@@ -5,36 +5,47 @@
 package com.azure.resourcemanager.streamanalytics.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonSerializable;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import java.io.IOException;
+import java.util.Map;
 
-/** Describes how identity is verified. */
+/**
+ * Describes how identity is verified.
+ */
 @Fluent
-public class Identity {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Identity.class);
-
+public final class Identity implements JsonSerializable<Identity> {
     /*
-     * The tenantId property.
+     * The tenantId of the identity.
      */
-    @JsonProperty(value = "tenantId")
     private String tenantId;
 
     /*
-     * The principalId property.
+     * The principalId of the identity.
      */
-    @JsonProperty(value = "principalId")
     private String principalId;
 
     /*
-     * The type property.
+     * The type of identity, can be SystemAssigned or UserAssigned.
      */
-    @JsonProperty(value = "type")
     private String type;
 
+    /*
+     * The user assigned identities associated with the streaming job resource.
+     */
+    private Map<String, Object> userAssignedIdentities;
+
     /**
-     * Get the tenantId property: The tenantId property.
-     *
+     * Creates an instance of Identity class.
+     */
+    public Identity() {
+    }
+
+    /**
+     * Get the tenantId property: The tenantId of the identity.
+     * 
      * @return the tenantId value.
      */
     public String tenantId() {
@@ -42,19 +53,8 @@ public class Identity {
     }
 
     /**
-     * Set the tenantId property: The tenantId property.
-     *
-     * @param tenantId the tenantId value to set.
-     * @return the Identity object itself.
-     */
-    public Identity withTenantId(String tenantId) {
-        this.tenantId = tenantId;
-        return this;
-    }
-
-    /**
-     * Get the principalId property: The principalId property.
-     *
+     * Get the principalId property: The principalId of the identity.
+     * 
      * @return the principalId value.
      */
     public String principalId() {
@@ -62,19 +62,8 @@ public class Identity {
     }
 
     /**
-     * Set the principalId property: The principalId property.
-     *
-     * @param principalId the principalId value to set.
-     * @return the Identity object itself.
-     */
-    public Identity withPrincipalId(String principalId) {
-        this.principalId = principalId;
-        return this;
-    }
-
-    /**
-     * Get the type property: The type property.
-     *
+     * Get the type property: The type of identity, can be SystemAssigned or UserAssigned.
+     * 
      * @return the type value.
      */
     public String type() {
@@ -82,8 +71,8 @@ public class Identity {
     }
 
     /**
-     * Set the type property: The type property.
-     *
+     * Set the type property: The type of identity, can be SystemAssigned or UserAssigned.
+     * 
      * @param type the type value to set.
      * @return the Identity object itself.
      */
@@ -93,10 +82,75 @@ public class Identity {
     }
 
     /**
+     * Get the userAssignedIdentities property: The user assigned identities associated with the streaming job resource.
+     * 
+     * @return the userAssignedIdentities value.
+     */
+    public Map<String, Object> userAssignedIdentities() {
+        return this.userAssignedIdentities;
+    }
+
+    /**
+     * Set the userAssignedIdentities property: The user assigned identities associated with the streaming job resource.
+     * 
+     * @param userAssignedIdentities the userAssignedIdentities value to set.
+     * @return the Identity object itself.
+     */
+    public Identity withUserAssignedIdentities(Map<String, Object> userAssignedIdentities) {
+        this.userAssignedIdentities = userAssignedIdentities;
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeStringField("type", this.type);
+        jsonWriter.writeMapField("userAssignedIdentities", this.userAssignedIdentities,
+            (writer, element) -> writer.writeUntyped(element));
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of Identity from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of Identity if the JsonReader was pointing to an instance of it, or null if it was pointing
+     * to JSON null.
+     * @throws IOException If an error occurs while reading the Identity.
+     */
+    public static Identity fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            Identity deserializedIdentity = new Identity();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("tenantId".equals(fieldName)) {
+                    deserializedIdentity.tenantId = reader.getString();
+                } else if ("principalId".equals(fieldName)) {
+                    deserializedIdentity.principalId = reader.getString();
+                } else if ("type".equals(fieldName)) {
+                    deserializedIdentity.type = reader.getString();
+                } else if ("userAssignedIdentities".equals(fieldName)) {
+                    Map<String, Object> userAssignedIdentities = reader.readMap(reader1 -> reader1.readUntyped());
+                    deserializedIdentity.userAssignedIdentities = userAssignedIdentities;
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedIdentity;
+        });
     }
 }

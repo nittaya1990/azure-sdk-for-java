@@ -98,6 +98,10 @@ public final class DiskImpl implements Disk, Disk.Definition, Disk.Update {
         return this.location();
     }
 
+    public String resourceGroupName() {
+        return resourceGroupName;
+    }
+
     public DiskInner innerModel() {
         return this.innerObject;
     }
@@ -124,20 +128,16 @@ public final class DiskImpl implements Disk, Disk.Definition, Disk.Update {
     }
 
     public Disk create() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getDisks()
-                .createOrUpdate(resourceGroupName, labName, username, name, this.innerModel(), Context.NONE);
+        this.innerObject = serviceManager.serviceClient()
+            .getDisks()
+            .createOrUpdate(resourceGroupName, labName, username, name, this.innerModel(), Context.NONE);
         return this;
     }
 
     public Disk create(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getDisks()
-                .createOrUpdate(resourceGroupName, labName, username, name, this.innerModel(), context);
+        this.innerObject = serviceManager.serviceClient()
+            .getDisks()
+            .createOrUpdate(resourceGroupName, labName, username, name, this.innerModel(), context);
         return this;
     }
 
@@ -153,22 +153,18 @@ public final class DiskImpl implements Disk, Disk.Definition, Disk.Update {
     }
 
     public Disk apply() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getDisks()
-                .updateWithResponse(resourceGroupName, labName, username, name, updateDisk, Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getDisks()
+            .updateWithResponse(resourceGroupName, labName, username, name, updateDisk, Context.NONE)
+            .getValue();
         return this;
     }
 
     public Disk apply(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getDisks()
-                .updateWithResponse(resourceGroupName, labName, username, name, updateDisk, context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getDisks()
+            .updateWithResponse(resourceGroupName, labName, username, name, updateDisk, context)
+            .getValue();
         return this;
     }
 
@@ -183,23 +179,19 @@ public final class DiskImpl implements Disk, Disk.Definition, Disk.Update {
 
     public Disk refresh() {
         String localExpand = null;
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getDisks()
-                .getWithResponse(resourceGroupName, labName, username, name, localExpand, Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getDisks()
+            .getWithResponse(resourceGroupName, labName, username, name, localExpand, Context.NONE)
+            .getValue();
         return this;
     }
 
     public Disk refresh(Context context) {
         String localExpand = null;
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getDisks()
-                .getWithResponse(resourceGroupName, labName, username, name, localExpand, context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getDisks()
+            .getWithResponse(resourceGroupName, labName, username, name, localExpand, context)
+            .getValue();
         return this;
     }
 

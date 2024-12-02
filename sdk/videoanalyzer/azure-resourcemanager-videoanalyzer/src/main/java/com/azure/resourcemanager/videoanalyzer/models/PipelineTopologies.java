@@ -19,7 +19,7 @@ public interface PipelineTopologies {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of PipelineTopology items.
+     * @return a collection of PipelineTopology items as paginated response with {@link PagedIterable}.
      */
     PagedIterable<PipelineTopology> list(String resourceGroupName, String accountName);
 
@@ -36,10 +36,10 @@ public interface PipelineTopologies {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of PipelineTopology items.
+     * @return a collection of PipelineTopology items as paginated response with {@link PagedIterable}.
      */
-    PagedIterable<PipelineTopology> list(
-        String resourceGroupName, String accountName, String filter, Integer top, Context context);
+    PagedIterable<PipelineTopology> list(String resourceGroupName, String accountName, String filter, Integer top,
+        Context context);
 
     /**
      * Retrieves a specific pipeline topology by name. If a topology with that name has been previously created, the
@@ -68,10 +68,10 @@ public interface PipelineTopologies {
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return pipeline topology describes the processing steps to be applied when processing content for a particular
-     *     outcome.
+     *     outcome along with {@link Response}.
      */
-    Response<PipelineTopology> getWithResponse(
-        String resourceGroupName, String accountName, String pipelineTopologyName, Context context);
+    Response<PipelineTopology> getWithResponse(String resourceGroupName, String accountName,
+        String pipelineTopologyName, Context context);
 
     /**
      * Deletes a pipeline topology with the given name. This method should be called after all instances of the topology
@@ -97,10 +97,10 @@ public interface PipelineTopologies {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
-    Response<Void> deleteWithResponse(
-        String resourceGroupName, String accountName, String pipelineTopologyName, Context context);
+    Response<Void> deleteWithResponse(String resourceGroupName, String accountName, String pipelineTopologyName,
+        Context context);
 
     /**
      * Retrieves a specific pipeline topology by name. If a topology with that name has been previously created, the
@@ -111,7 +111,7 @@ public interface PipelineTopologies {
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return pipeline topology describes the processing steps to be applied when processing content for a particular
-     *     outcome.
+     *     outcome along with {@link Response}.
      */
     PipelineTopology getById(String id);
 
@@ -125,7 +125,7 @@ public interface PipelineTopologies {
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return pipeline topology describes the processing steps to be applied when processing content for a particular
-     *     outcome.
+     *     outcome along with {@link Response}.
      */
     Response<PipelineTopology> getByIdWithResponse(String id, Context context);
 
@@ -149,7 +149,7 @@ public interface PipelineTopologies {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
     Response<Void> deleteByIdWithResponse(String id, Context context);
 

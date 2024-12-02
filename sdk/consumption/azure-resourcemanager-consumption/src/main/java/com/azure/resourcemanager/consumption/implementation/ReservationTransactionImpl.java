@@ -17,8 +17,7 @@ public final class ReservationTransactionImpl implements ReservationTransaction 
 
     private final com.azure.resourcemanager.consumption.ConsumptionManager serviceManager;
 
-    ReservationTransactionImpl(
-        ReservationTransactionInner innerObject,
+    ReservationTransactionImpl(ReservationTransactionInner innerObject,
         com.azure.resourcemanager.consumption.ConsumptionManager serviceManager) {
         this.innerObject = innerObject;
         this.serviceManager = serviceManager;
@@ -123,6 +122,18 @@ public final class ReservationTransactionImpl implements ReservationTransaction 
 
     public String billingFrequency() {
         return this.innerModel().billingFrequency();
+    }
+
+    public Integer billingMonth() {
+        return this.innerModel().billingMonth();
+    }
+
+    public BigDecimal monetaryCommitment() {
+        return this.innerModel().monetaryCommitment();
+    }
+
+    public BigDecimal overage() {
+        return this.innerModel().overage();
     }
 
     public ReservationTransactionInner innerModel() {

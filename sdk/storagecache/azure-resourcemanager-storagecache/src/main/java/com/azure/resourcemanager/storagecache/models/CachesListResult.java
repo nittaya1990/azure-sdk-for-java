@@ -5,19 +5,17 @@
 package com.azure.resourcemanager.storagecache.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.storagecache.fluent.models.CacheInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Result of the request to list Caches. It contains a list of Caches and a URL link to get the next set of results. */
+/**
+ * Result of the request to list caches. It contains a list of caches and a URL link to get the next set of results.
+ */
 @Fluent
 public final class CachesListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CachesListResult.class);
-
     /*
-     * URL to get the next set of Cache list results, if there are any.
+     * URL to get the next set of cache list results, if there are any.
      */
     @JsonProperty(value = "nextLink")
     private String nextLink;
@@ -29,8 +27,14 @@ public final class CachesListResult {
     private List<CacheInner> value;
 
     /**
-     * Get the nextLink property: URL to get the next set of Cache list results, if there are any.
-     *
+     * Creates an instance of CachesListResult class.
+     */
+    public CachesListResult() {
+    }
+
+    /**
+     * Get the nextLink property: URL to get the next set of cache list results, if there are any.
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -38,8 +42,8 @@ public final class CachesListResult {
     }
 
     /**
-     * Set the nextLink property: URL to get the next set of Cache list results, if there are any.
-     *
+     * Set the nextLink property: URL to get the next set of cache list results, if there are any.
+     * 
      * @param nextLink the nextLink value to set.
      * @return the CachesListResult object itself.
      */
@@ -50,7 +54,7 @@ public final class CachesListResult {
 
     /**
      * Get the value property: List of Caches.
-     *
+     * 
      * @return the value value.
      */
     public List<CacheInner> value() {
@@ -59,7 +63,7 @@ public final class CachesListResult {
 
     /**
      * Set the value property: List of Caches.
-     *
+     * 
      * @param value the value value to set.
      * @return the CachesListResult object itself.
      */
@@ -70,7 +74,7 @@ public final class CachesListResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

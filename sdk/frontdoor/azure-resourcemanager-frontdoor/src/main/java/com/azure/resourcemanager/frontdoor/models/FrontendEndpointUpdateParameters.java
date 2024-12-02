@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.frontdoor.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Frontend endpoint used in routing rule. */
+/**
+ * Frontend endpoint used in routing rule.
+ */
 @Fluent
 public class FrontendEndpointUpdateParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(FrontendEndpointUpdateParameters.class);
-
     /*
      * The host name of the frontendEndpoint. Must be a domain name.
      */
@@ -21,29 +19,32 @@ public class FrontendEndpointUpdateParameters {
     private String hostname;
 
     /*
-     * Whether to allow session affinity on this host. Valid options are
-     * 'Enabled' or 'Disabled'
+     * Whether to allow session affinity on this host. Valid options are 'Enabled' or 'Disabled'
      */
     @JsonProperty(value = "sessionAffinityEnabledState")
     private SessionAffinityEnabledState sessionAffinityEnabledState;
 
     /*
-     * UNUSED. This field will be ignored. The TTL to use in seconds for
-     * session affinity, if applicable.
+     * UNUSED. This field will be ignored. The TTL to use in seconds for session affinity, if applicable.
      */
     @JsonProperty(value = "sessionAffinityTtlSeconds")
     private Integer sessionAffinityTtlSeconds;
 
     /*
-     * Defines the Web Application Firewall policy for each host (if
-     * applicable)
+     * Defines the Web Application Firewall policy for each host (if applicable)
      */
     @JsonProperty(value = "webApplicationFirewallPolicyLink")
     private FrontendEndpointUpdateParametersWebApplicationFirewallPolicyLink webApplicationFirewallPolicyLink;
 
     /**
+     * Creates an instance of FrontendEndpointUpdateParameters class.
+     */
+    public FrontendEndpointUpdateParameters() {
+    }
+
+    /**
      * Get the hostname property: The host name of the frontendEndpoint. Must be a domain name.
-     *
+     * 
      * @return the hostname value.
      */
     public String hostname() {
@@ -52,7 +53,7 @@ public class FrontendEndpointUpdateParameters {
 
     /**
      * Set the hostname property: The host name of the frontendEndpoint. Must be a domain name.
-     *
+     * 
      * @param hostname the hostname value to set.
      * @return the FrontendEndpointUpdateParameters object itself.
      */
@@ -64,7 +65,7 @@ public class FrontendEndpointUpdateParameters {
     /**
      * Get the sessionAffinityEnabledState property: Whether to allow session affinity on this host. Valid options are
      * 'Enabled' or 'Disabled'.
-     *
+     * 
      * @return the sessionAffinityEnabledState value.
      */
     public SessionAffinityEnabledState sessionAffinityEnabledState() {
@@ -74,12 +75,12 @@ public class FrontendEndpointUpdateParameters {
     /**
      * Set the sessionAffinityEnabledState property: Whether to allow session affinity on this host. Valid options are
      * 'Enabled' or 'Disabled'.
-     *
+     * 
      * @param sessionAffinityEnabledState the sessionAffinityEnabledState value to set.
      * @return the FrontendEndpointUpdateParameters object itself.
      */
-    public FrontendEndpointUpdateParameters withSessionAffinityEnabledState(
-        SessionAffinityEnabledState sessionAffinityEnabledState) {
+    public FrontendEndpointUpdateParameters
+        withSessionAffinityEnabledState(SessionAffinityEnabledState sessionAffinityEnabledState) {
         this.sessionAffinityEnabledState = sessionAffinityEnabledState;
         return this;
     }
@@ -87,7 +88,7 @@ public class FrontendEndpointUpdateParameters {
     /**
      * Get the sessionAffinityTtlSeconds property: UNUSED. This field will be ignored. The TTL to use in seconds for
      * session affinity, if applicable.
-     *
+     * 
      * @return the sessionAffinityTtlSeconds value.
      */
     public Integer sessionAffinityTtlSeconds() {
@@ -97,7 +98,7 @@ public class FrontendEndpointUpdateParameters {
     /**
      * Set the sessionAffinityTtlSeconds property: UNUSED. This field will be ignored. The TTL to use in seconds for
      * session affinity, if applicable.
-     *
+     * 
      * @param sessionAffinityTtlSeconds the sessionAffinityTtlSeconds value to set.
      * @return the FrontendEndpointUpdateParameters object itself.
      */
@@ -109,7 +110,7 @@ public class FrontendEndpointUpdateParameters {
     /**
      * Get the webApplicationFirewallPolicyLink property: Defines the Web Application Firewall policy for each host (if
      * applicable).
-     *
+     * 
      * @return the webApplicationFirewallPolicyLink value.
      */
     public FrontendEndpointUpdateParametersWebApplicationFirewallPolicyLink webApplicationFirewallPolicyLink() {
@@ -119,7 +120,7 @@ public class FrontendEndpointUpdateParameters {
     /**
      * Set the webApplicationFirewallPolicyLink property: Defines the Web Application Firewall policy for each host (if
      * applicable).
-     *
+     * 
      * @param webApplicationFirewallPolicyLink the webApplicationFirewallPolicyLink value to set.
      * @return the FrontendEndpointUpdateParameters object itself.
      */
@@ -131,7 +132,7 @@ public class FrontendEndpointUpdateParameters {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

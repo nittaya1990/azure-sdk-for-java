@@ -5,57 +5,126 @@
 package com.azure.resourcemanager.streamanalytics.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import com.azure.resourcemanager.streamanalytics.fluent.models.JavaScriptFunctionBindingProperties;
+import java.io.IOException;
 
-/** The binding to a JavaScript function. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@JsonTypeName("Microsoft.StreamAnalytics/JavascriptUdf")
-@JsonFlatten
+/**
+ * The binding to a JavaScript function.
+ */
 @Fluent
-public class JavaScriptFunctionBinding extends FunctionBinding {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(JavaScriptFunctionBinding.class);
+public final class JavaScriptFunctionBinding extends FunctionBinding {
+    /*
+     * Indicates the function binding type.
+     */
+    private String type = "Microsoft.StreamAnalytics/JavascriptUdf";
 
     /*
-     * The JavaScript code containing a single function definition. For
-     * example: 'function (x, y) { return x + y; }'
+     * The binding properties associated with a JavaScript function.
      */
-    @JsonProperty(value = "properties.script")
-    private String script;
+    private JavaScriptFunctionBindingProperties innerProperties;
+
+    /**
+     * Creates an instance of JavaScriptFunctionBinding class.
+     */
+    public JavaScriptFunctionBinding() {
+    }
+
+    /**
+     * Get the type property: Indicates the function binding type.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
+     * Get the innerProperties property: The binding properties associated with a JavaScript function.
+     * 
+     * @return the innerProperties value.
+     */
+    private JavaScriptFunctionBindingProperties innerProperties() {
+        return this.innerProperties;
+    }
 
     /**
      * Get the script property: The JavaScript code containing a single function definition. For example: 'function (x,
      * y) { return x + y; }'.
-     *
+     * 
      * @return the script value.
      */
     public String script() {
-        return this.script;
+        return this.innerProperties() == null ? null : this.innerProperties().script();
     }
 
     /**
      * Set the script property: The JavaScript code containing a single function definition. For example: 'function (x,
      * y) { return x + y; }'.
-     *
+     * 
      * @param script the script value to set.
      * @return the JavaScriptFunctionBinding object itself.
      */
     public JavaScriptFunctionBinding withScript(String script) {
-        this.script = script;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new JavaScriptFunctionBindingProperties();
+        }
+        this.innerProperties().withScript(script);
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
-        super.validate();
+        if (innerProperties() != null) {
+            innerProperties().validate();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeStringField("type", this.type);
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of JavaScriptFunctionBinding from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of JavaScriptFunctionBinding if the JsonReader was pointing to an instance of it, or null if
+     * it was pointing to JSON null.
+     * @throws IOException If an error occurs while reading the JavaScriptFunctionBinding.
+     */
+    public static JavaScriptFunctionBinding fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            JavaScriptFunctionBinding deserializedJavaScriptFunctionBinding = new JavaScriptFunctionBinding();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("type".equals(fieldName)) {
+                    deserializedJavaScriptFunctionBinding.type = reader.getString();
+                } else if ("properties".equals(fieldName)) {
+                    deserializedJavaScriptFunctionBinding.innerProperties
+                        = JavaScriptFunctionBindingProperties.fromJson(reader);
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedJavaScriptFunctionBinding;
+        });
     }
 }

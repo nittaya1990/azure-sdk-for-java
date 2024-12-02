@@ -6,22 +6,22 @@ package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.models.LoggerType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
 /** Logger details. */
 @Fluent
 public final class LoggerContractInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(LoggerContractInner.class);
-
     /*
      * Logger entity contract properties.
      */
     @JsonProperty(value = "properties")
     private LoggerContractProperties innerProperties;
+
+    /** Creates an instance of LoggerContractInner class. */
+    public LoggerContractInner() {
+    }
 
     /**
      * Get the innerProperties property: Logger entity contract properties.

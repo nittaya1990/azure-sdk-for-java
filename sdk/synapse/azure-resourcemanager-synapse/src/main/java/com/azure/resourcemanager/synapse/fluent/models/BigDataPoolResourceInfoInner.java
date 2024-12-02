@@ -6,7 +6,9 @@ package com.azure.resourcemanager.synapse.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.Resource;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
 import com.azure.resourcemanager.synapse.models.AutoPauseProperties;
 import com.azure.resourcemanager.synapse.models.AutoScaleProperties;
 import com.azure.resourcemanager.synapse.models.DynamicExecutorAllocation;
@@ -14,40 +16,95 @@ import com.azure.resourcemanager.synapse.models.LibraryRequirements;
 import com.azure.resourcemanager.synapse.models.NodeSize;
 import com.azure.resourcemanager.synapse.models.NodeSizeFamily;
 import com.azure.resourcemanager.synapse.models.SparkConfigProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 
-/** Big Data pool A Big Data pool. */
+/**
+ * Big Data pool
+ * 
+ * A Big Data pool.
+ */
 @Fluent
 public final class BigDataPoolResourceInfoInner extends Resource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(BigDataPoolResourceInfoInner.class);
-
     /*
-     * Spark pool properties Big Data pool properties
+     * Big Data pool properties
      */
-    @JsonProperty(value = "properties")
     private BigDataPoolResourceProperties innerProperties;
 
+    /*
+     * The type of the resource.
+     */
+    private String type;
+
+    /*
+     * The name of the resource.
+     */
+    private String name;
+
+    /*
+     * Fully qualified resource Id for the resource.
+     */
+    private String id;
+
     /**
-     * Get the innerProperties property: Spark pool properties Big Data pool properties.
-     *
+     * Creates an instance of BigDataPoolResourceInfoInner class.
+     */
+    public BigDataPoolResourceInfoInner() {
+    }
+
+    /**
+     * Get the innerProperties property: Big Data pool properties.
+     * 
      * @return the innerProperties value.
      */
     private BigDataPoolResourceProperties innerProperties() {
         return this.innerProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * Get the type property: The type of the resource.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
+     * Get the name property: The name of the resource.
+     * 
+     * @return the name value.
+     */
+    @Override
+    public String name() {
+        return this.name;
+    }
+
+    /**
+     * Get the id property: Fully qualified resource Id for the resource.
+     * 
+     * @return the id value.
+     */
+    @Override
+    public String id() {
+        return this.id;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public BigDataPoolResourceInfoInner withLocation(String location) {
         super.withLocation(location);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public BigDataPoolResourceInfoInner withTags(Map<String, String> tags) {
         super.withTags(tags);
@@ -56,7 +113,7 @@ public final class BigDataPoolResourceInfoInner extends Resource {
 
     /**
      * Get the provisioningState property: The state of the Big Data pool.
-     *
+     * 
      * @return the provisioningState value.
      */
     public String provisioningState() {
@@ -65,7 +122,7 @@ public final class BigDataPoolResourceInfoInner extends Resource {
 
     /**
      * Set the provisioningState property: The state of the Big Data pool.
-     *
+     * 
      * @param provisioningState the provisioningState value to set.
      * @return the BigDataPoolResourceInfoInner object itself.
      */
@@ -78,8 +135,8 @@ public final class BigDataPoolResourceInfoInner extends Resource {
     }
 
     /**
-     * Get the autoScale property: Spark pool auto-scaling properties Auto-scaling properties.
-     *
+     * Get the autoScale property: Auto-scaling properties.
+     * 
      * @return the autoScale value.
      */
     public AutoScaleProperties autoScale() {
@@ -87,8 +144,8 @@ public final class BigDataPoolResourceInfoInner extends Resource {
     }
 
     /**
-     * Set the autoScale property: Spark pool auto-scaling properties Auto-scaling properties.
-     *
+     * Set the autoScale property: Auto-scaling properties.
+     * 
      * @param autoScale the autoScale value to set.
      * @return the BigDataPoolResourceInfoInner object itself.
      */
@@ -102,7 +159,7 @@ public final class BigDataPoolResourceInfoInner extends Resource {
 
     /**
      * Get the creationDate property: The time when the Big Data pool was created.
-     *
+     * 
      * @return the creationDate value.
      */
     public OffsetDateTime creationDate() {
@@ -110,22 +167,8 @@ public final class BigDataPoolResourceInfoInner extends Resource {
     }
 
     /**
-     * Set the creationDate property: The time when the Big Data pool was created.
-     *
-     * @param creationDate the creationDate value to set.
-     * @return the BigDataPoolResourceInfoInner object itself.
-     */
-    public BigDataPoolResourceInfoInner withCreationDate(OffsetDateTime creationDate) {
-        if (this.innerProperties() == null) {
-            this.innerProperties = new BigDataPoolResourceProperties();
-        }
-        this.innerProperties().withCreationDate(creationDate);
-        return this;
-    }
-
-    /**
-     * Get the autoPause property: Spark pool auto-pausing properties Auto-pausing properties.
-     *
+     * Get the autoPause property: Auto-pausing properties.
+     * 
      * @return the autoPause value.
      */
     public AutoPauseProperties autoPause() {
@@ -133,8 +176,8 @@ public final class BigDataPoolResourceInfoInner extends Resource {
     }
 
     /**
-     * Set the autoPause property: Spark pool auto-pausing properties Auto-pausing properties.
-     *
+     * Set the autoPause property: Auto-pausing properties.
+     * 
      * @param autoPause the autoPause value to set.
      * @return the BigDataPoolResourceInfoInner object itself.
      */
@@ -148,7 +191,7 @@ public final class BigDataPoolResourceInfoInner extends Resource {
 
     /**
      * Get the isComputeIsolationEnabled property: Whether compute isolation is required or not.
-     *
+     * 
      * @return the isComputeIsolationEnabled value.
      */
     public Boolean isComputeIsolationEnabled() {
@@ -157,7 +200,7 @@ public final class BigDataPoolResourceInfoInner extends Resource {
 
     /**
      * Set the isComputeIsolationEnabled property: Whether compute isolation is required or not.
-     *
+     * 
      * @param isComputeIsolationEnabled the isComputeIsolationEnabled value to set.
      * @return the BigDataPoolResourceInfoInner object itself.
      */
@@ -170,8 +213,31 @@ public final class BigDataPoolResourceInfoInner extends Resource {
     }
 
     /**
+     * Get the isAutotuneEnabled property: Whether autotune is required or not.
+     * 
+     * @return the isAutotuneEnabled value.
+     */
+    public Boolean isAutotuneEnabled() {
+        return this.innerProperties() == null ? null : this.innerProperties().isAutotuneEnabled();
+    }
+
+    /**
+     * Set the isAutotuneEnabled property: Whether autotune is required or not.
+     * 
+     * @param isAutotuneEnabled the isAutotuneEnabled value to set.
+     * @return the BigDataPoolResourceInfoInner object itself.
+     */
+    public BigDataPoolResourceInfoInner withIsAutotuneEnabled(Boolean isAutotuneEnabled) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new BigDataPoolResourceProperties();
+        }
+        this.innerProperties().withIsAutotuneEnabled(isAutotuneEnabled);
+        return this;
+    }
+
+    /**
      * Get the sessionLevelPackagesEnabled property: Whether session level packages enabled.
-     *
+     * 
      * @return the sessionLevelPackagesEnabled value.
      */
     public Boolean sessionLevelPackagesEnabled() {
@@ -180,7 +246,7 @@ public final class BigDataPoolResourceInfoInner extends Resource {
 
     /**
      * Set the sessionLevelPackagesEnabled property: Whether session level packages enabled.
-     *
+     * 
      * @param sessionLevelPackagesEnabled the sessionLevelPackagesEnabled value to set.
      * @return the BigDataPoolResourceInfoInner object itself.
      */
@@ -194,7 +260,7 @@ public final class BigDataPoolResourceInfoInner extends Resource {
 
     /**
      * Get the cacheSize property: The cache size.
-     *
+     * 
      * @return the cacheSize value.
      */
     public Integer cacheSize() {
@@ -203,7 +269,7 @@ public final class BigDataPoolResourceInfoInner extends Resource {
 
     /**
      * Set the cacheSize property: The cache size.
-     *
+     * 
      * @param cacheSize the cacheSize value to set.
      * @return the BigDataPoolResourceInfoInner object itself.
      */
@@ -217,7 +283,7 @@ public final class BigDataPoolResourceInfoInner extends Resource {
 
     /**
      * Get the dynamicExecutorAllocation property: Dynamic Executor Allocation.
-     *
+     * 
      * @return the dynamicExecutorAllocation value.
      */
     public DynamicExecutorAllocation dynamicExecutorAllocation() {
@@ -226,12 +292,12 @@ public final class BigDataPoolResourceInfoInner extends Resource {
 
     /**
      * Set the dynamicExecutorAllocation property: Dynamic Executor Allocation.
-     *
+     * 
      * @param dynamicExecutorAllocation the dynamicExecutorAllocation value to set.
      * @return the BigDataPoolResourceInfoInner object itself.
      */
-    public BigDataPoolResourceInfoInner withDynamicExecutorAllocation(
-        DynamicExecutorAllocation dynamicExecutorAllocation) {
+    public BigDataPoolResourceInfoInner
+        withDynamicExecutorAllocation(DynamicExecutorAllocation dynamicExecutorAllocation) {
         if (this.innerProperties() == null) {
             this.innerProperties = new BigDataPoolResourceProperties();
         }
@@ -241,7 +307,7 @@ public final class BigDataPoolResourceInfoInner extends Resource {
 
     /**
      * Get the sparkEventsFolder property: The Spark events folder.
-     *
+     * 
      * @return the sparkEventsFolder value.
      */
     public String sparkEventsFolder() {
@@ -250,7 +316,7 @@ public final class BigDataPoolResourceInfoInner extends Resource {
 
     /**
      * Set the sparkEventsFolder property: The Spark events folder.
-     *
+     * 
      * @param sparkEventsFolder the sparkEventsFolder value to set.
      * @return the BigDataPoolResourceInfoInner object itself.
      */
@@ -264,7 +330,7 @@ public final class BigDataPoolResourceInfoInner extends Resource {
 
     /**
      * Get the nodeCount property: The number of nodes in the Big Data pool.
-     *
+     * 
      * @return the nodeCount value.
      */
     public Integer nodeCount() {
@@ -273,7 +339,7 @@ public final class BigDataPoolResourceInfoInner extends Resource {
 
     /**
      * Set the nodeCount property: The number of nodes in the Big Data pool.
-     *
+     * 
      * @param nodeCount the nodeCount value to set.
      * @return the BigDataPoolResourceInfoInner object itself.
      */
@@ -286,8 +352,8 @@ public final class BigDataPoolResourceInfoInner extends Resource {
     }
 
     /**
-     * Get the libraryRequirements property: Spark pool library version requirements Library version requirements.
-     *
+     * Get the libraryRequirements property: Library version requirements.
+     * 
      * @return the libraryRequirements value.
      */
     public LibraryRequirements libraryRequirements() {
@@ -295,8 +361,8 @@ public final class BigDataPoolResourceInfoInner extends Resource {
     }
 
     /**
-     * Set the libraryRequirements property: Spark pool library version requirements Library version requirements.
-     *
+     * Set the libraryRequirements property: Library version requirements.
+     * 
      * @param libraryRequirements the libraryRequirements value to set.
      * @return the BigDataPoolResourceInfoInner object itself.
      */
@@ -310,7 +376,7 @@ public final class BigDataPoolResourceInfoInner extends Resource {
 
     /**
      * Get the customLibraries property: List of custom libraries/packages associated with the spark pool.
-     *
+     * 
      * @return the customLibraries value.
      */
     public List<LibraryInfo> customLibraries() {
@@ -319,7 +385,7 @@ public final class BigDataPoolResourceInfoInner extends Resource {
 
     /**
      * Set the customLibraries property: List of custom libraries/packages associated with the spark pool.
-     *
+     * 
      * @param customLibraries the customLibraries value to set.
      * @return the BigDataPoolResourceInfoInner object itself.
      */
@@ -332,9 +398,8 @@ public final class BigDataPoolResourceInfoInner extends Resource {
     }
 
     /**
-     * Get the sparkConfigProperties property: Spark pool Config Properties Spark configuration file to specify
-     * additional properties.
-     *
+     * Get the sparkConfigProperties property: Spark configuration file to specify additional properties.
+     * 
      * @return the sparkConfigProperties value.
      */
     public SparkConfigProperties sparkConfigProperties() {
@@ -342,9 +407,8 @@ public final class BigDataPoolResourceInfoInner extends Resource {
     }
 
     /**
-     * Set the sparkConfigProperties property: Spark pool Config Properties Spark configuration file to specify
-     * additional properties.
-     *
+     * Set the sparkConfigProperties property: Spark configuration file to specify additional properties.
+     * 
      * @param sparkConfigProperties the sparkConfigProperties value to set.
      * @return the BigDataPoolResourceInfoInner object itself.
      */
@@ -358,7 +422,7 @@ public final class BigDataPoolResourceInfoInner extends Resource {
 
     /**
      * Get the sparkVersion property: The Apache Spark version.
-     *
+     * 
      * @return the sparkVersion value.
      */
     public String sparkVersion() {
@@ -367,7 +431,7 @@ public final class BigDataPoolResourceInfoInner extends Resource {
 
     /**
      * Set the sparkVersion property: The Apache Spark version.
-     *
+     * 
      * @param sparkVersion the sparkVersion value to set.
      * @return the BigDataPoolResourceInfoInner object itself.
      */
@@ -381,7 +445,7 @@ public final class BigDataPoolResourceInfoInner extends Resource {
 
     /**
      * Get the defaultSparkLogFolder property: The default folder where Spark logs will be written.
-     *
+     * 
      * @return the defaultSparkLogFolder value.
      */
     public String defaultSparkLogFolder() {
@@ -390,7 +454,7 @@ public final class BigDataPoolResourceInfoInner extends Resource {
 
     /**
      * Set the defaultSparkLogFolder property: The default folder where Spark logs will be written.
-     *
+     * 
      * @param defaultSparkLogFolder the defaultSparkLogFolder value to set.
      * @return the BigDataPoolResourceInfoInner object itself.
      */
@@ -404,7 +468,7 @@ public final class BigDataPoolResourceInfoInner extends Resource {
 
     /**
      * Get the nodeSize property: The level of compute power that each node in the Big Data pool has.
-     *
+     * 
      * @return the nodeSize value.
      */
     public NodeSize nodeSize() {
@@ -413,7 +477,7 @@ public final class BigDataPoolResourceInfoInner extends Resource {
 
     /**
      * Set the nodeSize property: The level of compute power that each node in the Big Data pool has.
-     *
+     * 
      * @param nodeSize the nodeSize value to set.
      * @return the BigDataPoolResourceInfoInner object itself.
      */
@@ -427,7 +491,7 @@ public final class BigDataPoolResourceInfoInner extends Resource {
 
     /**
      * Get the nodeSizeFamily property: The kind of nodes that the Big Data pool provides.
-     *
+     * 
      * @return the nodeSizeFamily value.
      */
     public NodeSizeFamily nodeSizeFamily() {
@@ -436,7 +500,7 @@ public final class BigDataPoolResourceInfoInner extends Resource {
 
     /**
      * Set the nodeSizeFamily property: The kind of nodes that the Big Data pool provides.
-     *
+     * 
      * @param nodeSizeFamily the nodeSizeFamily value to set.
      * @return the BigDataPoolResourceInfoInner object itself.
      */
@@ -450,7 +514,7 @@ public final class BigDataPoolResourceInfoInner extends Resource {
 
     /**
      * Get the lastSucceededTimestamp property: The time when the Big Data pool was updated successfully.
-     *
+     * 
      * @return the lastSucceededTimestamp value.
      */
     public OffsetDateTime lastSucceededTimestamp() {
@@ -459,12 +523,63 @@ public final class BigDataPoolResourceInfoInner extends Resource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (innerProperties() != null) {
             innerProperties().validate();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeStringField("location", location());
+        jsonWriter.writeMapField("tags", tags(), (writer, element) -> writer.writeString(element));
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of BigDataPoolResourceInfoInner from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of BigDataPoolResourceInfoInner if the JsonReader was pointing to an instance of it, or null
+     * if it was pointing to JSON null.
+     * @throws IllegalStateException If the deserialized JSON object was missing any required properties.
+     * @throws IOException If an error occurs while reading the BigDataPoolResourceInfoInner.
+     */
+    public static BigDataPoolResourceInfoInner fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            BigDataPoolResourceInfoInner deserializedBigDataPoolResourceInfoInner = new BigDataPoolResourceInfoInner();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("id".equals(fieldName)) {
+                    deserializedBigDataPoolResourceInfoInner.id = reader.getString();
+                } else if ("name".equals(fieldName)) {
+                    deserializedBigDataPoolResourceInfoInner.name = reader.getString();
+                } else if ("type".equals(fieldName)) {
+                    deserializedBigDataPoolResourceInfoInner.type = reader.getString();
+                } else if ("location".equals(fieldName)) {
+                    deserializedBigDataPoolResourceInfoInner.withLocation(reader.getString());
+                } else if ("tags".equals(fieldName)) {
+                    Map<String, String> tags = reader.readMap(reader1 -> reader1.getString());
+                    deserializedBigDataPoolResourceInfoInner.withTags(tags);
+                } else if ("properties".equals(fieldName)) {
+                    deserializedBigDataPoolResourceInfoInner.innerProperties
+                        = BigDataPoolResourceProperties.fromJson(reader);
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedBigDataPoolResourceInfoInner;
+        });
     }
 }

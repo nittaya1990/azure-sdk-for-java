@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.resourcehealth.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Frequently asked question for the service health event. */
 @Fluent
 public final class Faq {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Faq.class);
-
     /*
      * FAQ question for the service health event.
      */
@@ -31,6 +27,10 @@ public final class Faq {
      */
     @JsonProperty(value = "localeCode")
     private String localeCode;
+
+    /** Creates an instance of Faq class. */
+    public Faq() {
+    }
 
     /**
      * Get the question property: FAQ question for the service health event.

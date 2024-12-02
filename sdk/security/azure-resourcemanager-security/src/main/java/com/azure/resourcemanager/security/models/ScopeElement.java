@@ -5,7 +5,6 @@
 package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -13,11 +12,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.HashMap;
 import java.util.Map;
 
-/** A more specific scope used to identify the alerts to suppress. */
+/**
+ * A more specific scope used to identify the alerts to suppress.
+ */
 @Fluent
 public final class ScopeElement {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ScopeElement.class);
-
     /*
      * The alert entity type to suppress by.
      */
@@ -27,11 +26,18 @@ public final class ScopeElement {
     /*
      * A more specific scope used to identify the alerts to suppress.
      */
-    @JsonIgnore private Map<String, Object> additionalProperties;
+    @JsonIgnore
+    private Map<String, Object> additionalProperties;
+
+    /**
+     * Creates an instance of ScopeElement class.
+     */
+    public ScopeElement() {
+    }
 
     /**
      * Get the field property: The alert entity type to suppress by.
-     *
+     * 
      * @return the field value.
      */
     public String field() {
@@ -40,7 +46,7 @@ public final class ScopeElement {
 
     /**
      * Set the field property: The alert entity type to suppress by.
-     *
+     * 
      * @param field the field value to set.
      * @return the ScopeElement object itself.
      */
@@ -51,7 +57,7 @@ public final class ScopeElement {
 
     /**
      * Get the additionalProperties property: A more specific scope used to identify the alerts to suppress.
-     *
+     * 
      * @return the additionalProperties value.
      */
     @JsonAnyGetter
@@ -61,7 +67,7 @@ public final class ScopeElement {
 
     /**
      * Set the additionalProperties property: A more specific scope used to identify the alerts to suppress.
-     *
+     * 
      * @param additionalProperties the additionalProperties value to set.
      * @return the ScopeElement object itself.
      */
@@ -80,7 +86,7 @@ public final class ScopeElement {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

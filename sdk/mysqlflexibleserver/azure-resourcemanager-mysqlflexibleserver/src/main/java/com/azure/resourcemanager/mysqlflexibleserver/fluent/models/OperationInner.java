@@ -5,18 +5,16 @@
 package com.azure.resourcemanager.mysqlflexibleserver.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.mysqlflexibleserver.models.OperationDisplay;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
-/** REST API operation definition. */
+/**
+ * REST API operation definition.
+ */
 @Fluent
 public final class OperationInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OperationInner.class);
-
     /*
      * The name of the operation being performed on this particular object.
      */
@@ -24,8 +22,7 @@ public final class OperationInner {
     private String name;
 
     /*
-     * The localized display information for this particular operation or
-     * action.
+     * The localized display information for this particular operation or action.
      */
     @JsonProperty(value = "display")
     private OperationDisplay display;
@@ -44,8 +41,14 @@ public final class OperationInner {
     private Map<String, Object> properties;
 
     /**
+     * Creates an instance of OperationInner class.
+     */
+    public OperationInner() {
+    }
+
+    /**
      * Get the name property: The name of the operation being performed on this particular object.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -54,7 +57,7 @@ public final class OperationInner {
 
     /**
      * Set the name property: The name of the operation being performed on this particular object.
-     *
+     * 
      * @param name the name value to set.
      * @return the OperationInner object itself.
      */
@@ -65,7 +68,7 @@ public final class OperationInner {
 
     /**
      * Get the display property: The localized display information for this particular operation or action.
-     *
+     * 
      * @return the display value.
      */
     public OperationDisplay display() {
@@ -74,7 +77,7 @@ public final class OperationInner {
 
     /**
      * Set the display property: The localized display information for this particular operation or action.
-     *
+     * 
      * @param display the display value to set.
      * @return the OperationInner object itself.
      */
@@ -85,7 +88,7 @@ public final class OperationInner {
 
     /**
      * Get the origin property: The intended executor of the operation.
-     *
+     * 
      * @return the origin value.
      */
     public String origin() {
@@ -94,7 +97,7 @@ public final class OperationInner {
 
     /**
      * Set the origin property: The intended executor of the operation.
-     *
+     * 
      * @param origin the origin value to set.
      * @return the OperationInner object itself.
      */
@@ -105,7 +108,7 @@ public final class OperationInner {
 
     /**
      * Get the properties property: Additional descriptions for the operation.
-     *
+     * 
      * @return the properties value.
      */
     public Map<String, Object> properties() {
@@ -114,7 +117,7 @@ public final class OperationInner {
 
     /**
      * Set the properties property: Additional descriptions for the operation.
-     *
+     * 
      * @param properties the properties value to set.
      * @return the OperationInner object itself.
      */
@@ -125,7 +128,7 @@ public final class OperationInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

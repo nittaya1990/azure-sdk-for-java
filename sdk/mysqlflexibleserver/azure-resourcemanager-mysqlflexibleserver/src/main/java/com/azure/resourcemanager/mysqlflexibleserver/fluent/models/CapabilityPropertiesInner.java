@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.mysqlflexibleserver.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.mysqlflexibleserver.models.ServerEditionCapability;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Location capabilities. */
+/**
+ * Location capabilities.
+ */
 @Immutable
 public final class CapabilityPropertiesInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CapabilityPropertiesInner.class);
-
     /*
      * zone name
      */
@@ -41,8 +39,14 @@ public final class CapabilityPropertiesInner {
     private List<ServerEditionCapability> supportedFlexibleServerEditions;
 
     /**
+     * Creates an instance of CapabilityPropertiesInner class.
+     */
+    public CapabilityPropertiesInner() {
+    }
+
+    /**
      * Get the zone property: zone name.
-     *
+     * 
      * @return the zone value.
      */
     public String zone() {
@@ -51,7 +55,7 @@ public final class CapabilityPropertiesInner {
 
     /**
      * Get the supportedHAMode property: Supported high availability mode.
-     *
+     * 
      * @return the supportedHAMode value.
      */
     public List<String> supportedHAMode() {
@@ -60,7 +64,7 @@ public final class CapabilityPropertiesInner {
 
     /**
      * Get the supportedGeoBackupRegions property: supported geo backup regions.
-     *
+     * 
      * @return the supportedGeoBackupRegions value.
      */
     public List<String> supportedGeoBackupRegions() {
@@ -69,7 +73,7 @@ public final class CapabilityPropertiesInner {
 
     /**
      * Get the supportedFlexibleServerEditions property: A list of supported flexible server editions.
-     *
+     * 
      * @return the supportedFlexibleServerEditions value.
      */
     public List<ServerEditionCapability> supportedFlexibleServerEditions() {
@@ -78,7 +82,7 @@ public final class CapabilityPropertiesInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -10,29 +10,33 @@
 > see https://github.com/Azure/autorest.java/releases for the latest version of autorest
 ```ps
 cd <swagger-folder>
-mvn install
-autorest --java --use:@autorest/java@4.0.x
+autorest
 ```
 
 ### Code generation settings
 ``` yaml
-input-file: https://raw.githubusercontent.com/Azure/azure-rest-api-specs/main/specification/storage/data-plane/Microsoft.BlobStorage/preview/2021-02-12/blob.json
+use: '@autorest/java@4.1.39'
+input-file: https://raw.githubusercontent.com/Azure/azure-rest-api-specs/refs/heads/feature/storage/stg96base2/specification/storage/data-plane/Microsoft.BlobStorage/stable/2025-01-05/blob.json
 java: true
 output-folder: ../
 namespace: com.azure.storage.blob
-enable-xml: true
 generate-client-as-impl: true
 generate-client-interfaces: false
 service-interface-as-public: true
-sync-methods: none
 license-header: MICROSOFT_MIT_SMALL
+enable-sync-stack: true
 context-client-method-parameter: true
 optional-constant-as-enum: true
+default-http-exception-type: com.azure.storage.blob.implementation.models.BlobStorageExceptionInternal
 models-subpackage: implementation.models
-custom-types: BlobAccessPolicy,AccessTier,AccountKind,ArchiveStatus,BlobHttpHeaders,BlobContainerItem,BlobContainerItemProperties,BlobContainerEncryptionScope,BlobServiceProperties,BlobType,Block,BlockList,BlockListType,BlockLookupList,ClearRange,CopyStatusType,BlobCorsRule,CpkInfo,CustomerProvidedKeyInfo,DeleteSnapshotsOptionType,EncryptionAlgorithmType,FilterBlobsItem,GeoReplication,GeoReplicationStatusType,KeyInfo,LeaseDurationType,LeaseStateType,LeaseStatusType,ListBlobContainersIncludeType,ListBlobsIncludeItem,BlobAnalyticsLogging,BlobMetrics,PageList,PageRange,PathRenameMode,PublicAccessType,RehydratePriority,BlobRetentionPolicy,SequenceNumberActionType,BlobSignedIdentifier,SkuName,StaticWebsite,BlobErrorCode,BlobServiceStatistics,SyncCopyStatusType,UserDelegationKey,BlobQueryHeaders,GeoReplicationStatus,BlobImmutabilityPolicyMode
+custom-types: BlobAccessPolicy,AccessTier,AccountKind,ArchiveStatus,BlobHttpHeaders,BlobContainerItem,BlobContainerItemProperties,BlobContainerEncryptionScope,BlobServiceProperties,BlobType,Block,BlockList,BlockListType,BlockLookupList,ClearRange,CopyStatusType,BlobCorsRule,CpkInfo,CustomerProvidedKeyInfo,DeleteSnapshotsOptionType,EncryptionAlgorithmType,FilterBlobsItem,GeoReplication,GeoReplicationStatusType,KeyInfo,LeaseDurationType,LeaseStateType,LeaseStatusType,ListBlobContainersIncludeType,ListBlobsIncludeItem,BlobAnalyticsLogging,BlobMetrics,PageList,PageRange,PathRenameMode,PublicAccessType,RehydratePriority,BlobRetentionPolicy,SequenceNumberActionType,BlobSignedIdentifier,SkuName,StaticWebsite,BlobErrorCode,BlobServiceStatistics,SyncCopyStatusType,UserDelegationKey,BlobQueryHeaders,GeoReplicationStatus,BlobImmutabilityPolicyMode,BlobCopySourceTagsMode
 custom-types-subpackage: models
-customization-jar-path: target/azure-storage-blob-customization-1.0.0-beta.1.jar
-customization-class: com.azure.storage.blob.customization.BlobStorageCustomization
+customization-class: src/main/java/BlobStorageCustomization.java
+generic-response-type: true
+use-input-stream-for-binary: true
+no-custom-headers: true
+disable-client-builder: true
+stream-style-serialization: true
 ```
 
 ### /{containerName}/{blob}
@@ -348,122 +352,81 @@ directive:
     $["x-ms-enum"].name = "BlobErrorCode";
 ```
 
+### Typo Fixed in ErrorCode Removed Enum Value
+``` yaml
+directive:
+- from: swagger-document
+  where: $.definitions.ErrorCode
+  transform: >
+    $.enum.push("SnaphotOperationRateExceeded");
+    $.enum.push("IncrementalCopyOfEralierVersionSnapshotNotAllowed");
+```
+
 ### BlobServiceProperties, BlobAnalyticsLogging, BlobMetrics, BlobCorsRule, and BlobRetentionPolicy
 ``` yaml
 directive:
+- rename-model:
+    from: Logging
+    to: BlobAnalyticsLogging
+- rename-model:
+    from: Metrics
+    to: BlobMetrics
+- rename-model:
+    from: CorsRule
+    to: BlobCorsRule
+- rename-model:
+    from: RetentionPolicy
+    to: BlobRetentionPolicy
+- rename-model:
+    from: StorageServiceProperties
+    to: BlobServiceProperties
+      
 - from: swagger-document
   where: $.definitions
   transform: >
-    if (!$.BlobServiceProperties) {
-        $.BlobServiceProperties = $.StorageServiceProperties;
-        delete $.StorageServiceProperties;
-        $.BlobServiceProperties.xml = { "name": "StorageServiceProperties" };
-    }
-    if (!$.BlobAnalyticsLogging) {
-      $.BlobAnalyticsLogging = $.Logging;
-      delete $.Logging;
-      $.BlobAnalyticsLogging.xml = {"name": "Logging"};
-      $.BlobServiceProperties.properties.Logging["$ref"] = "#/definitions/BlobAnalyticsLogging";
-    }
-    if (!$.BlobMetrics) {
-      $.BlobMetrics = $.Metrics;
-      delete $.Metrics;
-      $.BlobMetrics.xml = {"name": "Metrics"};
-      $.BlobMetrics.properties.IncludeApis = $.BlobMetrics.properties.IncludeAPIs;
-      delete $.BlobMetrics.properties.IncludeAPIs;
-      $.BlobMetrics.properties.IncludeApis.xml = {"name": "IncludeAPIs"};
-      $.BlobServiceProperties.properties.HourMetrics["$ref"] = "#/definitions/BlobMetrics";
-      $.BlobServiceProperties.properties.MinuteMetrics["$ref"] = "#/definitions/BlobMetrics";
-    }
-    if (!$.BlobCorsRule) {
-      $.BlobCorsRule = $.CorsRule;
-      delete $.CorsRule;
-      $.BlobCorsRule.xml = {"name": "CorsRule"};
-      $.BlobServiceProperties.properties.Cors.items["$ref"] = "#/definitions/BlobCorsRule";
-    }
-    if (!$.BlobRetentionPolicy) {
-      $.BlobRetentionPolicy = $.RetentionPolicy;
-      delete $.RetentionPolicy;
-      $.BlobRetentionPolicy.xml = {"name": "RetentionPolicy"};
-      $.BlobAnalyticsLogging.properties.RetentionPolicy["$ref"] = "#/definitions/BlobRetentionPolicy";
-      $.BlobMetrics.properties.RetentionPolicy["$ref"] = "#/definitions/BlobRetentionPolicy";
-      $.BlobServiceProperties.properties.DeleteRetentionPolicy["$ref"] = "#/definitions/BlobRetentionPolicy";
-    }
+    $.BlobMetrics.properties.IncludeAPIs["x-ms-client-name"] = "IncludeApis";
+    delete $.BlobRetentionPolicy.properties.AllowPermanentDelete;
+    $.BlobServiceProperties.xml = {"name": "StorageServiceProperties"};
+    $.BlobCorsRule.xml = {"name": "CorsRule"};
+    
 - from: swagger-document
   where: $.parameters
   transform: >
-    if (!$.BlobServiceProperties) {
-        const props = $.BlobServiceProperties = $.StorageServiceProperties;
-        props.name = "BlobServiceProperties";
-        props.schema = { "$ref": props.schema.$ref.replace(/[#].*$/, "#/definitions/BlobServiceProperties") };
-        delete $.StorageServiceProperties;
-    }
-- from: swagger-document
-  where: $["x-ms-paths"]["/?restype=service&comp=properties"]
-  transform: >
-    const param = $.put.parameters[0];
-    if (param && param["$ref"] && param["$ref"].endsWith("StorageServiceProperties")) {
-        const path = param["$ref"].replace(/[#].*$/, "#/parameters/BlobServiceProperties");
-        $.put.parameters[0] = { "$ref": path };
-    }
-    const def = $.get.responses["200"].schema;
-    if (def && def["$ref"] && def["$ref"].endsWith("StorageServiceProperties")) {
-        const path = def["$ref"].replace(/[#].*$/, "#/definitions/BlobServiceProperties");
-        $.get.responses["200"].schema = { "$ref": path };
-    }
+    $.StorageServiceProperties.name = "BlobServiceProperties";
 ```
 
-### BlobServiceStatistics
+### BlobServiceStatistics and BlobPrefixInternal
 ``` yaml
 directive:
+- rename-model:
+    from: StorageServiceStats
+    to: BlobServiceStatistics
+- rename-model:
+    from: BlobPrefix
+    to: BlobPrefixInternal
+    
 - from: swagger-document
   where: $.definitions
   transform: >
-    if (!$.BlobServiceStatistics) {
-        $.BlobServiceStatistics = $.StorageServiceStats;
-        delete $.StorageServiceStats;
-        $.BlobServiceStatistics.xml = { "name": "StorageServiceStats" }
-        $.BlobServiceStatistics.description = "Statistics for the storage service.";
-    }
-- from: swagger-document
-  where: $["x-ms-paths"]["/?restype=service&comp=stats"].get.responses["200"]
-  transform: >
-    if ($.schema && $.schema.$ref && $.schema.$ref.endsWith("StorageServiceStats")) {
-        const path = $.schema.$ref.replace(/[#].*$/, "#/definitions/BlobServiceStatistics");
-        $.schema = { "$ref": path };
-    }
+    $.BlobServiceStatistics.xml = { "name": "StorageServiceStats" };
+    $.BlobPrefixInternal.xml = { "name": "BlobPrefix" };
 ```
 
 ### BlobAccessPolicy and BlobSignedIdentifier
 ``` yaml
 directive:
+- rename-model:
+    from: SignedIdentifier
+    to: BlobSignedIdentifier
+- rename-model:
+    from: AccessPolicy
+    to: BlobAccessPolicy
 - from: swagger-document
   where: $.definitions
   transform: >
-    if (!$.BlobSignedIdentifier) {
-      $.BlobSignedIdentifier = $.SignedIdentifier;
-      delete $.SignedIdentifier;
-      $.BlobSignedIdentifier.xml = {"name": "SignedIdentifier"};
-      $.SignedIdentifiers.items["$ref"] = "#/definitions/BlobSignedIdentifier";
-    }
-- from: swagger-document
-  where: $.definitions
-  transform: >
-    if (!$.BlobAccessPolicy) {
-      $.BlobAccessPolicy = $.AccessPolicy;
-      delete $.AccessPolicy;
-      $.BlobAccessPolicy.xml = {"name": "AccessPolicy"};
-      $.BlobAccessPolicy.properties.StartsOn = $.BlobAccessPolicy.properties.Start;
-      $.BlobAccessPolicy.properties.StartsOn.xml = {"name": "Start"};
-      delete $.BlobAccessPolicy.properties.Start;
-      $.BlobAccessPolicy.properties.ExpiresOn = $.BlobAccessPolicy.properties.Expiry;
-      $.BlobAccessPolicy.properties.ExpiresOn.xml = {"name": "Expiry"};
-      delete $.BlobAccessPolicy.properties.Expiry;
-      $.BlobAccessPolicy.properties.Permissions = $.BlobAccessPolicy.properties.Permission;
-      $.BlobAccessPolicy.properties.Permissions.xml = {"name": "Permission"};
-      delete $.BlobAccessPolicy.properties.Permission;
-    }
-    $.BlobSignedIdentifier.properties.AccessPolicy["$ref"] = "#/definitions/BlobAccessPolicy";
+    $.BlobAccessPolicy.properties.Start["x-ms-client-name"] = "StartsOn";
+    $.BlobAccessPolicy.properties.Expiry["x-ms-client-name"] = "ExpiresOn";
+    $.BlobAccessPolicy.properties.Permission["x-ms-client-name"] = "Permissions";
 ```
 
 ### Rename BlobHttpHeaders to BlobHttpHeader
@@ -482,6 +445,7 @@ directive:
     $.BlobContentLanguage["x-ms-client-name"] = "contentLanguage";
     $.BlobContentMD5["x-ms-parameter-grouping"].name = "blob-http-headers";
     $.BlobContentMD5["x-ms-client-name"] = "contentMd5";
+    $.BlobContentMD5.description = "Optional. An MD5 hash of the blob content. Note that this hash is not validated, as the hashes for the individual blocks were validated when each was uploaded. The value does not need to be base64 encoded as the SDK will perform the encoding.";
     $.BlobContentType["x-ms-parameter-grouping"].name = "blob-http-headers";
     $.BlobContentType["x-ms-client-name"] = "contentType";
 ```
@@ -543,13 +507,13 @@ directive:
     $.DenyEncryptionScopeOverride["x-ms-parameter-grouping"]["name"] = "blob-container-encryption-scope";
 ```
 
-### Rename cpk-scope-info to encryption-scope	
-``` yaml	
-directive:	
-- from: swagger-document	
-  where: $.parameters	
-  transform: >	
-    $.EncryptionScope["x-ms-parameter-grouping"]["name"] = "encryption-scope";	
+### Rename cpk-scope-info to encryption-scope
+``` yaml
+directive:
+- from: swagger-document
+  where: $.parameters
+  transform: >
+    $.EncryptionScope["x-ms-parameter-grouping"]["name"] = "encryption-scope";
 ```
 
 ### Block size int to long transition
@@ -587,15 +551,6 @@ directive:
     delete $.FilterBlobItem.properties.TagValue;
 ```
 
-### Hide AllowPermanentDelete in RetentionPolicy
-``` yaml
-directive:
-- from: swagger-document
-  where: $.definitions.BlobRetentionPolicy
-  transform: >
-    delete $.properties.AllowPermanentDelete;
-```
-
 ### Service_ListContainersSegment x-ms-pageable itemName
 ``` yaml
 directive:
@@ -631,6 +586,103 @@ directive:
   where: $.parameters.BlobDeleteType
   transform: >
     $["x-ms-enum"].modelAsString = true;
+```
+
+### Delete PageBlob_GetPageRanges x-ms-pageable as autorest can't recognize the itemName for this
+``` yaml
+directive:
+- from: swagger-document
+  where: $["x-ms-paths"]["/{containerName}/{blob}?comp=pagelist"].get
+  transform: >
+    delete $["x-ms-pageable"];
+```
+
+### Delete PageList_GetPageRangesDiff x-ms-pageable as autorest can't recognize the itemName for this
+``` yaml
+directive:
+- from: swagger-document
+  where: $["x-ms-paths"]["/{containerName}/{blob}?comp=pagelist&diff"].get
+  transform: >
+    delete $["x-ms-pageable"];
+```
+
+### BlobCopySourceTags expandable string enum and rename
+``` yaml
+directive:
+- from: swagger-document
+  where: $.parameters.CopySourceTags
+  transform: >
+    $["x-ms-enum"].modelAsString = true;
+    $["x-ms-enum"].name = "BlobCopySourceTagsMode";
+```
+
+### Fix putBlobFromUrl Apostrophe
+``` yaml
+directive:
+- from: swagger-document
+  where: $["x-ms-paths"]["/{containerName}/{blob}?BlockBlob&fromUrl"].put
+  transform: >
+    $.description = "The Put Blob from URL operation creates a new Block Blob where the contents of the blob are read from a given URL.  This API is supported beginning with the 2020-04-08 version. Partial updates are not supported with Put Blob from URL; the content of an existing blob is overwritten with the content of the new blob.  To perform partial updates to a block blob's contents using a source URL, use the Put Block from URL API in conjunction with Put Block List.";
+```
+
+### Rename ListBlobsIncludeItem Enums to be underscore cased
+```yaml
+directive:
+  - from: swagger-document
+    where: $.parameters.ListBlobsInclude
+    transform: >
+      $.items["x-ms-enum"].values = [
+        {
+          "value": "copy",
+          "name": "copy",
+          "description": ""
+        },
+        {
+          "value": "deleted",
+          "name": "deleted",
+          "description": ""
+        },
+        {
+          "value": "metadata",
+          "name": "metadata",
+          "description": ""
+        },
+        {
+          "value": "snapshots",
+          "name": "snapshots",
+          "description": ""
+        },
+        {
+          "value": "uncommittedblobs",
+          "name": "uncommittedblobs",
+          "description": ""
+        },
+        {
+          "value": "versions",
+          "name": "versions",
+          "description": ""
+        },
+        {
+          "value": "tags",
+          "name": "tags",
+          "description": ""
+        },
+        {
+          "value": "immutabilitypolicy",
+          "name": "immutability_policy",
+          "description": ""
+        },
+        {
+          "value": "legalhold",
+          "name": "legal_hold",
+          "description": ""
+        },
+        {
+          "value": "deletedwithversions",
+          "name": "deleted_with_versions",
+          "description": ""
+        }
+      ];
 ```
 
 ![Impressions](https://azure-sdk-impressions.azurewebsites.net/api/impressions/azure-sdk-for-java%2Fsdk%2Fstorage%2Fazure-storage-blob%2Fswagger%2FREADME.png)

@@ -5,33 +5,86 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
 import com.azure.resourcemanager.compute.fluent.models.GalleryImageVersionProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.IOException;
 import java.util.Map;
 
-/** Specifies information about the gallery image version that you want to update. */
+/**
+ * Specifies information about the gallery image version that you want to update.
+ */
 @Fluent
 public final class GalleryImageVersionUpdate extends UpdateResourceDefinition {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(GalleryImageVersionUpdate.class);
-
     /*
      * Describes the properties of a gallery image version.
      */
-    @JsonProperty(value = "properties")
     private GalleryImageVersionProperties innerProperties;
+
+    /*
+     * Fully qualified resource Id for the resource.
+     */
+    private String id;
+
+    /*
+     * The name of the resource.
+     */
+    private String name;
+
+    /*
+     * The type of the resource.
+     */
+    private String type;
+
+    /**
+     * Creates an instance of GalleryImageVersionUpdate class.
+     */
+    public GalleryImageVersionUpdate() {
+    }
 
     /**
      * Get the innerProperties property: Describes the properties of a gallery image version.
-     *
+     * 
      * @return the innerProperties value.
      */
     private GalleryImageVersionProperties innerProperties() {
         return this.innerProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * Get the id property: Fully qualified resource Id for the resource.
+     * 
+     * @return the id value.
+     */
+    @Override
+    public String id() {
+        return this.id;
+    }
+
+    /**
+     * Get the name property: The name of the resource.
+     * 
+     * @return the name value.
+     */
+    @Override
+    public String name() {
+        return this.name;
+    }
+
+    /**
+     * Get the type property: The type of the resource.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public GalleryImageVersionUpdate withTags(Map<String, String> tags) {
         super.withTags(tags);
@@ -40,7 +93,7 @@ public final class GalleryImageVersionUpdate extends UpdateResourceDefinition {
 
     /**
      * Get the publishingProfile property: The publishing profile of a gallery image Version.
-     *
+     * 
      * @return the publishingProfile value.
      */
     public GalleryImageVersionPublishingProfile publishingProfile() {
@@ -49,7 +102,7 @@ public final class GalleryImageVersionUpdate extends UpdateResourceDefinition {
 
     /**
      * Set the publishingProfile property: The publishing profile of a gallery image Version.
-     *
+     * 
      * @param publishingProfile the publishingProfile value to set.
      * @return the GalleryImageVersionUpdate object itself.
      */
@@ -62,18 +115,17 @@ public final class GalleryImageVersionUpdate extends UpdateResourceDefinition {
     }
 
     /**
-     * Get the provisioningState property: The current state of the gallery image version. The provisioning state, which
-     * only appears in the response.
-     *
+     * Get the provisioningState property: The provisioning state, which only appears in the response.
+     * 
      * @return the provisioningState value.
      */
-    public GalleryImageVersionPropertiesProvisioningState provisioningState() {
+    public GalleryProvisioningState provisioningState() {
         return this.innerProperties() == null ? null : this.innerProperties().provisioningState();
     }
 
     /**
      * Get the storageProfile property: This is the storage profile of a Gallery Image Version.
-     *
+     * 
      * @return the storageProfile value.
      */
     public GalleryImageVersionStorageProfile storageProfile() {
@@ -82,7 +134,7 @@ public final class GalleryImageVersionUpdate extends UpdateResourceDefinition {
 
     /**
      * Set the storageProfile property: This is the storage profile of a Gallery Image Version.
-     *
+     * 
      * @param storageProfile the storageProfile value to set.
      * @return the GalleryImageVersionUpdate object itself.
      */
@@ -95,8 +147,31 @@ public final class GalleryImageVersionUpdate extends UpdateResourceDefinition {
     }
 
     /**
+     * Get the safetyProfile property: This is the safety profile of the Gallery Image Version.
+     * 
+     * @return the safetyProfile value.
+     */
+    public GalleryImageVersionSafetyProfile safetyProfile() {
+        return this.innerProperties() == null ? null : this.innerProperties().safetyProfile();
+    }
+
+    /**
+     * Set the safetyProfile property: This is the safety profile of the Gallery Image Version.
+     * 
+     * @param safetyProfile the safetyProfile value to set.
+     * @return the GalleryImageVersionUpdate object itself.
+     */
+    public GalleryImageVersionUpdate withSafetyProfile(GalleryImageVersionSafetyProfile safetyProfile) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new GalleryImageVersionProperties();
+        }
+        this.innerProperties().withSafetyProfile(safetyProfile);
+        return this;
+    }
+
+    /**
      * Get the replicationStatus property: This is the replication status of the gallery image version.
-     *
+     * 
      * @return the replicationStatus value.
      */
     public ReplicationStatus replicationStatus() {
@@ -104,8 +179,31 @@ public final class GalleryImageVersionUpdate extends UpdateResourceDefinition {
     }
 
     /**
+     * Get the securityProfile property: The security profile of a gallery image version.
+     * 
+     * @return the securityProfile value.
+     */
+    public ImageVersionSecurityProfile securityProfile() {
+        return this.innerProperties() == null ? null : this.innerProperties().securityProfile();
+    }
+
+    /**
+     * Set the securityProfile property: The security profile of a gallery image version.
+     * 
+     * @param securityProfile the securityProfile value to set.
+     * @return the GalleryImageVersionUpdate object itself.
+     */
+    public GalleryImageVersionUpdate withSecurityProfile(ImageVersionSecurityProfile securityProfile) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new GalleryImageVersionProperties();
+        }
+        this.innerProperties().withSecurityProfile(securityProfile);
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
@@ -114,5 +212,53 @@ public final class GalleryImageVersionUpdate extends UpdateResourceDefinition {
         if (innerProperties() != null) {
             innerProperties().validate();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeMapField("tags", tags(), (writer, element) -> writer.writeString(element));
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of GalleryImageVersionUpdate from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of GalleryImageVersionUpdate if the JsonReader was pointing to an instance of it, or null if
+     * it was pointing to JSON null.
+     * @throws IllegalStateException If the deserialized JSON object was missing any required properties.
+     * @throws IOException If an error occurs while reading the GalleryImageVersionUpdate.
+     */
+    public static GalleryImageVersionUpdate fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            GalleryImageVersionUpdate deserializedGalleryImageVersionUpdate = new GalleryImageVersionUpdate();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("id".equals(fieldName)) {
+                    deserializedGalleryImageVersionUpdate.id = reader.getString();
+                } else if ("name".equals(fieldName)) {
+                    deserializedGalleryImageVersionUpdate.name = reader.getString();
+                } else if ("type".equals(fieldName)) {
+                    deserializedGalleryImageVersionUpdate.type = reader.getString();
+                } else if ("tags".equals(fieldName)) {
+                    Map<String, String> tags = reader.readMap(reader1 -> reader1.getString());
+                    deserializedGalleryImageVersionUpdate.withTags(tags);
+                } else if ("properties".equals(fieldName)) {
+                    deserializedGalleryImageVersionUpdate.innerProperties
+                        = GalleryImageVersionProperties.fromJson(reader);
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedGalleryImageVersionUpdate;
+        });
     }
 }

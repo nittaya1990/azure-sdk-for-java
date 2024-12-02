@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Daily retention format. */
+/**
+ * Daily retention format.
+ */
 @Fluent
 public final class DailyRetentionFormat {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DailyRetentionFormat.class);
-
     /*
      * List of days of the month.
      */
@@ -22,8 +20,14 @@ public final class DailyRetentionFormat {
     private List<Day> daysOfTheMonth;
 
     /**
+     * Creates an instance of DailyRetentionFormat class.
+     */
+    public DailyRetentionFormat() {
+    }
+
+    /**
      * Get the daysOfTheMonth property: List of days of the month.
-     *
+     * 
      * @return the daysOfTheMonth value.
      */
     public List<Day> daysOfTheMonth() {
@@ -32,7 +36,7 @@ public final class DailyRetentionFormat {
 
     /**
      * Set the daysOfTheMonth property: List of days of the month.
-     *
+     * 
      * @param daysOfTheMonth the daysOfTheMonth value to set.
      * @return the DailyRetentionFormat object itself.
      */
@@ -43,7 +47,7 @@ public final class DailyRetentionFormat {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

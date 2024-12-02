@@ -30,19 +30,34 @@ import java.util.Random;
  * Base class for Azure Search performance tests.
  */
 public abstract class ServiceTest<TOptions extends PerfStressOptions> extends PerfStressTest<TOptions> {
-    private static final String CONFIGURATION_ERROR = "Configuration %s must be set in either environment variables "
-        + "or system properties.%n";
+    private static final String CONFIGURATION_ERROR
+        = "Configuration %s must be set in either environment variables " + "or system properties.%n";
     private static final String ALLOWED_INDEX_CHARACTERS = "abcdefghijklmnopqrstuvwxyz0123456789";
     private static final int INDEX_NAME_LENGTH = 24;
 
+    /**
+     * Well-known suggester name
+     */
     protected static final String SUGGESTER_NAME = "sg";
 
+    /**
+     * The SearchClient used in performance tests.
+     */
     protected final SearchClient searchClient;
+
+    /**
+     * The SearchAsyncClient used in asynchronous performance tests.
+     */
     protected final SearchAsyncClient searchAsyncClient;
 
     private final SearchIndexAsyncClient searchIndexAsyncClient;
     private final String indexName;
 
+    /**
+     * Creates the basic information needed for an Azure Search performance test.
+     *
+     * @param options Performance test configuration options.
+     */
     public ServiceTest(TOptions options) {
         super(options);
 
@@ -58,8 +73,7 @@ public abstract class ServiceTest<TOptions extends PerfStressOptions> extends Pe
             System.exit(1);
         }
 
-        SearchIndexClientBuilder builder = new SearchIndexClientBuilder()
-            .endpoint(searchEndpoint)
+        SearchIndexClientBuilder builder = new SearchIndexClientBuilder().endpoint(searchEndpoint)
             .credential(new AzureKeyCredential(searchApiKey))
             .httpClient(new NettyAsyncHttpClientBuilder()
                 .proxy(new ProxyOptions(ProxyOptions.Type.HTTP, new InetSocketAddress("localhost", 8888)))
@@ -89,6 +103,13 @@ public abstract class ServiceTest<TOptions extends PerfStressOptions> extends Pe
         return searchIndexAsyncClient.deleteIndex(indexName);
     }
 
+    /**
+     * Populates a Search service index with documents.
+     *
+     * @param documentCount The number of documents.
+     * @param documentSize The size of the documents.
+     * @return An asynchronous response that only indicates completion.
+     */
     protected Mono<Void> populateIndex(int documentCount, String documentSize) {
         /*
          * Generate the count of documents using the given size. Then, upload the documents in batches of 100, this
@@ -100,13 +121,14 @@ public abstract class ServiceTest<TOptions extends PerfStressOptions> extends Pe
 
             return Flux.range(0, (int) Math.ceil(hotels.size() / 100D))
                 .map(i -> hotels.subList(i * 100, Math.min((i + 1) * 100, hotels.size())))
-                .flatMap(hotelDocuments -> searchAsyncClient.indexDocuments(new IndexDocumentsBatch<Hotel>()
-                    .addUploadActions(hotelDocuments)))
+                .flatMap(hotelDocuments -> searchAsyncClient
+                    .indexDocuments(new IndexDocumentsBatch<Hotel>().addUploadActions(hotelDocuments)))
                 .then();
-        }).then(Mono.defer(() -> searchAsyncClient.getDocumentCount()
-            .delaySubscription(Duration.ofSeconds(1))
-            .filter(count -> count == documentCount)
-            .repeatWhenEmpty(Flux::repeat)
-            .then()));
+        })
+            .then(Mono.defer(() -> searchAsyncClient.getDocumentCount()
+                .delaySubscription(Duration.ofSeconds(1))
+                .filter(count -> count == documentCount)
+                .repeatWhenEmpty(Flux::repeat)
+                .then()));
     }
 }

@@ -53,6 +53,13 @@ public interface IssueAttachmentContract {
     String content();
 
     /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
+
+    /**
      * Gets the inner com.azure.resourcemanager.apimanagement.fluent.models.IssueAttachmentContractInner object.
      *
      * @return the inner object.
@@ -63,17 +70,19 @@ public interface IssueAttachmentContract {
     interface Definition
         extends DefinitionStages.Blank, DefinitionStages.WithParentResource, DefinitionStages.WithCreate {
     }
+
     /** The IssueAttachmentContract definition stages. */
     interface DefinitionStages {
         /** The first stage of the IssueAttachmentContract definition. */
         interface Blank extends WithParentResource {
         }
+
         /** The stage of the IssueAttachmentContract definition allowing to specify parent resource. */
         interface WithParentResource {
             /**
              * Specifies resourceGroupName, serviceName, apiId, issueId.
              *
-             * @param resourceGroupName The name of the resource group.
+             * @param resourceGroupName The name of the resource group. The name is case insensitive.
              * @param serviceName The name of the API Management service.
              * @param apiId API identifier. Must be unique in the current API Management service instance.
              * @param issueId Issue identifier. Must be unique in the current API Management service instance.
@@ -81,15 +90,13 @@ public interface IssueAttachmentContract {
              */
             WithCreate withExistingIssue(String resourceGroupName, String serviceName, String apiId, String issueId);
         }
+
         /**
          * The stage of the IssueAttachmentContract definition which contains all the minimum required properties for
          * the resource to be created, but also allows for any other optional properties to be specified.
          */
-        interface WithCreate
-            extends DefinitionStages.WithTitle,
-                DefinitionStages.WithContentFormat,
-                DefinitionStages.WithContent,
-                DefinitionStages.WithIfMatch {
+        interface WithCreate extends DefinitionStages.WithTitle, DefinitionStages.WithContentFormat,
+            DefinitionStages.WithContent, DefinitionStages.WithIfMatch {
             /**
              * Executes the create request.
              *
@@ -105,6 +112,7 @@ public interface IssueAttachmentContract {
              */
             IssueAttachmentContract create(Context context);
         }
+
         /** The stage of the IssueAttachmentContract definition allowing to specify title. */
         interface WithTitle {
             /**
@@ -115,6 +123,7 @@ public interface IssueAttachmentContract {
              */
             WithCreate withTitle(String title);
         }
+
         /** The stage of the IssueAttachmentContract definition allowing to specify contentFormat. */
         interface WithContentFormat {
             /**
@@ -127,6 +136,7 @@ public interface IssueAttachmentContract {
              */
             WithCreate withContentFormat(String contentFormat);
         }
+
         /** The stage of the IssueAttachmentContract definition allowing to specify content. */
         interface WithContent {
             /**
@@ -137,6 +147,7 @@ public interface IssueAttachmentContract {
              */
             WithCreate withContent(String content);
         }
+
         /** The stage of the IssueAttachmentContract definition allowing to specify ifMatch. */
         interface WithIfMatch {
             /**
@@ -150,6 +161,7 @@ public interface IssueAttachmentContract {
             WithCreate withIfMatch(String ifMatch);
         }
     }
+
     /**
      * Begins update for the IssueAttachmentContract resource.
      *
@@ -158,11 +170,8 @@ public interface IssueAttachmentContract {
     IssueAttachmentContract.Update update();
 
     /** The template for IssueAttachmentContract update. */
-    interface Update
-        extends UpdateStages.WithTitle,
-            UpdateStages.WithContentFormat,
-            UpdateStages.WithContent,
-            UpdateStages.WithIfMatch {
+    interface Update extends UpdateStages.WithTitle, UpdateStages.WithContentFormat, UpdateStages.WithContent,
+        UpdateStages.WithIfMatch {
         /**
          * Executes the update request.
          *
@@ -178,6 +187,7 @@ public interface IssueAttachmentContract {
          */
         IssueAttachmentContract apply(Context context);
     }
+
     /** The IssueAttachmentContract update stages. */
     interface UpdateStages {
         /** The stage of the IssueAttachmentContract update allowing to specify title. */
@@ -190,6 +200,7 @@ public interface IssueAttachmentContract {
              */
             Update withTitle(String title);
         }
+
         /** The stage of the IssueAttachmentContract update allowing to specify contentFormat. */
         interface WithContentFormat {
             /**
@@ -202,6 +213,7 @@ public interface IssueAttachmentContract {
              */
             Update withContentFormat(String contentFormat);
         }
+
         /** The stage of the IssueAttachmentContract update allowing to specify content. */
         interface WithContent {
             /**
@@ -212,6 +224,7 @@ public interface IssueAttachmentContract {
              */
             Update withContent(String content);
         }
+
         /** The stage of the IssueAttachmentContract update allowing to specify ifMatch. */
         interface WithIfMatch {
             /**
@@ -225,6 +238,7 @@ public interface IssueAttachmentContract {
             Update withIfMatch(String ifMatch);
         }
     }
+
     /**
      * Refreshes the resource to sync with Azure.
      *

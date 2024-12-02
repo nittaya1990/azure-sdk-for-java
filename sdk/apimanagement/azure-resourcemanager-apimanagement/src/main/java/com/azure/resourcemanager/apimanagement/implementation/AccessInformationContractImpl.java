@@ -43,6 +43,10 @@ public final class AccessInformationContractImpl
         return this.innerModel().enabled();
     }
 
+    public String resourceGroupName() {
+        return resourceGroupName;
+    }
+
     public AccessInformationContractInner innerModel() {
         return this.innerObject;
     }
@@ -72,29 +76,24 @@ public final class AccessInformationContractImpl
     }
 
     public AccessInformationContract create() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getTenantAccess()
-                .createWithResponse(
-                    resourceGroupName, serviceName, accessName, createIfMatch, createParameters, Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getTenantAccess()
+            .createWithResponse(resourceGroupName, serviceName, accessName, createIfMatch, createParameters,
+                Context.NONE)
+            .getValue();
         return this;
     }
 
     public AccessInformationContract create(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getTenantAccess()
-                .createWithResponse(
-                    resourceGroupName, serviceName, accessName, createIfMatch, createParameters, context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getTenantAccess()
+            .createWithResponse(resourceGroupName, serviceName, accessName, createIfMatch, createParameters, context)
+            .getValue();
         return this;
     }
 
-    AccessInformationContractImpl(
-        AccessIdName name, com.azure.resourcemanager.apimanagement.ApiManagementManager serviceManager) {
+    AccessInformationContractImpl(AccessIdName name,
+        com.azure.resourcemanager.apimanagement.ApiManagementManager serviceManager) {
         this.innerObject = new AccessInformationContractInner();
         this.serviceManager = serviceManager;
         this.accessName = name;
@@ -109,29 +108,23 @@ public final class AccessInformationContractImpl
     }
 
     public AccessInformationContract apply() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getTenantAccess()
-                .updateWithResponse(
-                    resourceGroupName, serviceName, accessName, updateIfMatch, updateParameters, Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getTenantAccess()
+            .updateWithResponse(resourceGroupName, serviceName, accessName, updateIfMatch, updateParameters,
+                Context.NONE)
+            .getValue();
         return this;
     }
 
     public AccessInformationContract apply(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getTenantAccess()
-                .updateWithResponse(
-                    resourceGroupName, serviceName, accessName, updateIfMatch, updateParameters, context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getTenantAccess()
+            .updateWithResponse(resourceGroupName, serviceName, accessName, updateIfMatch, updateParameters, context)
+            .getValue();
         return this;
     }
 
-    AccessInformationContractImpl(
-        AccessInformationContractInner innerObject,
+    AccessInformationContractImpl(AccessInformationContractInner innerObject,
         com.azure.resourcemanager.apimanagement.ApiManagementManager serviceManager) {
         this.innerObject = innerObject;
         this.serviceManager = serviceManager;
@@ -141,53 +134,46 @@ public final class AccessInformationContractImpl
     }
 
     public AccessInformationContract refresh() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getTenantAccess()
-                .getWithResponse(resourceGroupName, serviceName, accessName, Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getTenantAccess()
+            .getWithResponse(resourceGroupName, serviceName, accessName, Context.NONE)
+            .getValue();
         return this;
     }
 
     public AccessInformationContract refresh(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getTenantAccess()
-                .getWithResponse(resourceGroupName, serviceName, accessName, context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getTenantAccess()
+            .getWithResponse(resourceGroupName, serviceName, accessName, context)
+            .getValue();
         return this;
+    }
+
+    public Response<Void> regeneratePrimaryKeyWithResponse(Context context) {
+        return serviceManager.tenantAccess()
+            .regeneratePrimaryKeyWithResponse(resourceGroupName, serviceName, accessName, context);
     }
 
     public void regeneratePrimaryKey() {
         serviceManager.tenantAccess().regeneratePrimaryKey(resourceGroupName, serviceName, accessName);
     }
 
-    public Response<Void> regeneratePrimaryKeyWithResponse(Context context) {
-        return serviceManager
-            .tenantAccess()
-            .regeneratePrimaryKeyWithResponse(resourceGroupName, serviceName, accessName, context);
+    public Response<Void> regenerateSecondaryKeyWithResponse(Context context) {
+        return serviceManager.tenantAccess()
+            .regenerateSecondaryKeyWithResponse(resourceGroupName, serviceName, accessName, context);
     }
 
     public void regenerateSecondaryKey() {
         serviceManager.tenantAccess().regenerateSecondaryKey(resourceGroupName, serviceName, accessName);
     }
 
-    public Response<Void> regenerateSecondaryKeyWithResponse(Context context) {
-        return serviceManager
-            .tenantAccess()
-            .regenerateSecondaryKeyWithResponse(resourceGroupName, serviceName, accessName, context);
+    public Response<AccessInformationSecretsContract> listSecretsWithResponse(Context context) {
+        return serviceManager.tenantAccess()
+            .listSecretsWithResponse(resourceGroupName, serviceName, accessName, context);
     }
 
     public AccessInformationSecretsContract listSecrets() {
         return serviceManager.tenantAccess().listSecrets(resourceGroupName, serviceName, accessName);
-    }
-
-    public Response<AccessInformationSecretsContract> listSecretsWithResponse(Context context) {
-        return serviceManager
-            .tenantAccess()
-            .listSecretsWithResponse(resourceGroupName, serviceName, accessName, context);
     }
 
     public AccessInformationContractImpl withPrincipalId(String principalId) {

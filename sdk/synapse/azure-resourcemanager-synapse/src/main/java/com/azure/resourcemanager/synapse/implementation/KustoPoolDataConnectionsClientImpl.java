@@ -31,7 +31,6 @@ import com.azure.core.management.exception.ManagementException;
 import com.azure.core.management.polling.PollResult;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.core.util.polling.PollerFlux;
 import com.azure.core.util.polling.SyncPoller;
 import com.azure.resourcemanager.synapse.fluent.KustoPoolDataConnectionsClient;
@@ -45,25 +44,28 @@ import java.nio.ByteBuffer;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-/** An instance of this class provides access to all the operations defined in KustoPoolDataConnectionsClient. */
+/**
+ * An instance of this class provides access to all the operations defined in KustoPoolDataConnectionsClient.
+ */
 public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataConnectionsClient {
-    private final ClientLogger logger = new ClientLogger(KustoPoolDataConnectionsClientImpl.class);
-
-    /** The proxy service used to perform REST calls. */
+    /**
+     * The proxy service used to perform REST calls.
+     */
     private final KustoPoolDataConnectionsService service;
 
-    /** The service client containing this operation class. */
+    /**
+     * The service client containing this operation class.
+     */
     private final SynapseManagementClientImpl client;
 
     /**
      * Initializes an instance of KustoPoolDataConnectionsClientImpl.
-     *
+     * 
      * @param client the instance of the service client containing this operation class.
      */
     KustoPoolDataConnectionsClientImpl(SynapseManagementClientImpl client) {
-        this.service =
-            RestProxy
-                .create(KustoPoolDataConnectionsService.class, client.getHttpPipeline(), client.getSerializerAdapter());
+        this.service = RestProxy.create(KustoPoolDataConnectionsService.class, client.getHttpPipeline(),
+            client.getSerializerAdapter());
         this.client = client;
     }
 
@@ -73,142 +75,91 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      */
     @Host("{$host}")
     @ServiceInterface(name = "SynapseManagementCli")
-    private interface KustoPoolDataConnectionsService {
-        @Headers({"Content-Type: application/json"})
-        @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
-                + "/{workspaceName}/kustoPools/{kustoPoolName}/databases/{databaseName}/checkNameAvailability")
-        @ExpectedResponses({200})
+    public interface KustoPoolDataConnectionsService {
+        @Headers({ "Content-Type: application/json" })
+        @Post("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces/{workspaceName}/kustoPools/{kustoPoolName}/databases/{databaseName}/checkNameAvailability")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<CheckNameResultInner>> checkNameAvailability(
-            @HostParam("$host") String endpoint,
+        Mono<Response<CheckNameResultInner>> checkNameAvailability(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("workspaceName") String workspaceName,
-            @PathParam("kustoPoolName") String kustoPoolName,
-            @PathParam("databaseName") String databaseName,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("workspaceName") String workspaceName,
+            @PathParam("kustoPoolName") String kustoPoolName, @PathParam("databaseName") String databaseName,
             @QueryParam("api-version") String apiVersion,
             @BodyParam("application/json") DataConnectionCheckNameRequest dataConnectionName,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
-                + "/{workspaceName}/kustoPools/{kustoPoolName}/databases/{databaseName}/dataConnectionValidation")
-        @ExpectedResponses({200, 202})
+        @Headers({ "Content-Type: application/json" })
+        @Post("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces/{workspaceName}/kustoPools/{kustoPoolName}/databases/{databaseName}/dataConnectionValidation")
+        @ExpectedResponses({ 200, 202 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> dataConnectionValidation(
-            @HostParam("$host") String endpoint,
+        Mono<Response<Flux<ByteBuffer>>> dataConnectionValidation(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("workspaceName") String workspaceName,
-            @PathParam("kustoPoolName") String kustoPoolName,
-            @PathParam("databaseName") String databaseName,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("workspaceName") String workspaceName,
+            @PathParam("kustoPoolName") String kustoPoolName, @PathParam("databaseName") String databaseName,
             @QueryParam("api-version") String apiVersion,
             @BodyParam("application/json") DataConnectionValidationInner parameters,
-            @HeaderParam("Accept") String accept,
+            @HeaderParam("Accept") String accept, Context context);
+
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces/{workspaceName}/kustoPools/{kustoPoolName}/databases/{databaseName}/dataConnections")
+        @ExpectedResponses({ 200 })
+        @UnexpectedResponseExceptionType(ManagementException.class)
+        Mono<Response<DataConnectionListResult>> listByDatabase(@HostParam("$host") String endpoint,
+            @PathParam("subscriptionId") String subscriptionId,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("workspaceName") String workspaceName,
+            @PathParam("kustoPoolName") String kustoPoolName, @PathParam("databaseName") String databaseName,
+            @QueryParam("api-version") String apiVersion, @HeaderParam("Accept") String accept, Context context);
+
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces/{workspaceName}/kustoPools/{kustoPoolName}/databases/{databaseName}/dataConnections/{dataConnectionName}")
+        @ExpectedResponses({ 200 })
+        @UnexpectedResponseExceptionType(ManagementException.class)
+        Mono<Response<DataConnectionInner>> get(@HostParam("$host") String endpoint,
+            @PathParam("subscriptionId") String subscriptionId,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("workspaceName") String workspaceName,
+            @PathParam("kustoPoolName") String kustoPoolName, @PathParam("databaseName") String databaseName,
+            @PathParam("dataConnectionName") String dataConnectionName, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
+
+        @Headers({ "Content-Type: application/json" })
+        @Put("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces/{workspaceName}/kustoPools/{kustoPoolName}/databases/{databaseName}/dataConnections/{dataConnectionName}")
+        @ExpectedResponses({ 200, 201 })
+        @UnexpectedResponseExceptionType(ManagementException.class)
+        Mono<Response<Flux<ByteBuffer>>> createOrUpdate(@HostParam("$host") String endpoint,
+            @PathParam("subscriptionId") String subscriptionId,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("workspaceName") String workspaceName,
+            @PathParam("kustoPoolName") String kustoPoolName, @PathParam("databaseName") String databaseName,
+            @PathParam("dataConnectionName") String dataConnectionName, @QueryParam("api-version") String apiVersion,
+            @BodyParam("application/json") DataConnectionInner parameters, @HeaderParam("Accept") String accept,
             Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
-                + "/{workspaceName}/kustoPools/{kustoPoolName}/databases/{databaseName}/dataConnections")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Patch("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces/{workspaceName}/kustoPools/{kustoPoolName}/databases/{databaseName}/dataConnections/{dataConnectionName}")
+        @ExpectedResponses({ 200, 202 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<DataConnectionListResult>> listByDatabase(
-            @HostParam("$host") String endpoint,
+        Mono<Response<Flux<ByteBuffer>>> update(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("workspaceName") String workspaceName,
-            @PathParam("kustoPoolName") String kustoPoolName,
-            @PathParam("databaseName") String databaseName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("workspaceName") String workspaceName,
+            @PathParam("kustoPoolName") String kustoPoolName, @PathParam("databaseName") String databaseName,
+            @PathParam("dataConnectionName") String dataConnectionName, @QueryParam("api-version") String apiVersion,
+            @BodyParam("application/json") DataConnectionInner parameters, @HeaderParam("Accept") String accept,
             Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
-                + "/{workspaceName}/kustoPools/{kustoPoolName}/databases/{databaseName}/dataConnections"
-                + "/{dataConnectionName}")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Delete("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces/{workspaceName}/kustoPools/{kustoPoolName}/databases/{databaseName}/dataConnections/{dataConnectionName}")
+        @ExpectedResponses({ 200, 202, 204 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<DataConnectionInner>> get(
-            @HostParam("$host") String endpoint,
+        Mono<Response<Flux<ByteBuffer>>> delete(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("workspaceName") String workspaceName,
-            @PathParam("kustoPoolName") String kustoPoolName,
-            @PathParam("databaseName") String databaseName,
-            @PathParam("dataConnectionName") String dataConnectionName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
-
-        @Headers({"Content-Type: application/json"})
-        @Put(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
-                + "/{workspaceName}/kustoPools/{kustoPoolName}/databases/{databaseName}/dataConnections"
-                + "/{dataConnectionName}")
-        @ExpectedResponses({200, 201})
-        @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> createOrUpdate(
-            @HostParam("$host") String endpoint,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("workspaceName") String workspaceName,
-            @PathParam("kustoPoolName") String kustoPoolName,
-            @PathParam("databaseName") String databaseName,
-            @PathParam("dataConnectionName") String dataConnectionName,
-            @QueryParam("api-version") String apiVersion,
-            @BodyParam("application/json") DataConnectionInner parameters,
-            @HeaderParam("Accept") String accept,
-            Context context);
-
-        @Headers({"Content-Type: application/json"})
-        @Patch(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
-                + "/{workspaceName}/kustoPools/{kustoPoolName}/databases/{databaseName}/dataConnections"
-                + "/{dataConnectionName}")
-        @ExpectedResponses({200, 202})
-        @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> update(
-            @HostParam("$host") String endpoint,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("workspaceName") String workspaceName,
-            @PathParam("kustoPoolName") String kustoPoolName,
-            @PathParam("databaseName") String databaseName,
-            @PathParam("dataConnectionName") String dataConnectionName,
-            @QueryParam("api-version") String apiVersion,
-            @BodyParam("application/json") DataConnectionInner parameters,
-            @HeaderParam("Accept") String accept,
-            Context context);
-
-        @Headers({"Content-Type: application/json"})
-        @Delete(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
-                + "/{workspaceName}/kustoPools/{kustoPoolName}/databases/{databaseName}/dataConnections"
-                + "/{dataConnectionName}")
-        @ExpectedResponses({200, 202, 204})
-        @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> delete(
-            @HostParam("$host") String endpoint,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("workspaceName") String workspaceName,
-            @PathParam("kustoPoolName") String kustoPoolName,
-            @PathParam("databaseName") String databaseName,
-            @PathParam("dataConnectionName") String dataConnectionName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("workspaceName") String workspaceName,
+            @PathParam("kustoPoolName") String kustoPoolName, @PathParam("databaseName") String databaseName,
+            @PathParam("dataConnectionName") String dataConnectionName, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
     }
 
     /**
      * Checks that the data connection name is valid and is not already in use.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -217,26 +168,20 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the result returned from a check name availability request.
+     * @return the result returned from a check name availability request along with {@link Response} on successful
+     * completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<CheckNameResultInner>> checkNameAvailabilityWithResponseAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
+    private Mono<Response<CheckNameResultInner>> checkNameAvailabilityWithResponseAsync(String resourceGroupName,
+        String workspaceName, String kustoPoolName, String databaseName,
         DataConnectionCheckNameRequest dataConnectionName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -260,26 +205,15 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .checkNameAvailability(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            workspaceName,
-                            kustoPoolName,
-                            databaseName,
-                            apiVersion,
-                            dataConnectionName,
-                            accept,
-                            context))
+            .withContext(context -> service.checkNameAvailability(this.client.getEndpoint(),
+                this.client.getSubscriptionId(), resourceGroupName, workspaceName, kustoPoolName, databaseName,
+                apiVersion, dataConnectionName, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Checks that the data connection name is valid and is not already in use.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -289,27 +223,20 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the result returned from a check name availability request.
+     * @return the result returned from a check name availability request along with {@link Response} on successful
+     * completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<CheckNameResultInner>> checkNameAvailabilityWithResponseAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        DataConnectionCheckNameRequest dataConnectionName,
-        Context context) {
+    private Mono<Response<CheckNameResultInner>> checkNameAvailabilityWithResponseAsync(String resourceGroupName,
+        String workspaceName, String kustoPoolName, String databaseName,
+        DataConnectionCheckNameRequest dataConnectionName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -333,23 +260,14 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .checkNameAvailability(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                workspaceName,
-                kustoPoolName,
-                databaseName,
-                apiVersion,
-                dataConnectionName,
-                accept,
-                context);
+        return service.checkNameAvailability(this.client.getEndpoint(), this.client.getSubscriptionId(),
+            resourceGroupName, workspaceName, kustoPoolName, databaseName, apiVersion, dataConnectionName, accept,
+            context);
     }
 
     /**
      * Checks that the data connection name is valid and is not already in use.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -358,55 +276,18 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the result returned from a check name availability request.
+     * @return the result returned from a check name availability request on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<CheckNameResultInner> checkNameAvailabilityAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        DataConnectionCheckNameRequest dataConnectionName) {
-        return checkNameAvailabilityWithResponseAsync(
-                resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName)
-            .flatMap(
-                (Response<CheckNameResultInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+    private Mono<CheckNameResultInner> checkNameAvailabilityAsync(String resourceGroupName, String workspaceName,
+        String kustoPoolName, String databaseName, DataConnectionCheckNameRequest dataConnectionName) {
+        return checkNameAvailabilityWithResponseAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName,
+            dataConnectionName).flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Checks that the data connection name is valid and is not already in use.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param databaseName The name of the database in the Kusto pool.
-     * @param dataConnectionName The name of the data connection.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the result returned from a check name availability request.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public CheckNameResultInner checkNameAvailability(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        DataConnectionCheckNameRequest dataConnectionName) {
-        return checkNameAvailabilityAsync(
-                resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName)
-            .block();
-    }
-
-    /**
-     * Checks that the data connection name is valid and is not already in use.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -416,24 +297,39 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the result returned from a check name availability request along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<CheckNameResultInner> checkNameAvailabilityWithResponse(String resourceGroupName,
+        String workspaceName, String kustoPoolName, String databaseName,
+        DataConnectionCheckNameRequest dataConnectionName, Context context) {
+        return checkNameAvailabilityWithResponseAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName,
+            dataConnectionName, context).block();
+    }
+
+    /**
+     * Checks that the data connection name is valid and is not already in use.
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param databaseName The name of the database in the Kusto pool.
+     * @param dataConnectionName The name of the data connection.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return the result returned from a check name availability request.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<CheckNameResultInner> checkNameAvailabilityWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        DataConnectionCheckNameRequest dataConnectionName,
-        Context context) {
-        return checkNameAvailabilityWithResponseAsync(
-                resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName, context)
-            .block();
+    public CheckNameResultInner checkNameAvailability(String resourceGroupName, String workspaceName,
+        String kustoPoolName, String databaseName, DataConnectionCheckNameRequest dataConnectionName) {
+        return checkNameAvailabilityWithResponse(resourceGroupName, workspaceName, kustoPoolName, databaseName,
+            dataConnectionName, Context.NONE).getValue();
     }
 
     /**
      * Checks that the data connection parameters are valid.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -442,26 +338,19 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto data connection validation result.
+     * @return the list Kusto data connection validation result along with {@link Response} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> dataConnectionValidationWithResponseAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        DataConnectionValidationInner parameters) {
+    private Mono<Response<Flux<ByteBuffer>>> dataConnectionValidationWithResponseAsync(String resourceGroupName,
+        String workspaceName, String kustoPoolName, String databaseName, DataConnectionValidationInner parameters) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -484,26 +373,15 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .dataConnectionValidation(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            workspaceName,
-                            kustoPoolName,
-                            databaseName,
-                            apiVersion,
-                            parameters,
-                            accept,
-                            context))
+            .withContext(context -> service.dataConnectionValidation(this.client.getEndpoint(),
+                this.client.getSubscriptionId(), resourceGroupName, workspaceName, kustoPoolName, databaseName,
+                apiVersion, parameters, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Checks that the data connection parameters are valid.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -513,27 +391,20 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto data connection validation result.
+     * @return the list Kusto data connection validation result along with {@link Response} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> dataConnectionValidationWithResponseAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        DataConnectionValidationInner parameters,
+    private Mono<Response<Flux<ByteBuffer>>> dataConnectionValidationWithResponseAsync(String resourceGroupName,
+        String workspaceName, String kustoPoolName, String databaseName, DataConnectionValidationInner parameters,
         Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -556,23 +427,13 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .dataConnectionValidation(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                workspaceName,
-                kustoPoolName,
-                databaseName,
-                apiVersion,
-                parameters,
-                accept,
-                context);
+        return service.dataConnectionValidation(this.client.getEndpoint(), this.client.getSubscriptionId(),
+            resourceGroupName, workspaceName, kustoPoolName, databaseName, apiVersion, parameters, accept, context);
     }
 
     /**
      * Checks that the data connection parameters are valid.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -581,32 +442,23 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto data connection validation result.
+     * @return the {@link PollerFlux} for polling of the list Kusto data connection validation result.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<DataConnectionValidationListResultInner>, DataConnectionValidationListResultInner>
-        beginDataConnectionValidationAsync(
-            String resourceGroupName,
-            String workspaceName,
-            String kustoPoolName,
-            String databaseName,
-            DataConnectionValidationInner parameters) {
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            dataConnectionValidationWithResponseAsync(
-                resourceGroupName, workspaceName, kustoPoolName, databaseName, parameters);
-        return this
-            .client
-            .<DataConnectionValidationListResultInner, DataConnectionValidationListResultInner>getLroResult(
-                mono,
-                this.client.getHttpPipeline(),
-                DataConnectionValidationListResultInner.class,
-                DataConnectionValidationListResultInner.class,
-                Context.NONE);
+        beginDataConnectionValidationAsync(String resourceGroupName, String workspaceName, String kustoPoolName,
+            String databaseName, DataConnectionValidationInner parameters) {
+        Mono<Response<Flux<ByteBuffer>>> mono = dataConnectionValidationWithResponseAsync(resourceGroupName,
+            workspaceName, kustoPoolName, databaseName, parameters);
+        return this.client
+            .<DataConnectionValidationListResultInner, DataConnectionValidationListResultInner>getLroResult(mono,
+                this.client.getHttpPipeline(), DataConnectionValidationListResultInner.class,
+                DataConnectionValidationListResultInner.class, this.client.getContext());
     }
 
     /**
      * Checks that the data connection parameters are valid.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -616,60 +468,47 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto data connection validation result.
+     * @return the {@link PollerFlux} for polling of the list Kusto data connection validation result.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<DataConnectionValidationListResultInner>, DataConnectionValidationListResultInner>
-        beginDataConnectionValidationAsync(
-            String resourceGroupName,
-            String workspaceName,
-            String kustoPoolName,
-            String databaseName,
-            DataConnectionValidationInner parameters,
-            Context context) {
+        beginDataConnectionValidationAsync(String resourceGroupName, String workspaceName, String kustoPoolName,
+            String databaseName, DataConnectionValidationInner parameters, Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            dataConnectionValidationWithResponseAsync(
-                resourceGroupName, workspaceName, kustoPoolName, databaseName, parameters, context);
+        Mono<Response<Flux<ByteBuffer>>> mono = dataConnectionValidationWithResponseAsync(resourceGroupName,
+            workspaceName, kustoPoolName, databaseName, parameters, context);
+        return this.client
+            .<DataConnectionValidationListResultInner, DataConnectionValidationListResultInner>getLroResult(mono,
+                this.client.getHttpPipeline(), DataConnectionValidationListResultInner.class,
+                DataConnectionValidationListResultInner.class, context);
+    }
+
+    /**
+     * Checks that the data connection parameters are valid.
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param databaseName The name of the database in the Kusto pool.
+     * @param parameters The data connection parameters supplied to the CreateOrUpdate operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of the list Kusto data connection validation result.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<DataConnectionValidationListResultInner>, DataConnectionValidationListResultInner>
+        beginDataConnectionValidation(String resourceGroupName, String workspaceName, String kustoPoolName,
+            String databaseName, DataConnectionValidationInner parameters) {
         return this
-            .client
-            .<DataConnectionValidationListResultInner, DataConnectionValidationListResultInner>getLroResult(
-                mono,
-                this.client.getHttpPipeline(),
-                DataConnectionValidationListResultInner.class,
-                DataConnectionValidationListResultInner.class,
-                context);
-    }
-
-    /**
-     * Checks that the data connection parameters are valid.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param databaseName The name of the database in the Kusto pool.
-     * @param parameters The data connection parameters supplied to the CreateOrUpdate operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto data connection validation result.
-     */
-    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<DataConnectionValidationListResultInner>, DataConnectionValidationListResultInner>
-        beginDataConnectionValidation(
-            String resourceGroupName,
-            String workspaceName,
-            String kustoPoolName,
-            String databaseName,
-            DataConnectionValidationInner parameters) {
-        return beginDataConnectionValidationAsync(
-                resourceGroupName, workspaceName, kustoPoolName, databaseName, parameters)
+            .beginDataConnectionValidationAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName,
+                parameters)
             .getSyncPoller();
     }
 
     /**
      * Checks that the data connection parameters are valid.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -679,25 +518,21 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto data connection validation result.
+     * @return the {@link SyncPoller} for polling of the list Kusto data connection validation result.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<DataConnectionValidationListResultInner>, DataConnectionValidationListResultInner>
-        beginDataConnectionValidation(
-            String resourceGroupName,
-            String workspaceName,
-            String kustoPoolName,
-            String databaseName,
-            DataConnectionValidationInner parameters,
-            Context context) {
-        return beginDataConnectionValidationAsync(
-                resourceGroupName, workspaceName, kustoPoolName, databaseName, parameters, context)
+        beginDataConnectionValidation(String resourceGroupName, String workspaceName, String kustoPoolName,
+            String databaseName, DataConnectionValidationInner parameters, Context context) {
+        return this
+            .beginDataConnectionValidationAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName,
+                parameters, context)
             .getSyncPoller();
     }
 
     /**
      * Checks that the data connection parameters are valid.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -706,24 +541,18 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto data connection validation result.
+     * @return the list Kusto data connection validation result on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<DataConnectionValidationListResultInner> dataConnectionValidationAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        DataConnectionValidationInner parameters) {
-        return beginDataConnectionValidationAsync(
-                resourceGroupName, workspaceName, kustoPoolName, databaseName, parameters)
-            .last()
-            .flatMap(this.client::getLroFinalResultOrError);
+    private Mono<DataConnectionValidationListResultInner> dataConnectionValidationAsync(String resourceGroupName,
+        String workspaceName, String kustoPoolName, String databaseName, DataConnectionValidationInner parameters) {
+        return beginDataConnectionValidationAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName,
+            parameters).last().flatMap(this.client::getLroFinalResultOrError);
     }
 
     /**
      * Checks that the data connection parameters are valid.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -733,25 +562,19 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto data connection validation result.
+     * @return the list Kusto data connection validation result on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<DataConnectionValidationListResultInner> dataConnectionValidationAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        DataConnectionValidationInner parameters,
+    private Mono<DataConnectionValidationListResultInner> dataConnectionValidationAsync(String resourceGroupName,
+        String workspaceName, String kustoPoolName, String databaseName, DataConnectionValidationInner parameters,
         Context context) {
-        return beginDataConnectionValidationAsync(
-                resourceGroupName, workspaceName, kustoPoolName, databaseName, parameters, context)
-            .last()
-            .flatMap(this.client::getLroFinalResultOrError);
+        return beginDataConnectionValidationAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName,
+            parameters, context).last().flatMap(this.client::getLroFinalResultOrError);
     }
 
     /**
      * Checks that the data connection parameters are valid.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -763,19 +586,15 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @return the list Kusto data connection validation result.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public DataConnectionValidationListResultInner dataConnectionValidation(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        DataConnectionValidationInner parameters) {
+    public DataConnectionValidationListResultInner dataConnectionValidation(String resourceGroupName,
+        String workspaceName, String kustoPoolName, String databaseName, DataConnectionValidationInner parameters) {
         return dataConnectionValidationAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName, parameters)
             .block();
     }
 
     /**
      * Checks that the data connection parameters are valid.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -788,21 +607,16 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @return the list Kusto data connection validation result.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public DataConnectionValidationListResultInner dataConnectionValidation(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        DataConnectionValidationInner parameters,
+    public DataConnectionValidationListResultInner dataConnectionValidation(String resourceGroupName,
+        String workspaceName, String kustoPoolName, String databaseName, DataConnectionValidationInner parameters,
         Context context) {
-        return dataConnectionValidationAsync(
-                resourceGroupName, workspaceName, kustoPoolName, databaseName, parameters, context)
-            .block();
+        return dataConnectionValidationAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName, parameters,
+            context).block();
     }
 
     /**
      * Returns the list of data connections of the given Kusto pool database.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -810,22 +624,19 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto data connections operation response.
+     * @return the list Kusto data connections operation response along with {@link PagedResponse} on successful
+     * completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<DataConnectionInner>> listByDatabaseSinglePageAsync(
-        String resourceGroupName, String workspaceName, String kustoPoolName, String databaseName) {
+    private Mono<PagedResponse<DataConnectionInner>> listByDatabaseSinglePageAsync(String resourceGroupName,
+        String workspaceName, String kustoPoolName, String databaseName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -843,29 +654,16 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .listByDatabase(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            workspaceName,
-                            kustoPoolName,
-                            databaseName,
-                            apiVersion,
-                            accept,
-                            context))
-            .<PagedResponse<DataConnectionInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(), res.getStatusCode(), res.getHeaders(), res.getValue().value(), null, null))
+            .withContext(context -> service.listByDatabase(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                resourceGroupName, workspaceName, kustoPoolName, databaseName, apiVersion, accept, context))
+            .<PagedResponse<DataConnectionInner>>map(res -> new PagedResponseBase<>(res.getRequest(),
+                res.getStatusCode(), res.getHeaders(), res.getValue().value(), null, null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Returns the list of data connections of the given Kusto pool database.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -874,22 +672,19 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto data connections operation response.
+     * @return the list Kusto data connections operation response along with {@link PagedResponse} on successful
+     * completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<DataConnectionInner>> listByDatabaseSinglePageAsync(
-        String resourceGroupName, String workspaceName, String kustoPoolName, String databaseName, Context context) {
+    private Mono<PagedResponse<DataConnectionInner>> listByDatabaseSinglePageAsync(String resourceGroupName,
+        String workspaceName, String kustoPoolName, String databaseName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -908,25 +703,15 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
         final String accept = "application/json";
         context = this.client.mergeContext(context);
         return service
-            .listByDatabase(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                workspaceName,
-                kustoPoolName,
-                databaseName,
-                apiVersion,
-                accept,
-                context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(), res.getStatusCode(), res.getHeaders(), res.getValue().value(), null, null));
+            .listByDatabase(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+                workspaceName, kustoPoolName, databaseName, apiVersion, accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), null, null));
     }
 
     /**
      * Returns the list of data connections of the given Kusto pool database.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -934,18 +719,18 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto data connections operation response.
+     * @return the list Kusto data connections operation response as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<DataConnectionInner> listByDatabaseAsync(
-        String resourceGroupName, String workspaceName, String kustoPoolName, String databaseName) {
+    private PagedFlux<DataConnectionInner> listByDatabaseAsync(String resourceGroupName, String workspaceName,
+        String kustoPoolName, String databaseName) {
         return new PagedFlux<>(
             () -> listByDatabaseSinglePageAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName));
     }
 
     /**
      * Returns the list of data connections of the given Kusto pool database.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -954,19 +739,18 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto data connections operation response.
+     * @return the list Kusto data connections operation response as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<DataConnectionInner> listByDatabaseAsync(
-        String resourceGroupName, String workspaceName, String kustoPoolName, String databaseName, Context context) {
-        return new PagedFlux<>(
-            () ->
-                listByDatabaseSinglePageAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName, context));
+    private PagedFlux<DataConnectionInner> listByDatabaseAsync(String resourceGroupName, String workspaceName,
+        String kustoPoolName, String databaseName, Context context) {
+        return new PagedFlux<>(() -> listByDatabaseSinglePageAsync(resourceGroupName, workspaceName, kustoPoolName,
+            databaseName, context));
     }
 
     /**
      * Returns the list of data connections of the given Kusto pool database.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -974,17 +758,17 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto data connections operation response.
+     * @return the list Kusto data connections operation response as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<DataConnectionInner> listByDatabase(
-        String resourceGroupName, String workspaceName, String kustoPoolName, String databaseName) {
+    public PagedIterable<DataConnectionInner> listByDatabase(String resourceGroupName, String workspaceName,
+        String kustoPoolName, String databaseName) {
         return new PagedIterable<>(listByDatabaseAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName));
     }
 
     /**
      * Returns the list of data connections of the given Kusto pool database.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -993,18 +777,18 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto data connections operation response.
+     * @return the list Kusto data connections operation response as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<DataConnectionInner> listByDatabase(
-        String resourceGroupName, String workspaceName, String kustoPoolName, String databaseName, Context context) {
+    public PagedIterable<DataConnectionInner> listByDatabase(String resourceGroupName, String workspaceName,
+        String kustoPoolName, String databaseName, Context context) {
         return new PagedIterable<>(
             listByDatabaseAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName, context));
     }
 
     /**
      * Returns a data connection.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -1013,26 +797,19 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a data connection.
+     * @return class representing a data connection along with {@link Response} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<DataConnectionInner>> getWithResponseAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName) {
+    private Mono<Response<DataConnectionInner>> getWithResponseAsync(String resourceGroupName, String workspaceName,
+        String kustoPoolName, String databaseName, String dataConnectionName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1055,25 +832,14 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
         final String accept = "application/json";
         return FluxUtil
             .withContext(
-                context ->
-                    service
-                        .get(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            workspaceName,
-                            kustoPoolName,
-                            databaseName,
-                            dataConnectionName,
-                            apiVersion,
-                            accept,
-                            context))
+                context -> service.get(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+                    workspaceName, kustoPoolName, databaseName, dataConnectionName, apiVersion, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Returns a data connection.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -1083,27 +849,19 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a data connection.
+     * @return class representing a data connection along with {@link Response} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<DataConnectionInner>> getWithResponseAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName,
-        Context context) {
+    private Mono<Response<DataConnectionInner>> getWithResponseAsync(String resourceGroupName, String workspaceName,
+        String kustoPoolName, String databaseName, String dataConnectionName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1125,23 +883,13 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .get(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                workspaceName,
-                kustoPoolName,
-                databaseName,
-                dataConnectionName,
-                apiVersion,
-                accept,
-                context);
+        return service.get(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName, workspaceName,
+            kustoPoolName, databaseName, dataConnectionName, apiVersion, accept, context);
     }
 
     /**
      * Returns a data connection.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -1150,79 +898,59 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a data connection.
+     * @return class representing a data connection on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<DataConnectionInner> getAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName) {
+    private Mono<DataConnectionInner> getAsync(String resourceGroupName, String workspaceName, String kustoPoolName,
+        String databaseName, String dataConnectionName) {
         return getWithResponseAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName)
-            .flatMap(
-                (Response<DataConnectionInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Returns a data connection.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param databaseName The name of the database in the Kusto pool.
      * @param dataConnectionName The name of the data connection.
+     * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a data connection.
+     * @return class representing a data connection along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public DataConnectionInner get(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName) {
-        return getAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName).block();
+    public Response<DataConnectionInner> getWithResponse(String resourceGroupName, String workspaceName,
+        String kustoPoolName, String databaseName, String dataConnectionName, Context context) {
+        return getWithResponseAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName,
+            context).block();
     }
 
     /**
      * Returns a data connection.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param databaseName The name of the database in the Kusto pool.
      * @param dataConnectionName The name of the data connection.
-     * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return class representing a data connection.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<DataConnectionInner> getWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName,
-        Context context) {
-        return getWithResponseAsync(
-                resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName, context)
-            .block();
+    public DataConnectionInner get(String resourceGroupName, String workspaceName, String kustoPoolName,
+        String databaseName, String dataConnectionName) {
+        return getWithResponse(resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName,
+            Context.NONE).getValue();
     }
 
     /**
      * Creates or updates a data connection.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -1232,27 +960,20 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a data connection.
+     * @return class representing a data connection along with {@link Response} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName,
+    private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(String resourceGroupName,
+        String workspaceName, String kustoPoolName, String databaseName, String dataConnectionName,
         DataConnectionInner parameters) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1279,27 +1000,15 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .createOrUpdate(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            workspaceName,
-                            kustoPoolName,
-                            databaseName,
-                            dataConnectionName,
-                            apiVersion,
-                            parameters,
-                            accept,
-                            context))
+            .withContext(context -> service.createOrUpdate(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName, apiVersion,
+                parameters, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Creates or updates a data connection.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -1310,28 +1019,20 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a data connection.
+     * @return class representing a data connection along with {@link Response} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName,
-        DataConnectionInner parameters,
-        Context context) {
+    private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(String resourceGroupName,
+        String workspaceName, String kustoPoolName, String databaseName, String dataConnectionName,
+        DataConnectionInner parameters, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1358,24 +1059,13 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .createOrUpdate(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                workspaceName,
-                kustoPoolName,
-                databaseName,
-                dataConnectionName,
-                apiVersion,
-                parameters,
-                accept,
-                context);
+        return service.createOrUpdate(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+            workspaceName, kustoPoolName, databaseName, dataConnectionName, apiVersion, parameters, accept, context);
     }
 
     /**
      * Creates or updates a data connection.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -1385,32 +1075,21 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a data connection.
+     * @return the {@link PollerFlux} for polling of class representing a data connection.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<DataConnectionInner>, DataConnectionInner> beginCreateOrUpdateAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName,
-        DataConnectionInner parameters) {
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            createOrUpdateWithResponseAsync(
-                resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName, parameters);
-        return this
-            .client
-            .<DataConnectionInner, DataConnectionInner>getLroResult(
-                mono,
-                this.client.getHttpPipeline(),
-                DataConnectionInner.class,
-                DataConnectionInner.class,
-                Context.NONE);
+        String resourceGroupName, String workspaceName, String kustoPoolName, String databaseName,
+        String dataConnectionName, DataConnectionInner parameters) {
+        Mono<Response<Flux<ByteBuffer>>> mono = createOrUpdateWithResponseAsync(resourceGroupName, workspaceName,
+            kustoPoolName, databaseName, dataConnectionName, parameters);
+        return this.client.<DataConnectionInner, DataConnectionInner>getLroResult(mono, this.client.getHttpPipeline(),
+            DataConnectionInner.class, DataConnectionInner.class, this.client.getContext());
     }
 
     /**
      * Creates or updates a data connection.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -1421,57 +1100,46 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a data connection.
+     * @return the {@link PollerFlux} for polling of class representing a data connection.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<DataConnectionInner>, DataConnectionInner> beginCreateOrUpdateAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName,
-        DataConnectionInner parameters,
-        Context context) {
+        String resourceGroupName, String workspaceName, String kustoPoolName, String databaseName,
+        String dataConnectionName, DataConnectionInner parameters, Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            createOrUpdateWithResponseAsync(
-                resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName, parameters, context);
+        Mono<Response<Flux<ByteBuffer>>> mono = createOrUpdateWithResponseAsync(resourceGroupName, workspaceName,
+            kustoPoolName, databaseName, dataConnectionName, parameters, context);
+        return this.client.<DataConnectionInner, DataConnectionInner>getLroResult(mono, this.client.getHttpPipeline(),
+            DataConnectionInner.class, DataConnectionInner.class, context);
+    }
+
+    /**
+     * Creates or updates a data connection.
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param databaseName The name of the database in the Kusto pool.
+     * @param dataConnectionName The name of the data connection.
+     * @param parameters The data connection parameters supplied to the CreateOrUpdate operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of class representing a data connection.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<DataConnectionInner>, DataConnectionInner> beginCreateOrUpdate(
+        String resourceGroupName, String workspaceName, String kustoPoolName, String databaseName,
+        String dataConnectionName, DataConnectionInner parameters) {
         return this
-            .client
-            .<DataConnectionInner, DataConnectionInner>getLroResult(
-                mono, this.client.getHttpPipeline(), DataConnectionInner.class, DataConnectionInner.class, context);
-    }
-
-    /**
-     * Creates or updates a data connection.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param databaseName The name of the database in the Kusto pool.
-     * @param dataConnectionName The name of the data connection.
-     * @param parameters The data connection parameters supplied to the CreateOrUpdate operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a data connection.
-     */
-    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<DataConnectionInner>, DataConnectionInner> beginCreateOrUpdate(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName,
-        DataConnectionInner parameters) {
-        return beginCreateOrUpdateAsync(
-                resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName, parameters)
+            .beginCreateOrUpdateAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName,
+                parameters)
             .getSyncPoller();
     }
 
     /**
      * Creates or updates a data connection.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -1482,25 +1150,65 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a data connection.
+     * @return the {@link SyncPoller} for polling of class representing a data connection.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<DataConnectionInner>, DataConnectionInner> beginCreateOrUpdate(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName,
-        DataConnectionInner parameters,
-        Context context) {
-        return beginCreateOrUpdateAsync(
-                resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName, parameters, context)
+        String resourceGroupName, String workspaceName, String kustoPoolName, String databaseName,
+        String dataConnectionName, DataConnectionInner parameters, Context context) {
+        return this
+            .beginCreateOrUpdateAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName,
+                parameters, context)
             .getSyncPoller();
     }
 
     /**
      * Creates or updates a data connection.
-     *
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param databaseName The name of the database in the Kusto pool.
+     * @param dataConnectionName The name of the data connection.
+     * @param parameters The data connection parameters supplied to the CreateOrUpdate operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return class representing a data connection on successful completion of {@link Mono}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    private Mono<DataConnectionInner> createOrUpdateAsync(String resourceGroupName, String workspaceName,
+        String kustoPoolName, String databaseName, String dataConnectionName, DataConnectionInner parameters) {
+        return beginCreateOrUpdateAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName,
+            dataConnectionName, parameters).last().flatMap(this.client::getLroFinalResultOrError);
+    }
+
+    /**
+     * Creates or updates a data connection.
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param databaseName The name of the database in the Kusto pool.
+     * @param dataConnectionName The name of the data connection.
+     * @param parameters The data connection parameters supplied to the CreateOrUpdate operation.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return class representing a data connection on successful completion of {@link Mono}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    private Mono<DataConnectionInner> createOrUpdateAsync(String resourceGroupName, String workspaceName,
+        String kustoPoolName, String databaseName, String dataConnectionName, DataConnectionInner parameters,
+        Context context) {
+        return beginCreateOrUpdateAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName,
+            dataConnectionName, parameters, context).last().flatMap(this.client::getLroFinalResultOrError);
+    }
+
+    /**
+     * Creates or updates a data connection.
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -1513,22 +1221,15 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @return class representing a data connection.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<DataConnectionInner> createOrUpdateAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName,
-        DataConnectionInner parameters) {
-        return beginCreateOrUpdateAsync(
-                resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName, parameters)
-            .last()
-            .flatMap(this.client::getLroFinalResultOrError);
+    public DataConnectionInner createOrUpdate(String resourceGroupName, String workspaceName, String kustoPoolName,
+        String databaseName, String dataConnectionName, DataConnectionInner parameters) {
+        return createOrUpdateAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName,
+            parameters).block();
     }
 
     /**
      * Creates or updates a data connection.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -1542,79 +1243,15 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @return class representing a data connection.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<DataConnectionInner> createOrUpdateAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName,
-        DataConnectionInner parameters,
-        Context context) {
-        return beginCreateOrUpdateAsync(
-                resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName, parameters, context)
-            .last()
-            .flatMap(this.client::getLroFinalResultOrError);
-    }
-
-    /**
-     * Creates or updates a data connection.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param databaseName The name of the database in the Kusto pool.
-     * @param dataConnectionName The name of the data connection.
-     * @param parameters The data connection parameters supplied to the CreateOrUpdate operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a data connection.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public DataConnectionInner createOrUpdate(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName,
-        DataConnectionInner parameters) {
-        return createOrUpdateAsync(
-                resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName, parameters)
-            .block();
-    }
-
-    /**
-     * Creates or updates a data connection.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param databaseName The name of the database in the Kusto pool.
-     * @param dataConnectionName The name of the data connection.
-     * @param parameters The data connection parameters supplied to the CreateOrUpdate operation.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a data connection.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public DataConnectionInner createOrUpdate(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName,
-        DataConnectionInner parameters,
-        Context context) {
-        return createOrUpdateAsync(
-                resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName, parameters, context)
-            .block();
+    public DataConnectionInner createOrUpdate(String resourceGroupName, String workspaceName, String kustoPoolName,
+        String databaseName, String dataConnectionName, DataConnectionInner parameters, Context context) {
+        return createOrUpdateAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName,
+            parameters, context).block();
     }
 
     /**
      * Updates a data connection.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -1624,27 +1261,19 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a data connection.
+     * @return class representing a data connection along with {@link Response} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> updateWithResponseAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName,
-        DataConnectionInner parameters) {
+    private Mono<Response<Flux<ByteBuffer>>> updateWithResponseAsync(String resourceGroupName, String workspaceName,
+        String kustoPoolName, String databaseName, String dataConnectionName, DataConnectionInner parameters) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1671,27 +1300,15 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .update(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            workspaceName,
-                            kustoPoolName,
-                            databaseName,
-                            dataConnectionName,
-                            apiVersion,
-                            parameters,
-                            accept,
-                            context))
+            .withContext(context -> service.update(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName, apiVersion,
+                parameters, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Updates a data connection.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -1702,28 +1319,20 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a data connection.
+     * @return class representing a data connection along with {@link Response} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> updateWithResponseAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName,
-        DataConnectionInner parameters,
+    private Mono<Response<Flux<ByteBuffer>>> updateWithResponseAsync(String resourceGroupName, String workspaceName,
+        String kustoPoolName, String databaseName, String dataConnectionName, DataConnectionInner parameters,
         Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1750,24 +1359,13 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .update(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                workspaceName,
-                kustoPoolName,
-                databaseName,
-                dataConnectionName,
-                apiVersion,
-                parameters,
-                accept,
-                context);
+        return service.update(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+            workspaceName, kustoPoolName, databaseName, dataConnectionName, apiVersion, parameters, accept, context);
     }
 
     /**
      * Updates a data connection.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -1777,32 +1375,21 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a data connection.
+     * @return the {@link PollerFlux} for polling of class representing a data connection.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    private PollerFlux<PollResult<DataConnectionInner>, DataConnectionInner> beginUpdateAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName,
+    private PollerFlux<PollResult<DataConnectionInner>, DataConnectionInner> beginUpdateAsync(String resourceGroupName,
+        String workspaceName, String kustoPoolName, String databaseName, String dataConnectionName,
         DataConnectionInner parameters) {
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            updateWithResponseAsync(
-                resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName, parameters);
-        return this
-            .client
-            .<DataConnectionInner, DataConnectionInner>getLroResult(
-                mono,
-                this.client.getHttpPipeline(),
-                DataConnectionInner.class,
-                DataConnectionInner.class,
-                Context.NONE);
+        Mono<Response<Flux<ByteBuffer>>> mono = updateWithResponseAsync(resourceGroupName, workspaceName, kustoPoolName,
+            databaseName, dataConnectionName, parameters);
+        return this.client.<DataConnectionInner, DataConnectionInner>getLroResult(mono, this.client.getHttpPipeline(),
+            DataConnectionInner.class, DataConnectionInner.class, this.client.getContext());
     }
 
     /**
      * Updates a data connection.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -1813,57 +1400,46 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a data connection.
+     * @return the {@link PollerFlux} for polling of class representing a data connection.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    private PollerFlux<PollResult<DataConnectionInner>, DataConnectionInner> beginUpdateAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName,
-        DataConnectionInner parameters,
-        Context context) {
+    private PollerFlux<PollResult<DataConnectionInner>, DataConnectionInner> beginUpdateAsync(String resourceGroupName,
+        String workspaceName, String kustoPoolName, String databaseName, String dataConnectionName,
+        DataConnectionInner parameters, Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            updateWithResponseAsync(
-                resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName, parameters, context);
+        Mono<Response<Flux<ByteBuffer>>> mono = updateWithResponseAsync(resourceGroupName, workspaceName, kustoPoolName,
+            databaseName, dataConnectionName, parameters, context);
+        return this.client.<DataConnectionInner, DataConnectionInner>getLroResult(mono, this.client.getHttpPipeline(),
+            DataConnectionInner.class, DataConnectionInner.class, context);
+    }
+
+    /**
+     * Updates a data connection.
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param databaseName The name of the database in the Kusto pool.
+     * @param dataConnectionName The name of the data connection.
+     * @param parameters The data connection parameters supplied to the Update operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of class representing a data connection.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<DataConnectionInner>, DataConnectionInner> beginUpdate(String resourceGroupName,
+        String workspaceName, String kustoPoolName, String databaseName, String dataConnectionName,
+        DataConnectionInner parameters) {
         return this
-            .client
-            .<DataConnectionInner, DataConnectionInner>getLroResult(
-                mono, this.client.getHttpPipeline(), DataConnectionInner.class, DataConnectionInner.class, context);
-    }
-
-    /**
-     * Updates a data connection.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param databaseName The name of the database in the Kusto pool.
-     * @param dataConnectionName The name of the data connection.
-     * @param parameters The data connection parameters supplied to the Update operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a data connection.
-     */
-    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<DataConnectionInner>, DataConnectionInner> beginUpdate(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName,
-        DataConnectionInner parameters) {
-        return beginUpdateAsync(
-                resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName, parameters)
+            .beginUpdateAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName,
+                parameters)
             .getSyncPoller();
     }
 
     /**
      * Updates a data connection.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -1874,25 +1450,64 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a data connection.
+     * @return the {@link SyncPoller} for polling of class representing a data connection.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<DataConnectionInner>, DataConnectionInner> beginUpdate(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName,
-        DataConnectionInner parameters,
-        Context context) {
-        return beginUpdateAsync(
-                resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName, parameters, context)
+    public SyncPoller<PollResult<DataConnectionInner>, DataConnectionInner> beginUpdate(String resourceGroupName,
+        String workspaceName, String kustoPoolName, String databaseName, String dataConnectionName,
+        DataConnectionInner parameters, Context context) {
+        return this
+            .beginUpdateAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName,
+                parameters, context)
             .getSyncPoller();
     }
 
     /**
      * Updates a data connection.
-     *
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param databaseName The name of the database in the Kusto pool.
+     * @param dataConnectionName The name of the data connection.
+     * @param parameters The data connection parameters supplied to the Update operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return class representing a data connection on successful completion of {@link Mono}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    private Mono<DataConnectionInner> updateAsync(String resourceGroupName, String workspaceName, String kustoPoolName,
+        String databaseName, String dataConnectionName, DataConnectionInner parameters) {
+        return beginUpdateAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName,
+            parameters).last().flatMap(this.client::getLroFinalResultOrError);
+    }
+
+    /**
+     * Updates a data connection.
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param databaseName The name of the database in the Kusto pool.
+     * @param dataConnectionName The name of the data connection.
+     * @param parameters The data connection parameters supplied to the Update operation.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return class representing a data connection on successful completion of {@link Mono}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    private Mono<DataConnectionInner> updateAsync(String resourceGroupName, String workspaceName, String kustoPoolName,
+        String databaseName, String dataConnectionName, DataConnectionInner parameters, Context context) {
+        return beginUpdateAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName,
+            parameters, context).last().flatMap(this.client::getLroFinalResultOrError);
+    }
+
+    /**
+     * Updates a data connection.
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -1905,22 +1520,15 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @return class representing a data connection.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<DataConnectionInner> updateAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName,
-        DataConnectionInner parameters) {
-        return beginUpdateAsync(
-                resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName, parameters)
-            .last()
-            .flatMap(this.client::getLroFinalResultOrError);
+    public DataConnectionInner update(String resourceGroupName, String workspaceName, String kustoPoolName,
+        String databaseName, String dataConnectionName, DataConnectionInner parameters) {
+        return updateAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName,
+            parameters).block();
     }
 
     /**
      * Updates a data connection.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -1934,79 +1542,15 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @return class representing a data connection.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<DataConnectionInner> updateAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName,
-        DataConnectionInner parameters,
-        Context context) {
-        return beginUpdateAsync(
-                resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName, parameters, context)
-            .last()
-            .flatMap(this.client::getLroFinalResultOrError);
-    }
-
-    /**
-     * Updates a data connection.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param databaseName The name of the database in the Kusto pool.
-     * @param dataConnectionName The name of the data connection.
-     * @param parameters The data connection parameters supplied to the Update operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a data connection.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public DataConnectionInner update(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName,
-        DataConnectionInner parameters) {
-        return updateAsync(
-                resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName, parameters)
-            .block();
-    }
-
-    /**
-     * Updates a data connection.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param databaseName The name of the database in the Kusto pool.
-     * @param dataConnectionName The name of the data connection.
-     * @param parameters The data connection parameters supplied to the Update operation.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a data connection.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public DataConnectionInner update(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName,
-        DataConnectionInner parameters,
-        Context context) {
-        return updateAsync(
-                resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName, parameters, context)
-            .block();
+    public DataConnectionInner update(String resourceGroupName, String workspaceName, String kustoPoolName,
+        String databaseName, String dataConnectionName, DataConnectionInner parameters, Context context) {
+        return updateAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName,
+            parameters, context).block();
     }
 
     /**
      * Deletes the data connection with the given name.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -2015,26 +1559,18 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName) {
+    private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(String resourceGroupName, String workspaceName,
+        String kustoPoolName, String databaseName, String dataConnectionName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -2057,25 +1593,14 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
         final String accept = "application/json";
         return FluxUtil
             .withContext(
-                context ->
-                    service
-                        .delete(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            workspaceName,
-                            kustoPoolName,
-                            databaseName,
-                            dataConnectionName,
-                            apiVersion,
-                            accept,
-                            context))
+                context -> service.delete(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+                    workspaceName, kustoPoolName, databaseName, dataConnectionName, apiVersion, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Deletes the data connection with the given name.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -2085,27 +1610,18 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName,
-        Context context) {
+    private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(String resourceGroupName, String workspaceName,
+        String kustoPoolName, String databaseName, String dataConnectionName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -2127,23 +1643,13 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .delete(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                workspaceName,
-                kustoPoolName,
-                databaseName,
-                dataConnectionName,
-                apiVersion,
-                accept,
-                context);
+        return service.delete(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+            workspaceName, kustoPoolName, databaseName, dataConnectionName, apiVersion, accept, context);
     }
 
     /**
      * Deletes the data connection with the given name.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -2152,25 +1658,20 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    private PollerFlux<PollResult<Void>, Void> beginDeleteAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName) {
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            deleteWithResponseAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, Context.NONE);
+    private PollerFlux<PollResult<Void>, Void> beginDeleteAsync(String resourceGroupName, String workspaceName,
+        String kustoPoolName, String databaseName, String dataConnectionName) {
+        Mono<Response<Flux<ByteBuffer>>> mono = deleteWithResponseAsync(resourceGroupName, workspaceName, kustoPoolName,
+            databaseName, dataConnectionName);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            this.client.getContext());
     }
 
     /**
      * Deletes the data connection with the given name.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -2180,28 +1681,21 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    private PollerFlux<PollResult<Void>, Void> beginDeleteAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName,
-        Context context) {
+    private PollerFlux<PollResult<Void>, Void> beginDeleteAsync(String resourceGroupName, String workspaceName,
+        String kustoPoolName, String databaseName, String dataConnectionName, Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            deleteWithResponseAsync(
-                resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName, context);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, context);
+        Mono<Response<Flux<ByteBuffer>>> mono = deleteWithResponseAsync(resourceGroupName, workspaceName, kustoPoolName,
+            databaseName, dataConnectionName, context);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            context);
     }
 
     /**
      * Deletes the data connection with the given name.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -2210,22 +1704,18 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<Void>, Void> beginDelete(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName) {
-        return beginDeleteAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName)
+    public SyncPoller<PollResult<Void>, Void> beginDelete(String resourceGroupName, String workspaceName,
+        String kustoPoolName, String databaseName, String dataConnectionName) {
+        return this.beginDeleteAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName)
             .getSyncPoller();
     }
 
     /**
      * Deletes the data connection with the given name.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -2235,24 +1725,20 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<Void>, Void> beginDelete(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName,
-        Context context) {
-        return beginDeleteAsync(
-                resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName, context)
+    public SyncPoller<PollResult<Void>, Void> beginDelete(String resourceGroupName, String workspaceName,
+        String kustoPoolName, String databaseName, String dataConnectionName, Context context) {
+        return this
+            .beginDeleteAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName,
+                context)
             .getSyncPoller();
     }
 
     /**
      * Deletes the data connection with the given name.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -2261,15 +1747,11 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> deleteAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName) {
+    private Mono<Void> deleteAsync(String resourceGroupName, String workspaceName, String kustoPoolName,
+        String databaseName, String dataConnectionName) {
         return beginDeleteAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName)
             .last()
             .flatMap(this.client::getLroFinalResultOrError);
@@ -2277,7 +1759,7 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
 
     /**
      * Deletes the data connection with the given name.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -2287,25 +1769,18 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> deleteAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName,
-        Context context) {
-        return beginDeleteAsync(
-                resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName, context)
-            .last()
-            .flatMap(this.client::getLroFinalResultOrError);
+    private Mono<Void> deleteAsync(String resourceGroupName, String workspaceName, String kustoPoolName,
+        String databaseName, String dataConnectionName, Context context) {
+        return beginDeleteAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName,
+            context).last().flatMap(this.client::getLroFinalResultOrError);
     }
 
     /**
      * Deletes the data connection with the given name.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -2316,18 +1791,14 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public void delete(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
+    public void delete(String resourceGroupName, String workspaceName, String kustoPoolName, String databaseName,
         String dataConnectionName) {
         deleteAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName).block();
     }
 
     /**
      * Deletes the data connection with the given name.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -2339,13 +1810,8 @@ public final class KustoPoolDataConnectionsClientImpl implements KustoPoolDataCo
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public void delete(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName,
-        Context context) {
+    public void delete(String resourceGroupName, String workspaceName, String kustoPoolName, String databaseName,
+        String dataConnectionName, Context context) {
         deleteAsync(resourceGroupName, workspaceName, kustoPoolName, databaseName, dataConnectionName, context).block();
     }
 }

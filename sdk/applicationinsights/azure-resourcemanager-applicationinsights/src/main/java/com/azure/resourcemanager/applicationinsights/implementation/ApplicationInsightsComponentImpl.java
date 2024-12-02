@@ -4,14 +4,18 @@
 
 package com.azure.resourcemanager.applicationinsights.implementation;
 
+import com.azure.core.http.rest.Response;
 import com.azure.core.management.Region;
 import com.azure.core.util.Context;
 import com.azure.resourcemanager.applicationinsights.fluent.models.ApplicationInsightsComponentInner;
 import com.azure.resourcemanager.applicationinsights.models.ApplicationInsightsComponent;
 import com.azure.resourcemanager.applicationinsights.models.ApplicationType;
+import com.azure.resourcemanager.applicationinsights.models.ComponentPurgeBody;
+import com.azure.resourcemanager.applicationinsights.models.ComponentPurgeResponse;
 import com.azure.resourcemanager.applicationinsights.models.FlowType;
 import com.azure.resourcemanager.applicationinsights.models.IngestionMode;
 import com.azure.resourcemanager.applicationinsights.models.PrivateLinkScopedResource;
+import com.azure.resourcemanager.applicationinsights.models.PublicNetworkAccessType;
 import com.azure.resourcemanager.applicationinsights.models.RequestSource;
 import com.azure.resourcemanager.applicationinsights.models.TagsResource;
 import java.time.OffsetDateTime;
@@ -19,10 +23,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public final class ApplicationInsightsComponentImpl
-    implements ApplicationInsightsComponent,
-        ApplicationInsightsComponent.Definition,
-        ApplicationInsightsComponent.Update {
+public final class ApplicationInsightsComponentImpl implements ApplicationInsightsComponent,
+    ApplicationInsightsComponent.Definition, ApplicationInsightsComponent.Update {
     private ApplicationInsightsComponentInner innerObject;
 
     private final com.azure.resourcemanager.applicationinsights.ApplicationInsightsManager serviceManager;
@@ -56,12 +58,20 @@ public final class ApplicationInsightsComponentImpl
         return this.innerModel().kind();
     }
 
+    public String etag() {
+        return this.innerModel().etag();
+    }
+
     public String applicationId() {
         return this.innerModel().applicationId();
     }
 
     public String appId() {
         return this.innerModel().appId();
+    }
+
+    public String namePropertiesName() {
+        return this.innerModel().namePropertiesName();
     }
 
     public ApplicationType applicationType() {
@@ -120,6 +130,14 @@ public final class ApplicationInsightsComponentImpl
         return this.innerModel().immediatePurgeDataOn30Days();
     }
 
+    public String workspaceResourceId() {
+        return this.innerModel().workspaceResourceId();
+    }
+
+    public OffsetDateTime laMigrationDate() {
+        return this.innerModel().laMigrationDate();
+    }
+
     public List<PrivateLinkScopedResource> privateLinkScopedResources() {
         List<PrivateLinkScopedResource> inner = this.innerModel().privateLinkScopedResources();
         if (inner != null) {
@@ -129,8 +147,24 @@ public final class ApplicationInsightsComponentImpl
         }
     }
 
+    public PublicNetworkAccessType publicNetworkAccessForIngestion() {
+        return this.innerModel().publicNetworkAccessForIngestion();
+    }
+
+    public PublicNetworkAccessType publicNetworkAccessForQuery() {
+        return this.innerModel().publicNetworkAccessForQuery();
+    }
+
     public IngestionMode ingestionMode() {
         return this.innerModel().ingestionMode();
+    }
+
+    public Boolean disableLocalAuth() {
+        return this.innerModel().disableLocalAuth();
+    }
+
+    public Boolean forceCustomerStorageForProfiler() {
+        return this.innerModel().forceCustomerStorageForProfiler();
     }
 
     public Region region() {
@@ -139,6 +173,10 @@ public final class ApplicationInsightsComponentImpl
 
     public String regionName() {
         return this.location();
+    }
+
+    public String resourceGroupName() {
+        return resourceGroupName;
     }
 
     public ApplicationInsightsComponentInner innerModel() {
@@ -161,27 +199,23 @@ public final class ApplicationInsightsComponentImpl
     }
 
     public ApplicationInsightsComponent create() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getComponents()
-                .createOrUpdateWithResponse(resourceGroupName, resourceName, this.innerModel(), Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getComponents()
+            .createOrUpdateWithResponse(resourceGroupName, resourceName, this.innerModel(), Context.NONE)
+            .getValue();
         return this;
     }
 
     public ApplicationInsightsComponent create(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getComponents()
-                .createOrUpdateWithResponse(resourceGroupName, resourceName, this.innerModel(), context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getComponents()
+            .createOrUpdateWithResponse(resourceGroupName, resourceName, this.innerModel(), context)
+            .getValue();
         return this;
     }
 
-    ApplicationInsightsComponentImpl(
-        String name, com.azure.resourcemanager.applicationinsights.ApplicationInsightsManager serviceManager) {
+    ApplicationInsightsComponentImpl(String name,
+        com.azure.resourcemanager.applicationinsights.ApplicationInsightsManager serviceManager) {
         this.innerObject = new ApplicationInsightsComponentInner();
         this.serviceManager = serviceManager;
         this.resourceName = name;
@@ -193,27 +227,22 @@ public final class ApplicationInsightsComponentImpl
     }
 
     public ApplicationInsightsComponent apply() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getComponents()
-                .updateTagsWithResponse(resourceGroupName, resourceName, updateComponentTags, Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getComponents()
+            .updateTagsWithResponse(resourceGroupName, resourceName, updateComponentTags, Context.NONE)
+            .getValue();
         return this;
     }
 
     public ApplicationInsightsComponent apply(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getComponents()
-                .updateTagsWithResponse(resourceGroupName, resourceName, updateComponentTags, context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getComponents()
+            .updateTagsWithResponse(resourceGroupName, resourceName, updateComponentTags, context)
+            .getValue();
         return this;
     }
 
-    ApplicationInsightsComponentImpl(
-        ApplicationInsightsComponentInner innerObject,
+    ApplicationInsightsComponentImpl(ApplicationInsightsComponentInner innerObject,
         com.azure.resourcemanager.applicationinsights.ApplicationInsightsManager serviceManager) {
         this.innerObject = innerObject;
         this.serviceManager = serviceManager;
@@ -222,23 +251,27 @@ public final class ApplicationInsightsComponentImpl
     }
 
     public ApplicationInsightsComponent refresh() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getComponents()
-                .getByResourceGroupWithResponse(resourceGroupName, resourceName, Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getComponents()
+            .getByResourceGroupWithResponse(resourceGroupName, resourceName, Context.NONE)
+            .getValue();
         return this;
     }
 
     public ApplicationInsightsComponent refresh(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getComponents()
-                .getByResourceGroupWithResponse(resourceGroupName, resourceName, context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getComponents()
+            .getByResourceGroupWithResponse(resourceGroupName, resourceName, context)
+            .getValue();
         return this;
+    }
+
+    public Response<ComponentPurgeResponse> purgeWithResponse(ComponentPurgeBody body, Context context) {
+        return serviceManager.components().purgeWithResponse(resourceGroupName, resourceName, body, context);
+    }
+
+    public ComponentPurgeResponse purge(ComponentPurgeBody body) {
+        return serviceManager.components().purge(resourceGroupName, resourceName, body);
     }
 
     public ApplicationInsightsComponentImpl withRegion(Region location) {
@@ -264,6 +297,11 @@ public final class ApplicationInsightsComponentImpl
             this.updateComponentTags.withTags(tags);
             return this;
         }
+    }
+
+    public ApplicationInsightsComponentImpl withEtag(String etag) {
+        this.innerModel().withEtag(etag);
+        return this;
     }
 
     public ApplicationInsightsComponentImpl withApplicationType(ApplicationType applicationType) {
@@ -306,8 +344,36 @@ public final class ApplicationInsightsComponentImpl
         return this;
     }
 
+    public ApplicationInsightsComponentImpl withWorkspaceResourceId(String workspaceResourceId) {
+        this.innerModel().withWorkspaceResourceId(workspaceResourceId);
+        return this;
+    }
+
+    public ApplicationInsightsComponentImpl
+        withPublicNetworkAccessForIngestion(PublicNetworkAccessType publicNetworkAccessForIngestion) {
+        this.innerModel().withPublicNetworkAccessForIngestion(publicNetworkAccessForIngestion);
+        return this;
+    }
+
+    public ApplicationInsightsComponentImpl
+        withPublicNetworkAccessForQuery(PublicNetworkAccessType publicNetworkAccessForQuery) {
+        this.innerModel().withPublicNetworkAccessForQuery(publicNetworkAccessForQuery);
+        return this;
+    }
+
     public ApplicationInsightsComponentImpl withIngestionMode(IngestionMode ingestionMode) {
         this.innerModel().withIngestionMode(ingestionMode);
+        return this;
+    }
+
+    public ApplicationInsightsComponentImpl withDisableLocalAuth(Boolean disableLocalAuth) {
+        this.innerModel().withDisableLocalAuth(disableLocalAuth);
+        return this;
+    }
+
+    public ApplicationInsightsComponentImpl
+        withForceCustomerStorageForProfiler(Boolean forceCustomerStorageForProfiler) {
+        this.innerModel().withForceCustomerStorageForProfiler(forceCustomerStorageForProfiler);
         return this;
     }
 

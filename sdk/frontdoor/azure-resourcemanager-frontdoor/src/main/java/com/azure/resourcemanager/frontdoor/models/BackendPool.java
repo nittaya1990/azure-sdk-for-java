@@ -5,18 +5,21 @@
 package com.azure.resourcemanager.frontdoor.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.management.SubResource;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.azure.resourcemanager.frontdoor.fluent.models.BackendPoolProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** A backend pool is a collection of backends that can be routed to. */
-@JsonFlatten
+/**
+ * A backend pool is a collection of backends that can be routed to.
+ */
 @Fluent
-public class BackendPool extends SubResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(BackendPool.class);
+public final class BackendPool extends SubResource {
+    /*
+     * Properties of the Front Door Backend Pool
+     */
+    @JsonProperty(value = "properties")
+    private BackendPoolProperties innerProperties;
 
     /*
      * Resource name.
@@ -30,33 +33,24 @@ public class BackendPool extends SubResource {
     @JsonProperty(value = "type", access = JsonProperty.Access.WRITE_ONLY)
     private String type;
 
-    /*
-     * The set of backends for this pool
+    /**
+     * Creates an instance of BackendPool class.
      */
-    @JsonProperty(value = "properties.backends")
-    private List<Backend> backends;
+    public BackendPool() {
+    }
 
-    /*
-     * Load balancing settings for a backend pool
+    /**
+     * Get the innerProperties property: Properties of the Front Door Backend Pool.
+     * 
+     * @return the innerProperties value.
      */
-    @JsonProperty(value = "properties.loadBalancingSettings")
-    private SubResource loadBalancingSettings;
-
-    /*
-     * L7 health probe settings for a backend pool
-     */
-    @JsonProperty(value = "properties.healthProbeSettings")
-    private SubResource healthProbeSettings;
-
-    /*
-     * Resource status.
-     */
-    @JsonProperty(value = "properties.resourceState", access = JsonProperty.Access.WRITE_ONLY)
-    private FrontDoorResourceState resourceState;
+    private BackendPoolProperties innerProperties() {
+        return this.innerProperties;
+    }
 
     /**
      * Get the name property: Resource name.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -65,7 +59,7 @@ public class BackendPool extends SubResource {
 
     /**
      * Set the name property: Resource name.
-     *
+     * 
      * @param name the name value to set.
      * @return the BackendPool object itself.
      */
@@ -76,7 +70,7 @@ public class BackendPool extends SubResource {
 
     /**
      * Get the type property: Resource type.
-     *
+     * 
      * @return the type value.
      */
     public String type() {
@@ -84,75 +78,8 @@ public class BackendPool extends SubResource {
     }
 
     /**
-     * Get the backends property: The set of backends for this pool.
-     *
-     * @return the backends value.
+     * {@inheritDoc}
      */
-    public List<Backend> backends() {
-        return this.backends;
-    }
-
-    /**
-     * Set the backends property: The set of backends for this pool.
-     *
-     * @param backends the backends value to set.
-     * @return the BackendPool object itself.
-     */
-    public BackendPool withBackends(List<Backend> backends) {
-        this.backends = backends;
-        return this;
-    }
-
-    /**
-     * Get the loadBalancingSettings property: Load balancing settings for a backend pool.
-     *
-     * @return the loadBalancingSettings value.
-     */
-    public SubResource loadBalancingSettings() {
-        return this.loadBalancingSettings;
-    }
-
-    /**
-     * Set the loadBalancingSettings property: Load balancing settings for a backend pool.
-     *
-     * @param loadBalancingSettings the loadBalancingSettings value to set.
-     * @return the BackendPool object itself.
-     */
-    public BackendPool withLoadBalancingSettings(SubResource loadBalancingSettings) {
-        this.loadBalancingSettings = loadBalancingSettings;
-        return this;
-    }
-
-    /**
-     * Get the healthProbeSettings property: L7 health probe settings for a backend pool.
-     *
-     * @return the healthProbeSettings value.
-     */
-    public SubResource healthProbeSettings() {
-        return this.healthProbeSettings;
-    }
-
-    /**
-     * Set the healthProbeSettings property: L7 health probe settings for a backend pool.
-     *
-     * @param healthProbeSettings the healthProbeSettings value to set.
-     * @return the BackendPool object itself.
-     */
-    public BackendPool withHealthProbeSettings(SubResource healthProbeSettings) {
-        this.healthProbeSettings = healthProbeSettings;
-        return this;
-    }
-
-    /**
-     * Get the resourceState property: Resource status.
-     *
-     * @return the resourceState value.
-     */
-    public FrontDoorResourceState resourceState() {
-        return this.resourceState;
-    }
-
-    /** {@inheritDoc} */
     @Override
     public BackendPool withId(String id) {
         super.withId(id);
@@ -160,13 +87,93 @@ public class BackendPool extends SubResource {
     }
 
     /**
+     * Get the resourceState property: Resource status of the Front Door or Front Door SubResource.
+     * 
+     * Resource status.
+     * 
+     * @return the resourceState value.
+     */
+    public FrontDoorResourceState resourceState() {
+        return this.innerProperties() == null ? null : this.innerProperties().resourceState();
+    }
+
+    /**
+     * Get the backends property: The set of backends for this pool.
+     * 
+     * @return the backends value.
+     */
+    public List<Backend> backends() {
+        return this.innerProperties() == null ? null : this.innerProperties().backends();
+    }
+
+    /**
+     * Set the backends property: The set of backends for this pool.
+     * 
+     * @param backends the backends value to set.
+     * @return the BackendPool object itself.
+     */
+    public BackendPool withBackends(List<Backend> backends) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new BackendPoolProperties();
+        }
+        this.innerProperties().withBackends(backends);
+        return this;
+    }
+
+    /**
+     * Get the loadBalancingSettings property: Load balancing settings for a backend pool.
+     * 
+     * @return the loadBalancingSettings value.
+     */
+    public SubResource loadBalancingSettings() {
+        return this.innerProperties() == null ? null : this.innerProperties().loadBalancingSettings();
+    }
+
+    /**
+     * Set the loadBalancingSettings property: Load balancing settings for a backend pool.
+     * 
+     * @param loadBalancingSettings the loadBalancingSettings value to set.
+     * @return the BackendPool object itself.
+     */
+    public BackendPool withLoadBalancingSettings(SubResource loadBalancingSettings) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new BackendPoolProperties();
+        }
+        this.innerProperties().withLoadBalancingSettings(loadBalancingSettings);
+        return this;
+    }
+
+    /**
+     * Get the healthProbeSettings property: L7 health probe settings for a backend pool.
+     * 
+     * @return the healthProbeSettings value.
+     */
+    public SubResource healthProbeSettings() {
+        return this.innerProperties() == null ? null : this.innerProperties().healthProbeSettings();
+    }
+
+    /**
+     * Set the healthProbeSettings property: L7 health probe settings for a backend pool.
+     * 
+     * @param healthProbeSettings the healthProbeSettings value to set.
+     * @return the BackendPool object itself.
+     */
+    public BackendPool withHealthProbeSettings(SubResource healthProbeSettings) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new BackendPoolProperties();
+        }
+        this.innerProperties().withHealthProbeSettings(healthProbeSettings);
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
-        if (backends() != null) {
-            backends().forEach(e -> e.validate());
+        if (innerProperties() != null) {
+            innerProperties().validate();
         }
     }
 }

@@ -22,12 +22,12 @@ public interface GroupsClient {
     /**
      * Lists a collection of groups defined within a service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Group list representation.
+     * @return paged Group list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<GroupContractInner> listByService(String resourceGroupName, String serviceName);
@@ -35,7 +35,7 @@ public interface GroupsClient {
     /**
      * Lists a collection of groups defined within a service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -48,16 +48,32 @@ public interface GroupsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Group list representation.
+     * @return paged Group list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<GroupContractInner> listByService(
-        String resourceGroupName, String serviceName, String filter, Integer top, Integer skip, Context context);
+    PagedIterable<GroupContractInner> listByService(String resourceGroupName, String serviceName, String filter,
+        Integer top, Integer skip, Context context);
 
     /**
      * Gets the entity state (Etag) version of the group specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param groupId Group identifier. Must be unique in the current API Management service instance.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the entity state (Etag) version of the group specified by its identifier.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    GroupsGetEntityTagResponse getEntityTagWithResponse(String resourceGroupName, String serviceName, String groupId,
+        Context context);
+
+    /**
+     * Gets the entity state (Etag) version of the group specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -68,39 +84,9 @@ public interface GroupsClient {
     void getEntityTag(String resourceGroupName, String serviceName, String groupId);
 
     /**
-     * Gets the entity state (Etag) version of the group specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param groupId Group identifier. Must be unique in the current API Management service instance.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the group specified by its identifier.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    GroupsGetEntityTagResponse getEntityTagWithResponse(
-        String resourceGroupName, String serviceName, String groupId, Context context);
-
-    /**
      * Gets the details of the group specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param groupId Group identifier. Must be unique in the current API Management service instance.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the group specified by its identifier.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    GroupContractInner get(String resourceGroupName, String serviceName, String groupId);
-
-    /**
-     * Gets the details of the group specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @param context The context to associate with this operation.
@@ -113,25 +99,23 @@ public interface GroupsClient {
     GroupsGetResponse getWithResponse(String resourceGroupName, String serviceName, String groupId, Context context);
 
     /**
-     * Creates or Updates a group.
+     * Gets the details of the group specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
-     * @param parameters Create parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return contract details.
+     * @return the details of the group specified by its identifier.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    GroupContractInner createOrUpdate(
-        String resourceGroupName, String serviceName, String groupId, GroupCreateParameters parameters);
+    GroupContractInner get(String resourceGroupName, String serviceName, String groupId);
 
     /**
      * Creates or Updates a group.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @param parameters Create parameters.
@@ -143,36 +127,29 @@ public interface GroupsClient {
      * @return contract details.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    GroupsCreateOrUpdateResponse createOrUpdateWithResponse(
-        String resourceGroupName,
-        String serviceName,
-        String groupId,
-        GroupCreateParameters parameters,
-        String ifMatch,
-        Context context);
+    GroupsCreateOrUpdateResponse createOrUpdateWithResponse(String resourceGroupName, String serviceName,
+        String groupId, GroupCreateParameters parameters, String ifMatch, Context context);
 
     /**
-     * Updates the details of the group specified by its identifier.
+     * Creates or Updates a group.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @param parameters Update parameters.
+     * @param parameters Create parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return contract details.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    GroupContractInner update(
-        String resourceGroupName, String serviceName, String groupId, String ifMatch, GroupUpdateParameters parameters);
+    GroupContractInner createOrUpdate(String resourceGroupName, String serviceName, String groupId,
+        GroupCreateParameters parameters);
 
     /**
      * Updates the details of the group specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -185,18 +162,49 @@ public interface GroupsClient {
      * @return contract details.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    GroupsUpdateResponse updateWithResponse(
-        String resourceGroupName,
-        String serviceName,
-        String groupId,
-        String ifMatch,
-        GroupUpdateParameters parameters,
+    GroupsUpdateResponse updateWithResponse(String resourceGroupName, String serviceName, String groupId,
+        String ifMatch, GroupUpdateParameters parameters, Context context);
+
+    /**
+     * Updates the details of the group specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param groupId Group identifier. Must be unique in the current API Management service instance.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @param parameters Update parameters.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return contract details.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    GroupContractInner update(String resourceGroupName, String serviceName, String groupId, String ifMatch,
+        GroupUpdateParameters parameters);
+
+    /**
+     * Deletes specific group of the API Management service instance.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param groupId Group identifier. Must be unique in the current API Management service instance.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<Void> deleteWithResponse(String resourceGroupName, String serviceName, String groupId, String ifMatch,
         Context context);
 
     /**
      * Deletes specific group of the API Management service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -207,22 +215,4 @@ public interface GroupsClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     void delete(String resourceGroupName, String serviceName, String groupId, String ifMatch);
-
-    /**
-     * Deletes specific group of the API Management service instance.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param groupId Group identifier. Must be unique in the current API Management service instance.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<Void> deleteWithResponse(
-        String resourceGroupName, String serviceName, String groupId, String ifMatch, Context context);
 }

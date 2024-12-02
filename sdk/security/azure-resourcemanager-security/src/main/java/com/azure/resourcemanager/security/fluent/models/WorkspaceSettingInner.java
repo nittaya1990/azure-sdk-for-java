@@ -5,78 +5,91 @@
 package com.azure.resourcemanager.security.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Configures where to store the OMS agent data for workspaces under a scope. */
-@JsonFlatten
+/**
+ * Configures where to store the OMS agent data for workspaces under a scope.
+ */
 @Fluent
-public class WorkspaceSettingInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(WorkspaceSettingInner.class);
-
+public final class WorkspaceSettingInner extends ProxyResource {
     /*
-     * The full Azure ID of the workspace to save the data in
+     * Workspace setting data
      */
-    @JsonProperty(value = "properties.workspaceId")
-    private String workspaceId;
+    @JsonProperty(value = "properties")
+    private WorkspaceSettingProperties innerProperties;
 
-    /*
-     * All the VMs in this scope will send their security data to the mentioned
-     * workspace unless overridden by a setting with more specific scope
+    /**
+     * Creates an instance of WorkspaceSettingInner class.
      */
-    @JsonProperty(value = "properties.scope")
-    private String scope;
+    public WorkspaceSettingInner() {
+    }
+
+    /**
+     * Get the innerProperties property: Workspace setting data.
+     * 
+     * @return the innerProperties value.
+     */
+    private WorkspaceSettingProperties innerProperties() {
+        return this.innerProperties;
+    }
 
     /**
      * Get the workspaceId property: The full Azure ID of the workspace to save the data in.
-     *
+     * 
      * @return the workspaceId value.
      */
     public String workspaceId() {
-        return this.workspaceId;
+        return this.innerProperties() == null ? null : this.innerProperties().workspaceId();
     }
 
     /**
      * Set the workspaceId property: The full Azure ID of the workspace to save the data in.
-     *
+     * 
      * @param workspaceId the workspaceId value to set.
      * @return the WorkspaceSettingInner object itself.
      */
     public WorkspaceSettingInner withWorkspaceId(String workspaceId) {
-        this.workspaceId = workspaceId;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new WorkspaceSettingProperties();
+        }
+        this.innerProperties().withWorkspaceId(workspaceId);
         return this;
     }
 
     /**
      * Get the scope property: All the VMs in this scope will send their security data to the mentioned workspace unless
      * overridden by a setting with more specific scope.
-     *
+     * 
      * @return the scope value.
      */
     public String scope() {
-        return this.scope;
+        return this.innerProperties() == null ? null : this.innerProperties().scope();
     }
 
     /**
      * Set the scope property: All the VMs in this scope will send their security data to the mentioned workspace unless
      * overridden by a setting with more specific scope.
-     *
+     * 
      * @param scope the scope value to set.
      * @return the WorkspaceSettingInner object itself.
      */
     public WorkspaceSettingInner withScope(String scope) {
-        this.scope = scope;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new WorkspaceSettingProperties();
+        }
+        this.innerProperties().withScope(scope);
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
+        if (innerProperties() != null) {
+            innerProperties().validate();
+        }
     }
 }

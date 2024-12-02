@@ -5,21 +5,20 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Control Plane Apis version constraint for the API Management service. */
 @Fluent
 public final class ApiVersionConstraint {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApiVersionConstraint.class);
-
     /*
-     * Limit control plane API calls to API Management service with version
-     * equal to or newer than this value.
+     * Limit control plane API calls to API Management service with version equal to or newer than this value.
      */
     @JsonProperty(value = "minApiVersion")
     private String minApiVersion;
+
+    /** Creates an instance of ApiVersionConstraint class. */
+    public ApiVersionConstraint() {
+    }
 
     /**
      * Get the minApiVersion property: Limit control plane API calls to API Management service with version equal to or

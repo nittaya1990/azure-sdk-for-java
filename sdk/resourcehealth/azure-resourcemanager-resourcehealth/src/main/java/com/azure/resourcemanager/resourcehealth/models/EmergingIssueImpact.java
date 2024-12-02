@@ -5,16 +5,12 @@
 package com.azure.resourcemanager.resourcehealth.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Object of the emerging issue impact on services and regions. */
 @Fluent
 public final class EmergingIssueImpact {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(EmergingIssueImpact.class);
-
     /*
      * The impacted service id.
      */
@@ -32,6 +28,10 @@ public final class EmergingIssueImpact {
      */
     @JsonProperty(value = "regions")
     private List<ImpactedRegion> regions;
+
+    /** Creates an instance of EmergingIssueImpact class. */
+    public EmergingIssueImpact() {
+    }
 
     /**
      * Get the id property: The impacted service id.

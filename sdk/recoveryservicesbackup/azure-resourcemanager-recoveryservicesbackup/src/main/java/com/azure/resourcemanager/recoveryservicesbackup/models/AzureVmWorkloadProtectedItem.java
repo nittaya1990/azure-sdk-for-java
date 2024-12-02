@@ -5,21 +5,24 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Map;
 
-/** Azure VM workload-specific protected item. */
+/**
+ * Azure VM workload-specific protected item.
+ */
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
-    include = JsonTypeInfo.As.PROPERTY,
     property = "protectedItemType",
-    defaultImpl = AzureVmWorkloadProtectedItem.class)
+    defaultImpl = AzureVmWorkloadProtectedItem.class,
+    visible = true)
 @JsonTypeName("AzureVmWorkloadProtectedItem")
 @JsonSubTypes({
     @JsonSubTypes.Type(
@@ -28,16 +31,23 @@ import java.util.Map;
     @JsonSubTypes.Type(
         name = "AzureVmWorkloadSAPHanaDatabase",
         value = AzureVmWorkloadSapHanaDatabaseProtectedItem.class),
-    @JsonSubTypes.Type(name = "AzureVmWorkloadSQLDatabase", value = AzureVmWorkloadSqlDatabaseProtectedItem.class)
-})
+    @JsonSubTypes.Type(
+        name = "AzureVmWorkloadSAPHanaDBInstance",
+        value = AzureVmWorkloadSapHanaDBInstanceProtectedItem.class),
+    @JsonSubTypes.Type(name = "AzureVmWorkloadSQLDatabase", value = AzureVmWorkloadSqlDatabaseProtectedItem.class) })
 @Fluent
 public class AzureVmWorkloadProtectedItem extends ProtectedItem {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureVmWorkloadProtectedItem.class);
+    /*
+     * backup item type.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "protectedItemType", required = true)
+    private String protectedItemType = "AzureVmWorkloadProtectedItem";
 
     /*
      * Friendly name of the DB represented by this backup item.
      */
-    @JsonProperty(value = "friendlyName")
+    @JsonProperty(value = "friendlyName", access = JsonProperty.Access.WRITE_ONLY)
     private String friendlyName;
 
     /*
@@ -53,8 +63,7 @@ public class AzureVmWorkloadProtectedItem extends ProtectedItem {
     private String parentName;
 
     /*
-     * Parent type of protected item, example: for a DB, standalone server or
-     * distributed
+     * Parent type of protected item, example: for a DB, standalone server or distributed
      */
     @JsonProperty(value = "parentType")
     private String parentType;
@@ -62,7 +71,7 @@ public class AzureVmWorkloadProtectedItem extends ProtectedItem {
     /*
      * Backup status of this backup item.
      */
-    @JsonProperty(value = "protectionStatus")
+    @JsonProperty(value = "protectionStatus", access = JsonProperty.Access.WRITE_ONLY)
     private String protectionStatus;
 
     /*
@@ -96,8 +105,7 @@ public class AzureVmWorkloadProtectedItem extends ProtectedItem {
     private String protectedItemDataSourceId;
 
     /*
-     * Health status of the backup item, evaluated based on last heartbeat
-     * received
+     * Health status of the backup item, evaluated based on last heartbeat received
      */
     @JsonProperty(value = "protectedItemHealthStatus")
     private ProtectedItemHealthStatus protectedItemHealthStatus;
@@ -112,11 +120,34 @@ public class AzureVmWorkloadProtectedItem extends ProtectedItem {
      * Health details of different KPIs
      */
     @JsonProperty(value = "kpisHealths")
+    @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
     private Map<String, KpiResourceHealthDetails> kpisHealths;
+
+    /*
+     * List of the nodes in case of distributed container.
+     */
+    @JsonProperty(value = "nodesList")
+    private List<DistributedNodesInfo> nodesList;
+
+    /**
+     * Creates an instance of AzureVmWorkloadProtectedItem class.
+     */
+    public AzureVmWorkloadProtectedItem() {
+    }
+
+    /**
+     * Get the protectedItemType property: backup item type.
+     * 
+     * @return the protectedItemType value.
+     */
+    @Override
+    public String protectedItemType() {
+        return this.protectedItemType;
+    }
 
     /**
      * Get the friendlyName property: Friendly name of the DB represented by this backup item.
-     *
+     * 
      * @return the friendlyName value.
      */
     public String friendlyName() {
@@ -124,19 +155,8 @@ public class AzureVmWorkloadProtectedItem extends ProtectedItem {
     }
 
     /**
-     * Set the friendlyName property: Friendly name of the DB represented by this backup item.
-     *
-     * @param friendlyName the friendlyName value to set.
-     * @return the AzureVmWorkloadProtectedItem object itself.
-     */
-    public AzureVmWorkloadProtectedItem withFriendlyName(String friendlyName) {
-        this.friendlyName = friendlyName;
-        return this;
-    }
-
-    /**
      * Get the serverName property: Host/Cluster Name for instance or AG.
-     *
+     * 
      * @return the serverName value.
      */
     public String serverName() {
@@ -145,7 +165,7 @@ public class AzureVmWorkloadProtectedItem extends ProtectedItem {
 
     /**
      * Set the serverName property: Host/Cluster Name for instance or AG.
-     *
+     * 
      * @param serverName the serverName value to set.
      * @return the AzureVmWorkloadProtectedItem object itself.
      */
@@ -156,7 +176,7 @@ public class AzureVmWorkloadProtectedItem extends ProtectedItem {
 
     /**
      * Get the parentName property: Parent name of the DB such as Instance or Availability Group.
-     *
+     * 
      * @return the parentName value.
      */
     public String parentName() {
@@ -165,7 +185,7 @@ public class AzureVmWorkloadProtectedItem extends ProtectedItem {
 
     /**
      * Set the parentName property: Parent name of the DB such as Instance or Availability Group.
-     *
+     * 
      * @param parentName the parentName value to set.
      * @return the AzureVmWorkloadProtectedItem object itself.
      */
@@ -176,7 +196,7 @@ public class AzureVmWorkloadProtectedItem extends ProtectedItem {
 
     /**
      * Get the parentType property: Parent type of protected item, example: for a DB, standalone server or distributed.
-     *
+     * 
      * @return the parentType value.
      */
     public String parentType() {
@@ -185,7 +205,7 @@ public class AzureVmWorkloadProtectedItem extends ProtectedItem {
 
     /**
      * Set the parentType property: Parent type of protected item, example: for a DB, standalone server or distributed.
-     *
+     * 
      * @param parentType the parentType value to set.
      * @return the AzureVmWorkloadProtectedItem object itself.
      */
@@ -196,7 +216,7 @@ public class AzureVmWorkloadProtectedItem extends ProtectedItem {
 
     /**
      * Get the protectionStatus property: Backup status of this backup item.
-     *
+     * 
      * @return the protectionStatus value.
      */
     public String protectionStatus() {
@@ -204,19 +224,8 @@ public class AzureVmWorkloadProtectedItem extends ProtectedItem {
     }
 
     /**
-     * Set the protectionStatus property: Backup status of this backup item.
-     *
-     * @param protectionStatus the protectionStatus value to set.
-     * @return the AzureVmWorkloadProtectedItem object itself.
-     */
-    public AzureVmWorkloadProtectedItem withProtectionStatus(String protectionStatus) {
-        this.protectionStatus = protectionStatus;
-        return this;
-    }
-
-    /**
      * Get the protectionState property: Backup state of this backup item.
-     *
+     * 
      * @return the protectionState value.
      */
     public ProtectionState protectionState() {
@@ -225,7 +234,7 @@ public class AzureVmWorkloadProtectedItem extends ProtectedItem {
 
     /**
      * Set the protectionState property: Backup state of this backup item.
-     *
+     * 
      * @param protectionState the protectionState value to set.
      * @return the AzureVmWorkloadProtectedItem object itself.
      */
@@ -236,7 +245,7 @@ public class AzureVmWorkloadProtectedItem extends ProtectedItem {
 
     /**
      * Get the lastBackupStatus property: Last backup operation status. Possible values: Healthy, Unhealthy.
-     *
+     * 
      * @return the lastBackupStatus value.
      */
     public LastBackupStatus lastBackupStatus() {
@@ -245,7 +254,7 @@ public class AzureVmWorkloadProtectedItem extends ProtectedItem {
 
     /**
      * Set the lastBackupStatus property: Last backup operation status. Possible values: Healthy, Unhealthy.
-     *
+     * 
      * @param lastBackupStatus the lastBackupStatus value to set.
      * @return the AzureVmWorkloadProtectedItem object itself.
      */
@@ -256,7 +265,7 @@ public class AzureVmWorkloadProtectedItem extends ProtectedItem {
 
     /**
      * Get the lastBackupTime property: Timestamp of the last backup operation on this backup item.
-     *
+     * 
      * @return the lastBackupTime value.
      */
     public OffsetDateTime lastBackupTime() {
@@ -265,7 +274,7 @@ public class AzureVmWorkloadProtectedItem extends ProtectedItem {
 
     /**
      * Set the lastBackupTime property: Timestamp of the last backup operation on this backup item.
-     *
+     * 
      * @param lastBackupTime the lastBackupTime value to set.
      * @return the AzureVmWorkloadProtectedItem object itself.
      */
@@ -276,7 +285,7 @@ public class AzureVmWorkloadProtectedItem extends ProtectedItem {
 
     /**
      * Get the lastBackupErrorDetail property: Error details in last backup.
-     *
+     * 
      * @return the lastBackupErrorDetail value.
      */
     public ErrorDetail lastBackupErrorDetail() {
@@ -285,7 +294,7 @@ public class AzureVmWorkloadProtectedItem extends ProtectedItem {
 
     /**
      * Set the lastBackupErrorDetail property: Error details in last backup.
-     *
+     * 
      * @param lastBackupErrorDetail the lastBackupErrorDetail value to set.
      * @return the AzureVmWorkloadProtectedItem object itself.
      */
@@ -296,7 +305,7 @@ public class AzureVmWorkloadProtectedItem extends ProtectedItem {
 
     /**
      * Get the protectedItemDataSourceId property: Data ID of the protected item.
-     *
+     * 
      * @return the protectedItemDataSourceId value.
      */
     public String protectedItemDataSourceId() {
@@ -305,7 +314,7 @@ public class AzureVmWorkloadProtectedItem extends ProtectedItem {
 
     /**
      * Set the protectedItemDataSourceId property: Data ID of the protected item.
-     *
+     * 
      * @param protectedItemDataSourceId the protectedItemDataSourceId value to set.
      * @return the AzureVmWorkloadProtectedItem object itself.
      */
@@ -317,7 +326,7 @@ public class AzureVmWorkloadProtectedItem extends ProtectedItem {
     /**
      * Get the protectedItemHealthStatus property: Health status of the backup item, evaluated based on last heartbeat
      * received.
-     *
+     * 
      * @return the protectedItemHealthStatus value.
      */
     public ProtectedItemHealthStatus protectedItemHealthStatus() {
@@ -327,19 +336,19 @@ public class AzureVmWorkloadProtectedItem extends ProtectedItem {
     /**
      * Set the protectedItemHealthStatus property: Health status of the backup item, evaluated based on last heartbeat
      * received.
-     *
+     * 
      * @param protectedItemHealthStatus the protectedItemHealthStatus value to set.
      * @return the AzureVmWorkloadProtectedItem object itself.
      */
-    public AzureVmWorkloadProtectedItem withProtectedItemHealthStatus(
-        ProtectedItemHealthStatus protectedItemHealthStatus) {
+    public AzureVmWorkloadProtectedItem
+        withProtectedItemHealthStatus(ProtectedItemHealthStatus protectedItemHealthStatus) {
         this.protectedItemHealthStatus = protectedItemHealthStatus;
         return this;
     }
 
     /**
      * Get the extendedInfo property: Additional information for this backup item.
-     *
+     * 
      * @return the extendedInfo value.
      */
     public AzureVmWorkloadProtectedItemExtendedInfo extendedInfo() {
@@ -348,7 +357,7 @@ public class AzureVmWorkloadProtectedItem extends ProtectedItem {
 
     /**
      * Set the extendedInfo property: Additional information for this backup item.
-     *
+     * 
      * @param extendedInfo the extendedInfo value to set.
      * @return the AzureVmWorkloadProtectedItem object itself.
      */
@@ -359,7 +368,7 @@ public class AzureVmWorkloadProtectedItem extends ProtectedItem {
 
     /**
      * Get the kpisHealths property: Health details of different KPIs.
-     *
+     * 
      * @return the kpisHealths value.
      */
     public Map<String, KpiResourceHealthDetails> kpisHealths() {
@@ -368,7 +377,7 @@ public class AzureVmWorkloadProtectedItem extends ProtectedItem {
 
     /**
      * Set the kpisHealths property: Health details of different KPIs.
-     *
+     * 
      * @param kpisHealths the kpisHealths value to set.
      * @return the AzureVmWorkloadProtectedItem object itself.
      */
@@ -377,91 +386,119 @@ public class AzureVmWorkloadProtectedItem extends ProtectedItem {
         return this;
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public AzureVmWorkloadProtectedItem withBackupManagementType(BackupManagementType backupManagementType) {
-        super.withBackupManagementType(backupManagementType);
+    /**
+     * Get the nodesList property: List of the nodes in case of distributed container.
+     * 
+     * @return the nodesList value.
+     */
+    public List<DistributedNodesInfo> nodesList() {
+        return this.nodesList;
+    }
+
+    /**
+     * Set the nodesList property: List of the nodes in case of distributed container.
+     * 
+     * @param nodesList the nodesList value to set.
+     * @return the AzureVmWorkloadProtectedItem object itself.
+     */
+    public AzureVmWorkloadProtectedItem withNodesList(List<DistributedNodesInfo> nodesList) {
+        this.nodesList = nodesList;
         return this;
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public AzureVmWorkloadProtectedItem withWorkloadType(DataSourceType workloadType) {
-        super.withWorkloadType(workloadType);
-        return this;
-    }
-
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureVmWorkloadProtectedItem withContainerName(String containerName) {
         super.withContainerName(containerName);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureVmWorkloadProtectedItem withSourceResourceId(String sourceResourceId) {
         super.withSourceResourceId(sourceResourceId);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureVmWorkloadProtectedItem withPolicyId(String policyId) {
         super.withPolicyId(policyId);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureVmWorkloadProtectedItem withLastRecoveryPoint(OffsetDateTime lastRecoveryPoint) {
         super.withLastRecoveryPoint(lastRecoveryPoint);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureVmWorkloadProtectedItem withBackupSetName(String backupSetName) {
         super.withBackupSetName(backupSetName);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureVmWorkloadProtectedItem withCreateMode(CreateMode createMode) {
         super.withCreateMode(createMode);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureVmWorkloadProtectedItem withDeferredDeleteTimeInUtc(OffsetDateTime deferredDeleteTimeInUtc) {
         super.withDeferredDeleteTimeInUtc(deferredDeleteTimeInUtc);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureVmWorkloadProtectedItem withIsScheduledForDeferredDelete(Boolean isScheduledForDeferredDelete) {
         super.withIsScheduledForDeferredDelete(isScheduledForDeferredDelete);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureVmWorkloadProtectedItem withDeferredDeleteTimeRemaining(String deferredDeleteTimeRemaining) {
         super.withDeferredDeleteTimeRemaining(deferredDeleteTimeRemaining);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureVmWorkloadProtectedItem withIsDeferredDeleteScheduleUpcoming(Boolean isDeferredDeleteScheduleUpcoming) {
         super.withIsDeferredDeleteScheduleUpcoming(isDeferredDeleteScheduleUpcoming);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureVmWorkloadProtectedItem withIsRehydrate(Boolean isRehydrate) {
         super.withIsRehydrate(isRehydrate);
@@ -469,8 +506,45 @@ public class AzureVmWorkloadProtectedItem extends ProtectedItem {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AzureVmWorkloadProtectedItem
+        withResourceGuardOperationRequests(List<String> resourceGuardOperationRequests) {
+        super.withResourceGuardOperationRequests(resourceGuardOperationRequests);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AzureVmWorkloadProtectedItem withIsArchiveEnabled(Boolean isArchiveEnabled) {
+        super.withIsArchiveEnabled(isArchiveEnabled);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AzureVmWorkloadProtectedItem withPolicyName(String policyName) {
+        super.withPolicyName(policyName);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AzureVmWorkloadProtectedItem withSoftDeleteRetentionPeriod(Integer softDeleteRetentionPeriod) {
+        super.withSoftDeleteRetentionPeriod(softDeleteRetentionPeriod);
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
@@ -483,14 +557,14 @@ public class AzureVmWorkloadProtectedItem extends ProtectedItem {
             extendedInfo().validate();
         }
         if (kpisHealths() != null) {
-            kpisHealths()
-                .values()
-                .forEach(
-                    e -> {
-                        if (e != null) {
-                            e.validate();
-                        }
-                    });
+            kpisHealths().values().forEach(e -> {
+                if (e != null) {
+                    e.validate();
+                }
+            });
+        }
+        if (nodesList() != null) {
+            nodesList().forEach(e -> e.validate());
         }
     }
 }

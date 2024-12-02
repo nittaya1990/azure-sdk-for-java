@@ -7,21 +7,21 @@ package com.azure.resourcemanager.applicationinsights.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.applicationinsights.fluent.models.ApplicationInsightsComponentWebTestLocationInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Describes the list of web test locations available to an Application Insights Component. */
 @Fluent
 public final class ApplicationInsightsWebTestLocationsListResult {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(ApplicationInsightsWebTestLocationsListResult.class);
-
     /*
      * List of web test locations.
      */
     @JsonProperty(value = "value", required = true)
     private List<ApplicationInsightsComponentWebTestLocationInner> value;
+
+    /** Creates an instance of ApplicationInsightsWebTestLocationsListResult class. */
+    public ApplicationInsightsWebTestLocationsListResult() {
+    }
 
     /**
      * Get the value property: List of web test locations.
@@ -38,8 +38,8 @@ public final class ApplicationInsightsWebTestLocationsListResult {
      * @param value the value value to set.
      * @return the ApplicationInsightsWebTestLocationsListResult object itself.
      */
-    public ApplicationInsightsWebTestLocationsListResult withValue(
-        List<ApplicationInsightsComponentWebTestLocationInner> value) {
+    public ApplicationInsightsWebTestLocationsListResult
+        withValue(List<ApplicationInsightsComponentWebTestLocationInner> value) {
         this.value = value;
         return this;
     }
@@ -51,12 +51,12 @@ public final class ApplicationInsightsWebTestLocationsListResult {
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property value in model ApplicationInsightsWebTestLocationsListResult"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property value in model ApplicationInsightsWebTestLocationsListResult"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(ApplicationInsightsWebTestLocationsListResult.class);
 }

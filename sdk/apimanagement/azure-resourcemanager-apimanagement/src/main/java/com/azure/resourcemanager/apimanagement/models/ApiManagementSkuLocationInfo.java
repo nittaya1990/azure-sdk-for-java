@@ -5,16 +5,12 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** The ApiManagementSkuLocationInfo model. */
 @Immutable
 public final class ApiManagementSkuLocationInfo {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApiManagementSkuLocationInfo.class);
-
     /*
      * Location of the SKU
      */
@@ -32,6 +28,10 @@ public final class ApiManagementSkuLocationInfo {
      */
     @JsonProperty(value = "zoneDetails", access = JsonProperty.Access.WRITE_ONLY)
     private List<ApiManagementSkuZoneDetails> zoneDetails;
+
+    /** Creates an instance of ApiManagementSkuLocationInfo class. */
+    public ApiManagementSkuLocationInfo() {
+    }
 
     /**
      * Get the location property: Location of the SKU.

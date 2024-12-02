@@ -5,17 +5,13 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.models.GatewayContractInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Paged Gateway list representation. */
 @Fluent
 public final class GatewayCollection {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(GatewayCollection.class);
-
     /*
      * Page values.
      */
@@ -33,6 +29,10 @@ public final class GatewayCollection {
      */
     @JsonProperty(value = "nextLink", access = JsonProperty.Access.WRITE_ONLY)
     private String nextLink;
+
+    /** Creates an instance of GatewayCollection class. */
+    public GatewayCollection() {
+    }
 
     /**
      * Get the value property: Page values.

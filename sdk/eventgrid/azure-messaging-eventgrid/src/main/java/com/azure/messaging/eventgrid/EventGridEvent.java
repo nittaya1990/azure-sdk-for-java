@@ -5,27 +5,21 @@ package com.azure.messaging.eventgrid;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.BinaryData;
+import com.azure.core.util.CoreUtils;
 import com.azure.core.util.logging.ClientLogger;
-import com.azure.core.util.serializer.JacksonAdapter;
-import com.azure.core.util.serializer.JsonSerializer;
-import com.azure.core.util.serializer.JsonSerializerProviders;
-import com.azure.core.util.serializer.SerializerAdapter;
-import com.azure.core.util.serializer.SerializerEncoding;
 import com.azure.core.util.serializer.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import reactor.core.publisher.Mono;
+import com.azure.json.JsonProviders;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonSerializable;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UncheckedIOException;
-import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * Represents the EventGrid event conforming to the <a href="https://docs.microsoft.com/azure/event-grid/event-schema">
@@ -41,39 +35,64 @@ import java.util.UUID;
  * {@link EventGridPublisherAsyncClient} or {@link EventGridPublisherClient} to send it the EventGrid service.</p>
  *
  * <p><strong>Create EventGridEvent Samples</strong></p>
- * {@codesnippet com.azure.messaging.eventgrid.EventGridEvent#constructor}
+ * <!-- src_embed com.azure.messaging.eventgrid.EventGridEvent#constructor -->
+ * <pre>
+ * &#47;&#47; Use BinaryData.fromObject&#40;&#41; to create EventGridEvent data
+ * &#47;&#47; From a model class
+ * User user = new User&#40;&quot;Stephen&quot;, &quot;James&quot;&#41;;
+ * EventGridEvent eventGridEventDataObject = new EventGridEvent&#40;&quot;&#47;EventGridEvents&#47;example&#47;source&quot;,
+ *     &quot;Example.EventType&quot;, BinaryData.fromObject&#40;user&#41;, &quot;0.1&quot;&#41;;
+ *
+ * &#47;&#47; From a String
+ * EventGridEvent eventGridEventDataStr = new EventGridEvent&#40;&quot;&#47;EventGridEvents&#47;example&#47;source&quot;,
+ *     &quot;Example.EventType&quot;, BinaryData.fromObject&#40;&quot;Hello World&quot;&#41;, &quot;0.1&quot;&#41;;
+ *
+ * &#47;&#47; From an Integer
+ * EventGridEvent eventGridEventDataInt = new EventGridEvent&#40;&quot;&#47;EventGridEvents&#47;example&#47;source&quot;,
+ *     &quot;Example.EventType&quot;, BinaryData.fromObject&#40;1&#41;, &quot;0.1&quot;&#41;;
+ *
+ * &#47;&#47; From a Boolean
+ * EventGridEvent eventGridEventDataBool = new EventGridEvent&#40;&quot;&#47;EventGridEvents&#47;example&#47;source&quot;,
+ *     &quot;Example.EventType&quot;, BinaryData.fromObject&#40;true&#41;, &quot;0.1&quot;&#41;;
+ *
+ * &#47;&#47; From null
+ * EventGridEvent eventGridEventDataNull = new EventGridEvent&#40;&quot;&#47;EventGridEvents&#47;example&#47;source&quot;,
+ *     &quot;Example.EventType&quot;, BinaryData.fromObject&#40;null&#41;, &quot;0.1&quot;&#41;;
+ *
+ * &#47;&#47; Use BinaryData.fromString&#40;&#41; if you have a Json String for the EventGridEvent data.
+ * String jsonStringForData = &quot;&#92;&quot;Hello World&#92;&quot;&quot;;  &#47;&#47; A json String.
+ * EventGridEvent eventGridEventDataDataJsonStr = new EventGridEvent&#40;&quot;&#47;EventGridEvents&#47;example&#47;source&quot;,
+ *     &quot;Example.EventType&quot;, BinaryData.fromString&#40;jsonStringForData&#41;, &quot;0.1&quot;&#41;;
+ * </pre>
+ * <!-- end com.azure.messaging.eventgrid.EventGridEvent#constructor -->
  *
  * <p>On the contrary, if you receive events from any event handlers and therefore have the Json string representation
  * of one or more of EventGridEvents, use {@link #fromString(String)} to deserialize them from the Json string.</p>
  *
  * <p><strong>Deserialize EventGridEvent Samples</strong></p>
- * {@codesnippet com.azure.messaging.eventgrid.EventGridEvent.fromString}
+ * <!-- src_embed com.azure.messaging.eventgrid.EventGridEvent.fromString -->
+ * <pre>
+ * List&lt;EventGridEvent&gt; eventGridEventList = EventGridEvent.fromString&#40;eventGridEventJsonString&#41;;
+ * EventGridEvent eventGridEvent = eventGridEventList.get&#40;0&#41;;
+ * BinaryData eventGridEventData = eventGridEvent.getData&#40;&#41;;
+ *
+ * User objectValue = eventGridEventData.toObject&#40;User.class&#41;;  &#47;&#47; If data payload is a User object.
+ * int intValue = eventGridEventData.toObject&#40;Integer.class&#41;;  &#47;&#47; If data payload is an int.
+ * boolean boolValue = eventGridEventData.toObject&#40;Boolean.class&#41;;  &#47;&#47; If data payload is boolean.
+ * String stringValue = eventGridEventData.toObject&#40;String.class&#41;;  &#47;&#47; If data payload is String.
+ * String jsonStringValue = eventGridEventData.toString&#40;&#41;;  &#47;&#47; The data payload represented in Json String.
+ * </pre>
+ * <!-- end com.azure.messaging.eventgrid.EventGridEvent.fromString -->
  *
  * @see EventGridPublisherAsyncClient to send EventGridEvents asynchronously.
  * @see EventGridPublisherClient to send EventGridEvents sychronously.
  **/
 @Fluent
-public final class EventGridEvent {
+public final class EventGridEvent implements JsonSerializable<EventGridEvent> {
 
     private final com.azure.messaging.eventgrid.implementation.models.EventGridEvent event;
 
     private static final ClientLogger LOGGER = new ClientLogger(EventGridEvent.class);
-    private static final JsonSerializer SERIALIZER;
-    static {
-        JsonSerializer tmp;
-        try {
-            tmp = JsonSerializerProviders.createInstance();
-        } catch (IllegalStateException e) {
-            tmp = new JacksonSerializer();
-        }
-        SERIALIZER = tmp;
-    }
-    private static final TypeReference<List<com.azure.messaging.eventgrid.implementation.models.EventGridEvent>>
-        DESERIALIZER_TYPE_REFERENCE =
-        new TypeReference<List<com.azure.messaging.eventgrid.implementation.models.EventGridEvent>>() {
-        };
-    // May get SERIALIZER's object mapper in the future.
-    private static final ObjectMapper BINARY_DATA_OBJECT_MAPPER = new ObjectMapper();
 
     /*
      * Cache serialized data for getData()
@@ -84,7 +103,36 @@ public final class EventGridEvent {
      * Create a new instance of the EventGridEvent, with the given required fields.
      *
      * <p><strong>Create EventGridEvent Samples</strong></p>
-     * {@codesnippet com.azure.messaging.eventgrid.EventGridEvent#constructor}
+     * <!-- src_embed com.azure.messaging.eventgrid.EventGridEvent#constructor -->
+     * <pre>
+     * &#47;&#47; Use BinaryData.fromObject&#40;&#41; to create EventGridEvent data
+     * &#47;&#47; From a model class
+     * User user = new User&#40;&quot;Stephen&quot;, &quot;James&quot;&#41;;
+     * EventGridEvent eventGridEventDataObject = new EventGridEvent&#40;&quot;&#47;EventGridEvents&#47;example&#47;source&quot;,
+     *     &quot;Example.EventType&quot;, BinaryData.fromObject&#40;user&#41;, &quot;0.1&quot;&#41;;
+     *
+     * &#47;&#47; From a String
+     * EventGridEvent eventGridEventDataStr = new EventGridEvent&#40;&quot;&#47;EventGridEvents&#47;example&#47;source&quot;,
+     *     &quot;Example.EventType&quot;, BinaryData.fromObject&#40;&quot;Hello World&quot;&#41;, &quot;0.1&quot;&#41;;
+     *
+     * &#47;&#47; From an Integer
+     * EventGridEvent eventGridEventDataInt = new EventGridEvent&#40;&quot;&#47;EventGridEvents&#47;example&#47;source&quot;,
+     *     &quot;Example.EventType&quot;, BinaryData.fromObject&#40;1&#41;, &quot;0.1&quot;&#41;;
+     *
+     * &#47;&#47; From a Boolean
+     * EventGridEvent eventGridEventDataBool = new EventGridEvent&#40;&quot;&#47;EventGridEvents&#47;example&#47;source&quot;,
+     *     &quot;Example.EventType&quot;, BinaryData.fromObject&#40;true&#41;, &quot;0.1&quot;&#41;;
+     *
+     * &#47;&#47; From null
+     * EventGridEvent eventGridEventDataNull = new EventGridEvent&#40;&quot;&#47;EventGridEvents&#47;example&#47;source&quot;,
+     *     &quot;Example.EventType&quot;, BinaryData.fromObject&#40;null&#41;, &quot;0.1&quot;&#41;;
+     *
+     * &#47;&#47; Use BinaryData.fromString&#40;&#41; if you have a Json String for the EventGridEvent data.
+     * String jsonStringForData = &quot;&#92;&quot;Hello World&#92;&quot;&quot;;  &#47;&#47; A json String.
+     * EventGridEvent eventGridEventDataDataJsonStr = new EventGridEvent&#40;&quot;&#47;EventGridEvents&#47;example&#47;source&quot;,
+     *     &quot;Example.EventType&quot;, BinaryData.fromString&#40;jsonStringForData&#41;, &quot;0.1&quot;&#41;;
+     * </pre>
+     * <!-- end com.azure.messaging.eventgrid.EventGridEvent#constructor -->
      *
      * @param subject the subject of the event.
      * @param eventType the type of the event, e.g. "Contoso.Items.ItemReceived".
@@ -102,17 +150,20 @@ public final class EventGridEvent {
 
         this.event = new com.azure.messaging.eventgrid.implementation.models.EventGridEvent()
             .setEventTime(OffsetDateTime.now())
-            .setId(UUID.randomUUID().toString())
+            .setId(CoreUtils.randomUuid().toString())
             .setSubject(subject)
             .setEventType(eventType)
             .setDataVersion(dataVersion);
         this.binaryData = data;
-        try {
-            this.event.setData(BINARY_DATA_OBJECT_MAPPER.readTree(data.toBytes()));
-        } catch (IOException e) {
-            throw LOGGER.logExceptionAsError(new IllegalArgumentException("'data' isn't in valid Json format",
-                e));
-        }
+        this.event.setData(data.toObject(Object.class));
+    }
+
+    /**
+     * Private constructor for serialization.
+     */
+    private EventGridEvent(com.azure.messaging.eventgrid.implementation.models.EventGridEvent event, BinaryData data) {
+        this.event = event;
+        this.binaryData = data;
     }
 
     /**
@@ -120,7 +171,19 @@ public final class EventGridEvent {
      * an array of CloudEvent objects into a list of EventGridEvents.
      *
      * <p><strong>Deserialize EventGridEvent Samples</strong></p>
-     * {@codesnippet com.azure.messaging.eventgrid.EventGridEvent.fromString}
+     * <!-- src_embed com.azure.messaging.eventgrid.EventGridEvent.fromString -->
+     * <pre>
+     * List&lt;EventGridEvent&gt; eventGridEventList = EventGridEvent.fromString&#40;eventGridEventJsonString&#41;;
+     * EventGridEvent eventGridEvent = eventGridEventList.get&#40;0&#41;;
+     * BinaryData eventGridEventData = eventGridEvent.getData&#40;&#41;;
+     *
+     * User objectValue = eventGridEventData.toObject&#40;User.class&#41;;  &#47;&#47; If data payload is a User object.
+     * int intValue = eventGridEventData.toObject&#40;Integer.class&#41;;  &#47;&#47; If data payload is an int.
+     * boolean boolValue = eventGridEventData.toObject&#40;Boolean.class&#41;;  &#47;&#47; If data payload is boolean.
+     * String stringValue = eventGridEventData.toObject&#40;String.class&#41;;  &#47;&#47; If data payload is String.
+     * String jsonStringValue = eventGridEventData.toString&#40;&#41;;  &#47;&#47; The data payload represented in Json String.
+     * </pre>
+     * <!-- end com.azure.messaging.eventgrid.EventGridEvent.fromString -->
      *
      * @param eventGridJsonString the JSON string containing one or more EventGridEvent objects.
      *
@@ -128,22 +191,30 @@ public final class EventGridEvent {
      * @throws IllegalArgumentException if eventGridJsonString isn't a JSON string for a eventgrid event
      * or an array of it.
      * @throws NullPointerException if eventGridJsonString is {@code null}.
-     * @throws IllegalArgumentException if the {eventGridJsonString isn't a Json string or can't be deserialized
+     * @throws IllegalArgumentException if the eventGridJsonString isn't a Json string or can't be deserialized
      * into valid EventGridEvent instances.
      */
     public static List<EventGridEvent> fromString(String eventGridJsonString) {
-        try {
-            List<com.azure.messaging.eventgrid.implementation.models.EventGridEvent> internalEvents =
-                SERIALIZER.deserialize(new ByteArrayInputStream(eventGridJsonString.getBytes(StandardCharsets.UTF_8)),
-                DESERIALIZER_TYPE_REFERENCE);
+        try (JsonReader jsonReader = JsonProviders.createReader(eventGridJsonString)) {
+            List<com.azure.messaging.eventgrid.implementation.models.EventGridEvent> internalEvents;
+            JsonToken token = jsonReader.nextToken();
+            if (token == JsonToken.START_ARRAY) {
+                internalEvents = jsonReader
+                    .readArray(com.azure.messaging.eventgrid.implementation.models.EventGridEvent::fromJson);
+            } else {
+                internalEvents = Collections.singletonList(
+                    com.azure.messaging.eventgrid.implementation.models.EventGridEvent.fromJson(jsonReader));
+            }
 
-            List<EventGridEvent> events = new ArrayList<EventGridEvent>();
+            List<EventGridEvent> events = new ArrayList<>();
             for (int i = 0; i < internalEvents.size(); i++) {
-                com.azure.messaging.eventgrid.implementation.models.EventGridEvent internalEvent =
-                    internalEvents.get(i);
-                if (internalEvent.getSubject() == null || internalEvent.getEventType() == null
-                    || internalEvent.getData() == null || internalEvent.getDataVersion() == null) {
-                    List<String> nullAttributes = new ArrayList<String>();
+                com.azure.messaging.eventgrid.implementation.models.EventGridEvent internalEvent
+                    = internalEvents.get(i);
+                if (internalEvent.getSubject() == null
+                    || internalEvent.getEventType() == null
+                    || internalEvent.getData() == null
+                    || internalEvent.getDataVersion() == null) {
+                    List<String> nullAttributes = new ArrayList<>();
                     if (internalEvent.getSubject() == null) {
                         nullAttributes.add("'subject'");
                     }
@@ -159,19 +230,17 @@ public final class EventGridEvent {
                     throw LOGGER.logExceptionAsError(new IllegalArgumentException(
                         "'subject', 'eventType', 'data' and 'dataVersion' are mandatory attributes for an "
                             + "EventGridEvent. This Json string doesn't have "
-                            + String.join(",", nullAttributes)
-                            + " for the object at index " + i
+                            + CoreUtils.stringJoin(",", nullAttributes) + " for the object at index " + i
                             + ". Please make sure the input Json string has the required attributes"));
                 }
                 events.add(new EventGridEvent(internalEvent));
             }
             return events;
-        } catch (UncheckedIOException uncheckedIOException) {
-            throw LOGGER.logExceptionAsError(new IllegalArgumentException("The input parameter isn't a JSON string.",
-                uncheckedIOException.getCause()));
+        } catch (IOException ex) {
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("The input parameter isn't a JSON string.", ex.getCause()));
         }
     }
-
 
     /**
      * Get the unique id associated with this event.
@@ -228,13 +297,13 @@ public final class EventGridEvent {
     /**
      * Get the data associated with this event as a {@link BinaryData}, which has API to deserialize the data to
      * any objects by using {@link BinaryData#toObject(TypeReference)}.
-     * @return A {@link BinaryData} that wraps the this event's data payload.
+     * @return A {@link BinaryData} that wraps this event's data payload.
      */
     public BinaryData getData() {
         if (this.binaryData == null) {
             Object data = this.event.getData();
             if (data != null) {
-                this.binaryData = BinaryData.fromObject(data, SERIALIZER);
+                this.binaryData = BinaryData.fromObject(data);
             }
         }
         return this.binaryData;
@@ -284,36 +353,37 @@ public final class EventGridEvent {
         return this.event;
     }
 
-    private static class JacksonSerializer implements JsonSerializer {
-        private final SerializerAdapter jacksonAdapter = JacksonAdapter.createDefaultSerializerAdapter();
-
-        @Override
-        public <T> T deserialize(InputStream stream, TypeReference<T> typeReference) {
-            try {
-                return jacksonAdapter.deserialize(stream, typeReference.getJavaType(), SerializerEncoding.JSON);
-            } catch (IOException e) {
-                throw LOGGER.logExceptionAsError(new UncheckedIOException(e));
-            }
-        }
-
-        @Override
-        public <T> Mono<T> deserializeAsync(InputStream stream, TypeReference<T> typeReference) {
-            return Mono.defer(() -> Mono.fromCallable(() -> deserialize(stream, typeReference)));
-        }
-
-        @Override
-        public void serialize(OutputStream stream, Object value) {
-            try {
-                jacksonAdapter.serialize(value, SerializerEncoding.JSON, stream);
-            } catch (IOException e) {
-                throw LOGGER.logExceptionAsError(new UncheckedIOException(e));
-            }
-        }
-
-        @Override
-        public Mono<Void> serializeAsync(OutputStream stream, Object value) {
-            return Mono.fromRunnable(() -> serialize(stream, value));
-        }
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeJsonField("event", this.event);
+        jsonWriter.writeBinaryField("binaryData", this.binaryData.toBytes());
+        return jsonWriter.writeEndObject();
     }
 
+    /**
+     * Reads a JSON stream into an {@link EventGridEvent}.
+     *
+     * @param jsonReader The {@link JsonReader} being read.
+     * @return The {@link EventGridEvent} that the JSON stream represented, may return null.
+     * @throws IOException If an {@link EventGridEvent} fails to be read from the {@code jsonReader}.
+     */
+    public static EventGridEvent fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            com.azure.messaging.eventgrid.implementation.models.EventGridEvent internalEvent = null;
+            BinaryData data = null;
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+                if ("event".equals(fieldName)) {
+                    internalEvent = com.azure.messaging.eventgrid.implementation.models.EventGridEvent.fromJson(reader);
+                } else if ("binaryData".equals(fieldName)) {
+                    data = BinaryData.fromBytes(reader.getBinary());
+                } else {
+                    reader.skipChildren();
+                }
+            }
+            return new EventGridEvent(internalEvent, data);
+        });
+    }
 }

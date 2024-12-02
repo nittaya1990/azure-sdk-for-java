@@ -5,36 +5,46 @@
 package com.azure.resourcemanager.streamanalytics.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonSerializable;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import java.io.IOException;
 
-/** The storage account where the custom code artifacts are located. */
+/**
+ * The storage account where the custom code artifacts are located.
+ */
 @Fluent
-public final class External {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(External.class);
-
+public final class External implements JsonSerializable<External> {
     /*
      * The properties that are associated with an Azure Storage account
      */
-    @JsonProperty(value = "storageAccount")
     private StorageAccount storageAccount;
 
     /*
-     * The container property.
+     * The UserCustomCode container.
      */
-    @JsonProperty(value = "container")
     private String container;
 
     /*
-     * The path property.
+     * The UserCustomCode path.
      */
-    @JsonProperty(value = "path")
     private String path;
+
+    /*
+     * The refresh parameters for any/all updatable user defined functions present in the job config.
+     */
+    private RefreshConfiguration refreshConfiguration;
+
+    /**
+     * Creates an instance of External class.
+     */
+    public External() {
+    }
 
     /**
      * Get the storageAccount property: The properties that are associated with an Azure Storage account.
-     *
+     * 
      * @return the storageAccount value.
      */
     public StorageAccount storageAccount() {
@@ -43,7 +53,7 @@ public final class External {
 
     /**
      * Set the storageAccount property: The properties that are associated with an Azure Storage account.
-     *
+     * 
      * @param storageAccount the storageAccount value to set.
      * @return the External object itself.
      */
@@ -53,8 +63,8 @@ public final class External {
     }
 
     /**
-     * Get the container property: The container property.
-     *
+     * Get the container property: The UserCustomCode container.
+     * 
      * @return the container value.
      */
     public String container() {
@@ -62,8 +72,8 @@ public final class External {
     }
 
     /**
-     * Set the container property: The container property.
-     *
+     * Set the container property: The UserCustomCode container.
+     * 
      * @param container the container value to set.
      * @return the External object itself.
      */
@@ -73,8 +83,8 @@ public final class External {
     }
 
     /**
-     * Get the path property: The path property.
-     *
+     * Get the path property: The UserCustomCode path.
+     * 
      * @return the path value.
      */
     public String path() {
@@ -82,8 +92,8 @@ public final class External {
     }
 
     /**
-     * Set the path property: The path property.
-     *
+     * Set the path property: The UserCustomCode path.
+     * 
      * @param path the path value to set.
      * @return the External object itself.
      */
@@ -93,13 +103,83 @@ public final class External {
     }
 
     /**
+     * Get the refreshConfiguration property: The refresh parameters for any/all updatable user defined functions
+     * present in the job config.
+     * 
+     * @return the refreshConfiguration value.
+     */
+    public RefreshConfiguration refreshConfiguration() {
+        return this.refreshConfiguration;
+    }
+
+    /**
+     * Set the refreshConfiguration property: The refresh parameters for any/all updatable user defined functions
+     * present in the job config.
+     * 
+     * @param refreshConfiguration the refreshConfiguration value to set.
+     * @return the External object itself.
+     */
+    public External withRefreshConfiguration(RefreshConfiguration refreshConfiguration) {
+        this.refreshConfiguration = refreshConfiguration;
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (storageAccount() != null) {
             storageAccount().validate();
         }
+        if (refreshConfiguration() != null) {
+            refreshConfiguration().validate();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeJsonField("storageAccount", this.storageAccount);
+        jsonWriter.writeStringField("container", this.container);
+        jsonWriter.writeStringField("path", this.path);
+        jsonWriter.writeJsonField("refreshConfiguration", this.refreshConfiguration);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of External from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of External if the JsonReader was pointing to an instance of it, or null if it was pointing
+     * to JSON null.
+     * @throws IOException If an error occurs while reading the External.
+     */
+    public static External fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            External deserializedExternal = new External();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("storageAccount".equals(fieldName)) {
+                    deserializedExternal.storageAccount = StorageAccount.fromJson(reader);
+                } else if ("container".equals(fieldName)) {
+                    deserializedExternal.container = reader.getString();
+                } else if ("path".equals(fieldName)) {
+                    deserializedExternal.path = reader.getString();
+                } else if ("refreshConfiguration".equals(fieldName)) {
+                    deserializedExternal.refreshConfiguration = RefreshConfiguration.fromJson(reader);
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedExternal;
+        });
     }
 }

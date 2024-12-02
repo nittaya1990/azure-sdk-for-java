@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** OAuth Server Secrets Contract. */
 @Fluent
 public final class AuthorizationServerSecretsContractInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AuthorizationServerSecretsContractInner.class);
-
     /*
      * oAuth Authorization Server Secrets.
      */
@@ -21,18 +17,22 @@ public final class AuthorizationServerSecretsContractInner {
     private String clientSecret;
 
     /*
-     * Can be optionally specified when resource owner password grant type is
-     * supported by this authorization server. Default resource owner username.
+     * Can be optionally specified when resource owner password grant type is supported by this authorization server.
+     * Default resource owner username.
      */
     @JsonProperty(value = "resourceOwnerUsername")
     private String resourceOwnerUsername;
 
     /*
-     * Can be optionally specified when resource owner password grant type is
-     * supported by this authorization server. Default resource owner password.
+     * Can be optionally specified when resource owner password grant type is supported by this authorization server.
+     * Default resource owner password.
      */
     @JsonProperty(value = "resourceOwnerPassword")
     private String resourceOwnerPassword;
+
+    /** Creates an instance of AuthorizationServerSecretsContractInner class. */
+    public AuthorizationServerSecretsContractInner() {
+    }
 
     /**
      * Get the clientSecret property: oAuth Authorization Server Secrets.

@@ -6,22 +6,22 @@ package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.models.EmailTemplateParametersContractProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Email Template details. */
 @Fluent
 public final class EmailTemplateContractInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(EmailTemplateContractInner.class);
-
     /*
      * Email Template entity contract properties.
      */
     @JsonProperty(value = "properties")
     private EmailTemplateContractProperties innerProperties;
+
+    /** Creates an instance of EmailTemplateContractInner class. */
+    public EmailTemplateContractInner() {
+    }
 
     /**
      * Get the innerProperties property: Email Template entity contract properties.
@@ -125,7 +125,7 @@ public final class EmailTemplateContractInner extends ProxyResource {
     }
 
     /**
-     * Get the isDefault property: Whether the template is the default template provided by Api Management or has been
+     * Get the isDefault property: Whether the template is the default template provided by API Management or has been
      * edited.
      *
      * @return the isDefault value.

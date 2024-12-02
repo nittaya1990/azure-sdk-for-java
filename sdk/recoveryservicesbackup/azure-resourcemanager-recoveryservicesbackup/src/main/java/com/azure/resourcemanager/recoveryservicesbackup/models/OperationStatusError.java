@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Error information associated with operation status call. */
+/**
+ * Error information associated with operation status call.
+ */
 @Fluent
 public final class OperationStatusError {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OperationStatusError.class);
-
     /*
      * Error code of the operation failure.
      */
@@ -27,8 +25,14 @@ public final class OperationStatusError {
     private String message;
 
     /**
+     * Creates an instance of OperationStatusError class.
+     */
+    public OperationStatusError() {
+    }
+
+    /**
      * Get the code property: Error code of the operation failure.
-     *
+     * 
      * @return the code value.
      */
     public String code() {
@@ -37,7 +41,7 @@ public final class OperationStatusError {
 
     /**
      * Set the code property: Error code of the operation failure.
-     *
+     * 
      * @param code the code value to set.
      * @return the OperationStatusError object itself.
      */
@@ -48,7 +52,7 @@ public final class OperationStatusError {
 
     /**
      * Get the message property: Error message displayed if the operation failure.
-     *
+     * 
      * @return the message value.
      */
     public String message() {
@@ -57,7 +61,7 @@ public final class OperationStatusError {
 
     /**
      * Set the message property: Error message displayed if the operation failure.
-     *
+     * 
      * @param message the message value to set.
      * @return the OperationStatusError object itself.
      */
@@ -68,7 +72,7 @@ public final class OperationStatusError {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

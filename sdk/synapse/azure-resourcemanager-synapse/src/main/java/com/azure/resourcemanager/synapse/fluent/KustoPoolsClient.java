@@ -22,33 +22,50 @@ import com.azure.resourcemanager.synapse.models.KustoPoolCheckNameRequest;
 import com.azure.resourcemanager.synapse.models.KustoPoolUpdate;
 import com.azure.resourcemanager.synapse.models.LanguageExtensionsList;
 
-/** An instance of this class provides access to all the operations defined in KustoPoolsClient. */
+/**
+ * An instance of this class provides access to all the operations defined in KustoPoolsClient.
+ */
 public interface KustoPoolsClient {
     /**
      * Lists eligible SKUs for Kusto Pool resource.
-     *
+     * 
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of the SKU descriptions.
+     * @return the list of the SKU descriptions as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<SkuDescriptionInner> list();
 
     /**
      * Lists eligible SKUs for Kusto Pool resource.
-     *
+     * 
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of the SKU descriptions.
+     * @return the list of the SKU descriptions as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<SkuDescriptionInner> list(Context context);
 
     /**
      * Checks that the kusto pool name is valid and is not already in use.
-     *
+     * 
+     * @param location The name of Azure region.
+     * @param kustoPoolName The name of the cluster.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the result returned from a check name availability request along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<CheckNameResultInner> checkNameAvailabilityWithResponse(String location,
+        KustoPoolCheckNameRequest kustoPoolName, Context context);
+
+    /**
+     * Checks that the kusto pool name is valid and is not already in use.
+     * 
      * @param location The name of Azure region.
      * @param kustoPoolName The name of the cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -60,23 +77,27 @@ public interface KustoPoolsClient {
     CheckNameResultInner checkNameAvailability(String location, KustoPoolCheckNameRequest kustoPoolName);
 
     /**
-     * Checks that the kusto pool name is valid and is not already in use.
-     *
-     * @param location The name of Azure region.
-     * @param kustoPoolName The name of the cluster.
+     * List Kusto pools
+     * 
+     * List all Kusto pools.
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the result returned from a check name availability request.
+     * @return the list Kusto pools operation response along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<CheckNameResultInner> checkNameAvailabilityWithResponse(
-        String location, KustoPoolCheckNameRequest kustoPoolName, Context context);
+    Response<KustoPoolListResultInner> listByWorkspaceWithResponse(String resourceGroupName, String workspaceName,
+        Context context);
 
     /**
+     * List Kusto pools
+     * 
      * List all Kusto pools.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -88,23 +109,24 @@ public interface KustoPoolsClient {
     KustoPoolListResultInner listByWorkspace(String resourceGroupName, String workspaceName);
 
     /**
-     * List all Kusto pools.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * Gets a Kusto pool.
+     * 
      * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto pools operation response.
+     * @return a Kusto pool along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<KustoPoolListResultInner> listByWorkspaceWithResponse(
-        String resourceGroupName, String workspaceName, Context context);
+    Response<KustoPoolInner> getWithResponse(String workspaceName, String kustoPoolName, String resourceGroupName,
+        Context context);
 
     /**
      * Gets a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -117,125 +139,70 @@ public interface KustoPoolsClient {
     KustoPoolInner get(String workspaceName, String kustoPoolName, String resourceGroupName);
 
     /**
-     * Gets a Kusto pool.
-     *
+     * Create or update a Kusto pool.
+     * 
      * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param context The context to associate with this operation.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param parameters The Kusto pool parameters supplied to the CreateOrUpdate operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Kusto pool.
+     * @return the {@link SyncPoller} for polling of class representing a Kusto kusto pool.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<KustoPoolInner> getWithResponse(
-        String workspaceName, String kustoPoolName, String resourceGroupName, Context context);
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<KustoPoolInner>, KustoPoolInner> beginCreateOrUpdate(String workspaceName,
+        String resourceGroupName, String kustoPoolName, KustoPoolInner parameters);
 
     /**
      * Create or update a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
      * @param parameters The Kusto pool parameters supplied to the CreateOrUpdate operation.
      * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
-     *     the last-seen ETag value to prevent accidentally overwriting concurrent changes.
+     * the last-seen ETag value to prevent accidentally overwriting concurrent changes.
      * @param ifNoneMatch Set to '*' to allow a new Kusto Pool to be created, but to prevent updating an existing Kusto
-     *     Pool. Other values will result in a 412 Pre-condition Failed response.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
-     */
-    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    SyncPoller<PollResult<KustoPoolInner>, KustoPoolInner> beginCreateOrUpdate(
-        String workspaceName,
-        String resourceGroupName,
-        String kustoPoolName,
-        KustoPoolInner parameters,
-        String ifMatch,
-        String ifNoneMatch);
-
-    /**
-     * Create or update a Kusto pool.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param parameters The Kusto pool parameters supplied to the CreateOrUpdate operation.
-     * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
-     *     the last-seen ETag value to prevent accidentally overwriting concurrent changes.
-     * @param ifNoneMatch Set to '*' to allow a new Kusto Pool to be created, but to prevent updating an existing Kusto
-     *     Pool. Other values will result in a 412 Pre-condition Failed response.
+     * Pool. Other values will result in a 412 Pre-condition Failed response.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return the {@link SyncPoller} for polling of class representing a Kusto kusto pool.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    SyncPoller<PollResult<KustoPoolInner>, KustoPoolInner> beginCreateOrUpdate(
-        String workspaceName,
-        String resourceGroupName,
-        String kustoPoolName,
-        KustoPoolInner parameters,
-        String ifMatch,
-        String ifNoneMatch,
+    SyncPoller<PollResult<KustoPoolInner>, KustoPoolInner> beginCreateOrUpdate(String workspaceName,
+        String resourceGroupName, String kustoPoolName, KustoPoolInner parameters, String ifMatch, String ifNoneMatch,
         Context context);
 
     /**
      * Create or update a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
      * @param parameters The Kusto pool parameters supplied to the CreateOrUpdate operation.
-     * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
-     *     the last-seen ETag value to prevent accidentally overwriting concurrent changes.
-     * @param ifNoneMatch Set to '*' to allow a new Kusto Pool to be created, but to prevent updating an existing Kusto
-     *     Pool. Other values will result in a 412 Pre-condition Failed response.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return class representing a Kusto kusto pool.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    KustoPoolInner createOrUpdate(
-        String workspaceName,
-        String resourceGroupName,
-        String kustoPoolName,
-        KustoPoolInner parameters,
-        String ifMatch,
-        String ifNoneMatch);
+    KustoPoolInner createOrUpdate(String workspaceName, String resourceGroupName, String kustoPoolName,
+        KustoPoolInner parameters);
 
     /**
      * Create or update a Kusto pool.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param parameters The Kusto pool parameters supplied to the CreateOrUpdate operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    KustoPoolInner createOrUpdate(
-        String workspaceName, String resourceGroupName, String kustoPoolName, KustoPoolInner parameters);
-
-    /**
-     * Create or update a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
      * @param parameters The Kusto pool parameters supplied to the CreateOrUpdate operation.
      * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
-     *     the last-seen ETag value to prevent accidentally overwriting concurrent changes.
+     * the last-seen ETag value to prevent accidentally overwriting concurrent changes.
      * @param ifNoneMatch Set to '*' to allow a new Kusto Pool to be created, but to prevent updating an existing Kusto
-     *     Pool. Other values will result in a 412 Pre-condition Failed response.
+     * Pool. Other values will result in a 412 Pre-condition Failed response.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
@@ -243,86 +210,47 @@ public interface KustoPoolsClient {
      * @return class representing a Kusto kusto pool.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    KustoPoolInner createOrUpdate(
-        String workspaceName,
-        String resourceGroupName,
-        String kustoPoolName,
-        KustoPoolInner parameters,
-        String ifMatch,
-        String ifNoneMatch,
-        Context context);
+    KustoPoolInner createOrUpdate(String workspaceName, String resourceGroupName, String kustoPoolName,
+        KustoPoolInner parameters, String ifMatch, String ifNoneMatch, Context context);
 
     /**
      * Update a Kusto Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
      * @param parameters The Kusto pool parameters supplied to the Update operation.
-     * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
-     *     the last-seen ETag value to prevent accidentally overwriting concurrent changes.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return the {@link SyncPoller} for polling of class representing a Kusto kusto pool.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    SyncPoller<PollResult<KustoPoolInner>, KustoPoolInner> beginUpdate(
-        String workspaceName,
-        String resourceGroupName,
-        String kustoPoolName,
-        KustoPoolUpdate parameters,
-        String ifMatch);
+    SyncPoller<PollResult<KustoPoolInner>, KustoPoolInner> beginUpdate(String workspaceName, String resourceGroupName,
+        String kustoPoolName, KustoPoolUpdate parameters);
 
     /**
      * Update a Kusto Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
      * @param parameters The Kusto pool parameters supplied to the Update operation.
      * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
-     *     the last-seen ETag value to prevent accidentally overwriting concurrent changes.
+     * the last-seen ETag value to prevent accidentally overwriting concurrent changes.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return the {@link SyncPoller} for polling of class representing a Kusto kusto pool.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    SyncPoller<PollResult<KustoPoolInner>, KustoPoolInner> beginUpdate(
-        String workspaceName,
-        String resourceGroupName,
-        String kustoPoolName,
-        KustoPoolUpdate parameters,
-        String ifMatch,
-        Context context);
+    SyncPoller<PollResult<KustoPoolInner>, KustoPoolInner> beginUpdate(String workspaceName, String resourceGroupName,
+        String kustoPoolName, KustoPoolUpdate parameters, String ifMatch, Context context);
 
     /**
      * Update a Kusto Kusto Pool.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param parameters The Kusto pool parameters supplied to the Update operation.
-     * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
-     *     the last-seen ETag value to prevent accidentally overwriting concurrent changes.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    KustoPoolInner update(
-        String workspaceName,
-        String resourceGroupName,
-        String kustoPoolName,
-        KustoPoolUpdate parameters,
-        String ifMatch);
-
-    /**
-     * Update a Kusto Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
@@ -333,18 +261,18 @@ public interface KustoPoolsClient {
      * @return class representing a Kusto kusto pool.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    KustoPoolInner update(
-        String workspaceName, String resourceGroupName, String kustoPoolName, KustoPoolUpdate parameters);
+    KustoPoolInner update(String workspaceName, String resourceGroupName, String kustoPoolName,
+        KustoPoolUpdate parameters);
 
     /**
      * Update a Kusto Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
      * @param parameters The Kusto pool parameters supplied to the Update operation.
      * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
-     *     the last-seen ETag value to prevent accidentally overwriting concurrent changes.
+     * the last-seen ETag value to prevent accidentally overwriting concurrent changes.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
@@ -352,48 +280,43 @@ public interface KustoPoolsClient {
      * @return class representing a Kusto kusto pool.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    KustoPoolInner update(
-        String workspaceName,
-        String resourceGroupName,
-        String kustoPoolName,
-        KustoPoolUpdate parameters,
-        String ifMatch,
+    KustoPoolInner update(String workspaceName, String resourceGroupName, String kustoPoolName,
+        KustoPoolUpdate parameters, String ifMatch, Context context);
+
+    /**
+     * Deletes a Kusto pool.
+     * 
+     * @param workspaceName The name of the workspace.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of long-running operation.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<Void>, Void> beginDelete(String workspaceName, String resourceGroupName,
+        String kustoPoolName);
+
+    /**
+     * Deletes a Kusto pool.
+     * 
+     * @param workspaceName The name of the workspace.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of long-running operation.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<Void>, Void> beginDelete(String workspaceName, String resourceGroupName, String kustoPoolName,
         Context context);
 
     /**
      * Deletes a Kusto pool.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
-     */
-    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    SyncPoller<PollResult<Void>, Void> beginDelete(
-        String workspaceName, String resourceGroupName, String kustoPoolName);
-
-    /**
-     * Deletes a Kusto pool.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
-     */
-    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    SyncPoller<PollResult<Void>, Void> beginDelete(
-        String workspaceName, String resourceGroupName, String kustoPoolName, Context context);
-
-    /**
-     * Deletes a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
@@ -406,7 +329,7 @@ public interface KustoPoolsClient {
 
     /**
      * Deletes a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
@@ -420,21 +343,21 @@ public interface KustoPoolsClient {
 
     /**
      * Stops a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<Void>, Void> beginStop(String workspaceName, String kustoPoolName, String resourceGroupName);
 
     /**
      * Stops a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -442,15 +365,15 @@ public interface KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    SyncPoller<PollResult<Void>, Void> beginStop(
-        String workspaceName, String kustoPoolName, String resourceGroupName, Context context);
+    SyncPoller<PollResult<Void>, Void> beginStop(String workspaceName, String kustoPoolName, String resourceGroupName,
+        Context context);
 
     /**
      * Stops a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -463,7 +386,7 @@ public interface KustoPoolsClient {
 
     /**
      * Stops a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -477,21 +400,21 @@ public interface KustoPoolsClient {
 
     /**
      * Starts a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<Void>, Void> beginStart(String workspaceName, String kustoPoolName, String resourceGroupName);
 
     /**
      * Starts a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -499,15 +422,15 @@ public interface KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    SyncPoller<PollResult<Void>, Void> beginStart(
-        String workspaceName, String kustoPoolName, String resourceGroupName, Context context);
+    SyncPoller<PollResult<Void>, Void> beginStart(String workspaceName, String kustoPoolName, String resourceGroupName,
+        Context context);
 
     /**
      * Starts a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -520,7 +443,7 @@ public interface KustoPoolsClient {
 
     /**
      * Starts a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -534,22 +457,22 @@ public interface KustoPoolsClient {
 
     /**
      * Returns the SKUs available for the provided resource.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of available SKUs for a Kusto Pool.
+     * @return list of available SKUs for a Kusto Pool as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<AzureResourceSkuInner> listSkusByResource(
-        String workspaceName, String kustoPoolName, String resourceGroupName);
+    PagedIterable<AzureResourceSkuInner> listSkusByResource(String workspaceName, String kustoPoolName,
+        String resourceGroupName);
 
     /**
      * Returns the SKUs available for the provided resource.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -557,30 +480,30 @@ public interface KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of available SKUs for a Kusto Pool.
+     * @return list of available SKUs for a Kusto Pool as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<AzureResourceSkuInner> listSkusByResource(
-        String workspaceName, String kustoPoolName, String resourceGroupName, Context context);
+    PagedIterable<AzureResourceSkuInner> listSkusByResource(String workspaceName, String kustoPoolName,
+        String resourceGroupName, Context context);
 
     /**
      * Returns a list of language extensions that can run within KQL queries.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of language extension objects.
+     * @return the list of language extension objects as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<LanguageExtensionInner> listLanguageExtensions(
-        String workspaceName, String kustoPoolName, String resourceGroupName);
+    PagedIterable<LanguageExtensionInner> listLanguageExtensions(String workspaceName, String kustoPoolName,
+        String resourceGroupName);
 
     /**
      * Returns a list of language extensions that can run within KQL queries.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -588,15 +511,15 @@ public interface KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of language extension objects.
+     * @return the list of language extension objects as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<LanguageExtensionInner> listLanguageExtensions(
-        String workspaceName, String kustoPoolName, String resourceGroupName, Context context);
+    PagedIterable<LanguageExtensionInner> listLanguageExtensions(String workspaceName, String kustoPoolName,
+        String resourceGroupName, Context context);
 
     /**
      * Add a list of language extensions that can run within KQL queries.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -604,57 +527,47 @@ public interface KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    SyncPoller<PollResult<Void>, Void> beginAddLanguageExtensions(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
+    SyncPoller<PollResult<Void>, Void> beginAddLanguageExtensions(String workspaceName, String kustoPoolName,
+        String resourceGroupName, LanguageExtensionsList languageExtensionsToAdd);
+
+    /**
+     * Add a list of language extensions that can run within KQL queries.
+     * 
+     * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param languageExtensionsToAdd The language extensions to add.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of long-running operation.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<Void>, Void> beginAddLanguageExtensions(String workspaceName, String kustoPoolName,
+        String resourceGroupName, LanguageExtensionsList languageExtensionsToAdd, Context context);
+
+    /**
+     * Add a list of language extensions that can run within KQL queries.
+     * 
+     * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param languageExtensionsToAdd The language extensions to add.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    void addLanguageExtensions(String workspaceName, String kustoPoolName, String resourceGroupName,
         LanguageExtensionsList languageExtensionsToAdd);
 
     /**
      * Add a list of language extensions that can run within KQL queries.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param languageExtensionsToAdd The language extensions to add.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
-     */
-    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    SyncPoller<PollResult<Void>, Void> beginAddLanguageExtensions(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        LanguageExtensionsList languageExtensionsToAdd,
-        Context context);
-
-    /**
-     * Add a list of language extensions that can run within KQL queries.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param languageExtensionsToAdd The language extensions to add.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    void addLanguageExtensions(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        LanguageExtensionsList languageExtensionsToAdd);
-
-    /**
-     * Add a list of language extensions that can run within KQL queries.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -665,16 +578,12 @@ public interface KustoPoolsClient {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    void addLanguageExtensions(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        LanguageExtensionsList languageExtensionsToAdd,
-        Context context);
+    void addLanguageExtensions(String workspaceName, String kustoPoolName, String resourceGroupName,
+        LanguageExtensionsList languageExtensionsToAdd, Context context);
 
     /**
      * Remove a list of language extensions that can run within KQL queries.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -682,57 +591,47 @@ public interface KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    SyncPoller<PollResult<Void>, Void> beginRemoveLanguageExtensions(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
+    SyncPoller<PollResult<Void>, Void> beginRemoveLanguageExtensions(String workspaceName, String kustoPoolName,
+        String resourceGroupName, LanguageExtensionsList languageExtensionsToRemove);
+
+    /**
+     * Remove a list of language extensions that can run within KQL queries.
+     * 
+     * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param languageExtensionsToRemove The language extensions to remove.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of long-running operation.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<Void>, Void> beginRemoveLanguageExtensions(String workspaceName, String kustoPoolName,
+        String resourceGroupName, LanguageExtensionsList languageExtensionsToRemove, Context context);
+
+    /**
+     * Remove a list of language extensions that can run within KQL queries.
+     * 
+     * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param languageExtensionsToRemove The language extensions to remove.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    void removeLanguageExtensions(String workspaceName, String kustoPoolName, String resourceGroupName,
         LanguageExtensionsList languageExtensionsToRemove);
 
     /**
      * Remove a list of language extensions that can run within KQL queries.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param languageExtensionsToRemove The language extensions to remove.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
-     */
-    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    SyncPoller<PollResult<Void>, Void> beginRemoveLanguageExtensions(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        LanguageExtensionsList languageExtensionsToRemove,
-        Context context);
-
-    /**
-     * Remove a list of language extensions that can run within KQL queries.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param languageExtensionsToRemove The language extensions to remove.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    void removeLanguageExtensions(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        LanguageExtensionsList languageExtensionsToRemove);
-
-    /**
-     * Remove a list of language extensions that can run within KQL queries.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -743,31 +642,27 @@ public interface KustoPoolsClient {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    void removeLanguageExtensions(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        LanguageExtensionsList languageExtensionsToRemove,
-        Context context);
+    void removeLanguageExtensions(String workspaceName, String kustoPoolName, String resourceGroupName,
+        LanguageExtensionsList languageExtensionsToRemove, Context context);
 
     /**
      * Returns a list of databases that are owned by this Kusto Pool and were followed by another Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto database principals operation response.
+     * @return the list Kusto database principals operation response as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<FollowerDatabaseDefinitionInner> listFollowerDatabases(
-        String workspaceName, String kustoPoolName, String resourceGroupName);
+    PagedIterable<FollowerDatabaseDefinitionInner> listFollowerDatabases(String workspaceName, String kustoPoolName,
+        String resourceGroupName);
 
     /**
      * Returns a list of databases that are owned by this Kusto Pool and were followed by another Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -775,15 +670,15 @@ public interface KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto database principals operation response.
+     * @return the list Kusto database principals operation response as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<FollowerDatabaseDefinitionInner> listFollowerDatabases(
-        String workspaceName, String kustoPoolName, String resourceGroupName, Context context);
+    PagedIterable<FollowerDatabaseDefinitionInner> listFollowerDatabases(String workspaceName, String kustoPoolName,
+        String resourceGroupName, Context context);
 
     /**
      * Detaches all followers of a database owned by this Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -791,57 +686,47 @@ public interface KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    SyncPoller<PollResult<Void>, Void> beginDetachFollowerDatabases(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
+    SyncPoller<PollResult<Void>, Void> beginDetachFollowerDatabases(String workspaceName, String kustoPoolName,
+        String resourceGroupName, FollowerDatabaseDefinitionInner followerDatabaseToRemove);
+
+    /**
+     * Detaches all followers of a database owned by this Kusto Pool.
+     * 
+     * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param followerDatabaseToRemove The follower databases properties to remove.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of long-running operation.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<Void>, Void> beginDetachFollowerDatabases(String workspaceName, String kustoPoolName,
+        String resourceGroupName, FollowerDatabaseDefinitionInner followerDatabaseToRemove, Context context);
+
+    /**
+     * Detaches all followers of a database owned by this Kusto Pool.
+     * 
+     * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param followerDatabaseToRemove The follower databases properties to remove.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    void detachFollowerDatabases(String workspaceName, String kustoPoolName, String resourceGroupName,
         FollowerDatabaseDefinitionInner followerDatabaseToRemove);
 
     /**
      * Detaches all followers of a database owned by this Kusto Pool.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param followerDatabaseToRemove The follower databases properties to remove.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
-     */
-    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    SyncPoller<PollResult<Void>, Void> beginDetachFollowerDatabases(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        FollowerDatabaseDefinitionInner followerDatabaseToRemove,
-        Context context);
-
-    /**
-     * Detaches all followers of a database owned by this Kusto Pool.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param followerDatabaseToRemove The follower databases properties to remove.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    void detachFollowerDatabases(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        FollowerDatabaseDefinitionInner followerDatabaseToRemove);
-
-    /**
-     * Detaches all followers of a database owned by this Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -852,10 +737,6 @@ public interface KustoPoolsClient {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    void detachFollowerDatabases(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        FollowerDatabaseDefinitionInner followerDatabaseToRemove,
-        Context context);
+    void detachFollowerDatabases(String workspaceName, String kustoPoolName, String resourceGroupName,
+        FollowerDatabaseDefinitionInner followerDatabaseToRemove, Context context);
 }

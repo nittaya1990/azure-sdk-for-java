@@ -8,23 +8,42 @@ import com.azure.core.util.ExpandableStringEnum;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.Collection;
 
-/** Defines values for PropertyType. */
+/**
+ * The data type of the compared operands (string, integer, floating point number or a boolean [true/false]].
+ */
 public final class PropertyType extends ExpandableStringEnum<PropertyType> {
-    /** Static value String for PropertyType. */
+    /**
+     * Static value String for PropertyType.
+     */
     public static final PropertyType STRING = fromString("String");
 
-    /** Static value Integer for PropertyType. */
+    /**
+     * Static value Integer for PropertyType.
+     */
     public static final PropertyType INTEGER = fromString("Integer");
 
-    /** Static value Number for PropertyType. */
+    /**
+     * Static value Number for PropertyType.
+     */
     public static final PropertyType NUMBER = fromString("Number");
 
-    /** Static value Boolean for PropertyType. */
+    /**
+     * Static value Boolean for PropertyType.
+     */
     public static final PropertyType BOOLEAN = fromString("Boolean");
 
     /**
+     * Creates a new instance of PropertyType value.
+     * 
+     * @deprecated Use the {@link #fromString(String)} factory method.
+     */
+    @Deprecated
+    public PropertyType() {
+    }
+
+    /**
      * Creates or finds a PropertyType from its string representation.
-     *
+     * 
      * @param name a name to look for.
      * @return the corresponding PropertyType.
      */
@@ -33,7 +52,11 @@ public final class PropertyType extends ExpandableStringEnum<PropertyType> {
         return fromString(name, PropertyType.class);
     }
 
-    /** @return known PropertyType values. */
+    /**
+     * Gets known PropertyType values.
+     * 
+     * @return known PropertyType values.
+     */
     public static Collection<PropertyType> values() {
         return values(PropertyType.class);
     }

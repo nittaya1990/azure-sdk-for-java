@@ -6,21 +6,21 @@ package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
 /** Tenant Settings. */
 @Fluent
 public final class TenantSettingsContractInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TenantSettingsContractInner.class);
-
     /*
      * TenantSettings entity contract properties.
      */
     @JsonProperty(value = "properties")
     private TenantSettingsContractProperties innerProperties;
+
+    /** Creates an instance of TenantSettingsContractInner class. */
+    public TenantSettingsContractInner() {
+    }
 
     /**
      * Get the innerProperties property: TenantSettings entity contract properties.

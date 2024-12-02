@@ -31,7 +31,6 @@ import com.azure.core.management.exception.ManagementException;
 import com.azure.core.management.polling.PollResult;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.core.util.polling.PollerFlux;
 import com.azure.core.util.polling.SyncPoller;
 import com.azure.resourcemanager.devtestlabs.fluent.LabsClient;
@@ -51,8 +50,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in LabsClient. */
 public final class LabsClientImpl implements LabsClient {
-    private final ClientLogger logger = new ClientLogger(LabsClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final LabsService service;
 
@@ -75,224 +72,149 @@ public final class LabsClientImpl implements LabsClient {
      */
     @Host("{$host}")
     @ServiceInterface(name = "DevTestLabsClientLab")
-    private interface LabsService {
-        @Headers({"Content-Type: application/json"})
+    public interface LabsService {
+        @Headers({ "Content-Type: application/json" })
         @Get("/subscriptions/{subscriptionId}/providers/Microsoft.DevTestLab/labs")
-        @ExpectedResponses({200})
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<LabList>> list(
-            @HostParam("$host") String endpoint,
-            @PathParam("subscriptionId") String subscriptionId,
-            @QueryParam("$expand") String expand,
-            @QueryParam("$filter") String filter,
-            @QueryParam("$top") Integer top,
-            @QueryParam("$orderby") String orderby,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+        Mono<Response<LabList>> list(@HostParam("$host") String endpoint,
+            @PathParam("subscriptionId") String subscriptionId, @QueryParam("$expand") String expand,
+            @QueryParam("$filter") String filter, @QueryParam("$top") Integer top,
+            @QueryParam("$orderby") String orderby, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
+        @Headers({ "Content-Type: application/json" })
         @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DevTestLab/labs")
-        @ExpectedResponses({200})
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<LabList>> listByResourceGroup(
-            @HostParam("$host") String endpoint,
+        Mono<Response<LabList>> listByResourceGroup(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @QueryParam("$expand") String expand,
-            @QueryParam("$filter") String filter,
-            @QueryParam("$top") Integer top,
-            @QueryParam("$orderby") String orderby,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @QueryParam("$expand") String expand,
+            @QueryParam("$filter") String filter, @QueryParam("$top") Integer top,
+            @QueryParam("$orderby") String orderby, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DevTestLab/labs"
-                + "/{name}")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DevTestLab/labs/{name}")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<LabInner>> getByResourceGroup(
-            @HostParam("$host") String endpoint,
+        Mono<Response<LabInner>> getByResourceGroup(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("name") String name,
-            @QueryParam("$expand") String expand,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("name") String name,
+            @QueryParam("$expand") String expand, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Put(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DevTestLab/labs"
-                + "/{name}")
-        @ExpectedResponses({200, 201})
+        @Headers({ "Content-Type: application/json" })
+        @Put("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DevTestLab/labs/{name}")
+        @ExpectedResponses({ 200, 201 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> createOrUpdate(
-            @HostParam("$host") String endpoint,
+        Mono<Response<Flux<ByteBuffer>>> createOrUpdate(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("name") String name,
-            @QueryParam("api-version") String apiVersion,
-            @BodyParam("application/json") LabInner lab,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("name") String name,
+            @QueryParam("api-version") String apiVersion, @BodyParam("application/json") LabInner lab,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Delete(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DevTestLab/labs"
-                + "/{name}")
-        @ExpectedResponses({200, 202, 204})
+        @Headers({ "Content-Type: application/json" })
+        @Delete("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DevTestLab/labs/{name}")
+        @ExpectedResponses({ 200, 202, 204 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> delete(
-            @HostParam("$host") String endpoint,
+        Mono<Response<Flux<ByteBuffer>>> delete(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("name") String name,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("name") String name,
+            @QueryParam("api-version") String apiVersion, @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Patch(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DevTestLab/labs"
-                + "/{name}")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Patch("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DevTestLab/labs/{name}")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<LabInner>> update(
-            @HostParam("$host") String endpoint,
+        Mono<Response<LabInner>> update(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("name") String name,
-            @QueryParam("api-version") String apiVersion,
-            @BodyParam("application/json") LabFragment lab,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("name") String name,
+            @QueryParam("api-version") String apiVersion, @BodyParam("application/json") LabFragment lab,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DevTestLab/labs"
-                + "/{name}/claimAnyVm")
-        @ExpectedResponses({200, 202})
+        @Headers({ "Content-Type: application/json" })
+        @Post("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DevTestLab/labs/{name}/claimAnyVm")
+        @ExpectedResponses({ 200, 202 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> claimAnyVm(
-            @HostParam("$host") String endpoint,
+        Mono<Response<Flux<ByteBuffer>>> claimAnyVm(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("name") String name,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("name") String name,
+            @QueryParam("api-version") String apiVersion, @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DevTestLab/labs"
-                + "/{name}/createEnvironment")
-        @ExpectedResponses({200, 202})
+        @Headers({ "Content-Type: application/json" })
+        @Post("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DevTestLab/labs/{name}/createEnvironment")
+        @ExpectedResponses({ 200, 202 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> createEnvironment(
-            @HostParam("$host") String endpoint,
+        Mono<Response<Flux<ByteBuffer>>> createEnvironment(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("name") String name,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("name") String name,
             @QueryParam("api-version") String apiVersion,
             @BodyParam("application/json") LabVirtualMachineCreationParameter labVirtualMachineCreationParameter,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DevTestLab/labs"
-                + "/{name}/exportResourceUsage")
-        @ExpectedResponses({200, 202})
+        @Headers({ "Content-Type: application/json" })
+        @Post("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DevTestLab/labs/{name}/exportResourceUsage")
+        @ExpectedResponses({ 200, 202 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> exportResourceUsage(
-            @HostParam("$host") String endpoint,
+        Mono<Response<Flux<ByteBuffer>>> exportResourceUsage(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("name") String name,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("name") String name,
             @QueryParam("api-version") String apiVersion,
             @BodyParam("application/json") ExportResourceUsageParameters exportResourceUsageParameters,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DevTestLab/labs"
-                + "/{name}/generateUploadUri")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Post("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DevTestLab/labs/{name}/generateUploadUri")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<GenerateUploadUriResponseInner>> generateUploadUri(
-            @HostParam("$host") String endpoint,
+        Mono<Response<GenerateUploadUriResponseInner>> generateUploadUri(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("name") String name,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("name") String name,
             @QueryParam("api-version") String apiVersion,
             @BodyParam("application/json") GenerateUploadUriParameter generateUploadUriParameter,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DevTestLab/labs"
-                + "/{name}/importVirtualMachine")
-        @ExpectedResponses({200, 202})
+        @Headers({ "Content-Type: application/json" })
+        @Post("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DevTestLab/labs/{name}/importVirtualMachine")
+        @ExpectedResponses({ 200, 202 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> importVirtualMachine(
-            @HostParam("$host") String endpoint,
+        Mono<Response<Flux<ByteBuffer>>> importVirtualMachine(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("name") String name,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("name") String name,
             @QueryParam("api-version") String apiVersion,
             @BodyParam("application/json") ImportLabVirtualMachineRequest importLabVirtualMachineRequest,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DevTestLab/labs"
-                + "/{name}/listVhds")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Post("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DevTestLab/labs/{name}/listVhds")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<LabVhdList>> listVhds(
-            @HostParam("$host") String endpoint,
+        Mono<Response<LabVhdList>> listVhds(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("name") String name,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("name") String name,
+            @QueryParam("api-version") String apiVersion, @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
+        @Headers({ "Content-Type: application/json" })
         @Get("{nextLink}")
-        @ExpectedResponses({200})
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<LabList>> listBySubscriptionNext(
-            @PathParam(value = "nextLink", encoded = true) String nextLink,
-            @HostParam("$host") String endpoint,
-            @HeaderParam("Accept") String accept,
-            Context context);
+        Mono<Response<LabList>> listBySubscriptionNext(@PathParam(value = "nextLink", encoded = true) String nextLink,
+            @HostParam("$host") String endpoint, @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
+        @Headers({ "Content-Type: application/json" })
         @Get("{nextLink}")
-        @ExpectedResponses({200})
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<LabList>> listByResourceGroupNext(
-            @PathParam(value = "nextLink", encoded = true) String nextLink,
-            @HostParam("$host") String endpoint,
-            @HeaderParam("Accept") String accept,
-            Context context);
+        Mono<Response<LabList>> listByResourceGroupNext(@PathParam(value = "nextLink", encoded = true) String nextLink,
+            @HostParam("$host") String endpoint, @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
+        @Headers({ "Content-Type: application/json" })
         @Get("{nextLink}")
-        @ExpectedResponses({200})
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<LabVhdList>> listVhdsNext(
-            @PathParam(value = "nextLink", encoded = true) String nextLink,
-            @HostParam("$host") String endpoint,
-            @HeaderParam("Accept") String accept,
-            Context context);
+        Mono<Response<LabVhdList>> listVhdsNext(@PathParam(value = "nextLink", encoded = true) String nextLink,
+            @HostParam("$host") String endpoint, @HeaderParam("Accept") String accept, Context context);
     }
 
     /**
@@ -305,47 +227,26 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<LabInner>> listSinglePageAsync(
-        String expand, String filter, Integer top, String orderby) {
+    private Mono<PagedResponse<LabInner>> listSinglePageAsync(String expand, String filter, Integer top,
+        String orderby) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .list(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            expand,
-                            filter,
-                            top,
-                            orderby,
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
-            .<PagedResponse<LabInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null))
+            .withContext(context -> service.list(this.client.getEndpoint(), this.client.getSubscriptionId(), expand,
+                filter, top, orderby, this.client.getApiVersion(), accept, context))
+            .<PagedResponse<LabInner>>map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(),
+                res.getHeaders(), res.getValue().value(), res.getValue().nextLink(), null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -360,45 +261,27 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<LabInner>> listSinglePageAsync(
-        String expand, String filter, Integer top, String orderby, Context context) {
+    private Mono<PagedResponse<LabInner>> listSinglePageAsync(String expand, String filter, Integer top, String orderby,
+        Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
         return service
-            .list(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                expand,
-                filter,
-                top,
-                orderby,
-                this.client.getApiVersion(),
-                accept,
-                context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null));
+            .list(this.client.getEndpoint(), this.client.getSubscriptionId(), expand, filter, top, orderby,
+                this.client.getApiVersion(), accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), res.getValue().nextLink(), null));
     }
 
     /**
@@ -411,12 +294,11 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<LabInner> listAsync(String expand, String filter, Integer top, String orderby) {
-        return new PagedFlux<>(
-            () -> listSinglePageAsync(expand, filter, top, orderby),
+        return new PagedFlux<>(() -> listSinglePageAsync(expand, filter, top, orderby),
             nextLink -> listBySubscriptionNextSinglePageAsync(nextLink));
     }
 
@@ -425,7 +307,7 @@ public final class LabsClientImpl implements LabsClient {
      *
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<LabInner> listAsync() {
@@ -433,8 +315,7 @@ public final class LabsClientImpl implements LabsClient {
         final String filter = null;
         final Integer top = null;
         final String orderby = null;
-        return new PagedFlux<>(
-            () -> listSinglePageAsync(expand, filter, top, orderby),
+        return new PagedFlux<>(() -> listSinglePageAsync(expand, filter, top, orderby),
             nextLink -> listBySubscriptionNextSinglePageAsync(nextLink));
     }
 
@@ -449,12 +330,11 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<LabInner> listAsync(String expand, String filter, Integer top, String orderby, Context context) {
-        return new PagedFlux<>(
-            () -> listSinglePageAsync(expand, filter, top, orderby, context),
+        return new PagedFlux<>(() -> listSinglePageAsync(expand, filter, top, orderby, context),
             nextLink -> listBySubscriptionNextSinglePageAsync(nextLink, context));
     }
 
@@ -463,7 +343,7 @@ public final class LabsClientImpl implements LabsClient {
      *
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<LabInner> list() {
@@ -485,7 +365,7 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<LabInner> list(String expand, String filter, Integer top, String orderby, Context context) {
@@ -503,22 +383,19 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<LabInner>> listByResourceGroupSinglePageAsync(
-        String resourceGroupName, String expand, String filter, Integer top, String orderby) {
+    private Mono<PagedResponse<LabInner>> listByResourceGroupSinglePageAsync(String resourceGroupName, String expand,
+        String filter, Integer top, String orderby) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -527,28 +404,10 @@ public final class LabsClientImpl implements LabsClient {
         final String accept = "application/json";
         return FluxUtil
             .withContext(
-                context ->
-                    service
-                        .listByResourceGroup(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            expand,
-                            filter,
-                            top,
-                            orderby,
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
-            .<PagedResponse<LabInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null))
+                context -> service.listByResourceGroup(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                    resourceGroupName, expand, filter, top, orderby, this.client.getApiVersion(), accept, context))
+            .<PagedResponse<LabInner>>map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(),
+                res.getHeaders(), res.getValue().value(), res.getValue().nextLink(), null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -564,22 +423,19 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<LabInner>> listByResourceGroupSinglePageAsync(
-        String resourceGroupName, String expand, String filter, Integer top, String orderby, Context context) {
+    private Mono<PagedResponse<LabInner>> listByResourceGroupSinglePageAsync(String resourceGroupName, String expand,
+        String filter, Integer top, String orderby, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -588,26 +444,10 @@ public final class LabsClientImpl implements LabsClient {
         final String accept = "application/json";
         context = this.client.mergeContext(context);
         return service
-            .listByResourceGroup(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                expand,
-                filter,
-                top,
-                orderby,
-                this.client.getApiVersion(),
-                accept,
-                context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null));
+            .listByResourceGroup(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName, expand,
+                filter, top, orderby, this.client.getApiVersion(), accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), res.getValue().nextLink(), null));
     }
 
     /**
@@ -621,11 +461,11 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<LabInner> listByResourceGroupAsync(
-        String resourceGroupName, String expand, String filter, Integer top, String orderby) {
+    private PagedFlux<LabInner> listByResourceGroupAsync(String resourceGroupName, String expand, String filter,
+        Integer top, String orderby) {
         return new PagedFlux<>(
             () -> listByResourceGroupSinglePageAsync(resourceGroupName, expand, filter, top, orderby),
             nextLink -> listByResourceGroupNextSinglePageAsync(nextLink));
@@ -638,7 +478,7 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<LabInner> listByResourceGroupAsync(String resourceGroupName) {
@@ -663,11 +503,11 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<LabInner> listByResourceGroupAsync(
-        String resourceGroupName, String expand, String filter, Integer top, String orderby, Context context) {
+    private PagedFlux<LabInner> listByResourceGroupAsync(String resourceGroupName, String expand, String filter,
+        Integer top, String orderby, Context context) {
         return new PagedFlux<>(
             () -> listByResourceGroupSinglePageAsync(resourceGroupName, expand, filter, top, orderby, context),
             nextLink -> listByResourceGroupNextSinglePageAsync(nextLink, context));
@@ -680,7 +520,7 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<LabInner> listByResourceGroup(String resourceGroupName) {
@@ -703,11 +543,11 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<LabInner> listByResourceGroup(
-        String resourceGroupName, String expand, String filter, Integer top, String orderby, Context context) {
+    public PagedIterable<LabInner> listByResourceGroup(String resourceGroupName, String expand, String filter,
+        Integer top, String orderby, Context context) {
         return new PagedIterable<>(listByResourceGroupAsync(resourceGroupName, expand, filter, top, orderby, context));
     }
 
@@ -720,22 +560,18 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return lab.
+     * @return lab along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<LabInner>> getByResourceGroupWithResponseAsync(
-        String resourceGroupName, String name, String expand) {
+    private Mono<Response<LabInner>> getByResourceGroupWithResponseAsync(String resourceGroupName, String name,
+        String expand) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -747,17 +583,8 @@ public final class LabsClientImpl implements LabsClient {
         final String accept = "application/json";
         return FluxUtil
             .withContext(
-                context ->
-                    service
-                        .getByResourceGroup(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            name,
-                            expand,
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
+                context -> service.getByResourceGroup(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                    resourceGroupName, name, expand, this.client.getApiVersion(), accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -771,22 +598,18 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return lab.
+     * @return lab along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<LabInner>> getByResourceGroupWithResponseAsync(
-        String resourceGroupName, String name, String expand, Context context) {
+    private Mono<Response<LabInner>> getByResourceGroupWithResponseAsync(String resourceGroupName, String name,
+        String expand, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -797,16 +620,25 @@ public final class LabsClientImpl implements LabsClient {
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .getByResourceGroup(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                name,
-                expand,
-                this.client.getApiVersion(),
-                accept,
-                context);
+        return service.getByResourceGroup(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+            name, expand, this.client.getApiVersion(), accept, context);
+    }
+
+    /**
+     * Get lab.
+     *
+     * @param resourceGroupName The name of the resource group.
+     * @param name The name of the lab.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return lab on successful completion of {@link Mono}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    private Mono<LabInner> getByResourceGroupAsync(String resourceGroupName, String name) {
+        final String expand = null;
+        return getByResourceGroupWithResponseAsync(resourceGroupName, name, expand)
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
@@ -815,46 +647,16 @@ public final class LabsClientImpl implements LabsClient {
      * @param resourceGroupName The name of the resource group.
      * @param name The name of the lab.
      * @param expand Specify the $expand query. Example: 'properties($select=defaultStorageAccount)'.
+     * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return lab.
+     * @return lab along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<LabInner> getByResourceGroupAsync(String resourceGroupName, String name, String expand) {
-        return getByResourceGroupWithResponseAsync(resourceGroupName, name, expand)
-            .flatMap(
-                (Response<LabInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
-    }
-
-    /**
-     * Get lab.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param name The name of the lab.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return lab.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<LabInner> getByResourceGroupAsync(String resourceGroupName, String name) {
-        final String expand = null;
-        return getByResourceGroupWithResponseAsync(resourceGroupName, name, expand)
-            .flatMap(
-                (Response<LabInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+    public Response<LabInner> getByResourceGroupWithResponse(String resourceGroupName, String name, String expand,
+        Context context) {
+        return getByResourceGroupWithResponseAsync(resourceGroupName, name, expand, context).block();
     }
 
     /**
@@ -870,25 +672,7 @@ public final class LabsClientImpl implements LabsClient {
     @ServiceMethod(returns = ReturnType.SINGLE)
     public LabInner getByResourceGroup(String resourceGroupName, String name) {
         final String expand = null;
-        return getByResourceGroupAsync(resourceGroupName, name, expand).block();
-    }
-
-    /**
-     * Get lab.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param name The name of the lab.
-     * @param expand Specify the $expand query. Example: 'properties($select=defaultStorageAccount)'.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return lab.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<LabInner> getByResourceGroupWithResponse(
-        String resourceGroupName, String name, String expand, Context context) {
-        return getByResourceGroupWithResponseAsync(resourceGroupName, name, expand, context).block();
+        return getByResourceGroupWithResponse(resourceGroupName, name, expand, Context.NONE).getValue();
     }
 
     /**
@@ -900,22 +684,18 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a lab.
+     * @return a lab along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(
-        String resourceGroupName, String name, LabInner lab) {
+    private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(String resourceGroupName, String name,
+        LabInner lab) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -931,18 +711,8 @@ public final class LabsClientImpl implements LabsClient {
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .createOrUpdate(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            name,
-                            this.client.getApiVersion(),
-                            lab,
-                            accept,
-                            context))
+            .withContext(context -> service.createOrUpdate(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                resourceGroupName, name, this.client.getApiVersion(), lab, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -956,22 +726,18 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a lab.
+     * @return a lab along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(
-        String resourceGroupName, String name, LabInner lab, Context context) {
+    private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(String resourceGroupName, String name,
+        LabInner lab, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -987,16 +753,8 @@ public final class LabsClientImpl implements LabsClient {
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .createOrUpdate(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                name,
-                this.client.getApiVersion(),
-                lab,
-                accept,
-                context);
+        return service.createOrUpdate(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+            name, this.client.getApiVersion(), lab, accept, context);
     }
 
     /**
@@ -1008,16 +766,14 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a lab.
+     * @return the {@link PollerFlux} for polling of a lab.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private PollerFlux<PollResult<LabInner>, LabInner> beginCreateOrUpdateAsync(
-        String resourceGroupName, String name, LabInner lab) {
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<LabInner>, LabInner> beginCreateOrUpdateAsync(String resourceGroupName, String name,
+        LabInner lab) {
         Mono<Response<Flux<ByteBuffer>>> mono = createOrUpdateWithResponseAsync(resourceGroupName, name, lab);
-        return this
-            .client
-            .<LabInner, LabInner>getLroResult(
-                mono, this.client.getHttpPipeline(), LabInner.class, LabInner.class, Context.NONE);
+        return this.client.<LabInner, LabInner>getLroResult(mono, this.client.getHttpPipeline(), LabInner.class,
+            LabInner.class, this.client.getContext());
     }
 
     /**
@@ -1030,17 +786,15 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a lab.
+     * @return the {@link PollerFlux} for polling of a lab.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private PollerFlux<PollResult<LabInner>, LabInner> beginCreateOrUpdateAsync(
-        String resourceGroupName, String name, LabInner lab, Context context) {
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<LabInner>, LabInner> beginCreateOrUpdateAsync(String resourceGroupName, String name,
+        LabInner lab, Context context) {
         context = this.client.mergeContext(context);
         Mono<Response<Flux<ByteBuffer>>> mono = createOrUpdateWithResponseAsync(resourceGroupName, name, lab, context);
-        return this
-            .client
-            .<LabInner, LabInner>getLroResult(
-                mono, this.client.getHttpPipeline(), LabInner.class, LabInner.class, context);
+        return this.client.<LabInner, LabInner>getLroResult(mono, this.client.getHttpPipeline(), LabInner.class,
+            LabInner.class, context);
     }
 
     /**
@@ -1052,12 +806,12 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a lab.
+     * @return the {@link SyncPoller} for polling of a lab.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public SyncPoller<PollResult<LabInner>, LabInner> beginCreateOrUpdate(
-        String resourceGroupName, String name, LabInner lab) {
-        return beginCreateOrUpdateAsync(resourceGroupName, name, lab).getSyncPoller();
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<LabInner>, LabInner> beginCreateOrUpdate(String resourceGroupName, String name,
+        LabInner lab) {
+        return this.beginCreateOrUpdateAsync(resourceGroupName, name, lab).getSyncPoller();
     }
 
     /**
@@ -1070,12 +824,12 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a lab.
+     * @return the {@link SyncPoller} for polling of a lab.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public SyncPoller<PollResult<LabInner>, LabInner> beginCreateOrUpdate(
-        String resourceGroupName, String name, LabInner lab, Context context) {
-        return beginCreateOrUpdateAsync(resourceGroupName, name, lab, context).getSyncPoller();
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<LabInner>, LabInner> beginCreateOrUpdate(String resourceGroupName, String name,
+        LabInner lab, Context context) {
+        return this.beginCreateOrUpdateAsync(resourceGroupName, name, lab, context).getSyncPoller();
     }
 
     /**
@@ -1087,12 +841,11 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a lab.
+     * @return a lab on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<LabInner> createOrUpdateAsync(String resourceGroupName, String name, LabInner lab) {
-        return beginCreateOrUpdateAsync(resourceGroupName, name, lab)
-            .last()
+        return beginCreateOrUpdateAsync(resourceGroupName, name, lab).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
@@ -1106,12 +859,11 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a lab.
+     * @return a lab on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<LabInner> createOrUpdateAsync(String resourceGroupName, String name, LabInner lab, Context context) {
-        return beginCreateOrUpdateAsync(resourceGroupName, name, lab, context)
-            .last()
+        return beginCreateOrUpdateAsync(resourceGroupName, name, lab, context).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
@@ -1156,21 +908,17 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(String resourceGroupName, String name) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1181,17 +929,8 @@ public final class LabsClientImpl implements LabsClient {
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .delete(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            name,
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
+            .withContext(context -> service.delete(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                resourceGroupName, name, this.client.getApiVersion(), accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -1204,22 +943,18 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(
-        String resourceGroupName, String name, Context context) {
+    private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(String resourceGroupName, String name,
+        Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1230,15 +965,8 @@ public final class LabsClientImpl implements LabsClient {
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .delete(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                name,
-                this.client.getApiVersion(),
-                accept,
-                context);
+        return service.delete(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName, name,
+            this.client.getApiVersion(), accept, context);
     }
 
     /**
@@ -1249,14 +977,13 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<Void>, Void> beginDeleteAsync(String resourceGroupName, String name) {
         Mono<Response<Flux<ByteBuffer>>> mono = deleteWithResponseAsync(resourceGroupName, name);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, Context.NONE);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            this.client.getContext());
     }
 
     /**
@@ -1268,16 +995,15 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private PollerFlux<PollResult<Void>, Void> beginDeleteAsync(
-        String resourceGroupName, String name, Context context) {
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<Void>, Void> beginDeleteAsync(String resourceGroupName, String name,
+        Context context) {
         context = this.client.mergeContext(context);
         Mono<Response<Flux<ByteBuffer>>> mono = deleteWithResponseAsync(resourceGroupName, name, context);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, context);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            context);
     }
 
     /**
@@ -1288,11 +1014,11 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<Void>, Void> beginDelete(String resourceGroupName, String name) {
-        return beginDeleteAsync(resourceGroupName, name).getSyncPoller();
+        return this.beginDeleteAsync(resourceGroupName, name).getSyncPoller();
     }
 
     /**
@@ -1304,11 +1030,11 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<Void>, Void> beginDelete(String resourceGroupName, String name, Context context) {
-        return beginDeleteAsync(resourceGroupName, name, context).getSyncPoller();
+        return this.beginDeleteAsync(resourceGroupName, name, context).getSyncPoller();
     }
 
     /**
@@ -1319,7 +1045,7 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> deleteAsync(String resourceGroupName, String name) {
@@ -1335,7 +1061,7 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> deleteAsync(String resourceGroupName, String name, Context context) {
@@ -1380,21 +1106,17 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a lab.
+     * @return a lab along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<LabInner>> updateWithResponseAsync(String resourceGroupName, String name, LabFragment lab) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1410,18 +1132,8 @@ public final class LabsClientImpl implements LabsClient {
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .update(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            name,
-                            this.client.getApiVersion(),
-                            lab,
-                            accept,
-                            context))
+            .withContext(context -> service.update(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                resourceGroupName, name, this.client.getApiVersion(), lab, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -1435,22 +1147,18 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a lab.
+     * @return a lab along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<LabInner>> updateWithResponseAsync(
-        String resourceGroupName, String name, LabFragment lab, Context context) {
+    private Mono<Response<LabInner>> updateWithResponseAsync(String resourceGroupName, String name, LabFragment lab,
+        Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1466,16 +1174,8 @@ public final class LabsClientImpl implements LabsClient {
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .update(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                name,
-                this.client.getApiVersion(),
-                lab,
-                accept,
-                context);
+        return service.update(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName, name,
+            this.client.getApiVersion(), lab, accept, context);
     }
 
     /**
@@ -1487,19 +1187,29 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a lab.
+     * @return a lab on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<LabInner> updateAsync(String resourceGroupName, String name, LabFragment lab) {
-        return updateWithResponseAsync(resourceGroupName, name, lab)
-            .flatMap(
-                (Response<LabInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+        return updateWithResponseAsync(resourceGroupName, name, lab).flatMap(res -> Mono.justOrEmpty(res.getValue()));
+    }
+
+    /**
+     * Allows modifying tags of labs. All other properties will be ignored.
+     *
+     * @param resourceGroupName The name of the resource group.
+     * @param name The name of the lab.
+     * @param lab A lab.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a lab along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<LabInner> updateWithResponse(String resourceGroupName, String name, LabFragment lab,
+        Context context) {
+        return updateWithResponseAsync(resourceGroupName, name, lab, context).block();
     }
 
     /**
@@ -1515,25 +1225,7 @@ public final class LabsClientImpl implements LabsClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public LabInner update(String resourceGroupName, String name, LabFragment lab) {
-        return updateAsync(resourceGroupName, name, lab).block();
-    }
-
-    /**
-     * Allows modifying tags of labs. All other properties will be ignored.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param name The name of the lab.
-     * @param lab A lab.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a lab.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<LabInner> updateWithResponse(
-        String resourceGroupName, String name, LabFragment lab, Context context) {
-        return updateWithResponseAsync(resourceGroupName, name, lab, context).block();
+        return updateWithResponse(resourceGroupName, name, lab, Context.NONE).getValue();
     }
 
     /**
@@ -1544,21 +1236,17 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> claimAnyVmWithResponseAsync(String resourceGroupName, String name) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1569,17 +1257,8 @@ public final class LabsClientImpl implements LabsClient {
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .claimAnyVm(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            name,
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
+            .withContext(context -> service.claimAnyVm(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                resourceGroupName, name, this.client.getApiVersion(), accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -1592,22 +1271,18 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> claimAnyVmWithResponseAsync(
-        String resourceGroupName, String name, Context context) {
+    private Mono<Response<Flux<ByteBuffer>>> claimAnyVmWithResponseAsync(String resourceGroupName, String name,
+        Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1618,15 +1293,8 @@ public final class LabsClientImpl implements LabsClient {
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .claimAnyVm(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                name,
-                this.client.getApiVersion(),
-                accept,
-                context);
+        return service.claimAnyVm(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName, name,
+            this.client.getApiVersion(), accept, context);
     }
 
     /**
@@ -1637,14 +1305,13 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<Void>, Void> beginClaimAnyVmAsync(String resourceGroupName, String name) {
         Mono<Response<Flux<ByteBuffer>>> mono = claimAnyVmWithResponseAsync(resourceGroupName, name);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, Context.NONE);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            this.client.getContext());
     }
 
     /**
@@ -1656,16 +1323,15 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private PollerFlux<PollResult<Void>, Void> beginClaimAnyVmAsync(
-        String resourceGroupName, String name, Context context) {
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<Void>, Void> beginClaimAnyVmAsync(String resourceGroupName, String name,
+        Context context) {
         context = this.client.mergeContext(context);
         Mono<Response<Flux<ByteBuffer>>> mono = claimAnyVmWithResponseAsync(resourceGroupName, name, context);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, context);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            context);
     }
 
     /**
@@ -1676,11 +1342,11 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<Void>, Void> beginClaimAnyVm(String resourceGroupName, String name) {
-        return beginClaimAnyVmAsync(resourceGroupName, name).getSyncPoller();
+        return this.beginClaimAnyVmAsync(resourceGroupName, name).getSyncPoller();
     }
 
     /**
@@ -1692,11 +1358,11 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<Void>, Void> beginClaimAnyVm(String resourceGroupName, String name, Context context) {
-        return beginClaimAnyVmAsync(resourceGroupName, name, context).getSyncPoller();
+        return this.beginClaimAnyVmAsync(resourceGroupName, name, context).getSyncPoller();
     }
 
     /**
@@ -1707,7 +1373,7 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> claimAnyVmAsync(String resourceGroupName, String name) {
@@ -1723,12 +1389,11 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> claimAnyVmAsync(String resourceGroupName, String name, Context context) {
-        return beginClaimAnyVmAsync(resourceGroupName, name, context)
-            .last()
+        return beginClaimAnyVmAsync(resourceGroupName, name, context).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
@@ -1770,22 +1435,18 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> createEnvironmentWithResponseAsync(
-        String resourceGroupName, String name, LabVirtualMachineCreationParameter labVirtualMachineCreationParameter) {
+    private Mono<Response<Flux<ByteBuffer>>> createEnvironmentWithResponseAsync(String resourceGroupName, String name,
+        LabVirtualMachineCreationParameter labVirtualMachineCreationParameter) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1795,27 +1456,16 @@ public final class LabsClientImpl implements LabsClient {
             return Mono.error(new IllegalArgumentException("Parameter name is required and cannot be null."));
         }
         if (labVirtualMachineCreationParameter == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter labVirtualMachineCreationParameter is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter labVirtualMachineCreationParameter is required and cannot be null."));
         } else {
             labVirtualMachineCreationParameter.validate();
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .createEnvironment(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            name,
-                            this.client.getApiVersion(),
-                            labVirtualMachineCreationParameter,
-                            accept,
-                            context))
+            .withContext(context -> service.createEnvironment(this.client.getEndpoint(),
+                this.client.getSubscriptionId(), resourceGroupName, name, this.client.getApiVersion(),
+                labVirtualMachineCreationParameter, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -1829,25 +1479,18 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> createEnvironmentWithResponseAsync(
-        String resourceGroupName,
-        String name,
-        LabVirtualMachineCreationParameter labVirtualMachineCreationParameter,
-        Context context) {
+    private Mono<Response<Flux<ByteBuffer>>> createEnvironmentWithResponseAsync(String resourceGroupName, String name,
+        LabVirtualMachineCreationParameter labVirtualMachineCreationParameter, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1857,25 +1500,15 @@ public final class LabsClientImpl implements LabsClient {
             return Mono.error(new IllegalArgumentException("Parameter name is required and cannot be null."));
         }
         if (labVirtualMachineCreationParameter == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter labVirtualMachineCreationParameter is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter labVirtualMachineCreationParameter is required and cannot be null."));
         } else {
             labVirtualMachineCreationParameter.validate();
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .createEnvironment(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                name,
-                this.client.getApiVersion(),
-                labVirtualMachineCreationParameter,
-                accept,
-                context);
+        return service.createEnvironment(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+            name, this.client.getApiVersion(), labVirtualMachineCreationParameter, accept, context);
     }
 
     /**
@@ -1887,16 +1520,15 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private PollerFlux<PollResult<Void>, Void> beginCreateEnvironmentAsync(
-        String resourceGroupName, String name, LabVirtualMachineCreationParameter labVirtualMachineCreationParameter) {
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            createEnvironmentWithResponseAsync(resourceGroupName, name, labVirtualMachineCreationParameter);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, Context.NONE);
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<Void>, Void> beginCreateEnvironmentAsync(String resourceGroupName, String name,
+        LabVirtualMachineCreationParameter labVirtualMachineCreationParameter) {
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = createEnvironmentWithResponseAsync(resourceGroupName, name, labVirtualMachineCreationParameter);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            this.client.getContext());
     }
 
     /**
@@ -1909,20 +1541,16 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private PollerFlux<PollResult<Void>, Void> beginCreateEnvironmentAsync(
-        String resourceGroupName,
-        String name,
-        LabVirtualMachineCreationParameter labVirtualMachineCreationParameter,
-        Context context) {
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<Void>, Void> beginCreateEnvironmentAsync(String resourceGroupName, String name,
+        LabVirtualMachineCreationParameter labVirtualMachineCreationParameter, Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            createEnvironmentWithResponseAsync(resourceGroupName, name, labVirtualMachineCreationParameter, context);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, context);
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = createEnvironmentWithResponseAsync(resourceGroupName, name, labVirtualMachineCreationParameter, context);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            context);
     }
 
     /**
@@ -1934,12 +1562,13 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public SyncPoller<PollResult<Void>, Void> beginCreateEnvironment(
-        String resourceGroupName, String name, LabVirtualMachineCreationParameter labVirtualMachineCreationParameter) {
-        return beginCreateEnvironmentAsync(resourceGroupName, name, labVirtualMachineCreationParameter).getSyncPoller();
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<Void>, Void> beginCreateEnvironment(String resourceGroupName, String name,
+        LabVirtualMachineCreationParameter labVirtualMachineCreationParameter) {
+        return this.beginCreateEnvironmentAsync(resourceGroupName, name, labVirtualMachineCreationParameter)
+            .getSyncPoller();
     }
 
     /**
@@ -1952,15 +1581,12 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public SyncPoller<PollResult<Void>, Void> beginCreateEnvironment(
-        String resourceGroupName,
-        String name,
-        LabVirtualMachineCreationParameter labVirtualMachineCreationParameter,
-        Context context) {
-        return beginCreateEnvironmentAsync(resourceGroupName, name, labVirtualMachineCreationParameter, context)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<Void>, Void> beginCreateEnvironment(String resourceGroupName, String name,
+        LabVirtualMachineCreationParameter labVirtualMachineCreationParameter, Context context) {
+        return this.beginCreateEnvironmentAsync(resourceGroupName, name, labVirtualMachineCreationParameter, context)
             .getSyncPoller();
     }
 
@@ -1973,13 +1599,12 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> createEnvironmentAsync(
-        String resourceGroupName, String name, LabVirtualMachineCreationParameter labVirtualMachineCreationParameter) {
-        return beginCreateEnvironmentAsync(resourceGroupName, name, labVirtualMachineCreationParameter)
-            .last()
+    private Mono<Void> createEnvironmentAsync(String resourceGroupName, String name,
+        LabVirtualMachineCreationParameter labVirtualMachineCreationParameter) {
+        return beginCreateEnvironmentAsync(resourceGroupName, name, labVirtualMachineCreationParameter).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
@@ -1993,16 +1618,12 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> createEnvironmentAsync(
-        String resourceGroupName,
-        String name,
-        LabVirtualMachineCreationParameter labVirtualMachineCreationParameter,
-        Context context) {
-        return beginCreateEnvironmentAsync(resourceGroupName, name, labVirtualMachineCreationParameter, context)
-            .last()
+    private Mono<Void> createEnvironmentAsync(String resourceGroupName, String name,
+        LabVirtualMachineCreationParameter labVirtualMachineCreationParameter, Context context) {
+        return beginCreateEnvironmentAsync(resourceGroupName, name, labVirtualMachineCreationParameter, context).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
@@ -2017,8 +1638,8 @@ public final class LabsClientImpl implements LabsClient {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public void createEnvironment(
-        String resourceGroupName, String name, LabVirtualMachineCreationParameter labVirtualMachineCreationParameter) {
+    public void createEnvironment(String resourceGroupName, String name,
+        LabVirtualMachineCreationParameter labVirtualMachineCreationParameter) {
         createEnvironmentAsync(resourceGroupName, name, labVirtualMachineCreationParameter).block();
     }
 
@@ -2034,11 +1655,8 @@ public final class LabsClientImpl implements LabsClient {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public void createEnvironment(
-        String resourceGroupName,
-        String name,
-        LabVirtualMachineCreationParameter labVirtualMachineCreationParameter,
-        Context context) {
+    public void createEnvironment(String resourceGroupName, String name,
+        LabVirtualMachineCreationParameter labVirtualMachineCreationParameter, Context context) {
         createEnvironmentAsync(resourceGroupName, name, labVirtualMachineCreationParameter, context).block();
     }
 
@@ -2051,22 +1669,18 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> exportResourceUsageWithResponseAsync(
-        String resourceGroupName, String name, ExportResourceUsageParameters exportResourceUsageParameters) {
+    private Mono<Response<Flux<ByteBuffer>>> exportResourceUsageWithResponseAsync(String resourceGroupName, String name,
+        ExportResourceUsageParameters exportResourceUsageParameters) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -2076,27 +1690,16 @@ public final class LabsClientImpl implements LabsClient {
             return Mono.error(new IllegalArgumentException("Parameter name is required and cannot be null."));
         }
         if (exportResourceUsageParameters == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter exportResourceUsageParameters is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter exportResourceUsageParameters is required and cannot be null."));
         } else {
             exportResourceUsageParameters.validate();
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .exportResourceUsage(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            name,
-                            this.client.getApiVersion(),
-                            exportResourceUsageParameters,
-                            accept,
-                            context))
+            .withContext(context -> service.exportResourceUsage(this.client.getEndpoint(),
+                this.client.getSubscriptionId(), resourceGroupName, name, this.client.getApiVersion(),
+                exportResourceUsageParameters, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -2110,25 +1713,18 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> exportResourceUsageWithResponseAsync(
-        String resourceGroupName,
-        String name,
-        ExportResourceUsageParameters exportResourceUsageParameters,
-        Context context) {
+    private Mono<Response<Flux<ByteBuffer>>> exportResourceUsageWithResponseAsync(String resourceGroupName, String name,
+        ExportResourceUsageParameters exportResourceUsageParameters, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -2138,25 +1734,15 @@ public final class LabsClientImpl implements LabsClient {
             return Mono.error(new IllegalArgumentException("Parameter name is required and cannot be null."));
         }
         if (exportResourceUsageParameters == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter exportResourceUsageParameters is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter exportResourceUsageParameters is required and cannot be null."));
         } else {
             exportResourceUsageParameters.validate();
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .exportResourceUsage(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                name,
-                this.client.getApiVersion(),
-                exportResourceUsageParameters,
-                accept,
-                context);
+        return service.exportResourceUsage(this.client.getEndpoint(), this.client.getSubscriptionId(),
+            resourceGroupName, name, this.client.getApiVersion(), exportResourceUsageParameters, accept, context);
     }
 
     /**
@@ -2168,16 +1754,15 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private PollerFlux<PollResult<Void>, Void> beginExportResourceUsageAsync(
-        String resourceGroupName, String name, ExportResourceUsageParameters exportResourceUsageParameters) {
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            exportResourceUsageWithResponseAsync(resourceGroupName, name, exportResourceUsageParameters);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, Context.NONE);
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<Void>, Void> beginExportResourceUsageAsync(String resourceGroupName, String name,
+        ExportResourceUsageParameters exportResourceUsageParameters) {
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = exportResourceUsageWithResponseAsync(resourceGroupName, name, exportResourceUsageParameters);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            this.client.getContext());
     }
 
     /**
@@ -2190,20 +1775,16 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private PollerFlux<PollResult<Void>, Void> beginExportResourceUsageAsync(
-        String resourceGroupName,
-        String name,
-        ExportResourceUsageParameters exportResourceUsageParameters,
-        Context context) {
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<Void>, Void> beginExportResourceUsageAsync(String resourceGroupName, String name,
+        ExportResourceUsageParameters exportResourceUsageParameters, Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            exportResourceUsageWithResponseAsync(resourceGroupName, name, exportResourceUsageParameters, context);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, context);
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = exportResourceUsageWithResponseAsync(resourceGroupName, name, exportResourceUsageParameters, context);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            context);
     }
 
     /**
@@ -2215,12 +1796,13 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public SyncPoller<PollResult<Void>, Void> beginExportResourceUsage(
-        String resourceGroupName, String name, ExportResourceUsageParameters exportResourceUsageParameters) {
-        return beginExportResourceUsageAsync(resourceGroupName, name, exportResourceUsageParameters).getSyncPoller();
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<Void>, Void> beginExportResourceUsage(String resourceGroupName, String name,
+        ExportResourceUsageParameters exportResourceUsageParameters) {
+        return this.beginExportResourceUsageAsync(resourceGroupName, name, exportResourceUsageParameters)
+            .getSyncPoller();
     }
 
     /**
@@ -2233,15 +1815,12 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public SyncPoller<PollResult<Void>, Void> beginExportResourceUsage(
-        String resourceGroupName,
-        String name,
-        ExportResourceUsageParameters exportResourceUsageParameters,
-        Context context) {
-        return beginExportResourceUsageAsync(resourceGroupName, name, exportResourceUsageParameters, context)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<Void>, Void> beginExportResourceUsage(String resourceGroupName, String name,
+        ExportResourceUsageParameters exportResourceUsageParameters, Context context) {
+        return this.beginExportResourceUsageAsync(resourceGroupName, name, exportResourceUsageParameters, context)
             .getSyncPoller();
     }
 
@@ -2254,13 +1833,12 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> exportResourceUsageAsync(
-        String resourceGroupName, String name, ExportResourceUsageParameters exportResourceUsageParameters) {
-        return beginExportResourceUsageAsync(resourceGroupName, name, exportResourceUsageParameters)
-            .last()
+    private Mono<Void> exportResourceUsageAsync(String resourceGroupName, String name,
+        ExportResourceUsageParameters exportResourceUsageParameters) {
+        return beginExportResourceUsageAsync(resourceGroupName, name, exportResourceUsageParameters).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
@@ -2274,16 +1852,12 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> exportResourceUsageAsync(
-        String resourceGroupName,
-        String name,
-        ExportResourceUsageParameters exportResourceUsageParameters,
-        Context context) {
-        return beginExportResourceUsageAsync(resourceGroupName, name, exportResourceUsageParameters, context)
-            .last()
+    private Mono<Void> exportResourceUsageAsync(String resourceGroupName, String name,
+        ExportResourceUsageParameters exportResourceUsageParameters, Context context) {
+        return beginExportResourceUsageAsync(resourceGroupName, name, exportResourceUsageParameters, context).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
@@ -2298,8 +1872,8 @@ public final class LabsClientImpl implements LabsClient {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public void exportResourceUsage(
-        String resourceGroupName, String name, ExportResourceUsageParameters exportResourceUsageParameters) {
+    public void exportResourceUsage(String resourceGroupName, String name,
+        ExportResourceUsageParameters exportResourceUsageParameters) {
         exportResourceUsageAsync(resourceGroupName, name, exportResourceUsageParameters).block();
     }
 
@@ -2315,11 +1889,8 @@ public final class LabsClientImpl implements LabsClient {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public void exportResourceUsage(
-        String resourceGroupName,
-        String name,
-        ExportResourceUsageParameters exportResourceUsageParameters,
-        Context context) {
+    public void exportResourceUsage(String resourceGroupName, String name,
+        ExportResourceUsageParameters exportResourceUsageParameters, Context context) {
         exportResourceUsageAsync(resourceGroupName, name, exportResourceUsageParameters, context).block();
     }
 
@@ -2332,22 +1903,19 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return response body for generating an upload URI.
+     * @return response body for generating an upload URI along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<GenerateUploadUriResponseInner>> generateUploadUriWithResponseAsync(
-        String resourceGroupName, String name, GenerateUploadUriParameter generateUploadUriParameter) {
+    private Mono<Response<GenerateUploadUriResponseInner>> generateUploadUriWithResponseAsync(String resourceGroupName,
+        String name, GenerateUploadUriParameter generateUploadUriParameter) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -2357,27 +1925,16 @@ public final class LabsClientImpl implements LabsClient {
             return Mono.error(new IllegalArgumentException("Parameter name is required and cannot be null."));
         }
         if (generateUploadUriParameter == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter generateUploadUriParameter is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter generateUploadUriParameter is required and cannot be null."));
         } else {
             generateUploadUriParameter.validate();
         }
         final String accept = "application/json";
         return FluxUtil
             .withContext(
-                context ->
-                    service
-                        .generateUploadUri(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            name,
-                            this.client.getApiVersion(),
-                            generateUploadUriParameter,
-                            accept,
-                            context))
+                context -> service.generateUploadUri(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                    resourceGroupName, name, this.client.getApiVersion(), generateUploadUriParameter, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -2391,22 +1948,19 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return response body for generating an upload URI.
+     * @return response body for generating an upload URI along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<GenerateUploadUriResponseInner>> generateUploadUriWithResponseAsync(
-        String resourceGroupName, String name, GenerateUploadUriParameter generateUploadUriParameter, Context context) {
+    private Mono<Response<GenerateUploadUriResponseInner>> generateUploadUriWithResponseAsync(String resourceGroupName,
+        String name, GenerateUploadUriParameter generateUploadUriParameter, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -2416,25 +1970,15 @@ public final class LabsClientImpl implements LabsClient {
             return Mono.error(new IllegalArgumentException("Parameter name is required and cannot be null."));
         }
         if (generateUploadUriParameter == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter generateUploadUriParameter is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter generateUploadUriParameter is required and cannot be null."));
         } else {
             generateUploadUriParameter.validate();
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .generateUploadUri(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                name,
-                this.client.getApiVersion(),
-                generateUploadUriParameter,
-                accept,
-                context);
+        return service.generateUploadUri(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+            name, this.client.getApiVersion(), generateUploadUriParameter, accept, context);
     }
 
     /**
@@ -2446,37 +1990,13 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return response body for generating an upload URI.
+     * @return response body for generating an upload URI on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<GenerateUploadUriResponseInner> generateUploadUriAsync(
-        String resourceGroupName, String name, GenerateUploadUriParameter generateUploadUriParameter) {
+    private Mono<GenerateUploadUriResponseInner> generateUploadUriAsync(String resourceGroupName, String name,
+        GenerateUploadUriParameter generateUploadUriParameter) {
         return generateUploadUriWithResponseAsync(resourceGroupName, name, generateUploadUriParameter)
-            .flatMap(
-                (Response<GenerateUploadUriResponseInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
-    }
-
-    /**
-     * Generate a URI for uploading custom disk images to a Lab.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param name The name of the lab.
-     * @param generateUploadUriParameter Properties for generating an upload URI.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return response body for generating an upload URI.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public GenerateUploadUriResponseInner generateUploadUri(
-        String resourceGroupName, String name, GenerateUploadUriParameter generateUploadUriParameter) {
-        return generateUploadUriAsync(resourceGroupName, name, generateUploadUriParameter).block();
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
@@ -2489,15 +2009,33 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return response body for generating an upload URI.
+     * @return response body for generating an upload URI along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<GenerateUploadUriResponseInner> generateUploadUriWithResponse(
-        String resourceGroupName, String name, GenerateUploadUriParameter generateUploadUriParameter, Context context) {
+    public Response<GenerateUploadUriResponseInner> generateUploadUriWithResponse(String resourceGroupName, String name,
+        GenerateUploadUriParameter generateUploadUriParameter, Context context) {
         return generateUploadUriWithResponseAsync(resourceGroupName, name, generateUploadUriParameter, context).block();
     }
 
     /**
+     * Generate a URI for uploading custom disk images to a Lab.
+     *
+     * @param resourceGroupName The name of the resource group.
+     * @param name The name of the lab.
+     * @param generateUploadUriParameter Properties for generating an upload URI.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return response body for generating an upload URI.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public GenerateUploadUriResponseInner generateUploadUri(String resourceGroupName, String name,
+        GenerateUploadUriParameter generateUploadUriParameter) {
+        return generateUploadUriWithResponse(resourceGroupName, name, generateUploadUriParameter, Context.NONE)
+            .getValue();
+    }
+
+    /**
      * Import a virtual machine into a different lab. This operation can take a while to complete.
      *
      * @param resourceGroupName The name of the resource group.
@@ -2507,22 +2045,18 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> importVirtualMachineWithResponseAsync(
-        String resourceGroupName, String name, ImportLabVirtualMachineRequest importLabVirtualMachineRequest) {
+    private Mono<Response<Flux<ByteBuffer>>> importVirtualMachineWithResponseAsync(String resourceGroupName,
+        String name, ImportLabVirtualMachineRequest importLabVirtualMachineRequest) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -2532,27 +2066,16 @@ public final class LabsClientImpl implements LabsClient {
             return Mono.error(new IllegalArgumentException("Parameter name is required and cannot be null."));
         }
         if (importLabVirtualMachineRequest == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter importLabVirtualMachineRequest is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter importLabVirtualMachineRequest is required and cannot be null."));
         } else {
             importLabVirtualMachineRequest.validate();
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .importVirtualMachine(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            name,
-                            this.client.getApiVersion(),
-                            importLabVirtualMachineRequest,
-                            accept,
-                            context))
+            .withContext(context -> service.importVirtualMachine(this.client.getEndpoint(),
+                this.client.getSubscriptionId(), resourceGroupName, name, this.client.getApiVersion(),
+                importLabVirtualMachineRequest, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -2567,25 +2090,18 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> importVirtualMachineWithResponseAsync(
-        String resourceGroupName,
-        String name,
-        ImportLabVirtualMachineRequest importLabVirtualMachineRequest,
-        Context context) {
+    private Mono<Response<Flux<ByteBuffer>>> importVirtualMachineWithResponseAsync(String resourceGroupName,
+        String name, ImportLabVirtualMachineRequest importLabVirtualMachineRequest, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -2595,25 +2111,15 @@ public final class LabsClientImpl implements LabsClient {
             return Mono.error(new IllegalArgumentException("Parameter name is required and cannot be null."));
         }
         if (importLabVirtualMachineRequest == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter importLabVirtualMachineRequest is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter importLabVirtualMachineRequest is required and cannot be null."));
         } else {
             importLabVirtualMachineRequest.validate();
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .importVirtualMachine(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                name,
-                this.client.getApiVersion(),
-                importLabVirtualMachineRequest,
-                accept,
-                context);
+        return service.importVirtualMachine(this.client.getEndpoint(), this.client.getSubscriptionId(),
+            resourceGroupName, name, this.client.getApiVersion(), importLabVirtualMachineRequest, accept, context);
     }
 
     /**
@@ -2626,16 +2132,15 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private PollerFlux<PollResult<Void>, Void> beginImportVirtualMachineAsync(
-        String resourceGroupName, String name, ImportLabVirtualMachineRequest importLabVirtualMachineRequest) {
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            importVirtualMachineWithResponseAsync(resourceGroupName, name, importLabVirtualMachineRequest);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, Context.NONE);
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<Void>, Void> beginImportVirtualMachineAsync(String resourceGroupName, String name,
+        ImportLabVirtualMachineRequest importLabVirtualMachineRequest) {
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = importVirtualMachineWithResponseAsync(resourceGroupName, name, importLabVirtualMachineRequest);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            this.client.getContext());
     }
 
     /**
@@ -2649,20 +2154,16 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private PollerFlux<PollResult<Void>, Void> beginImportVirtualMachineAsync(
-        String resourceGroupName,
-        String name,
-        ImportLabVirtualMachineRequest importLabVirtualMachineRequest,
-        Context context) {
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<Void>, Void> beginImportVirtualMachineAsync(String resourceGroupName, String name,
+        ImportLabVirtualMachineRequest importLabVirtualMachineRequest, Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            importVirtualMachineWithResponseAsync(resourceGroupName, name, importLabVirtualMachineRequest, context);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, context);
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = importVirtualMachineWithResponseAsync(resourceGroupName, name, importLabVirtualMachineRequest, context);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            context);
     }
 
     /**
@@ -2675,12 +2176,13 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public SyncPoller<PollResult<Void>, Void> beginImportVirtualMachine(
-        String resourceGroupName, String name, ImportLabVirtualMachineRequest importLabVirtualMachineRequest) {
-        return beginImportVirtualMachineAsync(resourceGroupName, name, importLabVirtualMachineRequest).getSyncPoller();
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<Void>, Void> beginImportVirtualMachine(String resourceGroupName, String name,
+        ImportLabVirtualMachineRequest importLabVirtualMachineRequest) {
+        return this.beginImportVirtualMachineAsync(resourceGroupName, name, importLabVirtualMachineRequest)
+            .getSyncPoller();
     }
 
     /**
@@ -2694,15 +2196,12 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public SyncPoller<PollResult<Void>, Void> beginImportVirtualMachine(
-        String resourceGroupName,
-        String name,
-        ImportLabVirtualMachineRequest importLabVirtualMachineRequest,
-        Context context) {
-        return beginImportVirtualMachineAsync(resourceGroupName, name, importLabVirtualMachineRequest, context)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<Void>, Void> beginImportVirtualMachine(String resourceGroupName, String name,
+        ImportLabVirtualMachineRequest importLabVirtualMachineRequest, Context context) {
+        return this.beginImportVirtualMachineAsync(resourceGroupName, name, importLabVirtualMachineRequest, context)
             .getSyncPoller();
     }
 
@@ -2716,13 +2215,12 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> importVirtualMachineAsync(
-        String resourceGroupName, String name, ImportLabVirtualMachineRequest importLabVirtualMachineRequest) {
-        return beginImportVirtualMachineAsync(resourceGroupName, name, importLabVirtualMachineRequest)
-            .last()
+    private Mono<Void> importVirtualMachineAsync(String resourceGroupName, String name,
+        ImportLabVirtualMachineRequest importLabVirtualMachineRequest) {
+        return beginImportVirtualMachineAsync(resourceGroupName, name, importLabVirtualMachineRequest).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
@@ -2737,16 +2235,12 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> importVirtualMachineAsync(
-        String resourceGroupName,
-        String name,
-        ImportLabVirtualMachineRequest importLabVirtualMachineRequest,
-        Context context) {
-        return beginImportVirtualMachineAsync(resourceGroupName, name, importLabVirtualMachineRequest, context)
-            .last()
+    private Mono<Void> importVirtualMachineAsync(String resourceGroupName, String name,
+        ImportLabVirtualMachineRequest importLabVirtualMachineRequest, Context context) {
+        return beginImportVirtualMachineAsync(resourceGroupName, name, importLabVirtualMachineRequest, context).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
@@ -2762,8 +2256,8 @@ public final class LabsClientImpl implements LabsClient {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public void importVirtualMachine(
-        String resourceGroupName, String name, ImportLabVirtualMachineRequest importLabVirtualMachineRequest) {
+    public void importVirtualMachine(String resourceGroupName, String name,
+        ImportLabVirtualMachineRequest importLabVirtualMachineRequest) {
         importVirtualMachineAsync(resourceGroupName, name, importLabVirtualMachineRequest).block();
     }
 
@@ -2780,11 +2274,8 @@ public final class LabsClientImpl implements LabsClient {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public void importVirtualMachine(
-        String resourceGroupName,
-        String name,
-        ImportLabVirtualMachineRequest importLabVirtualMachineRequest,
-        Context context) {
+    public void importVirtualMachine(String resourceGroupName, String name,
+        ImportLabVirtualMachineRequest importLabVirtualMachineRequest, Context context) {
         importVirtualMachineAsync(resourceGroupName, name, importLabVirtualMachineRequest, context).block();
     }
 
@@ -2796,21 +2287,18 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<LabVhdInner>> listVhdsSinglePageAsync(String resourceGroupName, String name) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -2821,26 +2309,10 @@ public final class LabsClientImpl implements LabsClient {
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .listVhds(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            name,
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
-            .<PagedResponse<LabVhdInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null))
+            .withContext(context -> service.listVhds(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                resourceGroupName, name, this.client.getApiVersion(), accept, context))
+            .<PagedResponse<LabVhdInner>>map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(),
+                res.getHeaders(), res.getValue().value(), res.getValue().nextLink(), null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -2853,22 +2325,19 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<LabVhdInner>> listVhdsSinglePageAsync(
-        String resourceGroupName, String name, Context context) {
+    private Mono<PagedResponse<LabVhdInner>> listVhdsSinglePageAsync(String resourceGroupName, String name,
+        Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -2880,23 +2349,10 @@ public final class LabsClientImpl implements LabsClient {
         final String accept = "application/json";
         context = this.client.mergeContext(context);
         return service
-            .listVhds(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                name,
-                this.client.getApiVersion(),
-                accept,
-                context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null));
+            .listVhds(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName, name,
+                this.client.getApiVersion(), accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), res.getValue().nextLink(), null));
     }
 
     /**
@@ -2907,12 +2363,12 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<LabVhdInner> listVhdsAsync(String resourceGroupName, String name) {
-        return new PagedFlux<>(
-            () -> listVhdsSinglePageAsync(resourceGroupName, name), nextLink -> listVhdsNextSinglePageAsync(nextLink));
+        return new PagedFlux<>(() -> listVhdsSinglePageAsync(resourceGroupName, name),
+            nextLink -> listVhdsNextSinglePageAsync(nextLink));
     }
 
     /**
@@ -2924,12 +2380,11 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<LabVhdInner> listVhdsAsync(String resourceGroupName, String name, Context context) {
-        return new PagedFlux<>(
-            () -> listVhdsSinglePageAsync(resourceGroupName, name, context),
+        return new PagedFlux<>(() -> listVhdsSinglePageAsync(resourceGroupName, name, context),
             nextLink -> listVhdsNextSinglePageAsync(nextLink, context));
     }
 
@@ -2941,7 +2396,7 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<LabVhdInner> listVhds(String resourceGroupName, String name) {
@@ -2957,7 +2412,7 @@ public final class LabsClientImpl implements LabsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<LabVhdInner> listVhds(String resourceGroupName, String name, Context context) {
@@ -2967,11 +2422,13 @@ public final class LabsClientImpl implements LabsClient {
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<LabInner>> listBySubscriptionNextSinglePageAsync(String nextLink) {
@@ -2979,36 +2436,29 @@ public final class LabsClientImpl implements LabsClient {
             return Mono.error(new IllegalArgumentException("Parameter nextLink is required and cannot be null."));
         }
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         final String accept = "application/json";
         return FluxUtil
             .withContext(
                 context -> service.listBySubscriptionNext(nextLink, this.client.getEndpoint(), accept, context))
-            .<PagedResponse<LabInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null))
+            .<PagedResponse<LabInner>>map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(),
+                res.getHeaders(), res.getValue().value(), res.getValue().nextLink(), null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<LabInner>> listBySubscriptionNextSinglePageAsync(String nextLink, Context context) {
@@ -3016,34 +2466,26 @@ public final class LabsClientImpl implements LabsClient {
             return Mono.error(new IllegalArgumentException("Parameter nextLink is required and cannot be null."));
         }
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .listBySubscriptionNext(nextLink, this.client.getEndpoint(), accept, context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null));
+        return service.listBySubscriptionNext(nextLink, this.client.getEndpoint(), accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), res.getValue().nextLink(), null));
     }
 
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<LabInner>> listByResourceGroupNextSinglePageAsync(String nextLink) {
@@ -3051,36 +2493,29 @@ public final class LabsClientImpl implements LabsClient {
             return Mono.error(new IllegalArgumentException("Parameter nextLink is required and cannot be null."));
         }
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         final String accept = "application/json";
         return FluxUtil
             .withContext(
                 context -> service.listByResourceGroupNext(nextLink, this.client.getEndpoint(), accept, context))
-            .<PagedResponse<LabInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null))
+            .<PagedResponse<LabInner>>map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(),
+                res.getHeaders(), res.getValue().value(), res.getValue().nextLink(), null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<LabInner>> listByResourceGroupNextSinglePageAsync(String nextLink, Context context) {
@@ -3088,34 +2523,26 @@ public final class LabsClientImpl implements LabsClient {
             return Mono.error(new IllegalArgumentException("Parameter nextLink is required and cannot be null."));
         }
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .listByResourceGroupNext(nextLink, this.client.getEndpoint(), accept, context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null));
+        return service.listByResourceGroupNext(nextLink, this.client.getEndpoint(), accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), res.getValue().nextLink(), null));
     }
 
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<LabVhdInner>> listVhdsNextSinglePageAsync(String nextLink) {
@@ -3123,35 +2550,28 @@ public final class LabsClientImpl implements LabsClient {
             return Mono.error(new IllegalArgumentException("Parameter nextLink is required and cannot be null."));
         }
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         final String accept = "application/json";
         return FluxUtil
             .withContext(context -> service.listVhdsNext(nextLink, this.client.getEndpoint(), accept, context))
-            .<PagedResponse<LabVhdInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null))
+            .<PagedResponse<LabVhdInner>>map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(),
+                res.getHeaders(), res.getValue().value(), res.getValue().nextLink(), null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<LabVhdInner>> listVhdsNextSinglePageAsync(String nextLink, Context context) {
@@ -3159,23 +2579,13 @@ public final class LabsClientImpl implements LabsClient {
             return Mono.error(new IllegalArgumentException("Parameter nextLink is required and cannot be null."));
         }
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .listVhdsNext(nextLink, this.client.getEndpoint(), accept, context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null));
+        return service.listVhdsNext(nextLink, this.client.getEndpoint(), accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), res.getValue().nextLink(), null));
     }
 }

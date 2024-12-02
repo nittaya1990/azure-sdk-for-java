@@ -6,15 +6,12 @@ package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
 /** Quota counter details. */
 @Fluent
 public final class QuotaCounterContractInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(QuotaCounterContractInner.class);
-
     /*
      * The Key value of the Counter. Must not be empty.
      */
@@ -22,25 +19,22 @@ public final class QuotaCounterContractInner {
     private String counterKey;
 
     /*
-     * Identifier of the Period for which the counter was collected. Must not
-     * be empty.
+     * Identifier of the Period for which the counter was collected. Must not be empty.
      */
     @JsonProperty(value = "periodKey", required = true)
     private String periodKey;
 
     /*
-     * The date of the start of Counter Period. The date conforms to the
-     * following format: `yyyy-MM-ddTHH:mm:ssZ` as specified by the ISO 8601
-     * standard.
+     * The date of the start of Counter Period. The date conforms to the following format: `yyyy-MM-ddTHH:mm:ssZ` as
+     * specified by the ISO 8601 standard.
      *
      */
     @JsonProperty(value = "periodStartTime", required = true)
     private OffsetDateTime periodStartTime;
 
     /*
-     * The date of the end of Counter Period. The date conforms to the
-     * following format: `yyyy-MM-ddTHH:mm:ssZ` as specified by the ISO 8601
-     * standard.
+     * The date of the end of Counter Period. The date conforms to the following format: `yyyy-MM-ddTHH:mm:ssZ` as
+     * specified by the ISO 8601 standard.
      *
      */
     @JsonProperty(value = "periodEndTime", required = true)
@@ -51,6 +45,10 @@ public final class QuotaCounterContractInner {
      */
     @JsonProperty(value = "value")
     private QuotaCounterValueContractProperties value;
+
+    /** Creates an instance of QuotaCounterContractInner class. */
+    public QuotaCounterContractInner() {
+    }
 
     /**
      * Get the counterKey property: The Key value of the Counter. Must not be empty.
@@ -163,31 +161,25 @@ public final class QuotaCounterContractInner {
      */
     public void validate() {
         if (counterKey() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property counterKey in model QuotaCounterContractInner"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property counterKey in model QuotaCounterContractInner"));
         }
         if (periodKey() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property periodKey in model QuotaCounterContractInner"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property periodKey in model QuotaCounterContractInner"));
         }
         if (periodStartTime() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property periodStartTime in model QuotaCounterContractInner"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property periodStartTime in model QuotaCounterContractInner"));
         }
         if (periodEndTime() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property periodEndTime in model QuotaCounterContractInner"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property periodEndTime in model QuotaCounterContractInner"));
         }
         if (value() != null) {
             value().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(QuotaCounterContractInner.class);
 }

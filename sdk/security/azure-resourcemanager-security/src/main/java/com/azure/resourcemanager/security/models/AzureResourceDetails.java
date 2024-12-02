@@ -5,18 +5,24 @@
 package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** Details of the Azure resource that was assessed. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "source")
+/**
+ * Details of the Azure resource that was assessed.
+ */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "source", defaultImpl = AzureResourceDetails.class, visible = true)
 @JsonTypeName("Azure")
 @Immutable
 public final class AzureResourceDetails extends ResourceDetails {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureResourceDetails.class);
+    /*
+     * The platform where the assessed resource resides
+     */
+    @JsonTypeId
+    @JsonProperty(value = "source", required = true)
+    private Source source = Source.AZURE;
 
     /*
      * Azure resource Id of the assessed resource
@@ -25,8 +31,24 @@ public final class AzureResourceDetails extends ResourceDetails {
     private String id;
 
     /**
+     * Creates an instance of AzureResourceDetails class.
+     */
+    public AzureResourceDetails() {
+    }
+
+    /**
+     * Get the source property: The platform where the assessed resource resides.
+     * 
+     * @return the source value.
+     */
+    @Override
+    public Source source() {
+        return this.source;
+    }
+
+    /**
      * Get the id property: Azure resource Id of the assessed resource.
-     *
+     * 
      * @return the id value.
      */
     public String id() {
@@ -35,7 +57,7 @@ public final class AzureResourceDetails extends ResourceDetails {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

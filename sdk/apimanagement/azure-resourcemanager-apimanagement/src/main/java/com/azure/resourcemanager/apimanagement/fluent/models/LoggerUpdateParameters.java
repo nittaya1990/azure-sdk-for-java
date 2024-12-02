@@ -5,9 +5,7 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.models.LoggerType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
@@ -15,8 +13,6 @@ import java.util.Map;
 /** Parameters supplied to the Update Logger operation. */
 @Fluent
 public final class LoggerUpdateParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(LoggerUpdateParameters.class);
-
     /*
      * Logger type.
      */
@@ -37,11 +33,14 @@ public final class LoggerUpdateParameters {
     private Map<String, String> credentials;
 
     /*
-     * Whether records are buffered in the logger before publishing. Default is
-     * assumed to be true.
+     * Whether records are buffered in the logger before publishing. Default is assumed to be true.
      */
     @JsonProperty(value = "isBuffered")
     private Boolean isBuffered;
+
+    /** Creates an instance of LoggerUpdateParameters class. */
+    public LoggerUpdateParameters() {
+    }
 
     /**
      * Get the loggerType property: Logger type.

@@ -21,14 +21,14 @@ public interface ApiOperationsClient {
     /**
      * Lists a collection of the operations for the specified API.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Operation list representation.
+     * @return paged Operation list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<OperationContractInner> listByApi(String resourceGroupName, String serviceName, String apiId);
@@ -36,7 +36,7 @@ public interface ApiOperationsClient {
     /**
      * Lists a collection of the operations for the specified API.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -54,23 +54,35 @@ public interface ApiOperationsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Operation list representation.
+     * @return paged Operation list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<OperationContractInner> listByApi(
-        String resourceGroupName,
-        String serviceName,
-        String apiId,
-        String filter,
-        Integer top,
-        Integer skip,
-        String tags,
-        Context context);
+    PagedIterable<OperationContractInner> listByApi(String resourceGroupName, String serviceName, String apiId,
+        String filter, Integer top, Integer skip, String tags, Context context);
 
     /**
      * Gets the entity state (Etag) version of the API operation specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
+     *     revision has ;rev=n as a suffix where n is the revision number.
+     * @param operationId Operation identifier within an API. Must be unique in the current API Management service
+     *     instance.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the entity state (Etag) version of the API operation specified by its identifier.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    ApiOperationsGetEntityTagResponse getEntityTagWithResponse(String resourceGroupName, String serviceName,
+        String apiId, String operationId, Context context);
+
+    /**
+     * Gets the entity state (Etag) version of the API operation specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -84,9 +96,9 @@ public interface ApiOperationsClient {
     void getEntityTag(String resourceGroupName, String serviceName, String apiId, String operationId);
 
     /**
-     * Gets the entity state (Etag) version of the API operation specified by its identifier.
+     * Gets the details of the API Operation specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -96,16 +108,16 @@ public interface ApiOperationsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the API operation specified by its identifier.
+     * @return the details of the API Operation specified by its identifier.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    ApiOperationsGetEntityTagResponse getEntityTagWithResponse(
-        String resourceGroupName, String serviceName, String apiId, String operationId, Context context);
+    ApiOperationsGetResponse getWithResponse(String resourceGroupName, String serviceName, String apiId,
+        String operationId, Context context);
 
     /**
      * Gets the details of the API Operation specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -120,51 +132,9 @@ public interface ApiOperationsClient {
     OperationContractInner get(String resourceGroupName, String serviceName, String apiId, String operationId);
 
     /**
-     * Gets the details of the API Operation specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
-     *     revision has ;rev=n as a suffix where n is the revision number.
-     * @param operationId Operation identifier within an API. Must be unique in the current API Management service
-     *     instance.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the API Operation specified by its identifier.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    ApiOperationsGetResponse getWithResponse(
-        String resourceGroupName, String serviceName, String apiId, String operationId, Context context);
-
-    /**
      * Creates a new operation in the API or updates an existing one.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
-     *     revision has ;rev=n as a suffix where n is the revision number.
-     * @param operationId Operation identifier within an API. Must be unique in the current API Management service
-     *     instance.
-     * @param parameters Create parameters.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return api Operation details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    OperationContractInner createOrUpdate(
-        String resourceGroupName,
-        String serviceName,
-        String apiId,
-        String operationId,
-        OperationContractInner parameters);
-
-    /**
-     * Creates a new operation in the API or updates an existing one.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -176,48 +146,35 @@ public interface ApiOperationsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return api Operation details.
+     * @return aPI Operation details.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    ApiOperationsCreateOrUpdateResponse createOrUpdateWithResponse(
-        String resourceGroupName,
-        String serviceName,
-        String apiId,
-        String operationId,
-        OperationContractInner parameters,
-        String ifMatch,
-        Context context);
+    ApiOperationsCreateOrUpdateResponse createOrUpdateWithResponse(String resourceGroupName, String serviceName,
+        String apiId, String operationId, OperationContractInner parameters, String ifMatch, Context context);
 
     /**
-     * Updates the details of the operation in the API specified by its identifier.
+     * Creates a new operation in the API or updates an existing one.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
      * @param operationId Operation identifier within an API. Must be unique in the current API Management service
      *     instance.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @param parameters API Operation Update parameters.
+     * @param parameters Create parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return api Operation details.
+     * @return aPI Operation details.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    OperationContractInner update(
-        String resourceGroupName,
-        String serviceName,
-        String apiId,
-        String operationId,
-        String ifMatch,
-        OperationUpdateContract parameters);
+    OperationContractInner createOrUpdate(String resourceGroupName, String serviceName, String apiId,
+        String operationId, OperationContractInner parameters);
 
     /**
      * Updates the details of the operation in the API specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -230,22 +187,58 @@ public interface ApiOperationsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return api Operation details.
+     * @return aPI Operation details.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    ApiOperationsUpdateResponse updateWithResponse(
-        String resourceGroupName,
-        String serviceName,
-        String apiId,
-        String operationId,
-        String ifMatch,
-        OperationUpdateContract parameters,
-        Context context);
+    ApiOperationsUpdateResponse updateWithResponse(String resourceGroupName, String serviceName, String apiId,
+        String operationId, String ifMatch, OperationUpdateContract parameters, Context context);
+
+    /**
+     * Updates the details of the operation in the API specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
+     *     revision has ;rev=n as a suffix where n is the revision number.
+     * @param operationId Operation identifier within an API. Must be unique in the current API Management service
+     *     instance.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @param parameters API Operation Update parameters.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return aPI Operation details.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    OperationContractInner update(String resourceGroupName, String serviceName, String apiId, String operationId,
+        String ifMatch, OperationUpdateContract parameters);
 
     /**
      * Deletes the specified operation in the API.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
+     *     revision has ;rev=n as a suffix where n is the revision number.
+     * @param operationId Operation identifier within an API. Must be unique in the current API Management service
+     *     instance.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<Void> deleteWithResponse(String resourceGroupName, String serviceName, String apiId, String operationId,
+        String ifMatch, Context context);
+
+    /**
+     * Deletes the specified operation in the API.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -259,30 +252,4 @@ public interface ApiOperationsClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     void delete(String resourceGroupName, String serviceName, String apiId, String operationId, String ifMatch);
-
-    /**
-     * Deletes the specified operation in the API.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
-     *     revision has ;rev=n as a suffix where n is the revision number.
-     * @param operationId Operation identifier within an API. Must be unique in the current API Management service
-     *     instance.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<Void> deleteWithResponse(
-        String resourceGroupName,
-        String serviceName,
-        String apiId,
-        String operationId,
-        String ifMatch,
-        Context context);
 }

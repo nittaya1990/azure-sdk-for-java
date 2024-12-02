@@ -5,186 +5,58 @@
 package com.azure.resourcemanager.streamanalytics.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.management.SubResource;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
 import com.azure.resourcemanager.streamanalytics.models.Diagnostics;
+import com.azure.resourcemanager.streamanalytics.models.LastOutputEventTimestamp;
 import com.azure.resourcemanager.streamanalytics.models.OutputDataSource;
+import com.azure.resourcemanager.streamanalytics.models.OutputWatermarkProperties;
 import com.azure.resourcemanager.streamanalytics.models.Serialization;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * An output object, containing all information associated with the named output. All outputs are contained under a
  * streaming job.
  */
-@JsonFlatten
 @Fluent
-public class OutputInner extends SubResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OutputInner.class);
-
+public final class OutputInner extends SubResource {
     /*
-     * Describes the data source that output will be written to. Required on
-     * PUT (CreateOrReplace) requests.
+     * The properties that are associated with an output. Required on PUT (CreateOrReplace) requests.
      */
-    @JsonProperty(value = "properties.datasource")
-    private OutputDataSource datasource;
-
-    /*
-     * The timeWindow property.
-     */
-    @JsonProperty(value = "properties.timeWindow")
-    private String timeWindow;
-
-    /*
-     * The sizeWindow property.
-     */
-    @JsonProperty(value = "properties.sizeWindow")
-    private Float sizeWindow;
-
-    /*
-     * Describes how data from an input is serialized or how data is serialized
-     * when written to an output. Required on PUT (CreateOrReplace) requests.
-     */
-    @JsonProperty(value = "properties.serialization")
-    private Serialization serialization;
-
-    /*
-     * Describes conditions applicable to the Input, Output, or the job
-     * overall, that warrant customer attention.
-     */
-    @JsonProperty(value = "properties.diagnostics", access = JsonProperty.Access.WRITE_ONLY)
-    private Diagnostics diagnostics;
-
-    /*
-     * The current entity tag for the output. This is an opaque string. You can
-     * use it to detect whether the resource has changed between requests. You
-     * can also use it in the If-Match or If-None-Match headers for write
-     * operations for optimistic concurrency.
-     */
-    @JsonProperty(value = "properties.etag", access = JsonProperty.Access.WRITE_ONLY)
-    private String etag;
+    private OutputProperties innerProperties;
 
     /*
      * Resource name
      */
-    @JsonProperty(value = "name")
     private String name;
 
     /*
      * Resource type
      */
-    @JsonProperty(value = "type", access = JsonProperty.Access.WRITE_ONLY)
     private String type;
 
     /**
-     * Get the datasource property: Describes the data source that output will be written to. Required on PUT
+     * Creates an instance of OutputInner class.
+     */
+    public OutputInner() {
+    }
+
+    /**
+     * Get the innerProperties property: The properties that are associated with an output. Required on PUT
      * (CreateOrReplace) requests.
-     *
-     * @return the datasource value.
+     * 
+     * @return the innerProperties value.
      */
-    public OutputDataSource datasource() {
-        return this.datasource;
-    }
-
-    /**
-     * Set the datasource property: Describes the data source that output will be written to. Required on PUT
-     * (CreateOrReplace) requests.
-     *
-     * @param datasource the datasource value to set.
-     * @return the OutputInner object itself.
-     */
-    public OutputInner withDatasource(OutputDataSource datasource) {
-        this.datasource = datasource;
-        return this;
-    }
-
-    /**
-     * Get the timeWindow property: The timeWindow property.
-     *
-     * @return the timeWindow value.
-     */
-    public String timeWindow() {
-        return this.timeWindow;
-    }
-
-    /**
-     * Set the timeWindow property: The timeWindow property.
-     *
-     * @param timeWindow the timeWindow value to set.
-     * @return the OutputInner object itself.
-     */
-    public OutputInner withTimeWindow(String timeWindow) {
-        this.timeWindow = timeWindow;
-        return this;
-    }
-
-    /**
-     * Get the sizeWindow property: The sizeWindow property.
-     *
-     * @return the sizeWindow value.
-     */
-    public Float sizeWindow() {
-        return this.sizeWindow;
-    }
-
-    /**
-     * Set the sizeWindow property: The sizeWindow property.
-     *
-     * @param sizeWindow the sizeWindow value to set.
-     * @return the OutputInner object itself.
-     */
-    public OutputInner withSizeWindow(Float sizeWindow) {
-        this.sizeWindow = sizeWindow;
-        return this;
-    }
-
-    /**
-     * Get the serialization property: Describes how data from an input is serialized or how data is serialized when
-     * written to an output. Required on PUT (CreateOrReplace) requests.
-     *
-     * @return the serialization value.
-     */
-    public Serialization serialization() {
-        return this.serialization;
-    }
-
-    /**
-     * Set the serialization property: Describes how data from an input is serialized or how data is serialized when
-     * written to an output. Required on PUT (CreateOrReplace) requests.
-     *
-     * @param serialization the serialization value to set.
-     * @return the OutputInner object itself.
-     */
-    public OutputInner withSerialization(Serialization serialization) {
-        this.serialization = serialization;
-        return this;
-    }
-
-    /**
-     * Get the diagnostics property: Describes conditions applicable to the Input, Output, or the job overall, that
-     * warrant customer attention.
-     *
-     * @return the diagnostics value.
-     */
-    public Diagnostics diagnostics() {
-        return this.diagnostics;
-    }
-
-    /**
-     * Get the etag property: The current entity tag for the output. This is an opaque string. You can use it to detect
-     * whether the resource has changed between requests. You can also use it in the If-Match or If-None-Match headers
-     * for write operations for optimistic concurrency.
-     *
-     * @return the etag value.
-     */
-    public String etag() {
-        return this.etag;
+    private OutputProperties innerProperties() {
+        return this.innerProperties;
     }
 
     /**
      * Get the name property: Resource name.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -193,7 +65,7 @@ public class OutputInner extends SubResource {
 
     /**
      * Set the name property: Resource name.
-     *
+     * 
      * @param name the name value to set.
      * @return the OutputInner object itself.
      */
@@ -204,14 +76,16 @@ public class OutputInner extends SubResource {
 
     /**
      * Get the type property: Resource type.
-     *
+     * 
      * @return the type value.
      */
     public String type() {
         return this.type;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public OutputInner withId(String id) {
         super.withId(id);
@@ -219,19 +93,207 @@ public class OutputInner extends SubResource {
     }
 
     /**
+     * Get the datasource property: Describes the data source that output will be written to. Required on PUT
+     * (CreateOrReplace) requests.
+     * 
+     * @return the datasource value.
+     */
+    public OutputDataSource datasource() {
+        return this.innerProperties() == null ? null : this.innerProperties().datasource();
+    }
+
+    /**
+     * Set the datasource property: Describes the data source that output will be written to. Required on PUT
+     * (CreateOrReplace) requests.
+     * 
+     * @param datasource the datasource value to set.
+     * @return the OutputInner object itself.
+     */
+    public OutputInner withDatasource(OutputDataSource datasource) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new OutputProperties();
+        }
+        this.innerProperties().withDatasource(datasource);
+        return this;
+    }
+
+    /**
+     * Get the timeWindow property: The time frame for filtering Stream Analytics job outputs.
+     * 
+     * @return the timeWindow value.
+     */
+    public String timeWindow() {
+        return this.innerProperties() == null ? null : this.innerProperties().timeWindow();
+    }
+
+    /**
+     * Set the timeWindow property: The time frame for filtering Stream Analytics job outputs.
+     * 
+     * @param timeWindow the timeWindow value to set.
+     * @return the OutputInner object itself.
+     */
+    public OutputInner withTimeWindow(String timeWindow) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new OutputProperties();
+        }
+        this.innerProperties().withTimeWindow(timeWindow);
+        return this;
+    }
+
+    /**
+     * Get the sizeWindow property: The size window to constrain a Stream Analytics output to.
+     * 
+     * @return the sizeWindow value.
+     */
+    public Integer sizeWindow() {
+        return this.innerProperties() == null ? null : this.innerProperties().sizeWindow();
+    }
+
+    /**
+     * Set the sizeWindow property: The size window to constrain a Stream Analytics output to.
+     * 
+     * @param sizeWindow the sizeWindow value to set.
+     * @return the OutputInner object itself.
+     */
+    public OutputInner withSizeWindow(Integer sizeWindow) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new OutputProperties();
+        }
+        this.innerProperties().withSizeWindow(sizeWindow);
+        return this;
+    }
+
+    /**
+     * Get the serialization property: Describes how data from an input is serialized or how data is serialized when
+     * written to an output. Required on PUT (CreateOrReplace) requests.
+     * 
+     * @return the serialization value.
+     */
+    public Serialization serialization() {
+        return this.innerProperties() == null ? null : this.innerProperties().serialization();
+    }
+
+    /**
+     * Set the serialization property: Describes how data from an input is serialized or how data is serialized when
+     * written to an output. Required on PUT (CreateOrReplace) requests.
+     * 
+     * @param serialization the serialization value to set.
+     * @return the OutputInner object itself.
+     */
+    public OutputInner withSerialization(Serialization serialization) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new OutputProperties();
+        }
+        this.innerProperties().withSerialization(serialization);
+        return this;
+    }
+
+    /**
+     * Get the diagnostics property: Describes conditions applicable to the Input, Output, or the job overall, that
+     * warrant customer attention.
+     * 
+     * @return the diagnostics value.
+     */
+    public Diagnostics diagnostics() {
+        return this.innerProperties() == null ? null : this.innerProperties().diagnostics();
+    }
+
+    /**
+     * Get the etag property: The current entity tag for the output. This is an opaque string. You can use it to detect
+     * whether the resource has changed between requests. You can also use it in the If-Match or If-None-Match headers
+     * for write operations for optimistic concurrency.
+     * 
+     * @return the etag value.
+     */
+    public String etag() {
+        return this.innerProperties() == null ? null : this.innerProperties().etag();
+    }
+
+    /**
+     * Get the lastOutputEventTimestamps property: A list of the last output event times for each output partition. The
+     * index of the array corresponds to the partition number.
+     * 
+     * @return the lastOutputEventTimestamps value.
+     */
+    public List<LastOutputEventTimestamp> lastOutputEventTimestamps() {
+        return this.innerProperties() == null ? null : this.innerProperties().lastOutputEventTimestamps();
+    }
+
+    /**
+     * Get the watermarkSettings property: Settings which determine whether to send watermarks to downstream.
+     * 
+     * @return the watermarkSettings value.
+     */
+    public OutputWatermarkProperties watermarkSettings() {
+        return this.innerProperties() == null ? null : this.innerProperties().watermarkSettings();
+    }
+
+    /**
+     * Set the watermarkSettings property: Settings which determine whether to send watermarks to downstream.
+     * 
+     * @param watermarkSettings the watermarkSettings value to set.
+     * @return the OutputInner object itself.
+     */
+    public OutputInner withWatermarkSettings(OutputWatermarkProperties watermarkSettings) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new OutputProperties();
+        }
+        this.innerProperties().withWatermarkSettings(watermarkSettings);
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
-        if (datasource() != null) {
-            datasource().validate();
+        if (innerProperties() != null) {
+            innerProperties().validate();
         }
-        if (serialization() != null) {
-            serialization().validate();
-        }
-        if (diagnostics() != null) {
-            diagnostics().validate();
-        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeStringField("id", id());
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        jsonWriter.writeStringField("name", this.name);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of OutputInner from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of OutputInner if the JsonReader was pointing to an instance of it, or null if it was
+     * pointing to JSON null.
+     * @throws IOException If an error occurs while reading the OutputInner.
+     */
+    public static OutputInner fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            OutputInner deserializedOutputInner = new OutputInner();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("id".equals(fieldName)) {
+                    deserializedOutputInner.withId(reader.getString());
+                } else if ("properties".equals(fieldName)) {
+                    deserializedOutputInner.innerProperties = OutputProperties.fromJson(reader);
+                } else if ("name".equals(fieldName)) {
+                    deserializedOutputInner.name = reader.getString();
+                } else if ("type".equals(fieldName)) {
+                    deserializedOutputInner.type = reader.getString();
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedOutputInner;
+        });
     }
 }

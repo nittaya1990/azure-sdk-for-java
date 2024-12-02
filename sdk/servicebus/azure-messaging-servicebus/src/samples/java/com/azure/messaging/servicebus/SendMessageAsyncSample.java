@@ -4,22 +4,21 @@
 package com.azure.messaging.servicebus;
 
 import com.azure.core.util.BinaryData;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.IntStream;
 
 /**
- * Sample demonstrates how to send an {@link ServiceBusMessage} to an Azure Service Bus queue.
+ * Sample demonstrates how to send a {@link ServiceBusMessage} to an Azure Service Bus queue.
  */
 public class SendMessageAsyncSample {
     String connectionString = System.getenv("AZURE_SERVICEBUS_NAMESPACE_CONNECTION_STRING");
     String queueName = System.getenv("AZURE_SERVICEBUS_SAMPLE_QUEUE_NAME");
 
     /**
-     * Main method to invoke this demo on how to send an {@link ServiceBusMessageBatch} to an Azure Service Bus.
+     * Main method to invoke this demo on how to send a {@link ServiceBusMessageBatch} to an Azure Service Bus.
      *
      * @param args Unused arguments to the program.
      * @throws InterruptedException If the program is unable to sleep while waiting for the operations to complete.
@@ -30,7 +29,7 @@ public class SendMessageAsyncSample {
     }
 
     /**
-     * This method to invoke this demo on how to send an {@link ServiceBusMessageBatch} to an Azure Service Bus.
+     * This method to invoke this demo on how to send a {@link ServiceBusMessageBatch} to an Azure Service Bus.
      *
      * @throws InterruptedException If the program is unable to sleep while waiting for the operations to complete.
      */
@@ -50,33 +49,23 @@ public class SendMessageAsyncSample {
         //    inside the Service Bus namespace.
 
         // Instantiate a client that will be used to call the service.
-        ServiceBusSenderAsyncClient sender = new ServiceBusClientBuilder()
+        ServiceBusSenderClient sender = new ServiceBusClientBuilder()
             .connectionString(connectionString)
             .sender()
             .queueName(queueName)
-            .buildAsyncClient();
+            .buildClient();
 
         // Create a message to send.
-        ServiceBusMessage message = new ServiceBusMessage(BinaryData.fromString("Hello world!"));
+        final ServiceBusMessageBatch messageBatch = sender.createMessageBatch();
+        IntStream.range(0, 10)
+            .mapToObj(index -> new ServiceBusMessage(BinaryData.fromString("Hello world! " + index)))
+            .forEach(message -> messageBatch.tryAddMessage(message));
 
-        // Send that message. This call returns a Mono<Void>, which we subscribe to. It completes successfully when the
-        // event has been delivered to the Service queue or topic. It completes with an error if an exception occurred
-        // while sending the message.
-        sender.sendMessage(message).subscribe(
-            unused -> System.out.println("Sent."),
-            error -> System.err.println("Error occurred while publishing message: " + error),
-            () -> {
-                System.out.println("Send complete.");
-                sampleSuccessful.set(true);
-            });
-
-        // subscribe() is not a blocking call. We sleep here so the program does not end before the send is complete.
-        TimeUnit.SECONDS.sleep(5);
+        // Send that message. It completes successfully when the event has been delivered to the Service queue or topic.
+        // It completes with an error if an exception occurred while sending the message.
+        sender.sendMessages(messageBatch);
 
         // Close the sender.
         sender.close();
-
-        // This assertion is to ensure that samples are working. Users should remove this.
-        Assertions.assertTrue(sampleSuccessful.get());
     }
 }

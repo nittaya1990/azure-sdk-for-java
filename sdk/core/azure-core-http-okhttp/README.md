@@ -7,6 +7,7 @@ Azure Core OkHttp HTTP client is a plugin for the `azure-core` HTTP client API.
 ### Prerequisites
 
 - A [Java Development Kit (JDK)][jdk_link], version 8 or later.
+  - Here are details about [Java 8 client compatibility with Azure Certificate Authority][java8_client_compatibility].
 
 ### Include the package
 #### Include the BOM file
@@ -47,7 +48,7 @@ add the direct dependency to your project as follows.
 <dependency>
     <groupId>com.azure</groupId>
     <artifactId>azure-core-http-okhttp</artifactId>
-    <version>1.7.5</version>
+    <version>1.12.6</version>
 </dependency>
 ```
 [//]: # ({x-version-update-end})
@@ -79,6 +80,29 @@ HttpClient client = new OkHttpAsyncHttpClientBuilder()
     .build();
 ```
 
+### Create a Client with HTTP/2 Support
+
+Create an OkHttp client that supports both the HTTP/1.1 and HTTP/2 protocols, with HTTP/2 being the preferred protocol.
+
+```java readme-sample-useHttp2WithConfiguredOkHttpClient 
+// Constructs an HttpClient that supports both HTTP/1.1 and HTTP/2 with HTTP/2 being the preferred protocol.
+// This is the default handling for OkHttp.
+HttpClient client = new OkHttpAsyncHttpClientBuilder(new OkHttpClient.Builder()
+    .protocols(Arrays.asList(Protocol.HTTP_2, Protocol.HTTP_1_1))
+    .build())
+    .build();
+```
+
+It is also possible to create an OkHttp client that only supports HTTP/2.
+
+```java readme-sample-useHttp2OnlyWithConfiguredOkHttpClient
+// Constructs an HttpClient that only supports HTTP/2.
+HttpClient client = new OkHttpAsyncHttpClientBuilder(new OkHttpClient.Builder()
+    .protocols(Collections.singletonList(Protocol.H2_PRIOR_KNOWLEDGE))
+    .build())
+    .build();
+```
+
 ## Next steps
 
 Get started with Azure libraries that are [built using Azure Core](https://azure.github.io/azure-sdk/releases/latest/#java).
@@ -105,7 +129,8 @@ For details on contributing to this repository, see the [contributing guide](htt
 1. Create new Pull Request
 
 <!-- Links -->
-[logging]: https://github.com/Azure/azure-sdk-for-java/wiki/Logging-with-Azure-SDK
+[logging]: https://github.com/Azure/azure-sdk-for-java/wiki/Logging-in-Azure-SDK
 [jdk_link]: https://docs.microsoft.com/java/azure/jdk/?view=azure-java-stable
+[java8_client_compatibility]: https://learn.microsoft.com/azure/security/fundamentals/azure-ca-details?tabs=root-and-subordinate-cas-list#client-compatibility-for-public-pkis
 
 ![Impressions](https://azure-sdk-impressions.azurewebsites.net/api/impressions/azure-sdk-for-java%2Fsdk%2Fcore%2Fazure-core-http-okhttp%2FREADME.png)

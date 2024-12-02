@@ -5,27 +5,25 @@
 package com.azure.resourcemanager.kusto.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.kusto.models.AcceptedAudiences;
 import com.azure.resourcemanager.kusto.models.ClusterNetworkAccessFlag;
 import com.azure.resourcemanager.kusto.models.EngineType;
 import com.azure.resourcemanager.kusto.models.KeyVaultProperties;
 import com.azure.resourcemanager.kusto.models.LanguageExtensionsList;
+import com.azure.resourcemanager.kusto.models.MigrationClusterProperties;
 import com.azure.resourcemanager.kusto.models.OptimizedAutoscale;
 import com.azure.resourcemanager.kusto.models.ProvisioningState;
+import com.azure.resourcemanager.kusto.models.PublicIpType;
 import com.azure.resourcemanager.kusto.models.PublicNetworkAccess;
 import com.azure.resourcemanager.kusto.models.State;
 import com.azure.resourcemanager.kusto.models.TrustedExternalTenant;
 import com.azure.resourcemanager.kusto.models.VirtualNetworkConfiguration;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Class representing the Kusto cluster properties. */
 @Fluent
 public final class ClusterProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ClusterProperties.class);
-
     /*
      * The state of the resource.
      */
@@ -101,7 +99,7 @@ public final class ClusterProperties {
     /*
      * List of the cluster's language extensions.
      */
-    @JsonProperty(value = "languageExtensions", access = JsonProperty.Access.WRITE_ONLY)
+    @JsonProperty(value = "languageExtensions")
     private LanguageExtensionsList languageExtensions;
 
     /*
@@ -111,8 +109,8 @@ public final class ClusterProperties {
     private Boolean enableDoubleEncryption;
 
     /*
-     * Public network access to the cluster is enabled by default. When
-     * disabled, only private endpoint connection to the cluster is allowed
+     * Public network access to the cluster is enabled by default. When disabled, only private endpoint connection to
+     * the cluster is allowed
      */
     @JsonProperty(value = "publicNetworkAccess")
     private PublicNetworkAccess publicNetworkAccess;
@@ -136,25 +134,52 @@ public final class ClusterProperties {
     private List<AcceptedAudiences> acceptedAudiences;
 
     /*
-     * A boolean value that indicates if the cluster could be automatically
-     * stopped (due to lack of data or no activity for many days).
+     * A boolean value that indicates if the cluster could be automatically stopped (due to lack of data or no activity
+     * for many days).
      */
     @JsonProperty(value = "enableAutoStop")
     private Boolean enableAutoStop;
 
     /*
-     * Whether or not to restrict outbound network access.  Value is optional
-     * but if passed in, must be 'Enabled' or 'Disabled'
+     * Whether or not to restrict outbound network access.  Value is optional but if passed in, must be 'Enabled' or
+     * 'Disabled'
      */
     @JsonProperty(value = "restrictOutboundNetworkAccess")
     private ClusterNetworkAccessFlag restrictOutboundNetworkAccess;
 
     /*
-     * List of allowed FQDNs(Fully Qualified Domain Name) for egress from
-     * Cluster.
+     * List of allowed FQDNs(Fully Qualified Domain Name) for egress from Cluster.
      */
     @JsonProperty(value = "allowedFqdnList")
     private List<String> allowedFqdnList;
+
+    /*
+     * Indicates what public IP type to create - IPv4 (default), or DualStack (both IPv4 and IPv6)
+     */
+    @JsonProperty(value = "publicIPType")
+    private PublicIpType publicIpType;
+
+    /*
+     * Virtual Cluster graduation properties
+     */
+    @JsonProperty(value = "virtualClusterGraduationProperties")
+    private String virtualClusterGraduationProperties;
+
+    /*
+     * A list of private endpoint connections.
+     */
+    @JsonProperty(value = "privateEndpointConnections", access = JsonProperty.Access.WRITE_ONLY)
+    private List<PrivateEndpointConnectionInner> privateEndpointConnections;
+
+    /*
+     * Properties of the peer cluster involved in a migration to/from this cluster.
+     */
+    @JsonProperty(value = "migrationCluster", access = JsonProperty.Access.WRITE_ONLY)
+    private MigrationClusterProperties migrationCluster;
+
+    /** Creates an instance of ClusterProperties class. */
+    public ClusterProperties() {
+    }
 
     /**
      * Get the state property: The state of the resource.
@@ -351,6 +376,17 @@ public final class ClusterProperties {
     }
 
     /**
+     * Set the languageExtensions property: List of the cluster's language extensions.
+     *
+     * @param languageExtensions the languageExtensions value to set.
+     * @return the ClusterProperties object itself.
+     */
+    public ClusterProperties withLanguageExtensions(LanguageExtensionsList languageExtensions) {
+        this.languageExtensions = languageExtensions;
+        return this;
+    }
+
+    /**
      * Get the enableDoubleEncryption property: A boolean value that indicates if double encryption is enabled.
      *
      * @return the enableDoubleEncryption value.
@@ -517,6 +553,66 @@ public final class ClusterProperties {
     }
 
     /**
+     * Get the publicIpType property: Indicates what public IP type to create - IPv4 (default), or DualStack (both IPv4
+     * and IPv6).
+     *
+     * @return the publicIpType value.
+     */
+    public PublicIpType publicIpType() {
+        return this.publicIpType;
+    }
+
+    /**
+     * Set the publicIpType property: Indicates what public IP type to create - IPv4 (default), or DualStack (both IPv4
+     * and IPv6).
+     *
+     * @param publicIpType the publicIpType value to set.
+     * @return the ClusterProperties object itself.
+     */
+    public ClusterProperties withPublicIpType(PublicIpType publicIpType) {
+        this.publicIpType = publicIpType;
+        return this;
+    }
+
+    /**
+     * Get the virtualClusterGraduationProperties property: Virtual Cluster graduation properties.
+     *
+     * @return the virtualClusterGraduationProperties value.
+     */
+    public String virtualClusterGraduationProperties() {
+        return this.virtualClusterGraduationProperties;
+    }
+
+    /**
+     * Set the virtualClusterGraduationProperties property: Virtual Cluster graduation properties.
+     *
+     * @param virtualClusterGraduationProperties the virtualClusterGraduationProperties value to set.
+     * @return the ClusterProperties object itself.
+     */
+    public ClusterProperties withVirtualClusterGraduationProperties(String virtualClusterGraduationProperties) {
+        this.virtualClusterGraduationProperties = virtualClusterGraduationProperties;
+        return this;
+    }
+
+    /**
+     * Get the privateEndpointConnections property: A list of private endpoint connections.
+     *
+     * @return the privateEndpointConnections value.
+     */
+    public List<PrivateEndpointConnectionInner> privateEndpointConnections() {
+        return this.privateEndpointConnections;
+    }
+
+    /**
+     * Get the migrationCluster property: Properties of the peer cluster involved in a migration to/from this cluster.
+     *
+     * @return the migrationCluster value.
+     */
+    public MigrationClusterProperties migrationCluster() {
+        return this.migrationCluster;
+    }
+
+    /**
      * Validates the instance.
      *
      * @throws IllegalArgumentException thrown if the instance is not valid.
@@ -539,6 +635,12 @@ public final class ClusterProperties {
         }
         if (acceptedAudiences() != null) {
             acceptedAudiences().forEach(e -> e.validate());
+        }
+        if (privateEndpointConnections() != null) {
+            privateEndpointConnections().forEach(e -> e.validate());
+        }
+        if (migrationCluster() != null) {
+            migrationCluster().validate();
         }
     }
 }

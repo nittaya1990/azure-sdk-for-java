@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Details about inquired protectable items under a given container. */
+/**
+ * Details about inquired protectable items under a given container.
+ */
 @Fluent
 public final class InquiryInfo {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(InquiryInfo.class);
-
     /*
      * Inquiry Status for this container such as
      * InProgress | Failed | Succeeded
@@ -36,8 +34,15 @@ public final class InquiryInfo {
     private List<WorkloadInquiryDetails> inquiryDetails;
 
     /**
-     * Get the status property: Inquiry Status for this container such as InProgress | Failed | Succeeded.
-     *
+     * Creates an instance of InquiryInfo class.
+     */
+    public InquiryInfo() {
+    }
+
+    /**
+     * Get the status property: Inquiry Status for this container such as
+     * InProgress | Failed | Succeeded.
+     * 
      * @return the status value.
      */
     public String status() {
@@ -45,8 +50,9 @@ public final class InquiryInfo {
     }
 
     /**
-     * Set the status property: Inquiry Status for this container such as InProgress | Failed | Succeeded.
-     *
+     * Set the status property: Inquiry Status for this container such as
+     * InProgress | Failed | Succeeded.
+     * 
      * @param status the status value to set.
      * @return the InquiryInfo object itself.
      */
@@ -57,7 +63,7 @@ public final class InquiryInfo {
 
     /**
      * Get the errorDetail property: Error Details if the Status is non-success.
-     *
+     * 
      * @return the errorDetail value.
      */
     public ErrorDetail errorDetail() {
@@ -66,7 +72,7 @@ public final class InquiryInfo {
 
     /**
      * Set the errorDetail property: Error Details if the Status is non-success.
-     *
+     * 
      * @param errorDetail the errorDetail value to set.
      * @return the InquiryInfo object itself.
      */
@@ -76,9 +82,9 @@ public final class InquiryInfo {
     }
 
     /**
-     * Get the inquiryDetails property: Inquiry Details which will have workload specific details. For e.g. - For SQL
-     * and oracle this will contain different details.
-     *
+     * Get the inquiryDetails property: Inquiry Details which will have workload specific details.
+     * For e.g. - For SQL and oracle this will contain different details.
+     * 
      * @return the inquiryDetails value.
      */
     public List<WorkloadInquiryDetails> inquiryDetails() {
@@ -86,9 +92,9 @@ public final class InquiryInfo {
     }
 
     /**
-     * Set the inquiryDetails property: Inquiry Details which will have workload specific details. For e.g. - For SQL
-     * and oracle this will contain different details.
-     *
+     * Set the inquiryDetails property: Inquiry Details which will have workload specific details.
+     * For e.g. - For SQL and oracle this will contain different details.
+     * 
      * @param inquiryDetails the inquiryDetails value to set.
      * @return the InquiryInfo object itself.
      */
@@ -99,7 +105,7 @@ public final class InquiryInfo {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

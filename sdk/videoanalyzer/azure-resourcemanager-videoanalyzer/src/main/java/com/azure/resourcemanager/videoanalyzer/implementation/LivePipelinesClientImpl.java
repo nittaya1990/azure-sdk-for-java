@@ -31,7 +31,6 @@ import com.azure.core.management.exception.ManagementException;
 import com.azure.core.management.polling.PollResult;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.core.util.polling.PollerFlux;
 import com.azure.core.util.polling.SyncPoller;
 import com.azure.resourcemanager.videoanalyzer.fluent.LivePipelinesClient;
@@ -44,8 +43,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in LivePipelinesClient. */
 public final class LivePipelinesClientImpl implements LivePipelinesClient {
-    private final ClientLogger logger = new ClientLogger(LivePipelinesClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final LivePipelinesService service;
 
@@ -58,8 +55,8 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @param client the instance of the service client containing this operation class.
      */
     LivePipelinesClientImpl(VideoAnalyzerManagementClientImpl client) {
-        this.service =
-            RestProxy.create(LivePipelinesService.class, client.getHttpPipeline(), client.getSerializerAdapter());
+        this.service
+            = RestProxy.create(LivePipelinesService.class, client.getHttpPipeline(), client.getSerializerAdapter());
         this.client = client;
     }
 
@@ -70,130 +67,91 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
     @Host("{$host}")
     @ServiceInterface(name = "VideoAnalyzerManagem")
     private interface LivePipelinesService {
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Media"
-                + "/videoAnalyzers/{accountName}/livePipelines")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Media"
+            + "/videoAnalyzers/{accountName}/livePipelines")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<LivePipelineCollection>> list(
-            @HostParam("$host") String endpoint,
+        Mono<Response<LivePipelineCollection>> list(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("accountName") String accountName,
-            @QueryParam("api-version") String apiVersion,
-            @QueryParam("$filter") String filter,
-            @QueryParam("$top") Integer top,
-            @HeaderParam("Accept") String accept,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("accountName") String accountName,
+            @QueryParam("api-version") String apiVersion, @QueryParam("$filter") String filter,
+            @QueryParam("$top") Integer top, @HeaderParam("Accept") String accept, Context context);
+
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Media"
+            + "/videoAnalyzers/{accountName}/livePipelines/{livePipelineName}")
+        @ExpectedResponses({ 200 })
+        @UnexpectedResponseExceptionType(ManagementException.class)
+        Mono<Response<LivePipelineInner>> get(@HostParam("$host") String endpoint,
+            @PathParam("subscriptionId") String subscriptionId,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("accountName") String accountName,
+            @PathParam("livePipelineName") String livePipelineName, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
+
+        @Headers({ "Content-Type: application/json" })
+        @Put("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Media"
+            + "/videoAnalyzers/{accountName}/livePipelines/{livePipelineName}")
+        @ExpectedResponses({ 200, 201 })
+        @UnexpectedResponseExceptionType(ManagementException.class)
+        Mono<Response<LivePipelineInner>> createOrUpdate(@HostParam("$host") String endpoint,
+            @PathParam("subscriptionId") String subscriptionId,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("accountName") String accountName,
+            @PathParam("livePipelineName") String livePipelineName, @QueryParam("api-version") String apiVersion,
+            @BodyParam("application/json") LivePipelineInner parameters, @HeaderParam("Accept") String accept,
             Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Media"
-                + "/videoAnalyzers/{accountName}/livePipelines/{livePipelineName}")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Delete("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Media"
+            + "/videoAnalyzers/{accountName}/livePipelines/{livePipelineName}")
+        @ExpectedResponses({ 200, 204 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<LivePipelineInner>> get(
-            @HostParam("$host") String endpoint,
+        Mono<Response<Void>> delete(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("accountName") String accountName,
-            @PathParam("livePipelineName") String livePipelineName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("accountName") String accountName,
+            @PathParam("livePipelineName") String livePipelineName, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
+
+        @Headers({ "Content-Type: application/json" })
+        @Patch("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Media"
+            + "/videoAnalyzers/{accountName}/livePipelines/{livePipelineName}")
+        @ExpectedResponses({ 200 })
+        @UnexpectedResponseExceptionType(ManagementException.class)
+        Mono<Response<LivePipelineInner>> update(@HostParam("$host") String endpoint,
+            @PathParam("subscriptionId") String subscriptionId,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("accountName") String accountName,
+            @PathParam("livePipelineName") String livePipelineName, @QueryParam("api-version") String apiVersion,
+            @BodyParam("application/json") LivePipelineUpdate parameters, @HeaderParam("Accept") String accept,
             Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Put(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Media"
-                + "/videoAnalyzers/{accountName}/livePipelines/{livePipelineName}")
-        @ExpectedResponses({200, 201})
+        @Headers({ "Content-Type: application/json" })
+        @Post("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Media"
+            + "/videoAnalyzers/{accountName}/livePipelines/{livePipelineName}/activate")
+        @ExpectedResponses({ 200, 202 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<LivePipelineInner>> createOrUpdate(
-            @HostParam("$host") String endpoint,
+        Mono<Response<Flux<ByteBuffer>>> activate(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("accountName") String accountName,
-            @PathParam("livePipelineName") String livePipelineName,
-            @QueryParam("api-version") String apiVersion,
-            @BodyParam("application/json") LivePipelineInner parameters,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("accountName") String accountName,
+            @PathParam("livePipelineName") String livePipelineName, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Delete(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Media"
-                + "/videoAnalyzers/{accountName}/livePipelines/{livePipelineName}")
-        @ExpectedResponses({200, 204})
+        @Headers({ "Content-Type: application/json" })
+        @Post("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Media"
+            + "/videoAnalyzers/{accountName}/livePipelines/{livePipelineName}/deactivate")
+        @ExpectedResponses({ 200, 202 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Void>> delete(
-            @HostParam("$host") String endpoint,
+        Mono<Response<Flux<ByteBuffer>>> deactivate(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("accountName") String accountName,
-            @PathParam("livePipelineName") String livePipelineName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("accountName") String accountName,
+            @PathParam("livePipelineName") String livePipelineName, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Patch(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Media"
-                + "/videoAnalyzers/{accountName}/livePipelines/{livePipelineName}")
-        @ExpectedResponses({200})
-        @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<LivePipelineInner>> update(
-            @HostParam("$host") String endpoint,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("accountName") String accountName,
-            @PathParam("livePipelineName") String livePipelineName,
-            @QueryParam("api-version") String apiVersion,
-            @BodyParam("application/json") LivePipelineUpdate parameters,
-            @HeaderParam("Accept") String accept,
-            Context context);
-
-        @Headers({"Content-Type: application/json"})
-        @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Media"
-                + "/videoAnalyzers/{accountName}/livePipelines/{livePipelineName}/activate")
-        @ExpectedResponses({200, 202})
-        @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> activate(
-            @HostParam("$host") String endpoint,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("accountName") String accountName,
-            @PathParam("livePipelineName") String livePipelineName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
-
-        @Headers({"Content-Type: application/json"})
-        @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Media"
-                + "/videoAnalyzers/{accountName}/livePipelines/{livePipelineName}/deactivate")
-        @ExpectedResponses({200, 202})
-        @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> deactivate(
-            @HostParam("$host") String endpoint,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("accountName") String accountName,
-            @PathParam("livePipelineName") String livePipelineName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
-
-        @Headers({"Content-Type: application/json"})
+        @Headers({ "Content-Type: application/json" })
         @Get("{nextLink}")
-        @ExpectedResponses({200})
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<LivePipelineCollection>> listNext(
-            @PathParam(value = "nextLink", encoded = true) String nextLink,
-            @HostParam("$host") String endpoint,
-            @HeaderParam("Accept") String accept,
-            Context context);
+        Mono<Response<LivePipelineCollection>> listNext(@PathParam(value = "nextLink", encoded = true) String nextLink,
+            @HostParam("$host") String endpoint, @HeaderParam("Accept") String accept, Context context);
     }
 
     /**
@@ -207,22 +165,19 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of LivePipeline items.
+     * @return a collection of LivePipeline items along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<LivePipelineInner>> listSinglePageAsync(
-        String resourceGroupName, String accountName, String filter, Integer top) {
+    private Mono<PagedResponse<LivePipelineInner>> listSinglePageAsync(String resourceGroupName, String accountName,
+        String filter, Integer top) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -233,28 +188,10 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .list(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            accountName,
-                            this.client.getApiVersion(),
-                            filter,
-                            top,
-                            accept,
-                            context))
-            .<PagedResponse<LivePipelineInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null))
+            .withContext(context -> service.list(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                resourceGroupName, accountName, this.client.getApiVersion(), filter, top, accept, context))
+            .<PagedResponse<LivePipelineInner>>map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(),
+                res.getHeaders(), res.getValue().value(), res.getValue().nextLink(), null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -270,22 +207,19 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of LivePipeline items.
+     * @return a collection of LivePipeline items along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<LivePipelineInner>> listSinglePageAsync(
-        String resourceGroupName, String accountName, String filter, Integer top, Context context) {
+    private Mono<PagedResponse<LivePipelineInner>> listSinglePageAsync(String resourceGroupName, String accountName,
+        String filter, Integer top, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -297,25 +231,10 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
         final String accept = "application/json";
         context = this.client.mergeContext(context);
         return service
-            .list(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                accountName,
-                this.client.getApiVersion(),
-                filter,
-                top,
-                accept,
-                context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null));
+            .list(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName, accountName,
+                this.client.getApiVersion(), filter, top, accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), res.getValue().nextLink(), null));
     }
 
     /**
@@ -329,13 +248,12 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of LivePipeline items.
+     * @return a collection of LivePipeline items as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<LivePipelineInner> listAsync(
-        String resourceGroupName, String accountName, String filter, Integer top) {
-        return new PagedFlux<>(
-            () -> listSinglePageAsync(resourceGroupName, accountName, filter, top),
+    private PagedFlux<LivePipelineInner> listAsync(String resourceGroupName, String accountName, String filter,
+        Integer top) {
+        return new PagedFlux<>(() -> listSinglePageAsync(resourceGroupName, accountName, filter, top),
             nextLink -> listNextSinglePageAsync(nextLink));
     }
 
@@ -347,14 +265,13 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of LivePipeline items.
+     * @return a collection of LivePipeline items as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<LivePipelineInner> listAsync(String resourceGroupName, String accountName) {
         final String filter = null;
         final Integer top = null;
-        return new PagedFlux<>(
-            () -> listSinglePageAsync(resourceGroupName, accountName, filter, top),
+        return new PagedFlux<>(() -> listSinglePageAsync(resourceGroupName, accountName, filter, top),
             nextLink -> listNextSinglePageAsync(nextLink));
     }
 
@@ -370,13 +287,12 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of LivePipeline items.
+     * @return a collection of LivePipeline items as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<LivePipelineInner> listAsync(
-        String resourceGroupName, String accountName, String filter, Integer top, Context context) {
-        return new PagedFlux<>(
-            () -> listSinglePageAsync(resourceGroupName, accountName, filter, top, context),
+    private PagedFlux<LivePipelineInner> listAsync(String resourceGroupName, String accountName, String filter,
+        Integer top, Context context) {
+        return new PagedFlux<>(() -> listSinglePageAsync(resourceGroupName, accountName, filter, top, context),
             nextLink -> listNextSinglePageAsync(nextLink, context));
     }
 
@@ -388,7 +304,7 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of LivePipeline items.
+     * @return a collection of LivePipeline items as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<LivePipelineInner> list(String resourceGroupName, String accountName) {
@@ -409,11 +325,11 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of LivePipeline items.
+     * @return a collection of LivePipeline items as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<LivePipelineInner> list(
-        String resourceGroupName, String accountName, String filter, Integer top, Context context) {
+    public PagedIterable<LivePipelineInner> list(String resourceGroupName, String accountName, String filter,
+        Integer top, Context context) {
         return new PagedIterable<>(listAsync(resourceGroupName, accountName, filter, top, context));
     }
 
@@ -428,22 +344,19 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return live pipeline represents a unique instance of a live topology, used for real-time ingestion, archiving
-     *     and publishing of content for a unique RTSP camera.
+     *     and publishing of content for a unique RTSP camera along with {@link Response} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<LivePipelineInner>> getWithResponseAsync(
-        String resourceGroupName, String accountName, String livePipelineName) {
+    private Mono<Response<LivePipelineInner>> getWithResponseAsync(String resourceGroupName, String accountName,
+        String livePipelineName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -458,18 +371,8 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .get(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            accountName,
-                            livePipelineName,
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
+            .withContext(context -> service.get(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                resourceGroupName, accountName, livePipelineName, this.client.getApiVersion(), accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -485,22 +388,19 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return live pipeline represents a unique instance of a live topology, used for real-time ingestion, archiving
-     *     and publishing of content for a unique RTSP camera.
+     *     and publishing of content for a unique RTSP camera along with {@link Response} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<LivePipelineInner>> getWithResponseAsync(
-        String resourceGroupName, String accountName, String livePipelineName, Context context) {
+    private Mono<Response<LivePipelineInner>> getWithResponseAsync(String resourceGroupName, String accountName,
+        String livePipelineName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -515,16 +415,8 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .get(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                accountName,
-                livePipelineName,
-                this.client.getApiVersion(),
-                accept,
-                context);
+        return service.get(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName, accountName,
+            livePipelineName, this.client.getApiVersion(), accept, context);
     }
 
     /**
@@ -538,19 +430,12 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return live pipeline represents a unique instance of a live topology, used for real-time ingestion, archiving
-     *     and publishing of content for a unique RTSP camera.
+     *     and publishing of content for a unique RTSP camera on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<LivePipelineInner> getAsync(String resourceGroupName, String accountName, String livePipelineName) {
         return getWithResponseAsync(resourceGroupName, accountName, livePipelineName)
-            .flatMap(
-                (Response<LivePipelineInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
@@ -583,11 +468,11 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return live pipeline represents a unique instance of a live topology, used for real-time ingestion, archiving
-     *     and publishing of content for a unique RTSP camera.
+     *     and publishing of content for a unique RTSP camera along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<LivePipelineInner> getWithResponse(
-        String resourceGroupName, String accountName, String livePipelineName, Context context) {
+    public Response<LivePipelineInner> getWithResponse(String resourceGroupName, String accountName,
+        String livePipelineName, Context context) {
         return getWithResponseAsync(resourceGroupName, accountName, livePipelineName, context).block();
     }
 
@@ -602,22 +487,19 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return live pipeline represents a unique instance of a live topology, used for real-time ingestion, archiving
-     *     and publishing of content for a unique RTSP camera.
+     *     and publishing of content for a unique RTSP camera along with {@link Response} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<LivePipelineInner>> createOrUpdateWithResponseAsync(
-        String resourceGroupName, String accountName, String livePipelineName, LivePipelineInner parameters) {
+    private Mono<Response<LivePipelineInner>> createOrUpdateWithResponseAsync(String resourceGroupName,
+        String accountName, String livePipelineName, LivePipelineInner parameters) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -637,19 +519,9 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .createOrUpdate(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            accountName,
-                            livePipelineName,
-                            this.client.getApiVersion(),
-                            parameters,
-                            accept,
-                            context))
+            .withContext(context -> service.createOrUpdate(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                resourceGroupName, accountName, livePipelineName, this.client.getApiVersion(), parameters, accept,
+                context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -665,26 +537,19 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return live pipeline represents a unique instance of a live topology, used for real-time ingestion, archiving
-     *     and publishing of content for a unique RTSP camera.
+     *     and publishing of content for a unique RTSP camera along with {@link Response} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<LivePipelineInner>> createOrUpdateWithResponseAsync(
-        String resourceGroupName,
-        String accountName,
-        String livePipelineName,
-        LivePipelineInner parameters,
-        Context context) {
+    private Mono<Response<LivePipelineInner>> createOrUpdateWithResponseAsync(String resourceGroupName,
+        String accountName, String livePipelineName, LivePipelineInner parameters, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -704,17 +569,8 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .createOrUpdate(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                accountName,
-                livePipelineName,
-                this.client.getApiVersion(),
-                parameters,
-                accept,
-                context);
+        return service.createOrUpdate(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+            accountName, livePipelineName, this.client.getApiVersion(), parameters, accept, context);
     }
 
     /**
@@ -728,20 +584,13 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return live pipeline represents a unique instance of a live topology, used for real-time ingestion, archiving
-     *     and publishing of content for a unique RTSP camera.
+     *     and publishing of content for a unique RTSP camera on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<LivePipelineInner> createOrUpdateAsync(
-        String resourceGroupName, String accountName, String livePipelineName, LivePipelineInner parameters) {
+    private Mono<LivePipelineInner> createOrUpdateAsync(String resourceGroupName, String accountName,
+        String livePipelineName, LivePipelineInner parameters) {
         return createOrUpdateWithResponseAsync(resourceGroupName, accountName, livePipelineName, parameters)
-            .flatMap(
-                (Response<LivePipelineInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
@@ -758,8 +607,8 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      *     and publishing of content for a unique RTSP camera.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public LivePipelineInner createOrUpdate(
-        String resourceGroupName, String accountName, String livePipelineName, LivePipelineInner parameters) {
+    public LivePipelineInner createOrUpdate(String resourceGroupName, String accountName, String livePipelineName,
+        LivePipelineInner parameters) {
         return createOrUpdateAsync(resourceGroupName, accountName, livePipelineName, parameters).block();
     }
 
@@ -775,15 +624,11 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return live pipeline represents a unique instance of a live topology, used for real-time ingestion, archiving
-     *     and publishing of content for a unique RTSP camera.
+     *     and publishing of content for a unique RTSP camera along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<LivePipelineInner> createOrUpdateWithResponse(
-        String resourceGroupName,
-        String accountName,
-        String livePipelineName,
-        LivePipelineInner parameters,
-        Context context) {
+    public Response<LivePipelineInner> createOrUpdateWithResponse(String resourceGroupName, String accountName,
+        String livePipelineName, LivePipelineInner parameters, Context context) {
         return createOrUpdateWithResponseAsync(resourceGroupName, accountName, livePipelineName, parameters, context)
             .block();
     }
@@ -797,22 +642,18 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Void>> deleteWithResponseAsync(
-        String resourceGroupName, String accountName, String livePipelineName) {
+    private Mono<Response<Void>> deleteWithResponseAsync(String resourceGroupName, String accountName,
+        String livePipelineName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -827,18 +668,8 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .delete(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            accountName,
-                            livePipelineName,
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
+            .withContext(context -> service.delete(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                resourceGroupName, accountName, livePipelineName, this.client.getApiVersion(), accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -852,22 +683,18 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Void>> deleteWithResponseAsync(
-        String resourceGroupName, String accountName, String livePipelineName, Context context) {
+    private Mono<Response<Void>> deleteWithResponseAsync(String resourceGroupName, String accountName,
+        String livePipelineName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -882,16 +709,8 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .delete(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                accountName,
-                livePipelineName,
-                this.client.getApiVersion(),
-                accept,
-                context);
+        return service.delete(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+            accountName, livePipelineName, this.client.getApiVersion(), accept, context);
     }
 
     /**
@@ -903,12 +722,12 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> deleteAsync(String resourceGroupName, String accountName, String livePipelineName) {
         return deleteWithResponseAsync(resourceGroupName, accountName, livePipelineName)
-            .flatMap((Response<Void> res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
     }
 
     /**
@@ -936,11 +755,11 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> deleteWithResponse(
-        String resourceGroupName, String accountName, String livePipelineName, Context context) {
+    public Response<Void> deleteWithResponse(String resourceGroupName, String accountName, String livePipelineName,
+        Context context) {
         return deleteWithResponseAsync(resourceGroupName, accountName, livePipelineName, context).block();
     }
 
@@ -956,22 +775,19 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return live pipeline represents a unique instance of a live topology, used for real-time ingestion, archiving
-     *     and publishing of content for a unique RTSP camera.
+     *     and publishing of content for a unique RTSP camera along with {@link Response} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<LivePipelineInner>> updateWithResponseAsync(
-        String resourceGroupName, String accountName, String livePipelineName, LivePipelineUpdate parameters) {
+    private Mono<Response<LivePipelineInner>> updateWithResponseAsync(String resourceGroupName, String accountName,
+        String livePipelineName, LivePipelineUpdate parameters) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -992,18 +808,8 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
         final String accept = "application/json";
         return FluxUtil
             .withContext(
-                context ->
-                    service
-                        .update(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            accountName,
-                            livePipelineName,
-                            this.client.getApiVersion(),
-                            parameters,
-                            accept,
-                            context))
+                context -> service.update(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+                    accountName, livePipelineName, this.client.getApiVersion(), parameters, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -1020,26 +826,19 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return live pipeline represents a unique instance of a live topology, used for real-time ingestion, archiving
-     *     and publishing of content for a unique RTSP camera.
+     *     and publishing of content for a unique RTSP camera along with {@link Response} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<LivePipelineInner>> updateWithResponseAsync(
-        String resourceGroupName,
-        String accountName,
-        String livePipelineName,
-        LivePipelineUpdate parameters,
-        Context context) {
+    private Mono<Response<LivePipelineInner>> updateWithResponseAsync(String resourceGroupName, String accountName,
+        String livePipelineName, LivePipelineUpdate parameters, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1059,17 +858,8 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .update(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                accountName,
-                livePipelineName,
-                this.client.getApiVersion(),
-                parameters,
-                accept,
-                context);
+        return service.update(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+            accountName, livePipelineName, this.client.getApiVersion(), parameters, accept, context);
     }
 
     /**
@@ -1084,20 +874,13 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return live pipeline represents a unique instance of a live topology, used for real-time ingestion, archiving
-     *     and publishing of content for a unique RTSP camera.
+     *     and publishing of content for a unique RTSP camera on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<LivePipelineInner> updateAsync(
-        String resourceGroupName, String accountName, String livePipelineName, LivePipelineUpdate parameters) {
+    private Mono<LivePipelineInner> updateAsync(String resourceGroupName, String accountName, String livePipelineName,
+        LivePipelineUpdate parameters) {
         return updateWithResponseAsync(resourceGroupName, accountName, livePipelineName, parameters)
-            .flatMap(
-                (Response<LivePipelineInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
@@ -1115,8 +898,8 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      *     and publishing of content for a unique RTSP camera.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public LivePipelineInner update(
-        String resourceGroupName, String accountName, String livePipelineName, LivePipelineUpdate parameters) {
+    public LivePipelineInner update(String resourceGroupName, String accountName, String livePipelineName,
+        LivePipelineUpdate parameters) {
         return updateAsync(resourceGroupName, accountName, livePipelineName, parameters).block();
     }
 
@@ -1133,15 +916,11 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return live pipeline represents a unique instance of a live topology, used for real-time ingestion, archiving
-     *     and publishing of content for a unique RTSP camera.
+     *     and publishing of content for a unique RTSP camera along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<LivePipelineInner> updateWithResponse(
-        String resourceGroupName,
-        String accountName,
-        String livePipelineName,
-        LivePipelineUpdate parameters,
-        Context context) {
+    public Response<LivePipelineInner> updateWithResponse(String resourceGroupName, String accountName,
+        String livePipelineName, LivePipelineUpdate parameters, Context context) {
         return updateWithResponseAsync(resourceGroupName, accountName, livePipelineName, parameters, context).block();
     }
 
@@ -1154,22 +933,18 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> activateWithResponseAsync(
-        String resourceGroupName, String accountName, String livePipelineName) {
+    private Mono<Response<Flux<ByteBuffer>>> activateWithResponseAsync(String resourceGroupName, String accountName,
+        String livePipelineName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1184,18 +959,8 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .activate(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            accountName,
-                            livePipelineName,
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
+            .withContext(context -> service.activate(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                resourceGroupName, accountName, livePipelineName, this.client.getApiVersion(), accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -1209,22 +974,18 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> activateWithResponseAsync(
-        String resourceGroupName, String accountName, String livePipelineName, Context context) {
+    private Mono<Response<Flux<ByteBuffer>>> activateWithResponseAsync(String resourceGroupName, String accountName,
+        String livePipelineName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1239,16 +1000,8 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .activate(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                accountName,
-                livePipelineName,
-                this.client.getApiVersion(),
-                accept,
-                context);
+        return service.activate(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+            accountName, livePipelineName, this.client.getApiVersion(), accept, context);
     }
 
     /**
@@ -1260,16 +1013,15 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    private PollerFlux<PollResult<Void>, Void> beginActivateAsync(
-        String resourceGroupName, String accountName, String livePipelineName) {
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            activateWithResponseAsync(resourceGroupName, accountName, livePipelineName);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, Context.NONE);
+    private PollerFlux<PollResult<Void>, Void> beginActivateAsync(String resourceGroupName, String accountName,
+        String livePipelineName) {
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = activateWithResponseAsync(resourceGroupName, accountName, livePipelineName);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            this.client.getContext());
     }
 
     /**
@@ -1282,17 +1034,16 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    private PollerFlux<PollResult<Void>, Void> beginActivateAsync(
-        String resourceGroupName, String accountName, String livePipelineName, Context context) {
+    private PollerFlux<PollResult<Void>, Void> beginActivateAsync(String resourceGroupName, String accountName,
+        String livePipelineName, Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            activateWithResponseAsync(resourceGroupName, accountName, livePipelineName, context);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, context);
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = activateWithResponseAsync(resourceGroupName, accountName, livePipelineName, context);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            context);
     }
 
     /**
@@ -1304,11 +1055,11 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<Void>, Void> beginActivate(
-        String resourceGroupName, String accountName, String livePipelineName) {
+    public SyncPoller<PollResult<Void>, Void> beginActivate(String resourceGroupName, String accountName,
+        String livePipelineName) {
         return beginActivateAsync(resourceGroupName, accountName, livePipelineName).getSyncPoller();
     }
 
@@ -1322,11 +1073,11 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<Void>, Void> beginActivate(
-        String resourceGroupName, String accountName, String livePipelineName, Context context) {
+    public SyncPoller<PollResult<Void>, Void> beginActivate(String resourceGroupName, String accountName,
+        String livePipelineName, Context context) {
         return beginActivateAsync(resourceGroupName, accountName, livePipelineName, context).getSyncPoller();
     }
 
@@ -1339,12 +1090,11 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> activateAsync(String resourceGroupName, String accountName, String livePipelineName) {
-        return beginActivateAsync(resourceGroupName, accountName, livePipelineName)
-            .last()
+        return beginActivateAsync(resourceGroupName, accountName, livePipelineName).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
@@ -1358,13 +1108,12 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> activateAsync(
-        String resourceGroupName, String accountName, String livePipelineName, Context context) {
-        return beginActivateAsync(resourceGroupName, accountName, livePipelineName, context)
-            .last()
+    private Mono<Void> activateAsync(String resourceGroupName, String accountName, String livePipelineName,
+        Context context) {
+        return beginActivateAsync(resourceGroupName, accountName, livePipelineName, context).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
@@ -1408,22 +1157,18 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> deactivateWithResponseAsync(
-        String resourceGroupName, String accountName, String livePipelineName) {
+    private Mono<Response<Flux<ByteBuffer>>> deactivateWithResponseAsync(String resourceGroupName, String accountName,
+        String livePipelineName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1438,18 +1183,8 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .deactivate(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            accountName,
-                            livePipelineName,
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
+            .withContext(context -> service.deactivate(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                resourceGroupName, accountName, livePipelineName, this.client.getApiVersion(), accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -1463,22 +1198,18 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> deactivateWithResponseAsync(
-        String resourceGroupName, String accountName, String livePipelineName, Context context) {
+    private Mono<Response<Flux<ByteBuffer>>> deactivateWithResponseAsync(String resourceGroupName, String accountName,
+        String livePipelineName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1493,16 +1224,8 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .deactivate(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                accountName,
-                livePipelineName,
-                this.client.getApiVersion(),
-                accept,
-                context);
+        return service.deactivate(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+            accountName, livePipelineName, this.client.getApiVersion(), accept, context);
     }
 
     /**
@@ -1514,16 +1237,15 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    private PollerFlux<PollResult<Void>, Void> beginDeactivateAsync(
-        String resourceGroupName, String accountName, String livePipelineName) {
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            deactivateWithResponseAsync(resourceGroupName, accountName, livePipelineName);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, Context.NONE);
+    private PollerFlux<PollResult<Void>, Void> beginDeactivateAsync(String resourceGroupName, String accountName,
+        String livePipelineName) {
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = deactivateWithResponseAsync(resourceGroupName, accountName, livePipelineName);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            this.client.getContext());
     }
 
     /**
@@ -1536,17 +1258,16 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    private PollerFlux<PollResult<Void>, Void> beginDeactivateAsync(
-        String resourceGroupName, String accountName, String livePipelineName, Context context) {
+    private PollerFlux<PollResult<Void>, Void> beginDeactivateAsync(String resourceGroupName, String accountName,
+        String livePipelineName, Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            deactivateWithResponseAsync(resourceGroupName, accountName, livePipelineName, context);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, context);
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = deactivateWithResponseAsync(resourceGroupName, accountName, livePipelineName, context);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            context);
     }
 
     /**
@@ -1558,11 +1279,11 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<Void>, Void> beginDeactivate(
-        String resourceGroupName, String accountName, String livePipelineName) {
+    public SyncPoller<PollResult<Void>, Void> beginDeactivate(String resourceGroupName, String accountName,
+        String livePipelineName) {
         return beginDeactivateAsync(resourceGroupName, accountName, livePipelineName).getSyncPoller();
     }
 
@@ -1576,11 +1297,11 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<Void>, Void> beginDeactivate(
-        String resourceGroupName, String accountName, String livePipelineName, Context context) {
+    public SyncPoller<PollResult<Void>, Void> beginDeactivate(String resourceGroupName, String accountName,
+        String livePipelineName, Context context) {
         return beginDeactivateAsync(resourceGroupName, accountName, livePipelineName, context).getSyncPoller();
     }
 
@@ -1593,12 +1314,11 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> deactivateAsync(String resourceGroupName, String accountName, String livePipelineName) {
-        return beginDeactivateAsync(resourceGroupName, accountName, livePipelineName)
-            .last()
+        return beginDeactivateAsync(resourceGroupName, accountName, livePipelineName).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
@@ -1612,13 +1332,12 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> deactivateAsync(
-        String resourceGroupName, String accountName, String livePipelineName, Context context) {
-        return beginDeactivateAsync(resourceGroupName, accountName, livePipelineName, context)
-            .last()
+    private Mono<Void> deactivateAsync(String resourceGroupName, String accountName, String livePipelineName,
+        Context context) {
+        return beginDeactivateAsync(resourceGroupName, accountName, livePipelineName, context).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
@@ -1660,7 +1379,8 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of LivePipeline items.
+     * @return a collection of LivePipeline items along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<LivePipelineInner>> listNextSinglePageAsync(String nextLink) {
@@ -1668,23 +1388,13 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
             return Mono.error(new IllegalArgumentException("Parameter nextLink is required and cannot be null."));
         }
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         final String accept = "application/json";
-        return FluxUtil
-            .withContext(context -> service.listNext(nextLink, this.client.getEndpoint(), accept, context))
-            .<PagedResponse<LivePipelineInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null))
+        return FluxUtil.withContext(context -> service.listNext(nextLink, this.client.getEndpoint(), accept, context))
+            .<PagedResponse<LivePipelineInner>>map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(),
+                res.getHeaders(), res.getValue().value(), res.getValue().nextLink(), null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -1696,7 +1406,8 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of LivePipeline items.
+     * @return a collection of LivePipeline items along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<LivePipelineInner>> listNextSinglePageAsync(String nextLink, Context context) {
@@ -1704,23 +1415,13 @@ public final class LivePipelinesClientImpl implements LivePipelinesClient {
             return Mono.error(new IllegalArgumentException("Parameter nextLink is required and cannot be null."));
         }
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .listNext(nextLink, this.client.getEndpoint(), accept, context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null));
+        return service.listNext(nextLink, this.client.getEndpoint(), accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), res.getValue().nextLink(), null));
     }
 }

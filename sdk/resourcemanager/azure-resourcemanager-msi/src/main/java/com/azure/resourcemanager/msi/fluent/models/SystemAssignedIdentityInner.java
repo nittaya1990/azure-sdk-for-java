@@ -5,62 +5,65 @@
 package com.azure.resourcemanager.msi.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.management.ProxyResource;
+import com.azure.core.management.SystemData;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
 
-/** Describes a system assigned identity resource. */
-@JsonFlatten
+/**
+ * Describes a system assigned identity resource.
+ */
 @Fluent
-public class SystemAssignedIdentityInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SystemAssignedIdentityInner.class);
-
+public final class SystemAssignedIdentityInner extends ProxyResource {
     /*
      * The geo-location where the resource lives
      */
-    @JsonProperty(value = "location", required = true)
     private String location;
 
     /*
      * Resource tags
      */
-    @JsonProperty(value = "tags")
     private Map<String, String> tags;
 
     /*
-     * The id of the tenant which the identity belongs to.
+     * The properties associated with the identity.
      */
-    @JsonProperty(value = "properties.tenantId", access = JsonProperty.Access.WRITE_ONLY)
-    private UUID tenantId;
+    private SystemAssignedIdentityProperties innerProperties;
 
     /*
-     * The id of the service principal object associated with the created
-     * identity.
+     * Azure Resource Manager metadata containing createdBy and modifiedBy information.
      */
-    @JsonProperty(value = "properties.principalId", access = JsonProperty.Access.WRITE_ONLY)
-    private UUID principalId;
+    private SystemData systemData;
 
     /*
-     * The id of the app associated with the identity. This is a random
-     * generated UUID by MSI.
+     * Fully qualified resource Id for the resource.
      */
-    @JsonProperty(value = "properties.clientId", access = JsonProperty.Access.WRITE_ONLY)
-    private UUID clientId;
+    private String id;
 
     /*
-     * The ManagedServiceIdentity DataPlane URL that can be queried to obtain
-     * the identity credentials.
+     * The name of the resource.
      */
-    @JsonProperty(value = "properties.clientSecretUrl", access = JsonProperty.Access.WRITE_ONLY)
-    private String clientSecretUrl;
+    private String name;
+
+    /*
+     * The type of the resource.
+     */
+    private String type;
+
+    /**
+     * Creates an instance of SystemAssignedIdentityInner class.
+     */
+    public SystemAssignedIdentityInner() {
+    }
 
     /**
      * Get the location property: The geo-location where the resource lives.
-     *
+     * 
      * @return the location value.
      */
     public String location() {
@@ -69,7 +72,7 @@ public class SystemAssignedIdentityInner extends ProxyResource {
 
     /**
      * Set the location property: The geo-location where the resource lives.
-     *
+     * 
      * @param location the location value to set.
      * @return the SystemAssignedIdentityInner object itself.
      */
@@ -80,7 +83,7 @@ public class SystemAssignedIdentityInner extends ProxyResource {
 
     /**
      * Get the tags property: Resource tags.
-     *
+     * 
      * @return the tags value.
      */
     public Map<String, String> tags() {
@@ -89,7 +92,7 @@ public class SystemAssignedIdentityInner extends ProxyResource {
 
     /**
      * Set the tags property: Resource tags.
-     *
+     * 
      * @param tags the tags value to set.
      * @return the SystemAssignedIdentityInner object itself.
      */
@@ -99,54 +102,158 @@ public class SystemAssignedIdentityInner extends ProxyResource {
     }
 
     /**
+     * Get the innerProperties property: The properties associated with the identity.
+     * 
+     * @return the innerProperties value.
+     */
+    private SystemAssignedIdentityProperties innerProperties() {
+        return this.innerProperties;
+    }
+
+    /**
+     * Get the systemData property: Azure Resource Manager metadata containing createdBy and modifiedBy information.
+     * 
+     * @return the systemData value.
+     */
+    public SystemData systemData() {
+        return this.systemData;
+    }
+
+    /**
+     * Get the id property: Fully qualified resource Id for the resource.
+     * 
+     * @return the id value.
+     */
+    @Override
+    public String id() {
+        return this.id;
+    }
+
+    /**
+     * Get the name property: The name of the resource.
+     * 
+     * @return the name value.
+     */
+    @Override
+    public String name() {
+        return this.name;
+    }
+
+    /**
+     * Get the type property: The type of the resource.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
      * Get the tenantId property: The id of the tenant which the identity belongs to.
-     *
+     * 
      * @return the tenantId value.
      */
     public UUID tenantId() {
-        return this.tenantId;
+        return this.innerProperties() == null ? null : this.innerProperties().tenantId();
     }
 
     /**
      * Get the principalId property: The id of the service principal object associated with the created identity.
-     *
+     * 
      * @return the principalId value.
      */
     public UUID principalId() {
-        return this.principalId;
+        return this.innerProperties() == null ? null : this.innerProperties().principalId();
     }
 
     /**
      * Get the clientId property: The id of the app associated with the identity. This is a random generated UUID by
      * MSI.
-     *
+     * 
      * @return the clientId value.
      */
     public UUID clientId() {
-        return this.clientId;
+        return this.innerProperties() == null ? null : this.innerProperties().clientId();
     }
 
     /**
      * Get the clientSecretUrl property: The ManagedServiceIdentity DataPlane URL that can be queried to obtain the
      * identity credentials.
-     *
+     * 
      * @return the clientSecretUrl value.
      */
     public String clientSecretUrl() {
-        return this.clientSecretUrl;
+        return this.innerProperties() == null ? null : this.innerProperties().clientSecretUrl();
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (location() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property location in model SystemAssignedIdentityInner"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property location in model SystemAssignedIdentityInner"));
         }
+        if (innerProperties() != null) {
+            innerProperties().validate();
+        }
+    }
+
+    private static final ClientLogger LOGGER = new ClientLogger(SystemAssignedIdentityInner.class);
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeStringField("location", this.location);
+        jsonWriter.writeMapField("tags", this.tags, (writer, element) -> writer.writeString(element));
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of SystemAssignedIdentityInner from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of SystemAssignedIdentityInner if the JsonReader was pointing to an instance of it, or null
+     * if it was pointing to JSON null.
+     * @throws IllegalStateException If the deserialized JSON object was missing any required properties.
+     * @throws IOException If an error occurs while reading the SystemAssignedIdentityInner.
+     */
+    public static SystemAssignedIdentityInner fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            SystemAssignedIdentityInner deserializedSystemAssignedIdentityInner = new SystemAssignedIdentityInner();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("id".equals(fieldName)) {
+                    deserializedSystemAssignedIdentityInner.id = reader.getString();
+                } else if ("name".equals(fieldName)) {
+                    deserializedSystemAssignedIdentityInner.name = reader.getString();
+                } else if ("type".equals(fieldName)) {
+                    deserializedSystemAssignedIdentityInner.type = reader.getString();
+                } else if ("location".equals(fieldName)) {
+                    deserializedSystemAssignedIdentityInner.location = reader.getString();
+                } else if ("tags".equals(fieldName)) {
+                    Map<String, String> tags = reader.readMap(reader1 -> reader1.getString());
+                    deserializedSystemAssignedIdentityInner.tags = tags;
+                } else if ("properties".equals(fieldName)) {
+                    deserializedSystemAssignedIdentityInner.innerProperties
+                        = SystemAssignedIdentityProperties.fromJson(reader);
+                } else if ("systemData".equals(fieldName)) {
+                    deserializedSystemAssignedIdentityInner.systemData = SystemData.fromJson(reader);
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedSystemAssignedIdentityInner;
+        });
     }
 }

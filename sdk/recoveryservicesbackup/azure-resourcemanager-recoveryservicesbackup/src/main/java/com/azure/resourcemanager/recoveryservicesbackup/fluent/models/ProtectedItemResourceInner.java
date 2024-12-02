@@ -6,17 +6,15 @@ package com.azure.resourcemanager.recoveryservicesbackup.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.Resource;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.recoveryservicesbackup.models.ProtectedItem;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
-/** Base class for backup items. */
+/**
+ * Base class for backup items.
+ */
 @Fluent
 public final class ProtectedItemResourceInner extends Resource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ProtectedItemResourceInner.class);
-
     /*
      * ProtectedItemResource properties
      */
@@ -30,8 +28,14 @@ public final class ProtectedItemResourceInner extends Resource {
     private String etag;
 
     /**
+     * Creates an instance of ProtectedItemResourceInner class.
+     */
+    public ProtectedItemResourceInner() {
+    }
+
+    /**
      * Get the properties property: ProtectedItemResource properties.
-     *
+     * 
      * @return the properties value.
      */
     public ProtectedItem properties() {
@@ -40,7 +44,7 @@ public final class ProtectedItemResourceInner extends Resource {
 
     /**
      * Set the properties property: ProtectedItemResource properties.
-     *
+     * 
      * @param properties the properties value to set.
      * @return the ProtectedItemResourceInner object itself.
      */
@@ -51,7 +55,7 @@ public final class ProtectedItemResourceInner extends Resource {
 
     /**
      * Get the etag property: Optional ETag.
-     *
+     * 
      * @return the etag value.
      */
     public String etag() {
@@ -60,7 +64,7 @@ public final class ProtectedItemResourceInner extends Resource {
 
     /**
      * Set the etag property: Optional ETag.
-     *
+     * 
      * @param etag the etag value to set.
      * @return the ProtectedItemResourceInner object itself.
      */
@@ -69,14 +73,18 @@ public final class ProtectedItemResourceInner extends Resource {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ProtectedItemResourceInner withLocation(String location) {
         super.withLocation(location);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ProtectedItemResourceInner withTags(Map<String, String> tags) {
         super.withTags(tags);
@@ -85,7 +93,7 @@ public final class ProtectedItemResourceInner extends Resource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

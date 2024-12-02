@@ -6,6 +6,7 @@ package com.azure.resourcemanager.consumption.implementation;
 
 import com.azure.resourcemanager.consumption.fluent.models.ReservationRecommendationInner;
 import com.azure.resourcemanager.consumption.models.ReservationRecommendation;
+import com.azure.resourcemanager.consumption.models.ReservationRecommendationKind;
 import java.util.Collections;
 import java.util.Map;
 
@@ -14,19 +15,26 @@ public final class ReservationRecommendationImpl implements ReservationRecommend
 
     private final com.azure.resourcemanager.consumption.ConsumptionManager serviceManager;
 
-    ReservationRecommendationImpl(
-        ReservationRecommendationInner innerObject,
+    ReservationRecommendationImpl(ReservationRecommendationInner innerObject,
         com.azure.resourcemanager.consumption.ConsumptionManager serviceManager) {
         this.innerObject = innerObject;
         this.serviceManager = serviceManager;
     }
 
-    public String location() {
-        return this.innerModel().location();
+    public String id() {
+        return this.innerModel().id();
     }
 
-    public String sku() {
-        return this.innerModel().sku();
+    public String name() {
+        return this.innerModel().name();
+    }
+
+    public String type() {
+        return this.innerModel().type();
+    }
+
+    public ReservationRecommendationKind kind() {
+        return this.innerModel().kind();
     }
 
     public String etag() {
@@ -40,6 +48,14 @@ public final class ReservationRecommendationImpl implements ReservationRecommend
         } else {
             return Collections.emptyMap();
         }
+    }
+
+    public String location() {
+        return this.innerModel().location();
+    }
+
+    public String sku() {
+        return this.innerModel().sku();
     }
 
     public ReservationRecommendationInner innerModel() {

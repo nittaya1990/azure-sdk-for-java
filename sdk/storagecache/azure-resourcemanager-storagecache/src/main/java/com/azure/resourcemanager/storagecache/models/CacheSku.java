@@ -5,24 +5,28 @@
 package com.azure.resourcemanager.storagecache.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** SKU for the Cache. */
+/**
+ * SKU for the cache.
+ */
 @Fluent
 public final class CacheSku {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CacheSku.class);
-
     /*
-     * SKU name for this Cache.
+     * SKU name for this cache.
      */
     @JsonProperty(value = "name")
     private String name;
 
     /**
-     * Get the name property: SKU name for this Cache.
-     *
+     * Creates an instance of CacheSku class.
+     */
+    public CacheSku() {
+    }
+
+    /**
+     * Get the name property: SKU name for this cache.
+     * 
      * @return the name value.
      */
     public String name() {
@@ -30,8 +34,8 @@ public final class CacheSku {
     }
 
     /**
-     * Set the name property: SKU name for this Cache.
-     *
+     * Set the name property: SKU name for this cache.
+     * 
      * @param name the name value to set.
      * @return the CacheSku object itself.
      */
@@ -42,7 +46,7 @@ public final class CacheSku {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

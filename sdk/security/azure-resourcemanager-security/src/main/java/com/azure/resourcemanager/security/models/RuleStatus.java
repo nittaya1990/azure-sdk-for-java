@@ -8,20 +8,37 @@ import com.azure.core.util.ExpandableStringEnum;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.Collection;
 
-/** Defines values for RuleStatus. */
+/**
+ * The rule result status.
+ */
 public final class RuleStatus extends ExpandableStringEnum<RuleStatus> {
-    /** Static value NonFinding for RuleStatus. */
+    /**
+     * Static value NonFinding for RuleStatus.
+     */
     public static final RuleStatus NON_FINDING = fromString("NonFinding");
 
-    /** Static value Finding for RuleStatus. */
+    /**
+     * Static value Finding for RuleStatus.
+     */
     public static final RuleStatus FINDING = fromString("Finding");
 
-    /** Static value InternalError for RuleStatus. */
+    /**
+     * Static value InternalError for RuleStatus.
+     */
     public static final RuleStatus INTERNAL_ERROR = fromString("InternalError");
 
     /**
+     * Creates a new instance of RuleStatus value.
+     * 
+     * @deprecated Use the {@link #fromString(String)} factory method.
+     */
+    @Deprecated
+    public RuleStatus() {
+    }
+
+    /**
      * Creates or finds a RuleStatus from its string representation.
-     *
+     * 
      * @param name a name to look for.
      * @return the corresponding RuleStatus.
      */
@@ -30,7 +47,11 @@ public final class RuleStatus extends ExpandableStringEnum<RuleStatus> {
         return fromString(name, RuleStatus.class);
     }
 
-    /** @return known RuleStatus values. */
+    /**
+     * Gets known RuleStatus values.
+     * 
+     * @return known RuleStatus values.
+     */
     public static Collection<RuleStatus> values() {
         return values(RuleStatus.class);
     }

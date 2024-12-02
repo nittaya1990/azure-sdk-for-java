@@ -20,6 +20,7 @@ import com.azure.resourcemanager.kusto.fluent.models.LanguageExtensionInner;
 import com.azure.resourcemanager.kusto.fluent.models.OutboundNetworkDependenciesEndpointInner;
 import com.azure.resourcemanager.kusto.fluent.models.SkuDescriptionInner;
 import com.azure.resourcemanager.kusto.models.ClusterCheckNameRequest;
+import com.azure.resourcemanager.kusto.models.ClusterMigrateRequest;
 import com.azure.resourcemanager.kusto.models.ClusterUpdate;
 import com.azure.resourcemanager.kusto.models.LanguageExtensionsList;
 
@@ -28,7 +29,22 @@ public interface ClustersClient {
     /**
      * Gets a Kusto cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param clusterName The name of the Kusto cluster.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a Kusto cluster along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<ClusterInner> getByResourceGroupWithResponse(String resourceGroupName, String clusterName,
+        Context context);
+
+    /**
+     * Gets a Kusto cluster.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
@@ -39,43 +55,24 @@ public interface ClustersClient {
     ClusterInner getByResourceGroup(String resourceGroupName, String clusterName);
 
     /**
-     * Gets a Kusto cluster.
-     *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
-     * @param clusterName The name of the Kusto cluster.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Kusto cluster.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<ClusterInner> getByResourceGroupWithResponse(
-        String resourceGroupName, String clusterName, Context context);
-
-    /**
      * Create or update a Kusto cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param parameters The Kusto cluster parameters supplied to the CreateOrUpdate operation.
-     * @param ifMatch The ETag of the cluster. Omit this value to always overwrite the current cluster. Specify the
-     *     last-seen ETag value to prevent accidentally overwriting concurrent changes.
-     * @param ifNoneMatch Set to '*' to allow a new cluster to be created, but to prevent updating an existing cluster.
-     *     Other values will result in a 412 Pre-condition Failed response.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto cluster.
+     * @return the {@link SyncPoller} for polling of class representing a Kusto cluster.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<ClusterInner>, ClusterInner> beginCreateOrUpdate(
-        String resourceGroupName, String clusterName, ClusterInner parameters, String ifMatch, String ifNoneMatch);
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<ClusterInner>, ClusterInner> beginCreateOrUpdate(String resourceGroupName, String clusterName,
+        ClusterInner parameters);
 
     /**
      * Create or update a Kusto cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param parameters The Kusto cluster parameters supplied to the CreateOrUpdate operation.
      * @param ifMatch The ETag of the cluster. Omit this value to always overwrite the current cluster. Specify the
@@ -86,40 +83,16 @@ public interface ClustersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto cluster.
+     * @return the {@link SyncPoller} for polling of class representing a Kusto cluster.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<ClusterInner>, ClusterInner> beginCreateOrUpdate(
-        String resourceGroupName,
-        String clusterName,
-        ClusterInner parameters,
-        String ifMatch,
-        String ifNoneMatch,
-        Context context);
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<ClusterInner>, ClusterInner> beginCreateOrUpdate(String resourceGroupName, String clusterName,
+        ClusterInner parameters, String ifMatch, String ifNoneMatch, Context context);
 
     /**
      * Create or update a Kusto cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
-     * @param clusterName The name of the Kusto cluster.
-     * @param parameters The Kusto cluster parameters supplied to the CreateOrUpdate operation.
-     * @param ifMatch The ETag of the cluster. Omit this value to always overwrite the current cluster. Specify the
-     *     last-seen ETag value to prevent accidentally overwriting concurrent changes.
-     * @param ifNoneMatch Set to '*' to allow a new cluster to be created, but to prevent updating an existing cluster.
-     *     Other values will result in a 412 Pre-condition Failed response.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto cluster.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    ClusterInner createOrUpdate(
-        String resourceGroupName, String clusterName, ClusterInner parameters, String ifMatch, String ifNoneMatch);
-
-    /**
-     * Create or update a Kusto cluster.
-     *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param parameters The Kusto cluster parameters supplied to the CreateOrUpdate operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -133,7 +106,7 @@ public interface ClustersClient {
     /**
      * Create or update a Kusto cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param parameters The Kusto cluster parameters supplied to the CreateOrUpdate operation.
      * @param ifMatch The ETag of the cluster. Omit this value to always overwrite the current cluster. Specify the
@@ -147,35 +120,28 @@ public interface ClustersClient {
      * @return class representing a Kusto cluster.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    ClusterInner createOrUpdate(
-        String resourceGroupName,
-        String clusterName,
-        ClusterInner parameters,
-        String ifMatch,
-        String ifNoneMatch,
-        Context context);
+    ClusterInner createOrUpdate(String resourceGroupName, String clusterName, ClusterInner parameters, String ifMatch,
+        String ifNoneMatch, Context context);
 
     /**
      * Update a Kusto cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param parameters The Kusto cluster parameters supplied to the Update operation.
-     * @param ifMatch The ETag of the cluster. Omit this value to always overwrite the current cluster. Specify the
-     *     last-seen ETag value to prevent accidentally overwriting concurrent changes.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto cluster.
+     * @return the {@link SyncPoller} for polling of class representing a Kusto cluster.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<ClusterInner>, ClusterInner> beginUpdate(
-        String resourceGroupName, String clusterName, ClusterUpdate parameters, String ifMatch);
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<ClusterInner>, ClusterInner> beginUpdate(String resourceGroupName, String clusterName,
+        ClusterUpdate parameters);
 
     /**
      * Update a Kusto cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param parameters The Kusto cluster parameters supplied to the Update operation.
      * @param ifMatch The ETag of the cluster. Omit this value to always overwrite the current cluster. Specify the
@@ -184,32 +150,16 @@ public interface ClustersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto cluster.
+     * @return the {@link SyncPoller} for polling of class representing a Kusto cluster.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<ClusterInner>, ClusterInner> beginUpdate(
-        String resourceGroupName, String clusterName, ClusterUpdate parameters, String ifMatch, Context context);
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<ClusterInner>, ClusterInner> beginUpdate(String resourceGroupName, String clusterName,
+        ClusterUpdate parameters, String ifMatch, Context context);
 
     /**
      * Update a Kusto cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
-     * @param clusterName The name of the Kusto cluster.
-     * @param parameters The Kusto cluster parameters supplied to the Update operation.
-     * @param ifMatch The ETag of the cluster. Omit this value to always overwrite the current cluster. Specify the
-     *     last-seen ETag value to prevent accidentally overwriting concurrent changes.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto cluster.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    ClusterInner update(String resourceGroupName, String clusterName, ClusterUpdate parameters, String ifMatch);
-
-    /**
-     * Update a Kusto cluster.
-     *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param parameters The Kusto cluster parameters supplied to the Update operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -223,7 +173,7 @@ public interface ClustersClient {
     /**
      * Update a Kusto cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param parameters The Kusto cluster parameters supplied to the Update operation.
      * @param ifMatch The ETag of the cluster. Omit this value to always overwrite the current cluster. Specify the
@@ -235,40 +185,40 @@ public interface ClustersClient {
      * @return class representing a Kusto cluster.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    ClusterInner update(
-        String resourceGroupName, String clusterName, ClusterUpdate parameters, String ifMatch, Context context);
+    ClusterInner update(String resourceGroupName, String clusterName, ClusterUpdate parameters, String ifMatch,
+        Context context);
 
     /**
      * Deletes a Kusto cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<Void>, Void> beginDelete(String resourceGroupName, String clusterName);
 
     /**
      * Deletes a Kusto cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<Void>, Void> beginDelete(String resourceGroupName, String clusterName, Context context);
 
     /**
      * Deletes a Kusto cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
@@ -280,7 +230,7 @@ public interface ClustersClient {
     /**
      * Deletes a Kusto cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -293,34 +243,34 @@ public interface ClustersClient {
     /**
      * Stops a Kusto cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<Void>, Void> beginStop(String resourceGroupName, String clusterName);
 
     /**
      * Stops a Kusto cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<Void>, Void> beginStop(String resourceGroupName, String clusterName, Context context);
 
     /**
      * Stops a Kusto cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
@@ -332,7 +282,7 @@ public interface ClustersClient {
     /**
      * Stops a Kusto cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -345,34 +295,34 @@ public interface ClustersClient {
     /**
      * Starts a Kusto cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<Void>, Void> beginStart(String resourceGroupName, String clusterName);
 
     /**
      * Starts a Kusto cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<Void>, Void> beginStart(String resourceGroupName, String clusterName, Context context);
 
     /**
      * Starts a Kusto cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
@@ -384,7 +334,7 @@ public interface ClustersClient {
     /**
      * Starts a Kusto cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -395,14 +345,73 @@ public interface ClustersClient {
     void start(String resourceGroupName, String clusterName, Context context);
 
     /**
+     * Migrate data from a Kusto cluster to another cluster.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param clusterName The name of the Kusto cluster.
+     * @param clusterMigrateRequest The cluster migrate request parameters.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of long-running operation.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<Void>, Void> beginMigrate(String resourceGroupName, String clusterName,
+        ClusterMigrateRequest clusterMigrateRequest);
+
+    /**
+     * Migrate data from a Kusto cluster to another cluster.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param clusterName The name of the Kusto cluster.
+     * @param clusterMigrateRequest The cluster migrate request parameters.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of long-running operation.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<Void>, Void> beginMigrate(String resourceGroupName, String clusterName,
+        ClusterMigrateRequest clusterMigrateRequest, Context context);
+
+    /**
+     * Migrate data from a Kusto cluster to another cluster.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param clusterName The name of the Kusto cluster.
+     * @param clusterMigrateRequest The cluster migrate request parameters.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    void migrate(String resourceGroupName, String clusterName, ClusterMigrateRequest clusterMigrateRequest);
+
+    /**
+     * Migrate data from a Kusto cluster to another cluster.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param clusterName The name of the Kusto cluster.
+     * @param clusterMigrateRequest The cluster migrate request parameters.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    void migrate(String resourceGroupName, String clusterName, ClusterMigrateRequest clusterMigrateRequest,
+        Context context);
+
+    /**
      * Returns a list of databases that are owned by this cluster and were followed by another cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto database principals operation response.
+     * @return the list Kusto database principals operation response as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<FollowerDatabaseDefinitionInner> listFollowerDatabases(String resourceGroupName, String clusterName);
@@ -410,56 +419,53 @@ public interface ClustersClient {
     /**
      * Returns a list of databases that are owned by this cluster and were followed by another cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto database principals operation response.
+     * @return the list Kusto database principals operation response as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<FollowerDatabaseDefinitionInner> listFollowerDatabases(
-        String resourceGroupName, String clusterName, Context context);
+    PagedIterable<FollowerDatabaseDefinitionInner> listFollowerDatabases(String resourceGroupName, String clusterName,
+        Context context);
 
     /**
      * Detaches all followers of a database owned by this cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param followerDatabaseToRemove The follower databases properties to remove.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<Void>, Void> beginDetachFollowerDatabases(
-        String resourceGroupName, String clusterName, FollowerDatabaseDefinitionInner followerDatabaseToRemove);
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<Void>, Void> beginDetachFollowerDatabases(String resourceGroupName, String clusterName,
+        FollowerDatabaseDefinitionInner followerDatabaseToRemove);
 
     /**
      * Detaches all followers of a database owned by this cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param followerDatabaseToRemove The follower databases properties to remove.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<Void>, Void> beginDetachFollowerDatabases(
-        String resourceGroupName,
-        String clusterName,
-        FollowerDatabaseDefinitionInner followerDatabaseToRemove,
-        Context context);
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<Void>, Void> beginDetachFollowerDatabases(String resourceGroupName, String clusterName,
+        FollowerDatabaseDefinitionInner followerDatabaseToRemove, Context context);
 
     /**
      * Detaches all followers of a database owned by this cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param followerDatabaseToRemove The follower databases properties to remove.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -467,13 +473,13 @@ public interface ClustersClient {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    void detachFollowerDatabases(
-        String resourceGroupName, String clusterName, FollowerDatabaseDefinitionInner followerDatabaseToRemove);
+    void detachFollowerDatabases(String resourceGroupName, String clusterName,
+        FollowerDatabaseDefinitionInner followerDatabaseToRemove);
 
     /**
      * Detaches all followers of a database owned by this cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param followerDatabaseToRemove The follower databases properties to remove.
      * @param context The context to associate with this operation.
@@ -482,45 +488,42 @@ public interface ClustersClient {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    void detachFollowerDatabases(
-        String resourceGroupName,
-        String clusterName,
-        FollowerDatabaseDefinitionInner followerDatabaseToRemove,
-        Context context);
+    void detachFollowerDatabases(String resourceGroupName, String clusterName,
+        FollowerDatabaseDefinitionInner followerDatabaseToRemove, Context context);
 
     /**
      * Diagnoses network connectivity status for external resources on which the service is dependent on.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<DiagnoseVirtualNetworkResultInner>, DiagnoseVirtualNetworkResultInner>
         beginDiagnoseVirtualNetwork(String resourceGroupName, String clusterName);
 
     /**
      * Diagnoses network connectivity status for external resources on which the service is dependent on.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<DiagnoseVirtualNetworkResultInner>, DiagnoseVirtualNetworkResultInner>
         beginDiagnoseVirtualNetwork(String resourceGroupName, String clusterName, Context context);
 
     /**
      * Diagnoses network connectivity status for external resources on which the service is dependent on.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
@@ -533,7 +536,7 @@ public interface ClustersClient {
     /**
      * Diagnoses network connectivity status for external resources on which the service is dependent on.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -542,17 +545,17 @@ public interface ClustersClient {
      * @return the response.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    DiagnoseVirtualNetworkResultInner diagnoseVirtualNetwork(
-        String resourceGroupName, String clusterName, Context context);
+    DiagnoseVirtualNetworkResultInner diagnoseVirtualNetwork(String resourceGroupName, String clusterName,
+        Context context);
 
     /**
      * Lists all Kusto clusters within a resource group.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto clusters operation response.
+     * @return the list Kusto clusters operation response as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<ClusterInner> listByResourceGroup(String resourceGroupName);
@@ -560,12 +563,12 @@ public interface ClustersClient {
     /**
      * Lists all Kusto clusters within a resource group.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto clusters operation response.
+     * @return the list Kusto clusters operation response as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<ClusterInner> listByResourceGroup(String resourceGroupName, Context context);
@@ -575,7 +578,7 @@ public interface ClustersClient {
      *
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto clusters operation response.
+     * @return the list Kusto clusters operation response as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<ClusterInner> list();
@@ -587,7 +590,7 @@ public interface ClustersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto clusters operation response.
+     * @return the list Kusto clusters operation response as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<ClusterInner> list(Context context);
@@ -597,7 +600,7 @@ public interface ClustersClient {
      *
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of the EngagementFabric SKU descriptions.
+     * @return the list of the EngagementFabric SKU descriptions as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<SkuDescriptionInner> listSkus();
@@ -609,7 +612,7 @@ public interface ClustersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of the EngagementFabric SKU descriptions.
+     * @return the list of the EngagementFabric SKU descriptions as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<SkuDescriptionInner> listSkus(Context context);
@@ -617,7 +620,22 @@ public interface ClustersClient {
     /**
      * Checks that the cluster name is valid and is not already in use.
      *
-     * @param location Azure location (region) name.
+     * @param location The name of Azure region.
+     * @param clusterName The name of the cluster.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the result returned from a check name availability request along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<CheckNameResultInner> checkNameAvailabilityWithResponse(String location,
+        ClusterCheckNameRequest clusterName, Context context);
+
+    /**
+     * Checks that the cluster name is valid and is not already in use.
+     *
+     * @param location The name of Azure region.
      * @param clusterName The name of the cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
@@ -628,29 +646,14 @@ public interface ClustersClient {
     CheckNameResultInner checkNameAvailability(String location, ClusterCheckNameRequest clusterName);
 
     /**
-     * Checks that the cluster name is valid and is not already in use.
-     *
-     * @param location Azure location (region) name.
-     * @param clusterName The name of the cluster.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the result returned from a check name availability request.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<CheckNameResultInner> checkNameAvailabilityWithResponse(
-        String location, ClusterCheckNameRequest clusterName, Context context);
-
-    /**
      * Returns the SKUs available for the provided resource.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of available SKUs for a Kusto Cluster.
+     * @return list of available SKUs for a Kusto Cluster as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<AzureResourceSkuInner> listSkusByResource(String resourceGroupName, String clusterName);
@@ -658,56 +661,58 @@ public interface ClustersClient {
     /**
      * Returns the SKUs available for the provided resource.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of available SKUs for a Kusto Cluster.
+     * @return list of available SKUs for a Kusto Cluster as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<AzureResourceSkuInner> listSkusByResource(
-        String resourceGroupName, String clusterName, Context context);
+    PagedIterable<AzureResourceSkuInner> listSkusByResource(String resourceGroupName, String clusterName,
+        Context context);
 
     /**
      * Gets the network endpoints of all outbound dependencies of a Kusto cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the network endpoints of all outbound dependencies of a Kusto cluster.
+     * @return the network endpoints of all outbound dependencies of a Kusto cluster as paginated response with {@link
+     *     PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<OutboundNetworkDependenciesEndpointInner> listOutboundNetworkDependenciesEndpoints(
-        String resourceGroupName, String clusterName);
+    PagedIterable<OutboundNetworkDependenciesEndpointInner>
+        listOutboundNetworkDependenciesEndpoints(String resourceGroupName, String clusterName);
 
     /**
      * Gets the network endpoints of all outbound dependencies of a Kusto cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the network endpoints of all outbound dependencies of a Kusto cluster.
+     * @return the network endpoints of all outbound dependencies of a Kusto cluster as paginated response with {@link
+     *     PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<OutboundNetworkDependenciesEndpointInner> listOutboundNetworkDependenciesEndpoints(
-        String resourceGroupName, String clusterName, Context context);
+    PagedIterable<OutboundNetworkDependenciesEndpointInner>
+        listOutboundNetworkDependenciesEndpoints(String resourceGroupName, String clusterName, Context context);
 
     /**
      * Returns a list of language extensions that can run within KQL queries.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of language extension objects.
+     * @return the list of language extension objects as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<LanguageExtensionInner> listLanguageExtensions(String resourceGroupName, String clusterName);
@@ -715,116 +720,113 @@ public interface ClustersClient {
     /**
      * Returns a list of language extensions that can run within KQL queries.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of language extension objects.
+     * @return the list of language extension objects as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<LanguageExtensionInner> listLanguageExtensions(
-        String resourceGroupName, String clusterName, Context context);
-
-    /**
-     * Add a list of language extensions that can run within KQL queries.
-     *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
-     * @param clusterName The name of the Kusto cluster.
-     * @param languageExtensionsToAdd The language extensions to add.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<Void>, Void> beginAddLanguageExtensions(
-        String resourceGroupName, String clusterName, LanguageExtensionsList languageExtensionsToAdd);
-
-    /**
-     * Add a list of language extensions that can run within KQL queries.
-     *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
-     * @param clusterName The name of the Kusto cluster.
-     * @param languageExtensionsToAdd The language extensions to add.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<Void>, Void> beginAddLanguageExtensions(
-        String resourceGroupName, String clusterName, LanguageExtensionsList languageExtensionsToAdd, Context context);
-
-    /**
-     * Add a list of language extensions that can run within KQL queries.
-     *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
-     * @param clusterName The name of the Kusto cluster.
-     * @param languageExtensionsToAdd The language extensions to add.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    void addLanguageExtensions(
-        String resourceGroupName, String clusterName, LanguageExtensionsList languageExtensionsToAdd);
-
-    /**
-     * Add a list of language extensions that can run within KQL queries.
-     *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
-     * @param clusterName The name of the Kusto cluster.
-     * @param languageExtensionsToAdd The language extensions to add.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    void addLanguageExtensions(
-        String resourceGroupName, String clusterName, LanguageExtensionsList languageExtensionsToAdd, Context context);
-
-    /**
-     * Remove a list of language extensions that can run within KQL queries.
-     *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
-     * @param clusterName The name of the Kusto cluster.
-     * @param languageExtensionsToRemove The language extensions to remove.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<Void>, Void> beginRemoveLanguageExtensions(
-        String resourceGroupName, String clusterName, LanguageExtensionsList languageExtensionsToRemove);
-
-    /**
-     * Remove a list of language extensions that can run within KQL queries.
-     *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
-     * @param clusterName The name of the Kusto cluster.
-     * @param languageExtensionsToRemove The language extensions to remove.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<Void>, Void> beginRemoveLanguageExtensions(
-        String resourceGroupName,
-        String clusterName,
-        LanguageExtensionsList languageExtensionsToRemove,
+    PagedIterable<LanguageExtensionInner> listLanguageExtensions(String resourceGroupName, String clusterName,
         Context context);
 
     /**
+     * Add a list of language extensions that can run within KQL queries.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param clusterName The name of the Kusto cluster.
+     * @param languageExtensionsToAdd The language extensions to add.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of long-running operation.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<Void>, Void> beginAddLanguageExtensions(String resourceGroupName, String clusterName,
+        LanguageExtensionsList languageExtensionsToAdd);
+
+    /**
+     * Add a list of language extensions that can run within KQL queries.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param clusterName The name of the Kusto cluster.
+     * @param languageExtensionsToAdd The language extensions to add.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of long-running operation.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<Void>, Void> beginAddLanguageExtensions(String resourceGroupName, String clusterName,
+        LanguageExtensionsList languageExtensionsToAdd, Context context);
+
+    /**
+     * Add a list of language extensions that can run within KQL queries.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param clusterName The name of the Kusto cluster.
+     * @param languageExtensionsToAdd The language extensions to add.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    void addLanguageExtensions(String resourceGroupName, String clusterName,
+        LanguageExtensionsList languageExtensionsToAdd);
+
+    /**
+     * Add a list of language extensions that can run within KQL queries.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param clusterName The name of the Kusto cluster.
+     * @param languageExtensionsToAdd The language extensions to add.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    void addLanguageExtensions(String resourceGroupName, String clusterName,
+        LanguageExtensionsList languageExtensionsToAdd, Context context);
+
+    /**
      * Remove a list of language extensions that can run within KQL queries.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param clusterName The name of the Kusto cluster.
+     * @param languageExtensionsToRemove The language extensions to remove.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of long-running operation.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<Void>, Void> beginRemoveLanguageExtensions(String resourceGroupName, String clusterName,
+        LanguageExtensionsList languageExtensionsToRemove);
+
+    /**
+     * Remove a list of language extensions that can run within KQL queries.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param clusterName The name of the Kusto cluster.
+     * @param languageExtensionsToRemove The language extensions to remove.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of long-running operation.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<Void>, Void> beginRemoveLanguageExtensions(String resourceGroupName, String clusterName,
+        LanguageExtensionsList languageExtensionsToRemove, Context context);
+
+    /**
+     * Remove a list of language extensions that can run within KQL queries.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param languageExtensionsToRemove The language extensions to remove.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -832,13 +834,13 @@ public interface ClustersClient {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    void removeLanguageExtensions(
-        String resourceGroupName, String clusterName, LanguageExtensionsList languageExtensionsToRemove);
+    void removeLanguageExtensions(String resourceGroupName, String clusterName,
+        LanguageExtensionsList languageExtensionsToRemove);
 
     /**
      * Remove a list of language extensions that can run within KQL queries.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param languageExtensionsToRemove The language extensions to remove.
      * @param context The context to associate with this operation.
@@ -847,9 +849,6 @@ public interface ClustersClient {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    void removeLanguageExtensions(
-        String resourceGroupName,
-        String clusterName,
-        LanguageExtensionsList languageExtensionsToRemove,
-        Context context);
+    void removeLanguageExtensions(String resourceGroupName, String clusterName,
+        LanguageExtensionsList languageExtensionsToRemove, Context context);
 }

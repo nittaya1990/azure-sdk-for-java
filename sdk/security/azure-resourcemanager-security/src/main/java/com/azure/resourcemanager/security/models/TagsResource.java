@@ -5,25 +5,31 @@
 package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
-/** A container holding only the Tags for a resource, allowing the user to update the tags. */
+/**
+ * A container holding only the Tags for a resource, allowing the user to update the tags.
+ */
 @Fluent
 public class TagsResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TagsResource.class);
-
     /*
      * Resource tags
      */
     @JsonProperty(value = "tags")
+    @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
     private Map<String, String> tags;
 
     /**
+     * Creates an instance of TagsResource class.
+     */
+    public TagsResource() {
+    }
+
+    /**
      * Get the tags property: Resource tags.
-     *
+     * 
      * @return the tags value.
      */
     public Map<String, String> tags() {
@@ -32,7 +38,7 @@ public class TagsResource {
 
     /**
      * Set the tags property: Resource tags.
-     *
+     * 
      * @param tags the tags value to set.
      * @return the TagsResource object itself.
      */
@@ -43,7 +49,7 @@ public class TagsResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

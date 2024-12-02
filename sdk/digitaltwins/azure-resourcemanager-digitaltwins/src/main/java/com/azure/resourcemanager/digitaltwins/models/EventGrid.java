@@ -6,7 +6,6 @@ package com.azure.resourcemanager.digitaltwins.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -16,10 +15,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("EventGrid")
 @Fluent
 public final class EventGrid extends DigitalTwinsEndpointResourceProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(EventGrid.class);
-
     /*
-     * EventGrid Topic Endpoint
+     * EventGrid Topic Endpoint.
      */
     @JsonProperty(value = "TopicEndpoint", required = true)
     private String topicEndpoint;
@@ -35,6 +32,10 @@ public final class EventGrid extends DigitalTwinsEndpointResourceProperties {
      */
     @JsonProperty(value = "accessKey2")
     private String accessKey2;
+
+    /** Creates an instance of EventGrid class. */
+    public EventGrid() {
+    }
 
     /**
      * Get the topicEndpoint property: EventGrid Topic Endpoint.
@@ -117,6 +118,13 @@ public final class EventGrid extends DigitalTwinsEndpointResourceProperties {
         return this;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public EventGrid withIdentity(ManagedIdentityReference identity) {
+        super.withIdentity(identity);
+        return this;
+    }
+
     /**
      * Validates the instance.
      *
@@ -126,14 +134,14 @@ public final class EventGrid extends DigitalTwinsEndpointResourceProperties {
     public void validate() {
         super.validate();
         if (topicEndpoint() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property topicEndpoint in model EventGrid"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property topicEndpoint in model EventGrid"));
         }
         if (accessKey1() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property accessKey1 in model EventGrid"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property accessKey1 in model EventGrid"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(EventGrid.class);
 }

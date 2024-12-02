@@ -5,255 +5,300 @@
 package com.azure.resourcemanager.streamanalytics.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import com.azure.resourcemanager.streamanalytics.fluent.models.AzureSqlDatabaseOutputDataSourceProperties;
+import java.io.IOException;
 
-/** Describes an Azure SQL database output data source. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@JsonTypeName("Microsoft.Sql/Server/Database")
-@JsonFlatten
+/**
+ * Describes an Azure SQL database output data source.
+ */
 @Fluent
-public class AzureSqlDatabaseOutputDataSource extends OutputDataSource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureSqlDatabaseOutputDataSource.class);
-
+public final class AzureSqlDatabaseOutputDataSource extends OutputDataSource {
     /*
-     * The name of the SQL server containing the Azure SQL database. Required
-     * on PUT (CreateOrReplace) requests.
+     * Indicates the type of data source output will be written to. Required on PUT (CreateOrReplace) requests.
      */
-    @JsonProperty(value = "properties.server")
-    private String server;
+    private String type = "Microsoft.Sql/Server/Database";
 
     /*
-     * The name of the Azure SQL database. Required on PUT (CreateOrReplace)
-     * requests.
+     * The properties that are associated with an Azure SQL database output. Required on PUT (CreateOrReplace) requests.
      */
-    @JsonProperty(value = "properties.database")
-    private String database;
+    private AzureSqlDatabaseOutputDataSourceProperties innerProperties;
 
-    /*
-     * The user name that will be used to connect to the Azure SQL database.
-     * Required on PUT (CreateOrReplace) requests.
+    /**
+     * Creates an instance of AzureSqlDatabaseOutputDataSource class.
      */
-    @JsonProperty(value = "properties.user")
-    private String user;
+    public AzureSqlDatabaseOutputDataSource() {
+    }
 
-    /*
-     * The password that will be used to connect to the Azure SQL database.
-     * Required on PUT (CreateOrReplace) requests.
-     */
-    @JsonProperty(value = "properties.password")
-    private String password;
-
-    /*
-     * The name of the table in the Azure SQL database. Required on PUT
+    /**
+     * Get the type property: Indicates the type of data source output will be written to. Required on PUT
      * (CreateOrReplace) requests.
+     * 
+     * @return the type value.
      */
-    @JsonProperty(value = "properties.table")
-    private String table;
+    @Override
+    public String type() {
+        return this.type;
+    }
 
-    /*
-     * Max Batch count for write to Sql database, the default value is 10,000.
-     * Optional on PUT requests.
+    /**
+     * Get the innerProperties property: The properties that are associated with an Azure SQL database output. Required
+     * on PUT (CreateOrReplace) requests.
+     * 
+     * @return the innerProperties value.
      */
-    @JsonProperty(value = "properties.maxBatchCount")
-    private Float maxBatchCount;
-
-    /*
-     * Max Write r count, currently only 1(single writer) and 0(based on query
-     * partition) are available. Optional on PUT requests.
-     */
-    @JsonProperty(value = "properties.maxWriterCount")
-    private Float maxWriterCount;
-
-    /*
-     * Authentication Mode.
-     */
-    @JsonProperty(value = "properties.authenticationMode")
-    private AuthenticationMode authenticationMode;
+    private AzureSqlDatabaseOutputDataSourceProperties innerProperties() {
+        return this.innerProperties;
+    }
 
     /**
      * Get the server property: The name of the SQL server containing the Azure SQL database. Required on PUT
      * (CreateOrReplace) requests.
-     *
+     * 
      * @return the server value.
      */
     public String server() {
-        return this.server;
+        return this.innerProperties() == null ? null : this.innerProperties().server();
     }
 
     /**
      * Set the server property: The name of the SQL server containing the Azure SQL database. Required on PUT
      * (CreateOrReplace) requests.
-     *
+     * 
      * @param server the server value to set.
      * @return the AzureSqlDatabaseOutputDataSource object itself.
      */
     public AzureSqlDatabaseOutputDataSource withServer(String server) {
-        this.server = server;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AzureSqlDatabaseOutputDataSourceProperties();
+        }
+        this.innerProperties().withServer(server);
         return this;
     }
 
     /**
      * Get the database property: The name of the Azure SQL database. Required on PUT (CreateOrReplace) requests.
-     *
+     * 
      * @return the database value.
      */
     public String database() {
-        return this.database;
+        return this.innerProperties() == null ? null : this.innerProperties().database();
     }
 
     /**
      * Set the database property: The name of the Azure SQL database. Required on PUT (CreateOrReplace) requests.
-     *
+     * 
      * @param database the database value to set.
      * @return the AzureSqlDatabaseOutputDataSource object itself.
      */
     public AzureSqlDatabaseOutputDataSource withDatabase(String database) {
-        this.database = database;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AzureSqlDatabaseOutputDataSourceProperties();
+        }
+        this.innerProperties().withDatabase(database);
         return this;
     }
 
     /**
      * Get the user property: The user name that will be used to connect to the Azure SQL database. Required on PUT
      * (CreateOrReplace) requests.
-     *
+     * 
      * @return the user value.
      */
     public String user() {
-        return this.user;
+        return this.innerProperties() == null ? null : this.innerProperties().user();
     }
 
     /**
      * Set the user property: The user name that will be used to connect to the Azure SQL database. Required on PUT
      * (CreateOrReplace) requests.
-     *
+     * 
      * @param user the user value to set.
      * @return the AzureSqlDatabaseOutputDataSource object itself.
      */
     public AzureSqlDatabaseOutputDataSource withUser(String user) {
-        this.user = user;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AzureSqlDatabaseOutputDataSourceProperties();
+        }
+        this.innerProperties().withUser(user);
         return this;
     }
 
     /**
      * Get the password property: The password that will be used to connect to the Azure SQL database. Required on PUT
      * (CreateOrReplace) requests.
-     *
+     * 
      * @return the password value.
      */
     public String password() {
-        return this.password;
+        return this.innerProperties() == null ? null : this.innerProperties().password();
     }
 
     /**
      * Set the password property: The password that will be used to connect to the Azure SQL database. Required on PUT
      * (CreateOrReplace) requests.
-     *
+     * 
      * @param password the password value to set.
      * @return the AzureSqlDatabaseOutputDataSource object itself.
      */
     public AzureSqlDatabaseOutputDataSource withPassword(String password) {
-        this.password = password;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AzureSqlDatabaseOutputDataSourceProperties();
+        }
+        this.innerProperties().withPassword(password);
         return this;
     }
 
     /**
      * Get the table property: The name of the table in the Azure SQL database. Required on PUT (CreateOrReplace)
      * requests.
-     *
+     * 
      * @return the table value.
      */
     public String table() {
-        return this.table;
+        return this.innerProperties() == null ? null : this.innerProperties().table();
     }
 
     /**
      * Set the table property: The name of the table in the Azure SQL database. Required on PUT (CreateOrReplace)
      * requests.
-     *
+     * 
      * @param table the table value to set.
      * @return the AzureSqlDatabaseOutputDataSource object itself.
      */
     public AzureSqlDatabaseOutputDataSource withTable(String table) {
-        this.table = table;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AzureSqlDatabaseOutputDataSourceProperties();
+        }
+        this.innerProperties().withTable(table);
         return this;
     }
 
     /**
      * Get the maxBatchCount property: Max Batch count for write to Sql database, the default value is 10,000. Optional
      * on PUT requests.
-     *
+     * 
      * @return the maxBatchCount value.
      */
     public Float maxBatchCount() {
-        return this.maxBatchCount;
+        return this.innerProperties() == null ? null : this.innerProperties().maxBatchCount();
     }
 
     /**
      * Set the maxBatchCount property: Max Batch count for write to Sql database, the default value is 10,000. Optional
      * on PUT requests.
-     *
+     * 
      * @param maxBatchCount the maxBatchCount value to set.
      * @return the AzureSqlDatabaseOutputDataSource object itself.
      */
     public AzureSqlDatabaseOutputDataSource withMaxBatchCount(Float maxBatchCount) {
-        this.maxBatchCount = maxBatchCount;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AzureSqlDatabaseOutputDataSourceProperties();
+        }
+        this.innerProperties().withMaxBatchCount(maxBatchCount);
         return this;
     }
 
     /**
-     * Get the maxWriterCount property: Max Write r count, currently only 1(single writer) and 0(based on query
+     * Get the maxWriterCount property: Max Writer count, currently only 1(single writer) and 0(based on query
      * partition) are available. Optional on PUT requests.
-     *
+     * 
      * @return the maxWriterCount value.
      */
     public Float maxWriterCount() {
-        return this.maxWriterCount;
+        return this.innerProperties() == null ? null : this.innerProperties().maxWriterCount();
     }
 
     /**
-     * Set the maxWriterCount property: Max Write r count, currently only 1(single writer) and 0(based on query
+     * Set the maxWriterCount property: Max Writer count, currently only 1(single writer) and 0(based on query
      * partition) are available. Optional on PUT requests.
-     *
+     * 
      * @param maxWriterCount the maxWriterCount value to set.
      * @return the AzureSqlDatabaseOutputDataSource object itself.
      */
     public AzureSqlDatabaseOutputDataSource withMaxWriterCount(Float maxWriterCount) {
-        this.maxWriterCount = maxWriterCount;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AzureSqlDatabaseOutputDataSourceProperties();
+        }
+        this.innerProperties().withMaxWriterCount(maxWriterCount);
         return this;
     }
 
     /**
      * Get the authenticationMode property: Authentication Mode.
-     *
+     * 
      * @return the authenticationMode value.
      */
     public AuthenticationMode authenticationMode() {
-        return this.authenticationMode;
+        return this.innerProperties() == null ? null : this.innerProperties().authenticationMode();
     }
 
     /**
      * Set the authenticationMode property: Authentication Mode.
-     *
+     * 
      * @param authenticationMode the authenticationMode value to set.
      * @return the AzureSqlDatabaseOutputDataSource object itself.
      */
     public AzureSqlDatabaseOutputDataSource withAuthenticationMode(AuthenticationMode authenticationMode) {
-        this.authenticationMode = authenticationMode;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AzureSqlDatabaseOutputDataSourceProperties();
+        }
+        this.innerProperties().withAuthenticationMode(authenticationMode);
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
-        super.validate();
+        if (innerProperties() != null) {
+            innerProperties().validate();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeStringField("type", this.type);
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of AzureSqlDatabaseOutputDataSource from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of AzureSqlDatabaseOutputDataSource if the JsonReader was pointing to an instance of it, or
+     * null if it was pointing to JSON null.
+     * @throws IOException If an error occurs while reading the AzureSqlDatabaseOutputDataSource.
+     */
+    public static AzureSqlDatabaseOutputDataSource fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            AzureSqlDatabaseOutputDataSource deserializedAzureSqlDatabaseOutputDataSource
+                = new AzureSqlDatabaseOutputDataSource();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("type".equals(fieldName)) {
+                    deserializedAzureSqlDatabaseOutputDataSource.type = reader.getString();
+                } else if ("properties".equals(fieldName)) {
+                    deserializedAzureSqlDatabaseOutputDataSource.innerProperties
+                        = AzureSqlDatabaseOutputDataSourceProperties.fromJson(reader);
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedAzureSqlDatabaseOutputDataSource;
+        });
     }
 }

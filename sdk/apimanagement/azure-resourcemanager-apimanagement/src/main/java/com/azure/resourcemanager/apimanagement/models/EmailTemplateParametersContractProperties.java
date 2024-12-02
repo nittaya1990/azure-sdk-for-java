@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Email Template Parameter contract. */
 @Fluent
 public final class EmailTemplateParametersContractProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(EmailTemplateParametersContractProperties.class);
-
     /*
      * Template parameter name.
      */
@@ -31,6 +27,10 @@ public final class EmailTemplateParametersContractProperties {
      */
     @JsonProperty(value = "description")
     private String description;
+
+    /** Creates an instance of EmailTemplateParametersContractProperties class. */
+    public EmailTemplateParametersContractProperties() {
+    }
 
     /**
      * Get the name property: Template parameter name.

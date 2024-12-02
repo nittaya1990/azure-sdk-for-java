@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Properties of server X509Names. */
 @Fluent
 public final class X509CertificateName {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(X509CertificateName.class);
-
     /*
      * Common Name of the Certificate.
      */
@@ -25,6 +21,10 @@ public final class X509CertificateName {
      */
     @JsonProperty(value = "issuerCertificateThumbprint")
     private String issuerCertificateThumbprint;
+
+    /** Creates an instance of X509CertificateName class. */
+    public X509CertificateName() {
+    }
 
     /**
      * Get the name property: Common Name of the Certificate.

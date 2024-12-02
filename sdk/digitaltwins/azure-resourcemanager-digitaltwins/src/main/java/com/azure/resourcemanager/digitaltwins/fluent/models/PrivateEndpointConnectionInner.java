@@ -6,24 +6,32 @@ package com.azure.resourcemanager.digitaltwins.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.ProxyResource;
+import com.azure.core.management.SystemData;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.digitaltwins.models.ConnectionProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** The private endpoint connection of a Digital Twin. */
 @Fluent
 public final class PrivateEndpointConnectionInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PrivateEndpointConnectionInner.class);
-
     /*
-     * The properties of a private endpoint connection.
+     * The connection properties.
      */
     @JsonProperty(value = "properties", required = true)
     private ConnectionProperties properties;
 
+    /*
+     * Metadata pertaining to creation and last modification of the private endpoint connection.
+     */
+    @JsonProperty(value = "systemData", access = JsonProperty.Access.WRITE_ONLY)
+    private SystemData systemData;
+
+    /** Creates an instance of PrivateEndpointConnectionInner class. */
+    public PrivateEndpointConnectionInner() {
+    }
+
     /**
-     * Get the properties property: The properties of a private endpoint connection.
+     * Get the properties property: The connection properties.
      *
      * @return the properties value.
      */
@@ -32,7 +40,7 @@ public final class PrivateEndpointConnectionInner extends ProxyResource {
     }
 
     /**
-     * Set the properties property: The properties of a private endpoint connection.
+     * Set the properties property: The connection properties.
      *
      * @param properties the properties value to set.
      * @return the PrivateEndpointConnectionInner object itself.
@@ -43,18 +51,28 @@ public final class PrivateEndpointConnectionInner extends ProxyResource {
     }
 
     /**
+     * Get the systemData property: Metadata pertaining to creation and last modification of the private endpoint
+     * connection.
+     *
+     * @return the systemData value.
+     */
+    public SystemData systemData() {
+        return this.systemData;
+    }
+
+    /**
      * Validates the instance.
      *
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (properties() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property properties in model PrivateEndpointConnectionInner"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property properties in model PrivateEndpointConnectionInner"));
         } else {
             properties().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(PrivateEndpointConnectionInner.class);
 }

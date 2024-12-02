@@ -6,22 +6,22 @@ package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.models.AuthorizationServerUpdateContractProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** External OAuth authorization server settings. */
 @Fluent
 public final class AuthorizationServerUpdateContract extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AuthorizationServerUpdateContract.class);
-
     /*
      * Properties of the External OAuth authorization server update Contract.
      */
     @JsonProperty(value = "properties")
     private AuthorizationServerUpdateContractProperties innerProperties;
+
+    /** Creates an instance of AuthorizationServerUpdateContract class. */
+    public AuthorizationServerUpdateContract() {
+    }
 
     /**
      * Get the innerProperties property: Properties of the External OAuth authorization server update Contract.
@@ -52,6 +52,56 @@ public final class AuthorizationServerUpdateContract extends ProxyResource {
             this.innerProperties = new AuthorizationServerUpdateContractProperties();
         }
         this.innerProperties().withDisplayName(displayName);
+        return this;
+    }
+
+    /**
+     * Get the useInTestConsole property: If true, the authorization server may be used in the developer portal test
+     * console. True by default if no value is provided.
+     *
+     * @return the useInTestConsole value.
+     */
+    public Boolean useInTestConsole() {
+        return this.innerProperties() == null ? null : this.innerProperties().useInTestConsole();
+    }
+
+    /**
+     * Set the useInTestConsole property: If true, the authorization server may be used in the developer portal test
+     * console. True by default if no value is provided.
+     *
+     * @param useInTestConsole the useInTestConsole value to set.
+     * @return the AuthorizationServerUpdateContract object itself.
+     */
+    public AuthorizationServerUpdateContract withUseInTestConsole(Boolean useInTestConsole) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AuthorizationServerUpdateContractProperties();
+        }
+        this.innerProperties().withUseInTestConsole(useInTestConsole);
+        return this;
+    }
+
+    /**
+     * Get the useInApiDocumentation property: If true, the authorization server will be used in the API documentation
+     * in the developer portal. False by default if no value is provided.
+     *
+     * @return the useInApiDocumentation value.
+     */
+    public Boolean useInApiDocumentation() {
+        return this.innerProperties() == null ? null : this.innerProperties().useInApiDocumentation();
+    }
+
+    /**
+     * Set the useInApiDocumentation property: If true, the authorization server will be used in the API documentation
+     * in the developer portal. False by default if no value is provided.
+     *
+     * @param useInApiDocumentation the useInApiDocumentation value to set.
+     * @return the AuthorizationServerUpdateContract object itself.
+     */
+    public AuthorizationServerUpdateContract withUseInApiDocumentation(Boolean useInApiDocumentation) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AuthorizationServerUpdateContractProperties();
+        }
+        this.innerProperties().withUseInApiDocumentation(useInApiDocumentation);
         return this;
     }
 
@@ -243,8 +293,8 @@ public final class AuthorizationServerUpdateContract extends ProxyResource {
      * @param clientAuthenticationMethod the clientAuthenticationMethod value to set.
      * @return the AuthorizationServerUpdateContract object itself.
      */
-    public AuthorizationServerUpdateContract withClientAuthenticationMethod(
-        List<ClientAuthenticationMethod> clientAuthenticationMethod) {
+    public AuthorizationServerUpdateContract
+        withClientAuthenticationMethod(List<ClientAuthenticationMethod> clientAuthenticationMethod) {
         if (this.innerProperties() == null) {
             this.innerProperties = new AuthorizationServerUpdateContractProperties();
         }
@@ -271,8 +321,8 @@ public final class AuthorizationServerUpdateContract extends ProxyResource {
      * @param tokenBodyParameters the tokenBodyParameters value to set.
      * @return the AuthorizationServerUpdateContract object itself.
      */
-    public AuthorizationServerUpdateContract withTokenBodyParameters(
-        List<TokenBodyParameterContract> tokenBodyParameters) {
+    public AuthorizationServerUpdateContract
+        withTokenBodyParameters(List<TokenBodyParameterContract> tokenBodyParameters) {
         if (this.innerProperties() == null) {
             this.innerProperties = new AuthorizationServerUpdateContractProperties();
         }
@@ -368,8 +418,8 @@ public final class AuthorizationServerUpdateContract extends ProxyResource {
      * @param bearerTokenSendingMethods the bearerTokenSendingMethods value to set.
      * @return the AuthorizationServerUpdateContract object itself.
      */
-    public AuthorizationServerUpdateContract withBearerTokenSendingMethods(
-        List<BearerTokenSendingMethod> bearerTokenSendingMethods) {
+    public AuthorizationServerUpdateContract
+        withBearerTokenSendingMethods(List<BearerTokenSendingMethod> bearerTokenSendingMethods) {
         if (this.innerProperties() == null) {
             this.innerProperties = new AuthorizationServerUpdateContractProperties();
         }

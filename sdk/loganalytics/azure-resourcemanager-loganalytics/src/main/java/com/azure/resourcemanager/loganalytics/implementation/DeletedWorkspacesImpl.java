@@ -11,17 +11,15 @@ import com.azure.resourcemanager.loganalytics.fluent.DeletedWorkspacesClient;
 import com.azure.resourcemanager.loganalytics.fluent.models.WorkspaceInner;
 import com.azure.resourcemanager.loganalytics.models.DeletedWorkspaces;
 import com.azure.resourcemanager.loganalytics.models.Workspace;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class DeletedWorkspacesImpl implements DeletedWorkspaces {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DeletedWorkspacesImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(DeletedWorkspacesImpl.class);
 
     private final DeletedWorkspacesClient innerClient;
 
     private final com.azure.resourcemanager.loganalytics.LogAnalyticsManager serviceManager;
 
-    public DeletedWorkspacesImpl(
-        DeletedWorkspacesClient innerClient,
+    public DeletedWorkspacesImpl(DeletedWorkspacesClient innerClient,
         com.azure.resourcemanager.loganalytics.LogAnalyticsManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;

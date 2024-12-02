@@ -23,10 +23,8 @@ import java.util.Map;
 
 /** An immutable client-side representation of an Azure Redis Cache. */
 @Fluent
-public interface RedisCache
-    extends GroupableResource<RedisManager, RedisResourceInner>, Refreshable<RedisCache>, Updatable<RedisCache.Update>,
-    SupportsListingPrivateLinkResource,
-    SupportsListingPrivateEndpointConnection,
+public interface RedisCache extends GroupableResource<RedisManager, RedisResourceInner>, Refreshable<RedisCache>,
+    Updatable<RedisCache.Update>, SupportsListingPrivateLinkResource, SupportsListingPrivateEndpointConnection,
     SupportsUpdatingPrivateEndpointConnection {
 
     /** @return exposes features available only to Premium Sku Redis Cache instances. */
@@ -104,17 +102,20 @@ public interface RedisCache
      */
     RedisAccessKeys regenerateKey(RedisKeyType keyType);
 
+    /**
+     * Whether the redis cache can be accessed from public network.
+     *
+     * @return whether the redis cache can be accessed from public network.
+     */
+    PublicNetworkAccess publicNetworkAccess();
+
     /**************************************************************
      * Fluent interfaces to provision a RedisCache
      **************************************************************/
 
     /** Container interface for all the definitions that need to be implemented. */
-    interface Definition
-        extends DefinitionStages.Blank,
-            DefinitionStages.WithGroup,
-            DefinitionStages.WithSku,
-            DefinitionStages.WithCreate,
-            DefinitionStages.WithPremiumSkuCreate {
+    interface Definition extends DefinitionStages.Blank, DefinitionStages.WithGroup, DefinitionStages.WithSku,
+        DefinitionStages.WithCreate, DefinitionStages.WithPremiumSkuCreate {
     }
 
     /** Grouping of all the Redis Cache definition stages. */
@@ -214,6 +215,14 @@ public interface RedisCache
             WithCreate withRedisConfiguration(String key, String value);
 
             /**
+             * Specifies Redis Setting.
+             *
+             * @param redisConfiguration the Redis configuration.
+             * @return the next stage of Redis Cache definition.
+             */
+            WithCreate withRedisConfiguration(RedisConfiguration redisConfiguration);
+
+            /**
              * Creates Redis cache firewall rule with range of IP addresses permitted to connect to the cache.
              *
              * @param name name of the rule.
@@ -281,6 +290,13 @@ public interface RedisCache
              * @return the next stage of Redis Cache with Premium SKU definition.
              */
             WithCreate withRedisVersion(RedisVersion redisVersion);
+
+            /**
+             * Disables public network access for the redis cache.
+             *
+             * @return the next stage of the definition
+             */
+            WithCreate disablePublicNetworkAccess();
         }
 
         /** A Redis Cache definition with Premium Sku specific functionality. */
@@ -413,6 +429,14 @@ public interface RedisCache
             Update withRedisConfiguration(String key, String value);
 
             /**
+             * Specifies Redis Setting.
+             *
+             * @param redisConfiguration the Redis configuration.
+             * @return the next stage of Redis Cache update.
+             */
+            Update withRedisConfiguration(RedisConfiguration redisConfiguration);
+
+            /**
              * Cleans all the configuration settings being set on Redis Cache.
              *
              * @return the next stage of Redis Cache update.
@@ -427,15 +451,28 @@ public interface RedisCache
              */
             Update withoutRedisConfiguration(String key);
         }
+
+        /** The stage of redis cache update allowing to configure network access settings. */
+        interface WithPublicNetworkAccess {
+            /**
+             * Enables public network access for the redis cache.
+             *
+             * @return the next stage of the update
+             */
+            Update enablePublicNetworkAccess();
+
+            /**
+             * Disables public network access for the redis cache.
+             *
+             * @return the next stage of the update
+             */
+            Update disablePublicNetworkAccess();
+        }
     }
 
     /** The template for a Redis Cache update operation, containing all the settings that can be modified. */
-    interface Update
-        extends Appliable<RedisCache>,
-            Resource.UpdateWithTags<Update>,
-            UpdateStages.WithSku,
-            UpdateStages.WithNonSslPort,
-            UpdateStages.WithRedisConfiguration {
+    interface Update extends Appliable<RedisCache>, Resource.UpdateWithTags<Update>, UpdateStages.WithSku,
+        UpdateStages.WithNonSslPort, UpdateStages.WithRedisConfiguration, UpdateStages.WithPublicNetworkAccess {
         /**
          * The number of shards to be created on a Premium Cluster Cache.
          *
@@ -548,7 +585,10 @@ public interface RedisCache
         V6("6"),
         /**
          * version 4.x.x
+         * @deprecated Because Redis version 4 is no longer supported by the open source community,
+         *             it will be retired from Azure Cache for Redis.
          */
+        @Deprecated
         V4("4");
 
         private final String value;
@@ -557,9 +597,13 @@ public interface RedisCache
             this.value = value;
         }
 
+        /**
+         * Gets the string representation of the version.
+         *
+         * @return The string representation of the version.
+         */
         public String getValue() {
             return value;
         }
     }
-
 }

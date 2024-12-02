@@ -5,32 +5,34 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.OffsetDateTime;
 
-/** Defines workload agnostic properties for a job. */
-@JsonTypeInfo(
-    use = JsonTypeInfo.Id.NAME,
-    include = JsonTypeInfo.As.PROPERTY,
-    property = "jobType",
-    defaultImpl = Job.class)
+/**
+ * Defines workload agnostic properties for a job.
+ */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "jobType", defaultImpl = Job.class, visible = true)
 @JsonTypeName("Job")
 @JsonSubTypes({
     @JsonSubTypes.Type(name = "AzureIaaSVMJob", value = AzureIaaSvmJob.class),
+    @JsonSubTypes.Type(name = "AzureIaaSVMJobV2", value = AzureIaaSvmJobV2.class),
     @JsonSubTypes.Type(name = "AzureStorageJob", value = AzureStorageJob.class),
     @JsonSubTypes.Type(name = "AzureWorkloadJob", value = AzureWorkloadJob.class),
     @JsonSubTypes.Type(name = "DpmJob", value = DpmJob.class),
     @JsonSubTypes.Type(name = "MabJob", value = MabJob.class),
-    @JsonSubTypes.Type(name = "VaultJob", value = VaultJob.class)
-})
+    @JsonSubTypes.Type(name = "VaultJob", value = VaultJob.class) })
 @Fluent
 public class Job {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Job.class);
+    /*
+     * This property will be used as the discriminator for deciding the specific types in the polymorphic chain of types.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "jobType", required = true)
+    private String jobType;
 
     /*
      * Friendly name of the entity on which the current job is executing.
@@ -75,8 +77,25 @@ public class Job {
     private String activityId;
 
     /**
+     * Creates an instance of Job class.
+     */
+    public Job() {
+        this.jobType = "Job";
+    }
+
+    /**
+     * Get the jobType property: This property will be used as the discriminator for deciding the specific types in the
+     * polymorphic chain of types.
+     * 
+     * @return the jobType value.
+     */
+    public String jobType() {
+        return this.jobType;
+    }
+
+    /**
      * Get the entityFriendlyName property: Friendly name of the entity on which the current job is executing.
-     *
+     * 
      * @return the entityFriendlyName value.
      */
     public String entityFriendlyName() {
@@ -85,7 +104,7 @@ public class Job {
 
     /**
      * Set the entityFriendlyName property: Friendly name of the entity on which the current job is executing.
-     *
+     * 
      * @param entityFriendlyName the entityFriendlyName value to set.
      * @return the Job object itself.
      */
@@ -96,7 +115,7 @@ public class Job {
 
     /**
      * Get the backupManagementType property: Backup management type to execute the current job.
-     *
+     * 
      * @return the backupManagementType value.
      */
     public BackupManagementType backupManagementType() {
@@ -105,7 +124,7 @@ public class Job {
 
     /**
      * Set the backupManagementType property: Backup management type to execute the current job.
-     *
+     * 
      * @param backupManagementType the backupManagementType value to set.
      * @return the Job object itself.
      */
@@ -116,7 +135,7 @@ public class Job {
 
     /**
      * Get the operation property: The operation name.
-     *
+     * 
      * @return the operation value.
      */
     public String operation() {
@@ -125,7 +144,7 @@ public class Job {
 
     /**
      * Set the operation property: The operation name.
-     *
+     * 
      * @param operation the operation value to set.
      * @return the Job object itself.
      */
@@ -136,7 +155,7 @@ public class Job {
 
     /**
      * Get the status property: Job status.
-     *
+     * 
      * @return the status value.
      */
     public String status() {
@@ -145,7 +164,7 @@ public class Job {
 
     /**
      * Set the status property: Job status.
-     *
+     * 
      * @param status the status value to set.
      * @return the Job object itself.
      */
@@ -156,7 +175,7 @@ public class Job {
 
     /**
      * Get the startTime property: The start time.
-     *
+     * 
      * @return the startTime value.
      */
     public OffsetDateTime startTime() {
@@ -165,7 +184,7 @@ public class Job {
 
     /**
      * Set the startTime property: The start time.
-     *
+     * 
      * @param startTime the startTime value to set.
      * @return the Job object itself.
      */
@@ -176,7 +195,7 @@ public class Job {
 
     /**
      * Get the endTime property: The end time.
-     *
+     * 
      * @return the endTime value.
      */
     public OffsetDateTime endTime() {
@@ -185,7 +204,7 @@ public class Job {
 
     /**
      * Set the endTime property: The end time.
-     *
+     * 
      * @param endTime the endTime value to set.
      * @return the Job object itself.
      */
@@ -196,7 +215,7 @@ public class Job {
 
     /**
      * Get the activityId property: ActivityId of job.
-     *
+     * 
      * @return the activityId value.
      */
     public String activityId() {
@@ -205,7 +224,7 @@ public class Job {
 
     /**
      * Set the activityId property: ActivityId of job.
-     *
+     * 
      * @param activityId the activityId value to set.
      * @return the Job object itself.
      */
@@ -216,7 +235,7 @@ public class Job {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

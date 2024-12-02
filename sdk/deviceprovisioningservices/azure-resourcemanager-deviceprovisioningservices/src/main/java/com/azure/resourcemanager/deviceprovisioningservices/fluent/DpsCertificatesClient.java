@@ -11,7 +11,6 @@ import com.azure.core.util.Context;
 import com.azure.resourcemanager.deviceprovisioningservices.fluent.models.CertificateListDescriptionInner;
 import com.azure.resourcemanager.deviceprovisioningservices.fluent.models.CertificateResponseInner;
 import com.azure.resourcemanager.deviceprovisioningservices.fluent.models.VerificationCodeResponseInner;
-import com.azure.resourcemanager.deviceprovisioningservices.models.CertificateBodyDescription;
 import com.azure.resourcemanager.deviceprovisioningservices.models.CertificatePurpose;
 import com.azure.resourcemanager.deviceprovisioningservices.models.VerificationCodeRequest;
 import java.time.OffsetDateTime;
@@ -45,15 +44,11 @@ public interface DpsCertificatesClient {
      * @throws com.azure.resourcemanager.deviceprovisioningservices.models.ErrorDetailsException thrown if the request
      *     is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the certificate from the provisioning service.
+     * @return the certificate from the provisioning service along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<CertificateResponseInner> getWithResponse(
-        String certificateName,
-        String resourceGroupName,
-        String provisioningServiceName,
-        String ifMatch,
-        Context context);
+    Response<CertificateResponseInner> getWithResponse(String certificateName, String resourceGroupName,
+        String provisioningServiceName, String ifMatch, Context context);
 
     /**
      * Add new certificate or update an existing certificate.
@@ -69,11 +64,8 @@ public interface DpsCertificatesClient {
      * @return the X509 Certificate.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    CertificateResponseInner createOrUpdate(
-        String resourceGroupName,
-        String provisioningServiceName,
-        String certificateName,
-        CertificateBodyDescription certificateDescription);
+    CertificateResponseInner createOrUpdate(String resourceGroupName, String provisioningServiceName,
+        String certificateName, CertificateResponseInner certificateDescription);
 
     /**
      * Add new certificate or update an existing certificate.
@@ -89,16 +81,12 @@ public interface DpsCertificatesClient {
      * @throws com.azure.resourcemanager.deviceprovisioningservices.models.ErrorDetailsException thrown if the request
      *     is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the X509 Certificate.
+     * @return the X509 Certificate along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<CertificateResponseInner> createOrUpdateWithResponse(
-        String resourceGroupName,
-        String provisioningServiceName,
-        String certificateName,
-        CertificateBodyDescription certificateDescription,
-        String ifMatch,
-        Context context);
+    Response<CertificateResponseInner> createOrUpdateWithResponse(String resourceGroupName,
+        String provisioningServiceName, String certificateName, CertificateResponseInner certificateDescription,
+        String ifMatch, Context context);
 
     /**
      * Deletes the specified certificate associated with the Provisioning Service.
@@ -137,23 +125,13 @@ public interface DpsCertificatesClient {
      * @throws com.azure.resourcemanager.deviceprovisioningservices.models.ErrorDetailsException thrown if the request
      *     is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<Void> deleteWithResponse(
-        String resourceGroupName,
-        String ifMatch,
-        String provisioningServiceName,
-        String certificateName,
-        String certificateName1,
-        byte[] certificateRawBytes,
-        Boolean certificateIsVerified,
-        CertificatePurpose certificatePurpose,
-        OffsetDateTime certificateCreated,
-        OffsetDateTime certificateLastUpdated,
-        Boolean certificateHasPrivateKey,
-        String certificateNonce,
-        Context context);
+    Response<Void> deleteWithResponse(String resourceGroupName, String ifMatch, String provisioningServiceName,
+        String certificateName, String certificateName1, byte[] certificateRawBytes, Boolean certificateIsVerified,
+        CertificatePurpose certificatePurpose, OffsetDateTime certificateCreated, OffsetDateTime certificateLastUpdated,
+        Boolean certificateHasPrivateKey, String certificateNonce, Context context);
 
     /**
      * Get all the certificates tied to the provisioning service.
@@ -179,11 +157,11 @@ public interface DpsCertificatesClient {
      * @throws com.azure.resourcemanager.deviceprovisioningservices.models.ErrorDetailsException thrown if the request
      *     is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all the certificates tied to the provisioning service.
+     * @return all the certificates tied to the provisioning service along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<CertificateListDescriptionInner> listWithResponse(
-        String resourceGroupName, String provisioningServiceName, Context context);
+    Response<CertificateListDescriptionInner> listWithResponse(String resourceGroupName, String provisioningServiceName,
+        Context context);
 
     /**
      * Generate verification code for Proof of Possession.
@@ -201,8 +179,8 @@ public interface DpsCertificatesClient {
      * @return description of the response of the verification code.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    VerificationCodeResponseInner generateVerificationCode(
-        String certificateName, String ifMatch, String resourceGroupName, String provisioningServiceName);
+    VerificationCodeResponseInner generateVerificationCode(String certificateName, String ifMatch,
+        String resourceGroupName, String provisioningServiceName);
 
     /**
      * Generate verification code for Proof of Possession.
@@ -226,22 +204,13 @@ public interface DpsCertificatesClient {
      * @throws com.azure.resourcemanager.deviceprovisioningservices.models.ErrorDetailsException thrown if the request
      *     is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return description of the response of the verification code.
+     * @return description of the response of the verification code along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<VerificationCodeResponseInner> generateVerificationCodeWithResponse(
-        String certificateName,
-        String ifMatch,
-        String resourceGroupName,
-        String provisioningServiceName,
-        String certificateName1,
-        byte[] certificateRawBytes,
-        Boolean certificateIsVerified,
-        CertificatePurpose certificatePurpose,
-        OffsetDateTime certificateCreated,
-        OffsetDateTime certificateLastUpdated,
-        Boolean certificateHasPrivateKey,
-        String certificateNonce,
+    Response<VerificationCodeResponseInner> generateVerificationCodeWithResponse(String certificateName, String ifMatch,
+        String resourceGroupName, String provisioningServiceName, String certificateName1, byte[] certificateRawBytes,
+        Boolean certificateIsVerified, CertificatePurpose certificatePurpose, OffsetDateTime certificateCreated,
+        OffsetDateTime certificateLastUpdated, Boolean certificateHasPrivateKey, String certificateNonce,
         Context context);
 
     /**
@@ -261,12 +230,8 @@ public interface DpsCertificatesClient {
      * @return the X509 Certificate.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    CertificateResponseInner verifyCertificate(
-        String certificateName,
-        String ifMatch,
-        String resourceGroupName,
-        String provisioningServiceName,
-        VerificationCodeRequest request);
+    CertificateResponseInner verifyCertificate(String certificateName, String ifMatch, String resourceGroupName,
+        String provisioningServiceName, VerificationCodeRequest request);
 
     /**
      * Verifies the certificate's private key possession by providing the leaf cert issued by the verifying pre uploaded
@@ -291,22 +256,12 @@ public interface DpsCertificatesClient {
      * @throws com.azure.resourcemanager.deviceprovisioningservices.models.ErrorDetailsException thrown if the request
      *     is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the X509 Certificate.
+     * @return the X509 Certificate along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<CertificateResponseInner> verifyCertificateWithResponse(
-        String certificateName,
-        String ifMatch,
-        String resourceGroupName,
-        String provisioningServiceName,
-        VerificationCodeRequest request,
-        String certificateName1,
-        byte[] certificateRawBytes,
-        Boolean certificateIsVerified,
-        CertificatePurpose certificatePurpose,
-        OffsetDateTime certificateCreated,
-        OffsetDateTime certificateLastUpdated,
-        Boolean certificateHasPrivateKey,
-        String certificateNonce,
-        Context context);
+    Response<CertificateResponseInner> verifyCertificateWithResponse(String certificateName, String ifMatch,
+        String resourceGroupName, String provisioningServiceName, VerificationCodeRequest request,
+        String certificateName1, byte[] certificateRawBytes, Boolean certificateIsVerified,
+        CertificatePurpose certificatePurpose, OffsetDateTime certificateCreated, OffsetDateTime certificateLastUpdated,
+        Boolean certificateHasPrivateKey, String certificateNonce, Context context);
 }

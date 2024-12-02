@@ -13,6 +13,7 @@ import com.azure.core.util.Context;
 import com.azure.core.util.polling.SyncPoller;
 import com.azure.resourcemanager.postgresql.fluent.models.ServerSecurityAlertPolicyInner;
 import com.azure.resourcemanager.postgresql.models.SecurityAlertPolicyName;
+import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in ServerSecurityAlertPoliciesClient. */
 public interface ServerSecurityAlertPoliciesClient {
@@ -28,8 +29,8 @@ public interface ServerSecurityAlertPoliciesClient {
      * @return a server's security alert policy.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    ServerSecurityAlertPolicyInner get(
-        String resourceGroupName, String serverName, SecurityAlertPolicyName securityAlertPolicyName);
+    ServerSecurityAlertPolicyInner get(String resourceGroupName, String serverName,
+        SecurityAlertPolicyName securityAlertPolicyName);
 
     /**
      * Get a server's security alert policy.
@@ -41,11 +42,46 @@ public interface ServerSecurityAlertPoliciesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a server's security alert policy.
+     * @return a server's security alert policy along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<ServerSecurityAlertPolicyInner> getWithResponse(
-        String resourceGroupName, String serverName, SecurityAlertPolicyName securityAlertPolicyName, Context context);
+    Response<ServerSecurityAlertPolicyInner> getWithResponse(String resourceGroupName, String serverName,
+        SecurityAlertPolicyName securityAlertPolicyName, Context context);
+
+    /**
+     * Creates or updates a threat detection policy.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serverName The name of the server.
+     * @param securityAlertPolicyName The name of the threat detection policy.
+     * @param parameters The server security alert policy.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a server security alert policy along with {@link Response} on successful completion of {@link Mono}.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<ServerSecurityAlertPolicyInner>, ServerSecurityAlertPolicyInner> beginCreateOrUpdate(
+        String resourceGroupName, String serverName, SecurityAlertPolicyName securityAlertPolicyName,
+        ServerSecurityAlertPolicyInner parameters);
+
+    /**
+     * Creates or updates a threat detection policy.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serverName The name of the server.
+     * @param securityAlertPolicyName The name of the threat detection policy.
+     * @param parameters The server security alert policy.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a server security alert policy along with {@link Response} on successful completion of {@link Mono}.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<ServerSecurityAlertPolicyInner>, ServerSecurityAlertPolicyInner> beginCreateOrUpdate(
+        String resourceGroupName, String serverName, SecurityAlertPolicyName securityAlertPolicyName,
+        ServerSecurityAlertPolicyInner parameters, Context context);
 
     /**
      * Creates or updates a threat detection policy.
@@ -60,11 +96,8 @@ public interface ServerSecurityAlertPoliciesClient {
      * @return a server security alert policy.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<ServerSecurityAlertPolicyInner>, ServerSecurityAlertPolicyInner> beginCreateOrUpdate(
-        String resourceGroupName,
-        String serverName,
-        SecurityAlertPolicyName securityAlertPolicyName,
-        ServerSecurityAlertPolicyInner parameters);
+    ServerSecurityAlertPolicyInner createOrUpdate(String resourceGroupName, String serverName,
+        SecurityAlertPolicyName securityAlertPolicyName, ServerSecurityAlertPolicyInner parameters);
 
     /**
      * Creates or updates a threat detection policy.
@@ -80,52 +113,8 @@ public interface ServerSecurityAlertPoliciesClient {
      * @return a server security alert policy.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<ServerSecurityAlertPolicyInner>, ServerSecurityAlertPolicyInner> beginCreateOrUpdate(
-        String resourceGroupName,
-        String serverName,
-        SecurityAlertPolicyName securityAlertPolicyName,
-        ServerSecurityAlertPolicyInner parameters,
-        Context context);
-
-    /**
-     * Creates or updates a threat detection policy.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param serverName The name of the server.
-     * @param securityAlertPolicyName The name of the threat detection policy.
-     * @param parameters The server security alert policy.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a server security alert policy.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    ServerSecurityAlertPolicyInner createOrUpdate(
-        String resourceGroupName,
-        String serverName,
-        SecurityAlertPolicyName securityAlertPolicyName,
-        ServerSecurityAlertPolicyInner parameters);
-
-    /**
-     * Creates or updates a threat detection policy.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param serverName The name of the server.
-     * @param securityAlertPolicyName The name of the threat detection policy.
-     * @param parameters The server security alert policy.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a server security alert policy.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    ServerSecurityAlertPolicyInner createOrUpdate(
-        String resourceGroupName,
-        String serverName,
-        SecurityAlertPolicyName securityAlertPolicyName,
-        ServerSecurityAlertPolicyInner parameters,
-        Context context);
+    ServerSecurityAlertPolicyInner createOrUpdate(String resourceGroupName, String serverName,
+        SecurityAlertPolicyName securityAlertPolicyName, ServerSecurityAlertPolicyInner parameters, Context context);
 
     /**
      * Get the server's threat detection policies.
@@ -152,6 +141,6 @@ public interface ServerSecurityAlertPoliciesClient {
      * @return the server's threat detection policies.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<ServerSecurityAlertPolicyInner> listByServer(
-        String resourceGroupName, String serverName, Context context);
+    PagedIterable<ServerSecurityAlertPolicyInner> listByServer(String resourceGroupName, String serverName,
+        Context context);
 }

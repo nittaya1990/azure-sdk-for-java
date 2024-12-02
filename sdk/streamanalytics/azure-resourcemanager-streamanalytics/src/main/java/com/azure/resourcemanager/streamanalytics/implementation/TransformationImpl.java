@@ -7,6 +7,8 @@ package com.azure.resourcemanager.streamanalytics.implementation;
 import com.azure.core.util.Context;
 import com.azure.resourcemanager.streamanalytics.fluent.models.TransformationInner;
 import com.azure.resourcemanager.streamanalytics.models.Transformation;
+import java.util.Collections;
+import java.util.List;
 
 public final class TransformationImpl implements Transformation, Transformation.Definition, Transformation.Update {
     private TransformationInner innerObject;
@@ -17,8 +19,25 @@ public final class TransformationImpl implements Transformation, Transformation.
         return this.innerModel().id();
     }
 
+    public String name() {
+        return this.innerModel().name();
+    }
+
+    public String type() {
+        return this.innerModel().type();
+    }
+
     public Integer streamingUnits() {
         return this.innerModel().streamingUnits();
+    }
+
+    public List<Integer> validStreamingUnits() {
+        List<Integer> inner = this.innerModel().validStreamingUnits();
+        if (inner != null) {
+            return Collections.unmodifiableList(inner);
+        } else {
+            return Collections.emptyList();
+        }
     }
 
     public String query() {
@@ -29,12 +48,8 @@ public final class TransformationImpl implements Transformation, Transformation.
         return this.innerModel().etag();
     }
 
-    public String name() {
-        return this.innerModel().name();
-    }
-
-    public String type() {
-        return this.innerModel().type();
+    public String resourceGroupName() {
+        return resourceGroupName;
     }
 
     public TransformationInner innerModel() {
@@ -64,36 +79,20 @@ public final class TransformationImpl implements Transformation, Transformation.
     }
 
     public Transformation create() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getTransformations()
-                .createOrReplaceWithResponse(
-                    resourceGroupName,
-                    jobName,
-                    transformationName,
-                    this.innerModel(),
-                    createIfMatch,
-                    createIfNoneMatch,
-                    Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getTransformations()
+            .createOrReplaceWithResponse(resourceGroupName, jobName, transformationName, this.innerModel(),
+                createIfMatch, createIfNoneMatch, Context.NONE)
+            .getValue();
         return this;
     }
 
     public Transformation create(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getTransformations()
-                .createOrReplaceWithResponse(
-                    resourceGroupName,
-                    jobName,
-                    transformationName,
-                    this.innerModel(),
-                    createIfMatch,
-                    createIfNoneMatch,
-                    context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getTransformations()
+            .createOrReplaceWithResponse(resourceGroupName, jobName, transformationName, this.innerModel(),
+                createIfMatch, createIfNoneMatch, context)
+            .getValue();
         return this;
     }
 
@@ -111,64 +110,45 @@ public final class TransformationImpl implements Transformation, Transformation.
     }
 
     public Transformation apply() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getTransformations()
-                .updateWithResponse(
-                    resourceGroupName, jobName, transformationName, this.innerModel(), updateIfMatch, Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getTransformations()
+            .updateWithResponse(resourceGroupName, jobName, transformationName, this.innerModel(), updateIfMatch,
+                Context.NONE)
+            .getValue();
         return this;
     }
 
     public Transformation apply(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getTransformations()
-                .updateWithResponse(
-                    resourceGroupName, jobName, transformationName, this.innerModel(), updateIfMatch, context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getTransformations()
+            .updateWithResponse(resourceGroupName, jobName, transformationName, this.innerModel(), updateIfMatch,
+                context)
+            .getValue();
         return this;
     }
 
-    TransformationImpl(
-        TransformationInner innerObject,
+    TransformationImpl(TransformationInner innerObject,
         com.azure.resourcemanager.streamanalytics.StreamAnalyticsManager serviceManager) {
         this.innerObject = innerObject;
         this.serviceManager = serviceManager;
-        this.resourceGroupName = Utils.getValueFromIdByName(innerObject.id(), "resourcegroups");
-        this.jobName = Utils.getValueFromIdByName(innerObject.id(), "streamingjobs");
-        this.transformationName = Utils.getValueFromIdByName(innerObject.id(), "transformations");
+        this.resourceGroupName = ResourceManagerUtils.getValueFromIdByName(innerObject.id(), "resourcegroups");
+        this.jobName = ResourceManagerUtils.getValueFromIdByName(innerObject.id(), "streamingjobs");
+        this.transformationName = ResourceManagerUtils.getValueFromIdByName(innerObject.id(), "transformations");
     }
 
     public Transformation refresh() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getTransformations()
-                .getWithResponse(resourceGroupName, jobName, transformationName, Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getTransformations()
+            .getWithResponse(resourceGroupName, jobName, transformationName, Context.NONE)
+            .getValue();
         return this;
     }
 
     public Transformation refresh(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getTransformations()
-                .getWithResponse(resourceGroupName, jobName, transformationName, context)
-                .getValue();
-        return this;
-    }
-
-    public TransformationImpl withStreamingUnits(Integer streamingUnits) {
-        this.innerModel().withStreamingUnits(streamingUnits);
-        return this;
-    }
-
-    public TransformationImpl withQuery(String query) {
-        this.innerModel().withQuery(query);
+        this.innerObject = serviceManager.serviceClient()
+            .getTransformations()
+            .getWithResponse(resourceGroupName, jobName, transformationName, context)
+            .getValue();
         return this;
     }
 
@@ -177,9 +157,29 @@ public final class TransformationImpl implements Transformation, Transformation.
         return this;
     }
 
-    public TransformationImpl withIfMatch(String ifMatch) {
-        this.createIfMatch = ifMatch;
+    public TransformationImpl withStreamingUnits(Integer streamingUnits) {
+        this.innerModel().withStreamingUnits(streamingUnits);
         return this;
+    }
+
+    public TransformationImpl withValidStreamingUnits(List<Integer> validStreamingUnits) {
+        this.innerModel().withValidStreamingUnits(validStreamingUnits);
+        return this;
+    }
+
+    public TransformationImpl withQuery(String query) {
+        this.innerModel().withQuery(query);
+        return this;
+    }
+
+    public TransformationImpl withIfMatch(String ifMatch) {
+        if (isInCreateMode()) {
+            this.createIfMatch = ifMatch;
+            return this;
+        } else {
+            this.updateIfMatch = ifMatch;
+            return this;
+        }
     }
 
     public TransformationImpl withIfNoneMatch(String ifNoneMatch) {
@@ -187,8 +187,7 @@ public final class TransformationImpl implements Transformation, Transformation.
         return this;
     }
 
-    public TransformationImpl ifMatch(String ifMatch) {
-        this.updateIfMatch = ifMatch;
-        return this;
+    private boolean isInCreateMode() {
+        return this.innerModel().id() == null;
     }
 }

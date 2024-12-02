@@ -5,6 +5,7 @@
 package com.azure.resourcemanager.digitaltwins.models;
 
 import com.azure.core.management.Region;
+import com.azure.core.management.SystemData;
 import com.azure.core.util.Context;
 import com.azure.resourcemanager.digitaltwins.fluent.models.DigitalTwinsDescriptionInner;
 import com.azure.resourcemanager.digitaltwins.fluent.models.PrivateEndpointConnectionInner;
@@ -57,6 +58,13 @@ public interface DigitalTwinsDescription {
     DigitalTwinsIdentity identity();
 
     /**
+     * Gets the systemData property: Metadata pertaining to creation and last modification of the DigitalTwinsInstance.
+     *
+     * @return the systemData value.
+     */
+    SystemData systemData();
+
+    /**
      * Gets the createdTime property: Time when DigitalTwinsInstance was created.
      *
      * @return the createdTime value.
@@ -85,7 +93,7 @@ public interface DigitalTwinsDescription {
     String hostname();
 
     /**
-     * Gets the privateEndpointConnections property: The privateEndpointConnections property.
+     * Gets the privateEndpointConnections property: The private endpoint connections.
      *
      * @return the privateEndpointConnections value.
      */
@@ -113,6 +121,13 @@ public interface DigitalTwinsDescription {
     String regionName();
 
     /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
+
+    /**
      * Gets the inner com.azure.resourcemanager.digitaltwins.fluent.models.DigitalTwinsDescriptionInner object.
      *
      * @return the inner object.
@@ -120,17 +135,16 @@ public interface DigitalTwinsDescription {
     DigitalTwinsDescriptionInner innerModel();
 
     /** The entirety of the DigitalTwinsDescription definition. */
-    interface Definition
-        extends DefinitionStages.Blank,
-            DefinitionStages.WithLocation,
-            DefinitionStages.WithResourceGroup,
-            DefinitionStages.WithCreate {
+    interface Definition extends DefinitionStages.Blank, DefinitionStages.WithLocation,
+        DefinitionStages.WithResourceGroup, DefinitionStages.WithCreate {
     }
+
     /** The DigitalTwinsDescription definition stages. */
     interface DefinitionStages {
         /** The first stage of the DigitalTwinsDescription definition. */
         interface Blank extends WithLocation {
         }
+
         /** The stage of the DigitalTwinsDescription definition allowing to specify location. */
         interface WithLocation {
             /**
@@ -149,6 +163,7 @@ public interface DigitalTwinsDescription {
              */
             WithResourceGroup withRegion(String location);
         }
+
         /** The stage of the DigitalTwinsDescription definition allowing to specify parent resource. */
         interface WithResourceGroup {
             /**
@@ -159,15 +174,13 @@ public interface DigitalTwinsDescription {
              */
             WithCreate withExistingResourceGroup(String resourceGroupName);
         }
+
         /**
          * The stage of the DigitalTwinsDescription definition which contains all the minimum required properties for
          * the resource to be created, but also allows for any other optional properties to be specified.
          */
-        interface WithCreate
-            extends DefinitionStages.WithTags,
-                DefinitionStages.WithIdentity,
-                DefinitionStages.WithPrivateEndpointConnections,
-                DefinitionStages.WithPublicNetworkAccess {
+        interface WithCreate extends DefinitionStages.WithTags, DefinitionStages.WithIdentity,
+            DefinitionStages.WithPrivateEndpointConnections, DefinitionStages.WithPublicNetworkAccess {
             /**
              * Executes the create request.
              *
@@ -183,6 +196,7 @@ public interface DigitalTwinsDescription {
              */
             DigitalTwinsDescription create(Context context);
         }
+
         /** The stage of the DigitalTwinsDescription definition allowing to specify tags. */
         interface WithTags {
             /**
@@ -193,6 +207,7 @@ public interface DigitalTwinsDescription {
              */
             WithCreate withTags(Map<String, String> tags);
         }
+
         /** The stage of the DigitalTwinsDescription definition allowing to specify identity. */
         interface WithIdentity {
             /**
@@ -203,16 +218,18 @@ public interface DigitalTwinsDescription {
              */
             WithCreate withIdentity(DigitalTwinsIdentity identity);
         }
+
         /** The stage of the DigitalTwinsDescription definition allowing to specify privateEndpointConnections. */
         interface WithPrivateEndpointConnections {
             /**
-             * Specifies the privateEndpointConnections property: The privateEndpointConnections property..
+             * Specifies the privateEndpointConnections property: The private endpoint connections..
              *
-             * @param privateEndpointConnections The privateEndpointConnections property.
+             * @param privateEndpointConnections The private endpoint connections.
              * @return the next definition stage.
              */
             WithCreate withPrivateEndpointConnections(List<PrivateEndpointConnectionInner> privateEndpointConnections);
         }
+
         /** The stage of the DigitalTwinsDescription definition allowing to specify publicNetworkAccess. */
         interface WithPublicNetworkAccess {
             /**
@@ -224,6 +241,7 @@ public interface DigitalTwinsDescription {
             WithCreate withPublicNetworkAccess(PublicNetworkAccess publicNetworkAccess);
         }
     }
+
     /**
      * Begins update for the DigitalTwinsDescription resource.
      *
@@ -248,6 +266,7 @@ public interface DigitalTwinsDescription {
          */
         DigitalTwinsDescription apply(Context context);
     }
+
     /** The DigitalTwinsDescription update stages. */
     interface UpdateStages {
         /** The stage of the DigitalTwinsDescription update allowing to specify tags. */
@@ -260,6 +279,7 @@ public interface DigitalTwinsDescription {
              */
             Update withTags(Map<String, String> tags);
         }
+
         /** The stage of the DigitalTwinsDescription update allowing to specify identity. */
         interface WithIdentity {
             /**
@@ -270,6 +290,7 @@ public interface DigitalTwinsDescription {
              */
             Update withIdentity(DigitalTwinsIdentity identity);
         }
+
         /** The stage of the DigitalTwinsDescription update allowing to specify properties. */
         interface WithProperties {
             /**
@@ -281,6 +302,7 @@ public interface DigitalTwinsDescription {
             Update withProperties(DigitalTwinsPatchProperties properties);
         }
     }
+
     /**
      * Refreshes the resource to sync with Azure.
      *

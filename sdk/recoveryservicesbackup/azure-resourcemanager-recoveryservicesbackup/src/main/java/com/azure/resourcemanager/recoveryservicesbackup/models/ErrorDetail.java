@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Error Detail class which encapsulates Code, Message and Recommendations. */
+/**
+ * Error Detail class which encapsulates Code, Message and Recommendations.
+ */
 @Immutable
 public final class ErrorDetail {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ErrorDetail.class);
-
     /*
      * Error code.
      */
@@ -34,8 +32,14 @@ public final class ErrorDetail {
     private List<String> recommendations;
 
     /**
+     * Creates an instance of ErrorDetail class.
+     */
+    public ErrorDetail() {
+    }
+
+    /**
      * Get the code property: Error code.
-     *
+     * 
      * @return the code value.
      */
     public String code() {
@@ -44,7 +48,7 @@ public final class ErrorDetail {
 
     /**
      * Get the message property: Error Message related to the Code.
-     *
+     * 
      * @return the message value.
      */
     public String message() {
@@ -53,7 +57,7 @@ public final class ErrorDetail {
 
     /**
      * Get the recommendations property: List of recommendation strings.
-     *
+     * 
      * @return the recommendations value.
      */
     public List<String> recommendations() {
@@ -62,7 +66,7 @@ public final class ErrorDetail {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

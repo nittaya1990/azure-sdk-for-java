@@ -6,15 +6,12 @@ package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Properties of the Service Fabric Type Backend. */
 @Fluent
 public final class BackendServiceFabricClusterProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(BackendServiceFabricClusterProperties.class);
-
     /*
      * The client certificate id for the management endpoint.
      */
@@ -22,8 +19,7 @@ public final class BackendServiceFabricClusterProperties {
     private String clientCertificateId;
 
     /*
-     * The client certificate thumbprint for the management endpoint. Will be
-     * ignored if certificatesIds are provided
+     * The client certificate thumbprint for the management endpoint. Will be ignored if certificatesIds are provided
      */
     @JsonProperty(value = "clientCertificatethumbprint")
     private String clientCertificatethumbprint;
@@ -41,8 +37,7 @@ public final class BackendServiceFabricClusterProperties {
     private List<String> managementEndpoints;
 
     /*
-     * Thumbprints of certificates cluster management service uses for tls
-     * communication
+     * Thumbprints of certificates cluster management service uses for tls communication
      */
     @JsonProperty(value = "serverCertificateThumbprints")
     private List<String> serverCertificateThumbprints;
@@ -52,6 +47,10 @@ public final class BackendServiceFabricClusterProperties {
      */
     @JsonProperty(value = "serverX509Names")
     private List<X509CertificateName> serverX509Names;
+
+    /** Creates an instance of BackendServiceFabricClusterProperties class. */
+    public BackendServiceFabricClusterProperties() {
+    }
 
     /**
      * Get the clientCertificateId property: The client certificate id for the management endpoint.
@@ -110,8 +109,8 @@ public final class BackendServiceFabricClusterProperties {
      * @param maxPartitionResolutionRetries the maxPartitionResolutionRetries value to set.
      * @return the BackendServiceFabricClusterProperties object itself.
      */
-    public BackendServiceFabricClusterProperties withMaxPartitionResolutionRetries(
-        Integer maxPartitionResolutionRetries) {
+    public BackendServiceFabricClusterProperties
+        withMaxPartitionResolutionRetries(Integer maxPartitionResolutionRetries) {
         this.maxPartitionResolutionRetries = maxPartitionResolutionRetries;
         return this;
     }
@@ -153,8 +152,8 @@ public final class BackendServiceFabricClusterProperties {
      * @param serverCertificateThumbprints the serverCertificateThumbprints value to set.
      * @return the BackendServiceFabricClusterProperties object itself.
      */
-    public BackendServiceFabricClusterProperties withServerCertificateThumbprints(
-        List<String> serverCertificateThumbprints) {
+    public BackendServiceFabricClusterProperties
+        withServerCertificateThumbprints(List<String> serverCertificateThumbprints) {
         this.serverCertificateThumbprints = serverCertificateThumbprints;
         return this;
     }
@@ -186,14 +185,13 @@ public final class BackendServiceFabricClusterProperties {
      */
     public void validate() {
         if (managementEndpoints() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property managementEndpoints in model"
-                            + " BackendServiceFabricClusterProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property managementEndpoints in model" + " BackendServiceFabricClusterProperties"));
         }
         if (serverX509Names() != null) {
             serverX509Names().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(BackendServiceFabricClusterProperties.class);
 }

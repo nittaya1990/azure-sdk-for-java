@@ -72,6 +72,13 @@ public interface NamedValueContract {
     Boolean secret();
 
     /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
+
+    /**
      * Gets the inner com.azure.resourcemanager.apimanagement.fluent.models.NamedValueContractInner object.
      *
      * @return the inner object.
@@ -82,33 +89,32 @@ public interface NamedValueContract {
     interface Definition
         extends DefinitionStages.Blank, DefinitionStages.WithParentResource, DefinitionStages.WithCreate {
     }
+
     /** The NamedValueContract definition stages. */
     interface DefinitionStages {
         /** The first stage of the NamedValueContract definition. */
         interface Blank extends WithParentResource {
         }
+
         /** The stage of the NamedValueContract definition allowing to specify parent resource. */
         interface WithParentResource {
             /**
              * Specifies resourceGroupName, serviceName.
              *
-             * @param resourceGroupName The name of the resource group.
+             * @param resourceGroupName The name of the resource group. The name is case insensitive.
              * @param serviceName The name of the API Management service.
              * @return the next definition stage.
              */
             WithCreate withExistingService(String resourceGroupName, String serviceName);
         }
+
         /**
          * The stage of the NamedValueContract definition which contains all the minimum required properties for the
          * resource to be created, but also allows for any other optional properties to be specified.
          */
         interface WithCreate
-            extends DefinitionStages.WithTags,
-                DefinitionStages.WithDisplayName,
-                DefinitionStages.WithValue,
-                DefinitionStages.WithKeyVault,
-                DefinitionStages.WithSecret,
-                DefinitionStages.WithIfMatch {
+            extends DefinitionStages.WithTags, DefinitionStages.WithDisplayName, DefinitionStages.WithValue,
+            DefinitionStages.WithKeyVault, DefinitionStages.WithSecret, DefinitionStages.WithIfMatch {
             /**
              * Executes the create request.
              *
@@ -124,6 +130,7 @@ public interface NamedValueContract {
              */
             NamedValueContract create(Context context);
         }
+
         /** The stage of the NamedValueContract definition allowing to specify tags. */
         interface WithTags {
             /**
@@ -134,6 +141,7 @@ public interface NamedValueContract {
              */
             WithCreate withTags(List<String> tags);
         }
+
         /** The stage of the NamedValueContract definition allowing to specify displayName. */
         interface WithDisplayName {
             /**
@@ -146,6 +154,7 @@ public interface NamedValueContract {
              */
             WithCreate withDisplayName(String displayName);
         }
+
         /** The stage of the NamedValueContract definition allowing to specify value. */
         interface WithValue {
             /**
@@ -160,6 +169,7 @@ public interface NamedValueContract {
              */
             WithCreate withValue(String value);
         }
+
         /** The stage of the NamedValueContract definition allowing to specify keyVault. */
         interface WithKeyVault {
             /**
@@ -170,6 +180,7 @@ public interface NamedValueContract {
              */
             WithCreate withKeyVault(KeyVaultContractCreateProperties keyVault);
         }
+
         /** The stage of the NamedValueContract definition allowing to specify secret. */
         interface WithSecret {
             /**
@@ -182,6 +193,7 @@ public interface NamedValueContract {
              */
             WithCreate withSecret(Boolean secret);
         }
+
         /** The stage of the NamedValueContract definition allowing to specify ifMatch. */
         interface WithIfMatch {
             /**
@@ -195,6 +207,7 @@ public interface NamedValueContract {
             WithCreate withIfMatch(String ifMatch);
         }
     }
+
     /**
      * Begins update for the NamedValueContract resource.
      *
@@ -203,13 +216,8 @@ public interface NamedValueContract {
     NamedValueContract.Update update();
 
     /** The template for NamedValueContract update. */
-    interface Update
-        extends UpdateStages.WithTags,
-            UpdateStages.WithDisplayName,
-            UpdateStages.WithValue,
-            UpdateStages.WithKeyVault,
-            UpdateStages.WithSecret,
-            UpdateStages.WithIfMatch {
+    interface Update extends UpdateStages.WithTags, UpdateStages.WithDisplayName, UpdateStages.WithValue,
+        UpdateStages.WithKeyVault, UpdateStages.WithSecret, UpdateStages.WithIfMatch {
         /**
          * Executes the update request.
          *
@@ -225,6 +233,7 @@ public interface NamedValueContract {
          */
         NamedValueContract apply(Context context);
     }
+
     /** The NamedValueContract update stages. */
     interface UpdateStages {
         /** The stage of the NamedValueContract update allowing to specify tags. */
@@ -237,6 +246,7 @@ public interface NamedValueContract {
              */
             Update withTags(List<String> tags);
         }
+
         /** The stage of the NamedValueContract update allowing to specify displayName. */
         interface WithDisplayName {
             /**
@@ -249,6 +259,7 @@ public interface NamedValueContract {
              */
             Update withDisplayName(String displayName);
         }
+
         /** The stage of the NamedValueContract update allowing to specify value. */
         interface WithValue {
             /**
@@ -261,6 +272,7 @@ public interface NamedValueContract {
              */
             Update withValue(String value);
         }
+
         /** The stage of the NamedValueContract update allowing to specify keyVault. */
         interface WithKeyVault {
             /**
@@ -271,6 +283,7 @@ public interface NamedValueContract {
              */
             Update withKeyVault(KeyVaultContractCreateProperties keyVault);
         }
+
         /** The stage of the NamedValueContract update allowing to specify secret. */
         interface WithSecret {
             /**
@@ -283,6 +296,7 @@ public interface NamedValueContract {
              */
             Update withSecret(Boolean secret);
         }
+
         /** The stage of the NamedValueContract update allowing to specify ifMatch. */
         interface WithIfMatch {
             /**
@@ -296,6 +310,7 @@ public interface NamedValueContract {
             Update withIfMatch(String ifMatch);
         }
     }
+
     /**
      * Refreshes the resource to sync with Azure.
      *
@@ -314,15 +329,6 @@ public interface NamedValueContract {
     /**
      * Gets the secret of the named value specified by its identifier.
      *
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the secret of the named value specified by its identifier.
-     */
-    NamedValueSecretContract listValue();
-
-    /**
-     * Gets the secret of the named value specified by its identifier.
-     *
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
@@ -330,6 +336,15 @@ public interface NamedValueContract {
      * @return the secret of the named value specified by its identifier.
      */
     Response<NamedValueSecretContract> listValueWithResponse(Context context);
+
+    /**
+     * Gets the secret of the named value specified by its identifier.
+     *
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the secret of the named value specified by its identifier.
+     */
+    NamedValueSecretContract listValue();
 
     /**
      * Refresh the secret of the named value specified by its identifier.

@@ -5,17 +5,12 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
 /** Tenant Configuration Synchronization State. */
 @Fluent
 public final class TenantConfigurationSyncStateContractProperties {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(TenantConfigurationSyncStateContractProperties.class);
-
     /*
      * The name of Git branch.
      */
@@ -29,15 +24,13 @@ public final class TenantConfigurationSyncStateContractProperties {
     private String commitId;
 
     /*
-     * value indicating if last sync was save (true) or deploy (false)
-     * operation.
+     * value indicating if last sync was save (true) or deploy (false) operation.
      */
     @JsonProperty(value = "isExport")
     private Boolean isExport;
 
     /*
-     * value indicating if last synchronization was later than the
-     * configuration change.
+     * value indicating if last synchronization was later than the configuration change.
      */
     @JsonProperty(value = "isSynced")
     private Boolean isSynced;
@@ -49,18 +42,16 @@ public final class TenantConfigurationSyncStateContractProperties {
     private Boolean isGitEnabled;
 
     /*
-     * The date of the latest synchronization. The date conforms to the
-     * following format: `yyyy-MM-ddTHH:mm:ssZ` as specified by the ISO 8601
-     * standard.
+     * The date of the latest synchronization. The date conforms to the following format: `yyyy-MM-ddTHH:mm:ssZ` as
+     * specified by the ISO 8601 standard.
      *
      */
     @JsonProperty(value = "syncDate")
     private OffsetDateTime syncDate;
 
     /*
-     * The date of the latest configuration change. The date conforms to the
-     * following format: `yyyy-MM-ddTHH:mm:ssZ` as specified by the ISO 8601
-     * standard.
+     * The date of the latest configuration change. The date conforms to the following format: `yyyy-MM-ddTHH:mm:ssZ`
+     * as specified by the ISO 8601 standard.
      *
      */
     @JsonProperty(value = "configurationChangeDate")
@@ -71,6 +62,10 @@ public final class TenantConfigurationSyncStateContractProperties {
      */
     @JsonProperty(value = "lastOperationId")
     private String lastOperationId;
+
+    /** Creates an instance of TenantConfigurationSyncStateContractProperties class. */
+    public TenantConfigurationSyncStateContractProperties() {
+    }
 
     /**
      * Get the branch property: The name of Git branch.
@@ -211,8 +206,8 @@ public final class TenantConfigurationSyncStateContractProperties {
      * @param configurationChangeDate the configurationChangeDate value to set.
      * @return the TenantConfigurationSyncStateContractProperties object itself.
      */
-    public TenantConfigurationSyncStateContractProperties withConfigurationChangeDate(
-        OffsetDateTime configurationChangeDate) {
+    public TenantConfigurationSyncStateContractProperties
+        withConfigurationChangeDate(OffsetDateTime configurationChangeDate) {
         this.configurationChangeDate = configurationChangeDate;
         return this;
     }

@@ -8,16 +8,28 @@ import com.azure.core.util.ExpandableStringEnum;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.Collection;
 
-/** Defines values for EventLevelValues. */
+/** Level of event. */
 public final class EventLevelValues extends ExpandableStringEnum<EventLevelValues> {
     /** Static value Critical for EventLevelValues. */
     public static final EventLevelValues CRITICAL = fromString("Critical");
+
+    /** Static value Error for EventLevelValues. */
+    public static final EventLevelValues ERROR = fromString("Error");
 
     /** Static value Warning for EventLevelValues. */
     public static final EventLevelValues WARNING = fromString("Warning");
 
     /** Static value Informational for EventLevelValues. */
     public static final EventLevelValues INFORMATIONAL = fromString("Informational");
+
+    /**
+     * Creates a new instance of EventLevelValues value.
+     *
+     * @deprecated Use the {@link #fromString(String)} factory method.
+     */
+    @Deprecated
+    public EventLevelValues() {
+    }
 
     /**
      * Creates or finds a EventLevelValues from its string representation.
@@ -30,7 +42,11 @@ public final class EventLevelValues extends ExpandableStringEnum<EventLevelValue
         return fromString(name, EventLevelValues.class);
     }
 
-    /** @return known EventLevelValues values. */
+    /**
+     * Gets known EventLevelValues values.
+     *
+     * @return known EventLevelValues values.
+     */
     public static Collection<EventLevelValues> values() {
         return values(EventLevelValues.class);
     }

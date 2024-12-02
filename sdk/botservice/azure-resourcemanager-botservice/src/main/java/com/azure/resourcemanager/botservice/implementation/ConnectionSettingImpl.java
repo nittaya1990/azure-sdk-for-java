@@ -13,6 +13,7 @@ import com.azure.resourcemanager.botservice.models.ConnectionSettingProperties;
 import com.azure.resourcemanager.botservice.models.Kind;
 import com.azure.resourcemanager.botservice.models.Sku;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 public final class ConnectionSettingImpl
@@ -62,12 +63,25 @@ public final class ConnectionSettingImpl
         return this.innerModel().etag();
     }
 
+    public List<String> zones() {
+        List<String> inner = this.innerModel().zones();
+        if (inner != null) {
+            return Collections.unmodifiableList(inner);
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
     public Region region() {
         return Region.fromName(this.regionName());
     }
 
     public String regionName() {
         return this.location();
+    }
+
+    public String resourceGroupName() {
+        return resourceGroupName;
     }
 
     public ConnectionSettingInner innerModel() {
@@ -91,22 +105,18 @@ public final class ConnectionSettingImpl
     }
 
     public ConnectionSetting create() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getBotConnections()
-                .createWithResponse(resourceGroupName, resourceName, connectionName, this.innerModel(), Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getBotConnections()
+            .createWithResponse(resourceGroupName, resourceName, connectionName, this.innerModel(), Context.NONE)
+            .getValue();
         return this;
     }
 
     public ConnectionSetting create(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getBotConnections()
-                .createWithResponse(resourceGroupName, resourceName, connectionName, this.innerModel(), context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getBotConnections()
+            .createWithResponse(resourceGroupName, resourceName, connectionName, this.innerModel(), context)
+            .getValue();
         return this;
     }
 
@@ -121,62 +131,53 @@ public final class ConnectionSettingImpl
     }
 
     public ConnectionSetting apply() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getBotConnections()
-                .updateWithResponse(resourceGroupName, resourceName, connectionName, this.innerModel(), Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getBotConnections()
+            .updateWithResponse(resourceGroupName, resourceName, connectionName, this.innerModel(), Context.NONE)
+            .getValue();
         return this;
     }
 
     public ConnectionSetting apply(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getBotConnections()
-                .updateWithResponse(resourceGroupName, resourceName, connectionName, this.innerModel(), context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getBotConnections()
+            .updateWithResponse(resourceGroupName, resourceName, connectionName, this.innerModel(), context)
+            .getValue();
         return this;
     }
 
-    ConnectionSettingImpl(
-        ConnectionSettingInner innerObject, com.azure.resourcemanager.botservice.BotServiceManager serviceManager) {
+    ConnectionSettingImpl(ConnectionSettingInner innerObject,
+        com.azure.resourcemanager.botservice.BotServiceManager serviceManager) {
         this.innerObject = innerObject;
         this.serviceManager = serviceManager;
-        this.resourceGroupName = Utils.getValueFromIdByName(innerObject.id(), "resourceGroups");
-        this.resourceName = Utils.getValueFromIdByName(innerObject.id(), "botServices");
-        this.connectionName = Utils.getValueFromIdByName(innerObject.id(), "connections");
+        this.resourceGroupName = ResourceManagerUtils.getValueFromIdByName(innerObject.id(), "resourceGroups");
+        this.resourceName = ResourceManagerUtils.getValueFromIdByName(innerObject.id(), "botServices");
+        this.connectionName = ResourceManagerUtils.getValueFromIdByName(innerObject.id(), "connections");
     }
 
     public ConnectionSetting refresh() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getBotConnections()
-                .getWithResponse(resourceGroupName, resourceName, connectionName, Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getBotConnections()
+            .getWithResponse(resourceGroupName, resourceName, connectionName, Context.NONE)
+            .getValue();
         return this;
     }
 
     public ConnectionSetting refresh(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getBotConnections()
-                .getWithResponse(resourceGroupName, resourceName, connectionName, context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getBotConnections()
+            .getWithResponse(resourceGroupName, resourceName, connectionName, context)
+            .getValue();
         return this;
+    }
+
+    public Response<ConnectionSetting> listWithSecretsWithResponse(Context context) {
+        return serviceManager.botConnections()
+            .listWithSecretsWithResponse(resourceGroupName, resourceName, connectionName, context);
     }
 
     public ConnectionSetting listWithSecrets() {
         return serviceManager.botConnections().listWithSecrets(resourceGroupName, resourceName, connectionName);
-    }
-
-    public Response<ConnectionSetting> listWithSecretsWithResponse(Context context) {
-        return serviceManager
-            .botConnections()
-            .listWithSecretsWithResponse(resourceGroupName, resourceName, connectionName, context);
     }
 
     public ConnectionSettingImpl withRegion(Region location) {

@@ -5,19 +5,18 @@
 package com.azure.resourcemanager.eventgrid.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.eventgrid.models.ResourceRegionType;
-import com.azure.resourcemanager.eventgrid.models.TopicTypePropertiesSupportedScopesForSourceItem;
+import com.azure.resourcemanager.eventgrid.models.TopicTypeAdditionalEnforcedPermission;
 import com.azure.resourcemanager.eventgrid.models.TopicTypeProvisioningState;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.azure.resourcemanager.eventgrid.models.TopicTypeSourceScope;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Properties of a topic type. */
+/**
+ * Properties of a topic type.
+ */
 @Fluent
 public final class TopicTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TopicTypeProperties.class);
-
     /*
      * Namespace of the provider of the topic type.
      */
@@ -43,7 +42,7 @@ public final class TopicTypeProperties {
     private ResourceRegionType resourceRegionType;
 
     /*
-     * Provisioning state of the topic type
+     * Provisioning state of the topic type.
      */
     @JsonProperty(value = "provisioningState")
     private TopicTypeProvisioningState provisioningState;
@@ -64,11 +63,29 @@ public final class TopicTypeProperties {
      * Supported source scopes.
      */
     @JsonProperty(value = "supportedScopesForSource")
-    private List<TopicTypePropertiesSupportedScopesForSourceItem> supportedScopesForSource;
+    private List<TopicTypeSourceScope> supportedScopesForSource;
+
+    /*
+     * Flag to indicate that a topic type can support both regional or global system topics.
+     */
+    @JsonProperty(value = "areRegionalAndGlobalSourcesSupported")
+    private Boolean areRegionalAndGlobalSourcesSupported;
+
+    /*
+     * Permissions which are enforced for creating and updating system topics of this this topic type.
+     */
+    @JsonProperty(value = "additionalEnforcedPermissions")
+    private List<TopicTypeAdditionalEnforcedPermission> additionalEnforcedPermissions;
+
+    /**
+     * Creates an instance of TopicTypeProperties class.
+     */
+    public TopicTypeProperties() {
+    }
 
     /**
      * Get the provider property: Namespace of the provider of the topic type.
-     *
+     * 
      * @return the provider value.
      */
     public String provider() {
@@ -77,7 +94,7 @@ public final class TopicTypeProperties {
 
     /**
      * Set the provider property: Namespace of the provider of the topic type.
-     *
+     * 
      * @param provider the provider value to set.
      * @return the TopicTypeProperties object itself.
      */
@@ -88,7 +105,7 @@ public final class TopicTypeProperties {
 
     /**
      * Get the displayName property: Display Name for the topic type.
-     *
+     * 
      * @return the displayName value.
      */
     public String displayName() {
@@ -97,7 +114,7 @@ public final class TopicTypeProperties {
 
     /**
      * Set the displayName property: Display Name for the topic type.
-     *
+     * 
      * @param displayName the displayName value to set.
      * @return the TopicTypeProperties object itself.
      */
@@ -108,7 +125,7 @@ public final class TopicTypeProperties {
 
     /**
      * Get the description property: Description of the topic type.
-     *
+     * 
      * @return the description value.
      */
     public String description() {
@@ -117,7 +134,7 @@ public final class TopicTypeProperties {
 
     /**
      * Set the description property: Description of the topic type.
-     *
+     * 
      * @param description the description value to set.
      * @return the TopicTypeProperties object itself.
      */
@@ -128,7 +145,7 @@ public final class TopicTypeProperties {
 
     /**
      * Get the resourceRegionType property: Region type of the resource.
-     *
+     * 
      * @return the resourceRegionType value.
      */
     public ResourceRegionType resourceRegionType() {
@@ -137,7 +154,7 @@ public final class TopicTypeProperties {
 
     /**
      * Set the resourceRegionType property: Region type of the resource.
-     *
+     * 
      * @param resourceRegionType the resourceRegionType value to set.
      * @return the TopicTypeProperties object itself.
      */
@@ -148,7 +165,7 @@ public final class TopicTypeProperties {
 
     /**
      * Get the provisioningState property: Provisioning state of the topic type.
-     *
+     * 
      * @return the provisioningState value.
      */
     public TopicTypeProvisioningState provisioningState() {
@@ -157,7 +174,7 @@ public final class TopicTypeProperties {
 
     /**
      * Set the provisioningState property: Provisioning state of the topic type.
-     *
+     * 
      * @param provisioningState the provisioningState value to set.
      * @return the TopicTypeProperties object itself.
      */
@@ -168,7 +185,7 @@ public final class TopicTypeProperties {
 
     /**
      * Get the supportedLocations property: List of locations supported by this topic type.
-     *
+     * 
      * @return the supportedLocations value.
      */
     public List<String> supportedLocations() {
@@ -177,7 +194,7 @@ public final class TopicTypeProperties {
 
     /**
      * Set the supportedLocations property: List of locations supported by this topic type.
-     *
+     * 
      * @param supportedLocations the supportedLocations value to set.
      * @return the TopicTypeProperties object itself.
      */
@@ -188,7 +205,7 @@ public final class TopicTypeProperties {
 
     /**
      * Get the sourceResourceFormat property: Source resource format.
-     *
+     * 
      * @return the sourceResourceFormat value.
      */
     public String sourceResourceFormat() {
@@ -197,7 +214,7 @@ public final class TopicTypeProperties {
 
     /**
      * Set the sourceResourceFormat property: Source resource format.
-     *
+     * 
      * @param sourceResourceFormat the sourceResourceFormat value to set.
      * @return the TopicTypeProperties object itself.
      */
@@ -208,30 +225,77 @@ public final class TopicTypeProperties {
 
     /**
      * Get the supportedScopesForSource property: Supported source scopes.
-     *
+     * 
      * @return the supportedScopesForSource value.
      */
-    public List<TopicTypePropertiesSupportedScopesForSourceItem> supportedScopesForSource() {
+    public List<TopicTypeSourceScope> supportedScopesForSource() {
         return this.supportedScopesForSource;
     }
 
     /**
      * Set the supportedScopesForSource property: Supported source scopes.
-     *
+     * 
      * @param supportedScopesForSource the supportedScopesForSource value to set.
      * @return the TopicTypeProperties object itself.
      */
-    public TopicTypeProperties withSupportedScopesForSource(
-        List<TopicTypePropertiesSupportedScopesForSourceItem> supportedScopesForSource) {
+    public TopicTypeProperties withSupportedScopesForSource(List<TopicTypeSourceScope> supportedScopesForSource) {
         this.supportedScopesForSource = supportedScopesForSource;
         return this;
     }
 
     /**
+     * Get the areRegionalAndGlobalSourcesSupported property: Flag to indicate that a topic type can support both
+     * regional or global system topics.
+     * 
+     * @return the areRegionalAndGlobalSourcesSupported value.
+     */
+    public Boolean areRegionalAndGlobalSourcesSupported() {
+        return this.areRegionalAndGlobalSourcesSupported;
+    }
+
+    /**
+     * Set the areRegionalAndGlobalSourcesSupported property: Flag to indicate that a topic type can support both
+     * regional or global system topics.
+     * 
+     * @param areRegionalAndGlobalSourcesSupported the areRegionalAndGlobalSourcesSupported value to set.
+     * @return the TopicTypeProperties object itself.
+     */
+    public TopicTypeProperties withAreRegionalAndGlobalSourcesSupported(Boolean areRegionalAndGlobalSourcesSupported) {
+        this.areRegionalAndGlobalSourcesSupported = areRegionalAndGlobalSourcesSupported;
+        return this;
+    }
+
+    /**
+     * Get the additionalEnforcedPermissions property: Permissions which are enforced for creating and updating system
+     * topics of this this topic type.
+     * 
+     * @return the additionalEnforcedPermissions value.
+     */
+    public List<TopicTypeAdditionalEnforcedPermission> additionalEnforcedPermissions() {
+        return this.additionalEnforcedPermissions;
+    }
+
+    /**
+     * Set the additionalEnforcedPermissions property: Permissions which are enforced for creating and updating system
+     * topics of this this topic type.
+     * 
+     * @param additionalEnforcedPermissions the additionalEnforcedPermissions value to set.
+     * @return the TopicTypeProperties object itself.
+     */
+    public TopicTypeProperties
+        withAdditionalEnforcedPermissions(List<TopicTypeAdditionalEnforcedPermission> additionalEnforcedPermissions) {
+        this.additionalEnforcedPermissions = additionalEnforcedPermissions;
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
+        if (additionalEnforcedPermissions() != null) {
+            additionalEnforcedPermissions().forEach(e -> e.validate());
+        }
     }
 }

@@ -5,15 +5,16 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.models.AdditionalLocation;
 import com.azure.resourcemanager.apimanagement.models.ApiManagementServiceBaseProperties;
 import com.azure.resourcemanager.apimanagement.models.ApiVersionConstraint;
 import com.azure.resourcemanager.apimanagement.models.CertificateConfiguration;
 import com.azure.resourcemanager.apimanagement.models.HostnameConfiguration;
+import com.azure.resourcemanager.apimanagement.models.NatGatewayState;
+import com.azure.resourcemanager.apimanagement.models.PublicNetworkAccess;
+import com.azure.resourcemanager.apimanagement.models.RemotePrivateEndpointConnectionWrapper;
 import com.azure.resourcemanager.apimanagement.models.VirtualNetworkConfiguration;
 import com.azure.resourcemanager.apimanagement.models.VirtualNetworkType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.Map;
@@ -21,8 +22,6 @@ import java.util.Map;
 /** Properties of an API Management service resource description. */
 @Fluent
 public final class ApiManagementServiceUpdateProperties extends ApiManagementServiceBaseProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApiManagementServiceUpdateProperties.class);
-
     /*
      * Publisher email.
      */
@@ -34,6 +33,10 @@ public final class ApiManagementServiceUpdateProperties extends ApiManagementSer
      */
     @JsonProperty(value = "publisherName")
     private String publisherName;
+
+    /** Creates an instance of ApiManagementServiceUpdateProperties class. */
+    public ApiManagementServiceUpdateProperties() {
+    }
 
     /**
      * Get the publisherEmail property: Publisher email.
@@ -84,16 +87,30 @@ public final class ApiManagementServiceUpdateProperties extends ApiManagementSer
 
     /** {@inheritDoc} */
     @Override
-    public ApiManagementServiceUpdateProperties withHostnameConfigurations(
-        List<HostnameConfiguration> hostnameConfigurations) {
+    public ApiManagementServiceUpdateProperties
+        withHostnameConfigurations(List<HostnameConfiguration> hostnameConfigurations) {
         super.withHostnameConfigurations(hostnameConfigurations);
         return this;
     }
 
     /** {@inheritDoc} */
     @Override
-    public ApiManagementServiceUpdateProperties withVirtualNetworkConfiguration(
-        VirtualNetworkConfiguration virtualNetworkConfiguration) {
+    public ApiManagementServiceUpdateProperties withPublicIpAddressId(String publicIpAddressId) {
+        super.withPublicIpAddressId(publicIpAddressId);
+        return this;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public ApiManagementServiceUpdateProperties withPublicNetworkAccess(PublicNetworkAccess publicNetworkAccess) {
+        super.withPublicNetworkAccess(publicNetworkAccess);
+        return this;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public ApiManagementServiceUpdateProperties
+        withVirtualNetworkConfiguration(VirtualNetworkConfiguration virtualNetworkConfiguration) {
         super.withVirtualNetworkConfiguration(virtualNetworkConfiguration);
         return this;
     }
@@ -128,6 +145,13 @@ public final class ApiManagementServiceUpdateProperties extends ApiManagementSer
 
     /** {@inheritDoc} */
     @Override
+    public ApiManagementServiceUpdateProperties withNatGatewayState(NatGatewayState natGatewayState) {
+        super.withNatGatewayState(natGatewayState);
+        return this;
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public ApiManagementServiceUpdateProperties withDisableGateway(Boolean disableGateway) {
         super.withDisableGateway(disableGateway);
         return this;
@@ -151,6 +175,14 @@ public final class ApiManagementServiceUpdateProperties extends ApiManagementSer
     @Override
     public ApiManagementServiceUpdateProperties withRestore(Boolean restore) {
         super.withRestore(restore);
+        return this;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public ApiManagementServiceUpdateProperties
+        withPrivateEndpointConnections(List<RemotePrivateEndpointConnectionWrapper> privateEndpointConnections) {
+        super.withPrivateEndpointConnections(privateEndpointConnections);
         return this;
     }
 

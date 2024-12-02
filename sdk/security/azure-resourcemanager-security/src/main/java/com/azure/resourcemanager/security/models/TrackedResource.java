@@ -6,16 +6,15 @@ package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
-/** Describes an Azure tracked resource. */
+/**
+ * Describes an Azure tracked resource.
+ */
 @Fluent
 public final class TrackedResource extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TrackedResource.class);
-
     /*
      * Location where the resource is stored
      */
@@ -29,8 +28,7 @@ public final class TrackedResource extends ProxyResource {
     private String kind;
 
     /*
-     * Entity tag is used for comparing two or more entities from the same
-     * requested resource.
+     * Entity tag is used for comparing two or more entities from the same requested resource.
      */
     @JsonProperty(value = "etag")
     private String etag;
@@ -39,11 +37,18 @@ public final class TrackedResource extends ProxyResource {
      * A list of key value pairs that describe the resource.
      */
     @JsonProperty(value = "tags")
+    @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
     private Map<String, String> tags;
 
     /**
+     * Creates an instance of TrackedResource class.
+     */
+    public TrackedResource() {
+    }
+
+    /**
      * Get the location property: Location where the resource is stored.
-     *
+     * 
      * @return the location value.
      */
     public String location() {
@@ -52,7 +57,7 @@ public final class TrackedResource extends ProxyResource {
 
     /**
      * Set the location property: Location where the resource is stored.
-     *
+     * 
      * @param location the location value to set.
      * @return the TrackedResource object itself.
      */
@@ -63,7 +68,7 @@ public final class TrackedResource extends ProxyResource {
 
     /**
      * Get the kind property: Kind of the resource.
-     *
+     * 
      * @return the kind value.
      */
     public String kind() {
@@ -72,7 +77,7 @@ public final class TrackedResource extends ProxyResource {
 
     /**
      * Set the kind property: Kind of the resource.
-     *
+     * 
      * @param kind the kind value to set.
      * @return the TrackedResource object itself.
      */
@@ -83,7 +88,7 @@ public final class TrackedResource extends ProxyResource {
 
     /**
      * Get the etag property: Entity tag is used for comparing two or more entities from the same requested resource.
-     *
+     * 
      * @return the etag value.
      */
     public String etag() {
@@ -92,7 +97,7 @@ public final class TrackedResource extends ProxyResource {
 
     /**
      * Set the etag property: Entity tag is used for comparing two or more entities from the same requested resource.
-     *
+     * 
      * @param etag the etag value to set.
      * @return the TrackedResource object itself.
      */
@@ -103,7 +108,7 @@ public final class TrackedResource extends ProxyResource {
 
     /**
      * Get the tags property: A list of key value pairs that describe the resource.
-     *
+     * 
      * @return the tags value.
      */
     public Map<String, String> tags() {
@@ -112,7 +117,7 @@ public final class TrackedResource extends ProxyResource {
 
     /**
      * Set the tags property: A list of key value pairs that describe the resource.
-     *
+     * 
      * @param tags the tags value to set.
      * @return the TrackedResource object itself.
      */
@@ -123,7 +128,7 @@ public final class TrackedResource extends ProxyResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

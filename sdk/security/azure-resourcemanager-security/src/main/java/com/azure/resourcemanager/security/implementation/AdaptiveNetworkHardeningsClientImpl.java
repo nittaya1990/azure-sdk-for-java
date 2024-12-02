@@ -28,7 +28,6 @@ import com.azure.core.management.exception.ManagementException;
 import com.azure.core.management.polling.PollResult;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.core.util.polling.PollerFlux;
 import com.azure.core.util.polling.SyncPoller;
 import com.azure.resourcemanager.security.fluent.AdaptiveNetworkHardeningsClient;
@@ -39,26 +38,28 @@ import java.nio.ByteBuffer;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-/** An instance of this class provides access to all the operations defined in AdaptiveNetworkHardeningsClient. */
+/**
+ * An instance of this class provides access to all the operations defined in AdaptiveNetworkHardeningsClient.
+ */
 public final class AdaptiveNetworkHardeningsClientImpl implements AdaptiveNetworkHardeningsClient {
-    private final ClientLogger logger = new ClientLogger(AdaptiveNetworkHardeningsClientImpl.class);
-
-    /** The proxy service used to perform REST calls. */
+    /**
+     * The proxy service used to perform REST calls.
+     */
     private final AdaptiveNetworkHardeningsService service;
 
-    /** The service client containing this operation class. */
+    /**
+     * The service client containing this operation class.
+     */
     private final SecurityCenterImpl client;
 
     /**
      * Initializes an instance of AdaptiveNetworkHardeningsClientImpl.
-     *
+     * 
      * @param client the instance of the service client containing this operation class.
      */
     AdaptiveNetworkHardeningsClientImpl(SecurityCenterImpl client) {
-        this.service =
-            RestProxy
-                .create(
-                    AdaptiveNetworkHardeningsService.class, client.getHttpPipeline(), client.getSerializerAdapter());
+        this.service = RestProxy.create(AdaptiveNetworkHardeningsService.class, client.getHttpPipeline(),
+            client.getSerializerAdapter());
         this.client = client;
     }
 
@@ -68,102 +69,78 @@ public final class AdaptiveNetworkHardeningsClientImpl implements AdaptiveNetwor
      */
     @Host("{$host}")
     @ServiceInterface(name = "SecurityCenterAdapti")
-    private interface AdaptiveNetworkHardeningsService {
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceNamespace}"
-                + "/{resourceType}/{resourceName}/providers/Microsoft.Security/adaptiveNetworkHardenings")
-        @ExpectedResponses({200})
+    public interface AdaptiveNetworkHardeningsService {
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceNamespace}/{resourceType}/{resourceName}/providers/Microsoft.Security/adaptiveNetworkHardenings")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<AdaptiveNetworkHardeningsList>> listByExtendedResource(
-            @HostParam("$host") String endpoint,
+        Mono<Response<AdaptiveNetworkHardeningsList>> listByExtendedResource(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
             @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("resourceNamespace") String resourceNamespace,
-            @PathParam("resourceType") String resourceType,
-            @PathParam("resourceName") String resourceName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceNamespace") String resourceNamespace, @PathParam("resourceType") String resourceType,
+            @PathParam("resourceName") String resourceName, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceNamespace}"
-                + "/{resourceType}/{resourceName}/providers/Microsoft.Security/adaptiveNetworkHardenings"
-                + "/{adaptiveNetworkHardeningResourceName}")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceNamespace}/{resourceType}/{resourceName}/providers/Microsoft.Security/adaptiveNetworkHardenings/{adaptiveNetworkHardeningResourceName}")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<AdaptiveNetworkHardeningInner>> get(
-            @HostParam("$host") String endpoint,
+        Mono<Response<AdaptiveNetworkHardeningInner>> get(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
             @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("resourceNamespace") String resourceNamespace,
-            @PathParam("resourceType") String resourceType,
+            @PathParam("resourceNamespace") String resourceNamespace, @PathParam("resourceType") String resourceType,
             @PathParam("resourceName") String resourceName,
             @PathParam("adaptiveNetworkHardeningResourceName") String adaptiveNetworkHardeningResourceName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @QueryParam("api-version") String apiVersion, @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceNamespace}"
-                + "/{resourceType}/{resourceName}/providers/Microsoft.Security/adaptiveNetworkHardenings"
-                + "/{adaptiveNetworkHardeningResourceName}/{adaptiveNetworkHardeningEnforceAction}")
-        @ExpectedResponses({200, 202})
+        @Headers({ "Content-Type: application/json" })
+        @Post("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceNamespace}/{resourceType}/{resourceName}/providers/Microsoft.Security/adaptiveNetworkHardenings/{adaptiveNetworkHardeningResourceName}/{adaptiveNetworkHardeningEnforceAction}")
+        @ExpectedResponses({ 200, 202 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> enforce(
-            @HostParam("$host") String endpoint,
+        Mono<Response<Flux<ByteBuffer>>> enforce(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
             @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("resourceNamespace") String resourceNamespace,
-            @PathParam("resourceType") String resourceType,
+            @PathParam("resourceNamespace") String resourceNamespace, @PathParam("resourceType") String resourceType,
             @PathParam("resourceName") String resourceName,
             @PathParam("adaptiveNetworkHardeningResourceName") String adaptiveNetworkHardeningResourceName,
             @PathParam("adaptiveNetworkHardeningEnforceAction") String adaptiveNetworkHardeningEnforceAction,
             @QueryParam("api-version") String apiVersion,
             @BodyParam("application/json") AdaptiveNetworkHardeningEnforceRequest body,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
+        @Headers({ "Content-Type: application/json" })
         @Get("{nextLink}")
-        @ExpectedResponses({200})
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<AdaptiveNetworkHardeningsList>> listByExtendedResourceNext(
-            @PathParam(value = "nextLink", encoded = true) String nextLink,
-            @HostParam("$host") String endpoint,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam(value = "nextLink", encoded = true) String nextLink, @HostParam("$host") String endpoint,
+            @HeaderParam("Accept") String accept, Context context);
     }
 
     /**
      * Gets a list of Adaptive Network Hardenings resources in scope of an extended resource.
-     *
+     * 
      * @param resourceGroupName The name of the resource group within the user's subscription. The name is case
-     *     insensitive.
+     * insensitive.
      * @param resourceNamespace The Namespace of the resource.
      * @param resourceType The type of the resource.
      * @param resourceName Name of the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Adaptive Network Hardenings resources in scope of an extended resource.
+     * @return a list of Adaptive Network Hardenings resources in scope of an extended resource along with
+     * {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<AdaptiveNetworkHardeningInner>> listByExtendedResourceSinglePageAsync(
         String resourceGroupName, String resourceNamespace, String resourceType, String resourceName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -183,35 +160,18 @@ public final class AdaptiveNetworkHardeningsClientImpl implements AdaptiveNetwor
         final String accept = "application/json";
         return FluxUtil
             .withContext(
-                context ->
-                    service
-                        .listByExtendedResource(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            resourceNamespace,
-                            resourceType,
-                            resourceName,
-                            apiVersion,
-                            accept,
-                            context))
-            .<PagedResponse<AdaptiveNetworkHardeningInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null))
+                context -> service.listByExtendedResource(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                    resourceGroupName, resourceNamespace, resourceType, resourceName, apiVersion, accept, context))
+            .<PagedResponse<AdaptiveNetworkHardeningInner>>map(res -> new PagedResponseBase<>(res.getRequest(),
+                res.getStatusCode(), res.getHeaders(), res.getValue().value(), res.getValue().nextLink(), null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Gets a list of Adaptive Network Hardenings resources in scope of an extended resource.
-     *
+     * 
      * @param resourceGroupName The name of the resource group within the user's subscription. The name is case
-     *     insensitive.
+     * insensitive.
      * @param resourceNamespace The Namespace of the resource.
      * @param resourceType The type of the resource.
      * @param resourceName Name of the resource.
@@ -219,22 +179,19 @@ public final class AdaptiveNetworkHardeningsClientImpl implements AdaptiveNetwor
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Adaptive Network Hardenings resources in scope of an extended resource.
+     * @return a list of Adaptive Network Hardenings resources in scope of an extended resource along with
+     * {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<AdaptiveNetworkHardeningInner>> listByExtendedResourceSinglePageAsync(
         String resourceGroupName, String resourceNamespace, String resourceType, String resourceName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -254,54 +211,38 @@ public final class AdaptiveNetworkHardeningsClientImpl implements AdaptiveNetwor
         final String accept = "application/json";
         context = this.client.mergeContext(context);
         return service
-            .listByExtendedResource(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                resourceNamespace,
-                resourceType,
-                resourceName,
-                apiVersion,
-                accept,
-                context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null));
+            .listByExtendedResource(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+                resourceNamespace, resourceType, resourceName, apiVersion, accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), res.getValue().nextLink(), null));
     }
 
     /**
      * Gets a list of Adaptive Network Hardenings resources in scope of an extended resource.
-     *
+     * 
      * @param resourceGroupName The name of the resource group within the user's subscription. The name is case
-     *     insensitive.
+     * insensitive.
      * @param resourceNamespace The Namespace of the resource.
      * @param resourceType The type of the resource.
      * @param resourceName Name of the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Adaptive Network Hardenings resources in scope of an extended resource.
+     * @return a list of Adaptive Network Hardenings resources in scope of an extended resource as paginated response
+     * with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<AdaptiveNetworkHardeningInner> listByExtendedResourceAsync(
-        String resourceGroupName, String resourceNamespace, String resourceType, String resourceName) {
-        return new PagedFlux<>(
-            () ->
-                listByExtendedResourceSinglePageAsync(resourceGroupName, resourceNamespace, resourceType, resourceName),
-            nextLink -> listByExtendedResourceNextSinglePageAsync(nextLink));
+    private PagedFlux<AdaptiveNetworkHardeningInner> listByExtendedResourceAsync(String resourceGroupName,
+        String resourceNamespace, String resourceType, String resourceName) {
+        return new PagedFlux<>(() -> listByExtendedResourceSinglePageAsync(resourceGroupName, resourceNamespace,
+            resourceType, resourceName), nextLink -> listByExtendedResourceNextSinglePageAsync(nextLink));
     }
 
     /**
      * Gets a list of Adaptive Network Hardenings resources in scope of an extended resource.
-     *
+     * 
      * @param resourceGroupName The name of the resource group within the user's subscription. The name is case
-     *     insensitive.
+     * insensitive.
      * @param resourceNamespace The Namespace of the resource.
      * @param resourceType The type of the resource.
      * @param resourceName Name of the resource.
@@ -309,43 +250,43 @@ public final class AdaptiveNetworkHardeningsClientImpl implements AdaptiveNetwor
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Adaptive Network Hardenings resources in scope of an extended resource.
+     * @return a list of Adaptive Network Hardenings resources in scope of an extended resource as paginated response
+     * with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<AdaptiveNetworkHardeningInner> listByExtendedResourceAsync(
-        String resourceGroupName, String resourceNamespace, String resourceType, String resourceName, Context context) {
-        return new PagedFlux<>(
-            () ->
-                listByExtendedResourceSinglePageAsync(
-                    resourceGroupName, resourceNamespace, resourceType, resourceName, context),
+    private PagedFlux<AdaptiveNetworkHardeningInner> listByExtendedResourceAsync(String resourceGroupName,
+        String resourceNamespace, String resourceType, String resourceName, Context context) {
+        return new PagedFlux<>(() -> listByExtendedResourceSinglePageAsync(resourceGroupName, resourceNamespace,
+            resourceType, resourceName, context),
             nextLink -> listByExtendedResourceNextSinglePageAsync(nextLink, context));
     }
 
     /**
      * Gets a list of Adaptive Network Hardenings resources in scope of an extended resource.
-     *
+     * 
      * @param resourceGroupName The name of the resource group within the user's subscription. The name is case
-     *     insensitive.
+     * insensitive.
      * @param resourceNamespace The Namespace of the resource.
      * @param resourceType The type of the resource.
      * @param resourceName Name of the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Adaptive Network Hardenings resources in scope of an extended resource.
+     * @return a list of Adaptive Network Hardenings resources in scope of an extended resource as paginated response
+     * with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<AdaptiveNetworkHardeningInner> listByExtendedResource(
-        String resourceGroupName, String resourceNamespace, String resourceType, String resourceName) {
+    public PagedIterable<AdaptiveNetworkHardeningInner> listByExtendedResource(String resourceGroupName,
+        String resourceNamespace, String resourceType, String resourceName) {
         return new PagedIterable<>(
             listByExtendedResourceAsync(resourceGroupName, resourceNamespace, resourceType, resourceName));
     }
 
     /**
      * Gets a list of Adaptive Network Hardenings resources in scope of an extended resource.
-     *
+     * 
      * @param resourceGroupName The name of the resource group within the user's subscription. The name is case
-     *     insensitive.
+     * insensitive.
      * @param resourceNamespace The Namespace of the resource.
      * @param resourceType The type of the resource.
      * @param resourceName Name of the resource.
@@ -353,20 +294,21 @@ public final class AdaptiveNetworkHardeningsClientImpl implements AdaptiveNetwor
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Adaptive Network Hardenings resources in scope of an extended resource.
+     * @return a list of Adaptive Network Hardenings resources in scope of an extended resource as paginated response
+     * with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<AdaptiveNetworkHardeningInner> listByExtendedResource(
-        String resourceGroupName, String resourceNamespace, String resourceType, String resourceName, Context context) {
+    public PagedIterable<AdaptiveNetworkHardeningInner> listByExtendedResource(String resourceGroupName,
+        String resourceNamespace, String resourceType, String resourceName, Context context) {
         return new PagedIterable<>(
             listByExtendedResourceAsync(resourceGroupName, resourceNamespace, resourceType, resourceName, context));
     }
 
     /**
      * Gets a single Adaptive Network Hardening resource.
-     *
+     * 
      * @param resourceGroupName The name of the resource group within the user's subscription. The name is case
-     *     insensitive.
+     * insensitive.
      * @param resourceNamespace The Namespace of the resource.
      * @param resourceType The type of the resource.
      * @param resourceName Name of the resource.
@@ -374,26 +316,20 @@ public final class AdaptiveNetworkHardeningsClientImpl implements AdaptiveNetwor
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single Adaptive Network Hardening resource.
+     * @return a single Adaptive Network Hardening resource along with {@link Response} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<AdaptiveNetworkHardeningInner>> getWithResponseAsync(
-        String resourceGroupName,
-        String resourceNamespace,
-        String resourceType,
-        String resourceName,
+    private Mono<Response<AdaptiveNetworkHardeningInner>> getWithResponseAsync(String resourceGroupName,
+        String resourceNamespace, String resourceType, String resourceName,
         String adaptiveNetworkHardeningResourceName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -410,36 +346,23 @@ public final class AdaptiveNetworkHardeningsClientImpl implements AdaptiveNetwor
             return Mono.error(new IllegalArgumentException("Parameter resourceName is required and cannot be null."));
         }
         if (adaptiveNetworkHardeningResourceName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter adaptiveNetworkHardeningResourceName is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter adaptiveNetworkHardeningResourceName is required and cannot be null."));
         }
         final String apiVersion = "2020-01-01";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .get(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            resourceNamespace,
-                            resourceType,
-                            resourceName,
-                            adaptiveNetworkHardeningResourceName,
-                            apiVersion,
-                            accept,
-                            context))
+            .withContext(context -> service.get(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                resourceGroupName, resourceNamespace, resourceType, resourceName, adaptiveNetworkHardeningResourceName,
+                apiVersion, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Gets a single Adaptive Network Hardening resource.
-     *
+     * 
      * @param resourceGroupName The name of the resource group within the user's subscription. The name is case
-     *     insensitive.
+     * insensitive.
      * @param resourceNamespace The Namespace of the resource.
      * @param resourceType The type of the resource.
      * @param resourceName Name of the resource.
@@ -448,27 +371,20 @@ public final class AdaptiveNetworkHardeningsClientImpl implements AdaptiveNetwor
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single Adaptive Network Hardening resource.
+     * @return a single Adaptive Network Hardening resource along with {@link Response} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<AdaptiveNetworkHardeningInner>> getWithResponseAsync(
-        String resourceGroupName,
-        String resourceNamespace,
-        String resourceType,
-        String resourceName,
-        String adaptiveNetworkHardeningResourceName,
+    private Mono<Response<AdaptiveNetworkHardeningInner>> getWithResponseAsync(String resourceGroupName,
+        String resourceNamespace, String resourceType, String resourceName, String adaptiveNetworkHardeningResourceName,
         Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -485,33 +401,22 @@ public final class AdaptiveNetworkHardeningsClientImpl implements AdaptiveNetwor
             return Mono.error(new IllegalArgumentException("Parameter resourceName is required and cannot be null."));
         }
         if (adaptiveNetworkHardeningResourceName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter adaptiveNetworkHardeningResourceName is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter adaptiveNetworkHardeningResourceName is required and cannot be null."));
         }
         final String apiVersion = "2020-01-01";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .get(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                resourceNamespace,
-                resourceType,
-                resourceName,
-                adaptiveNetworkHardeningResourceName,
-                apiVersion,
-                accept,
-                context);
+        return service.get(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+            resourceNamespace, resourceType, resourceName, adaptiveNetworkHardeningResourceName, apiVersion, accept,
+            context);
     }
 
     /**
      * Gets a single Adaptive Network Hardening resource.
-     *
+     * 
      * @param resourceGroupName The name of the resource group within the user's subscription. The name is case
-     *     insensitive.
+     * insensitive.
      * @param resourceNamespace The Namespace of the resource.
      * @param resourceType The type of the resource.
      * @param resourceName Name of the resource.
@@ -519,58 +424,20 @@ public final class AdaptiveNetworkHardeningsClientImpl implements AdaptiveNetwor
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single Adaptive Network Hardening resource.
+     * @return a single Adaptive Network Hardening resource on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<AdaptiveNetworkHardeningInner> getAsync(
-        String resourceGroupName,
-        String resourceNamespace,
-        String resourceType,
-        String resourceName,
-        String adaptiveNetworkHardeningResourceName) {
-        return getWithResponseAsync(
-                resourceGroupName, resourceNamespace, resourceType, resourceName, adaptiveNetworkHardeningResourceName)
-            .flatMap(
-                (Response<AdaptiveNetworkHardeningInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+    private Mono<AdaptiveNetworkHardeningInner> getAsync(String resourceGroupName, String resourceNamespace,
+        String resourceType, String resourceName, String adaptiveNetworkHardeningResourceName) {
+        return getWithResponseAsync(resourceGroupName, resourceNamespace, resourceType, resourceName,
+            adaptiveNetworkHardeningResourceName).flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Gets a single Adaptive Network Hardening resource.
-     *
+     * 
      * @param resourceGroupName The name of the resource group within the user's subscription. The name is case
-     *     insensitive.
-     * @param resourceNamespace The Namespace of the resource.
-     * @param resourceType The type of the resource.
-     * @param resourceName Name of the resource.
-     * @param adaptiveNetworkHardeningResourceName The name of the Adaptive Network Hardening resource.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single Adaptive Network Hardening resource.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public AdaptiveNetworkHardeningInner get(
-        String resourceGroupName,
-        String resourceNamespace,
-        String resourceType,
-        String resourceName,
-        String adaptiveNetworkHardeningResourceName) {
-        return getAsync(
-                resourceGroupName, resourceNamespace, resourceType, resourceName, adaptiveNetworkHardeningResourceName)
-            .block();
-    }
-
-    /**
-     * Gets a single Adaptive Network Hardening resource.
-     *
-     * @param resourceGroupName The name of the resource group within the user's subscription. The name is case
-     *     insensitive.
+     * insensitive.
      * @param resourceNamespace The Namespace of the resource.
      * @param resourceType The type of the resource.
      * @param resourceName Name of the resource.
@@ -579,31 +446,41 @@ public final class AdaptiveNetworkHardeningsClientImpl implements AdaptiveNetwor
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a single Adaptive Network Hardening resource along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<AdaptiveNetworkHardeningInner> getWithResponse(String resourceGroupName, String resourceNamespace,
+        String resourceType, String resourceName, String adaptiveNetworkHardeningResourceName, Context context) {
+        return getWithResponseAsync(resourceGroupName, resourceNamespace, resourceType, resourceName,
+            adaptiveNetworkHardeningResourceName, context).block();
+    }
+
+    /**
+     * Gets a single Adaptive Network Hardening resource.
+     * 
+     * @param resourceGroupName The name of the resource group within the user's subscription. The name is case
+     * insensitive.
+     * @param resourceNamespace The Namespace of the resource.
+     * @param resourceType The type of the resource.
+     * @param resourceName Name of the resource.
+     * @param adaptiveNetworkHardeningResourceName The name of the Adaptive Network Hardening resource.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return a single Adaptive Network Hardening resource.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<AdaptiveNetworkHardeningInner> getWithResponse(
-        String resourceGroupName,
-        String resourceNamespace,
-        String resourceType,
-        String resourceName,
-        String adaptiveNetworkHardeningResourceName,
-        Context context) {
-        return getWithResponseAsync(
-                resourceGroupName,
-                resourceNamespace,
-                resourceType,
-                resourceName,
-                adaptiveNetworkHardeningResourceName,
-                context)
-            .block();
+    public AdaptiveNetworkHardeningInner get(String resourceGroupName, String resourceNamespace, String resourceType,
+        String resourceName, String adaptiveNetworkHardeningResourceName) {
+        return getWithResponse(resourceGroupName, resourceNamespace, resourceType, resourceName,
+            adaptiveNetworkHardeningResourceName, Context.NONE).getValue();
     }
 
     /**
      * Enforces the given rules on the NSG(s) listed in the request.
-     *
+     * 
      * @param resourceGroupName The name of the resource group within the user's subscription. The name is case
-     *     insensitive.
+     * insensitive.
      * @param resourceNamespace The Namespace of the resource.
      * @param resourceType The type of the resource.
      * @param resourceName Name of the resource.
@@ -612,27 +489,19 @@ public final class AdaptiveNetworkHardeningsClientImpl implements AdaptiveNetwor
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> enforceWithResponseAsync(
-        String resourceGroupName,
-        String resourceNamespace,
-        String resourceType,
-        String resourceName,
-        String adaptiveNetworkHardeningResourceName,
+    private Mono<Response<Flux<ByteBuffer>>> enforceWithResponseAsync(String resourceGroupName,
+        String resourceNamespace, String resourceType, String resourceName, String adaptiveNetworkHardeningResourceName,
         AdaptiveNetworkHardeningEnforceRequest body) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -649,10 +518,8 @@ public final class AdaptiveNetworkHardeningsClientImpl implements AdaptiveNetwor
             return Mono.error(new IllegalArgumentException("Parameter resourceName is required and cannot be null."));
         }
         if (adaptiveNetworkHardeningResourceName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter adaptiveNetworkHardeningResourceName is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter adaptiveNetworkHardeningResourceName is required and cannot be null."));
         }
         if (body == null) {
             return Mono.error(new IllegalArgumentException("Parameter body is required and cannot be null."));
@@ -663,30 +530,17 @@ public final class AdaptiveNetworkHardeningsClientImpl implements AdaptiveNetwor
         final String apiVersion = "2020-01-01";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .enforce(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            resourceNamespace,
-                            resourceType,
-                            resourceName,
-                            adaptiveNetworkHardeningResourceName,
-                            adaptiveNetworkHardeningEnforceAction,
-                            apiVersion,
-                            body,
-                            accept,
-                            context))
+            .withContext(context -> service.enforce(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                resourceGroupName, resourceNamespace, resourceType, resourceName, adaptiveNetworkHardeningResourceName,
+                adaptiveNetworkHardeningEnforceAction, apiVersion, body, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Enforces the given rules on the NSG(s) listed in the request.
-     *
+     * 
      * @param resourceGroupName The name of the resource group within the user's subscription. The name is case
-     *     insensitive.
+     * insensitive.
      * @param resourceNamespace The Namespace of the resource.
      * @param resourceType The type of the resource.
      * @param resourceName Name of the resource.
@@ -696,28 +550,19 @@ public final class AdaptiveNetworkHardeningsClientImpl implements AdaptiveNetwor
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> enforceWithResponseAsync(
-        String resourceGroupName,
-        String resourceNamespace,
-        String resourceType,
-        String resourceName,
-        String adaptiveNetworkHardeningResourceName,
-        AdaptiveNetworkHardeningEnforceRequest body,
-        Context context) {
+    private Mono<Response<Flux<ByteBuffer>>> enforceWithResponseAsync(String resourceGroupName,
+        String resourceNamespace, String resourceType, String resourceName, String adaptiveNetworkHardeningResourceName,
+        AdaptiveNetworkHardeningEnforceRequest body, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -734,10 +579,8 @@ public final class AdaptiveNetworkHardeningsClientImpl implements AdaptiveNetwor
             return Mono.error(new IllegalArgumentException("Parameter resourceName is required and cannot be null."));
         }
         if (adaptiveNetworkHardeningResourceName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter adaptiveNetworkHardeningResourceName is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter adaptiveNetworkHardeningResourceName is required and cannot be null."));
         }
         if (body == null) {
             return Mono.error(new IllegalArgumentException("Parameter body is required and cannot be null."));
@@ -748,27 +591,16 @@ public final class AdaptiveNetworkHardeningsClientImpl implements AdaptiveNetwor
         final String apiVersion = "2020-01-01";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .enforce(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                resourceNamespace,
-                resourceType,
-                resourceName,
-                adaptiveNetworkHardeningResourceName,
-                adaptiveNetworkHardeningEnforceAction,
-                apiVersion,
-                body,
-                accept,
-                context);
+        return service.enforce(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+            resourceNamespace, resourceType, resourceName, adaptiveNetworkHardeningResourceName,
+            adaptiveNetworkHardeningEnforceAction, apiVersion, body, accept, context);
     }
 
     /**
      * Enforces the given rules on the NSG(s) listed in the request.
-     *
+     * 
      * @param resourceGroupName The name of the resource group within the user's subscription. The name is case
-     *     insensitive.
+     * insensitive.
      * @param resourceNamespace The Namespace of the resource.
      * @param resourceType The type of the resource.
      * @param resourceName Name of the resource.
@@ -777,34 +609,23 @@ public final class AdaptiveNetworkHardeningsClientImpl implements AdaptiveNetwor
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private PollerFlux<PollResult<Void>, Void> beginEnforceAsync(
-        String resourceGroupName,
-        String resourceNamespace,
-        String resourceType,
-        String resourceName,
-        String adaptiveNetworkHardeningResourceName,
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<Void>, Void> beginEnforceAsync(String resourceGroupName, String resourceNamespace,
+        String resourceType, String resourceName, String adaptiveNetworkHardeningResourceName,
         AdaptiveNetworkHardeningEnforceRequest body) {
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            enforceWithResponseAsync(
-                resourceGroupName,
-                resourceNamespace,
-                resourceType,
-                resourceName,
-                adaptiveNetworkHardeningResourceName,
-                body);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, Context.NONE);
+        Mono<Response<Flux<ByteBuffer>>> mono = enforceWithResponseAsync(resourceGroupName, resourceNamespace,
+            resourceType, resourceName, adaptiveNetworkHardeningResourceName, body);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            this.client.getContext());
     }
 
     /**
      * Enforces the given rules on the NSG(s) listed in the request.
-     *
+     * 
      * @param resourceGroupName The name of the resource group within the user's subscription. The name is case
-     *     insensitive.
+     * insensitive.
      * @param resourceNamespace The Namespace of the resource.
      * @param resourceType The type of the resource.
      * @param resourceName Name of the resource.
@@ -814,70 +635,49 @@ public final class AdaptiveNetworkHardeningsClientImpl implements AdaptiveNetwor
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private PollerFlux<PollResult<Void>, Void> beginEnforceAsync(
-        String resourceGroupName,
-        String resourceNamespace,
-        String resourceType,
-        String resourceName,
-        String adaptiveNetworkHardeningResourceName,
-        AdaptiveNetworkHardeningEnforceRequest body,
-        Context context) {
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<Void>, Void> beginEnforceAsync(String resourceGroupName, String resourceNamespace,
+        String resourceType, String resourceName, String adaptiveNetworkHardeningResourceName,
+        AdaptiveNetworkHardeningEnforceRequest body, Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            enforceWithResponseAsync(
-                resourceGroupName,
-                resourceNamespace,
-                resourceType,
-                resourceName,
-                adaptiveNetworkHardeningResourceName,
-                body,
-                context);
+        Mono<Response<Flux<ByteBuffer>>> mono = enforceWithResponseAsync(resourceGroupName, resourceNamespace,
+            resourceType, resourceName, adaptiveNetworkHardeningResourceName, body, context);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            context);
+    }
+
+    /**
+     * Enforces the given rules on the NSG(s) listed in the request.
+     * 
+     * @param resourceGroupName The name of the resource group within the user's subscription. The name is case
+     * insensitive.
+     * @param resourceNamespace The Namespace of the resource.
+     * @param resourceType The type of the resource.
+     * @param resourceName Name of the resource.
+     * @param adaptiveNetworkHardeningResourceName The name of the Adaptive Network Hardening resource.
+     * @param body The body parameter.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of long-running operation.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<Void>, Void> beginEnforce(String resourceGroupName, String resourceNamespace,
+        String resourceType, String resourceName, String adaptiveNetworkHardeningResourceName,
+        AdaptiveNetworkHardeningEnforceRequest body) {
         return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, context);
-    }
-
-    /**
-     * Enforces the given rules on the NSG(s) listed in the request.
-     *
-     * @param resourceGroupName The name of the resource group within the user's subscription. The name is case
-     *     insensitive.
-     * @param resourceNamespace The Namespace of the resource.
-     * @param resourceType The type of the resource.
-     * @param resourceName Name of the resource.
-     * @param adaptiveNetworkHardeningResourceName The name of the Adaptive Network Hardening resource.
-     * @param body The body parameter.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public SyncPoller<PollResult<Void>, Void> beginEnforce(
-        String resourceGroupName,
-        String resourceNamespace,
-        String resourceType,
-        String resourceName,
-        String adaptiveNetworkHardeningResourceName,
-        AdaptiveNetworkHardeningEnforceRequest body) {
-        return beginEnforceAsync(
-                resourceGroupName,
-                resourceNamespace,
-                resourceType,
-                resourceName,
-                adaptiveNetworkHardeningResourceName,
-                body)
+            .beginEnforceAsync(resourceGroupName, resourceNamespace, resourceType, resourceName,
+                adaptiveNetworkHardeningResourceName, body)
             .getSyncPoller();
     }
 
     /**
      * Enforces the given rules on the NSG(s) listed in the request.
-     *
+     * 
      * @param resourceGroupName The name of the resource group within the user's subscription. The name is case
-     *     insensitive.
+     * insensitive.
      * @param resourceNamespace The Namespace of the resource.
      * @param resourceType The type of the resource.
      * @param resourceName Name of the resource.
@@ -887,33 +687,23 @@ public final class AdaptiveNetworkHardeningsClientImpl implements AdaptiveNetwor
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public SyncPoller<PollResult<Void>, Void> beginEnforce(
-        String resourceGroupName,
-        String resourceNamespace,
-        String resourceType,
-        String resourceName,
-        String adaptiveNetworkHardeningResourceName,
-        AdaptiveNetworkHardeningEnforceRequest body,
-        Context context) {
-        return beginEnforceAsync(
-                resourceGroupName,
-                resourceNamespace,
-                resourceType,
-                resourceName,
-                adaptiveNetworkHardeningResourceName,
-                body,
-                context)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<Void>, Void> beginEnforce(String resourceGroupName, String resourceNamespace,
+        String resourceType, String resourceName, String adaptiveNetworkHardeningResourceName,
+        AdaptiveNetworkHardeningEnforceRequest body, Context context) {
+        return this
+            .beginEnforceAsync(resourceGroupName, resourceNamespace, resourceType, resourceName,
+                adaptiveNetworkHardeningResourceName, body, context)
             .getSyncPoller();
     }
 
     /**
      * Enforces the given rules on the NSG(s) listed in the request.
-     *
+     * 
      * @param resourceGroupName The name of the resource group within the user's subscription. The name is case
-     *     insensitive.
+     * insensitive.
      * @param resourceNamespace The Namespace of the resource.
      * @param resourceType The type of the resource.
      * @param resourceName Name of the resource.
@@ -922,32 +712,20 @@ public final class AdaptiveNetworkHardeningsClientImpl implements AdaptiveNetwor
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> enforceAsync(
-        String resourceGroupName,
-        String resourceNamespace,
-        String resourceType,
-        String resourceName,
-        String adaptiveNetworkHardeningResourceName,
-        AdaptiveNetworkHardeningEnforceRequest body) {
-        return beginEnforceAsync(
-                resourceGroupName,
-                resourceNamespace,
-                resourceType,
-                resourceName,
-                adaptiveNetworkHardeningResourceName,
-                body)
-            .last()
-            .flatMap(this.client::getLroFinalResultOrError);
+    private Mono<Void> enforceAsync(String resourceGroupName, String resourceNamespace, String resourceType,
+        String resourceName, String adaptiveNetworkHardeningResourceName, AdaptiveNetworkHardeningEnforceRequest body) {
+        return beginEnforceAsync(resourceGroupName, resourceNamespace, resourceType, resourceName,
+            adaptiveNetworkHardeningResourceName, body).last().flatMap(this.client::getLroFinalResultOrError);
     }
 
     /**
      * Enforces the given rules on the NSG(s) listed in the request.
-     *
+     * 
      * @param resourceGroupName The name of the resource group within the user's subscription. The name is case
-     *     insensitive.
+     * insensitive.
      * @param resourceNamespace The Namespace of the resource.
      * @param resourceType The type of the resource.
      * @param resourceName Name of the resource.
@@ -957,34 +735,21 @@ public final class AdaptiveNetworkHardeningsClientImpl implements AdaptiveNetwor
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> enforceAsync(
-        String resourceGroupName,
-        String resourceNamespace,
-        String resourceType,
-        String resourceName,
-        String adaptiveNetworkHardeningResourceName,
-        AdaptiveNetworkHardeningEnforceRequest body,
+    private Mono<Void> enforceAsync(String resourceGroupName, String resourceNamespace, String resourceType,
+        String resourceName, String adaptiveNetworkHardeningResourceName, AdaptiveNetworkHardeningEnforceRequest body,
         Context context) {
-        return beginEnforceAsync(
-                resourceGroupName,
-                resourceNamespace,
-                resourceType,
-                resourceName,
-                adaptiveNetworkHardeningResourceName,
-                body,
-                context)
-            .last()
-            .flatMap(this.client::getLroFinalResultOrError);
+        return beginEnforceAsync(resourceGroupName, resourceNamespace, resourceType, resourceName,
+            adaptiveNetworkHardeningResourceName, body, context).last().flatMap(this.client::getLroFinalResultOrError);
     }
 
     /**
      * Enforces the given rules on the NSG(s) listed in the request.
-     *
+     * 
      * @param resourceGroupName The name of the resource group within the user's subscription. The name is case
-     *     insensitive.
+     * insensitive.
      * @param resourceNamespace The Namespace of the resource.
      * @param resourceType The type of the resource.
      * @param resourceName Name of the resource.
@@ -995,28 +760,17 @@ public final class AdaptiveNetworkHardeningsClientImpl implements AdaptiveNetwor
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public void enforce(
-        String resourceGroupName,
-        String resourceNamespace,
-        String resourceType,
-        String resourceName,
-        String adaptiveNetworkHardeningResourceName,
-        AdaptiveNetworkHardeningEnforceRequest body) {
-        enforceAsync(
-                resourceGroupName,
-                resourceNamespace,
-                resourceType,
-                resourceName,
-                adaptiveNetworkHardeningResourceName,
-                body)
-            .block();
+    public void enforce(String resourceGroupName, String resourceNamespace, String resourceType, String resourceName,
+        String adaptiveNetworkHardeningResourceName, AdaptiveNetworkHardeningEnforceRequest body) {
+        enforceAsync(resourceGroupName, resourceNamespace, resourceType, resourceName,
+            adaptiveNetworkHardeningResourceName, body).block();
     }
 
     /**
      * Enforces the given rules on the NSG(s) listed in the request.
-     *
+     * 
      * @param resourceGroupName The name of the resource group within the user's subscription. The name is case
-     *     insensitive.
+     * insensitive.
      * @param resourceNamespace The Namespace of the resource.
      * @param resourceType The type of the resource.
      * @param resourceName Name of the resource.
@@ -1028,96 +782,70 @@ public final class AdaptiveNetworkHardeningsClientImpl implements AdaptiveNetwor
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public void enforce(
-        String resourceGroupName,
-        String resourceNamespace,
-        String resourceType,
-        String resourceName,
-        String adaptiveNetworkHardeningResourceName,
-        AdaptiveNetworkHardeningEnforceRequest body,
-        Context context) {
-        enforceAsync(
-                resourceGroupName,
-                resourceNamespace,
-                resourceType,
-                resourceName,
-                adaptiveNetworkHardeningResourceName,
-                body,
-                context)
-            .block();
+    public void enforce(String resourceGroupName, String resourceNamespace, String resourceType, String resourceName,
+        String adaptiveNetworkHardeningResourceName, AdaptiveNetworkHardeningEnforceRequest body, Context context) {
+        enforceAsync(resourceGroupName, resourceNamespace, resourceType, resourceName,
+            adaptiveNetworkHardeningResourceName, body, context).block();
     }
 
     /**
      * Get the next page of items.
-     *
-     * @param nextLink The nextLink parameter.
+     * 
+     * @param nextLink The URL to get the next list of items
+     * 
+     * The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return response for ListAdaptiveNetworkHardenings API service call.
+     * @return response for ListAdaptiveNetworkHardenings API service call along with {@link PagedResponse} on
+     * successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<AdaptiveNetworkHardeningInner>> listByExtendedResourceNextSinglePageAsync(
-        String nextLink) {
+    private Mono<PagedResponse<AdaptiveNetworkHardeningInner>>
+        listByExtendedResourceNextSinglePageAsync(String nextLink) {
         if (nextLink == null) {
             return Mono.error(new IllegalArgumentException("Parameter nextLink is required and cannot be null."));
         }
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         final String accept = "application/json";
         return FluxUtil
             .withContext(
                 context -> service.listByExtendedResourceNext(nextLink, this.client.getEndpoint(), accept, context))
-            .<PagedResponse<AdaptiveNetworkHardeningInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null))
+            .<PagedResponse<AdaptiveNetworkHardeningInner>>map(res -> new PagedResponseBase<>(res.getRequest(),
+                res.getStatusCode(), res.getHeaders(), res.getValue().value(), res.getValue().nextLink(), null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Get the next page of items.
-     *
-     * @param nextLink The nextLink parameter.
+     * 
+     * @param nextLink The URL to get the next list of items
+     * 
+     * The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return response for ListAdaptiveNetworkHardenings API service call.
+     * @return response for ListAdaptiveNetworkHardenings API service call along with {@link PagedResponse} on
+     * successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<AdaptiveNetworkHardeningInner>> listByExtendedResourceNextSinglePageAsync(
-        String nextLink, Context context) {
+    private Mono<PagedResponse<AdaptiveNetworkHardeningInner>>
+        listByExtendedResourceNextSinglePageAsync(String nextLink, Context context) {
         if (nextLink == null) {
             return Mono.error(new IllegalArgumentException("Parameter nextLink is required and cannot be null."));
         }
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .listByExtendedResourceNext(nextLink, this.client.getEndpoint(), accept, context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null));
+        return service.listByExtendedResourceNext(nextLink, this.client.getEndpoint(), accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), res.getValue().nextLink(), null));
     }
 }

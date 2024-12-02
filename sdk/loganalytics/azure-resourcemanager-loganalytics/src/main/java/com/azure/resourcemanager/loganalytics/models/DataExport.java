@@ -75,11 +75,11 @@ public interface DataExport {
     String resourceId();
 
     /**
-     * Gets the typePropertiesDestinationType property: The type of the destination resource.
+     * Gets the typePropertiesType property: The type of the destination resource.
      *
-     * @return the typePropertiesDestinationType value.
+     * @return the typePropertiesType value.
      */
-    Type typePropertiesDestinationType();
+    Type typePropertiesType();
 
     /**
      * Gets the eventHubName property: Optional. Allows to define an Event Hub name. Not applicable when destination is
@@ -88,6 +88,13 @@ public interface DataExport {
      * @return the eventHubName value.
      */
     String eventHubName();
+
+    /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
 
     /**
      * Gets the inner com.azure.resourcemanager.loganalytics.fluent.models.DataExportInner object.
@@ -100,11 +107,13 @@ public interface DataExport {
     interface Definition
         extends DefinitionStages.Blank, DefinitionStages.WithParentResource, DefinitionStages.WithCreate {
     }
+
     /** The DataExport definition stages. */
     interface DefinitionStages {
         /** The first stage of the DataExport definition. */
         interface Blank extends WithParentResource {
         }
+
         /** The stage of the DataExport definition allowing to specify parent resource. */
         interface WithParentResource {
             /**
@@ -116,18 +125,14 @@ public interface DataExport {
              */
             WithCreate withExistingWorkspace(String resourceGroupName, String workspaceName);
         }
+
         /**
          * The stage of the DataExport definition which contains all the minimum required properties for the resource to
          * be created, but also allows for any other optional properties to be specified.
          */
-        interface WithCreate
-            extends DefinitionStages.WithDataExportId,
-                DefinitionStages.WithTableNames,
-                DefinitionStages.WithEnable,
-                DefinitionStages.WithCreatedDate,
-                DefinitionStages.WithLastModifiedDate,
-                DefinitionStages.WithResourceId,
-                DefinitionStages.WithEventHubName {
+        interface WithCreate extends DefinitionStages.WithDataExportId, DefinitionStages.WithTableNames,
+            DefinitionStages.WithEnable, DefinitionStages.WithCreatedDate, DefinitionStages.WithLastModifiedDate,
+            DefinitionStages.WithResourceId, DefinitionStages.WithEventHubName {
             /**
              * Executes the create request.
              *
@@ -143,6 +148,7 @@ public interface DataExport {
              */
             DataExport create(Context context);
         }
+
         /** The stage of the DataExport definition allowing to specify dataExportId. */
         interface WithDataExportId {
             /**
@@ -153,6 +159,7 @@ public interface DataExport {
              */
             WithCreate withDataExportId(String dataExportId);
         }
+
         /** The stage of the DataExport definition allowing to specify tableNames. */
         interface WithTableNames {
             /**
@@ -164,6 +171,7 @@ public interface DataExport {
              */
             WithCreate withTableNames(List<String> tableNames);
         }
+
         /** The stage of the DataExport definition allowing to specify enable. */
         interface WithEnable {
             /**
@@ -174,6 +182,7 @@ public interface DataExport {
              */
             WithCreate withEnable(Boolean enable);
         }
+
         /** The stage of the DataExport definition allowing to specify createdDate. */
         interface WithCreatedDate {
             /**
@@ -184,6 +193,7 @@ public interface DataExport {
              */
             WithCreate withCreatedDate(String createdDate);
         }
+
         /** The stage of the DataExport definition allowing to specify lastModifiedDate. */
         interface WithLastModifiedDate {
             /**
@@ -194,6 +204,7 @@ public interface DataExport {
              */
             WithCreate withLastModifiedDate(String lastModifiedDate);
         }
+
         /** The stage of the DataExport definition allowing to specify resourceId. */
         interface WithResourceId {
             /**
@@ -206,6 +217,7 @@ public interface DataExport {
              */
             WithCreate withResourceId(String resourceId);
         }
+
         /** The stage of the DataExport definition allowing to specify eventHubName. */
         interface WithEventHubName {
             /**
@@ -219,6 +231,7 @@ public interface DataExport {
             WithCreate withEventHubName(String eventHubName);
         }
     }
+
     /**
      * Begins update for the DataExport resource.
      *
@@ -227,14 +240,9 @@ public interface DataExport {
     DataExport.Update update();
 
     /** The template for DataExport update. */
-    interface Update
-        extends UpdateStages.WithDataExportId,
-            UpdateStages.WithTableNames,
-            UpdateStages.WithEnable,
-            UpdateStages.WithCreatedDate,
-            UpdateStages.WithLastModifiedDate,
-            UpdateStages.WithResourceId,
-            UpdateStages.WithEventHubName {
+    interface Update extends UpdateStages.WithDataExportId, UpdateStages.WithTableNames, UpdateStages.WithEnable,
+        UpdateStages.WithCreatedDate, UpdateStages.WithLastModifiedDate, UpdateStages.WithResourceId,
+        UpdateStages.WithEventHubName {
         /**
          * Executes the update request.
          *
@@ -250,6 +258,7 @@ public interface DataExport {
          */
         DataExport apply(Context context);
     }
+
     /** The DataExport update stages. */
     interface UpdateStages {
         /** The stage of the DataExport update allowing to specify dataExportId. */
@@ -262,6 +271,7 @@ public interface DataExport {
              */
             Update withDataExportId(String dataExportId);
         }
+
         /** The stage of the DataExport update allowing to specify tableNames. */
         interface WithTableNames {
             /**
@@ -273,6 +283,7 @@ public interface DataExport {
              */
             Update withTableNames(List<String> tableNames);
         }
+
         /** The stage of the DataExport update allowing to specify enable. */
         interface WithEnable {
             /**
@@ -283,6 +294,7 @@ public interface DataExport {
              */
             Update withEnable(Boolean enable);
         }
+
         /** The stage of the DataExport update allowing to specify createdDate. */
         interface WithCreatedDate {
             /**
@@ -293,6 +305,7 @@ public interface DataExport {
              */
             Update withCreatedDate(String createdDate);
         }
+
         /** The stage of the DataExport update allowing to specify lastModifiedDate. */
         interface WithLastModifiedDate {
             /**
@@ -303,6 +316,7 @@ public interface DataExport {
              */
             Update withLastModifiedDate(String lastModifiedDate);
         }
+
         /** The stage of the DataExport update allowing to specify resourceId. */
         interface WithResourceId {
             /**
@@ -315,6 +329,7 @@ public interface DataExport {
              */
             Update withResourceId(String resourceId);
         }
+
         /** The stage of the DataExport update allowing to specify eventHubName. */
         interface WithEventHubName {
             /**
@@ -328,6 +343,7 @@ public interface DataExport {
             Update withEventHubName(String eventHubName);
         }
     }
+
     /**
      * Refreshes the resource to sync with Azure.
      *

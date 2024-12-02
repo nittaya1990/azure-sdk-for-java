@@ -12,17 +12,16 @@ import com.azure.resourcemanager.videoanalyzer.fluent.OperationsClient;
 import com.azure.resourcemanager.videoanalyzer.fluent.models.OperationCollectionInner;
 import com.azure.resourcemanager.videoanalyzer.models.OperationCollection;
 import com.azure.resourcemanager.videoanalyzer.models.Operations;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class OperationsImpl implements Operations {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OperationsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(OperationsImpl.class);
 
     private final OperationsClient innerClient;
 
     private final com.azure.resourcemanager.videoanalyzer.VideoAnalyzerManager serviceManager;
 
-    public OperationsImpl(
-        OperationsClient innerClient, com.azure.resourcemanager.videoanalyzer.VideoAnalyzerManager serviceManager) {
+    public OperationsImpl(OperationsClient innerClient,
+        com.azure.resourcemanager.videoanalyzer.VideoAnalyzerManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
     }
@@ -39,10 +38,7 @@ public final class OperationsImpl implements Operations {
     public Response<OperationCollection> listWithResponse(Context context) {
         Response<OperationCollectionInner> inner = this.serviceClient().listWithResponse(context);
         if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
                 new OperationCollectionImpl(inner.getValue(), this.manager()));
         } else {
             return null;

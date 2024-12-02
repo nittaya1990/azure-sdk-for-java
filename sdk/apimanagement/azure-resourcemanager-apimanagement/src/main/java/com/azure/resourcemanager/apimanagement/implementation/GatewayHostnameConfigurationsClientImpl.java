@@ -29,7 +29,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.GatewayHostnameConfigurationsClient;
 import com.azure.resourcemanager.apimanagement.fluent.models.GatewayHostnameConfigurationContractInner;
 import com.azure.resourcemanager.apimanagement.models.GatewayHostnameConfigurationCollection;
@@ -40,8 +39,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in GatewayHostnameConfigurationsClient. */
 public final class GatewayHostnameConfigurationsClientImpl implements GatewayHostnameConfigurationsClient {
-    private final ClientLogger logger = new ClientLogger(GatewayHostnameConfigurationsClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final GatewayHostnameConfigurationsService service;
 
@@ -54,12 +51,8 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
      * @param client the instance of the service client containing this operation class.
      */
     GatewayHostnameConfigurationsClientImpl(ApiManagementClientImpl client) {
-        this.service =
-            RestProxy
-                .create(
-                    GatewayHostnameConfigurationsService.class,
-                    client.getHttpPipeline(),
-                    client.getSerializerAdapter());
+        this.service = RestProxy.create(GatewayHostnameConfigurationsService.class, client.getHttpPipeline(),
+            client.getSerializerAdapter());
         this.client = client;
     }
 
@@ -69,112 +62,73 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
      */
     @Host("{$host}")
     @ServiceInterface(name = "ApiManagementClientG")
-    private interface GatewayHostnameConfigurationsService {
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/gateways/{gatewayId}/hostnameConfigurations")
-        @ExpectedResponses({200})
+    public interface GatewayHostnameConfigurationsService {
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/gateways/{gatewayId}/hostnameConfigurations")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<GatewayHostnameConfigurationCollection>> listByService(
-            @HostParam("$host") String endpoint,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("serviceName") String serviceName,
-            @PathParam("gatewayId") String gatewayId,
-            @QueryParam("$filter") String filter,
-            @QueryParam("$top") Integer top,
-            @QueryParam("$skip") Integer skip,
-            @QueryParam("api-version") String apiVersion,
-            @PathParam("subscriptionId") String subscriptionId,
-            @HeaderParam("Accept") String accept,
-            Context context);
+        Mono<Response<GatewayHostnameConfigurationCollection>> listByService(@HostParam("$host") String endpoint,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("serviceName") String serviceName,
+            @PathParam("gatewayId") String gatewayId, @QueryParam("$filter") String filter,
+            @QueryParam("$top") Integer top, @QueryParam("$skip") Integer skip,
+            @QueryParam("api-version") String apiVersion, @PathParam("subscriptionId") String subscriptionId,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Head(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/gateways/{gatewayId}/hostnameConfigurations/{hcId}")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Head("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/gateways/{gatewayId}/hostnameConfigurations/{hcId}")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<GatewayHostnameConfigurationsGetEntityTagResponse> getEntityTag(
-            @HostParam("$host") String endpoint,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("serviceName") String serviceName,
-            @PathParam("gatewayId") String gatewayId,
-            @PathParam("hcId") String hcId,
-            @QueryParam("api-version") String apiVersion,
-            @PathParam("subscriptionId") String subscriptionId,
-            @HeaderParam("Accept") String accept,
-            Context context);
+        Mono<GatewayHostnameConfigurationsGetEntityTagResponse> getEntityTag(@HostParam("$host") String endpoint,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("serviceName") String serviceName,
+            @PathParam("gatewayId") String gatewayId, @PathParam("hcId") String hcId,
+            @QueryParam("api-version") String apiVersion, @PathParam("subscriptionId") String subscriptionId,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/gateways/{gatewayId}/hostnameConfigurations/{hcId}")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/gateways/{gatewayId}/hostnameConfigurations/{hcId}")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<GatewayHostnameConfigurationsGetResponse> get(
-            @HostParam("$host") String endpoint,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("serviceName") String serviceName,
-            @PathParam("gatewayId") String gatewayId,
-            @PathParam("hcId") String hcId,
-            @QueryParam("api-version") String apiVersion,
-            @PathParam("subscriptionId") String subscriptionId,
-            @HeaderParam("Accept") String accept,
-            Context context);
+        Mono<GatewayHostnameConfigurationsGetResponse> get(@HostParam("$host") String endpoint,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("serviceName") String serviceName,
+            @PathParam("gatewayId") String gatewayId, @PathParam("hcId") String hcId,
+            @QueryParam("api-version") String apiVersion, @PathParam("subscriptionId") String subscriptionId,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Put(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/gateways/{gatewayId}/hostnameConfigurations/{hcId}")
-        @ExpectedResponses({200, 201})
+        @Headers({ "Content-Type: application/json" })
+        @Put("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/gateways/{gatewayId}/hostnameConfigurations/{hcId}")
+        @ExpectedResponses({ 200, 201 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<GatewayHostnameConfigurationsCreateOrUpdateResponse> createOrUpdate(
-            @HostParam("$host") String endpoint,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("serviceName") String serviceName,
-            @PathParam("gatewayId") String gatewayId,
-            @PathParam("hcId") String hcId,
-            @HeaderParam("If-Match") String ifMatch,
-            @QueryParam("api-version") String apiVersion,
+        Mono<GatewayHostnameConfigurationsCreateOrUpdateResponse> createOrUpdate(@HostParam("$host") String endpoint,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("serviceName") String serviceName,
+            @PathParam("gatewayId") String gatewayId, @PathParam("hcId") String hcId,
+            @HeaderParam("If-Match") String ifMatch, @QueryParam("api-version") String apiVersion,
             @PathParam("subscriptionId") String subscriptionId,
             @BodyParam("application/json") GatewayHostnameConfigurationContractInner parameters,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Delete(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/gateways/{gatewayId}/hostnameConfigurations/{hcId}")
-        @ExpectedResponses({200, 204})
+        @Headers({ "Content-Type: application/json" })
+        @Delete("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/gateways/{gatewayId}/hostnameConfigurations/{hcId}")
+        @ExpectedResponses({ 200, 204 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Void>> delete(
-            @HostParam("$host") String endpoint,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("serviceName") String serviceName,
-            @PathParam("gatewayId") String gatewayId,
-            @PathParam("hcId") String hcId,
-            @HeaderParam("If-Match") String ifMatch,
-            @QueryParam("api-version") String apiVersion,
-            @PathParam("subscriptionId") String subscriptionId,
-            @HeaderParam("Accept") String accept,
-            Context context);
+        Mono<Response<Void>> delete(@HostParam("$host") String endpoint,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("serviceName") String serviceName,
+            @PathParam("gatewayId") String gatewayId, @PathParam("hcId") String hcId,
+            @HeaderParam("If-Match") String ifMatch, @QueryParam("api-version") String apiVersion,
+            @PathParam("subscriptionId") String subscriptionId, @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
+        @Headers({ "Content-Type: application/json" })
         @Get("{nextLink}")
-        @ExpectedResponses({200})
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<GatewayHostnameConfigurationCollection>> listByServiceNext(
-            @PathParam(value = "nextLink", encoded = true) String nextLink,
-            @HostParam("$host") String endpoint,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam(value = "nextLink", encoded = true) String nextLink, @HostParam("$host") String endpoint,
+            @HeaderParam("Accept") String accept, Context context);
     }
 
     /**
      * Lists the collection of hostname configurations for the specified gateway.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
@@ -187,16 +141,15 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Gateway hostname configuration list representation.
+     * @return paged Gateway hostname configuration list representation along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<GatewayHostnameConfigurationContractInner>> listByServiceSinglePageAsync(
         String resourceGroupName, String serviceName, String gatewayId, String filter, Integer top, Integer skip) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -209,44 +162,24 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
             return Mono.error(new IllegalArgumentException("Parameter gatewayId is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         final String accept = "application/json";
         return FluxUtil
             .withContext(
-                context ->
-                    service
-                        .listByService(
-                            this.client.getEndpoint(),
-                            resourceGroupName,
-                            serviceName,
-                            gatewayId,
-                            filter,
-                            top,
-                            skip,
-                            this.client.getApiVersion(),
-                            this.client.getSubscriptionId(),
-                            accept,
-                            context))
+                context -> service.listByService(this.client.getEndpoint(), resourceGroupName, serviceName, gatewayId,
+                    filter, top, skip, this.client.getApiVersion(), this.client.getSubscriptionId(), accept, context))
             .<PagedResponse<GatewayHostnameConfigurationContractInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null))
+                res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                    res.getValue().value(), res.getValue().nextLink(), null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Lists the collection of hostname configurations for the specified gateway.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
@@ -260,22 +193,16 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Gateway hostname configuration list representation.
+     * @return paged Gateway hostname configuration list representation along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<GatewayHostnameConfigurationContractInner>> listByServiceSinglePageAsync(
-        String resourceGroupName,
-        String serviceName,
-        String gatewayId,
-        String filter,
-        Integer top,
-        Integer skip,
+        String resourceGroupName, String serviceName, String gatewayId, String filter, Integer top, Integer skip,
         Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -288,41 +215,22 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
             return Mono.error(new IllegalArgumentException("Parameter gatewayId is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
         return service
-            .listByService(
-                this.client.getEndpoint(),
-                resourceGroupName,
-                serviceName,
-                gatewayId,
-                filter,
-                top,
-                skip,
-                this.client.getApiVersion(),
-                this.client.getSubscriptionId(),
-                accept,
-                context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null));
+            .listByService(this.client.getEndpoint(), resourceGroupName, serviceName, gatewayId, filter, top, skip,
+                this.client.getApiVersion(), this.client.getSubscriptionId(), accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), res.getValue().nextLink(), null));
     }
 
     /**
      * Lists the collection of hostname configurations for the specified gateway.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
@@ -335,11 +243,11 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Gateway hostname configuration list representation.
+     * @return paged Gateway hostname configuration list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<GatewayHostnameConfigurationContractInner> listByServiceAsync(
-        String resourceGroupName, String serviceName, String gatewayId, String filter, Integer top, Integer skip) {
+    private PagedFlux<GatewayHostnameConfigurationContractInner> listByServiceAsync(String resourceGroupName,
+        String serviceName, String gatewayId, String filter, Integer top, Integer skip) {
         return new PagedFlux<>(
             () -> listByServiceSinglePageAsync(resourceGroupName, serviceName, gatewayId, filter, top, skip),
             nextLink -> listByServiceNextSinglePageAsync(nextLink));
@@ -348,18 +256,18 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
     /**
      * Lists the collection of hostname configurations for the specified gateway.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Gateway hostname configuration list representation.
+     * @return paged Gateway hostname configuration list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<GatewayHostnameConfigurationContractInner> listByServiceAsync(
-        String resourceGroupName, String serviceName, String gatewayId) {
+    private PagedFlux<GatewayHostnameConfigurationContractInner> listByServiceAsync(String resourceGroupName,
+        String serviceName, String gatewayId) {
         final String filter = null;
         final Integer top = null;
         final Integer skip = null;
@@ -371,7 +279,7 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
     /**
      * Lists the collection of hostname configurations for the specified gateway.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
@@ -385,17 +293,11 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Gateway hostname configuration list representation.
+     * @return paged Gateway hostname configuration list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<GatewayHostnameConfigurationContractInner> listByServiceAsync(
-        String resourceGroupName,
-        String serviceName,
-        String gatewayId,
-        String filter,
-        Integer top,
-        Integer skip,
-        Context context) {
+    private PagedFlux<GatewayHostnameConfigurationContractInner> listByServiceAsync(String resourceGroupName,
+        String serviceName, String gatewayId, String filter, Integer top, Integer skip, Context context) {
         return new PagedFlux<>(
             () -> listByServiceSinglePageAsync(resourceGroupName, serviceName, gatewayId, filter, top, skip, context),
             nextLink -> listByServiceNextSinglePageAsync(nextLink, context));
@@ -404,18 +306,19 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
     /**
      * Lists the collection of hostname configurations for the specified gateway.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Gateway hostname configuration list representation.
+     * @return paged Gateway hostname configuration list representation as paginated response with {@link
+     *     PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<GatewayHostnameConfigurationContractInner> listByService(
-        String resourceGroupName, String serviceName, String gatewayId) {
+    public PagedIterable<GatewayHostnameConfigurationContractInner> listByService(String resourceGroupName,
+        String serviceName, String gatewayId) {
         final String filter = null;
         final Integer top = null;
         final Integer skip = null;
@@ -425,7 +328,7 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
     /**
      * Lists the collection of hostname configurations for the specified gateway.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
@@ -439,17 +342,12 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Gateway hostname configuration list representation.
+     * @return paged Gateway hostname configuration list representation as paginated response with {@link
+     *     PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<GatewayHostnameConfigurationContractInner> listByService(
-        String resourceGroupName,
-        String serviceName,
-        String gatewayId,
-        String filter,
-        Integer top,
-        Integer skip,
-        Context context) {
+    public PagedIterable<GatewayHostnameConfigurationContractInner> listByService(String resourceGroupName,
+        String serviceName, String gatewayId, String filter, Integer top, Integer skip, Context context) {
         return new PagedIterable<>(
             listByServiceAsync(resourceGroupName, serviceName, gatewayId, filter, top, skip, context));
     }
@@ -457,7 +355,7 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
     /**
      * Checks that hostname configuration entity specified by identifier exists for specified Gateway entity.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
@@ -465,16 +363,14 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<GatewayHostnameConfigurationsGetEntityTagResponse> getEntityTagWithResponseAsync(
-        String resourceGroupName, String serviceName, String gatewayId, String hcId) {
+    private Mono<GatewayHostnameConfigurationsGetEntityTagResponse>
+        getEntityTagWithResponseAsync(String resourceGroupName, String serviceName, String gatewayId, String hcId) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -490,33 +386,20 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
             return Mono.error(new IllegalArgumentException("Parameter hcId is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .getEntityTag(
-                            this.client.getEndpoint(),
-                            resourceGroupName,
-                            serviceName,
-                            gatewayId,
-                            hcId,
-                            this.client.getApiVersion(),
-                            this.client.getSubscriptionId(),
-                            accept,
-                            context))
+            .withContext(context -> service.getEntityTag(this.client.getEndpoint(), resourceGroupName, serviceName,
+                gatewayId, hcId, this.client.getApiVersion(), this.client.getSubscriptionId(), accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Checks that hostname configuration entity specified by identifier exists for specified Gateway entity.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
@@ -525,16 +408,14 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<GatewayHostnameConfigurationsGetEntityTagResponse> getEntityTagWithResponseAsync(
         String resourceGroupName, String serviceName, String gatewayId, String hcId, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -550,30 +431,19 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
             return Mono.error(new IllegalArgumentException("Parameter hcId is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .getEntityTag(
-                this.client.getEndpoint(),
-                resourceGroupName,
-                serviceName,
-                gatewayId,
-                hcId,
-                this.client.getApiVersion(),
-                this.client.getSubscriptionId(),
-                accept,
-                context);
+        return service.getEntityTag(this.client.getEndpoint(), resourceGroupName, serviceName, gatewayId, hcId,
+            this.client.getApiVersion(), this.client.getSubscriptionId(), accept, context);
     }
 
     /**
      * Checks that hostname configuration entity specified by identifier exists for specified Gateway entity.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
@@ -581,35 +451,18 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> getEntityTagAsync(String resourceGroupName, String serviceName, String gatewayId, String hcId) {
         return getEntityTagWithResponseAsync(resourceGroupName, serviceName, gatewayId, hcId)
-            .flatMap((GatewayHostnameConfigurationsGetEntityTagResponse res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
     }
 
     /**
      * Checks that hostname configuration entity specified by identifier exists for specified Gateway entity.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
-     *     not have value 'managed'.
-     * @param hcId Gateway hostname configuration identifier. Must be unique in the scope of parent Gateway entity.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public void getEntityTag(String resourceGroupName, String serviceName, String gatewayId, String hcId) {
-        getEntityTagAsync(resourceGroupName, serviceName, gatewayId, hcId).block();
-    }
-
-    /**
-     * Checks that hostname configuration entity specified by identifier exists for specified Gateway entity.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
@@ -621,15 +474,15 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
      * @return the response.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public GatewayHostnameConfigurationsGetEntityTagResponse getEntityTagWithResponse(
-        String resourceGroupName, String serviceName, String gatewayId, String hcId, Context context) {
+    public GatewayHostnameConfigurationsGetEntityTagResponse getEntityTagWithResponse(String resourceGroupName,
+        String serviceName, String gatewayId, String hcId, Context context) {
         return getEntityTagWithResponseAsync(resourceGroupName, serviceName, gatewayId, hcId, context).block();
     }
 
     /**
-     * Get details of a hostname configuration.
+     * Checks that hostname configuration entity specified by identifier exists for specified Gateway entity.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
@@ -637,16 +490,31 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return details of a hostname configuration.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<GatewayHostnameConfigurationsGetResponse> getWithResponseAsync(
-        String resourceGroupName, String serviceName, String gatewayId, String hcId) {
+    public void getEntityTag(String resourceGroupName, String serviceName, String gatewayId, String hcId) {
+        getEntityTagWithResponse(resourceGroupName, serviceName, gatewayId, hcId, Context.NONE);
+    }
+
+    /**
+     * Get details of a hostname configuration.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
+     *     not have value 'managed'.
+     * @param hcId Gateway hostname configuration identifier. Must be unique in the scope of parent Gateway entity.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return details of a hostname configuration on successful completion of {@link Mono}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    private Mono<GatewayHostnameConfigurationsGetResponse> getWithResponseAsync(String resourceGroupName,
+        String serviceName, String gatewayId, String hcId) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -662,33 +530,20 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
             return Mono.error(new IllegalArgumentException("Parameter hcId is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .get(
-                            this.client.getEndpoint(),
-                            resourceGroupName,
-                            serviceName,
-                            gatewayId,
-                            hcId,
-                            this.client.getApiVersion(),
-                            this.client.getSubscriptionId(),
-                            accept,
-                            context))
+            .withContext(context -> service.get(this.client.getEndpoint(), resourceGroupName, serviceName, gatewayId,
+                hcId, this.client.getApiVersion(), this.client.getSubscriptionId(), accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Get details of a hostname configuration.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
@@ -697,16 +552,14 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return details of a hostname configuration.
+     * @return details of a hostname configuration on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<GatewayHostnameConfigurationsGetResponse> getWithResponseAsync(
-        String resourceGroupName, String serviceName, String gatewayId, String hcId, Context context) {
+    private Mono<GatewayHostnameConfigurationsGetResponse> getWithResponseAsync(String resourceGroupName,
+        String serviceName, String gatewayId, String hcId, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -722,30 +575,19 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
             return Mono.error(new IllegalArgumentException("Parameter hcId is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .get(
-                this.client.getEndpoint(),
-                resourceGroupName,
-                serviceName,
-                gatewayId,
-                hcId,
-                this.client.getApiVersion(),
-                this.client.getSubscriptionId(),
-                accept,
-                context);
+        return service.get(this.client.getEndpoint(), resourceGroupName, serviceName, gatewayId, hcId,
+            this.client.getApiVersion(), this.client.getSubscriptionId(), accept, context);
     }
 
     /**
      * Get details of a hostname configuration.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
@@ -753,45 +595,19 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return details of a hostname configuration.
+     * @return details of a hostname configuration on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<GatewayHostnameConfigurationContractInner> getAsync(
-        String resourceGroupName, String serviceName, String gatewayId, String hcId) {
+    private Mono<GatewayHostnameConfigurationContractInner> getAsync(String resourceGroupName, String serviceName,
+        String gatewayId, String hcId) {
         return getWithResponseAsync(resourceGroupName, serviceName, gatewayId, hcId)
-            .flatMap(
-                (GatewayHostnameConfigurationsGetResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Get details of a hostname configuration.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
-     *     not have value 'managed'.
-     * @param hcId Gateway hostname configuration identifier. Must be unique in the scope of parent Gateway entity.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return details of a hostname configuration.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public GatewayHostnameConfigurationContractInner get(
-        String resourceGroupName, String serviceName, String gatewayId, String hcId) {
-        return getAsync(resourceGroupName, serviceName, gatewayId, hcId).block();
-    }
-
-    /**
-     * Get details of a hostname configuration.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
@@ -803,15 +619,34 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
      * @return details of a hostname configuration.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public GatewayHostnameConfigurationsGetResponse getWithResponse(
-        String resourceGroupName, String serviceName, String gatewayId, String hcId, Context context) {
+    public GatewayHostnameConfigurationsGetResponse getWithResponse(String resourceGroupName, String serviceName,
+        String gatewayId, String hcId, Context context) {
         return getWithResponseAsync(resourceGroupName, serviceName, gatewayId, hcId, context).block();
     }
 
     /**
+     * Get details of a hostname configuration.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
+     *     not have value 'managed'.
+     * @param hcId Gateway hostname configuration identifier. Must be unique in the scope of parent Gateway entity.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return details of a hostname configuration.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public GatewayHostnameConfigurationContractInner get(String resourceGroupName, String serviceName, String gatewayId,
+        String hcId) {
+        return getWithResponse(resourceGroupName, serviceName, gatewayId, hcId, Context.NONE).getValue();
+    }
+
+    /**
      * Creates of updates hostname configuration for a Gateway.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
@@ -821,21 +656,15 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return gateway hostname configuration details.
+     * @return gateway hostname configuration details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<GatewayHostnameConfigurationsCreateOrUpdateResponse> createOrUpdateWithResponseAsync(
-        String resourceGroupName,
-        String serviceName,
-        String gatewayId,
-        String hcId,
-        GatewayHostnameConfigurationContractInner parameters,
-        String ifMatch) {
+        String resourceGroupName, String serviceName, String gatewayId, String hcId,
+        GatewayHostnameConfigurationContractInner parameters, String ifMatch) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -851,10 +680,8 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
             return Mono.error(new IllegalArgumentException("Parameter hcId is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (parameters == null) {
             return Mono.error(new IllegalArgumentException("Parameter parameters is required and cannot be null."));
@@ -863,28 +690,16 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .createOrUpdate(
-                            this.client.getEndpoint(),
-                            resourceGroupName,
-                            serviceName,
-                            gatewayId,
-                            hcId,
-                            ifMatch,
-                            this.client.getApiVersion(),
-                            this.client.getSubscriptionId(),
-                            parameters,
-                            accept,
-                            context))
+            .withContext(context -> service.createOrUpdate(this.client.getEndpoint(), resourceGroupName, serviceName,
+                gatewayId, hcId, ifMatch, this.client.getApiVersion(), this.client.getSubscriptionId(), parameters,
+                accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Creates of updates hostname configuration for a Gateway.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
@@ -895,22 +710,15 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return gateway hostname configuration details.
+     * @return gateway hostname configuration details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<GatewayHostnameConfigurationsCreateOrUpdateResponse> createOrUpdateWithResponseAsync(
-        String resourceGroupName,
-        String serviceName,
-        String gatewayId,
-        String hcId,
-        GatewayHostnameConfigurationContractInner parameters,
-        String ifMatch,
-        Context context) {
+        String resourceGroupName, String serviceName, String gatewayId, String hcId,
+        GatewayHostnameConfigurationContractInner parameters, String ifMatch, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -926,10 +734,8 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
             return Mono.error(new IllegalArgumentException("Parameter hcId is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (parameters == null) {
             return Mono.error(new IllegalArgumentException("Parameter parameters is required and cannot be null."));
@@ -938,59 +744,14 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .createOrUpdate(
-                this.client.getEndpoint(),
-                resourceGroupName,
-                serviceName,
-                gatewayId,
-                hcId,
-                ifMatch,
-                this.client.getApiVersion(),
-                this.client.getSubscriptionId(),
-                parameters,
-                accept,
-                context);
+        return service.createOrUpdate(this.client.getEndpoint(), resourceGroupName, serviceName, gatewayId, hcId,
+            ifMatch, this.client.getApiVersion(), this.client.getSubscriptionId(), parameters, accept, context);
     }
 
     /**
      * Creates of updates hostname configuration for a Gateway.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
-     *     not have value 'managed'.
-     * @param hcId Gateway hostname configuration identifier. Must be unique in the scope of parent Gateway entity.
-     * @param parameters Gateway hostname configuration details.
-     * @param ifMatch ETag of the Entity. Not required when creating an entity, but required when updating an entity.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return gateway hostname configuration details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<GatewayHostnameConfigurationContractInner> createOrUpdateAsync(
-        String resourceGroupName,
-        String serviceName,
-        String gatewayId,
-        String hcId,
-        GatewayHostnameConfigurationContractInner parameters,
-        String ifMatch) {
-        return createOrUpdateWithResponseAsync(resourceGroupName, serviceName, gatewayId, hcId, parameters, ifMatch)
-            .flatMap(
-                (GatewayHostnameConfigurationsCreateOrUpdateResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
-    }
-
-    /**
-     * Creates of updates hostname configuration for a Gateway.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
@@ -999,56 +760,20 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return gateway hostname configuration details.
+     * @return gateway hostname configuration details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<GatewayHostnameConfigurationContractInner> createOrUpdateAsync(
-        String resourceGroupName,
-        String serviceName,
-        String gatewayId,
-        String hcId,
-        GatewayHostnameConfigurationContractInner parameters) {
+    private Mono<GatewayHostnameConfigurationContractInner> createOrUpdateAsync(String resourceGroupName,
+        String serviceName, String gatewayId, String hcId, GatewayHostnameConfigurationContractInner parameters) {
         final String ifMatch = null;
         return createOrUpdateWithResponseAsync(resourceGroupName, serviceName, gatewayId, hcId, parameters, ifMatch)
-            .flatMap(
-                (GatewayHostnameConfigurationsCreateOrUpdateResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Creates of updates hostname configuration for a Gateway.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
-     *     not have value 'managed'.
-     * @param hcId Gateway hostname configuration identifier. Must be unique in the scope of parent Gateway entity.
-     * @param parameters Gateway hostname configuration details.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return gateway hostname configuration details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public GatewayHostnameConfigurationContractInner createOrUpdate(
-        String resourceGroupName,
-        String serviceName,
-        String gatewayId,
-        String hcId,
-        GatewayHostnameConfigurationContractInner parameters) {
-        final String ifMatch = null;
-        return createOrUpdateAsync(resourceGroupName, serviceName, gatewayId, hcId, parameters, ifMatch).block();
-    }
-
-    /**
-     * Creates of updates hostname configuration for a Gateway.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
@@ -1062,23 +787,39 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
      * @return gateway hostname configuration details.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public GatewayHostnameConfigurationsCreateOrUpdateResponse createOrUpdateWithResponse(
-        String resourceGroupName,
-        String serviceName,
-        String gatewayId,
-        String hcId,
-        GatewayHostnameConfigurationContractInner parameters,
-        String ifMatch,
-        Context context) {
-        return createOrUpdateWithResponseAsync(
-                resourceGroupName, serviceName, gatewayId, hcId, parameters, ifMatch, context)
-            .block();
+    public GatewayHostnameConfigurationsCreateOrUpdateResponse createOrUpdateWithResponse(String resourceGroupName,
+        String serviceName, String gatewayId, String hcId, GatewayHostnameConfigurationContractInner parameters,
+        String ifMatch, Context context) {
+        return createOrUpdateWithResponseAsync(resourceGroupName, serviceName, gatewayId, hcId, parameters, ifMatch,
+            context).block();
+    }
+
+    /**
+     * Creates of updates hostname configuration for a Gateway.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
+     *     not have value 'managed'.
+     * @param hcId Gateway hostname configuration identifier. Must be unique in the scope of parent Gateway entity.
+     * @param parameters Gateway hostname configuration details.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return gateway hostname configuration details.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public GatewayHostnameConfigurationContractInner createOrUpdate(String resourceGroupName, String serviceName,
+        String gatewayId, String hcId, GatewayHostnameConfigurationContractInner parameters) {
+        final String ifMatch = null;
+        return createOrUpdateWithResponse(resourceGroupName, serviceName, gatewayId, hcId, parameters, ifMatch,
+            Context.NONE).getValue();
     }
 
     /**
      * Deletes the specified hostname configuration from the specified Gateway.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
@@ -1088,16 +829,14 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Void>> deleteWithResponseAsync(
-        String resourceGroupName, String serviceName, String gatewayId, String hcId, String ifMatch) {
+    private Mono<Response<Void>> deleteWithResponseAsync(String resourceGroupName, String serviceName, String gatewayId,
+        String hcId, String ifMatch) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1116,34 +855,20 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
             return Mono.error(new IllegalArgumentException("Parameter ifMatch is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .delete(
-                            this.client.getEndpoint(),
-                            resourceGroupName,
-                            serviceName,
-                            gatewayId,
-                            hcId,
-                            ifMatch,
-                            this.client.getApiVersion(),
-                            this.client.getSubscriptionId(),
-                            accept,
-                            context))
+            .withContext(context -> service.delete(this.client.getEndpoint(), resourceGroupName, serviceName, gatewayId,
+                hcId, ifMatch, this.client.getApiVersion(), this.client.getSubscriptionId(), accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Deletes the specified hostname configuration from the specified Gateway.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
@@ -1154,16 +879,14 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Void>> deleteWithResponseAsync(
-        String resourceGroupName, String serviceName, String gatewayId, String hcId, String ifMatch, Context context) {
+    private Mono<Response<Void>> deleteWithResponseAsync(String resourceGroupName, String serviceName, String gatewayId,
+        String hcId, String ifMatch, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1182,31 +905,19 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
             return Mono.error(new IllegalArgumentException("Parameter ifMatch is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .delete(
-                this.client.getEndpoint(),
-                resourceGroupName,
-                serviceName,
-                gatewayId,
-                hcId,
-                ifMatch,
-                this.client.getApiVersion(),
-                this.client.getSubscriptionId(),
-                accept,
-                context);
+        return service.delete(this.client.getEndpoint(), resourceGroupName, serviceName, gatewayId, hcId, ifMatch,
+            this.client.getApiVersion(), this.client.getSubscriptionId(), accept, context);
     }
 
     /**
      * Deletes the specified hostname configuration from the specified Gateway.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
@@ -1216,19 +927,41 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> deleteAsync(
-        String resourceGroupName, String serviceName, String gatewayId, String hcId, String ifMatch) {
+    private Mono<Void> deleteAsync(String resourceGroupName, String serviceName, String gatewayId, String hcId,
+        String ifMatch) {
         return deleteWithResponseAsync(resourceGroupName, serviceName, gatewayId, hcId, ifMatch)
-            .flatMap((Response<Void> res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
     }
 
     /**
      * Deletes the specified hostname configuration from the specified Gateway.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
+     *     not have value 'managed'.
+     * @param hcId Gateway hostname configuration identifier. Must be unique in the scope of parent Gateway entity.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<Void> deleteWithResponse(String resourceGroupName, String serviceName, String gatewayId,
+        String hcId, String ifMatch, Context context) {
+        return deleteWithResponseAsync(resourceGroupName, serviceName, gatewayId, hcId, ifMatch, context).block();
+    }
+
+    /**
+     * Deletes the specified hostname configuration from the specified Gateway.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
@@ -1241,101 +974,65 @@ public final class GatewayHostnameConfigurationsClientImpl implements GatewayHos
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public void delete(String resourceGroupName, String serviceName, String gatewayId, String hcId, String ifMatch) {
-        deleteAsync(resourceGroupName, serviceName, gatewayId, hcId, ifMatch).block();
-    }
-
-    /**
-     * Deletes the specified hostname configuration from the specified Gateway.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
-     *     not have value 'managed'.
-     * @param hcId Gateway hostname configuration identifier. Must be unique in the scope of parent Gateway entity.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> deleteWithResponse(
-        String resourceGroupName, String serviceName, String gatewayId, String hcId, String ifMatch, Context context) {
-        return deleteWithResponseAsync(resourceGroupName, serviceName, gatewayId, hcId, ifMatch, context).block();
+        deleteWithResponse(resourceGroupName, serviceName, gatewayId, hcId, ifMatch, Context.NONE);
     }
 
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Gateway hostname configuration list representation.
+     * @return paged Gateway hostname configuration list representation along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<GatewayHostnameConfigurationContractInner>> listByServiceNextSinglePageAsync(
-        String nextLink) {
+    private Mono<PagedResponse<GatewayHostnameConfigurationContractInner>>
+        listByServiceNextSinglePageAsync(String nextLink) {
         if (nextLink == null) {
             return Mono.error(new IllegalArgumentException("Parameter nextLink is required and cannot be null."));
         }
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         final String accept = "application/json";
         return FluxUtil
             .withContext(context -> service.listByServiceNext(nextLink, this.client.getEndpoint(), accept, context))
             .<PagedResponse<GatewayHostnameConfigurationContractInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null))
+                res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                    res.getValue().value(), res.getValue().nextLink(), null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Gateway hostname configuration list representation.
+     * @return paged Gateway hostname configuration list representation along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<GatewayHostnameConfigurationContractInner>> listByServiceNextSinglePageAsync(
-        String nextLink, Context context) {
+    private Mono<PagedResponse<GatewayHostnameConfigurationContractInner>>
+        listByServiceNextSinglePageAsync(String nextLink, Context context) {
         if (nextLink == null) {
             return Mono.error(new IllegalArgumentException("Parameter nextLink is required and cannot be null."));
         }
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .listByServiceNext(nextLink, this.client.getEndpoint(), accept, context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null));
+        return service.listByServiceNext(nextLink, this.client.getEndpoint(), accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), res.getValue().nextLink(), null));
     }
 }

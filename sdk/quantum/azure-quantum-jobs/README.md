@@ -1,6 +1,6 @@
 # Azure Quantum Jobs client library for Java
 
-Azure Quantum is a Microsoft Azure service that you can use to run quantum computing programs or solve optimization problems in the cloud.  Using the Azure Quantum tools and SDKs, you can create quantum programs and run them against different quantum simulators and machines.  You can use the Azure.Quantum.Jobs client library to:
+Azure Quantum is a Microsoft Azure service that you can use to run quantum computing programs in the cloud.  Using the Azure Quantum tools and SDKs, you can create quantum programs and run them against different quantum simulators and machines.  You can use the Azure.Quantum.Jobs client library to:
 - Create, enumerate, and cancel quantum jobs
 - Enumerate provider status and quotas
 
@@ -57,14 +57,12 @@ To authenticate with the service, you will have to pass a [`TokenCredential`][to
 Create an instance of the client of your choice by passing the following values to `QuantumClientBuilder` and then calling the appropriate build method.
 - [Subscription][subscriptions] - looks like XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX and can be found in your list of subscriptions on azure
 - [Resource Group][resource-groups] - a container that holds related resources for an Azure solution
-- [Workspace][workspaces] - a collection of assets associated with running quantum or optimization applications
+- [Workspace][workspaces] - a collection of assets associated with running quantum
 - [Host][location] - the host endpoint is "https://{location}.quantum.azure.com". Choose the best data center location by geographical region
 - [StorageContainerName][blob-storage] - your blob storage
 - [Credential][credentials] - used to authenticate
 
-
-<!-- embedme ./src/samples/java/com/azure/quantum/jobs/ReadmeSamples.java#L37-L51 -->
-```java
+```java readme-sample-getClients
 JobsClient jobsClient = new QuantumClientBuilder()
     .credential(new DefaultAzureCredentialBuilder().build())
     .host("{endpoint}")
@@ -86,8 +84,7 @@ StorageClient storageClient = new QuantumClientBuilder()
 
 Create a storage container to put your data in.
 
-<!-- embedme ./src/samples/java/com/azure/quantum/jobs/ReadmeSamples.java#L58-L73 -->
-```java
+```java readme-sample-getContainerSasUri
 // Get container URI with SAS key
 String containerName = "{storageContainerName}";
 
@@ -106,42 +103,62 @@ String containerUri = storageClient.sasUri(
 ).getSasUri();
 ```
 
+### Compile your quantum program into QIR
+
+This step can be done in multiple ways and it is not in scope for this sample.
+
+[Quantum Intermediate Representation (QIR)](https://github.com/qir-alliance/qir-spec) is a [QIR Alliance](https://www.qir-alliance.org/) specification to represent quantum programs within the [LLVM](https://llvm.org/) Intermediate Representation (IR).
+
+A few methods to compile or generate a quantum program into QIR:
+- [Q# compiler](https://github.com/microsoft/qsharp-compiler/): Can be used to [compile Q# Code into QIR](https://github.com/microsoft/qsharp-compiler/tree/main/src/QsCompiler/QirGeneration).
+- [PyQIR](https://github.com/qir-alliance/pyqir): PyQIR is a set of APIs for generating, parsing, and evaluating Quantum Intermediate Representation (QIR).
+- [IQ#](https://github.com/microsoft/iqsharp): Can be used to compile a Q# program into QIR with the [%qir](https://learn.microsoft.com/qsharp/api/iqsharp-magic/qir) magic command.
+
+In this sample, we assume you already have a file with the QIR bitcode and you know the method name that you want to execute (entry point).
+
+We will use the QIR bitcode sample (`BellState.bc` in the samples folde), compiled a Q# code (`BellState.qs` in the samples folder) targeting the `quantinuum.sim.h1-1e` target, with `AdaptiveExecution` target capability.
+
 ### Upload Input Data
 
-Using the SAS URI, upload the json input data to the blob client.
-This contains the parameters to be used with [Quantum Inspired Optimizations](https://docs.microsoft.com/azure/quantum/optimization-overview-introduction)
+Using the SAS URI, upload the QIR bitcode input data to the blob client.
 
-<!-- embedme ./src/samples/java/com/azure/quantum/jobs/ReadmeSamples.java#L80-L92 -->
-```java
+```java readme-sample-uploadInputData
 // Get input data blob Uri with SAS key
 String blobName = "{blobName}";
 BlobDetails blobDetails = new BlobDetails()
     .setContainerName(containerName)
     .setBlobName(blobName);
+BlobHttpHeaders blobHttpHeaders = new BlobHttpHeaders()
+    .setContentType("qir.v1");
 String inputDataUri = storageClient.sasUri(blobDetails).getSasUri();
 
 // Upload input data to blob
 BlobClient blobClient = new BlobClientBuilder()
     .endpoint(inputDataUri)
     .buildClient();
-String problemFilePath = FileSystems.getDefault().getPath("src/samples/resources/problem.json").toString();
-blobClient.uploadFromFile(problemFilePath);
+String qirFilePath = FileSystems.getDefault().getPath("src/samples/java/com/azure/quantum/jobs/BellState.bc").toString();
+blobClient.uploadFromFile(qirFilePath, null, blobHttpHeaders, null, null, null, null);
 ```
+
 ### Create The Job
 
-Now that you've uploaded your problem definition to Azure Storage, you can use the `create()` method in `JobsClient` or `JobsAsyncClient`, or the `createWithResponse()` method in `JobsAsyncClient` to define an Azure Quantum job.
+Now that you've uploaded your QIR program bitcode to Azure Storage, you can use the `create()` method in `JobsClient` or `JobsAsyncClient`, or the `createWithResponse()` method in `JobsAsyncClient` to submit an Azure Quantum job.
 
-<!-- embedme ./src/samples/java/com/azure/quantum/jobs/ReadmeSamples.java#L99-L108 -->
-```java
+```java readme-sample-createTheJob
 String jobId = String.format("job-%s", UUID.randomUUID());
+Map<String, Object> inputParams = new HashMap<String, Object>();
+inputParams.put("entryPoint", "ENTRYPOINT__BellState");
+inputParams.put("arguments", new ArrayList<String>());
+inputParams.put("targetCapability", "AdaptiveExecution");
 JobDetails createJobDetails = new JobDetails()
     .setContainerUri(containerUri)
     .setId(jobId)
-    .setInputDataFormat("microsoft.qio.v2")
-    .setOutputDataFormat("microsoft.qio-results.v2")
-    .setProviderId("microsoft")
-    .setTarget("microsoft.paralleltempering-parameterfree.cpu")
-    .setName("{jobName}");
+    .setInputDataFormat("qir.v1")
+    .setOutputDataFormat("microsoft.quantum-results.v1")
+    .setProviderId("quantinuum")
+    .setTarget("quantinuum.sim.h1-1e")
+    .setName("{jobName}")
+    .setInputParams(inputParams);
 JobDetails jobDetails = jobsClient.create(jobId, createJobDetails);
 ```
 
@@ -149,8 +166,7 @@ JobDetails jobDetails = jobsClient.create(jobId, createJobDetails);
 
 To retrieve a specific job by its ID, you can use `get()` from `JobsClient` or `JobsAsyncClient`, or `getWithResponse()` in `JobsAsyncClient`.
 
-<!-- embedme ./src/samples/java/com/azure/quantum/jobs/ReadmeSamples.java#L115-L116 -->
-```java
+```java readme-sample-getJob
 // Get the job that we've just created based on its jobId
 JobDetails myJob = jobsClient.get(jobId);
 ```
@@ -159,12 +175,9 @@ JobDetails myJob = jobsClient.get(jobId);
 
 To enumerate all the jobs in the workspace, use the `list()` method from `JobClient` or `JobAsyncClient`, or from `JobAsyncClient` use `listSinglePage()` or `listNextPage()`.
 
-<!-- embedme ./src/samples/java/com/azure/quantum/jobs/ReadmeSamples.java#L123-L126 -->
-```java
+```java readme-sample-listJobs
 PagedIterable<JobDetails> jobs = jobsClient.list();
-jobs.forEach(job -> {
-    System.out.println(job.getName());
-});
+jobs.forEach(job -> System.out.println(job.getName()));
 ```
 
 ## Troubleshooting
@@ -198,7 +211,7 @@ additional questions or comments.
 [workspaces]: https://docs.microsoft.com/azure/quantum/how-to-create-quantum-workspaces-with-the-azure-portal
 [location]: https://azure.microsoft.com/global-infrastructure/services/?products=quantum
 [blob-storage]: https://docs.microsoft.com/azure/storage/blobs/storage-blobs-introduction
-[contributing]: https://github.com/Azure/azure-sdk-for-net/tree/main/CONTRIBUTING.md
+[contributing]: https://github.com/Azure/azure-sdk-for-java/tree/main/CONTRIBUTING.md
 [subscriptions]: https://ms.portal.azure.com/#blade/Microsoft_Azure_Billing/SubscriptionsBlade
 [credentials]: https://docs.microsoft.com/dotnet/api/overview/azure/identity-readme#credentials
 [style-guide-msft]: https://docs.microsoft.com/style-guide/capitalization

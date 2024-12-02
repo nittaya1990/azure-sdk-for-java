@@ -14,17 +14,15 @@ import com.azure.resourcemanager.videoanalyzer.fluent.models.PrivateLinkResource
 import com.azure.resourcemanager.videoanalyzer.models.PrivateLinkResource;
 import com.azure.resourcemanager.videoanalyzer.models.PrivateLinkResourceListResult;
 import com.azure.resourcemanager.videoanalyzer.models.PrivateLinkResources;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class PrivateLinkResourcesImpl implements PrivateLinkResources {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PrivateLinkResourcesImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(PrivateLinkResourcesImpl.class);
 
     private final PrivateLinkResourcesClient innerClient;
 
     private final com.azure.resourcemanager.videoanalyzer.VideoAnalyzerManager serviceManager;
 
-    public PrivateLinkResourcesImpl(
-        PrivateLinkResourcesClient innerClient,
+    public PrivateLinkResourcesImpl(PrivateLinkResourcesClient innerClient,
         com.azure.resourcemanager.videoanalyzer.VideoAnalyzerManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
@@ -39,15 +37,12 @@ public final class PrivateLinkResourcesImpl implements PrivateLinkResources {
         }
     }
 
-    public Response<PrivateLinkResourceListResult> listWithResponse(
-        String resourceGroupName, String accountName, Context context) {
-        Response<PrivateLinkResourceListResultInner> inner =
-            this.serviceClient().listWithResponse(resourceGroupName, accountName, context);
+    public Response<PrivateLinkResourceListResult> listWithResponse(String resourceGroupName, String accountName,
+        Context context) {
+        Response<PrivateLinkResourceListResultInner> inner
+            = this.serviceClient().listWithResponse(resourceGroupName, accountName, context);
         if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
                 new PrivateLinkResourceListResultImpl(inner.getValue(), this.manager()));
         } else {
             return null;
@@ -63,15 +58,12 @@ public final class PrivateLinkResourcesImpl implements PrivateLinkResources {
         }
     }
 
-    public Response<PrivateLinkResource> getWithResponse(
-        String resourceGroupName, String accountName, String name, Context context) {
-        Response<PrivateLinkResourceInner> inner =
-            this.serviceClient().getWithResponse(resourceGroupName, accountName, name, context);
+    public Response<PrivateLinkResource> getWithResponse(String resourceGroupName, String accountName, String name,
+        Context context) {
+        Response<PrivateLinkResourceInner> inner
+            = this.serviceClient().getWithResponse(resourceGroupName, accountName, name, context);
         if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
                 new PrivateLinkResourceImpl(inner.getValue(), this.manager()));
         } else {
             return null;

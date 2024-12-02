@@ -5,9 +5,10 @@
 package com.azure.resourcemanager.streamanalytics.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.management.Resource;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
 import com.azure.resourcemanager.streamanalytics.models.ClusterInfo;
 import com.azure.resourcemanager.streamanalytics.models.CompatibilityLevel;
 import com.azure.resourcemanager.streamanalytics.models.ContentStoragePolicy;
@@ -18,217 +19,87 @@ import com.azure.resourcemanager.streamanalytics.models.JobStorageAccount;
 import com.azure.resourcemanager.streamanalytics.models.JobType;
 import com.azure.resourcemanager.streamanalytics.models.OutputErrorPolicy;
 import com.azure.resourcemanager.streamanalytics.models.OutputStartMode;
-import com.azure.resourcemanager.streamanalytics.models.StreamingJobSku;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.azure.resourcemanager.streamanalytics.models.Sku;
+import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 
-/** A streaming job object, containing all information associated with the named streaming job. */
-@JsonFlatten
+/**
+ * A streaming job object, containing all information associated with the named streaming job.
+ */
 @Fluent
-public class StreamingJobInner extends Resource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(StreamingJobInner.class);
+public final class StreamingJobInner extends Resource {
+    /*
+     * Describes the SKU of the streaming job. Required on PUT (CreateOrReplace) requests.
+     */
+    private Sku sku;
 
     /*
-     * Describes the system-assigned managed identity assigned to this job that
-     * can be used to authenticate with inputs and outputs.
+     * The properties that are associated with a streaming job. Required on PUT (CreateOrReplace) requests.
      */
-    @JsonProperty(value = "identity")
+    private StreamingJobPropertiesInner innerProperties;
+
+    /*
+     * Describes the managed identity assigned to this job that can be used to authenticate with inputs and outputs.
+     */
     private Identity identity;
 
     /*
-     * Describes the SKU of the streaming job. Required on PUT
-     * (CreateOrReplace) requests.
+     * The type of the resource.
      */
-    @JsonProperty(value = "properties.sku")
-    private StreamingJobSku sku;
+    private String type;
 
     /*
-     * A GUID uniquely identifying the streaming job. This GUID is generated
-     * upon creation of the streaming job.
+     * The name of the resource.
      */
-    @JsonProperty(value = "properties.jobId", access = JsonProperty.Access.WRITE_ONLY)
-    private String jobId;
+    private String name;
 
     /*
-     * Describes the provisioning status of the streaming job.
+     * Fully qualified resource Id for the resource.
      */
-    @JsonProperty(value = "properties.provisioningState", access = JsonProperty.Access.WRITE_ONLY)
-    private String provisioningState;
-
-    /*
-     * Describes the state of the streaming job.
-     */
-    @JsonProperty(value = "properties.jobState", access = JsonProperty.Access.WRITE_ONLY)
-    private String jobState;
-
-    /*
-     * Describes the type of the job. Valid modes are `Cloud` and 'Edge'.
-     */
-    @JsonProperty(value = "properties.jobType")
-    private JobType jobType;
-
-    /*
-     * This property should only be utilized when it is desired that the job be
-     * started immediately upon creation. Value may be JobStartTime,
-     * CustomTime, or LastOutputEventTime to indicate whether the starting
-     * point of the output event stream should start whenever the job is
-     * started, start at a custom user time stamp specified via the
-     * outputStartTime property, or start from the last event output time.
-     */
-    @JsonProperty(value = "properties.outputStartMode")
-    private OutputStartMode outputStartMode;
-
-    /*
-     * Value is either an ISO-8601 formatted time stamp that indicates the
-     * starting point of the output event stream, or null to indicate that the
-     * output event stream will start whenever the streaming job is started.
-     * This property must have a value if outputStartMode is set to CustomTime.
-     */
-    @JsonProperty(value = "properties.outputStartTime")
-    private OffsetDateTime outputStartTime;
-
-    /*
-     * Value is either an ISO-8601 formatted timestamp indicating the last
-     * output event time of the streaming job or null indicating that output
-     * has not yet been produced. In case of multiple outputs or multiple
-     * streams, this shows the latest value in that set.
-     */
-    @JsonProperty(value = "properties.lastOutputEventTime", access = JsonProperty.Access.WRITE_ONLY)
-    private OffsetDateTime lastOutputEventTime;
-
-    /*
-     * Indicates the policy to apply to events that arrive out of order in the
-     * input event stream.
-     */
-    @JsonProperty(value = "properties.eventsOutOfOrderPolicy")
-    private EventsOutOfOrderPolicy eventsOutOfOrderPolicy;
-
-    /*
-     * Indicates the policy to apply to events that arrive at the output and
-     * cannot be written to the external storage due to being malformed
-     * (missing column values, column values of wrong type or size).
-     */
-    @JsonProperty(value = "properties.outputErrorPolicy")
-    private OutputErrorPolicy outputErrorPolicy;
-
-    /*
-     * The maximum tolerable delay in seconds where out-of-order events can be
-     * adjusted to be back in order.
-     */
-    @JsonProperty(value = "properties.eventsOutOfOrderMaxDelayInSeconds")
-    private Integer eventsOutOfOrderMaxDelayInSeconds;
-
-    /*
-     * The maximum tolerable delay in seconds where events arriving late could
-     * be included.  Supported range is -1 to 1814399 (20.23:59:59 days) and -1
-     * is used to specify wait indefinitely. If the property is absent, it is
-     * interpreted to have a value of -1.
-     */
-    @JsonProperty(value = "properties.eventsLateArrivalMaxDelayInSeconds")
-    private Integer eventsLateArrivalMaxDelayInSeconds;
-
-    /*
-     * The data locale of the stream analytics job. Value should be the name of
-     * a supported .NET Culture from the set
-     * https://msdn.microsoft.com/en-us/library/system.globalization.culturetypes(v=vs.110).aspx.
-     * Defaults to 'en-US' if none specified.
-     */
-    @JsonProperty(value = "properties.dataLocale")
-    private String dataLocale;
-
-    /*
-     * Controls certain runtime behaviors of the streaming job.
-     */
-    @JsonProperty(value = "properties.compatibilityLevel")
-    private CompatibilityLevel compatibilityLevel;
-
-    /*
-     * Value is an ISO-8601 formatted UTC timestamp indicating when the
-     * streaming job was created.
-     */
-    @JsonProperty(value = "properties.createdDate", access = JsonProperty.Access.WRITE_ONLY)
-    private OffsetDateTime createdDate;
-
-    /*
-     * A list of one or more inputs to the streaming job. The name property for
-     * each input is required when specifying this property in a PUT request.
-     * This property cannot be modify via a PATCH operation. You must use the
-     * PATCH API available for the individual input.
-     */
-    @JsonProperty(value = "properties.inputs")
-    private List<InputInner> inputs;
-
-    /*
-     * Indicates the query and the number of streaming units to use for the
-     * streaming job. The name property of the transformation is required when
-     * specifying this property in a PUT request. This property cannot be
-     * modify via a PATCH operation. You must use the PATCH API available for
-     * the individual transformation.
-     */
-    @JsonProperty(value = "properties.transformation")
-    private TransformationInner transformation;
-
-    /*
-     * A list of one or more outputs for the streaming job. The name property
-     * for each output is required when specifying this property in a PUT
-     * request. This property cannot be modify via a PATCH operation. You must
-     * use the PATCH API available for the individual output.
-     */
-    @JsonProperty(value = "properties.outputs")
-    private List<OutputInner> outputs;
-
-    /*
-     * A list of one or more functions for the streaming job. The name property
-     * for each function is required when specifying this property in a PUT
-     * request. This property cannot be modify via a PATCH operation. You must
-     * use the PATCH API available for the individual transformation.
-     */
-    @JsonProperty(value = "properties.functions")
-    private List<FunctionInner> functions;
-
-    /*
-     * The current entity tag for the streaming job. This is an opaque string.
-     * You can use it to detect whether the resource has changed between
-     * requests. You can also use it in the If-Match or If-None-Match headers
-     * for write operations for optimistic concurrency.
-     */
-    @JsonProperty(value = "properties.etag", access = JsonProperty.Access.WRITE_ONLY)
-    private String etag;
-
-    /*
-     * The properties that are associated with an Azure Storage account with
-     * MSI
-     */
-    @JsonProperty(value = "properties.jobStorageAccount")
-    private JobStorageAccount jobStorageAccount;
-
-    /*
-     * Valid values are JobStorageAccount and SystemAccount. If set to
-     * JobStorageAccount, this requires the user to also specify
-     * jobStorageAccount property. .
-     */
-    @JsonProperty(value = "properties.contentStoragePolicy")
-    private ContentStoragePolicy contentStoragePolicy;
-
-    /*
-     * The storage account where the custom code artifacts are located.
-     */
-    @JsonProperty(value = "properties.externals")
-    private External externals;
-
-    /*
-     * The cluster which streaming jobs will run on.
-     */
-    @JsonProperty(value = "properties.cluster")
-    private ClusterInfo cluster;
+    private String id;
 
     /**
-     * Get the identity property: Describes the system-assigned managed identity assigned to this job that can be used
-     * to authenticate with inputs and outputs.
-     *
+     * Creates an instance of StreamingJobInner class.
+     */
+    public StreamingJobInner() {
+    }
+
+    /**
+     * Get the sku property: Describes the SKU of the streaming job. Required on PUT (CreateOrReplace) requests.
+     * 
+     * @return the sku value.
+     */
+    public Sku sku() {
+        return this.sku;
+    }
+
+    /**
+     * Set the sku property: Describes the SKU of the streaming job. Required on PUT (CreateOrReplace) requests.
+     * 
+     * @param sku the sku value to set.
+     * @return the StreamingJobInner object itself.
+     */
+    public StreamingJobInner withSku(Sku sku) {
+        this.sku = sku;
+        return this;
+    }
+
+    /**
+     * Get the innerProperties property: The properties that are associated with a streaming job. Required on PUT
+     * (CreateOrReplace) requests.
+     * 
+     * @return the innerProperties value.
+     */
+    private StreamingJobPropertiesInner innerProperties() {
+        return this.innerProperties;
+    }
+
+    /**
+     * Get the identity property: Describes the managed identity assigned to this job that can be used to authenticate
+     * with inputs and outputs.
+     * 
      * @return the identity value.
      */
     public Identity identity() {
@@ -236,9 +107,9 @@ public class StreamingJobInner extends Resource {
     }
 
     /**
-     * Set the identity property: Describes the system-assigned managed identity assigned to this job that can be used
-     * to authenticate with inputs and outputs.
-     *
+     * Set the identity property: Describes the managed identity assigned to this job that can be used to authenticate
+     * with inputs and outputs.
+     * 
      * @param identity the identity value to set.
      * @return the StreamingJobInner object itself.
      */
@@ -248,70 +119,124 @@ public class StreamingJobInner extends Resource {
     }
 
     /**
+     * Get the type property: The type of the resource.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
+     * Get the name property: The name of the resource.
+     * 
+     * @return the name value.
+     */
+    @Override
+    public String name() {
+        return this.name;
+    }
+
+    /**
+     * Get the id property: Fully qualified resource Id for the resource.
+     * 
+     * @return the id value.
+     */
+    @Override
+    public String id() {
+        return this.id;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public StreamingJobInner withLocation(String location) {
+        super.withLocation(location);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public StreamingJobInner withTags(Map<String, String> tags) {
+        super.withTags(tags);
+        return this;
+    }
+
+    /**
      * Get the sku property: Describes the SKU of the streaming job. Required on PUT (CreateOrReplace) requests.
-     *
+     * 
      * @return the sku value.
      */
-    public StreamingJobSku sku() {
-        return this.sku;
+    public Sku skuPropertiesSku() {
+        return this.innerProperties() == null ? null : this.innerProperties().sku();
     }
 
     /**
      * Set the sku property: Describes the SKU of the streaming job. Required on PUT (CreateOrReplace) requests.
-     *
+     * 
      * @param sku the sku value to set.
      * @return the StreamingJobInner object itself.
      */
-    public StreamingJobInner withSku(StreamingJobSku sku) {
-        this.sku = sku;
+    public StreamingJobInner withSkuPropertiesSku(Sku sku) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new StreamingJobPropertiesInner();
+        }
+        this.innerProperties().withSku(sku);
         return this;
     }
 
     /**
      * Get the jobId property: A GUID uniquely identifying the streaming job. This GUID is generated upon creation of
      * the streaming job.
-     *
+     * 
      * @return the jobId value.
      */
     public String jobId() {
-        return this.jobId;
+        return this.innerProperties() == null ? null : this.innerProperties().jobId();
     }
 
     /**
      * Get the provisioningState property: Describes the provisioning status of the streaming job.
-     *
+     * 
      * @return the provisioningState value.
      */
     public String provisioningState() {
-        return this.provisioningState;
+        return this.innerProperties() == null ? null : this.innerProperties().provisioningState();
     }
 
     /**
      * Get the jobState property: Describes the state of the streaming job.
-     *
+     * 
      * @return the jobState value.
      */
     public String jobState() {
-        return this.jobState;
+        return this.innerProperties() == null ? null : this.innerProperties().jobState();
     }
 
     /**
      * Get the jobType property: Describes the type of the job. Valid modes are `Cloud` and 'Edge'.
-     *
+     * 
      * @return the jobType value.
      */
     public JobType jobType() {
-        return this.jobType;
+        return this.innerProperties() == null ? null : this.innerProperties().jobType();
     }
 
     /**
      * Set the jobType property: Describes the type of the job. Valid modes are `Cloud` and 'Edge'.
-     *
+     * 
      * @param jobType the jobType value to set.
      * @return the StreamingJobInner object itself.
      */
     public StreamingJobInner withJobType(JobType jobType) {
-        this.jobType = jobType;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new StreamingJobPropertiesInner();
+        }
+        this.innerProperties().withJobType(jobType);
         return this;
     }
 
@@ -320,11 +245,11 @@ public class StreamingJobInner extends Resource {
      * started immediately upon creation. Value may be JobStartTime, CustomTime, or LastOutputEventTime to indicate
      * whether the starting point of the output event stream should start whenever the job is started, start at a custom
      * user time stamp specified via the outputStartTime property, or start from the last event output time.
-     *
+     * 
      * @return the outputStartMode value.
      */
     public OutputStartMode outputStartMode() {
-        return this.outputStartMode;
+        return this.innerProperties() == null ? null : this.innerProperties().outputStartMode();
     }
 
     /**
@@ -332,12 +257,15 @@ public class StreamingJobInner extends Resource {
      * started immediately upon creation. Value may be JobStartTime, CustomTime, or LastOutputEventTime to indicate
      * whether the starting point of the output event stream should start whenever the job is started, start at a custom
      * user time stamp specified via the outputStartTime property, or start from the last event output time.
-     *
+     * 
      * @param outputStartMode the outputStartMode value to set.
      * @return the StreamingJobInner object itself.
      */
     public StreamingJobInner withOutputStartMode(OutputStartMode outputStartMode) {
-        this.outputStartMode = outputStartMode;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new StreamingJobPropertiesInner();
+        }
+        this.innerProperties().withOutputStartMode(outputStartMode);
         return this;
     }
 
@@ -345,23 +273,26 @@ public class StreamingJobInner extends Resource {
      * Get the outputStartTime property: Value is either an ISO-8601 formatted time stamp that indicates the starting
      * point of the output event stream, or null to indicate that the output event stream will start whenever the
      * streaming job is started. This property must have a value if outputStartMode is set to CustomTime.
-     *
+     * 
      * @return the outputStartTime value.
      */
     public OffsetDateTime outputStartTime() {
-        return this.outputStartTime;
+        return this.innerProperties() == null ? null : this.innerProperties().outputStartTime();
     }
 
     /**
      * Set the outputStartTime property: Value is either an ISO-8601 formatted time stamp that indicates the starting
      * point of the output event stream, or null to indicate that the output event stream will start whenever the
      * streaming job is started. This property must have a value if outputStartMode is set to CustomTime.
-     *
+     * 
      * @param outputStartTime the outputStartTime value to set.
      * @return the StreamingJobInner object itself.
      */
     public StreamingJobInner withOutputStartTime(OffsetDateTime outputStartTime) {
-        this.outputStartTime = outputStartTime;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new StreamingJobPropertiesInner();
+        }
+        this.innerProperties().withOutputStartTime(outputStartTime);
         return this;
     }
 
@@ -369,32 +300,35 @@ public class StreamingJobInner extends Resource {
      * Get the lastOutputEventTime property: Value is either an ISO-8601 formatted timestamp indicating the last output
      * event time of the streaming job or null indicating that output has not yet been produced. In case of multiple
      * outputs or multiple streams, this shows the latest value in that set.
-     *
+     * 
      * @return the lastOutputEventTime value.
      */
     public OffsetDateTime lastOutputEventTime() {
-        return this.lastOutputEventTime;
+        return this.innerProperties() == null ? null : this.innerProperties().lastOutputEventTime();
     }
 
     /**
      * Get the eventsOutOfOrderPolicy property: Indicates the policy to apply to events that arrive out of order in the
      * input event stream.
-     *
+     * 
      * @return the eventsOutOfOrderPolicy value.
      */
     public EventsOutOfOrderPolicy eventsOutOfOrderPolicy() {
-        return this.eventsOutOfOrderPolicy;
+        return this.innerProperties() == null ? null : this.innerProperties().eventsOutOfOrderPolicy();
     }
 
     /**
      * Set the eventsOutOfOrderPolicy property: Indicates the policy to apply to events that arrive out of order in the
      * input event stream.
-     *
+     * 
      * @param eventsOutOfOrderPolicy the eventsOutOfOrderPolicy value to set.
      * @return the StreamingJobInner object itself.
      */
     public StreamingJobInner withEventsOutOfOrderPolicy(EventsOutOfOrderPolicy eventsOutOfOrderPolicy) {
-        this.eventsOutOfOrderPolicy = eventsOutOfOrderPolicy;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new StreamingJobPropertiesInner();
+        }
+        this.innerProperties().withEventsOutOfOrderPolicy(eventsOutOfOrderPolicy);
         return this;
     }
 
@@ -402,45 +336,51 @@ public class StreamingJobInner extends Resource {
      * Get the outputErrorPolicy property: Indicates the policy to apply to events that arrive at the output and cannot
      * be written to the external storage due to being malformed (missing column values, column values of wrong type or
      * size).
-     *
+     * 
      * @return the outputErrorPolicy value.
      */
     public OutputErrorPolicy outputErrorPolicy() {
-        return this.outputErrorPolicy;
+        return this.innerProperties() == null ? null : this.innerProperties().outputErrorPolicy();
     }
 
     /**
      * Set the outputErrorPolicy property: Indicates the policy to apply to events that arrive at the output and cannot
      * be written to the external storage due to being malformed (missing column values, column values of wrong type or
      * size).
-     *
+     * 
      * @param outputErrorPolicy the outputErrorPolicy value to set.
      * @return the StreamingJobInner object itself.
      */
     public StreamingJobInner withOutputErrorPolicy(OutputErrorPolicy outputErrorPolicy) {
-        this.outputErrorPolicy = outputErrorPolicy;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new StreamingJobPropertiesInner();
+        }
+        this.innerProperties().withOutputErrorPolicy(outputErrorPolicy);
         return this;
     }
 
     /**
      * Get the eventsOutOfOrderMaxDelayInSeconds property: The maximum tolerable delay in seconds where out-of-order
      * events can be adjusted to be back in order.
-     *
+     * 
      * @return the eventsOutOfOrderMaxDelayInSeconds value.
      */
     public Integer eventsOutOfOrderMaxDelayInSeconds() {
-        return this.eventsOutOfOrderMaxDelayInSeconds;
+        return this.innerProperties() == null ? null : this.innerProperties().eventsOutOfOrderMaxDelayInSeconds();
     }
 
     /**
      * Set the eventsOutOfOrderMaxDelayInSeconds property: The maximum tolerable delay in seconds where out-of-order
      * events can be adjusted to be back in order.
-     *
+     * 
      * @param eventsOutOfOrderMaxDelayInSeconds the eventsOutOfOrderMaxDelayInSeconds value to set.
      * @return the StreamingJobInner object itself.
      */
     public StreamingJobInner withEventsOutOfOrderMaxDelayInSeconds(Integer eventsOutOfOrderMaxDelayInSeconds) {
-        this.eventsOutOfOrderMaxDelayInSeconds = eventsOutOfOrderMaxDelayInSeconds;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new StreamingJobPropertiesInner();
+        }
+        this.innerProperties().withEventsOutOfOrderMaxDelayInSeconds(eventsOutOfOrderMaxDelayInSeconds);
         return this;
     }
 
@@ -448,23 +388,26 @@ public class StreamingJobInner extends Resource {
      * Get the eventsLateArrivalMaxDelayInSeconds property: The maximum tolerable delay in seconds where events arriving
      * late could be included. Supported range is -1 to 1814399 (20.23:59:59 days) and -1 is used to specify wait
      * indefinitely. If the property is absent, it is interpreted to have a value of -1.
-     *
+     * 
      * @return the eventsLateArrivalMaxDelayInSeconds value.
      */
     public Integer eventsLateArrivalMaxDelayInSeconds() {
-        return this.eventsLateArrivalMaxDelayInSeconds;
+        return this.innerProperties() == null ? null : this.innerProperties().eventsLateArrivalMaxDelayInSeconds();
     }
 
     /**
      * Set the eventsLateArrivalMaxDelayInSeconds property: The maximum tolerable delay in seconds where events arriving
      * late could be included. Supported range is -1 to 1814399 (20.23:59:59 days) and -1 is used to specify wait
      * indefinitely. If the property is absent, it is interpreted to have a value of -1.
-     *
+     * 
      * @param eventsLateArrivalMaxDelayInSeconds the eventsLateArrivalMaxDelayInSeconds value to set.
      * @return the StreamingJobInner object itself.
      */
     public StreamingJobInner withEventsLateArrivalMaxDelayInSeconds(Integer eventsLateArrivalMaxDelayInSeconds) {
-        this.eventsLateArrivalMaxDelayInSeconds = eventsLateArrivalMaxDelayInSeconds;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new StreamingJobPropertiesInner();
+        }
+        this.innerProperties().withEventsLateArrivalMaxDelayInSeconds(eventsLateArrivalMaxDelayInSeconds);
         return this;
     }
 
@@ -473,11 +416,11 @@ public class StreamingJobInner extends Resource {
      * .NET Culture from the set
      * https://msdn.microsoft.com/en-us/library/system.globalization.culturetypes(v=vs.110).aspx. Defaults to 'en-US' if
      * none specified.
-     *
+     * 
      * @return the dataLocale value.
      */
     public String dataLocale() {
-        return this.dataLocale;
+        return this.innerProperties() == null ? null : this.innerProperties().dataLocale();
     }
 
     /**
@@ -485,66 +428,75 @@ public class StreamingJobInner extends Resource {
      * .NET Culture from the set
      * https://msdn.microsoft.com/en-us/library/system.globalization.culturetypes(v=vs.110).aspx. Defaults to 'en-US' if
      * none specified.
-     *
+     * 
      * @param dataLocale the dataLocale value to set.
      * @return the StreamingJobInner object itself.
      */
     public StreamingJobInner withDataLocale(String dataLocale) {
-        this.dataLocale = dataLocale;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new StreamingJobPropertiesInner();
+        }
+        this.innerProperties().withDataLocale(dataLocale);
         return this;
     }
 
     /**
      * Get the compatibilityLevel property: Controls certain runtime behaviors of the streaming job.
-     *
+     * 
      * @return the compatibilityLevel value.
      */
     public CompatibilityLevel compatibilityLevel() {
-        return this.compatibilityLevel;
+        return this.innerProperties() == null ? null : this.innerProperties().compatibilityLevel();
     }
 
     /**
      * Set the compatibilityLevel property: Controls certain runtime behaviors of the streaming job.
-     *
+     * 
      * @param compatibilityLevel the compatibilityLevel value to set.
      * @return the StreamingJobInner object itself.
      */
     public StreamingJobInner withCompatibilityLevel(CompatibilityLevel compatibilityLevel) {
-        this.compatibilityLevel = compatibilityLevel;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new StreamingJobPropertiesInner();
+        }
+        this.innerProperties().withCompatibilityLevel(compatibilityLevel);
         return this;
     }
 
     /**
      * Get the createdDate property: Value is an ISO-8601 formatted UTC timestamp indicating when the streaming job was
      * created.
-     *
+     * 
      * @return the createdDate value.
      */
     public OffsetDateTime createdDate() {
-        return this.createdDate;
+        return this.innerProperties() == null ? null : this.innerProperties().createdDate();
     }
 
     /**
      * Get the inputs property: A list of one or more inputs to the streaming job. The name property for each input is
      * required when specifying this property in a PUT request. This property cannot be modify via a PATCH operation.
      * You must use the PATCH API available for the individual input.
-     *
+     * 
      * @return the inputs value.
      */
     public List<InputInner> inputs() {
-        return this.inputs;
+        return this.innerProperties() == null ? null : this.innerProperties().inputs();
     }
 
     /**
      * Set the inputs property: A list of one or more inputs to the streaming job. The name property for each input is
      * required when specifying this property in a PUT request. This property cannot be modify via a PATCH operation.
      * You must use the PATCH API available for the individual input.
-     *
+     * 
      * @param inputs the inputs value to set.
      * @return the StreamingJobInner object itself.
      */
     public StreamingJobInner withInputs(List<InputInner> inputs) {
-        this.inputs = inputs;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new StreamingJobPropertiesInner();
+        }
+        this.innerProperties().withInputs(inputs);
         return this;
     }
 
@@ -553,11 +505,11 @@ public class StreamingJobInner extends Resource {
      * job. The name property of the transformation is required when specifying this property in a PUT request. This
      * property cannot be modify via a PATCH operation. You must use the PATCH API available for the individual
      * transformation.
-     *
+     * 
      * @return the transformation value.
      */
     public TransformationInner transformation() {
-        return this.transformation;
+        return this.innerProperties() == null ? null : this.innerProperties().transformation();
     }
 
     /**
@@ -565,12 +517,15 @@ public class StreamingJobInner extends Resource {
      * job. The name property of the transformation is required when specifying this property in a PUT request. This
      * property cannot be modify via a PATCH operation. You must use the PATCH API available for the individual
      * transformation.
-     *
+     * 
      * @param transformation the transformation value to set.
      * @return the StreamingJobInner object itself.
      */
     public StreamingJobInner withTransformation(TransformationInner transformation) {
-        this.transformation = transformation;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new StreamingJobPropertiesInner();
+        }
+        this.innerProperties().withTransformation(transformation);
         return this;
     }
 
@@ -578,23 +533,26 @@ public class StreamingJobInner extends Resource {
      * Get the outputs property: A list of one or more outputs for the streaming job. The name property for each output
      * is required when specifying this property in a PUT request. This property cannot be modify via a PATCH operation.
      * You must use the PATCH API available for the individual output.
-     *
+     * 
      * @return the outputs value.
      */
     public List<OutputInner> outputs() {
-        return this.outputs;
+        return this.innerProperties() == null ? null : this.innerProperties().outputs();
     }
 
     /**
      * Set the outputs property: A list of one or more outputs for the streaming job. The name property for each output
      * is required when specifying this property in a PUT request. This property cannot be modify via a PATCH operation.
      * You must use the PATCH API available for the individual output.
-     *
+     * 
      * @param outputs the outputs value to set.
      * @return the StreamingJobInner object itself.
      */
     public StreamingJobInner withOutputs(List<OutputInner> outputs) {
-        this.outputs = outputs;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new StreamingJobPropertiesInner();
+        }
+        this.innerProperties().withOutputs(outputs);
         return this;
     }
 
@@ -602,23 +560,26 @@ public class StreamingJobInner extends Resource {
      * Get the functions property: A list of one or more functions for the streaming job. The name property for each
      * function is required when specifying this property in a PUT request. This property cannot be modify via a PATCH
      * operation. You must use the PATCH API available for the individual transformation.
-     *
+     * 
      * @return the functions value.
      */
     public List<FunctionInner> functions() {
-        return this.functions;
+        return this.innerProperties() == null ? null : this.innerProperties().functions();
     }
 
     /**
      * Set the functions property: A list of one or more functions for the streaming job. The name property for each
      * function is required when specifying this property in a PUT request. This property cannot be modify via a PATCH
      * operation. You must use the PATCH API available for the individual transformation.
-     *
+     * 
      * @param functions the functions value to set.
      * @return the StreamingJobInner object itself.
      */
     public StreamingJobInner withFunctions(List<FunctionInner> functions) {
-        this.functions = functions;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new StreamingJobPropertiesInner();
+        }
+        this.innerProperties().withFunctions(functions);
         return this;
     }
 
@@ -626,141 +587,177 @@ public class StreamingJobInner extends Resource {
      * Get the etag property: The current entity tag for the streaming job. This is an opaque string. You can use it to
      * detect whether the resource has changed between requests. You can also use it in the If-Match or If-None-Match
      * headers for write operations for optimistic concurrency.
-     *
+     * 
      * @return the etag value.
      */
     public String etag() {
-        return this.etag;
+        return this.innerProperties() == null ? null : this.innerProperties().etag();
     }
 
     /**
      * Get the jobStorageAccount property: The properties that are associated with an Azure Storage account with MSI.
-     *
+     * 
      * @return the jobStorageAccount value.
      */
     public JobStorageAccount jobStorageAccount() {
-        return this.jobStorageAccount;
+        return this.innerProperties() == null ? null : this.innerProperties().jobStorageAccount();
     }
 
     /**
      * Set the jobStorageAccount property: The properties that are associated with an Azure Storage account with MSI.
-     *
+     * 
      * @param jobStorageAccount the jobStorageAccount value to set.
      * @return the StreamingJobInner object itself.
      */
     public StreamingJobInner withJobStorageAccount(JobStorageAccount jobStorageAccount) {
-        this.jobStorageAccount = jobStorageAccount;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new StreamingJobPropertiesInner();
+        }
+        this.innerProperties().withJobStorageAccount(jobStorageAccount);
         return this;
     }
 
     /**
      * Get the contentStoragePolicy property: Valid values are JobStorageAccount and SystemAccount. If set to
      * JobStorageAccount, this requires the user to also specify jobStorageAccount property. .
-     *
+     * 
      * @return the contentStoragePolicy value.
      */
     public ContentStoragePolicy contentStoragePolicy() {
-        return this.contentStoragePolicy;
+        return this.innerProperties() == null ? null : this.innerProperties().contentStoragePolicy();
     }
 
     /**
      * Set the contentStoragePolicy property: Valid values are JobStorageAccount and SystemAccount. If set to
      * JobStorageAccount, this requires the user to also specify jobStorageAccount property. .
-     *
+     * 
      * @param contentStoragePolicy the contentStoragePolicy value to set.
      * @return the StreamingJobInner object itself.
      */
     public StreamingJobInner withContentStoragePolicy(ContentStoragePolicy contentStoragePolicy) {
-        this.contentStoragePolicy = contentStoragePolicy;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new StreamingJobPropertiesInner();
+        }
+        this.innerProperties().withContentStoragePolicy(contentStoragePolicy);
         return this;
     }
 
     /**
      * Get the externals property: The storage account where the custom code artifacts are located.
-     *
+     * 
      * @return the externals value.
      */
     public External externals() {
-        return this.externals;
+        return this.innerProperties() == null ? null : this.innerProperties().externals();
     }
 
     /**
      * Set the externals property: The storage account where the custom code artifacts are located.
-     *
+     * 
      * @param externals the externals value to set.
      * @return the StreamingJobInner object itself.
      */
     public StreamingJobInner withExternals(External externals) {
-        this.externals = externals;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new StreamingJobPropertiesInner();
+        }
+        this.innerProperties().withExternals(externals);
         return this;
     }
 
     /**
      * Get the cluster property: The cluster which streaming jobs will run on.
-     *
+     * 
      * @return the cluster value.
      */
     public ClusterInfo cluster() {
-        return this.cluster;
+        return this.innerProperties() == null ? null : this.innerProperties().cluster();
     }
 
     /**
      * Set the cluster property: The cluster which streaming jobs will run on.
-     *
+     * 
      * @param cluster the cluster value to set.
      * @return the StreamingJobInner object itself.
      */
     public StreamingJobInner withCluster(ClusterInfo cluster) {
-        this.cluster = cluster;
-        return this;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public StreamingJobInner withLocation(String location) {
-        super.withLocation(location);
-        return this;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public StreamingJobInner withTags(Map<String, String> tags) {
-        super.withTags(tags);
+        if (this.innerProperties() == null) {
+            this.innerProperties = new StreamingJobPropertiesInner();
+        }
+        this.innerProperties().withCluster(cluster);
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
-        if (identity() != null) {
-            identity().validate();
-        }
         if (sku() != null) {
             sku().validate();
         }
-        if (inputs() != null) {
-            inputs().forEach(e -> e.validate());
+        if (innerProperties() != null) {
+            innerProperties().validate();
         }
-        if (transformation() != null) {
-            transformation().validate();
+        if (identity() != null) {
+            identity().validate();
         }
-        if (outputs() != null) {
-            outputs().forEach(e -> e.validate());
-        }
-        if (functions() != null) {
-            functions().forEach(e -> e.validate());
-        }
-        if (jobStorageAccount() != null) {
-            jobStorageAccount().validate();
-        }
-        if (externals() != null) {
-            externals().validate();
-        }
-        if (cluster() != null) {
-            cluster().validate();
-        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeStringField("location", location());
+        jsonWriter.writeMapField("tags", tags(), (writer, element) -> writer.writeString(element));
+        jsonWriter.writeJsonField("sku", this.sku);
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        jsonWriter.writeJsonField("identity", this.identity);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of StreamingJobInner from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of StreamingJobInner if the JsonReader was pointing to an instance of it, or null if it was
+     * pointing to JSON null.
+     * @throws IllegalStateException If the deserialized JSON object was missing any required properties.
+     * @throws IOException If an error occurs while reading the StreamingJobInner.
+     */
+    public static StreamingJobInner fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            StreamingJobInner deserializedStreamingJobInner = new StreamingJobInner();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("id".equals(fieldName)) {
+                    deserializedStreamingJobInner.id = reader.getString();
+                } else if ("name".equals(fieldName)) {
+                    deserializedStreamingJobInner.name = reader.getString();
+                } else if ("type".equals(fieldName)) {
+                    deserializedStreamingJobInner.type = reader.getString();
+                } else if ("location".equals(fieldName)) {
+                    deserializedStreamingJobInner.withLocation(reader.getString());
+                } else if ("tags".equals(fieldName)) {
+                    Map<String, String> tags = reader.readMap(reader1 -> reader1.getString());
+                    deserializedStreamingJobInner.withTags(tags);
+                } else if ("sku".equals(fieldName)) {
+                    deserializedStreamingJobInner.sku = Sku.fromJson(reader);
+                } else if ("properties".equals(fieldName)) {
+                    deserializedStreamingJobInner.innerProperties = StreamingJobPropertiesInner.fromJson(reader);
+                } else if ("identity".equals(fieldName)) {
+                    deserializedStreamingJobInner.identity = Identity.fromJson(reader);
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedStreamingJobInner;
+        });
     }
 }

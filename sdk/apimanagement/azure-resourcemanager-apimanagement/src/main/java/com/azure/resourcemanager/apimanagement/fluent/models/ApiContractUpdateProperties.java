@@ -5,21 +5,19 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.resourcemanager.apimanagement.models.ApiContactInformation;
 import com.azure.resourcemanager.apimanagement.models.ApiEntityBaseContract;
+import com.azure.resourcemanager.apimanagement.models.ApiLicenseInformation;
 import com.azure.resourcemanager.apimanagement.models.ApiType;
 import com.azure.resourcemanager.apimanagement.models.AuthenticationSettingsContract;
 import com.azure.resourcemanager.apimanagement.models.Protocol;
 import com.azure.resourcemanager.apimanagement.models.SubscriptionKeyParameterNamesContract;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** API update contract properties. */
 @Fluent
 public final class ApiContractUpdateProperties extends ApiEntityBaseContract {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApiContractUpdateProperties.class);
-
     /*
      * API name.
      */
@@ -33,10 +31,9 @@ public final class ApiContractUpdateProperties extends ApiEntityBaseContract {
     private String serviceUrl;
 
     /*
-     * Relative URL uniquely identifying this API and all of its resource paths
-     * within the API Management service instance. It is appended to the API
-     * endpoint base URL specified during the service instance creation to form
-     * a public URL for this API.
+     * Relative URL uniquely identifying this API and all of its resource paths within the API Management service
+     * instance. It is appended to the API endpoint base URL specified during the service instance creation to form a
+     * public URL for this API.
      */
     @JsonProperty(value = "path")
     private String path;
@@ -46,6 +43,10 @@ public final class ApiContractUpdateProperties extends ApiEntityBaseContract {
      */
     @JsonProperty(value = "protocols")
     private List<Protocol> protocols;
+
+    /** Creates an instance of ApiContractUpdateProperties class. */
+    public ApiContractUpdateProperties() {
+    }
 
     /**
      * Get the displayName property: API name.
@@ -140,16 +141,16 @@ public final class ApiContractUpdateProperties extends ApiEntityBaseContract {
 
     /** {@inheritDoc} */
     @Override
-    public ApiContractUpdateProperties withAuthenticationSettings(
-        AuthenticationSettingsContract authenticationSettings) {
+    public ApiContractUpdateProperties
+        withAuthenticationSettings(AuthenticationSettingsContract authenticationSettings) {
         super.withAuthenticationSettings(authenticationSettings);
         return this;
     }
 
     /** {@inheritDoc} */
     @Override
-    public ApiContractUpdateProperties withSubscriptionKeyParameterNames(
-        SubscriptionKeyParameterNamesContract subscriptionKeyParameterNames) {
+    public ApiContractUpdateProperties
+        withSubscriptionKeyParameterNames(SubscriptionKeyParameterNamesContract subscriptionKeyParameterNames) {
         super.withSubscriptionKeyParameterNames(subscriptionKeyParameterNames);
         return this;
     }
@@ -207,6 +208,27 @@ public final class ApiContractUpdateProperties extends ApiEntityBaseContract {
     @Override
     public ApiContractUpdateProperties withSubscriptionRequired(Boolean subscriptionRequired) {
         super.withSubscriptionRequired(subscriptionRequired);
+        return this;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public ApiContractUpdateProperties withTermsOfServiceUrl(String termsOfServiceUrl) {
+        super.withTermsOfServiceUrl(termsOfServiceUrl);
+        return this;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public ApiContractUpdateProperties withContact(ApiContactInformation contact) {
+        super.withContact(contact);
+        return this;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public ApiContractUpdateProperties withLicense(ApiLicenseInformation license) {
+        super.withLicense(license);
         return this;
     }
 

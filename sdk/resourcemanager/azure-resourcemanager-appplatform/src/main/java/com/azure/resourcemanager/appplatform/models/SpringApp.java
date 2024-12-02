@@ -12,14 +12,10 @@ import com.azure.resourcemanager.resources.fluentcore.model.HasInnerModel;
 import com.azure.resourcemanager.resources.fluentcore.model.Updatable;
 import reactor.core.publisher.Mono;
 
-import java.time.OffsetDateTime;
-
 /** An immutable client-side representation of an Azure Spring App. */
 @Fluent
-public interface SpringApp
-    extends ExternalChildResource<SpringApp, SpringService>,
-        HasInnerModel<AppResourceInner>,
-        Updatable<SpringApp.Update> {
+public interface SpringApp extends ExternalChildResource<SpringApp, SpringService>, HasInnerModel<AppResourceInner>,
+    Updatable<SpringApp.Update> {
     /** @return whether the app exposes public endpoint */
     boolean isPublic();
 
@@ -40,9 +36,6 @@ public interface SpringApp
 
     /** @return the identity property of the app */
     ManagedIdentityProperties identity();
-
-    /** @return the creation time of the app */
-    OffsetDateTime createdTime();
 
     /** @return the active deployment name */
     String activeDeploymentName();
@@ -71,15 +64,27 @@ public interface SpringApp
     /** @return the blob url to upload deployment */
     ResourceUploadDefinition getResourceUploadUrl();
 
+    /**
+     * (Enterprise Tier Only)
+     * @return whether this app has binding to the default Configuration Service
+     */
+    boolean hasConfigurationServiceBinding();
+
+    /**
+     * (Enterprise Tier Only)
+     * @return whether this app has binding to the default Service Registry
+     */
+    boolean hasServiceRegistryBinding();
+
     /** Container interface for all the definitions that need to be implemented. */
-    interface Definition
-        extends DefinitionStages.Blank,
-            DefinitionStages.WithCreate { }
+    interface Definition extends DefinitionStages.Blank, DefinitionStages.WithCreate {
+    }
 
     /** Grouping of all the spring app definition stages. */
     interface DefinitionStages {
         /** The first stage of the spring app definition. */
-        interface Blank extends WithDeployment { }
+        interface Blank extends WithDeployment {
+        }
 
         /**
          * The stage of a spring app definition allowing to specify an active deployment.
@@ -97,8 +102,7 @@ public interface SpringApp
              * @param <T> derived type of {@link SpringAppDeployment.DefinitionStages.WithAttach}
              * @return the first stage of spring app deployment definition
              */
-            <T extends SpringAppDeployment.DefinitionStages.WithAttach
-                <? extends SpringApp.DefinitionStages.WithCreate, T>>
+            <T extends SpringAppDeployment.DefinitionStages.WithAttach<? extends SpringApp.DefinitionStages.WithCreate, T>>
                 SpringAppDeployment.DefinitionStages.Blank<T> defineActiveDeployment(String name);
         }
 
@@ -151,43 +155,80 @@ public interface SpringApp
             WithCreate withPersistentDisk(int sizeInGB, String mountPath);
         }
 
-        /** The stage of a spring app update allowing to specify the service binding. */
+        /** The stage of a spring app definition allowing to specify the service binding. */
         interface WithServiceBinding {
             /**
              * Specifies a service binding for the spring app.
              * @param name the service binding name
              * @param bindingProperties the property for the service binding
-             * @return the next stage of spring app update
+             * @return the next stage of spring app definition
              */
             WithCreate withServiceBinding(String name, BindingResourceProperties bindingProperties);
 
             /**
              * Removes a service binding for the spring app.
              * @param name the service binding name
-             * @return the next stage of spring app update
+             * @return the next stage of spring app definition
              */
             WithCreate withoutServiceBinding(String name);
+        }
+
+        /**
+         * (Enterprise Tier Only)
+         * The stage of spring app definition allowing to bind it to default configuration service.
+         */
+        interface WithConfigurationServiceBinding {
+            /**
+             * Specifies a binding to the default configuration service.
+             * To use the centralized configurations, you must bind the app to Application Configuration Service for Tanzu.
+             * When you change the bind/unbind status, you must restart or redeploy the app to for the binding to take effect.
+             * @return the next stage of spring app definition
+             */
+            WithCreate withConfigurationServiceBinding();
+
+            /**
+             * Removes a binding to the default configuration service.
+             * When you change the bind/unbind status, you must restart or redeploy the app to for the binding to take effect.
+             * @return the next stage of spring app definition
+             */
+            WithCreate withoutConfigurationServiceBinding();
+        }
+
+        /**
+         * (Enterprise Tier Only)
+         * The stage of spring app definition allowing to bind it to service registry.
+         */
+        interface WithServiceRegistryBinding {
+            /**
+             * Specifies a binding to the default service registry.
+             * When you change the bind/unbind status, you must restart or redeploy the app to for the binding to take effect.
+             * @return the next stage of spring app definition
+             */
+            WithCreate withServiceRegistryBinding();
+
+            /**
+             * Removes a binding to the default service registry.
+             * When you change the bind/unbind status, you must restart or redeploy the app to for the binding to take effect.
+             * @return the next stage of spring app definition
+             */
+            WithCreate withoutServiceRegistryBinding();
         }
 
         /**
          * The stage of the definition which contains all the minimum required inputs for the resource to be created,
          * but also allows for any other optional settings to be specified.
          */
-        interface WithCreate
-            extends Creatable<SpringApp>,
-                DefinitionStages.WithEndpoint,
-                DefinitionStages.WithDisk,
-                DefinitionStages.WithDeployment,
-                DefinitionStages.WithServiceBinding { }
+        interface WithCreate extends Creatable<SpringApp>, DefinitionStages.WithEndpoint, DefinitionStages.WithDisk,
+            DefinitionStages.WithDeployment, DefinitionStages.WithServiceBinding,
+            DefinitionStages.WithConfigurationServiceBinding, DefinitionStages.WithServiceRegistryBinding {
+        }
     }
 
     /** The template for an update operation, containing all the settings that can be modified. */
-    interface Update
-        extends Appliable<SpringApp>,
-        UpdateStages.WithEndpoint,
-        UpdateStages.WithDisk,
-        UpdateStages.WithDeployment,
-        UpdateStages.WithServiceBinding { }
+    interface Update extends Appliable<SpringApp>, UpdateStages.WithEndpoint, UpdateStages.WithDisk,
+        UpdateStages.WithDeployment, UpdateStages.WithServiceBinding, UpdateStages.WithConfigurationServiceBinding,
+        UpdateStages.WithServiceRegistryBinding {
+    }
 
     /** Grouping of spring app update stages. */
     interface UpdateStages {
@@ -288,6 +329,47 @@ public interface SpringApp
              * @return the next stage of spring app update
              */
             Update withoutServiceBinding(String name);
+        }
+
+        /**
+         * (Enterprise Tier Only)
+         * The stage of a spring app update allowing to bind it to the default configuration service.
+         */
+        interface WithConfigurationServiceBinding {
+            /**
+             * Specifies a binding to the default configuration service.
+             * To use the centralized configurations, you must bind the app to Application Configuration Service for Tanzu.
+             * When you change the bind/unbind status, you must restart or redeploy the app to for the binding to take effect.
+             * @return the next stage of spring app update
+             */
+            Update withConfigurationServiceBinding();
+
+            /**
+             * Removes a binding to the default configuration service.
+             * When you change the bind/unbind status, you must restart or redeploy the app to for the binding to take effect.
+             * @return the next stage of spring app update
+             */
+            Update withoutConfigurationServiceBinding();
+        }
+
+        /**
+         * (Enterprise Tier)
+         * The stage of spring app update allowing to bind it to service registry.
+         */
+        interface WithServiceRegistryBinding {
+            /**
+             * Specifies a binding to the default service registry.
+             * When you change the bind/unbind status, you must restart or redeploy the app to for the binding to take effect.
+             * @return the next stage of spring app update
+             */
+            Update withServiceRegistryBinding();
+
+            /**
+             * Removes a binding to the default service registry.
+             * When you change the bind/unbind status, you must restart or redeploy the app to for the binding to take effect.
+             * @return the next stage of spring app update
+             */
+            Update withoutServiceRegistryBinding();
         }
     }
 }

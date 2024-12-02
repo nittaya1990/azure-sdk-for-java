@@ -5,18 +5,20 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** Base class for additional information of operation status. */
+/**
+ * Base class for additional information of operation status.
+ */
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
-    include = JsonTypeInfo.As.PROPERTY,
     property = "objectType",
-    defaultImpl = OperationStatusExtendedInfo.class)
+    defaultImpl = OperationStatusExtendedInfo.class,
+    visible = true)
 @JsonTypeName("OperationStatusExtendedInfo")
 @JsonSubTypes({
     @JsonSubTypes.Type(name = "OperationStatusJobExtendedInfo", value = OperationStatusJobExtendedInfo.class),
@@ -25,16 +27,37 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
         name = "OperationStatusProvisionILRExtendedInfo",
         value = OperationStatusProvisionIlrExtendedInfo.class),
     @JsonSubTypes.Type(
-        name = "OperationStatusRecoveryPointExtendedInfo",
-        value = OperationStatusRecoveryPointExtendedInfo.class)
-})
+        name = "OperationStatusValidateOperationExtendedInfo",
+        value = OperationStatusValidateOperationExtendedInfo.class) })
 @Immutable
 public class OperationStatusExtendedInfo {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OperationStatusExtendedInfo.class);
+    /*
+     * This property will be used as the discriminator for deciding the specific types in the polymorphic chain of types.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "objectType", required = true)
+    private String objectType;
+
+    /**
+     * Creates an instance of OperationStatusExtendedInfo class.
+     */
+    public OperationStatusExtendedInfo() {
+        this.objectType = "OperationStatusExtendedInfo";
+    }
+
+    /**
+     * Get the objectType property: This property will be used as the discriminator for deciding the specific types in
+     * the polymorphic chain of types.
+     * 
+     * @return the objectType value.
+     */
+    public String objectType() {
+        return this.objectType;
+    }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

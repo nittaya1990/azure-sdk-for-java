@@ -5,9 +5,7 @@
 package com.azure.resourcemanager.storagecache.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.storagecache.fluent.models.ApiOperationInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
@@ -17,8 +15,6 @@ import java.util.List;
  */
 @Fluent
 public final class ApiOperationListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApiOperationListResult.class);
-
     /*
      * URL to get the next set of operation list results if there are any.
      */
@@ -26,15 +22,20 @@ public final class ApiOperationListResult {
     private String nextLink;
 
     /*
-     * List of Resource Provider operations supported by the
-     * Microsoft.StorageCache resource provider.
+     * List of Resource Provider operations supported by the Microsoft.StorageCache resource provider.
      */
     @JsonProperty(value = "value")
     private List<ApiOperationInner> value;
 
     /**
+     * Creates an instance of ApiOperationListResult class.
+     */
+    public ApiOperationListResult() {
+    }
+
+    /**
      * Get the nextLink property: URL to get the next set of operation list results if there are any.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -43,7 +44,7 @@ public final class ApiOperationListResult {
 
     /**
      * Set the nextLink property: URL to get the next set of operation list results if there are any.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the ApiOperationListResult object itself.
      */
@@ -55,7 +56,7 @@ public final class ApiOperationListResult {
     /**
      * Get the value property: List of Resource Provider operations supported by the Microsoft.StorageCache resource
      * provider.
-     *
+     * 
      * @return the value value.
      */
     public List<ApiOperationInner> value() {
@@ -65,7 +66,7 @@ public final class ApiOperationListResult {
     /**
      * Set the value property: List of Resource Provider operations supported by the Microsoft.StorageCache resource
      * provider.
-     *
+     * 
      * @param value the value value to set.
      * @return the ApiOperationListResult object itself.
      */
@@ -76,7 +77,7 @@ public final class ApiOperationListResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

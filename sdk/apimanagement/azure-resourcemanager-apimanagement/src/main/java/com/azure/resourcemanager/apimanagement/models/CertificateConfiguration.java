@@ -6,14 +6,11 @@ package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Certificate configuration which consist of non-trusted intermediates and root certificates. */
 @Fluent
 public final class CertificateConfiguration {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CertificateConfiguration.class);
-
     /*
      * Base64 Encoded certificate.
      */
@@ -27,8 +24,8 @@ public final class CertificateConfiguration {
     private String certificatePassword;
 
     /*
-     * The System.Security.Cryptography.x509certificates.StoreName certificate
-     * store location. Only Root and CertificateAuthority are valid locations.
+     * The System.Security.Cryptography.x509certificates.StoreName certificate store location. Only Root and
+     * CertificateAuthority are valid locations.
      */
     @JsonProperty(value = "storeName", required = true)
     private CertificateConfigurationStoreName storeName;
@@ -38,6 +35,10 @@ public final class CertificateConfiguration {
      */
     @JsonProperty(value = "certificate")
     private CertificateInformation certificate;
+
+    /** Creates an instance of CertificateConfiguration class. */
+    public CertificateConfiguration() {
+    }
 
     /**
      * Get the encodedCertificate property: Base64 Encoded certificate.
@@ -128,13 +129,13 @@ public final class CertificateConfiguration {
      */
     public void validate() {
         if (storeName() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property storeName in model CertificateConfiguration"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property storeName in model CertificateConfiguration"));
         }
         if (certificate() != null) {
             certificate().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(CertificateConfiguration.class);
 }

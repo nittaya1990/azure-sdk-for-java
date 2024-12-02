@@ -16,8 +16,8 @@ public final class ReservationDetailImpl implements ReservationDetail {
 
     private final com.azure.resourcemanager.consumption.ConsumptionManager serviceManager;
 
-    ReservationDetailImpl(
-        ReservationDetailInner innerObject, com.azure.resourcemanager.consumption.ConsumptionManager serviceManager) {
+    ReservationDetailImpl(ReservationDetailInner innerObject,
+        com.azure.resourcemanager.consumption.ConsumptionManager serviceManager) {
         this.innerObject = innerObject;
         this.serviceManager = serviceManager;
     }
@@ -32,6 +32,19 @@ public final class ReservationDetailImpl implements ReservationDetail {
 
     public String type() {
         return this.innerModel().type();
+    }
+
+    public String etag() {
+        return this.innerModel().etag();
+    }
+
+    public Map<String, String> tags() {
+        Map<String, String> inner = this.innerModel().tags();
+        if (inner != null) {
+            return Collections.unmodifiableMap(inner);
+        } else {
+            return Collections.emptyMap();
+        }
     }
 
     public String reservationOrderId() {
@@ -76,19 +89,6 @@ public final class ReservationDetailImpl implements ReservationDetail {
 
     public String kind() {
         return this.innerModel().kind();
-    }
-
-    public String etag() {
-        return this.innerModel().etag();
-    }
-
-    public Map<String, String> tags() {
-        Map<String, String> inner = this.innerModel().tags();
-        if (inner != null) {
-            return Collections.unmodifiableMap(inner);
-        } else {
-            return Collections.emptyMap();
-        }
     }
 
     public ReservationDetailInner innerModel() {

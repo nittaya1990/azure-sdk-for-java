@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.frontdoor.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The pricing tier of the web application firewall policy. */
+/**
+ * The pricing tier of the web application firewall policy.
+ */
 @Fluent
 public final class Sku {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Sku.class);
-
     /*
      * Name of the pricing tier.
      */
@@ -21,8 +19,14 @@ public final class Sku {
     private SkuName name;
 
     /**
+     * Creates an instance of Sku class.
+     */
+    public Sku() {
+    }
+
+    /**
      * Get the name property: Name of the pricing tier.
-     *
+     * 
      * @return the name value.
      */
     public SkuName name() {
@@ -31,7 +35,7 @@ public final class Sku {
 
     /**
      * Set the name property: Name of the pricing tier.
-     *
+     * 
      * @param name the name value to set.
      * @return the Sku object itself.
      */
@@ -42,7 +46,7 @@ public final class Sku {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

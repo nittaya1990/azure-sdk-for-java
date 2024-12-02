@@ -5,28 +5,29 @@
 package com.azure.resourcemanager.mysqlflexibleserver.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.mysqlflexibleserver.models.Backup;
 import com.azure.resourcemanager.mysqlflexibleserver.models.CreateMode;
+import com.azure.resourcemanager.mysqlflexibleserver.models.DataEncryption;
 import com.azure.resourcemanager.mysqlflexibleserver.models.HighAvailability;
+import com.azure.resourcemanager.mysqlflexibleserver.models.ImportSourceProperties;
 import com.azure.resourcemanager.mysqlflexibleserver.models.MaintenanceWindow;
 import com.azure.resourcemanager.mysqlflexibleserver.models.Network;
+import com.azure.resourcemanager.mysqlflexibleserver.models.PrivateEndpointConnection;
 import com.azure.resourcemanager.mysqlflexibleserver.models.ReplicationRole;
 import com.azure.resourcemanager.mysqlflexibleserver.models.ServerState;
 import com.azure.resourcemanager.mysqlflexibleserver.models.ServerVersion;
 import com.azure.resourcemanager.mysqlflexibleserver.models.Storage;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
+import java.util.List;
 
-/** The properties of a server. */
+/**
+ * The properties of a server.
+ */
 @Fluent
 public final class ServerProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ServerProperties.class);
-
     /*
-     * The administrator's login name of a server. Can only be specified when
-     * the server is being created (and is required for creation).
+     * The administrator's login name of a server. Can only be specified when the server is being created (and is required for creation).
      */
     @JsonProperty(value = "administratorLogin")
     private String administratorLogin;
@@ -62,8 +63,7 @@ public final class ServerProperties {
     private String sourceServerResourceId;
 
     /*
-     * Restore point creation time (ISO8601 format), specifying the time to
-     * restore from.
+     * Restore point creation time (ISO8601 format), specifying the time to restore from.
      */
     @JsonProperty(value = "restorePointInTime")
     private OffsetDateTime restorePointInTime;
@@ -79,6 +79,12 @@ public final class ServerProperties {
      */
     @JsonProperty(value = "replicaCapacity", access = JsonProperty.Access.WRITE_ONLY)
     private Integer replicaCapacity;
+
+    /*
+     * The Data Encryption for CMK.
+     */
+    @JsonProperty(value = "dataEncryption")
+    private DataEncryption dataEncryption;
 
     /*
      * The state of a server.
@@ -117,15 +123,33 @@ public final class ServerProperties {
     private Network network;
 
     /*
+     * PrivateEndpointConnections related properties of a server.
+     */
+    @JsonProperty(value = "privateEndpointConnections", access = JsonProperty.Access.WRITE_ONLY)
+    private List<PrivateEndpointConnection> privateEndpointConnections;
+
+    /*
      * Maintenance window of a server.
      */
     @JsonProperty(value = "maintenanceWindow")
     private MaintenanceWindow maintenanceWindow;
 
+    /*
+     * Source properties for import from storage.
+     */
+    @JsonProperty(value = "importSourceProperties")
+    private ImportSourceProperties importSourceProperties;
+
+    /**
+     * Creates an instance of ServerProperties class.
+     */
+    public ServerProperties() {
+    }
+
     /**
      * Get the administratorLogin property: The administrator's login name of a server. Can only be specified when the
      * server is being created (and is required for creation).
-     *
+     * 
      * @return the administratorLogin value.
      */
     public String administratorLogin() {
@@ -135,7 +159,7 @@ public final class ServerProperties {
     /**
      * Set the administratorLogin property: The administrator's login name of a server. Can only be specified when the
      * server is being created (and is required for creation).
-     *
+     * 
      * @param administratorLogin the administratorLogin value to set.
      * @return the ServerProperties object itself.
      */
@@ -147,7 +171,7 @@ public final class ServerProperties {
     /**
      * Get the administratorLoginPassword property: The password of the administrator login (required for server
      * creation).
-     *
+     * 
      * @return the administratorLoginPassword value.
      */
     public String administratorLoginPassword() {
@@ -157,7 +181,7 @@ public final class ServerProperties {
     /**
      * Set the administratorLoginPassword property: The password of the administrator login (required for server
      * creation).
-     *
+     * 
      * @param administratorLoginPassword the administratorLoginPassword value to set.
      * @return the ServerProperties object itself.
      */
@@ -168,7 +192,7 @@ public final class ServerProperties {
 
     /**
      * Get the version property: Server version.
-     *
+     * 
      * @return the version value.
      */
     public ServerVersion version() {
@@ -177,7 +201,7 @@ public final class ServerProperties {
 
     /**
      * Set the version property: Server version.
-     *
+     * 
      * @param version the version value to set.
      * @return the ServerProperties object itself.
      */
@@ -188,7 +212,7 @@ public final class ServerProperties {
 
     /**
      * Get the availabilityZone property: availability Zone information of the server.
-     *
+     * 
      * @return the availabilityZone value.
      */
     public String availabilityZone() {
@@ -197,7 +221,7 @@ public final class ServerProperties {
 
     /**
      * Set the availabilityZone property: availability Zone information of the server.
-     *
+     * 
      * @param availabilityZone the availabilityZone value to set.
      * @return the ServerProperties object itself.
      */
@@ -208,7 +232,7 @@ public final class ServerProperties {
 
     /**
      * Get the createMode property: The mode to create a new MySQL server.
-     *
+     * 
      * @return the createMode value.
      */
     public CreateMode createMode() {
@@ -217,7 +241,7 @@ public final class ServerProperties {
 
     /**
      * Set the createMode property: The mode to create a new MySQL server.
-     *
+     * 
      * @param createMode the createMode value to set.
      * @return the ServerProperties object itself.
      */
@@ -228,7 +252,7 @@ public final class ServerProperties {
 
     /**
      * Get the sourceServerResourceId property: The source MySQL server id.
-     *
+     * 
      * @return the sourceServerResourceId value.
      */
     public String sourceServerResourceId() {
@@ -237,7 +261,7 @@ public final class ServerProperties {
 
     /**
      * Set the sourceServerResourceId property: The source MySQL server id.
-     *
+     * 
      * @param sourceServerResourceId the sourceServerResourceId value to set.
      * @return the ServerProperties object itself.
      */
@@ -249,7 +273,7 @@ public final class ServerProperties {
     /**
      * Get the restorePointInTime property: Restore point creation time (ISO8601 format), specifying the time to restore
      * from.
-     *
+     * 
      * @return the restorePointInTime value.
      */
     public OffsetDateTime restorePointInTime() {
@@ -259,7 +283,7 @@ public final class ServerProperties {
     /**
      * Set the restorePointInTime property: Restore point creation time (ISO8601 format), specifying the time to restore
      * from.
-     *
+     * 
      * @param restorePointInTime the restorePointInTime value to set.
      * @return the ServerProperties object itself.
      */
@@ -270,7 +294,7 @@ public final class ServerProperties {
 
     /**
      * Get the replicationRole property: The replication role.
-     *
+     * 
      * @return the replicationRole value.
      */
     public ReplicationRole replicationRole() {
@@ -279,7 +303,7 @@ public final class ServerProperties {
 
     /**
      * Set the replicationRole property: The replication role.
-     *
+     * 
      * @param replicationRole the replicationRole value to set.
      * @return the ServerProperties object itself.
      */
@@ -290,7 +314,7 @@ public final class ServerProperties {
 
     /**
      * Get the replicaCapacity property: The maximum number of replicas that a primary server can have.
-     *
+     * 
      * @return the replicaCapacity value.
      */
     public Integer replicaCapacity() {
@@ -298,8 +322,28 @@ public final class ServerProperties {
     }
 
     /**
+     * Get the dataEncryption property: The Data Encryption for CMK.
+     * 
+     * @return the dataEncryption value.
+     */
+    public DataEncryption dataEncryption() {
+        return this.dataEncryption;
+    }
+
+    /**
+     * Set the dataEncryption property: The Data Encryption for CMK.
+     * 
+     * @param dataEncryption the dataEncryption value to set.
+     * @return the ServerProperties object itself.
+     */
+    public ServerProperties withDataEncryption(DataEncryption dataEncryption) {
+        this.dataEncryption = dataEncryption;
+        return this;
+    }
+
+    /**
      * Get the state property: The state of a server.
-     *
+     * 
      * @return the state value.
      */
     public ServerState state() {
@@ -308,7 +352,7 @@ public final class ServerProperties {
 
     /**
      * Get the fullyQualifiedDomainName property: The fully qualified domain name of a server.
-     *
+     * 
      * @return the fullyQualifiedDomainName value.
      */
     public String fullyQualifiedDomainName() {
@@ -317,7 +361,7 @@ public final class ServerProperties {
 
     /**
      * Get the storage property: Storage related properties of a server.
-     *
+     * 
      * @return the storage value.
      */
     public Storage storage() {
@@ -326,7 +370,7 @@ public final class ServerProperties {
 
     /**
      * Set the storage property: Storage related properties of a server.
-     *
+     * 
      * @param storage the storage value to set.
      * @return the ServerProperties object itself.
      */
@@ -337,7 +381,7 @@ public final class ServerProperties {
 
     /**
      * Get the backup property: Backup related properties of a server.
-     *
+     * 
      * @return the backup value.
      */
     public Backup backup() {
@@ -346,7 +390,7 @@ public final class ServerProperties {
 
     /**
      * Set the backup property: Backup related properties of a server.
-     *
+     * 
      * @param backup the backup value to set.
      * @return the ServerProperties object itself.
      */
@@ -357,7 +401,7 @@ public final class ServerProperties {
 
     /**
      * Get the highAvailability property: High availability related properties of a server.
-     *
+     * 
      * @return the highAvailability value.
      */
     public HighAvailability highAvailability() {
@@ -366,7 +410,7 @@ public final class ServerProperties {
 
     /**
      * Set the highAvailability property: High availability related properties of a server.
-     *
+     * 
      * @param highAvailability the highAvailability value to set.
      * @return the ServerProperties object itself.
      */
@@ -377,7 +421,7 @@ public final class ServerProperties {
 
     /**
      * Get the network property: Network related properties of a server.
-     *
+     * 
      * @return the network value.
      */
     public Network network() {
@@ -386,7 +430,7 @@ public final class ServerProperties {
 
     /**
      * Set the network property: Network related properties of a server.
-     *
+     * 
      * @param network the network value to set.
      * @return the ServerProperties object itself.
      */
@@ -396,8 +440,17 @@ public final class ServerProperties {
     }
 
     /**
+     * Get the privateEndpointConnections property: PrivateEndpointConnections related properties of a server.
+     * 
+     * @return the privateEndpointConnections value.
+     */
+    public List<PrivateEndpointConnection> privateEndpointConnections() {
+        return this.privateEndpointConnections;
+    }
+
+    /**
      * Get the maintenanceWindow property: Maintenance window of a server.
-     *
+     * 
      * @return the maintenanceWindow value.
      */
     public MaintenanceWindow maintenanceWindow() {
@@ -406,7 +459,7 @@ public final class ServerProperties {
 
     /**
      * Set the maintenanceWindow property: Maintenance window of a server.
-     *
+     * 
      * @param maintenanceWindow the maintenanceWindow value to set.
      * @return the ServerProperties object itself.
      */
@@ -416,11 +469,34 @@ public final class ServerProperties {
     }
 
     /**
+     * Get the importSourceProperties property: Source properties for import from storage.
+     * 
+     * @return the importSourceProperties value.
+     */
+    public ImportSourceProperties importSourceProperties() {
+        return this.importSourceProperties;
+    }
+
+    /**
+     * Set the importSourceProperties property: Source properties for import from storage.
+     * 
+     * @param importSourceProperties the importSourceProperties value to set.
+     * @return the ServerProperties object itself.
+     */
+    public ServerProperties withImportSourceProperties(ImportSourceProperties importSourceProperties) {
+        this.importSourceProperties = importSourceProperties;
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
+        if (dataEncryption() != null) {
+            dataEncryption().validate();
+        }
         if (storage() != null) {
             storage().validate();
         }
@@ -433,8 +509,14 @@ public final class ServerProperties {
         if (network() != null) {
             network().validate();
         }
+        if (privateEndpointConnections() != null) {
+            privateEndpointConnections().forEach(e -> e.validate());
+        }
         if (maintenanceWindow() != null) {
             maintenanceWindow().validate();
+        }
+        if (importSourceProperties() != null) {
+            importSourceProperties().validate();
         }
     }
 }

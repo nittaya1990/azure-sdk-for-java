@@ -8,17 +8,32 @@ import com.azure.core.util.ExpandableStringEnum;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.Collection;
 
-/** Defines values for IsDynamicConfig. */
+/**
+ * If is the configuration dynamic.
+ */
 public final class IsDynamicConfig extends ExpandableStringEnum<IsDynamicConfig> {
-    /** Static value True for IsDynamicConfig. */
+    /**
+     * Static value True for IsDynamicConfig.
+     */
     public static final IsDynamicConfig TRUE = fromString("True");
 
-    /** Static value False for IsDynamicConfig. */
+    /**
+     * Static value False for IsDynamicConfig.
+     */
     public static final IsDynamicConfig FALSE = fromString("False");
 
     /**
+     * Creates a new instance of IsDynamicConfig value.
+     * 
+     * @deprecated Use the {@link #fromString(String)} factory method.
+     */
+    @Deprecated
+    public IsDynamicConfig() {
+    }
+
+    /**
      * Creates or finds a IsDynamicConfig from its string representation.
-     *
+     * 
      * @param name a name to look for.
      * @return the corresponding IsDynamicConfig.
      */
@@ -27,7 +42,11 @@ public final class IsDynamicConfig extends ExpandableStringEnum<IsDynamicConfig>
         return fromString(name, IsDynamicConfig.class);
     }
 
-    /** @return known IsDynamicConfig values. */
+    /**
+     * Gets known IsDynamicConfig values.
+     * 
+     * @return known IsDynamicConfig values.
+     */
     public static Collection<IsDynamicConfig> values() {
         return values(IsDynamicConfig.class);
     }

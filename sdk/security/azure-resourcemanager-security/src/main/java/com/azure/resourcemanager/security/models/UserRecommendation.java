@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Represents a user that is recommended to be allowed for a certain rule. */
+/**
+ * Represents a user that is recommended to be allowed for a certain rule.
+ */
 @Fluent
 public final class UserRecommendation {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(UserRecommendation.class);
-
     /*
      * Represents a user that is recommended to be allowed for a certain rule
      */
@@ -27,8 +25,14 @@ public final class UserRecommendation {
     private RecommendationAction recommendationAction;
 
     /**
+     * Creates an instance of UserRecommendation class.
+     */
+    public UserRecommendation() {
+    }
+
+    /**
      * Get the username property: Represents a user that is recommended to be allowed for a certain rule.
-     *
+     * 
      * @return the username value.
      */
     public String username() {
@@ -37,7 +41,7 @@ public final class UserRecommendation {
 
     /**
      * Set the username property: Represents a user that is recommended to be allowed for a certain rule.
-     *
+     * 
      * @param username the username value to set.
      * @return the UserRecommendation object itself.
      */
@@ -48,7 +52,7 @@ public final class UserRecommendation {
 
     /**
      * Get the recommendationAction property: The recommendation action of the machine or rule.
-     *
+     * 
      * @return the recommendationAction value.
      */
     public RecommendationAction recommendationAction() {
@@ -57,7 +61,7 @@ public final class UserRecommendation {
 
     /**
      * Set the recommendationAction property: The recommendation action of the machine or rule.
-     *
+     * 
      * @param recommendationAction the recommendationAction value to set.
      * @return the UserRecommendation object itself.
      */
@@ -68,7 +72,7 @@ public final class UserRecommendation {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

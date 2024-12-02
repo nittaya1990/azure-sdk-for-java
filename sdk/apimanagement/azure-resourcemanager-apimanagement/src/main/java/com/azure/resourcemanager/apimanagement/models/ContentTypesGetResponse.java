@@ -20,16 +20,16 @@ public final class ContentTypesGetResponse extends ResponseBase<ContentTypesGetH
      * @param value the deserialized value of the HTTP response.
      * @param headers the deserialized headers of the HTTP response.
      */
-    public ContentTypesGetResponse(
-        HttpRequest request,
-        int statusCode,
-        HttpHeaders rawHeaders,
-        ContentTypeContractInner value,
-        ContentTypesGetHeaders headers) {
+    public ContentTypesGetResponse(HttpRequest request, int statusCode, HttpHeaders rawHeaders,
+        ContentTypeContractInner value, ContentTypesGetHeaders headers) {
         super(request, statusCode, rawHeaders, value, headers);
     }
 
-    /** @return the deserialized response body. */
+    /**
+     * Gets the deserialized response body.
+     *
+     * @return the deserialized response body.
+     */
     @Override
     public ContentTypeContractInner getValue() {
         return super.getValue();

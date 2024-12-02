@@ -8,11 +8,32 @@ import com.azure.core.http.rest.PagedIterable;
 import com.azure.core.http.rest.Response;
 import com.azure.core.util.Context;
 
-/** Resource collection API of SqlPools. */
+/**
+ * Resource collection API of SqlPools.
+ */
 public interface SqlPools {
     /**
+     * Get SQL pool
+     * 
      * Get SQL pool properties.
-     *
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param sqlPoolName SQL pool name.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return sQL pool properties along with {@link Response}.
+     */
+    Response<SqlPool> getWithResponse(String resourceGroupName, String workspaceName, String sqlPoolName,
+        Context context);
+
+    /**
+     * Get SQL pool
+     * 
+     * Get SQL pool properties.
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param sqlPoolName SQL pool name.
@@ -24,8 +45,25 @@ public interface SqlPools {
     SqlPool get(String resourceGroupName, String workspaceName, String sqlPoolName);
 
     /**
-     * Get SQL pool properties.
-     *
+     * Delete SQL pool
+     * 
+     * Delete a SQL pool.
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param sqlPoolName SQL pool name.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return sQL pool.
+     */
+    SqlPool delete(String resourceGroupName, String workspaceName, String sqlPoolName);
+
+    /**
+     * Delete SQL pool
+     * 
+     * Delete a SQL pool.
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param sqlPoolName SQL pool name.
@@ -33,79 +71,59 @@ public interface SqlPools {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return sQL pool properties.
+     * @return sQL pool.
      */
-    Response<SqlPool> getWithResponse(
-        String resourceGroupName, String workspaceName, String sqlPoolName, Context context);
+    SqlPool delete(String resourceGroupName, String workspaceName, String sqlPoolName, Context context);
 
     /**
-     * Delete a SQL pool.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param sqlPoolName SQL pool name.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return any object.
-     */
-    Object delete(String resourceGroupName, String workspaceName, String sqlPoolName);
-
-    /**
-     * Delete a SQL pool.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param sqlPoolName SQL pool name.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return any object.
-     */
-    Object delete(String resourceGroupName, String workspaceName, String sqlPoolName, Context context);
-
-    /**
+     * List SQL pools
+     * 
      * List all SQL pools.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return sQL pool collection.
+     * @return sQL pool collection as paginated response with {@link PagedIterable}.
      */
     PagedIterable<SqlPool> listByWorkspace(String resourceGroupName, String workspaceName);
 
     /**
+     * List SQL pools
+     * 
      * List all SQL pools.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return sQL pool collection.
+     * @return sQL pool collection as paginated response with {@link PagedIterable}.
      */
     PagedIterable<SqlPool> listByWorkspace(String resourceGroupName, String workspaceName, Context context);
 
     /**
+     * Pause SQL pool
+     * 
      * Pause a SQL pool.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param sqlPoolName SQL pool name.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return any object.
+     * @return sQL pool.
      */
-    Object pause(String resourceGroupName, String workspaceName, String sqlPoolName);
+    SqlPool pause(String resourceGroupName, String workspaceName, String sqlPoolName);
 
     /**
+     * Pause SQL pool
+     * 
      * Pause a SQL pool.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param sqlPoolName SQL pool name.
@@ -113,26 +131,30 @@ public interface SqlPools {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return any object.
+     * @return sQL pool.
      */
-    Object pause(String resourceGroupName, String workspaceName, String sqlPoolName, Context context);
+    SqlPool pause(String resourceGroupName, String workspaceName, String sqlPoolName, Context context);
 
     /**
+     * Resume SQL pool
+     * 
      * Resume a SQL pool.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param sqlPoolName SQL pool name.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return any object.
+     * @return sQL pool.
      */
-    Object resume(String resourceGroupName, String workspaceName, String sqlPoolName);
+    SqlPool resume(String resourceGroupName, String workspaceName, String sqlPoolName);
 
     /**
+     * Resume SQL pool
+     * 
      * Resume a SQL pool.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param sqlPoolName SQL pool name.
@@ -140,92 +162,67 @@ public interface SqlPools {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return any object.
+     * @return sQL pool.
      */
-    Object resume(String resourceGroupName, String workspaceName, String sqlPoolName, Context context);
+    SqlPool resume(String resourceGroupName, String workspaceName, String sqlPoolName, Context context);
 
     /**
-     * Rename a SQL pool.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param sqlPoolName SQL pool name.
-     * @param parameters The resource move definition for renaming this Sql pool.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     */
-    void rename(String resourceGroupName, String workspaceName, String sqlPoolName, ResourceMoveDefinition parameters);
-
-    /**
-     * Rename a SQL pool.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param sqlPoolName SQL pool name.
-     * @param parameters The resource move definition for renaming this Sql pool.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    Response<Void> renameWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String sqlPoolName,
-        ResourceMoveDefinition parameters,
-        Context context);
-
-    /**
+     * Get SQL pool
+     * 
      * Get SQL pool properties.
-     *
+     * 
      * @param id the resource ID.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return sQL pool properties.
+     * @return sQL pool properties along with {@link Response}.
      */
     SqlPool getById(String id);
 
     /**
+     * Get SQL pool
+     * 
      * Get SQL pool properties.
-     *
+     * 
      * @param id the resource ID.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return sQL pool properties.
+     * @return sQL pool properties along with {@link Response}.
      */
     Response<SqlPool> getByIdWithResponse(String id, Context context);
 
     /**
+     * Delete SQL pool
+     * 
      * Delete a SQL pool.
-     *
+     * 
      * @param id the resource ID.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return any object.
+     * @return sQL pool.
      */
-    Object deleteById(String id);
+    SqlPool deleteById(String id);
 
     /**
+     * Delete SQL pool
+     * 
      * Delete a SQL pool.
-     *
+     * 
      * @param id the resource ID.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return any object.
+     * @return sQL pool.
      */
-    Object deleteByIdWithResponse(String id, Context context);
+    SqlPool deleteByIdWithResponse(String id, Context context);
 
     /**
      * Begins definition for a new SqlPool resource.
-     *
+     * 
      * @param name resource name.
      * @return the first stage of the new SqlPool definition.
      */

@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.applicationinsights.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Work item configuration associated with an application insights resource. */
 @Fluent
 public final class WorkItemConfigurationInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(WorkItemConfigurationInner.class);
-
     /*
      * Connector identifier where work item is created
      */
@@ -43,6 +39,10 @@ public final class WorkItemConfigurationInner {
      */
     @JsonProperty(value = "ConfigProperties")
     private String configProperties;
+
+    /** Creates an instance of WorkItemConfigurationInner class. */
+    public WorkItemConfigurationInner() {
+    }
 
     /**
      * Get the connectorId property: Connector identifier where work item is created.

@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Represents a summary of the alerts of the machine group. */
+/**
+ * Represents a summary of the alerts of the machine group.
+ */
 @Fluent
 public final class AdaptiveApplicationControlIssueSummary {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AdaptiveApplicationControlIssueSummary.class);
-
     /*
      * An alert that machines within a group can have
      */
@@ -27,8 +25,14 @@ public final class AdaptiveApplicationControlIssueSummary {
     private Float numberOfVms;
 
     /**
+     * Creates an instance of AdaptiveApplicationControlIssueSummary class.
+     */
+    public AdaptiveApplicationControlIssueSummary() {
+    }
+
+    /**
      * Get the issue property: An alert that machines within a group can have.
-     *
+     * 
      * @return the issue value.
      */
     public AdaptiveApplicationControlIssue issue() {
@@ -37,7 +41,7 @@ public final class AdaptiveApplicationControlIssueSummary {
 
     /**
      * Set the issue property: An alert that machines within a group can have.
-     *
+     * 
      * @param issue the issue value to set.
      * @return the AdaptiveApplicationControlIssueSummary object itself.
      */
@@ -48,7 +52,7 @@ public final class AdaptiveApplicationControlIssueSummary {
 
     /**
      * Get the numberOfVms property: The number of machines in the group that have this alert.
-     *
+     * 
      * @return the numberOfVms value.
      */
     public Float numberOfVms() {
@@ -57,7 +61,7 @@ public final class AdaptiveApplicationControlIssueSummary {
 
     /**
      * Set the numberOfVms property: The number of machines in the group that have this alert.
-     *
+     * 
      * @param numberOfVms the numberOfVms value to set.
      * @return the AdaptiveApplicationControlIssueSummary object itself.
      */
@@ -68,7 +72,7 @@ public final class AdaptiveApplicationControlIssueSummary {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

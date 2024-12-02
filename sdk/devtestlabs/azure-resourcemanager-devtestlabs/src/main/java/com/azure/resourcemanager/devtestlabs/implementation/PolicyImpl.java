@@ -90,6 +90,10 @@ public final class PolicyImpl implements Policy, Policy.Definition, Policy.Updat
         return this.location();
     }
 
+    public String resourceGroupName() {
+        return resourceGroupName;
+    }
+
     public PolicyInner innerModel() {
         return this.innerObject;
     }
@@ -116,23 +120,19 @@ public final class PolicyImpl implements Policy, Policy.Definition, Policy.Updat
     }
 
     public Policy create() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getPolicies()
-                .createOrUpdateWithResponse(
-                    resourceGroupName, labName, policySetName, name, this.innerModel(), Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getPolicies()
+            .createOrUpdateWithResponse(resourceGroupName, labName, policySetName, name, this.innerModel(),
+                Context.NONE)
+            .getValue();
         return this;
     }
 
     public Policy create(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getPolicies()
-                .createOrUpdateWithResponse(resourceGroupName, labName, policySetName, name, this.innerModel(), context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getPolicies()
+            .createOrUpdateWithResponse(resourceGroupName, labName, policySetName, name, this.innerModel(), context)
+            .getValue();
         return this;
     }
 
@@ -148,22 +148,18 @@ public final class PolicyImpl implements Policy, Policy.Definition, Policy.Updat
     }
 
     public Policy apply() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getPolicies()
-                .updateWithResponse(resourceGroupName, labName, policySetName, name, updatePolicy, Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getPolicies()
+            .updateWithResponse(resourceGroupName, labName, policySetName, name, updatePolicy, Context.NONE)
+            .getValue();
         return this;
     }
 
     public Policy apply(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getPolicies()
-                .updateWithResponse(resourceGroupName, labName, policySetName, name, updatePolicy, context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getPolicies()
+            .updateWithResponse(resourceGroupName, labName, policySetName, name, updatePolicy, context)
+            .getValue();
         return this;
     }
 
@@ -178,23 +174,19 @@ public final class PolicyImpl implements Policy, Policy.Definition, Policy.Updat
 
     public Policy refresh() {
         String localExpand = null;
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getPolicies()
-                .getWithResponse(resourceGroupName, labName, policySetName, name, localExpand, Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getPolicies()
+            .getWithResponse(resourceGroupName, labName, policySetName, name, localExpand, Context.NONE)
+            .getValue();
         return this;
     }
 
     public Policy refresh(Context context) {
         String localExpand = null;
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getPolicies()
-                .getWithResponse(resourceGroupName, labName, policySetName, name, localExpand, context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getPolicies()
+            .getWithResponse(resourceGroupName, labName, policySetName, name, localExpand, context)
+            .getValue();
         return this;
     }
 

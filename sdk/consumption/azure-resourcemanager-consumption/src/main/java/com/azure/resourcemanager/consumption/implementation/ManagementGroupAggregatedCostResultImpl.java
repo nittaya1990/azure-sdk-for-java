@@ -18,8 +18,7 @@ public final class ManagementGroupAggregatedCostResultImpl implements Management
 
     private final com.azure.resourcemanager.consumption.ConsumptionManager serviceManager;
 
-    ManagementGroupAggregatedCostResultImpl(
-        ManagementGroupAggregatedCostResultInner innerObject,
+    ManagementGroupAggregatedCostResultImpl(ManagementGroupAggregatedCostResultInner innerObject,
         com.azure.resourcemanager.consumption.ConsumptionManager serviceManager) {
         this.innerObject = innerObject;
         this.serviceManager = serviceManager;
@@ -35,6 +34,19 @@ public final class ManagementGroupAggregatedCostResultImpl implements Management
 
     public String type() {
         return this.innerModel().type();
+    }
+
+    public String etag() {
+        return this.innerModel().etag();
+    }
+
+    public Map<String, String> tags() {
+        Map<String, String> inner = this.innerModel().tags();
+        if (inner != null) {
+            return Collections.unmodifiableMap(inner);
+        } else {
+            return Collections.emptyMap();
+        }
     }
 
     public String billingPeriodId() {
@@ -68,12 +80,9 @@ public final class ManagementGroupAggregatedCostResultImpl implements Management
     public List<ManagementGroupAggregatedCostResult> children() {
         List<ManagementGroupAggregatedCostResultInner> inner = this.innerModel().children();
         if (inner != null) {
-            return Collections
-                .unmodifiableList(
-                    inner
-                        .stream()
-                        .map(inner1 -> new ManagementGroupAggregatedCostResultImpl(inner1, this.manager()))
-                        .collect(Collectors.toList()));
+            return Collections.unmodifiableList(inner.stream()
+                .map(inner1 -> new ManagementGroupAggregatedCostResultImpl(inner1, this.manager()))
+                .collect(Collectors.toList()));
         } else {
             return Collections.emptyList();
         }
@@ -94,19 +103,6 @@ public final class ManagementGroupAggregatedCostResultImpl implements Management
             return Collections.unmodifiableList(inner);
         } else {
             return Collections.emptyList();
-        }
-    }
-
-    public String etag() {
-        return this.innerModel().etag();
-    }
-
-    public Map<String, String> tags() {
-        Map<String, String> inner = this.innerModel().tags();
-        if (inner != null) {
-            return Collections.unmodifiableMap(inner);
-        } else {
-            return Collections.emptyMap();
         }
     }
 

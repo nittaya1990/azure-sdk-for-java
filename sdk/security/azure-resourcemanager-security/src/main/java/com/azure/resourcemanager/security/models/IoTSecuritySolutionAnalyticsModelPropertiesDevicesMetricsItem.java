@@ -5,18 +5,14 @@
 package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
-/** The IoTSecuritySolutionAnalyticsModelPropertiesDevicesMetricsItem model. */
+/**
+ * The IoTSecuritySolutionAnalyticsModelPropertiesDevicesMetricsItem model.
+ */
 @Fluent
 public final class IoTSecuritySolutionAnalyticsModelPropertiesDevicesMetricsItem {
-    @JsonIgnore
-    private final ClientLogger logger =
-        new ClientLogger(IoTSecuritySolutionAnalyticsModelPropertiesDevicesMetricsItem.class);
-
     /*
      * Aggregation of IoT Security solution device alert metrics by date.
      */
@@ -30,8 +26,14 @@ public final class IoTSecuritySolutionAnalyticsModelPropertiesDevicesMetricsItem
     private IoTSeverityMetrics devicesMetrics;
 
     /**
+     * Creates an instance of IoTSecuritySolutionAnalyticsModelPropertiesDevicesMetricsItem class.
+     */
+    public IoTSecuritySolutionAnalyticsModelPropertiesDevicesMetricsItem() {
+    }
+
+    /**
      * Get the date property: Aggregation of IoT Security solution device alert metrics by date.
-     *
+     * 
      * @return the date value.
      */
     public OffsetDateTime date() {
@@ -40,7 +42,7 @@ public final class IoTSecuritySolutionAnalyticsModelPropertiesDevicesMetricsItem
 
     /**
      * Set the date property: Aggregation of IoT Security solution device alert metrics by date.
-     *
+     * 
      * @param date the date value to set.
      * @return the IoTSecuritySolutionAnalyticsModelPropertiesDevicesMetricsItem object itself.
      */
@@ -51,7 +53,7 @@ public final class IoTSecuritySolutionAnalyticsModelPropertiesDevicesMetricsItem
 
     /**
      * Get the devicesMetrics property: Device alert count by severity.
-     *
+     * 
      * @return the devicesMetrics value.
      */
     public IoTSeverityMetrics devicesMetrics() {
@@ -60,19 +62,19 @@ public final class IoTSecuritySolutionAnalyticsModelPropertiesDevicesMetricsItem
 
     /**
      * Set the devicesMetrics property: Device alert count by severity.
-     *
+     * 
      * @param devicesMetrics the devicesMetrics value to set.
      * @return the IoTSecuritySolutionAnalyticsModelPropertiesDevicesMetricsItem object itself.
      */
-    public IoTSecuritySolutionAnalyticsModelPropertiesDevicesMetricsItem withDevicesMetrics(
-        IoTSeverityMetrics devicesMetrics) {
+    public IoTSecuritySolutionAnalyticsModelPropertiesDevicesMetricsItem
+        withDevicesMetrics(IoTSeverityMetrics devicesMetrics) {
         this.devicesMetrics = devicesMetrics;
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

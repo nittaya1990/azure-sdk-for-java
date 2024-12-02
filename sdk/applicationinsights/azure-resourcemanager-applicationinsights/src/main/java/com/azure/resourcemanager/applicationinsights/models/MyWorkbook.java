@@ -5,6 +5,7 @@
 package com.azure.resourcemanager.applicationinsights.models;
 
 import com.azure.core.management.Region;
+import com.azure.core.management.SystemData;
 import com.azure.core.util.Context;
 import com.azure.resourcemanager.applicationinsights.fluent.models.MyWorkbookInner;
 import java.util.List;
@@ -31,7 +32,7 @@ public interface MyWorkbook {
      *
      * @return the identity value.
      */
-    ManagedIdentity identity();
+    MyWorkbookManagedIdentity identity();
 
     /**
      * Gets the id property: Azure resource Id.
@@ -67,6 +68,13 @@ public interface MyWorkbook {
      * @return the kind value.
      */
     Kind kind();
+
+    /**
+     * Gets the systemData property: Metadata pertaining to creation and last modification of the resource.
+     *
+     * @return the systemData value.
+     */
+    SystemData systemData();
 
     /**
      * Gets the displayName property: The user-defined name of the private workbook.
@@ -150,6 +158,13 @@ public interface MyWorkbook {
     String regionName();
 
     /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
+
+    /**
      * Gets the inner com.azure.resourcemanager.applicationinsights.fluent.models.MyWorkbookInner object.
      *
      * @return the inner object.
@@ -157,17 +172,16 @@ public interface MyWorkbook {
     MyWorkbookInner innerModel();
 
     /** The entirety of the MyWorkbook definition. */
-    interface Definition
-        extends DefinitionStages.Blank,
-            DefinitionStages.WithLocation,
-            DefinitionStages.WithResourceGroup,
-            DefinitionStages.WithCreate {
+    interface Definition extends DefinitionStages.Blank, DefinitionStages.WithLocation,
+        DefinitionStages.WithResourceGroup, DefinitionStages.WithCreate {
     }
+
     /** The MyWorkbook definition stages. */
     interface DefinitionStages {
         /** The first stage of the MyWorkbook definition. */
         interface Blank extends WithLocation {
         }
+
         /** The stage of the MyWorkbook definition allowing to specify location. */
         interface WithLocation {
             /**
@@ -186,6 +200,7 @@ public interface MyWorkbook {
              */
             WithResourceGroup withRegion(String location);
         }
+
         /** The stage of the MyWorkbook definition allowing to specify parent resource. */
         interface WithResourceGroup {
             /**
@@ -196,25 +211,16 @@ public interface MyWorkbook {
              */
             WithCreate withExistingResourceGroup(String resourceGroupName);
         }
+
         /**
          * The stage of the MyWorkbook definition which contains all the minimum required properties for the resource to
          * be created, but also allows for any other optional properties to be specified.
          */
-        interface WithCreate
-            extends DefinitionStages.WithTags,
-                DefinitionStages.WithIdentity,
-                DefinitionStages.WithName,
-                DefinitionStages.WithType,
-                DefinitionStages.WithEtag,
-                DefinitionStages.WithKind,
-                DefinitionStages.WithDisplayName,
-                DefinitionStages.WithSerializedData,
-                DefinitionStages.WithVersion,
-                DefinitionStages.WithCategory,
-                DefinitionStages.WithTagsPropertiesTags,
-                DefinitionStages.WithSourceId,
-                DefinitionStages.WithStorageUri,
-                DefinitionStages.WithSourceIdParameter {
+        interface WithCreate extends DefinitionStages.WithTags, DefinitionStages.WithIdentity,
+            DefinitionStages.WithName, DefinitionStages.WithType, DefinitionStages.WithEtag, DefinitionStages.WithKind,
+            DefinitionStages.WithDisplayName, DefinitionStages.WithSerializedData, DefinitionStages.WithVersion,
+            DefinitionStages.WithCategory, DefinitionStages.WithTagsPropertiesTags, DefinitionStages.WithSourceId,
+            DefinitionStages.WithStorageUri, DefinitionStages.WithSourceIdParameter {
             /**
              * Executes the create request.
              *
@@ -230,6 +236,7 @@ public interface MyWorkbook {
              */
             MyWorkbook create(Context context);
         }
+
         /** The stage of the MyWorkbook definition allowing to specify tags. */
         interface WithTags {
             /**
@@ -240,6 +247,7 @@ public interface MyWorkbook {
              */
             WithCreate withTags(Map<String, String> tags);
         }
+
         /** The stage of the MyWorkbook definition allowing to specify identity. */
         interface WithIdentity {
             /**
@@ -248,8 +256,9 @@ public interface MyWorkbook {
              * @param identity Identity used for BYOS.
              * @return the next definition stage.
              */
-            WithCreate withIdentity(ManagedIdentity identity);
+            WithCreate withIdentity(MyWorkbookManagedIdentity identity);
         }
+
         /** The stage of the MyWorkbook definition allowing to specify name. */
         interface WithName {
             /**
@@ -260,6 +269,7 @@ public interface MyWorkbook {
              */
             WithCreate withName(String name);
         }
+
         /** The stage of the MyWorkbook definition allowing to specify type. */
         interface WithType {
             /**
@@ -270,6 +280,7 @@ public interface MyWorkbook {
              */
             WithCreate withType(String type);
         }
+
         /** The stage of the MyWorkbook definition allowing to specify etag. */
         interface WithEtag {
             /**
@@ -280,6 +291,7 @@ public interface MyWorkbook {
              */
             WithCreate withEtag(Map<String, String> etag);
         }
+
         /** The stage of the MyWorkbook definition allowing to specify kind. */
         interface WithKind {
             /**
@@ -290,6 +302,7 @@ public interface MyWorkbook {
              */
             WithCreate withKind(Kind kind);
         }
+
         /** The stage of the MyWorkbook definition allowing to specify displayName. */
         interface WithDisplayName {
             /**
@@ -300,6 +313,7 @@ public interface MyWorkbook {
              */
             WithCreate withDisplayName(String displayName);
         }
+
         /** The stage of the MyWorkbook definition allowing to specify serializedData. */
         interface WithSerializedData {
             /**
@@ -312,6 +326,7 @@ public interface MyWorkbook {
              */
             WithCreate withSerializedData(String serializedData);
         }
+
         /** The stage of the MyWorkbook definition allowing to specify version. */
         interface WithVersion {
             /**
@@ -324,6 +339,7 @@ public interface MyWorkbook {
              */
             WithCreate withVersion(String version);
         }
+
         /** The stage of the MyWorkbook definition allowing to specify category. */
         interface WithCategory {
             /**
@@ -334,6 +350,7 @@ public interface MyWorkbook {
              */
             WithCreate withCategory(String category);
         }
+
         /** The stage of the MyWorkbook definition allowing to specify tagsPropertiesTags. */
         interface WithTagsPropertiesTags {
             /**
@@ -346,6 +363,7 @@ public interface MyWorkbook {
              */
             WithCreate withTagsPropertiesTags(List<String> tagsPropertiesTags);
         }
+
         /** The stage of the MyWorkbook definition allowing to specify sourceId. */
         interface WithSourceId {
             /**
@@ -356,6 +374,7 @@ public interface MyWorkbook {
              */
             WithCreate withSourceId(String sourceId);
         }
+
         /** The stage of the MyWorkbook definition allowing to specify storageUri. */
         interface WithStorageUri {
             /**
@@ -366,6 +385,7 @@ public interface MyWorkbook {
              */
             WithCreate withStorageUri(String storageUri);
         }
+
         /** The stage of the MyWorkbook definition allowing to specify sourceId. */
         interface WithSourceIdParameter {
             /**
@@ -377,6 +397,7 @@ public interface MyWorkbook {
             WithCreate withSourceIdParameter(String sourceId);
         }
     }
+
     /**
      * Begins update for the MyWorkbook resource.
      *
@@ -385,21 +406,10 @@ public interface MyWorkbook {
     MyWorkbook.Update update();
 
     /** The template for MyWorkbook update. */
-    interface Update
-        extends UpdateStages.WithTags,
-            UpdateStages.WithIdentity,
-            UpdateStages.WithName,
-            UpdateStages.WithType,
-            UpdateStages.WithEtag,
-            UpdateStages.WithKind,
-            UpdateStages.WithDisplayName,
-            UpdateStages.WithSerializedData,
-            UpdateStages.WithVersion,
-            UpdateStages.WithCategory,
-            UpdateStages.WithTagsPropertiesTags,
-            UpdateStages.WithSourceId,
-            UpdateStages.WithStorageUri,
-            UpdateStages.WithsourceIdParameter {
+    interface Update extends UpdateStages.WithTags, UpdateStages.WithIdentity, UpdateStages.WithEtag,
+        UpdateStages.WithKind, UpdateStages.WithDisplayName, UpdateStages.WithSerializedData, UpdateStages.WithVersion,
+        UpdateStages.WithCategory, UpdateStages.WithTagsPropertiesTags, UpdateStages.WithSourceId,
+        UpdateStages.WithStorageUri, UpdateStages.WithSourceIdParameter {
         /**
          * Executes the update request.
          *
@@ -415,6 +425,7 @@ public interface MyWorkbook {
          */
         MyWorkbook apply(Context context);
     }
+
     /** The MyWorkbook update stages. */
     interface UpdateStages {
         /** The stage of the MyWorkbook update allowing to specify tags. */
@@ -427,6 +438,7 @@ public interface MyWorkbook {
              */
             Update withTags(Map<String, String> tags);
         }
+
         /** The stage of the MyWorkbook update allowing to specify identity. */
         interface WithIdentity {
             /**
@@ -435,28 +447,9 @@ public interface MyWorkbook {
              * @param identity Identity used for BYOS.
              * @return the next definition stage.
              */
-            Update withIdentity(ManagedIdentity identity);
+            Update withIdentity(MyWorkbookManagedIdentity identity);
         }
-        /** The stage of the MyWorkbook update allowing to specify name. */
-        interface WithName {
-            /**
-             * Specifies the name property: Azure resource name.
-             *
-             * @param name Azure resource name.
-             * @return the next definition stage.
-             */
-            Update withName(String name);
-        }
-        /** The stage of the MyWorkbook update allowing to specify type. */
-        interface WithType {
-            /**
-             * Specifies the type property: Azure resource type.
-             *
-             * @param type Azure resource type.
-             * @return the next definition stage.
-             */
-            Update withType(String type);
-        }
+
         /** The stage of the MyWorkbook update allowing to specify etag. */
         interface WithEtag {
             /**
@@ -467,6 +460,7 @@ public interface MyWorkbook {
              */
             Update withEtag(Map<String, String> etag);
         }
+
         /** The stage of the MyWorkbook update allowing to specify kind. */
         interface WithKind {
             /**
@@ -477,6 +471,7 @@ public interface MyWorkbook {
              */
             Update withKind(Kind kind);
         }
+
         /** The stage of the MyWorkbook update allowing to specify displayName. */
         interface WithDisplayName {
             /**
@@ -487,6 +482,7 @@ public interface MyWorkbook {
              */
             Update withDisplayName(String displayName);
         }
+
         /** The stage of the MyWorkbook update allowing to specify serializedData. */
         interface WithSerializedData {
             /**
@@ -499,6 +495,7 @@ public interface MyWorkbook {
              */
             Update withSerializedData(String serializedData);
         }
+
         /** The stage of the MyWorkbook update allowing to specify version. */
         interface WithVersion {
             /**
@@ -511,6 +508,7 @@ public interface MyWorkbook {
              */
             Update withVersion(String version);
         }
+
         /** The stage of the MyWorkbook update allowing to specify category. */
         interface WithCategory {
             /**
@@ -521,6 +519,7 @@ public interface MyWorkbook {
              */
             Update withCategory(String category);
         }
+
         /** The stage of the MyWorkbook update allowing to specify tagsPropertiesTags. */
         interface WithTagsPropertiesTags {
             /**
@@ -533,6 +532,7 @@ public interface MyWorkbook {
              */
             Update withTagsPropertiesTags(List<String> tagsPropertiesTags);
         }
+
         /** The stage of the MyWorkbook update allowing to specify sourceId. */
         interface WithSourceId {
             /**
@@ -543,6 +543,7 @@ public interface MyWorkbook {
              */
             Update withSourceId(String sourceId);
         }
+
         /** The stage of the MyWorkbook update allowing to specify storageUri. */
         interface WithStorageUri {
             /**
@@ -553,17 +554,19 @@ public interface MyWorkbook {
              */
             Update withStorageUri(String storageUri);
         }
+
         /** The stage of the MyWorkbook update allowing to specify sourceId. */
-        interface WithsourceIdParameter {
+        interface WithSourceIdParameter {
             /**
              * Specifies the sourceId property: Azure Resource Id that will fetch all linked workbooks..
              *
              * @param sourceId Azure Resource Id that will fetch all linked workbooks.
              * @return the next definition stage.
              */
-            Update sourceIdParameter(String sourceId);
+            Update withSourceIdParameter(String sourceId);
         }
     }
+
     /**
      * Refreshes the resource to sync with Azure.
      *

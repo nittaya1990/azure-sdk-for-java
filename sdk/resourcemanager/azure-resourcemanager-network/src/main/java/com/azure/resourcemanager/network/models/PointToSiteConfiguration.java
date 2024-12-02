@@ -22,7 +22,18 @@ public interface PointToSiteConfiguration extends HasInnerModel<VpnClientConfigu
         interface Blank<ParentT> extends WithAddressPool<ParentT> {
         }
 
+        /**
+         * the stage of the point-to-site configuration definition allowing to specify the address pool.
+         *
+         * @param <ParentT> the stage of the parent definition to return to after attaching this definition
+         */
         interface WithAddressPool<ParentT> {
+            /**
+             * Specifies the address pool.
+             *
+             * @param addressPool the address pool
+             * @return the next stage of the definition
+             */
             WithAuthenticationType<ParentT> withAddressPool(String addressPool);
         }
 
@@ -72,7 +83,19 @@ public interface PointToSiteConfiguration extends HasInnerModel<VpnClientConfigu
                 throws IOException;
         }
 
+        /**
+         * The stage of the point-to-site configuration definition allowing to specify the revoked certificate.
+         *
+         * @param <ParentT> the stage of the parent definition to return to after attaching this definition
+         */
         interface WithRevokedCertificate<ParentT> {
+            /**
+             * Specifies the revoked certificate.
+             *
+             * @param name name of the certificate
+             * @param thumbprint thumbprint of the certificate
+             * @return the next stage of the definition
+             */
             WithAttach<ParentT> withRevokedCertificate(String name, String thumbprint);
         }
 
@@ -88,6 +111,7 @@ public interface PointToSiteConfiguration extends HasInnerModel<VpnClientConfigu
              * @return the next stage of the definition
              */
             WithAttach<ParentT> withSstpOnly();
+
             /**
              * Specifies that only IKEv2 VPN tunnel type will be used.
              *
@@ -115,11 +139,8 @@ public interface PointToSiteConfiguration extends HasInnerModel<VpnClientConfigu
          *
          * @param <ParentT> the stage of the parent definition to return to after attaching this definition
          */
-        interface WithAttachAndAzureCertificate<ParentT>
-            extends WithAttach<ParentT>,
-                WithTunnelType<ParentT>,
-                WithAzureCertificate<ParentT>,
-                WithRevokedCertificate<ParentT> {
+        interface WithAttachAndAzureCertificate<ParentT> extends WithAttach<ParentT>, WithTunnelType<ParentT>,
+            WithAzureCertificate<ParentT>, WithRevokedCertificate<ParentT> {
         }
     }
 
@@ -129,10 +150,8 @@ public interface PointToSiteConfiguration extends HasInnerModel<VpnClientConfigu
      * @param <ParentT> the stage of the parent definition to return to after attaching this definition
      */
     interface Definition<ParentT>
-        extends DefinitionStages.Blank<ParentT>,
-            DefinitionStages.WithAuthenticationType<ParentT>,
-            DefinitionStages.WithAddressPool<ParentT>,
-            DefinitionStages.WithAttachAndAzureCertificate<ParentT> {
+        extends DefinitionStages.Blank<ParentT>, DefinitionStages.WithAuthenticationType<ParentT>,
+        DefinitionStages.WithAddressPool<ParentT>, DefinitionStages.WithAttachAndAzureCertificate<ParentT> {
     }
 
     /** Grouping of point-to-site configuration update stages. */
@@ -223,11 +242,7 @@ public interface PointToSiteConfiguration extends HasInnerModel<VpnClientConfigu
     }
 
     /** The entirety of a subnet update as part of a network update. */
-    interface Update
-        extends UpdateStages.WithAddressPool,
-            UpdateStages.WithAuthenticationType,
-            UpdateStages.WithRevokedCertificate,
-            UpdateStages.WithTunnelType,
-            Settable<VirtualNetworkGateway.Update> {
+    interface Update extends UpdateStages.WithAddressPool, UpdateStages.WithAuthenticationType,
+        UpdateStages.WithRevokedCertificate, UpdateStages.WithTunnelType, Settable<VirtualNetworkGateway.Update> {
     }
 }

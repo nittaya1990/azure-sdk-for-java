@@ -5,9 +5,7 @@
 package com.azure.resourcemanager.frontdoor.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.frontdoor.fluent.models.ExperimentInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
@@ -17,8 +15,6 @@ import java.util.List;
  */
 @Fluent
 public final class ExperimentList {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ExperimentList.class);
-
     /*
      * List of Experiments within a resource group.
      */
@@ -32,8 +28,14 @@ public final class ExperimentList {
     private String nextLink;
 
     /**
+     * Creates an instance of ExperimentList class.
+     */
+    public ExperimentList() {
+    }
+
+    /**
      * Get the value property: List of Experiments within a resource group.
-     *
+     * 
      * @return the value value.
      */
     public List<ExperimentInner> value() {
@@ -42,7 +44,7 @@ public final class ExperimentList {
 
     /**
      * Get the nextLink property: URL to get the next set of Experiment objects if there are any.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -51,7 +53,7 @@ public final class ExperimentList {
 
     /**
      * Set the nextLink property: URL to get the next set of Experiment objects if there are any.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the ExperimentList object itself.
      */
@@ -62,7 +64,7 @@ public final class ExperimentList {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

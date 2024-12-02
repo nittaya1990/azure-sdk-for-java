@@ -40,6 +40,13 @@ public interface EdgeModuleEntity {
     UUID edgeModuleId();
 
     /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
+
+    /**
      * Gets the inner com.azure.resourcemanager.videoanalyzer.fluent.models.EdgeModuleEntityInner object.
      *
      * @return the inner object.
@@ -50,11 +57,13 @@ public interface EdgeModuleEntity {
     interface Definition
         extends DefinitionStages.Blank, DefinitionStages.WithParentResource, DefinitionStages.WithCreate {
     }
+
     /** The EdgeModuleEntity definition stages. */
     interface DefinitionStages {
         /** The first stage of the EdgeModuleEntity definition. */
         interface Blank extends WithParentResource {
         }
+
         /** The stage of the EdgeModuleEntity definition allowing to specify parent resource. */
         interface WithParentResource {
             /**
@@ -66,6 +75,7 @@ public interface EdgeModuleEntity {
              */
             WithCreate withExistingVideoAnalyzer(String resourceGroupName, String accountName);
         }
+
         /**
          * The stage of the EdgeModuleEntity definition which contains all the minimum required properties for the
          * resource to be created, but also allows for any other optional properties to be specified.
@@ -87,6 +97,7 @@ public interface EdgeModuleEntity {
             EdgeModuleEntity create(Context context);
         }
     }
+
     /**
      * Begins update for the EdgeModuleEntity resource.
      *
@@ -111,9 +122,11 @@ public interface EdgeModuleEntity {
          */
         EdgeModuleEntity apply(Context context);
     }
+
     /** The EdgeModuleEntity update stages. */
     interface UpdateStages {
     }
+
     /**
      * Refreshes the resource to sync with Azure.
      *
@@ -158,8 +171,8 @@ public interface EdgeModuleEntity {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return provisioning token properties.
+     * @return provisioning token properties along with {@link Response}.
      */
-    Response<EdgeModuleProvisioningToken> listProvisioningTokenWithResponse(
-        ListProvisioningTokenInput parameters, Context context);
+    Response<EdgeModuleProvisioningToken> listProvisioningTokenWithResponse(ListProvisioningTokenInput parameters,
+        Context context);
 }

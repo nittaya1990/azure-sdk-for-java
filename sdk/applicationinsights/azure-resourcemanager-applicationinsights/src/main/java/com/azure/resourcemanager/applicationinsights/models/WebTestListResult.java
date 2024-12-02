@@ -7,30 +7,31 @@ package com.azure.resourcemanager.applicationinsights.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.applicationinsights.fluent.models.WebTestInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** A list of 0 or more Application Insights web test definitions. */
+/** A list of 0 or more Application Insights WebTest definitions. */
 @Fluent
 public final class WebTestListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(WebTestListResult.class);
-
     /*
-     * Set of Application Insights web test definitions.
+     * Set of Application Insights WebTest definitions.
      */
     @JsonProperty(value = "value", required = true)
     private List<WebTestInner> value;
 
     /*
-     * The link to get the next part of the returned list of web tests, should
-     * the return set be too large for a single request. May be null.
+     * The link to get the next part of the returned list of WebTest, should the return set be too large for a single
+     * request. May be null.
      */
     @JsonProperty(value = "nextLink")
     private String nextLink;
 
+    /** Creates an instance of WebTestListResult class. */
+    public WebTestListResult() {
+    }
+
     /**
-     * Get the value property: Set of Application Insights web test definitions.
+     * Get the value property: Set of Application Insights WebTest definitions.
      *
      * @return the value value.
      */
@@ -39,7 +40,7 @@ public final class WebTestListResult {
     }
 
     /**
-     * Set the value property: Set of Application Insights web test definitions.
+     * Set the value property: Set of Application Insights WebTest definitions.
      *
      * @param value the value value to set.
      * @return the WebTestListResult object itself.
@@ -50,7 +51,7 @@ public final class WebTestListResult {
     }
 
     /**
-     * Get the nextLink property: The link to get the next part of the returned list of web tests, should the return set
+     * Get the nextLink property: The link to get the next part of the returned list of WebTest, should the return set
      * be too large for a single request. May be null.
      *
      * @return the nextLink value.
@@ -60,7 +61,7 @@ public final class WebTestListResult {
     }
 
     /**
-     * Set the nextLink property: The link to get the next part of the returned list of web tests, should the return set
+     * Set the nextLink property: The link to get the next part of the returned list of WebTest, should the return set
      * be too large for a single request. May be null.
      *
      * @param nextLink the nextLink value to set.
@@ -78,11 +79,12 @@ public final class WebTestListResult {
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property value in model WebTestListResult"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property value in model WebTestListResult"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(WebTestListResult.class);
 }

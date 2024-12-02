@@ -17,8 +17,29 @@ import com.azure.resourcemanager.synapse.models.TransparentDataEncryptionName;
  */
 public interface SqlPoolTransparentDataEncryptionsClient {
     /**
+     * Get a SQL pool's transparent data encryption configuration
+     * 
      * Get a SQL pool's transparent data encryption configuration.
-     *
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param sqlPoolName SQL pool name.
+     * @param transparentDataEncryptionName The name of the transparent data encryption configuration.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a SQL pool's transparent data encryption configuration along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<TransparentDataEncryptionInner> getWithResponse(String resourceGroupName, String workspaceName,
+        String sqlPoolName, TransparentDataEncryptionName transparentDataEncryptionName, Context context);
+
+    /**
+     * Get a SQL pool's transparent data encryption configuration
+     * 
+     * Get a SQL pool's transparent data encryption configuration.
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param sqlPoolName SQL pool name.
@@ -29,36 +50,35 @@ public interface SqlPoolTransparentDataEncryptionsClient {
      * @return a SQL pool's transparent data encryption configuration.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    TransparentDataEncryptionInner get(
-        String resourceGroupName,
-        String workspaceName,
-        String sqlPoolName,
+    TransparentDataEncryptionInner get(String resourceGroupName, String workspaceName, String sqlPoolName,
         TransparentDataEncryptionName transparentDataEncryptionName);
 
     /**
-     * Get a SQL pool's transparent data encryption configuration.
-     *
+     * Creates or updates a Sql pool's transparent data encryption configuration
+     * 
+     * Creates or updates a Sql pool's transparent data encryption configuration.
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param sqlPoolName SQL pool name.
      * @param transparentDataEncryptionName The name of the transparent data encryption configuration.
+     * @param parameters The required parameters for creating or updating transparent data encryption.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a SQL pool's transparent data encryption configuration.
+     * @return represents a Sql pool transparent data encryption configuration along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<TransparentDataEncryptionInner> getWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String sqlPoolName,
-        TransparentDataEncryptionName transparentDataEncryptionName,
-        Context context);
+    Response<TransparentDataEncryptionInner> createOrUpdateWithResponse(String resourceGroupName, String workspaceName,
+        String sqlPoolName, TransparentDataEncryptionName transparentDataEncryptionName,
+        TransparentDataEncryptionInner parameters, Context context);
 
     /**
+     * Creates or updates a Sql pool's transparent data encryption configuration
+     * 
      * Creates or updates a Sql pool's transparent data encryption configuration.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param sqlPoolName SQL pool name.
@@ -70,54 +90,32 @@ public interface SqlPoolTransparentDataEncryptionsClient {
      * @return represents a Sql pool transparent data encryption configuration.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    TransparentDataEncryptionInner createOrUpdate(
-        String resourceGroupName,
-        String workspaceName,
-        String sqlPoolName,
-        TransparentDataEncryptionName transparentDataEncryptionName,
-        TransparentDataEncryptionInner parameters);
+    TransparentDataEncryptionInner createOrUpdate(String resourceGroupName, String workspaceName, String sqlPoolName,
+        TransparentDataEncryptionName transparentDataEncryptionName, TransparentDataEncryptionInner parameters);
 
     /**
-     * Creates or updates a Sql pool's transparent data encryption configuration.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param sqlPoolName SQL pool name.
-     * @param transparentDataEncryptionName The name of the transparent data encryption configuration.
-     * @param parameters The required parameters for creating or updating transparent data encryption.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return represents a Sql pool transparent data encryption configuration.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<TransparentDataEncryptionInner> createOrUpdateWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String sqlPoolName,
-        TransparentDataEncryptionName transparentDataEncryptionName,
-        TransparentDataEncryptionInner parameters,
-        Context context);
-
-    /**
+     * SQL pool's transparent data encryption configurations
+     * 
      * Get list of SQL pool's transparent data encryption configurations.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param sqlPoolName SQL pool name.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of SQL pool's transparent data encryption configurations.
+     * @return list of SQL pool's transparent data encryption configurations as paginated response with
+     * {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<TransparentDataEncryptionInner> list(
-        String resourceGroupName, String workspaceName, String sqlPoolName);
+    PagedIterable<TransparentDataEncryptionInner> list(String resourceGroupName, String workspaceName,
+        String sqlPoolName);
 
     /**
+     * SQL pool's transparent data encryption configurations
+     * 
      * Get list of SQL pool's transparent data encryption configurations.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param sqlPoolName SQL pool name.
@@ -125,9 +123,10 @@ public interface SqlPoolTransparentDataEncryptionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of SQL pool's transparent data encryption configurations.
+     * @return list of SQL pool's transparent data encryption configurations as paginated response with
+     * {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<TransparentDataEncryptionInner> list(
-        String resourceGroupName, String workspaceName, String sqlPoolName, Context context);
+    PagedIterable<TransparentDataEncryptionInner> list(String resourceGroupName, String workspaceName,
+        String sqlPoolName, Context context);
 }

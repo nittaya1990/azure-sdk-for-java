@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
-/** Additional information of the DPMContainer. */
+/**
+ * Additional information of the DPMContainer.
+ */
 @Fluent
 public final class DpmContainerExtendedInfo {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DpmContainerExtendedInfo.class);
-
     /*
      * Last refresh time of the DPMContainer.
      */
@@ -22,8 +20,14 @@ public final class DpmContainerExtendedInfo {
     private OffsetDateTime lastRefreshedAt;
 
     /**
+     * Creates an instance of DpmContainerExtendedInfo class.
+     */
+    public DpmContainerExtendedInfo() {
+    }
+
+    /**
      * Get the lastRefreshedAt property: Last refresh time of the DPMContainer.
-     *
+     * 
      * @return the lastRefreshedAt value.
      */
     public OffsetDateTime lastRefreshedAt() {
@@ -32,7 +36,7 @@ public final class DpmContainerExtendedInfo {
 
     /**
      * Set the lastRefreshedAt property: Last refresh time of the DPMContainer.
-     *
+     * 
      * @param lastRefreshedAt the lastRefreshedAt value to set.
      * @return the DpmContainerExtendedInfo object itself.
      */
@@ -43,7 +47,7 @@ public final class DpmContainerExtendedInfo {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

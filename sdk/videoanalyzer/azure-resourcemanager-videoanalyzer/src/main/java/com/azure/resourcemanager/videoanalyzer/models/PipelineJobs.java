@@ -18,7 +18,7 @@ public interface PipelineJobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of PipelineJob items.
+     * @return a collection of PipelineJob items as paginated response with {@link PagedIterable}.
      */
     PagedIterable<PipelineJob> list(String resourceGroupName, String accountName);
 
@@ -34,10 +34,10 @@ public interface PipelineJobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of PipelineJob items.
+     * @return a collection of PipelineJob items as paginated response with {@link PagedIterable}.
      */
-    PagedIterable<PipelineJob> list(
-        String resourceGroupName, String accountName, String filter, Integer top, Context context);
+    PagedIterable<PipelineJob> list(String resourceGroupName, String accountName, String filter, Integer top,
+        Context context);
 
     /**
      * Retrieves a specific pipeline job by name. If a pipeline job with that name has been previously created, the call
@@ -66,10 +66,10 @@ public interface PipelineJobs {
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return pipeline job represents a unique instance of a batch topology, used for offline processing of selected
-     *     portions of archived content.
+     *     portions of archived content along with {@link Response}.
      */
-    Response<PipelineJob> getWithResponse(
-        String resourceGroupName, String accountName, String pipelineJobName, Context context);
+    Response<PipelineJob> getWithResponse(String resourceGroupName, String accountName, String pipelineJobName,
+        Context context);
 
     /**
      * Deletes a pipeline job with the given name.
@@ -93,10 +93,10 @@ public interface PipelineJobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
-    Response<Void> deleteWithResponse(
-        String resourceGroupName, String accountName, String pipelineJobName, Context context);
+    Response<Void> deleteWithResponse(String resourceGroupName, String accountName, String pipelineJobName,
+        Context context);
 
     /**
      * Cancels a pipeline job with the given name.
@@ -132,7 +132,7 @@ public interface PipelineJobs {
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return pipeline job represents a unique instance of a batch topology, used for offline processing of selected
-     *     portions of archived content.
+     *     portions of archived content along with {@link Response}.
      */
     PipelineJob getById(String id);
 
@@ -146,7 +146,7 @@ public interface PipelineJobs {
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return pipeline job represents a unique instance of a batch topology, used for offline processing of selected
-     *     portions of archived content.
+     *     portions of archived content along with {@link Response}.
      */
     Response<PipelineJob> getByIdWithResponse(String id, Context context);
 
@@ -168,7 +168,7 @@ public interface PipelineJobs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
     Response<Void> deleteByIdWithResponse(String id, Context context);
 

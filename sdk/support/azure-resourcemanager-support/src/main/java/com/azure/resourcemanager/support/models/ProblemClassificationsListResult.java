@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.support.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.support.fluent.models.ProblemClassificationInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Collection of ProblemClassification resources. */
+/**
+ * Collection of ProblemClassification resources.
+ */
 @Fluent
 public final class ProblemClassificationsListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ProblemClassificationsListResult.class);
-
     /*
      * List of ProblemClassification resources.
      */
@@ -23,8 +21,14 @@ public final class ProblemClassificationsListResult {
     private List<ProblemClassificationInner> value;
 
     /**
+     * Creates an instance of ProblemClassificationsListResult class.
+     */
+    public ProblemClassificationsListResult() {
+    }
+
+    /**
      * Get the value property: List of ProblemClassification resources.
-     *
+     * 
      * @return the value value.
      */
     public List<ProblemClassificationInner> value() {
@@ -33,7 +37,7 @@ public final class ProblemClassificationsListResult {
 
     /**
      * Set the value property: List of ProblemClassification resources.
-     *
+     * 
      * @param value the value value to set.
      * @return the ProblemClassificationsListResult object itself.
      */
@@ -44,7 +48,7 @@ public final class ProblemClassificationsListResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

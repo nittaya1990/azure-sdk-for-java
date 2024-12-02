@@ -36,14 +36,10 @@ public interface DpsCertificates {
      * @throws com.azure.resourcemanager.deviceprovisioningservices.models.ErrorDetailsException thrown if the request
      *     is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the certificate from the provisioning service.
+     * @return the certificate from the provisioning service along with {@link Response}.
      */
-    Response<CertificateResponse> getWithResponse(
-        String certificateName,
-        String resourceGroupName,
-        String provisioningServiceName,
-        String ifMatch,
-        Context context);
+    Response<CertificateResponse> getWithResponse(String certificateName, String resourceGroupName,
+        String provisioningServiceName, String ifMatch, Context context);
 
     /**
      * Deletes the specified certificate associated with the Provisioning Service.
@@ -81,22 +77,12 @@ public interface DpsCertificates {
      * @throws com.azure.resourcemanager.deviceprovisioningservices.models.ErrorDetailsException thrown if the request
      *     is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
-    Response<Void> deleteWithResponse(
-        String resourceGroupName,
-        String ifMatch,
-        String provisioningServiceName,
-        String certificateName,
-        String certificateName1,
-        byte[] certificateRawBytes,
-        Boolean certificateIsVerified,
-        CertificatePurpose certificatePurpose,
-        OffsetDateTime certificateCreated,
-        OffsetDateTime certificateLastUpdated,
-        Boolean certificateHasPrivateKey,
-        String certificateNonce,
-        Context context);
+    Response<Void> deleteWithResponse(String resourceGroupName, String ifMatch, String provisioningServiceName,
+        String certificateName, String certificateName1, byte[] certificateRawBytes, Boolean certificateIsVerified,
+        CertificatePurpose certificatePurpose, OffsetDateTime certificateCreated, OffsetDateTime certificateLastUpdated,
+        Boolean certificateHasPrivateKey, String certificateNonce, Context context);
 
     /**
      * Get all the certificates tied to the provisioning service.
@@ -121,10 +107,10 @@ public interface DpsCertificates {
      * @throws com.azure.resourcemanager.deviceprovisioningservices.models.ErrorDetailsException thrown if the request
      *     is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all the certificates tied to the provisioning service.
+     * @return all the certificates tied to the provisioning service along with {@link Response}.
      */
-    Response<CertificateListDescription> listWithResponse(
-        String resourceGroupName, String provisioningServiceName, Context context);
+    Response<CertificateListDescription> listWithResponse(String resourceGroupName, String provisioningServiceName,
+        Context context);
 
     /**
      * Generate verification code for Proof of Possession.
@@ -141,8 +127,8 @@ public interface DpsCertificates {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return description of the response of the verification code.
      */
-    VerificationCodeResponse generateVerificationCode(
-        String certificateName, String ifMatch, String resourceGroupName, String provisioningServiceName);
+    VerificationCodeResponse generateVerificationCode(String certificateName, String ifMatch, String resourceGroupName,
+        String provisioningServiceName);
 
     /**
      * Generate verification code for Proof of Possession.
@@ -166,21 +152,12 @@ public interface DpsCertificates {
      * @throws com.azure.resourcemanager.deviceprovisioningservices.models.ErrorDetailsException thrown if the request
      *     is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return description of the response of the verification code.
+     * @return description of the response of the verification code along with {@link Response}.
      */
-    Response<VerificationCodeResponse> generateVerificationCodeWithResponse(
-        String certificateName,
-        String ifMatch,
-        String resourceGroupName,
-        String provisioningServiceName,
-        String certificateName1,
-        byte[] certificateRawBytes,
-        Boolean certificateIsVerified,
-        CertificatePurpose certificatePurpose,
-        OffsetDateTime certificateCreated,
-        OffsetDateTime certificateLastUpdated,
-        Boolean certificateHasPrivateKey,
-        String certificateNonce,
+    Response<VerificationCodeResponse> generateVerificationCodeWithResponse(String certificateName, String ifMatch,
+        String resourceGroupName, String provisioningServiceName, String certificateName1, byte[] certificateRawBytes,
+        Boolean certificateIsVerified, CertificatePurpose certificatePurpose, OffsetDateTime certificateCreated,
+        OffsetDateTime certificateLastUpdated, Boolean certificateHasPrivateKey, String certificateNonce,
         Context context);
 
     /**
@@ -199,12 +176,8 @@ public interface DpsCertificates {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return the X509 Certificate.
      */
-    CertificateResponse verifyCertificate(
-        String certificateName,
-        String ifMatch,
-        String resourceGroupName,
-        String provisioningServiceName,
-        VerificationCodeRequest request);
+    CertificateResponse verifyCertificate(String certificateName, String ifMatch, String resourceGroupName,
+        String provisioningServiceName, VerificationCodeRequest request);
 
     /**
      * Verifies the certificate's private key possession by providing the leaf cert issued by the verifying pre uploaded
@@ -229,23 +202,13 @@ public interface DpsCertificates {
      * @throws com.azure.resourcemanager.deviceprovisioningservices.models.ErrorDetailsException thrown if the request
      *     is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the X509 Certificate.
+     * @return the X509 Certificate along with {@link Response}.
      */
-    Response<CertificateResponse> verifyCertificateWithResponse(
-        String certificateName,
-        String ifMatch,
-        String resourceGroupName,
-        String provisioningServiceName,
-        VerificationCodeRequest request,
-        String certificateName1,
-        byte[] certificateRawBytes,
-        Boolean certificateIsVerified,
-        CertificatePurpose certificatePurpose,
-        OffsetDateTime certificateCreated,
-        OffsetDateTime certificateLastUpdated,
-        Boolean certificateHasPrivateKey,
-        String certificateNonce,
-        Context context);
+    Response<CertificateResponse> verifyCertificateWithResponse(String certificateName, String ifMatch,
+        String resourceGroupName, String provisioningServiceName, VerificationCodeRequest request,
+        String certificateName1, byte[] certificateRawBytes, Boolean certificateIsVerified,
+        CertificatePurpose certificatePurpose, OffsetDateTime certificateCreated, OffsetDateTime certificateLastUpdated,
+        Boolean certificateHasPrivateKey, String certificateNonce, Context context);
 
     /**
      * Get the certificate from the provisioning service.
@@ -255,7 +218,7 @@ public interface DpsCertificates {
      * @throws com.azure.resourcemanager.deviceprovisioningservices.models.ErrorDetailsException thrown if the request
      *     is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the certificate from the provisioning service.
+     * @return the certificate from the provisioning service along with {@link Response}.
      */
     CertificateResponse getById(String id);
 
@@ -269,7 +232,7 @@ public interface DpsCertificates {
      * @throws com.azure.resourcemanager.deviceprovisioningservices.models.ErrorDetailsException thrown if the request
      *     is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the certificate from the provisioning service.
+     * @return the certificate from the provisioning service along with {@link Response}.
      */
     Response<CertificateResponse> getByIdWithResponse(String id, String ifMatch, Context context);
 
@@ -302,20 +265,12 @@ public interface DpsCertificates {
      * @throws com.azure.resourcemanager.deviceprovisioningservices.models.ErrorDetailsException thrown if the request
      *     is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
-    Response<Void> deleteByIdWithResponse(
-        String id,
-        String ifMatch,
-        String certificateName1,
-        byte[] certificateRawBytes,
-        Boolean certificateIsVerified,
-        CertificatePurpose certificatePurpose,
-        OffsetDateTime certificateCreated,
-        OffsetDateTime certificateLastUpdated,
-        Boolean certificateHasPrivateKey,
-        String certificateNonce,
-        Context context);
+    Response<Void> deleteByIdWithResponse(String id, String ifMatch, String certificateName1,
+        byte[] certificateRawBytes, Boolean certificateIsVerified, CertificatePurpose certificatePurpose,
+        OffsetDateTime certificateCreated, OffsetDateTime certificateLastUpdated, Boolean certificateHasPrivateKey,
+        String certificateNonce, Context context);
 
     /**
      * Begins definition for a new CertificateResponse resource.

@@ -4,18 +4,17 @@ package com.azure.cosmos.implementation.caches;
 
 import com.azure.cosmos.BridgeInternal;
 import com.azure.cosmos.implementation.CosmosClientMetadataCachesSnapshot;
-import com.azure.cosmos.implementation.MetadataDiagnosticsContext;
-import com.azure.cosmos.implementation.Utils;
-import com.azure.cosmos.implementation.apachecommons.lang.StringUtils;
-import com.azure.cosmos.implementation.routing.PartitionKeyRangeIdentity;
 import com.azure.cosmos.implementation.DocumentCollection;
 import com.azure.cosmos.implementation.InvalidPartitionException;
+import com.azure.cosmos.implementation.MetadataDiagnosticsContext;
 import com.azure.cosmos.implementation.NotFoundException;
 import com.azure.cosmos.implementation.PathsHelper;
 import com.azure.cosmos.implementation.RMResources;
 import com.azure.cosmos.implementation.ResourceId;
 import com.azure.cosmos.implementation.RxDocumentServiceRequest;
-import com.azure.cosmos.models.ModelBridgeInternal;
+import com.azure.cosmos.implementation.Utils;
+import com.azure.cosmos.implementation.apachecommons.lang.StringUtils;
+import com.azure.cosmos.implementation.routing.PartitionKeyRangeIdentity;
 import reactor.core.Exceptions;
 import reactor.core.publisher.Mono;
 
@@ -164,18 +163,30 @@ public abstract class RxCollectionCache {
     public Mono<DocumentCollection> resolveByNameAsync(
         MetadataDiagnosticsContext metaDataDiagnosticsContext, String resourceAddress, Map<String, Object> properties) {
 
+        return this.resolveByNameAsync(metaDataDiagnosticsContext, resourceAddress, properties, null);
+    }
+
+    public Mono<DocumentCollection> resolveByNameAsync(
+        MetadataDiagnosticsContext metaDataDiagnosticsContext,
+        String resourceAddress,
+        Map<String, Object> properties,
+        DocumentCollection obsoleteValue) {
+
         String resourceFullName = PathsHelper.getCollectionPath(resourceAddress);
 
         return this.collectionInfoByNameCache.getAsync(
-                resourceFullName,
-                null,
-                () -> {
-                    Mono<DocumentCollection> collectionObs = this.getByNameAsync(metaDataDiagnosticsContext, resourceFullName, properties);
-                    return collectionObs.doOnSuccess(collection -> this.collectionInfoByIdCache.set(collection.getResourceId(), collection));
-                });
+            resourceFullName,
+            obsoleteValue,
+            () -> {
+                Mono<DocumentCollection> collectionObs = this.getByNameAsync(
+                    metaDataDiagnosticsContext, resourceFullName, properties);
+                return collectionObs.doOnSuccess(collection -> this.collectionInfoByIdCache.set(
+                    collection.getResourceId(),
+                    collection));
+            });
     }
 
-    private Mono<Void> refreshAsync(MetadataDiagnosticsContext metaDataDiagnosticsContext, RxDocumentServiceRequest request) {
+    public Mono<Void> refreshAsync(MetadataDiagnosticsContext metaDataDiagnosticsContext, RxDocumentServiceRequest request) {
         // TODO System.Diagnostics.Debug.Assert(request.IsNameBased);
 
         String resourceFullName = PathsHelper.getCollectionPath(request.getResourceAddress());
@@ -184,7 +195,7 @@ public abstract class RxCollectionCache {
         if (request.requestContext.resolvedCollectionRid != null) {
             // Here we will issue backend call only if cache wasn't already refreshed (if whatever is there corresponds to previously resolved collection rid).
             DocumentCollection obsoleteValue = new DocumentCollection();
-            ModelBridgeInternal.setResourceId(obsoleteValue, request.requestContext.resolvedCollectionRid);
+            obsoleteValue.setResourceId(request.requestContext.resolvedCollectionRid);
 
             mono = this.collectionInfoByNameCache.getAsync(
                     resourceFullName,

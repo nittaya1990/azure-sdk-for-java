@@ -16,11 +16,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("Default")
 @Fluent
 public final class ServerPropertiesForDefaultCreate extends ServerPropertiesForCreate {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ServerPropertiesForDefaultCreate.class);
+    @JsonIgnore
+    private final ClientLogger logger = new ClientLogger(ServerPropertiesForDefaultCreate.class);
 
     /*
      * The administrator's login name of a server. Can only be specified when
-     * the server is being created (and is required for creation).
+     * the server is being created (and is required for creation). The login
+     * name is required when updating password.
      */
     @JsonProperty(value = "administratorLogin", required = true)
     private String administratorLogin;
@@ -33,7 +35,7 @@ public final class ServerPropertiesForDefaultCreate extends ServerPropertiesForC
 
     /**
      * Get the administratorLogin property: The administrator's login name of a server. Can only be specified when the
-     * server is being created (and is required for creation).
+     * server is being created (and is required for creation). The login name is required when updating password.
      *
      * @return the administratorLogin value.
      */
@@ -43,7 +45,7 @@ public final class ServerPropertiesForDefaultCreate extends ServerPropertiesForC
 
     /**
      * Set the administratorLogin property: The administrator's login name of a server. Can only be specified when the
-     * server is being created (and is required for creation).
+     * server is being created (and is required for creation). The login name is required when updating password.
      *
      * @param administratorLogin the administratorLogin value to set.
      * @return the ServerPropertiesForDefaultCreate object itself.
@@ -96,8 +98,8 @@ public final class ServerPropertiesForDefaultCreate extends ServerPropertiesForC
 
     /** {@inheritDoc} */
     @Override
-    public ServerPropertiesForDefaultCreate withInfrastructureEncryption(
-        InfrastructureEncryption infrastructureEncryption) {
+    public ServerPropertiesForDefaultCreate
+        withInfrastructureEncryption(InfrastructureEncryption infrastructureEncryption) {
         super.withInfrastructureEncryption(infrastructureEncryption);
         return this;
     }
@@ -125,17 +127,12 @@ public final class ServerPropertiesForDefaultCreate extends ServerPropertiesForC
     public void validate() {
         super.validate();
         if (administratorLogin() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property administratorLogin in model ServerPropertiesForDefaultCreate"));
+            throw logger.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property administratorLogin in model ServerPropertiesForDefaultCreate"));
         }
         if (administratorLoginPassword() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property administratorLoginPassword in model"
-                            + " ServerPropertiesForDefaultCreate"));
+            throw logger.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property administratorLoginPassword in model" + " ServerPropertiesForDefaultCreate"));
         }
     }
 }

@@ -4,20 +4,23 @@
 
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
-import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.azure.core.annotation.Fluent;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.List;
 import java.util.Map;
 
-/** AzureWorkload SAP Hana-specific restore. */
+/**
+ * AzureWorkload SAP Hana-specific restore.
+ */
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
-    include = JsonTypeInfo.As.PROPERTY,
     property = "objectType",
-    defaultImpl = AzureWorkloadSapHanaRestoreRequest.class)
+    defaultImpl = AzureWorkloadSapHanaRestoreRequest.class,
+    visible = true)
 @JsonTypeName("AzureWorkloadSAPHanaRestoreRequest")
 @JsonSubTypes({
     @JsonSubTypes.Type(
@@ -25,41 +28,72 @@ import java.util.Map;
         value = AzureWorkloadSapHanaPointInTimeRestoreRequest.class),
     @JsonSubTypes.Type(
         name = "AzureWorkloadSAPHanaRestoreWithRehydrateRequest",
-        value = AzureWorkloadSapHanaRestoreWithRehydrateRequest.class)
-})
-@Immutable
+        value = AzureWorkloadSapHanaRestoreWithRehydrateRequest.class) })
+@Fluent
 public class AzureWorkloadSapHanaRestoreRequest extends AzureWorkloadRestoreRequest {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureWorkloadSapHanaRestoreRequest.class);
+    /*
+     * This property will be used as the discriminator for deciding the specific types in the polymorphic chain of types.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "objectType", required = true)
+    private String objectType = "AzureWorkloadSAPHanaRestoreRequest";
 
-    /** {@inheritDoc} */
+    /**
+     * Creates an instance of AzureWorkloadSapHanaRestoreRequest class.
+     */
+    public AzureWorkloadSapHanaRestoreRequest() {
+    }
+
+    /**
+     * Get the objectType property: This property will be used as the discriminator for deciding the specific types in
+     * the polymorphic chain of types.
+     * 
+     * @return the objectType value.
+     */
+    @Override
+    public String objectType() {
+        return this.objectType;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureWorkloadSapHanaRestoreRequest withRecoveryType(RecoveryType recoveryType) {
         super.withRecoveryType(recoveryType);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureWorkloadSapHanaRestoreRequest withSourceResourceId(String sourceResourceId) {
         super.withSourceResourceId(sourceResourceId);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureWorkloadSapHanaRestoreRequest withPropertyBag(Map<String, String> propertyBag) {
         super.withPropertyBag(propertyBag);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureWorkloadSapHanaRestoreRequest withTargetInfo(TargetRestoreInfo targetInfo) {
         super.withTargetInfo(targetInfo);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureWorkloadSapHanaRestoreRequest withRecoveryMode(RecoveryMode recoveryMode) {
         super.withRecoveryMode(recoveryMode);
@@ -67,8 +101,56 @@ public class AzureWorkloadSapHanaRestoreRequest extends AzureWorkloadRestoreRequ
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AzureWorkloadSapHanaRestoreRequest withTargetResourceGroupName(String targetResourceGroupName) {
+        super.withTargetResourceGroupName(targetResourceGroupName);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AzureWorkloadSapHanaRestoreRequest
+        withUserAssignedManagedIdentityDetails(UserAssignedManagedIdentityDetails userAssignedManagedIdentityDetails) {
+        super.withUserAssignedManagedIdentityDetails(userAssignedManagedIdentityDetails);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AzureWorkloadSapHanaRestoreRequest
+        withSnapshotRestoreParameters(SnapshotRestoreParameters snapshotRestoreParameters) {
+        super.withSnapshotRestoreParameters(snapshotRestoreParameters);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AzureWorkloadSapHanaRestoreRequest withTargetVirtualMachineId(String targetVirtualMachineId) {
+        super.withTargetVirtualMachineId(targetVirtualMachineId);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AzureWorkloadSapHanaRestoreRequest
+        withResourceGuardOperationRequests(List<String> resourceGuardOperationRequests) {
+        super.withResourceGuardOperationRequests(resourceGuardOperationRequests);
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

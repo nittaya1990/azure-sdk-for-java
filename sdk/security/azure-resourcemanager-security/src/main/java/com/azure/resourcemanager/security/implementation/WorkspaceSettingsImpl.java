@@ -13,29 +13,38 @@ import com.azure.resourcemanager.security.fluent.WorkspaceSettingsClient;
 import com.azure.resourcemanager.security.fluent.models.WorkspaceSettingInner;
 import com.azure.resourcemanager.security.models.WorkspaceSetting;
 import com.azure.resourcemanager.security.models.WorkspaceSettings;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class WorkspaceSettingsImpl implements WorkspaceSettings {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(WorkspaceSettingsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(WorkspaceSettingsImpl.class);
 
     private final WorkspaceSettingsClient innerClient;
 
     private final com.azure.resourcemanager.security.SecurityManager serviceManager;
 
-    public WorkspaceSettingsImpl(
-        WorkspaceSettingsClient innerClient, com.azure.resourcemanager.security.SecurityManager serviceManager) {
+    public WorkspaceSettingsImpl(WorkspaceSettingsClient innerClient,
+        com.azure.resourcemanager.security.SecurityManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
     }
 
     public PagedIterable<WorkspaceSetting> list() {
         PagedIterable<WorkspaceSettingInner> inner = this.serviceClient().list();
-        return Utils.mapPage(inner, inner1 -> new WorkspaceSettingImpl(inner1, this.manager()));
+        return ResourceManagerUtils.mapPage(inner, inner1 -> new WorkspaceSettingImpl(inner1, this.manager()));
     }
 
     public PagedIterable<WorkspaceSetting> list(Context context) {
         PagedIterable<WorkspaceSettingInner> inner = this.serviceClient().list(context);
-        return Utils.mapPage(inner, inner1 -> new WorkspaceSettingImpl(inner1, this.manager()));
+        return ResourceManagerUtils.mapPage(inner, inner1 -> new WorkspaceSettingImpl(inner1, this.manager()));
+    }
+
+    public Response<WorkspaceSetting> getWithResponse(String workspaceSettingName, Context context) {
+        Response<WorkspaceSettingInner> inner = this.serviceClient().getWithResponse(workspaceSettingName, context);
+        if (inner != null) {
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
+                new WorkspaceSettingImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
     }
 
     public WorkspaceSetting get(String workspaceSettingName) {
@@ -47,75 +56,46 @@ public final class WorkspaceSettingsImpl implements WorkspaceSettings {
         }
     }
 
-    public Response<WorkspaceSetting> getWithResponse(String workspaceSettingName, Context context) {
-        Response<WorkspaceSettingInner> inner = this.serviceClient().getWithResponse(workspaceSettingName, context);
-        if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
-                new WorkspaceSettingImpl(inner.getValue(), this.manager()));
-        } else {
-            return null;
-        }
+    public Response<Void> deleteWithResponse(String workspaceSettingName, Context context) {
+        return this.serviceClient().deleteWithResponse(workspaceSettingName, context);
     }
 
     public void delete(String workspaceSettingName) {
         this.serviceClient().delete(workspaceSettingName);
     }
 
-    public Response<Void> deleteWithResponse(String workspaceSettingName, Context context) {
-        return this.serviceClient().deleteWithResponse(workspaceSettingName, context);
-    }
-
     public WorkspaceSetting getById(String id) {
-        String workspaceSettingName = Utils.getValueFromIdByName(id, "workspaceSettings");
+        String workspaceSettingName = ResourceManagerUtils.getValueFromIdByName(id, "workspaceSettings");
         if (workspaceSettingName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format(
-                                "The resource ID '%s' is not valid. Missing path segment 'workspaceSettings'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'workspaceSettings'.", id)));
         }
         return this.getWithResponse(workspaceSettingName, Context.NONE).getValue();
     }
 
     public Response<WorkspaceSetting> getByIdWithResponse(String id, Context context) {
-        String workspaceSettingName = Utils.getValueFromIdByName(id, "workspaceSettings");
+        String workspaceSettingName = ResourceManagerUtils.getValueFromIdByName(id, "workspaceSettings");
         if (workspaceSettingName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format(
-                                "The resource ID '%s' is not valid. Missing path segment 'workspaceSettings'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'workspaceSettings'.", id)));
         }
         return this.getWithResponse(workspaceSettingName, context);
     }
 
     public void deleteById(String id) {
-        String workspaceSettingName = Utils.getValueFromIdByName(id, "workspaceSettings");
+        String workspaceSettingName = ResourceManagerUtils.getValueFromIdByName(id, "workspaceSettings");
         if (workspaceSettingName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format(
-                                "The resource ID '%s' is not valid. Missing path segment 'workspaceSettings'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'workspaceSettings'.", id)));
         }
-        this.deleteWithResponse(workspaceSettingName, Context.NONE).getValue();
+        this.deleteWithResponse(workspaceSettingName, Context.NONE);
     }
 
     public Response<Void> deleteByIdWithResponse(String id, Context context) {
-        String workspaceSettingName = Utils.getValueFromIdByName(id, "workspaceSettings");
+        String workspaceSettingName = ResourceManagerUtils.getValueFromIdByName(id, "workspaceSettings");
         if (workspaceSettingName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format(
-                                "The resource ID '%s' is not valid. Missing path segment 'workspaceSettings'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'workspaceSettings'.", id)));
         }
         return this.deleteWithResponse(workspaceSettingName, context);
     }

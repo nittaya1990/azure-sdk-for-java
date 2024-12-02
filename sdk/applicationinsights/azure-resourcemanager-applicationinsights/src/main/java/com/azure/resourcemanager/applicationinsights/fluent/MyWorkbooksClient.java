@@ -24,7 +24,8 @@ public interface MyWorkbooksClient {
      * @throws com.azure.resourcemanager.applicationinsights.models.ErrorDefinitionException thrown if the request is
      *     rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all private workbooks defined within a specified resource group and category.
+     * @return all private workbooks defined within a specified resource group and category as paginated response with
+     *     {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<MyWorkbookInner> listByResourceGroup(String resourceGroupName, CategoryType category);
@@ -43,16 +44,12 @@ public interface MyWorkbooksClient {
      * @throws com.azure.resourcemanager.applicationinsights.models.ErrorDefinitionException thrown if the request is
      *     rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all private workbooks defined within a specified resource group and category.
+     * @return all private workbooks defined within a specified resource group and category as paginated response with
+     *     {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<MyWorkbookInner> listByResourceGroup(
-        String resourceGroupName,
-        CategoryType category,
-        List<String> tags,
-        String sourceId,
-        Boolean canFetchContent,
-        Context context);
+    PagedIterable<MyWorkbookInner> listByResourceGroup(String resourceGroupName, CategoryType category,
+        List<String> tags, String sourceId, Boolean canFetchContent, Context context);
 
     /**
      * Get all private workbooks defined within a specified subscription and category.
@@ -62,7 +59,8 @@ public interface MyWorkbooksClient {
      * @throws com.azure.resourcemanager.applicationinsights.models.ErrorDefinitionException thrown if the request is
      *     rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all private workbooks defined within a specified subscription and category.
+     * @return all private workbooks defined within a specified subscription and category as paginated response with
+     *     {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<MyWorkbookInner> list(CategoryType category);
@@ -79,11 +77,28 @@ public interface MyWorkbooksClient {
      * @throws com.azure.resourcemanager.applicationinsights.models.ErrorDefinitionException thrown if the request is
      *     rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all private workbooks defined within a specified subscription and category.
+     * @return all private workbooks defined within a specified subscription and category as paginated response with
+     *     {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<MyWorkbookInner> list(
-        CategoryType category, List<String> tags, Boolean canFetchContent, Context context);
+    PagedIterable<MyWorkbookInner> list(CategoryType category, List<String> tags, Boolean canFetchContent,
+        Context context);
+
+    /**
+     * Get a single private workbook by its resourceName.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param resourceName The name of the Application Insights component resource.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.resourcemanager.applicationinsights.models.ErrorDefinitionException thrown if the request is
+     *     rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a single private workbook by its resourceName along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<MyWorkbookInner> getByResourceGroupWithResponse(String resourceGroupName, String resourceName,
+        Context context);
 
     /**
      * Get a single private workbook by its resourceName.
@@ -100,7 +115,7 @@ public interface MyWorkbooksClient {
     MyWorkbookInner getByResourceGroup(String resourceGroupName, String resourceName);
 
     /**
-     * Get a single private workbook by its resourceName.
+     * Delete a private workbook.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param resourceName The name of the Application Insights component resource.
@@ -109,11 +124,10 @@ public interface MyWorkbooksClient {
      * @throws com.azure.resourcemanager.applicationinsights.models.ErrorDefinitionException thrown if the request is
      *     rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single private workbook by its resourceName.
+     * @return the {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<MyWorkbookInner> getByResourceGroupWithResponse(
-        String resourceGroupName, String resourceName, Context context);
+    Response<Void> deleteWithResponse(String resourceGroupName, String resourceName, Context context);
 
     /**
      * Delete a private workbook.
@@ -129,19 +143,22 @@ public interface MyWorkbooksClient {
     void delete(String resourceGroupName, String resourceName);
 
     /**
-     * Delete a private workbook.
+     * Create a new private workbook.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param resourceName The name of the Application Insights component resource.
+     * @param workbookProperties Properties that need to be specified to create a new private workbook.
+     * @param sourceId Azure Resource Id that will fetch all linked workbooks.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.resourcemanager.applicationinsights.models.ErrorDefinitionException thrown if the request is
      *     rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return an Application Insights private workbook definition along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<Void> deleteWithResponse(String resourceGroupName, String resourceName, Context context);
+    Response<MyWorkbookInner> createOrUpdateWithResponse(String resourceGroupName, String resourceName,
+        MyWorkbookInner workbookProperties, String sourceId, Context context);
 
     /**
      * Create a new private workbook.
@@ -159,7 +176,7 @@ public interface MyWorkbooksClient {
     MyWorkbookInner createOrUpdate(String resourceGroupName, String resourceName, MyWorkbookInner workbookProperties);
 
     /**
-     * Create a new private workbook.
+     * Updates a private workbook that has already been added.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param resourceName The name of the Application Insights component resource.
@@ -170,15 +187,11 @@ public interface MyWorkbooksClient {
      * @throws com.azure.resourcemanager.applicationinsights.models.ErrorDefinitionException thrown if the request is
      *     rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Application Insights private workbook definition.
+     * @return an Application Insights private workbook definition along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<MyWorkbookInner> createOrUpdateWithResponse(
-        String resourceGroupName,
-        String resourceName,
-        MyWorkbookInner workbookProperties,
-        String sourceId,
-        Context context);
+    Response<MyWorkbookInner> updateWithResponse(String resourceGroupName, String resourceName,
+        MyWorkbookInner workbookProperties, String sourceId, Context context);
 
     /**
      * Updates a private workbook that has already been added.
@@ -194,26 +207,4 @@ public interface MyWorkbooksClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     MyWorkbookInner update(String resourceGroupName, String resourceName, MyWorkbookInner workbookProperties);
-
-    /**
-     * Updates a private workbook that has already been added.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param resourceName The name of the Application Insights component resource.
-     * @param workbookProperties Properties that need to be specified to create a new private workbook.
-     * @param sourceId Azure Resource Id that will fetch all linked workbooks.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.resourcemanager.applicationinsights.models.ErrorDefinitionException thrown if the request is
-     *     rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Application Insights private workbook definition.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<MyWorkbookInner> updateWithResponse(
-        String resourceGroupName,
-        String resourceName,
-        MyWorkbookInner workbookProperties,
-        String sourceId,
-        Context context);
 }

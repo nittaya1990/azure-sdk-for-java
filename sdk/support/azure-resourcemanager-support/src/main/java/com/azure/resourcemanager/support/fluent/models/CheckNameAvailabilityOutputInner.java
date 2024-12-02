@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.support.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Output of check name availability API. */
+/**
+ * Output of check name availability API.
+ */
 @Immutable
 public final class CheckNameAvailabilityOutputInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CheckNameAvailabilityOutputInner.class);
-
     /*
      * Indicates whether the name is available.
      */
@@ -33,8 +31,14 @@ public final class CheckNameAvailabilityOutputInner {
     private String message;
 
     /**
+     * Creates an instance of CheckNameAvailabilityOutputInner class.
+     */
+    public CheckNameAvailabilityOutputInner() {
+    }
+
+    /**
      * Get the nameAvailable property: Indicates whether the name is available.
-     *
+     * 
      * @return the nameAvailable value.
      */
     public Boolean nameAvailable() {
@@ -43,7 +47,7 @@ public final class CheckNameAvailabilityOutputInner {
 
     /**
      * Get the reason property: The reason why the name is not available.
-     *
+     * 
      * @return the reason value.
      */
     public String reason() {
@@ -52,7 +56,7 @@ public final class CheckNameAvailabilityOutputInner {
 
     /**
      * Get the message property: The detailed error message describing why the name is not available.
-     *
+     * 
      * @return the message value.
      */
     public String message() {
@@ -61,7 +65,7 @@ public final class CheckNameAvailabilityOutputInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

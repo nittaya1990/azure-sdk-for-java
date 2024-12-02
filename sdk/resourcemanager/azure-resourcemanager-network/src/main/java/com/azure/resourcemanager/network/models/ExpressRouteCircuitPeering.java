@@ -15,10 +15,8 @@ import com.azure.resourcemanager.resources.fluentcore.model.Updatable;
 /** Client-side representation of express route circuit peering object, associated with express route circuit. */
 @Fluent
 public interface ExpressRouteCircuitPeering
-    extends IndependentChild<NetworkManager>,
-        HasInnerModel<ExpressRouteCircuitPeeringInner>,
-        Refreshable<ExpressRouteCircuitPeering>,
-        Updatable<ExpressRouteCircuitPeering.Update> {
+    extends IndependentChild<NetworkManager>, HasInnerModel<ExpressRouteCircuitPeeringInner>,
+    Refreshable<ExpressRouteCircuitPeering>, Updatable<ExpressRouteCircuitPeering.Update> {
 
     // Getters
 
@@ -76,18 +74,16 @@ public interface ExpressRouteCircuitPeering
     Ipv6ExpressRouteCircuitPeeringConfig ipv6PeeringConfig();
 
     /** The entirety of the express route circuit peering definition. */
-    interface Definition
-        extends DefinitionStages.Blank,
-            DefinitionStages.WithAdvertisedPublicPrefixes,
-            DefinitionStages.WithPrimaryPeerAddressPrefix,
-            DefinitionStages.WithSecondaryPeerAddressPrefix,
-            DefinitionStages.WithVlanId,
-            DefinitionStages.WithPeerAsn,
-            DefinitionStages.WithCreate {
+    interface Definition extends DefinitionStages.Blank, DefinitionStages.WithAdvertisedPublicPrefixes,
+        DefinitionStages.WithPrimaryPeerAddressPrefix, DefinitionStages.WithSecondaryPeerAddressPrefix,
+        DefinitionStages.WithVlanId, DefinitionStages.WithPeerAsn, DefinitionStages.WithCreate {
     }
 
     /** Grouping of express route circuit peering definition stages. */
     interface DefinitionStages {
+        /**
+         * The first stage of an Express Route Circuit Peering configuration.
+         */
         interface Blank extends WithPrimaryPeerAddressPrefix {
         }
 
@@ -106,11 +102,23 @@ public interface ExpressRouteCircuitPeering
 
         /** The stage of Express Route Circuit Peering definition allowing to specify primary address prefix. */
         interface WithPrimaryPeerAddressPrefix {
+            /**
+             * Specifies the primary peer address prefix for the Express Route Circuit Peering.
+             *
+             * @param addressPrefix the primary peer address prefix
+             * @return next stage of definition
+             */
             WithSecondaryPeerAddressPrefix withPrimaryPeerAddressPrefix(String addressPrefix);
         }
 
         /** The stage of Express Route Circuit Peering definition allowing to specify secondary address prefix. */
         interface WithSecondaryPeerAddressPrefix {
+            /**
+             * Specifies the secondary peer address prefix for the Express Route Circuit Peering.
+             *
+             * @param addressPrefix the secondary peer address prefix
+             * @return next stage of definition
+             */
             WithVlanId withSecondaryPeerAddressPrefix(String addressPrefix);
         }
 
@@ -133,18 +141,18 @@ public interface ExpressRouteCircuitPeering
             WithCreate withPeerAsn(long peerAsn);
         }
 
+        /**
+         * The stage of the Express Route Circuit Peering definition which contains all the minimum required inputs for
+         * the resource to be created, but also allows for any other optional settings to be specified.
+         */
         interface WithCreate extends Creatable<ExpressRouteCircuitPeering> {
         }
     }
 
     /** Grouping of express route circuit peering update stages. */
-    interface Update
-        extends Appliable<ExpressRouteCircuitPeering>,
-            UpdateStages.WithAdvertisedPublicPrefixes,
-            UpdateStages.WithPrimaryPeerAddressPrefix,
-            UpdateStages.WithSecondaryPeerAddressPrefix,
-            UpdateStages.WithVlanId,
-            UpdateStages.WithPeerAsn {
+    interface Update extends Appliable<ExpressRouteCircuitPeering>, UpdateStages.WithAdvertisedPublicPrefixes,
+        UpdateStages.WithPrimaryPeerAddressPrefix, UpdateStages.WithSecondaryPeerAddressPrefix, UpdateStages.WithVlanId,
+        UpdateStages.WithPeerAsn {
     }
 
     /**
@@ -154,26 +162,56 @@ public interface ExpressRouteCircuitPeering
     interface UpdateStages {
         /** The stage of Express Route Circuit Peering update allowing to specify advertised address prefixes. */
         interface WithAdvertisedPublicPrefixes {
+            /**
+             * Specifies the advertised public prefixes for the Express Route Circuit Peering.
+             *
+             * @param publicPrefixes the advertised public prefixes
+             * @return next stage of update
+             */
             Update withAdvertisedPublicPrefixes(String publicPrefixes);
         }
 
         /** The stage of Express Route Circuit Peering update allowing to specify primary address prefix. */
         interface WithPrimaryPeerAddressPrefix {
+            /**
+             * Specifies the primary peer address prefix for the Express Route Circuit Peering.
+             *
+             * @param addressPrefix the primary peer address prefix
+             * @return next stage of update
+             */
             Update withPrimaryPeerAddressPrefix(String addressPrefix);
         }
 
         /** The stage of Express Route Circuit Peering update allowing to specify secondary address prefix. */
         interface WithSecondaryPeerAddressPrefix {
+            /**
+             * Specifies the secondary peer address prefix for the Express Route Circuit Peering.
+             *
+             * @param addressPrefix the secondary peer address prefix
+             * @return next stage of update
+             */
             Update withSecondaryPeerAddressPrefix(String addressPrefix);
         }
 
         /** The stage of Express Route Circuit Peering update allowing to specify VLAN ID. */
         interface WithVlanId {
+            /**
+             * Specifies the VLAN ID for the Express Route Circuit Peering.
+             *
+             * @param vlanId the VLAN ID
+             * @return next stage of update
+             */
             Update withVlanId(int vlanId);
         }
 
         /** The stage of Express Route Circuit Peering update allowing to specify AS number for peering. */
         interface WithPeerAsn {
+            /**
+             * Specifies the peer AS number for the Express Route Circuit Peering.
+             *
+             * @param peerAsn the peer AS number
+             * @return next stage of update
+             */
             Update withPeerAsn(long peerAsn);
         }
     }

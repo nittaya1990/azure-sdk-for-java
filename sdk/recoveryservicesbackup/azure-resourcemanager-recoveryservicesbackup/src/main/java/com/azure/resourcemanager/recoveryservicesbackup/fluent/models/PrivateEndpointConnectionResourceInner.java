@@ -6,17 +6,15 @@ package com.azure.resourcemanager.recoveryservicesbackup.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.Resource;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.recoveryservicesbackup.models.PrivateEndpointConnection;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
-/** Private Endpoint Connection Response Properties. */
+/**
+ * Private Endpoint Connection Response Properties.
+ */
 @Fluent
 public final class PrivateEndpointConnectionResourceInner extends Resource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PrivateEndpointConnectionResourceInner.class);
-
     /*
      * PrivateEndpointConnectionResource properties
      */
@@ -30,8 +28,14 @@ public final class PrivateEndpointConnectionResourceInner extends Resource {
     private String etag;
 
     /**
+     * Creates an instance of PrivateEndpointConnectionResourceInner class.
+     */
+    public PrivateEndpointConnectionResourceInner() {
+    }
+
+    /**
      * Get the properties property: PrivateEndpointConnectionResource properties.
-     *
+     * 
      * @return the properties value.
      */
     public PrivateEndpointConnection properties() {
@@ -40,7 +44,7 @@ public final class PrivateEndpointConnectionResourceInner extends Resource {
 
     /**
      * Set the properties property: PrivateEndpointConnectionResource properties.
-     *
+     * 
      * @param properties the properties value to set.
      * @return the PrivateEndpointConnectionResourceInner object itself.
      */
@@ -51,7 +55,7 @@ public final class PrivateEndpointConnectionResourceInner extends Resource {
 
     /**
      * Get the etag property: Optional ETag.
-     *
+     * 
      * @return the etag value.
      */
     public String etag() {
@@ -60,7 +64,7 @@ public final class PrivateEndpointConnectionResourceInner extends Resource {
 
     /**
      * Set the etag property: Optional ETag.
-     *
+     * 
      * @param etag the etag value to set.
      * @return the PrivateEndpointConnectionResourceInner object itself.
      */
@@ -69,14 +73,18 @@ public final class PrivateEndpointConnectionResourceInner extends Resource {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PrivateEndpointConnectionResourceInner withLocation(String location) {
         super.withLocation(location);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PrivateEndpointConnectionResourceInner withTags(Map<String, String> tags) {
         super.withTags(tags);
@@ -85,7 +93,7 @@ public final class PrivateEndpointConnectionResourceInner extends Resource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

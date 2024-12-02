@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.security.fluent.models.DiscoveredSecuritySolutionInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The DiscoveredSecuritySolutionList model. */
+/**
+ * The DiscoveredSecuritySolutionList model.
+ */
 @Fluent
 public final class DiscoveredSecuritySolutionList {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DiscoveredSecuritySolutionList.class);
-
     /*
      * The value property.
      */
@@ -29,8 +27,14 @@ public final class DiscoveredSecuritySolutionList {
     private String nextLink;
 
     /**
+     * Creates an instance of DiscoveredSecuritySolutionList class.
+     */
+    public DiscoveredSecuritySolutionList() {
+    }
+
+    /**
      * Get the value property: The value property.
-     *
+     * 
      * @return the value value.
      */
     public List<DiscoveredSecuritySolutionInner> value() {
@@ -39,7 +43,7 @@ public final class DiscoveredSecuritySolutionList {
 
     /**
      * Set the value property: The value property.
-     *
+     * 
      * @param value the value value to set.
      * @return the DiscoveredSecuritySolutionList object itself.
      */
@@ -50,7 +54,7 @@ public final class DiscoveredSecuritySolutionList {
 
     /**
      * Get the nextLink property: The URI to fetch the next page.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -59,7 +63,7 @@ public final class DiscoveredSecuritySolutionList {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

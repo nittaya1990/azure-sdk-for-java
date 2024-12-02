@@ -66,6 +66,13 @@ public interface TagDescriptionContract {
     String externalDocsDescription();
 
     /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
+
+    /**
      * Gets the inner com.azure.resourcemanager.apimanagement.fluent.models.TagDescriptionContractInner object.
      *
      * @return the inner object.
@@ -76,17 +83,19 @@ public interface TagDescriptionContract {
     interface Definition
         extends DefinitionStages.Blank, DefinitionStages.WithParentResource, DefinitionStages.WithCreate {
     }
+
     /** The TagDescriptionContract definition stages. */
     interface DefinitionStages {
         /** The first stage of the TagDescriptionContract definition. */
         interface Blank extends WithParentResource {
         }
+
         /** The stage of the TagDescriptionContract definition allowing to specify parent resource. */
         interface WithParentResource {
             /**
              * Specifies resourceGroupName, serviceName, apiId.
              *
-             * @param resourceGroupName The name of the resource group.
+             * @param resourceGroupName The name of the resource group. The name is case insensitive.
              * @param serviceName The name of the API Management service.
              * @param apiId API revision identifier. Must be unique in the current API Management service instance.
              *     Non-current revision has ;rev=n as a suffix where n is the revision number.
@@ -94,15 +103,13 @@ public interface TagDescriptionContract {
              */
             WithCreate withExistingApi(String resourceGroupName, String serviceName, String apiId);
         }
+
         /**
          * The stage of the TagDescriptionContract definition which contains all the minimum required properties for the
          * resource to be created, but also allows for any other optional properties to be specified.
          */
-        interface WithCreate
-            extends DefinitionStages.WithDescription,
-                DefinitionStages.WithExternalDocsUrl,
-                DefinitionStages.WithExternalDocsDescription,
-                DefinitionStages.WithIfMatch {
+        interface WithCreate extends DefinitionStages.WithDescription, DefinitionStages.WithExternalDocsUrl,
+            DefinitionStages.WithExternalDocsDescription, DefinitionStages.WithIfMatch {
             /**
              * Executes the create request.
              *
@@ -118,6 +125,7 @@ public interface TagDescriptionContract {
              */
             TagDescriptionContract create(Context context);
         }
+
         /** The stage of the TagDescriptionContract definition allowing to specify description. */
         interface WithDescription {
             /**
@@ -128,6 +136,7 @@ public interface TagDescriptionContract {
              */
             WithCreate withDescription(String description);
         }
+
         /** The stage of the TagDescriptionContract definition allowing to specify externalDocsUrl. */
         interface WithExternalDocsUrl {
             /**
@@ -138,6 +147,7 @@ public interface TagDescriptionContract {
              */
             WithCreate withExternalDocsUrl(String externalDocsUrl);
         }
+
         /** The stage of the TagDescriptionContract definition allowing to specify externalDocsDescription. */
         interface WithExternalDocsDescription {
             /**
@@ -149,6 +159,7 @@ public interface TagDescriptionContract {
              */
             WithCreate withExternalDocsDescription(String externalDocsDescription);
         }
+
         /** The stage of the TagDescriptionContract definition allowing to specify ifMatch. */
         interface WithIfMatch {
             /**
@@ -162,6 +173,7 @@ public interface TagDescriptionContract {
             WithCreate withIfMatch(String ifMatch);
         }
     }
+
     /**
      * Begins update for the TagDescriptionContract resource.
      *
@@ -170,11 +182,8 @@ public interface TagDescriptionContract {
     TagDescriptionContract.Update update();
 
     /** The template for TagDescriptionContract update. */
-    interface Update
-        extends UpdateStages.WithDescription,
-            UpdateStages.WithExternalDocsUrl,
-            UpdateStages.WithExternalDocsDescription,
-            UpdateStages.WithIfMatch {
+    interface Update extends UpdateStages.WithDescription, UpdateStages.WithExternalDocsUrl,
+        UpdateStages.WithExternalDocsDescription, UpdateStages.WithIfMatch {
         /**
          * Executes the update request.
          *
@@ -190,6 +199,7 @@ public interface TagDescriptionContract {
          */
         TagDescriptionContract apply(Context context);
     }
+
     /** The TagDescriptionContract update stages. */
     interface UpdateStages {
         /** The stage of the TagDescriptionContract update allowing to specify description. */
@@ -202,6 +212,7 @@ public interface TagDescriptionContract {
              */
             Update withDescription(String description);
         }
+
         /** The stage of the TagDescriptionContract update allowing to specify externalDocsUrl. */
         interface WithExternalDocsUrl {
             /**
@@ -212,6 +223,7 @@ public interface TagDescriptionContract {
              */
             Update withExternalDocsUrl(String externalDocsUrl);
         }
+
         /** The stage of the TagDescriptionContract update allowing to specify externalDocsDescription. */
         interface WithExternalDocsDescription {
             /**
@@ -223,6 +235,7 @@ public interface TagDescriptionContract {
              */
             Update withExternalDocsDescription(String externalDocsDescription);
         }
+
         /** The stage of the TagDescriptionContract update allowing to specify ifMatch. */
         interface WithIfMatch {
             /**
@@ -236,6 +249,7 @@ public interface TagDescriptionContract {
             Update withIfMatch(String ifMatch);
         }
     }
+
     /**
      * Refreshes the resource to sync with Azure.
      *

@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.eventgrid.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Properties of the Extension Topic. */
+/**
+ * Properties of the Extension Topic.
+ */
 @Fluent
 public final class ExtensionTopicProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ExtensionTopicProperties.class);
-
     /*
      * Description of the extension topic.
      */
@@ -27,8 +25,14 @@ public final class ExtensionTopicProperties {
     private String systemTopic;
 
     /**
+     * Creates an instance of ExtensionTopicProperties class.
+     */
+    public ExtensionTopicProperties() {
+    }
+
+    /**
      * Get the description property: Description of the extension topic.
-     *
+     * 
      * @return the description value.
      */
     public String description() {
@@ -37,7 +41,7 @@ public final class ExtensionTopicProperties {
 
     /**
      * Set the description property: Description of the extension topic.
-     *
+     * 
      * @param description the description value to set.
      * @return the ExtensionTopicProperties object itself.
      */
@@ -48,7 +52,7 @@ public final class ExtensionTopicProperties {
 
     /**
      * Get the systemTopic property: System topic resource id which is mapped to the source.
-     *
+     * 
      * @return the systemTopic value.
      */
     public String systemTopic() {
@@ -57,7 +61,7 @@ public final class ExtensionTopicProperties {
 
     /**
      * Set the systemTopic property: System topic resource id which is mapped to the source.
-     *
+     * 
      * @param systemTopic the systemTopic value to set.
      * @return the ExtensionTopicProperties object itself.
      */
@@ -68,7 +72,7 @@ public final class ExtensionTopicProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -8,27 +8,48 @@ import com.azure.core.util.ExpandableStringEnum;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.Collection;
 
-/** Defines values for EndOfSupportStatus. */
+/**
+ * End of support status.
+ */
 public final class EndOfSupportStatus extends ExpandableStringEnum<EndOfSupportStatus> {
-    /** Static value None for EndOfSupportStatus. */
+    /**
+     * Static value None for EndOfSupportStatus.
+     */
     public static final EndOfSupportStatus NONE = fromString("None");
 
-    /** Static value noLongerSupported for EndOfSupportStatus. */
+    /**
+     * Static value noLongerSupported for EndOfSupportStatus.
+     */
     public static final EndOfSupportStatus NO_LONGER_SUPPORTED = fromString("noLongerSupported");
 
-    /** Static value versionNoLongerSupported for EndOfSupportStatus. */
+    /**
+     * Static value versionNoLongerSupported for EndOfSupportStatus.
+     */
     public static final EndOfSupportStatus VERSION_NO_LONGER_SUPPORTED = fromString("versionNoLongerSupported");
 
-    /** Static value upcomingNoLongerSupported for EndOfSupportStatus. */
+    /**
+     * Static value upcomingNoLongerSupported for EndOfSupportStatus.
+     */
     public static final EndOfSupportStatus UPCOMING_NO_LONGER_SUPPORTED = fromString("upcomingNoLongerSupported");
 
-    /** Static value upcomingVersionNoLongerSupported for EndOfSupportStatus. */
-    public static final EndOfSupportStatus UPCOMING_VERSION_NO_LONGER_SUPPORTED =
-        fromString("upcomingVersionNoLongerSupported");
+    /**
+     * Static value upcomingVersionNoLongerSupported for EndOfSupportStatus.
+     */
+    public static final EndOfSupportStatus UPCOMING_VERSION_NO_LONGER_SUPPORTED
+        = fromString("upcomingVersionNoLongerSupported");
+
+    /**
+     * Creates a new instance of EndOfSupportStatus value.
+     * 
+     * @deprecated Use the {@link #fromString(String)} factory method.
+     */
+    @Deprecated
+    public EndOfSupportStatus() {
+    }
 
     /**
      * Creates or finds a EndOfSupportStatus from its string representation.
-     *
+     * 
      * @param name a name to look for.
      * @return the corresponding EndOfSupportStatus.
      */
@@ -37,7 +58,11 @@ public final class EndOfSupportStatus extends ExpandableStringEnum<EndOfSupportS
         return fromString(name, EndOfSupportStatus.class);
     }
 
-    /** @return known EndOfSupportStatus values. */
+    /**
+     * Gets known EndOfSupportStatus values.
+     * 
+     * @return known EndOfSupportStatus values.
+     */
     public static Collection<EndOfSupportStatus> values() {
         return values(EndOfSupportStatus.class);
     }

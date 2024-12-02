@@ -13,17 +13,15 @@ import com.azure.resourcemanager.datadog.fluent.MarketplaceAgreementsClient;
 import com.azure.resourcemanager.datadog.fluent.models.DatadogAgreementResourceInner;
 import com.azure.resourcemanager.datadog.models.DatadogAgreementResource;
 import com.azure.resourcemanager.datadog.models.MarketplaceAgreements;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class MarketplaceAgreementsImpl implements MarketplaceAgreements {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(MarketplaceAgreementsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(MarketplaceAgreementsImpl.class);
 
     private final MarketplaceAgreementsClient innerClient;
 
     private final com.azure.resourcemanager.datadog.MicrosoftDatadogManager serviceManager;
 
-    public MarketplaceAgreementsImpl(
-        MarketplaceAgreementsClient innerClient,
+    public MarketplaceAgreementsImpl(MarketplaceAgreementsClient innerClient,
         com.azure.resourcemanager.datadog.MicrosoftDatadogManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
@@ -39,24 +37,21 @@ public final class MarketplaceAgreementsImpl implements MarketplaceAgreements {
         return Utils.mapPage(inner, inner1 -> new DatadogAgreementResourceImpl(inner1, this.manager()));
     }
 
-    public DatadogAgreementResource createOrUpdate() {
-        DatadogAgreementResourceInner inner = this.serviceClient().createOrUpdate();
+    public Response<DatadogAgreementResource> createOrUpdateWithResponse(DatadogAgreementResourceInner body,
+        Context context) {
+        Response<DatadogAgreementResourceInner> inner = this.serviceClient().createOrUpdateWithResponse(body, context);
         if (inner != null) {
-            return new DatadogAgreementResourceImpl(inner, this.manager());
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
+                new DatadogAgreementResourceImpl(inner.getValue(), this.manager()));
         } else {
             return null;
         }
     }
 
-    public Response<DatadogAgreementResource> createOrUpdateWithResponse(
-        DatadogAgreementResourceInner body, Context context) {
-        Response<DatadogAgreementResourceInner> inner = this.serviceClient().createOrUpdateWithResponse(body, context);
+    public DatadogAgreementResource createOrUpdate() {
+        DatadogAgreementResourceInner inner = this.serviceClient().createOrUpdate();
         if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
-                new DatadogAgreementResourceImpl(inner.getValue(), this.manager()));
+            return new DatadogAgreementResourceImpl(inner, this.manager());
         } else {
             return null;
         }

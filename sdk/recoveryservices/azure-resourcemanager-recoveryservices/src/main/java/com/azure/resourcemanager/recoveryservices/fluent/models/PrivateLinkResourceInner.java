@@ -5,17 +5,19 @@
 package com.azure.resourcemanager.recoveryservices.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.annotation.JsonFlatten;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Information of the private link resource. */
-@JsonFlatten
+/**
+ * Information of the private link resource.
+ */
 @Immutable
-public class PrivateLinkResourceInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PrivateLinkResourceInner.class);
+public final class PrivateLinkResourceInner {
+    /*
+     * Resource properties
+     */
+    @JsonProperty(value = "properties")
+    private PrivateLinkResourceProperties innerProperties;
 
     /*
      * Fully qualified identifier of the resource.
@@ -35,28 +37,24 @@ public class PrivateLinkResourceInner {
     @JsonProperty(value = "type", access = JsonProperty.Access.WRITE_ONLY)
     private String type;
 
-    /*
-     * e.g. f9ad6492-33d4-4690-9999-6bfd52a0d081 (Backup) or
-     * f9ad6492-33d4-4690-9999-6bfd52a0d082 (SiteRecovery)
+    /**
+     * Creates an instance of PrivateLinkResourceInner class.
      */
-    @JsonProperty(value = "properties.groupId", access = JsonProperty.Access.WRITE_ONLY)
-    private String groupId;
+    public PrivateLinkResourceInner() {
+    }
 
-    /*
-     * [backup-ecs1, backup-prot1, backup-prot1b, backup-prot1c, backup-id1]
+    /**
+     * Get the innerProperties property: Resource properties.
+     * 
+     * @return the innerProperties value.
      */
-    @JsonProperty(value = "properties.requiredMembers", access = JsonProperty.Access.WRITE_ONLY)
-    private List<String> requiredMembers;
-
-    /*
-     * The private link resource Private link DNS zone name.
-     */
-    @JsonProperty(value = "properties.requiredZoneNames", access = JsonProperty.Access.WRITE_ONLY)
-    private List<String> requiredZoneNames;
+    private PrivateLinkResourceProperties innerProperties() {
+        return this.innerProperties;
+    }
 
     /**
      * Get the id property: Fully qualified identifier of the resource.
-     *
+     * 
      * @return the id value.
      */
     public String id() {
@@ -65,7 +63,7 @@ public class PrivateLinkResourceInner {
 
     /**
      * Get the name property: Name of the resource.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -74,7 +72,7 @@ public class PrivateLinkResourceInner {
 
     /**
      * Get the type property: e.g. Microsoft.RecoveryServices/vaults/privateLinkResources.
-     *
+     * 
      * @return the type value.
      */
     public String type() {
@@ -84,36 +82,39 @@ public class PrivateLinkResourceInner {
     /**
      * Get the groupId property: e.g. f9ad6492-33d4-4690-9999-6bfd52a0d081 (Backup) or
      * f9ad6492-33d4-4690-9999-6bfd52a0d082 (SiteRecovery).
-     *
+     * 
      * @return the groupId value.
      */
     public String groupId() {
-        return this.groupId;
+        return this.innerProperties() == null ? null : this.innerProperties().groupId();
     }
 
     /**
      * Get the requiredMembers property: [backup-ecs1, backup-prot1, backup-prot1b, backup-prot1c, backup-id1].
-     *
+     * 
      * @return the requiredMembers value.
      */
     public List<String> requiredMembers() {
-        return this.requiredMembers;
+        return this.innerProperties() == null ? null : this.innerProperties().requiredMembers();
     }
 
     /**
      * Get the requiredZoneNames property: The private link resource Private link DNS zone name.
-     *
+     * 
      * @return the requiredZoneNames value.
      */
     public List<String> requiredZoneNames() {
-        return this.requiredZoneNames;
+        return this.innerProperties() == null ? null : this.innerProperties().requiredZoneNames();
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
+        if (innerProperties() != null) {
+            innerProperties().validate();
+        }
     }
 }

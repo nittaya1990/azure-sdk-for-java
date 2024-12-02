@@ -7,15 +7,12 @@ package com.azure.resourcemanager.resourcehealth.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.resourcehealth.fluent.models.EventInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** The List events operation response. */
 @Fluent
 public final class Events {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Events.class);
-
     /*
      * The list of event.
      */
@@ -23,11 +20,14 @@ public final class Events {
     private List<EventInner> value;
 
     /*
-     * The URI to fetch the next page of events. Call ListNext() with this URI
-     * to fetch the next page of events.
+     * The URI to fetch the next page of events. Call ListNext() with this URI to fetch the next page of events.
      */
     @JsonProperty(value = "nextLink")
     private String nextLink;
+
+    /** Creates an instance of Events class. */
+    public Events() {
+    }
 
     /**
      * Get the value property: The list of event.
@@ -78,10 +78,12 @@ public final class Events {
      */
     public void validate() {
         if (value() == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(new IllegalArgumentException("Missing required property value in model Events"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(Events.class);
 }

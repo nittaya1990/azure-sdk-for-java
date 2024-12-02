@@ -23,7 +23,7 @@ public interface SingleSignOnConfigurationsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return response of a list operation.
+     * @return response of a list operation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<DatadogSingleSignOnResourceInner> list(String resourceGroupName, String monitorName);
@@ -37,7 +37,7 @@ public interface SingleSignOnConfigurationsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return response of a list operation.
+     * @return response of a list operation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<DatadogSingleSignOnResourceInner> list(String resourceGroupName, String monitorName, Context context);
@@ -48,15 +48,47 @@ public interface SingleSignOnConfigurationsClient {
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param monitorName Monitor resource name.
      * @param configurationName Configuration name.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of long-running operation.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<DatadogSingleSignOnResourceInner>, DatadogSingleSignOnResourceInner>
+        beginCreateOrUpdate(String resourceGroupName, String monitorName, String configurationName);
+
+    /**
+     * Configures single-sign-on for this resource.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param monitorName Monitor resource name.
+     * @param configurationName Configuration name.
      * @param body The body parameter.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of long-running operation.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<DatadogSingleSignOnResourceInner>, DatadogSingleSignOnResourceInner> beginCreateOrUpdate(
+        String resourceGroupName, String monitorName, String configurationName, DatadogSingleSignOnResourceInner body,
+        Context context);
+
+    /**
+     * Configures single-sign-on for this resource.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param monitorName Monitor resource name.
+     * @param configurationName Configuration name.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return the response.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<DatadogSingleSignOnResourceInner>, DatadogSingleSignOnResourceInner> beginCreateOrUpdate(
-        String resourceGroupName, String monitorName, String configurationName, DatadogSingleSignOnResourceInner body);
+    DatadogSingleSignOnResourceInner createOrUpdate(String resourceGroupName, String monitorName,
+        String configurationName);
 
     /**
      * Configures single-sign-on for this resource.
@@ -72,64 +104,24 @@ public interface SingleSignOnConfigurationsClient {
      * @return the response.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<DatadogSingleSignOnResourceInner>, DatadogSingleSignOnResourceInner> beginCreateOrUpdate(
-        String resourceGroupName,
-        String monitorName,
-        String configurationName,
-        DatadogSingleSignOnResourceInner body,
-        Context context);
+    DatadogSingleSignOnResourceInner createOrUpdate(String resourceGroupName, String monitorName,
+        String configurationName, DatadogSingleSignOnResourceInner body, Context context);
 
     /**
-     * Configures single-sign-on for this resource.
+     * Gets the datadog single sign-on resource for the given Monitor.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param monitorName Monitor resource name.
      * @param configurationName Configuration name.
-     * @param body The body parameter.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    DatadogSingleSignOnResourceInner createOrUpdate(
-        String resourceGroupName, String monitorName, String configurationName, DatadogSingleSignOnResourceInner body);
-
-    /**
-     * Configures single-sign-on for this resource.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param monitorName Monitor resource name.
-     * @param configurationName Configuration name.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    DatadogSingleSignOnResourceInner createOrUpdate(
-        String resourceGroupName, String monitorName, String configurationName);
-
-    /**
-     * Configures single-sign-on for this resource.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param monitorName Monitor resource name.
-     * @param configurationName Configuration name.
-     * @param body The body parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the datadog single sign-on resource for the given Monitor along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    DatadogSingleSignOnResourceInner createOrUpdate(
-        String resourceGroupName,
-        String monitorName,
-        String configurationName,
-        DatadogSingleSignOnResourceInner body,
-        Context context);
+    Response<DatadogSingleSignOnResourceInner> getWithResponse(String resourceGroupName, String monitorName,
+        String configurationName, Context context);
 
     /**
      * Gets the datadog single sign-on resource for the given Monitor.
@@ -144,20 +136,4 @@ public interface SingleSignOnConfigurationsClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     DatadogSingleSignOnResourceInner get(String resourceGroupName, String monitorName, String configurationName);
-
-    /**
-     * Gets the datadog single sign-on resource for the given Monitor.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param monitorName Monitor resource name.
-     * @param configurationName Configuration name.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the datadog single sign-on resource for the given Monitor.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<DatadogSingleSignOnResourceInner> getWithResponse(
-        String resourceGroupName, String monitorName, String configurationName, Context context);
 }

@@ -69,6 +69,13 @@ public interface GroupContract {
     String externalId();
 
     /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
+
+    /**
      * Gets the inner com.azure.resourcemanager.apimanagement.fluent.models.GroupContractInner object.
      *
      * @return the inner object.
@@ -79,32 +86,31 @@ public interface GroupContract {
     interface Definition
         extends DefinitionStages.Blank, DefinitionStages.WithParentResource, DefinitionStages.WithCreate {
     }
+
     /** The GroupContract definition stages. */
     interface DefinitionStages {
         /** The first stage of the GroupContract definition. */
         interface Blank extends WithParentResource {
         }
+
         /** The stage of the GroupContract definition allowing to specify parent resource. */
         interface WithParentResource {
             /**
              * Specifies resourceGroupName, serviceName.
              *
-             * @param resourceGroupName The name of the resource group.
+             * @param resourceGroupName The name of the resource group. The name is case insensitive.
              * @param serviceName The name of the API Management service.
              * @return the next definition stage.
              */
             WithCreate withExistingService(String resourceGroupName, String serviceName);
         }
+
         /**
          * The stage of the GroupContract definition which contains all the minimum required properties for the resource
          * to be created, but also allows for any other optional properties to be specified.
          */
-        interface WithCreate
-            extends DefinitionStages.WithDisplayName,
-                DefinitionStages.WithDescription,
-                DefinitionStages.WithType,
-                DefinitionStages.WithExternalId,
-                DefinitionStages.WithIfMatch {
+        interface WithCreate extends DefinitionStages.WithDisplayName, DefinitionStages.WithDescription,
+            DefinitionStages.WithType, DefinitionStages.WithExternalId, DefinitionStages.WithIfMatch {
             /**
              * Executes the create request.
              *
@@ -120,6 +126,7 @@ public interface GroupContract {
              */
             GroupContract create(Context context);
         }
+
         /** The stage of the GroupContract definition allowing to specify displayName. */
         interface WithDisplayName {
             /**
@@ -130,6 +137,7 @@ public interface GroupContract {
              */
             WithCreate withDisplayName(String displayName);
         }
+
         /** The stage of the GroupContract definition allowing to specify description. */
         interface WithDescription {
             /**
@@ -140,6 +148,7 @@ public interface GroupContract {
              */
             WithCreate withDescription(String description);
         }
+
         /** The stage of the GroupContract definition allowing to specify type. */
         interface WithType {
             /**
@@ -150,6 +159,7 @@ public interface GroupContract {
              */
             WithCreate withType(GroupType type);
         }
+
         /** The stage of the GroupContract definition allowing to specify externalId. */
         interface WithExternalId {
             /**
@@ -164,6 +174,7 @@ public interface GroupContract {
              */
             WithCreate withExternalId(String externalId);
         }
+
         /** The stage of the GroupContract definition allowing to specify ifMatch. */
         interface WithIfMatch {
             /**
@@ -177,6 +188,7 @@ public interface GroupContract {
             WithCreate withIfMatch(String ifMatch);
         }
     }
+
     /**
      * Begins update for the GroupContract resource.
      *
@@ -185,12 +197,8 @@ public interface GroupContract {
     GroupContract.Update update();
 
     /** The template for GroupContract update. */
-    interface Update
-        extends UpdateStages.WithDisplayName,
-            UpdateStages.WithDescription,
-            UpdateStages.WithType,
-            UpdateStages.WithExternalId,
-            UpdateStages.WithIfMatch {
+    interface Update extends UpdateStages.WithDisplayName, UpdateStages.WithDescription, UpdateStages.WithType,
+        UpdateStages.WithExternalId, UpdateStages.WithIfMatch {
         /**
          * Executes the update request.
          *
@@ -206,6 +214,7 @@ public interface GroupContract {
          */
         GroupContract apply(Context context);
     }
+
     /** The GroupContract update stages. */
     interface UpdateStages {
         /** The stage of the GroupContract update allowing to specify displayName. */
@@ -218,6 +227,7 @@ public interface GroupContract {
              */
             Update withDisplayName(String displayName);
         }
+
         /** The stage of the GroupContract update allowing to specify description. */
         interface WithDescription {
             /**
@@ -228,6 +238,7 @@ public interface GroupContract {
              */
             Update withDescription(String description);
         }
+
         /** The stage of the GroupContract update allowing to specify type. */
         interface WithType {
             /**
@@ -238,6 +249,7 @@ public interface GroupContract {
              */
             Update withType(GroupType type);
         }
+
         /** The stage of the GroupContract update allowing to specify externalId. */
         interface WithExternalId {
             /**
@@ -252,6 +264,7 @@ public interface GroupContract {
              */
             Update withExternalId(String externalId);
         }
+
         /** The stage of the GroupContract update allowing to specify ifMatch. */
         interface WithIfMatch {
             /**
@@ -265,6 +278,7 @@ public interface GroupContract {
             Update withIfMatch(String ifMatch);
         }
     }
+
     /**
      * Refreshes the resource to sync with Azure.
      *

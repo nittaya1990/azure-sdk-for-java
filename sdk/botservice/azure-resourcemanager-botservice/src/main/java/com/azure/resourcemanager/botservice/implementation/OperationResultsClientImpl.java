@@ -22,7 +22,6 @@ import com.azure.core.management.exception.ManagementException;
 import com.azure.core.management.polling.PollResult;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.core.util.polling.PollerFlux;
 import com.azure.core.util.polling.SyncPoller;
 import com.azure.resourcemanager.botservice.fluent.OperationResultsClient;
@@ -31,24 +30,28 @@ import java.nio.ByteBuffer;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-/** An instance of this class provides access to all the operations defined in OperationResultsClient. */
+/**
+ * An instance of this class provides access to all the operations defined in OperationResultsClient.
+ */
 public final class OperationResultsClientImpl implements OperationResultsClient {
-    private final ClientLogger logger = new ClientLogger(OperationResultsClientImpl.class);
-
-    /** The proxy service used to perform REST calls. */
+    /**
+     * The proxy service used to perform REST calls.
+     */
     private final OperationResultsService service;
 
-    /** The service client containing this operation class. */
+    /**
+     * The service client containing this operation class.
+     */
     private final AzureBotServiceImpl client;
 
     /**
      * Initializes an instance of OperationResultsClientImpl.
-     *
+     * 
      * @param client the instance of the service client containing this operation class.
      */
     OperationResultsClientImpl(AzureBotServiceImpl client) {
-        this.service =
-            RestProxy.create(OperationResultsService.class, client.getHttpPipeline(), client.getSerializerAdapter());
+        this.service
+            = RestProxy.create(OperationResultsService.class, client.getHttpPipeline(), client.getSerializerAdapter());
         this.client = client;
     }
 
@@ -58,42 +61,36 @@ public final class OperationResultsClientImpl implements OperationResultsClient 
      */
     @Host("{$host}")
     @ServiceInterface(name = "AzureBotServiceOpera")
-    private interface OperationResultsService {
-        @Headers({"Content-Type: application/json"})
+    public interface OperationResultsService {
+        @Headers({ "Content-Type: application/json" })
         @Get("/subscriptions/{subscriptionId}/providers/Microsoft.BotService/operationresults/{operationResultId}")
-        @ExpectedResponses({200, 202})
+        @ExpectedResponses({ 200, 202 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> get(
-            @HostParam("$host") String endpoint,
-            @QueryParam("api-version") String apiVersion,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("operationResultId") String operationResultId,
-            @HeaderParam("Accept") String accept,
+        Mono<Response<Flux<ByteBuffer>>> get(@HostParam("$host") String endpoint,
+            @QueryParam("api-version") String apiVersion, @PathParam("subscriptionId") String subscriptionId,
+            @PathParam("operationResultId") String operationResultId, @HeaderParam("Accept") String accept,
             Context context);
     }
 
     /**
      * Get the operation result for a long running operation.
-     *
+     * 
      * @param operationResultId The ID of the operation result to get.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the operation result for a long running operation.
+     * @return the operation result for a long running operation along with {@link Response} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> getWithResponseAsync(String operationResultId) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (operationResultId == null) {
             return Mono
@@ -101,42 +98,31 @@ public final class OperationResultsClientImpl implements OperationResultsClient 
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .get(
-                            this.client.getEndpoint(),
-                            this.client.getApiVersion(),
-                            this.client.getSubscriptionId(),
-                            operationResultId,
-                            accept,
-                            context))
+            .withContext(context -> service.get(this.client.getEndpoint(), this.client.getApiVersion(),
+                this.client.getSubscriptionId(), operationResultId, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Get the operation result for a long running operation.
-     *
+     * 
      * @param operationResultId The ID of the operation result to get.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the operation result for a long running operation.
+     * @return the operation result for a long running operation along with {@link Response} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> getWithResponseAsync(String operationResultId, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (operationResultId == null) {
             return Mono
@@ -144,103 +130,87 @@ public final class OperationResultsClientImpl implements OperationResultsClient 
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .get(
-                this.client.getEndpoint(),
-                this.client.getApiVersion(),
-                this.client.getSubscriptionId(),
-                operationResultId,
-                accept,
-                context);
+        return service.get(this.client.getEndpoint(), this.client.getApiVersion(), this.client.getSubscriptionId(),
+            operationResultId, accept, context);
     }
 
     /**
      * Get the operation result for a long running operation.
-     *
+     * 
      * @param operationResultId The ID of the operation result to get.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the operation result for a long running operation.
+     * @return the {@link PollerFlux} for polling of the operation result for a long running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    private PollerFlux<PollResult<OperationResultsDescriptionInner>, OperationResultsDescriptionInner> beginGetAsync(
-        String operationResultId) {
+    private PollerFlux<PollResult<OperationResultsDescriptionInner>, OperationResultsDescriptionInner>
+        beginGetAsync(String operationResultId) {
         Mono<Response<Flux<ByteBuffer>>> mono = getWithResponseAsync(operationResultId);
-        return this
-            .client
-            .<OperationResultsDescriptionInner, OperationResultsDescriptionInner>getLroResult(
-                mono,
-                this.client.getHttpPipeline(),
-                OperationResultsDescriptionInner.class,
-                OperationResultsDescriptionInner.class,
-                Context.NONE);
+        return this.client.<OperationResultsDescriptionInner, OperationResultsDescriptionInner>getLroResult(mono,
+            this.client.getHttpPipeline(), OperationResultsDescriptionInner.class,
+            OperationResultsDescriptionInner.class, this.client.getContext());
     }
 
     /**
      * Get the operation result for a long running operation.
-     *
+     * 
      * @param operationResultId The ID of the operation result to get.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the operation result for a long running operation.
+     * @return the {@link PollerFlux} for polling of the operation result for a long running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    private PollerFlux<PollResult<OperationResultsDescriptionInner>, OperationResultsDescriptionInner> beginGetAsync(
-        String operationResultId, Context context) {
+    private PollerFlux<PollResult<OperationResultsDescriptionInner>, OperationResultsDescriptionInner>
+        beginGetAsync(String operationResultId, Context context) {
         context = this.client.mergeContext(context);
         Mono<Response<Flux<ByteBuffer>>> mono = getWithResponseAsync(operationResultId, context);
-        return this
-            .client
-            .<OperationResultsDescriptionInner, OperationResultsDescriptionInner>getLroResult(
-                mono,
-                this.client.getHttpPipeline(),
-                OperationResultsDescriptionInner.class,
-                OperationResultsDescriptionInner.class,
-                context);
+        return this.client.<OperationResultsDescriptionInner, OperationResultsDescriptionInner>getLroResult(mono,
+            this.client.getHttpPipeline(), OperationResultsDescriptionInner.class,
+            OperationResultsDescriptionInner.class, context);
     }
 
     /**
      * Get the operation result for a long running operation.
-     *
+     * 
      * @param operationResultId The ID of the operation result to get.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the operation result for a long running operation.
+     * @return the {@link SyncPoller} for polling of the operation result for a long running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<OperationResultsDescriptionInner>, OperationResultsDescriptionInner> beginGet(
-        String operationResultId) {
-        return beginGetAsync(operationResultId).getSyncPoller();
+    public SyncPoller<PollResult<OperationResultsDescriptionInner>, OperationResultsDescriptionInner>
+        beginGet(String operationResultId) {
+        return this.beginGetAsync(operationResultId).getSyncPoller();
     }
 
     /**
      * Get the operation result for a long running operation.
-     *
+     * 
      * @param operationResultId The ID of the operation result to get.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the operation result for a long running operation.
+     * @return the {@link SyncPoller} for polling of the operation result for a long running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<OperationResultsDescriptionInner>, OperationResultsDescriptionInner> beginGet(
-        String operationResultId, Context context) {
-        return beginGetAsync(operationResultId, context).getSyncPoller();
+    public SyncPoller<PollResult<OperationResultsDescriptionInner>, OperationResultsDescriptionInner>
+        beginGet(String operationResultId, Context context) {
+        return this.beginGetAsync(operationResultId, context).getSyncPoller();
     }
 
     /**
      * Get the operation result for a long running operation.
-     *
+     * 
      * @param operationResultId The ID of the operation result to get.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the operation result for a long running operation.
+     * @return the operation result for a long running operation on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<OperationResultsDescriptionInner> getAsync(String operationResultId) {
@@ -249,13 +219,13 @@ public final class OperationResultsClientImpl implements OperationResultsClient 
 
     /**
      * Get the operation result for a long running operation.
-     *
+     * 
      * @param operationResultId The ID of the operation result to get.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the operation result for a long running operation.
+     * @return the operation result for a long running operation on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<OperationResultsDescriptionInner> getAsync(String operationResultId, Context context) {
@@ -264,7 +234,7 @@ public final class OperationResultsClientImpl implements OperationResultsClient 
 
     /**
      * Get the operation result for a long running operation.
-     *
+     * 
      * @param operationResultId The ID of the operation result to get.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
@@ -278,7 +248,7 @@ public final class OperationResultsClientImpl implements OperationResultsClient 
 
     /**
      * Get the operation result for a long running operation.
-     *
+     * 
      * @param operationResultId The ID of the operation result to get.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.

@@ -5,16 +5,12 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Describes scaling information of a SKU. */
 @Immutable
 public final class ApiManagementSkuRestrictions {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApiManagementSkuRestrictions.class);
-
     /*
      * The type of restrictions.
      */
@@ -22,8 +18,8 @@ public final class ApiManagementSkuRestrictions {
     private ApiManagementSkuRestrictionsType type;
 
     /*
-     * The value of restrictions. If the restriction type is set to location.
-     * This would be different locations where the SKU is restricted.
+     * The value of restrictions. If the restriction type is set to location. This would be different locations where
+     * the SKU is restricted.
      */
     @JsonProperty(value = "values", access = JsonProperty.Access.WRITE_ONLY)
     private List<String> values;
@@ -39,6 +35,10 @@ public final class ApiManagementSkuRestrictions {
      */
     @JsonProperty(value = "reasonCode", access = JsonProperty.Access.WRITE_ONLY)
     private ApiManagementSkuRestrictionsReasonCode reasonCode;
+
+    /** Creates an instance of ApiManagementSkuRestrictions class. */
+    public ApiManagementSkuRestrictions() {
+    }
 
     /**
      * Get the type property: The type of restrictions.

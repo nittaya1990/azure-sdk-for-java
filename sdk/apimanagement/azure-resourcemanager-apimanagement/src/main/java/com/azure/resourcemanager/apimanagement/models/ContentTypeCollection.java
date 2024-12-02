@@ -5,17 +5,13 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.models.ContentTypeContractInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Paged list of content types. */
 @Immutable
 public final class ContentTypeCollection {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ContentTypeCollection.class);
-
     /*
      * Collection of content types.
      */
@@ -27,6 +23,10 @@ public final class ContentTypeCollection {
      */
     @JsonProperty(value = "nextLink", access = JsonProperty.Access.WRITE_ONLY)
     private String nextLink;
+
+    /** Creates an instance of ContentTypeCollection class. */
+    public ContentTypeCollection() {
+    }
 
     /**
      * Get the value property: Collection of content types.

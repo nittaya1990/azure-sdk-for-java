@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Parameters supplied to the Update Cache operation. */
 @Fluent
 public final class CacheUpdateProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CacheUpdateProperties.class);
-
     /*
      * Cache description
      */
@@ -27,8 +23,7 @@ public final class CacheUpdateProperties {
     private String connectionString;
 
     /*
-     * Location identifier to use cache from (should be either 'default' or
-     * valid Azure region identifier)
+     * Location identifier to use cache from (should be either 'default' or valid Azure region identifier)
      */
     @JsonProperty(value = "useFromLocation")
     private String useFromLocation;
@@ -38,6 +33,10 @@ public final class CacheUpdateProperties {
      */
     @JsonProperty(value = "resourceId")
     private String resourceId;
+
+    /** Creates an instance of CacheUpdateProperties class. */
+    public CacheUpdateProperties() {
+    }
 
     /**
      * Get the description property: Cache description.

@@ -5,87 +5,81 @@
 package com.azure.resourcemanager.imagebuilder.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.management.Resource;
+import com.azure.core.management.SystemData;
 import com.azure.core.util.logging.ClientLogger;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import com.azure.resourcemanager.imagebuilder.models.ImageTemplateAutoRun;
 import com.azure.resourcemanager.imagebuilder.models.ImageTemplateCustomizer;
 import com.azure.resourcemanager.imagebuilder.models.ImageTemplateDistributor;
 import com.azure.resourcemanager.imagebuilder.models.ImageTemplateIdentity;
 import com.azure.resourcemanager.imagebuilder.models.ImageTemplateLastRunStatus;
+import com.azure.resourcemanager.imagebuilder.models.ImageTemplatePropertiesErrorHandling;
+import com.azure.resourcemanager.imagebuilder.models.ImageTemplatePropertiesOptimize;
+import com.azure.resourcemanager.imagebuilder.models.ImageTemplatePropertiesValidate;
 import com.azure.resourcemanager.imagebuilder.models.ImageTemplateSource;
 import com.azure.resourcemanager.imagebuilder.models.ImageTemplateVmProfile;
 import com.azure.resourcemanager.imagebuilder.models.ProvisioningError;
 import com.azure.resourcemanager.imagebuilder.models.ProvisioningState;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-/** Image template is an ARM resource managed by Microsoft.VirtualMachineImages provider. */
-@JsonFlatten
+/**
+ * Image template is an ARM resource managed by Microsoft.VirtualMachineImages provider.
+ */
 @Fluent
-public class ImageTemplateInner extends Resource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ImageTemplateInner.class);
+public final class ImageTemplateInner extends Resource {
+    /*
+     * The properties of the image template
+     */
+    private ImageTemplateProperties innerProperties;
 
     /*
      * The identity of the image template, if configured.
      */
-    @JsonProperty(value = "identity", required = true)
     private ImageTemplateIdentity identity;
 
     /*
-     * Specifies the properties used to describe the source image.
+     * Azure Resource Manager metadata containing createdBy and modifiedBy information.
      */
-    @JsonProperty(value = "properties.source")
-    private ImageTemplateSource source;
+    private SystemData systemData;
 
     /*
-     * Specifies the properties used to describe the customization steps of the
-     * image, like Image source etc
+     * Fully qualified resource Id for the resource.
      */
-    @JsonProperty(value = "properties.customize")
-    private List<ImageTemplateCustomizer> customize;
+    private String id;
 
     /*
-     * The distribution targets where the image output needs to go to.
+     * The name of the resource.
      */
-    @JsonProperty(value = "properties.distribute")
-    private List<ImageTemplateDistributor> distribute;
+    private String name;
 
     /*
-     * Provisioning state of the resource
+     * The type of the resource.
      */
-    @JsonProperty(value = "properties.provisioningState", access = JsonProperty.Access.WRITE_ONLY)
-    private ProvisioningState provisioningState;
+    private String type;
 
-    /*
-     * Provisioning error, if any
+    /**
+     * Creates an instance of ImageTemplateInner class.
      */
-    @JsonProperty(value = "properties.provisioningError", access = JsonProperty.Access.WRITE_ONLY)
-    private ProvisioningError provisioningError;
+    public ImageTemplateInner() {
+    }
 
-    /*
-     * State of 'run' that is currently executing or was last executed.
+    /**
+     * Get the innerProperties property: The properties of the image template.
+     * 
+     * @return the innerProperties value.
      */
-    @JsonProperty(value = "properties.lastRunStatus", access = JsonProperty.Access.WRITE_ONLY)
-    private ImageTemplateLastRunStatus lastRunStatus;
-
-    /*
-     * Maximum duration to wait while building the image template. Omit or
-     * specify 0 to use the default (4 hours).
-     */
-    @JsonProperty(value = "properties.buildTimeoutInMinutes")
-    private Integer buildTimeoutInMinutes;
-
-    /*
-     * Describes how virtual machine is set up to build images
-     */
-    @JsonProperty(value = "properties.vmProfile")
-    private ImageTemplateVmProfile vmProfile;
+    private ImageTemplateProperties innerProperties() {
+        return this.innerProperties;
+    }
 
     /**
      * Get the identity property: The identity of the image template, if configured.
-     *
+     * 
      * @return the identity value.
      */
     public ImageTemplateIdentity identity() {
@@ -94,7 +88,7 @@ public class ImageTemplateInner extends Resource {
 
     /**
      * Set the identity property: The identity of the image template, if configured.
-     *
+     * 
      * @param identity the identity value to set.
      * @return the ImageTemplateInner object itself.
      */
@@ -104,144 +98,56 @@ public class ImageTemplateInner extends Resource {
     }
 
     /**
-     * Get the source property: Specifies the properties used to describe the source image.
-     *
-     * @return the source value.
+     * Get the systemData property: Azure Resource Manager metadata containing createdBy and modifiedBy information.
+     * 
+     * @return the systemData value.
      */
-    public ImageTemplateSource source() {
-        return this.source;
+    public SystemData systemData() {
+        return this.systemData;
     }
 
     /**
-     * Set the source property: Specifies the properties used to describe the source image.
-     *
-     * @param source the source value to set.
-     * @return the ImageTemplateInner object itself.
+     * Get the id property: Fully qualified resource Id for the resource.
+     * 
+     * @return the id value.
      */
-    public ImageTemplateInner withSource(ImageTemplateSource source) {
-        this.source = source;
-        return this;
+    @Override
+    public String id() {
+        return this.id;
     }
 
     /**
-     * Get the customize property: Specifies the properties used to describe the customization steps of the image, like
-     * Image source etc.
-     *
-     * @return the customize value.
+     * Get the name property: The name of the resource.
+     * 
+     * @return the name value.
      */
-    public List<ImageTemplateCustomizer> customize() {
-        return this.customize;
+    @Override
+    public String name() {
+        return this.name;
     }
 
     /**
-     * Set the customize property: Specifies the properties used to describe the customization steps of the image, like
-     * Image source etc.
-     *
-     * @param customize the customize value to set.
-     * @return the ImageTemplateInner object itself.
+     * Get the type property: The type of the resource.
+     * 
+     * @return the type value.
      */
-    public ImageTemplateInner withCustomize(List<ImageTemplateCustomizer> customize) {
-        this.customize = customize;
-        return this;
+    @Override
+    public String type() {
+        return this.type;
     }
 
     /**
-     * Get the distribute property: The distribution targets where the image output needs to go to.
-     *
-     * @return the distribute value.
+     * {@inheritDoc}
      */
-    public List<ImageTemplateDistributor> distribute() {
-        return this.distribute;
-    }
-
-    /**
-     * Set the distribute property: The distribution targets where the image output needs to go to.
-     *
-     * @param distribute the distribute value to set.
-     * @return the ImageTemplateInner object itself.
-     */
-    public ImageTemplateInner withDistribute(List<ImageTemplateDistributor> distribute) {
-        this.distribute = distribute;
-        return this;
-    }
-
-    /**
-     * Get the provisioningState property: Provisioning state of the resource.
-     *
-     * @return the provisioningState value.
-     */
-    public ProvisioningState provisioningState() {
-        return this.provisioningState;
-    }
-
-    /**
-     * Get the provisioningError property: Provisioning error, if any.
-     *
-     * @return the provisioningError value.
-     */
-    public ProvisioningError provisioningError() {
-        return this.provisioningError;
-    }
-
-    /**
-     * Get the lastRunStatus property: State of 'run' that is currently executing or was last executed.
-     *
-     * @return the lastRunStatus value.
-     */
-    public ImageTemplateLastRunStatus lastRunStatus() {
-        return this.lastRunStatus;
-    }
-
-    /**
-     * Get the buildTimeoutInMinutes property: Maximum duration to wait while building the image template. Omit or
-     * specify 0 to use the default (4 hours).
-     *
-     * @return the buildTimeoutInMinutes value.
-     */
-    public Integer buildTimeoutInMinutes() {
-        return this.buildTimeoutInMinutes;
-    }
-
-    /**
-     * Set the buildTimeoutInMinutes property: Maximum duration to wait while building the image template. Omit or
-     * specify 0 to use the default (4 hours).
-     *
-     * @param buildTimeoutInMinutes the buildTimeoutInMinutes value to set.
-     * @return the ImageTemplateInner object itself.
-     */
-    public ImageTemplateInner withBuildTimeoutInMinutes(Integer buildTimeoutInMinutes) {
-        this.buildTimeoutInMinutes = buildTimeoutInMinutes;
-        return this;
-    }
-
-    /**
-     * Get the vmProfile property: Describes how virtual machine is set up to build images.
-     *
-     * @return the vmProfile value.
-     */
-    public ImageTemplateVmProfile vmProfile() {
-        return this.vmProfile;
-    }
-
-    /**
-     * Set the vmProfile property: Describes how virtual machine is set up to build images.
-     *
-     * @param vmProfile the vmProfile value to set.
-     * @return the ImageTemplateInner object itself.
-     */
-    public ImageTemplateInner withVmProfile(ImageTemplateVmProfile vmProfile) {
-        this.vmProfile = vmProfile;
-        return this;
-    }
-
-    /** {@inheritDoc} */
     @Override
     public ImageTemplateInner withLocation(String location) {
         super.withLocation(location);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ImageTemplateInner withTags(Map<String, String> tags) {
         super.withTags(tags);
@@ -249,35 +155,389 @@ public class ImageTemplateInner extends Resource {
     }
 
     /**
+     * Get the source property: Specifies the properties used to describe the source image.
+     * 
+     * @return the source value.
+     */
+    public ImageTemplateSource source() {
+        return this.innerProperties() == null ? null : this.innerProperties().source();
+    }
+
+    /**
+     * Set the source property: Specifies the properties used to describe the source image.
+     * 
+     * @param source the source value to set.
+     * @return the ImageTemplateInner object itself.
+     */
+    public ImageTemplateInner withSource(ImageTemplateSource source) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new ImageTemplateProperties();
+        }
+        this.innerProperties().withSource(source);
+        return this;
+    }
+
+    /**
+     * Get the customize property: Specifies the properties used to describe the customization steps of the image, like
+     * Image source etc.
+     * 
+     * @return the customize value.
+     */
+    public List<ImageTemplateCustomizer> customize() {
+        return this.innerProperties() == null ? null : this.innerProperties().customize();
+    }
+
+    /**
+     * Set the customize property: Specifies the properties used to describe the customization steps of the image, like
+     * Image source etc.
+     * 
+     * @param customize the customize value to set.
+     * @return the ImageTemplateInner object itself.
+     */
+    public ImageTemplateInner withCustomize(List<ImageTemplateCustomizer> customize) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new ImageTemplateProperties();
+        }
+        this.innerProperties().withCustomize(customize);
+        return this;
+    }
+
+    /**
+     * Get the optimize property: Specifies optimization to be performed on image.
+     * 
+     * @return the optimize value.
+     */
+    public ImageTemplatePropertiesOptimize optimize() {
+        return this.innerProperties() == null ? null : this.innerProperties().optimize();
+    }
+
+    /**
+     * Set the optimize property: Specifies optimization to be performed on image.
+     * 
+     * @param optimize the optimize value to set.
+     * @return the ImageTemplateInner object itself.
+     */
+    public ImageTemplateInner withOptimize(ImageTemplatePropertiesOptimize optimize) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new ImageTemplateProperties();
+        }
+        this.innerProperties().withOptimize(optimize);
+        return this;
+    }
+
+    /**
+     * Get the validation property: Configuration options and list of validations to be performed on the resulting
+     * image.
+     * 
+     * @return the validation value.
+     */
+    public ImageTemplatePropertiesValidate validation() {
+        return this.innerProperties() == null ? null : this.innerProperties().validation();
+    }
+
+    /**
+     * Set the validation property: Configuration options and list of validations to be performed on the resulting
+     * image.
+     * 
+     * @param validation the validation value to set.
+     * @return the ImageTemplateInner object itself.
+     */
+    public ImageTemplateInner withValidation(ImageTemplatePropertiesValidate validation) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new ImageTemplateProperties();
+        }
+        this.innerProperties().withValidation(validation);
+        return this;
+    }
+
+    /**
+     * Get the distribute property: The distribution targets where the image output needs to go to.
+     * 
+     * @return the distribute value.
+     */
+    public List<ImageTemplateDistributor> distribute() {
+        return this.innerProperties() == null ? null : this.innerProperties().distribute();
+    }
+
+    /**
+     * Set the distribute property: The distribution targets where the image output needs to go to.
+     * 
+     * @param distribute the distribute value to set.
+     * @return the ImageTemplateInner object itself.
+     */
+    public ImageTemplateInner withDistribute(List<ImageTemplateDistributor> distribute) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new ImageTemplateProperties();
+        }
+        this.innerProperties().withDistribute(distribute);
+        return this;
+    }
+
+    /**
+     * Get the errorHandling property: Error handling options upon a build failure.
+     * 
+     * @return the errorHandling value.
+     */
+    public ImageTemplatePropertiesErrorHandling errorHandling() {
+        return this.innerProperties() == null ? null : this.innerProperties().errorHandling();
+    }
+
+    /**
+     * Set the errorHandling property: Error handling options upon a build failure.
+     * 
+     * @param errorHandling the errorHandling value to set.
+     * @return the ImageTemplateInner object itself.
+     */
+    public ImageTemplateInner withErrorHandling(ImageTemplatePropertiesErrorHandling errorHandling) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new ImageTemplateProperties();
+        }
+        this.innerProperties().withErrorHandling(errorHandling);
+        return this;
+    }
+
+    /**
+     * Get the provisioningState property: Provisioning state of the resource.
+     * 
+     * @return the provisioningState value.
+     */
+    public ProvisioningState provisioningState() {
+        return this.innerProperties() == null ? null : this.innerProperties().provisioningState();
+    }
+
+    /**
+     * Get the provisioningError property: Provisioning error, if any.
+     * 
+     * @return the provisioningError value.
+     */
+    public ProvisioningError provisioningError() {
+        return this.innerProperties() == null ? null : this.innerProperties().provisioningError();
+    }
+
+    /**
+     * Get the lastRunStatus property: State of 'run' that is currently executing or was last executed.
+     * 
+     * @return the lastRunStatus value.
+     */
+    public ImageTemplateLastRunStatus lastRunStatus() {
+        return this.innerProperties() == null ? null : this.innerProperties().lastRunStatus();
+    }
+
+    /**
+     * Get the buildTimeoutInMinutes property: Maximum duration to wait while building the image template (includes all
+     * customizations, optimization, validations, and distributions). Omit or specify 0 to use the default (4 hours).
+     * 
+     * @return the buildTimeoutInMinutes value.
+     */
+    public Integer buildTimeoutInMinutes() {
+        return this.innerProperties() == null ? null : this.innerProperties().buildTimeoutInMinutes();
+    }
+
+    /**
+     * Set the buildTimeoutInMinutes property: Maximum duration to wait while building the image template (includes all
+     * customizations, optimization, validations, and distributions). Omit or specify 0 to use the default (4 hours).
+     * 
+     * @param buildTimeoutInMinutes the buildTimeoutInMinutes value to set.
+     * @return the ImageTemplateInner object itself.
+     */
+    public ImageTemplateInner withBuildTimeoutInMinutes(Integer buildTimeoutInMinutes) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new ImageTemplateProperties();
+        }
+        this.innerProperties().withBuildTimeoutInMinutes(buildTimeoutInMinutes);
+        return this;
+    }
+
+    /**
+     * Get the vmProfile property: Describes how virtual machine is set up to build images.
+     * 
+     * @return the vmProfile value.
+     */
+    public ImageTemplateVmProfile vmProfile() {
+        return this.innerProperties() == null ? null : this.innerProperties().vmProfile();
+    }
+
+    /**
+     * Set the vmProfile property: Describes how virtual machine is set up to build images.
+     * 
+     * @param vmProfile the vmProfile value to set.
+     * @return the ImageTemplateInner object itself.
+     */
+    public ImageTemplateInner withVmProfile(ImageTemplateVmProfile vmProfile) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new ImageTemplateProperties();
+        }
+        this.innerProperties().withVmProfile(vmProfile);
+        return this;
+    }
+
+    /**
+     * Get the stagingResourceGroup property: The staging resource group id in the same subscription as the image
+     * template that will be used to build the image. If this field is empty, a resource group with a random name will
+     * be created. If the resource group specified in this field doesn't exist, it will be created with the same name.
+     * If the resource group specified exists, it must be empty and in the same region as the image template. The
+     * resource group created will be deleted during template deletion if this field is empty or the resource group
+     * specified doesn't exist, but if the resource group specified exists the resources created in the resource group
+     * will be deleted during template deletion and the resource group itself will remain.
+     * 
+     * @return the stagingResourceGroup value.
+     */
+    public String stagingResourceGroup() {
+        return this.innerProperties() == null ? null : this.innerProperties().stagingResourceGroup();
+    }
+
+    /**
+     * Set the stagingResourceGroup property: The staging resource group id in the same subscription as the image
+     * template that will be used to build the image. If this field is empty, a resource group with a random name will
+     * be created. If the resource group specified in this field doesn't exist, it will be created with the same name.
+     * If the resource group specified exists, it must be empty and in the same region as the image template. The
+     * resource group created will be deleted during template deletion if this field is empty or the resource group
+     * specified doesn't exist, but if the resource group specified exists the resources created in the resource group
+     * will be deleted during template deletion and the resource group itself will remain.
+     * 
+     * @param stagingResourceGroup the stagingResourceGroup value to set.
+     * @return the ImageTemplateInner object itself.
+     */
+    public ImageTemplateInner withStagingResourceGroup(String stagingResourceGroup) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new ImageTemplateProperties();
+        }
+        this.innerProperties().withStagingResourceGroup(stagingResourceGroup);
+        return this;
+    }
+
+    /**
+     * Get the exactStagingResourceGroup property: The staging resource group id in the same subscription as the image
+     * template that will be used to build the image. This read-only field differs from 'stagingResourceGroup' only if
+     * the value specified in the 'stagingResourceGroup' field is empty.
+     * 
+     * @return the exactStagingResourceGroup value.
+     */
+    public String exactStagingResourceGroup() {
+        return this.innerProperties() == null ? null : this.innerProperties().exactStagingResourceGroup();
+    }
+
+    /**
+     * Get the autoRun property: Indicates whether or not to automatically run the image template build on template
+     * creation or update.
+     * 
+     * @return the autoRun value.
+     */
+    public ImageTemplateAutoRun autoRun() {
+        return this.innerProperties() == null ? null : this.innerProperties().autoRun();
+    }
+
+    /**
+     * Set the autoRun property: Indicates whether or not to automatically run the image template build on template
+     * creation or update.
+     * 
+     * @param autoRun the autoRun value to set.
+     * @return the ImageTemplateInner object itself.
+     */
+    public ImageTemplateInner withAutoRun(ImageTemplateAutoRun autoRun) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new ImageTemplateProperties();
+        }
+        this.innerProperties().withAutoRun(autoRun);
+        return this;
+    }
+
+    /**
+     * Get the managedResourceTags property: Tags that will be applied to the resource group and/or resources created by
+     * the service.
+     * 
+     * @return the managedResourceTags value.
+     */
+    public Map<String, String> managedResourceTags() {
+        return this.innerProperties() == null ? null : this.innerProperties().managedResourceTags();
+    }
+
+    /**
+     * Set the managedResourceTags property: Tags that will be applied to the resource group and/or resources created by
+     * the service.
+     * 
+     * @param managedResourceTags the managedResourceTags value to set.
+     * @return the ImageTemplateInner object itself.
+     */
+    public ImageTemplateInner withManagedResourceTags(Map<String, String> managedResourceTags) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new ImageTemplateProperties();
+        }
+        this.innerProperties().withManagedResourceTags(managedResourceTags);
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
+        if (innerProperties() != null) {
+            innerProperties().validate();
+        }
         if (identity() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property identity in model ImageTemplateInner"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property identity in model ImageTemplateInner"));
         } else {
             identity().validate();
         }
-        if (source() != null) {
-            source().validate();
-        }
-        if (customize() != null) {
-            customize().forEach(e -> e.validate());
-        }
-        if (distribute() != null) {
-            distribute().forEach(e -> e.validate());
-        }
-        if (provisioningError() != null) {
-            provisioningError().validate();
-        }
-        if (lastRunStatus() != null) {
-            lastRunStatus().validate();
-        }
-        if (vmProfile() != null) {
-            vmProfile().validate();
-        }
+    }
+
+    private static final ClientLogger LOGGER = new ClientLogger(ImageTemplateInner.class);
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeStringField("location", location());
+        jsonWriter.writeMapField("tags", tags(), (writer, element) -> writer.writeString(element));
+        jsonWriter.writeJsonField("identity", this.identity);
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of ImageTemplateInner from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of ImageTemplateInner if the JsonReader was pointing to an instance of it, or null if it was
+     * pointing to JSON null.
+     * @throws IllegalStateException If the deserialized JSON object was missing any required properties.
+     * @throws IOException If an error occurs while reading the ImageTemplateInner.
+     */
+    public static ImageTemplateInner fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            ImageTemplateInner deserializedImageTemplateInner = new ImageTemplateInner();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("id".equals(fieldName)) {
+                    deserializedImageTemplateInner.id = reader.getString();
+                } else if ("name".equals(fieldName)) {
+                    deserializedImageTemplateInner.name = reader.getString();
+                } else if ("type".equals(fieldName)) {
+                    deserializedImageTemplateInner.type = reader.getString();
+                } else if ("location".equals(fieldName)) {
+                    deserializedImageTemplateInner.withLocation(reader.getString());
+                } else if ("tags".equals(fieldName)) {
+                    Map<String, String> tags = reader.readMap(reader1 -> reader1.getString());
+                    deserializedImageTemplateInner.withTags(tags);
+                } else if ("identity".equals(fieldName)) {
+                    deserializedImageTemplateInner.identity = ImageTemplateIdentity.fromJson(reader);
+                } else if ("properties".equals(fieldName)) {
+                    deserializedImageTemplateInner.innerProperties = ImageTemplateProperties.fromJson(reader);
+                } else if ("systemData".equals(fieldName)) {
+                    deserializedImageTemplateInner.systemData = SystemData.fromJson(reader);
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedImageTemplateInner;
+        });
     }
 }

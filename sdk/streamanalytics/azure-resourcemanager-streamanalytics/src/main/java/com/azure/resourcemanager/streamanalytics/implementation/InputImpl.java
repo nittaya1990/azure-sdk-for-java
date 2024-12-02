@@ -8,6 +8,7 @@ import com.azure.core.util.Context;
 import com.azure.resourcemanager.streamanalytics.fluent.models.InputInner;
 import com.azure.resourcemanager.streamanalytics.models.Input;
 import com.azure.resourcemanager.streamanalytics.models.InputProperties;
+import com.azure.resourcemanager.streamanalytics.models.ResourceTestStatus;
 
 public final class InputImpl implements Input, Input.Definition, Input.Update {
     private InputInner innerObject;
@@ -28,6 +29,10 @@ public final class InputImpl implements Input, Input.Definition, Input.Update {
 
     public String type() {
         return this.innerModel().type();
+    }
+
+    public String resourceGroupName() {
+        return resourceGroupName;
     }
 
     public InputInner innerModel() {
@@ -57,30 +62,20 @@ public final class InputImpl implements Input, Input.Definition, Input.Update {
     }
 
     public Input create() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getInputs()
-                .createOrReplaceWithResponse(
-                    resourceGroupName,
-                    jobName,
-                    inputName,
-                    this.innerModel(),
-                    createIfMatch,
-                    createIfNoneMatch,
-                    Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getInputs()
+            .createOrReplaceWithResponse(resourceGroupName, jobName, inputName, this.innerModel(), createIfMatch,
+                createIfNoneMatch, Context.NONE)
+            .getValue();
         return this;
     }
 
     public Input create(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getInputs()
-                .createOrReplaceWithResponse(
-                    resourceGroupName, jobName, inputName, this.innerModel(), createIfMatch, createIfNoneMatch, context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getInputs()
+            .createOrReplaceWithResponse(resourceGroupName, jobName, inputName, this.innerModel(), createIfMatch,
+                createIfNoneMatch, context)
+            .getValue();
         return this;
     }
 
@@ -98,52 +93,51 @@ public final class InputImpl implements Input, Input.Definition, Input.Update {
     }
 
     public Input apply() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getInputs()
-                .updateWithResponse(
-                    resourceGroupName, jobName, inputName, this.innerModel(), updateIfMatch, Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getInputs()
+            .updateWithResponse(resourceGroupName, jobName, inputName, this.innerModel(), updateIfMatch, Context.NONE)
+            .getValue();
         return this;
     }
 
     public Input apply(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getInputs()
-                .updateWithResponse(resourceGroupName, jobName, inputName, this.innerModel(), updateIfMatch, context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getInputs()
+            .updateWithResponse(resourceGroupName, jobName, inputName, this.innerModel(), updateIfMatch, context)
+            .getValue();
         return this;
     }
 
     InputImpl(InputInner innerObject, com.azure.resourcemanager.streamanalytics.StreamAnalyticsManager serviceManager) {
         this.innerObject = innerObject;
         this.serviceManager = serviceManager;
-        this.resourceGroupName = Utils.getValueFromIdByName(innerObject.id(), "resourcegroups");
-        this.jobName = Utils.getValueFromIdByName(innerObject.id(), "streamingjobs");
-        this.inputName = Utils.getValueFromIdByName(innerObject.id(), "inputs");
+        this.resourceGroupName = ResourceManagerUtils.getValueFromIdByName(innerObject.id(), "resourcegroups");
+        this.jobName = ResourceManagerUtils.getValueFromIdByName(innerObject.id(), "streamingjobs");
+        this.inputName = ResourceManagerUtils.getValueFromIdByName(innerObject.id(), "inputs");
     }
 
     public Input refresh() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getInputs()
-                .getWithResponse(resourceGroupName, jobName, inputName, Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getInputs()
+            .getWithResponse(resourceGroupName, jobName, inputName, Context.NONE)
+            .getValue();
         return this;
     }
 
     public Input refresh(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getInputs()
-                .getWithResponse(resourceGroupName, jobName, inputName, context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getInputs()
+            .getWithResponse(resourceGroupName, jobName, inputName, context)
+            .getValue();
         return this;
+    }
+
+    public ResourceTestStatus test() {
+        return serviceManager.inputs().test(resourceGroupName, jobName, inputName);
+    }
+
+    public ResourceTestStatus test(InputInner input, Context context) {
+        return serviceManager.inputs().test(resourceGroupName, jobName, inputName, input, context);
     }
 
     public InputImpl withProperties(InputProperties properties) {
@@ -157,8 +151,13 @@ public final class InputImpl implements Input, Input.Definition, Input.Update {
     }
 
     public InputImpl withIfMatch(String ifMatch) {
-        this.createIfMatch = ifMatch;
-        return this;
+        if (isInCreateMode()) {
+            this.createIfMatch = ifMatch;
+            return this;
+        } else {
+            this.updateIfMatch = ifMatch;
+            return this;
+        }
     }
 
     public InputImpl withIfNoneMatch(String ifNoneMatch) {
@@ -166,8 +165,7 @@ public final class InputImpl implements Input, Input.Definition, Input.Update {
         return this;
     }
 
-    public InputImpl ifMatch(String ifMatch) {
-        this.updateIfMatch = ifMatch;
-        return this;
+    private boolean isInCreateMode() {
+        return this.innerModel().id() == null;
     }
 }

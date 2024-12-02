@@ -5,144 +5,206 @@
 package com.azure.resourcemanager.imagebuilder.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
-import com.azure.core.management.SubResource;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.core.management.ProxyResource;
+import com.azure.core.management.SystemData;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
 import com.azure.resourcemanager.imagebuilder.models.ProvisioningState;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.IOException;
 
-/** Represents an output that was created by running an image template. */
-@JsonFlatten
+/**
+ * Represents an output that was created by running an image template.
+ */
 @Fluent
-public class RunOutputInner extends SubResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RunOutputInner.class);
+public final class RunOutputInner extends ProxyResource {
+    /*
+     * The properties of the run output
+     */
+    private RunOutputProperties innerProperties;
 
     /*
-     * The resource id of the artifact.
+     * Azure Resource Manager metadata containing createdBy and modifiedBy information.
      */
-    @JsonProperty(value = "properties.artifactId")
-    private String artifactId;
+    private SystemData systemData;
 
     /*
-     * The location URI of the artifact.
+     * Fully qualified resource Id for the resource.
      */
-    @JsonProperty(value = "properties.artifactUri")
-    private String artifactUri;
+    private String id;
 
     /*
-     * Provisioning state of the resource
+     * The name of the resource.
      */
-    @JsonProperty(value = "properties.provisioningState", access = JsonProperty.Access.WRITE_ONLY)
-    private ProvisioningState provisioningState;
-
-    /*
-     * Resource name
-     */
-    @JsonProperty(value = "name", required = true)
     private String name;
 
     /*
-     * Resource type
+     * The type of the resource.
      */
-    @JsonProperty(value = "type", access = JsonProperty.Access.WRITE_ONLY)
     private String type;
 
     /**
-     * Get the artifactId property: The resource id of the artifact.
-     *
-     * @return the artifactId value.
+     * Creates an instance of RunOutputInner class.
      */
-    public String artifactId() {
-        return this.artifactId;
+    public RunOutputInner() {
     }
 
     /**
-     * Set the artifactId property: The resource id of the artifact.
-     *
-     * @param artifactId the artifactId value to set.
-     * @return the RunOutputInner object itself.
+     * Get the innerProperties property: The properties of the run output.
+     * 
+     * @return the innerProperties value.
      */
-    public RunOutputInner withArtifactId(String artifactId) {
-        this.artifactId = artifactId;
-        return this;
+    private RunOutputProperties innerProperties() {
+        return this.innerProperties;
     }
 
     /**
-     * Get the artifactUri property: The location URI of the artifact.
-     *
-     * @return the artifactUri value.
+     * Get the systemData property: Azure Resource Manager metadata containing createdBy and modifiedBy information.
+     * 
+     * @return the systemData value.
      */
-    public String artifactUri() {
-        return this.artifactUri;
+    public SystemData systemData() {
+        return this.systemData;
     }
 
     /**
-     * Set the artifactUri property: The location URI of the artifact.
-     *
-     * @param artifactUri the artifactUri value to set.
-     * @return the RunOutputInner object itself.
+     * Get the id property: Fully qualified resource Id for the resource.
+     * 
+     * @return the id value.
      */
-    public RunOutputInner withArtifactUri(String artifactUri) {
-        this.artifactUri = artifactUri;
-        return this;
+    @Override
+    public String id() {
+        return this.id;
     }
 
     /**
-     * Get the provisioningState property: Provisioning state of the resource.
-     *
-     * @return the provisioningState value.
-     */
-    public ProvisioningState provisioningState() {
-        return this.provisioningState;
-    }
-
-    /**
-     * Get the name property: Resource name.
-     *
+     * Get the name property: The name of the resource.
+     * 
      * @return the name value.
      */
+    @Override
     public String name() {
         return this.name;
     }
 
     /**
-     * Set the name property: Resource name.
-     *
-     * @param name the name value to set.
-     * @return the RunOutputInner object itself.
-     */
-    public RunOutputInner withName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    /**
-     * Get the type property: Resource type.
-     *
+     * Get the type property: The type of the resource.
+     * 
      * @return the type value.
      */
+    @Override
     public String type() {
         return this.type;
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public RunOutputInner withId(String id) {
-        super.withId(id);
+    /**
+     * Get the artifactId property: The resource id of the artifact.
+     * 
+     * @return the artifactId value.
+     */
+    public String artifactId() {
+        return this.innerProperties() == null ? null : this.innerProperties().artifactId();
+    }
+
+    /**
+     * Set the artifactId property: The resource id of the artifact.
+     * 
+     * @param artifactId the artifactId value to set.
+     * @return the RunOutputInner object itself.
+     */
+    public RunOutputInner withArtifactId(String artifactId) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new RunOutputProperties();
+        }
+        this.innerProperties().withArtifactId(artifactId);
         return this;
     }
 
     /**
+     * Get the artifactUri property: The location URI of the artifact.
+     * 
+     * @return the artifactUri value.
+     */
+    public String artifactUri() {
+        return this.innerProperties() == null ? null : this.innerProperties().artifactUri();
+    }
+
+    /**
+     * Set the artifactUri property: The location URI of the artifact.
+     * 
+     * @param artifactUri the artifactUri value to set.
+     * @return the RunOutputInner object itself.
+     */
+    public RunOutputInner withArtifactUri(String artifactUri) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new RunOutputProperties();
+        }
+        this.innerProperties().withArtifactUri(artifactUri);
+        return this;
+    }
+
+    /**
+     * Get the provisioningState property: Provisioning state of the resource.
+     * 
+     * @return the provisioningState value.
+     */
+    public ProvisioningState provisioningState() {
+        return this.innerProperties() == null ? null : this.innerProperties().provisioningState();
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
-        if (name() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property name in model RunOutputInner"));
+        if (innerProperties() != null) {
+            innerProperties().validate();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of RunOutputInner from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of RunOutputInner if the JsonReader was pointing to an instance of it, or null if it was
+     * pointing to JSON null.
+     * @throws IllegalStateException If the deserialized JSON object was missing any required properties.
+     * @throws IOException If an error occurs while reading the RunOutputInner.
+     */
+    public static RunOutputInner fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            RunOutputInner deserializedRunOutputInner = new RunOutputInner();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("id".equals(fieldName)) {
+                    deserializedRunOutputInner.id = reader.getString();
+                } else if ("name".equals(fieldName)) {
+                    deserializedRunOutputInner.name = reader.getString();
+                } else if ("type".equals(fieldName)) {
+                    deserializedRunOutputInner.type = reader.getString();
+                } else if ("properties".equals(fieldName)) {
+                    deserializedRunOutputInner.innerProperties = RunOutputProperties.fromJson(reader);
+                } else if ("systemData".equals(fieldName)) {
+                    deserializedRunOutputInner.systemData = SystemData.fromJson(reader);
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedRunOutputInner;
+        });
     }
 }

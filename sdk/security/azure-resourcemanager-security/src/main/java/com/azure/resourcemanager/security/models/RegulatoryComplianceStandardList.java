@@ -7,15 +7,14 @@ package com.azure.resourcemanager.security.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.security.fluent.models.RegulatoryComplianceStandardInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** List of regulatory compliance standards response. */
+/**
+ * List of regulatory compliance standards response.
+ */
 @Fluent
 public final class RegulatoryComplianceStandardList {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RegulatoryComplianceStandardList.class);
-
     /*
      * The value property.
      */
@@ -29,8 +28,14 @@ public final class RegulatoryComplianceStandardList {
     private String nextLink;
 
     /**
+     * Creates an instance of RegulatoryComplianceStandardList class.
+     */
+    public RegulatoryComplianceStandardList() {
+    }
+
+    /**
      * Get the value property: The value property.
-     *
+     * 
      * @return the value value.
      */
     public List<RegulatoryComplianceStandardInner> value() {
@@ -39,7 +44,7 @@ public final class RegulatoryComplianceStandardList {
 
     /**
      * Set the value property: The value property.
-     *
+     * 
      * @param value the value value to set.
      * @return the RegulatoryComplianceStandardList object itself.
      */
@@ -50,7 +55,7 @@ public final class RegulatoryComplianceStandardList {
 
     /**
      * Get the nextLink property: The URI to fetch the next page.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -59,17 +64,18 @@ public final class RegulatoryComplianceStandardList {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property value in model RegulatoryComplianceStandardList"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property value in model RegulatoryComplianceStandardList"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(RegulatoryComplianceStandardList.class);
 }

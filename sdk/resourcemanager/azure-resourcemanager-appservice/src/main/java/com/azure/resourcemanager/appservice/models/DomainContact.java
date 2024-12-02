@@ -45,20 +45,13 @@ public interface DomainContact extends HasInnerModel<Contact>, ChildResource<App
      *
      * @param <ParentT> the return type of the final {@link Attachable#attach()}
      */
-    interface Definition<ParentT>
-        extends DefinitionStages.Blank<ParentT>,
-            DefinitionStages.WithFirstName<ParentT>,
-            DefinitionStages.WithMiddleName<ParentT>,
-            DefinitionStages.WithAddressLine1<ParentT>,
-            DefinitionStages.WithAddressLine2<ParentT>,
-            DefinitionStages.WithCity<ParentT>,
-            DefinitionStages.WithStateOrProvince<ParentT>,
-            DefinitionStages.WithCountry<ParentT>,
-            DefinitionStages.WithPostalCode<ParentT>,
-            DefinitionStages.WithEmail<ParentT>,
-            DefinitionStages.WithPhoneCountryCode<ParentT>,
-            DefinitionStages.WithPhoneNumber<ParentT>,
-            DefinitionStages.WithAttach<ParentT> {
+    interface Definition<ParentT> extends DefinitionStages.Blank<ParentT>, DefinitionStages.WithFirstName<ParentT>,
+        DefinitionStages.WithMiddleName<ParentT>, DefinitionStages.WithAddressLine1<ParentT>,
+        DefinitionStages.WithAddressLine2<ParentT>, DefinitionStages.WithCity<ParentT>,
+        DefinitionStages.WithStateOrProvince<ParentT>, DefinitionStages.WithCountry<ParentT>,
+        DefinitionStages.WithPostalCode<ParentT>, DefinitionStages.WithEmail<ParentT>,
+        DefinitionStages.WithPhoneCountryCode<ParentT>, DefinitionStages.WithPhoneNumber<ParentT>,
+        DefinitionStages.WithAttach<ParentT> {
     }
 
     /** Grouping of domain contact stages applicable as part of a domain creation. */
@@ -257,6 +250,12 @@ public interface DomainContact extends HasInnerModel<Contact>, ChildResource<App
          * @param <ParentT> the stage of the parent definition to return to after attaching
          */
         interface WithFaxNumber<ParentT> {
+            /**
+             * Specifies the fax number.
+             *
+             * @param faxNumber the fax number
+             * @return the next stage of the definition
+             */
             WithAttach<ParentT> withFaxNumber(String faxNumber);
         }
 
@@ -266,6 +265,12 @@ public interface DomainContact extends HasInnerModel<Contact>, ChildResource<App
          * @param <ParentT> the stage of the parent definition to return to after attaching
          */
         interface WithOrganization<ParentT> {
+            /**
+             * Specifies the organization.
+             *
+             * @param organziation the organization
+             * @return the next stage of the definition
+             */
             WithAttach<ParentT> withOrganization(String organziation);
         }
 
@@ -275,6 +280,12 @@ public interface DomainContact extends HasInnerModel<Contact>, ChildResource<App
          * @param <ParentT> the stage of the parent definition to return to after attaching
          */
         interface WithJobTitle<ParentT> {
+            /**
+             * Specifies the job title.
+             *
+             * @param jobTitle the job title
+             * @return the next stage of the definition
+             */
             WithAttach<ParentT> withJobTitle(String jobTitle);
         }
 
@@ -287,10 +298,11 @@ public interface DomainContact extends HasInnerModel<Contact>, ChildResource<App
          * @param <ParentT> the return type of {@link WithAttach#attach()}
          */
         interface WithAttach<ParentT>
-            extends Attachable.InDefinition<ParentT>,
-                DefinitionStages.WithOrganization<ParentT>,
-                DefinitionStages.WithJobTitle<ParentT>,
-                DefinitionStages.WithFaxNumber<ParentT> {
+            extends Attachable.InDefinition<ParentT>, DefinitionStages.WithOrganization<ParentT>,
+            DefinitionStages.WithJobTitle<ParentT>, DefinitionStages.WithFaxNumber<ParentT> {
+            /**
+             * @return the contact
+             */
             Contact build();
         }
     }

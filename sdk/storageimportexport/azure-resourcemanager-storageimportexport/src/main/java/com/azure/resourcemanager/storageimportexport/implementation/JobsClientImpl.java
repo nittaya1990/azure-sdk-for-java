@@ -28,28 +28,31 @@ import com.azure.core.http.rest.Response;
 import com.azure.core.http.rest.RestProxy;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.storageimportexport.fluent.JobsClient;
 import com.azure.resourcemanager.storageimportexport.fluent.models.JobResponseInner;
-import com.azure.resourcemanager.storageimportexport.models.ErrorResponseException;
+import com.azure.resourcemanager.storageimportexport.models.ErrorResponseErrorException;
 import com.azure.resourcemanager.storageimportexport.models.ListJobsResponse;
 import com.azure.resourcemanager.storageimportexport.models.PutJobParameters;
 import com.azure.resourcemanager.storageimportexport.models.UpdateJobParameters;
 import reactor.core.publisher.Mono;
 
-/** An instance of this class provides access to all the operations defined in JobsClient. */
+/**
+ * An instance of this class provides access to all the operations defined in JobsClient.
+ */
 public final class JobsClientImpl implements JobsClient {
-    private final ClientLogger logger = new ClientLogger(JobsClientImpl.class);
-
-    /** The proxy service used to perform REST calls. */
+    /**
+     * The proxy service used to perform REST calls.
+     */
     private final JobsService service;
 
-    /** The service client containing this operation class. */
+    /**
+     * The service client containing this operation class.
+     */
     private final StorageImportExportImpl client;
 
     /**
      * Initializes an instance of JobsClientImpl.
-     *
+     * 
      * @param client the instance of the service client containing this operation class.
      */
     JobsClientImpl(StorageImportExportImpl client) {
@@ -63,279 +66,203 @@ public final class JobsClientImpl implements JobsClient {
      */
     @Host("{$host}")
     @ServiceInterface(name = "StorageImportExportJ")
-    private interface JobsService {
-        @Headers({"Content-Type: application/json"})
+    public interface JobsService {
+        @Headers({ "Content-Type: application/json" })
         @Get("/subscriptions/{subscriptionId}/providers/Microsoft.ImportExport/jobs")
-        @ExpectedResponses({200})
-        @UnexpectedResponseExceptionType(ErrorResponseException.class)
-        Mono<Response<ListJobsResponse>> list(
-            @HostParam("$host") String endpoint,
-            @QueryParam("$top") Long top,
-            @QueryParam("$filter") String filter,
-            @PathParam("subscriptionId") String subscriptionId,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept-Language") String acceptLanguage,
-            @HeaderParam("Accept") String accept,
-            Context context);
+        @ExpectedResponses({ 200 })
+        @UnexpectedResponseExceptionType(ErrorResponseErrorException.class)
+        Mono<Response<ListJobsResponse>> list(@HostParam("$host") String endpoint, @QueryParam("$top") Long top,
+            @QueryParam("$filter") String filter, @PathParam("subscriptionId") String subscriptionId,
+            @QueryParam("api-version") String apiVersion, @HeaderParam("Accept-Language") String acceptLanguage,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
+        @Headers({ "Content-Type: application/json" })
         @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ImportExport/jobs")
-        @ExpectedResponses({200})
-        @UnexpectedResponseExceptionType(ErrorResponseException.class)
-        Mono<Response<ListJobsResponse>> listByResourceGroup(
-            @HostParam("$host") String endpoint,
-            @QueryParam("$top") Long top,
-            @QueryParam("$filter") String filter,
+        @ExpectedResponses({ 200 })
+        @UnexpectedResponseExceptionType(ErrorResponseErrorException.class)
+        Mono<Response<ListJobsResponse>> listByResourceGroup(@HostParam("$host") String endpoint,
+            @QueryParam("$top") Long top, @QueryParam("$filter") String filter,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept-Language") String acceptLanguage,
-            @HeaderParam("Accept") String accept,
+            @PathParam("resourceGroupName") String resourceGroupName, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept-Language") String acceptLanguage, @HeaderParam("Accept") String accept,
             Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ImportExport/jobs"
-                + "/{jobName}")
-        @ExpectedResponses({200})
-        @UnexpectedResponseExceptionType(ErrorResponseException.class)
-        Mono<Response<JobResponseInner>> getByResourceGroup(
-            @HostParam("$host") String endpoint,
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ImportExport/jobs/{jobName}")
+        @ExpectedResponses({ 200 })
+        @UnexpectedResponseExceptionType(ErrorResponseErrorException.class)
+        Mono<Response<JobResponseInner>> getByResourceGroup(@HostParam("$host") String endpoint,
             @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("jobName") String jobName,
-            @QueryParam("api-version") String apiVersion,
+            @PathParam("subscriptionId") String subscriptionId, @PathParam("jobName") String jobName,
+            @QueryParam("api-version") String apiVersion, @HeaderParam("Accept-Language") String acceptLanguage,
+            @HeaderParam("Accept") String accept, Context context);
+
+        @Headers({ "Content-Type: application/json" })
+        @Patch("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ImportExport/jobs/{jobName}")
+        @ExpectedResponses({ 200 })
+        @UnexpectedResponseExceptionType(ErrorResponseErrorException.class)
+        Mono<Response<JobResponseInner>> update(@HostParam("$host") String endpoint,
+            @PathParam("jobName") String jobName, @PathParam("subscriptionId") String subscriptionId,
+            @PathParam("resourceGroupName") String resourceGroupName, @QueryParam("api-version") String apiVersion,
             @HeaderParam("Accept-Language") String acceptLanguage,
-            @HeaderParam("Accept") String accept,
+            @BodyParam("application/json") UpdateJobParameters body, @HeaderParam("Accept") String accept,
             Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Patch(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ImportExport/jobs"
-                + "/{jobName}")
-        @ExpectedResponses({200})
-        @UnexpectedResponseExceptionType(ErrorResponseException.class)
-        Mono<Response<JobResponseInner>> update(
-            @HostParam("$host") String endpoint,
-            @PathParam("jobName") String jobName,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept-Language") String acceptLanguage,
-            @BodyParam("application/json") UpdateJobParameters body,
-            @HeaderParam("Accept") String accept,
-            Context context);
-
-        @Headers({"Content-Type: application/json"})
-        @Put(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ImportExport/jobs"
-                + "/{jobName}")
-        @ExpectedResponses({200, 201})
-        @UnexpectedResponseExceptionType(ErrorResponseException.class)
-        Mono<Response<JobResponseInner>> create(
-            @HostParam("$host") String endpoint,
-            @PathParam("jobName") String jobName,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @QueryParam("api-version") String apiVersion,
+        @Headers({ "Content-Type: application/json" })
+        @Put("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ImportExport/jobs/{jobName}")
+        @ExpectedResponses({ 200, 201 })
+        @UnexpectedResponseExceptionType(ErrorResponseErrorException.class)
+        Mono<Response<JobResponseInner>> create(@HostParam("$host") String endpoint,
+            @PathParam("jobName") String jobName, @PathParam("subscriptionId") String subscriptionId,
+            @PathParam("resourceGroupName") String resourceGroupName, @QueryParam("api-version") String apiVersion,
             @HeaderParam("Accept-Language") String acceptLanguage,
             @HeaderParam("x-ms-client-tenant-id") String clientTenantId,
-            @BodyParam("application/json") PutJobParameters body,
-            @HeaderParam("Accept") String accept,
+            @BodyParam("application/json") PutJobParameters body, @HeaderParam("Accept") String accept,
             Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Delete(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ImportExport/jobs"
-                + "/{jobName}")
-        @ExpectedResponses({200})
-        @UnexpectedResponseExceptionType(ErrorResponseException.class)
-        Mono<Response<Void>> delete(
-            @HostParam("$host") String endpoint,
+        @Headers({ "Content-Type: application/json" })
+        @Delete("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ImportExport/jobs/{jobName}")
+        @ExpectedResponses({ 200 })
+        @UnexpectedResponseExceptionType(ErrorResponseErrorException.class)
+        Mono<Response<Void>> delete(@HostParam("$host") String endpoint,
             @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("jobName") String jobName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept-Language") String acceptLanguage,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("subscriptionId") String subscriptionId, @PathParam("jobName") String jobName,
+            @QueryParam("api-version") String apiVersion, @HeaderParam("Accept-Language") String acceptLanguage,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
+        @Headers({ "Content-Type: application/json" })
         @Get("{nextLink}")
-        @ExpectedResponses({200})
-        @UnexpectedResponseExceptionType(ErrorResponseException.class)
+        @ExpectedResponses({ 200 })
+        @UnexpectedResponseExceptionType(ErrorResponseErrorException.class)
         Mono<Response<ListJobsResponse>> listBySubscriptionNext(
-            @PathParam(value = "nextLink", encoded = true) String nextLink,
-            @HostParam("$host") String endpoint,
-            @HeaderParam("Accept-Language") String acceptLanguage,
-            @HeaderParam("Accept") String accept,
+            @PathParam(value = "nextLink", encoded = true) String nextLink, @HostParam("$host") String endpoint,
+            @HeaderParam("Accept-Language") String acceptLanguage, @HeaderParam("Accept") String accept,
             Context context);
 
-        @Headers({"Content-Type: application/json"})
+        @Headers({ "Content-Type: application/json" })
         @Get("{nextLink}")
-        @ExpectedResponses({200})
-        @UnexpectedResponseExceptionType(ErrorResponseException.class)
+        @ExpectedResponses({ 200 })
+        @UnexpectedResponseExceptionType(ErrorResponseErrorException.class)
         Mono<Response<ListJobsResponse>> listByResourceGroupNext(
-            @PathParam(value = "nextLink", encoded = true) String nextLink,
-            @HostParam("$host") String endpoint,
-            @HeaderParam("Accept-Language") String acceptLanguage,
-            @HeaderParam("Accept") String accept,
+            @PathParam(value = "nextLink", encoded = true) String nextLink, @HostParam("$host") String endpoint,
+            @HeaderParam("Accept-Language") String acceptLanguage, @HeaderParam("Accept") String accept,
             Context context);
     }
 
     /**
      * Returns all active and completed jobs in a subscription.
-     *
+     * 
      * @param top An integer value that specifies how many jobs at most should be returned. The value cannot exceed 100.
      * @param filter Can be used to restrict the results to certain conditions.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list jobs response.
+     * @return list jobs response along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<JobResponseInner>> listSinglePageAsync(Long top, String filter) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         final String accept = "application/json";
         return FluxUtil
             .withContext(
-                context ->
-                    service
-                        .list(
-                            this.client.getEndpoint(),
-                            top,
-                            filter,
-                            this.client.getSubscriptionId(),
-                            this.client.getApiVersion(),
-                            this.client.getAcceptLanguage(),
-                            accept,
-                            context))
-            .<PagedResponse<JobResponseInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null))
+                context -> service.list(this.client.getEndpoint(), top, filter, this.client.getSubscriptionId(),
+                    this.client.getApiVersion(), this.client.getAcceptLanguage(), accept, context))
+            .<PagedResponse<JobResponseInner>>map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(),
+                res.getHeaders(), res.getValue().value(), res.getValue().nextLink(), null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Returns all active and completed jobs in a subscription.
-     *
+     * 
      * @param top An integer value that specifies how many jobs at most should be returned. The value cannot exceed 100.
      * @param filter Can be used to restrict the results to certain conditions.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list jobs response.
+     * @return list jobs response along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<JobResponseInner>> listSinglePageAsync(Long top, String filter, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
         return service
-            .list(
-                this.client.getEndpoint(),
-                top,
-                filter,
-                this.client.getSubscriptionId(),
-                this.client.getApiVersion(),
-                this.client.getAcceptLanguage(),
-                accept,
-                context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null));
+            .list(this.client.getEndpoint(), top, filter, this.client.getSubscriptionId(), this.client.getApiVersion(),
+                this.client.getAcceptLanguage(), accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), res.getValue().nextLink(), null));
     }
 
     /**
      * Returns all active and completed jobs in a subscription.
-     *
+     * 
      * @param top An integer value that specifies how many jobs at most should be returned. The value cannot exceed 100.
      * @param filter Can be used to restrict the results to certain conditions.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list jobs response.
+     * @return list jobs response as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<JobResponseInner> listAsync(Long top, String filter) {
-        return new PagedFlux<>(
-            () -> listSinglePageAsync(top, filter), nextLink -> listBySubscriptionNextSinglePageAsync(nextLink));
+        return new PagedFlux<>(() -> listSinglePageAsync(top, filter),
+            nextLink -> listBySubscriptionNextSinglePageAsync(nextLink));
     }
 
     /**
      * Returns all active and completed jobs in a subscription.
-     *
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * 
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list jobs response.
+     * @return list jobs response as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<JobResponseInner> listAsync() {
         final Long top = null;
         final String filter = null;
-        return new PagedFlux<>(
-            () -> listSinglePageAsync(top, filter), nextLink -> listBySubscriptionNextSinglePageAsync(nextLink));
+        return new PagedFlux<>(() -> listSinglePageAsync(top, filter),
+            nextLink -> listBySubscriptionNextSinglePageAsync(nextLink));
     }
 
     /**
      * Returns all active and completed jobs in a subscription.
-     *
+     * 
      * @param top An integer value that specifies how many jobs at most should be returned. The value cannot exceed 100.
      * @param filter Can be used to restrict the results to certain conditions.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list jobs response.
+     * @return list jobs response as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<JobResponseInner> listAsync(Long top, String filter, Context context) {
-        return new PagedFlux<>(
-            () -> listSinglePageAsync(top, filter, context),
+        return new PagedFlux<>(() -> listSinglePageAsync(top, filter, context),
             nextLink -> listBySubscriptionNextSinglePageAsync(nextLink, context));
     }
 
     /**
      * Returns all active and completed jobs in a subscription.
-     *
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * 
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list jobs response.
+     * @return list jobs response as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<JobResponseInner> list() {
@@ -346,14 +273,14 @@ public final class JobsClientImpl implements JobsClient {
 
     /**
      * Returns all active and completed jobs in a subscription.
-     *
+     * 
      * @param top An integer value that specifies how many jobs at most should be returned. The value cannot exceed 100.
      * @param filter Can be used to restrict the results to certain conditions.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list jobs response.
+     * @return list jobs response as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<JobResponseInner> list(Long top, String filter, Context context) {
@@ -362,30 +289,26 @@ public final class JobsClientImpl implements JobsClient {
 
     /**
      * Returns all active and completed jobs in a resource group.
-     *
+     * 
      * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
-     *     subscription.
+     * subscription.
      * @param top An integer value that specifies how many jobs at most should be returned. The value cannot exceed 100.
      * @param filter Can be used to restrict the results to certain conditions.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list jobs response.
+     * @return list jobs response along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<JobResponseInner>> listByResourceGroupSinglePageAsync(
-        String resourceGroupName, Long top, String filter) {
+    private Mono<PagedResponse<JobResponseInner>> listByResourceGroupSinglePageAsync(String resourceGroupName, Long top,
+        String filter) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -393,58 +316,37 @@ public final class JobsClientImpl implements JobsClient {
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .listByResourceGroup(
-                            this.client.getEndpoint(),
-                            top,
-                            filter,
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            this.client.getApiVersion(),
-                            this.client.getAcceptLanguage(),
-                            accept,
-                            context))
-            .<PagedResponse<JobResponseInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null))
+            .withContext(context -> service.listByResourceGroup(this.client.getEndpoint(), top, filter,
+                this.client.getSubscriptionId(), resourceGroupName, this.client.getApiVersion(),
+                this.client.getAcceptLanguage(), accept, context))
+            .<PagedResponse<JobResponseInner>>map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(),
+                res.getHeaders(), res.getValue().value(), res.getValue().nextLink(), null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Returns all active and completed jobs in a resource group.
-     *
+     * 
      * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
-     *     subscription.
+     * subscription.
      * @param top An integer value that specifies how many jobs at most should be returned. The value cannot exceed 100.
      * @param filter Can be used to restrict the results to certain conditions.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list jobs response.
+     * @return list jobs response along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<JobResponseInner>> listByResourceGroupSinglePageAsync(
-        String resourceGroupName, Long top, String filter, Context context) {
+    private Mono<PagedResponse<JobResponseInner>> listByResourceGroupSinglePageAsync(String resourceGroupName, Long top,
+        String filter, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -453,95 +355,77 @@ public final class JobsClientImpl implements JobsClient {
         final String accept = "application/json";
         context = this.client.mergeContext(context);
         return service
-            .listByResourceGroup(
-                this.client.getEndpoint(),
-                top,
-                filter,
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                this.client.getApiVersion(),
-                this.client.getAcceptLanguage(),
-                accept,
-                context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null));
+            .listByResourceGroup(this.client.getEndpoint(), top, filter, this.client.getSubscriptionId(),
+                resourceGroupName, this.client.getApiVersion(), this.client.getAcceptLanguage(), accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), res.getValue().nextLink(), null));
     }
 
     /**
      * Returns all active and completed jobs in a resource group.
-     *
+     * 
      * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
-     *     subscription.
+     * subscription.
      * @param top An integer value that specifies how many jobs at most should be returned. The value cannot exceed 100.
      * @param filter Can be used to restrict the results to certain conditions.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list jobs response.
+     * @return list jobs response as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<JobResponseInner> listByResourceGroupAsync(String resourceGroupName, Long top, String filter) {
-        return new PagedFlux<>(
-            () -> listByResourceGroupSinglePageAsync(resourceGroupName, top, filter),
+        return new PagedFlux<>(() -> listByResourceGroupSinglePageAsync(resourceGroupName, top, filter),
             nextLink -> listByResourceGroupNextSinglePageAsync(nextLink));
     }
 
     /**
      * Returns all active and completed jobs in a resource group.
-     *
+     * 
      * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
-     *     subscription.
+     * subscription.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list jobs response.
+     * @return list jobs response as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<JobResponseInner> listByResourceGroupAsync(String resourceGroupName) {
         final Long top = null;
         final String filter = null;
-        return new PagedFlux<>(
-            () -> listByResourceGroupSinglePageAsync(resourceGroupName, top, filter),
+        return new PagedFlux<>(() -> listByResourceGroupSinglePageAsync(resourceGroupName, top, filter),
             nextLink -> listByResourceGroupNextSinglePageAsync(nextLink));
     }
 
     /**
      * Returns all active and completed jobs in a resource group.
-     *
+     * 
      * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
-     *     subscription.
+     * subscription.
      * @param top An integer value that specifies how many jobs at most should be returned. The value cannot exceed 100.
      * @param filter Can be used to restrict the results to certain conditions.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list jobs response.
+     * @return list jobs response as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<JobResponseInner> listByResourceGroupAsync(
-        String resourceGroupName, Long top, String filter, Context context) {
-        return new PagedFlux<>(
-            () -> listByResourceGroupSinglePageAsync(resourceGroupName, top, filter, context),
+    private PagedFlux<JobResponseInner> listByResourceGroupAsync(String resourceGroupName, Long top, String filter,
+        Context context) {
+        return new PagedFlux<>(() -> listByResourceGroupSinglePageAsync(resourceGroupName, top, filter, context),
             nextLink -> listByResourceGroupNextSinglePageAsync(nextLink, context));
     }
 
     /**
      * Returns all active and completed jobs in a resource group.
-     *
+     * 
      * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
-     *     subscription.
+     * subscription.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list jobs response.
+     * @return list jobs response as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<JobResponseInner> listByResourceGroup(String resourceGroupName) {
@@ -552,210 +436,174 @@ public final class JobsClientImpl implements JobsClient {
 
     /**
      * Returns all active and completed jobs in a resource group.
-     *
+     * 
      * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
-     *     subscription.
+     * subscription.
      * @param top An integer value that specifies how many jobs at most should be returned. The value cannot exceed 100.
      * @param filter Can be used to restrict the results to certain conditions.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list jobs response.
+     * @return list jobs response as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<JobResponseInner> listByResourceGroup(
-        String resourceGroupName, Long top, String filter, Context context) {
+    public PagedIterable<JobResponseInner> listByResourceGroup(String resourceGroupName, Long top, String filter,
+        Context context) {
         return new PagedIterable<>(listByResourceGroupAsync(resourceGroupName, top, filter, context));
     }
 
     /**
      * Gets information about an existing job.
-     *
+     * 
      * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
-     *     subscription.
+     * subscription.
      * @param jobName The name of the import/export job.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return information about an existing job.
+     * @return information about an existing job along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<JobResponseInner>> getByResourceGroupWithResponseAsync(
-        String resourceGroupName, String jobName) {
+    private Mono<Response<JobResponseInner>> getByResourceGroupWithResponseAsync(String resourceGroupName,
+        String jobName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
                 .error(new IllegalArgumentException("Parameter resourceGroupName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (jobName == null) {
             return Mono.error(new IllegalArgumentException("Parameter jobName is required and cannot be null."));
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .getByResourceGroup(
-                            this.client.getEndpoint(),
-                            resourceGroupName,
-                            this.client.getSubscriptionId(),
-                            jobName,
-                            this.client.getApiVersion(),
-                            this.client.getAcceptLanguage(),
-                            accept,
-                            context))
+            .withContext(context -> service.getByResourceGroup(this.client.getEndpoint(), resourceGroupName,
+                this.client.getSubscriptionId(), jobName, this.client.getApiVersion(), this.client.getAcceptLanguage(),
+                accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Gets information about an existing job.
-     *
+     * 
      * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
-     *     subscription.
+     * subscription.
      * @param jobName The name of the import/export job.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return information about an existing job.
+     * @return information about an existing job along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<JobResponseInner>> getByResourceGroupWithResponseAsync(
-        String resourceGroupName, String jobName, Context context) {
+    private Mono<Response<JobResponseInner>> getByResourceGroupWithResponseAsync(String resourceGroupName,
+        String jobName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
                 .error(new IllegalArgumentException("Parameter resourceGroupName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (jobName == null) {
             return Mono.error(new IllegalArgumentException("Parameter jobName is required and cannot be null."));
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .getByResourceGroup(
-                this.client.getEndpoint(),
-                resourceGroupName,
-                this.client.getSubscriptionId(),
-                jobName,
-                this.client.getApiVersion(),
-                this.client.getAcceptLanguage(),
-                accept,
-                context);
+        return service.getByResourceGroup(this.client.getEndpoint(), resourceGroupName, this.client.getSubscriptionId(),
+            jobName, this.client.getApiVersion(), this.client.getAcceptLanguage(), accept, context);
     }
 
     /**
      * Gets information about an existing job.
-     *
+     * 
      * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
-     *     subscription.
+     * subscription.
      * @param jobName The name of the import/export job.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return information about an existing job.
+     * @return information about an existing job on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<JobResponseInner> getByResourceGroupAsync(String resourceGroupName, String jobName) {
         return getByResourceGroupWithResponseAsync(resourceGroupName, jobName)
-            .flatMap(
-                (Response<JobResponseInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Gets information about an existing job.
-     *
+     * 
      * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
-     *     subscription.
+     * subscription.
+     * @param jobName The name of the import/export job.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return information about an existing job along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<JobResponseInner> getByResourceGroupWithResponse(String resourceGroupName, String jobName,
+        Context context) {
+        return getByResourceGroupWithResponseAsync(resourceGroupName, jobName, context).block();
+    }
+
+    /**
+     * Gets information about an existing job.
+     * 
+     * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
+     * subscription.
      * @param jobName The name of the import/export job.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return information about an existing job.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public JobResponseInner getByResourceGroup(String resourceGroupName, String jobName) {
-        return getByResourceGroupAsync(resourceGroupName, jobName).block();
-    }
-
-    /**
-     * Gets information about an existing job.
-     *
-     * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
-     *     subscription.
-     * @param jobName The name of the import/export job.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return information about an existing job.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<JobResponseInner> getByResourceGroupWithResponse(
-        String resourceGroupName, String jobName, Context context) {
-        return getByResourceGroupWithResponseAsync(resourceGroupName, jobName, context).block();
+        return getByResourceGroupWithResponse(resourceGroupName, jobName, Context.NONE).getValue();
     }
 
     /**
      * Updates specific properties of a job. You can call this operation to notify the Import/Export service that the
      * hard drives comprising the import or export job have been shipped to the Microsoft data center. It can also be
      * used to cancel an existing job.
-     *
+     * 
      * @param jobName The name of the import/export job.
      * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
-     *     subscription.
+     * subscription.
      * @param body The parameters to update in the job.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return contains the job information.
+     * @return contains the job information along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<JobResponseInner>> updateWithResponseAsync(
-        String jobName, String resourceGroupName, UpdateJobParameters body) {
+    private Mono<Response<JobResponseInner>> updateWithResponseAsync(String jobName, String resourceGroupName,
+        UpdateJobParameters body) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (jobName == null) {
             return Mono.error(new IllegalArgumentException("Parameter jobName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -768,19 +616,8 @@ public final class JobsClientImpl implements JobsClient {
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .update(
-                            this.client.getEndpoint(),
-                            jobName,
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            this.client.getApiVersion(),
-                            this.client.getAcceptLanguage(),
-                            body,
-                            accept,
-                            context))
+            .withContext(context -> service.update(this.client.getEndpoint(), jobName, this.client.getSubscriptionId(),
+                resourceGroupName, this.client.getApiVersion(), this.client.getAcceptLanguage(), body, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -788,34 +625,30 @@ public final class JobsClientImpl implements JobsClient {
      * Updates specific properties of a job. You can call this operation to notify the Import/Export service that the
      * hard drives comprising the import or export job have been shipped to the Microsoft data center. It can also be
      * used to cancel an existing job.
-     *
+     * 
      * @param jobName The name of the import/export job.
      * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
-     *     subscription.
+     * subscription.
      * @param body The parameters to update in the job.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return contains the job information.
+     * @return contains the job information along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<JobResponseInner>> updateWithResponseAsync(
-        String jobName, String resourceGroupName, UpdateJobParameters body, Context context) {
+    private Mono<Response<JobResponseInner>> updateWithResponseAsync(String jobName, String resourceGroupName,
+        UpdateJobParameters body, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (jobName == null) {
             return Mono.error(new IllegalArgumentException("Parameter jobName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -828,116 +661,96 @@ public final class JobsClientImpl implements JobsClient {
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .update(
-                this.client.getEndpoint(),
-                jobName,
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                this.client.getApiVersion(),
-                this.client.getAcceptLanguage(),
-                body,
-                accept,
-                context);
+        return service.update(this.client.getEndpoint(), jobName, this.client.getSubscriptionId(), resourceGroupName,
+            this.client.getApiVersion(), this.client.getAcceptLanguage(), body, accept, context);
     }
 
     /**
      * Updates specific properties of a job. You can call this operation to notify the Import/Export service that the
      * hard drives comprising the import or export job have been shipped to the Microsoft data center. It can also be
      * used to cancel an existing job.
-     *
+     * 
      * @param jobName The name of the import/export job.
      * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
-     *     subscription.
+     * subscription.
      * @param body The parameters to update in the job.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return contains the job information.
+     * @return contains the job information on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<JobResponseInner> updateAsync(String jobName, String resourceGroupName, UpdateJobParameters body) {
         return updateWithResponseAsync(jobName, resourceGroupName, body)
-            .flatMap(
-                (Response<JobResponseInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Updates specific properties of a job. You can call this operation to notify the Import/Export service that the
      * hard drives comprising the import or export job have been shipped to the Microsoft data center. It can also be
      * used to cancel an existing job.
-     *
+     * 
      * @param jobName The name of the import/export job.
      * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
-     *     subscription.
+     * subscription.
+     * @param body The parameters to update in the job.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return contains the job information along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<JobResponseInner> updateWithResponse(String jobName, String resourceGroupName,
+        UpdateJobParameters body, Context context) {
+        return updateWithResponseAsync(jobName, resourceGroupName, body, context).block();
+    }
+
+    /**
+     * Updates specific properties of a job. You can call this operation to notify the Import/Export service that the
+     * hard drives comprising the import or export job have been shipped to the Microsoft data center. It can also be
+     * used to cancel an existing job.
+     * 
+     * @param jobName The name of the import/export job.
+     * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
+     * subscription.
      * @param body The parameters to update in the job.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return contains the job information.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public JobResponseInner update(String jobName, String resourceGroupName, UpdateJobParameters body) {
-        return updateAsync(jobName, resourceGroupName, body).block();
-    }
-
-    /**
-     * Updates specific properties of a job. You can call this operation to notify the Import/Export service that the
-     * hard drives comprising the import or export job have been shipped to the Microsoft data center. It can also be
-     * used to cancel an existing job.
-     *
-     * @param jobName The name of the import/export job.
-     * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
-     *     subscription.
-     * @param body The parameters to update in the job.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return contains the job information.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<JobResponseInner> updateWithResponse(
-        String jobName, String resourceGroupName, UpdateJobParameters body, Context context) {
-        return updateWithResponseAsync(jobName, resourceGroupName, body, context).block();
+        return updateWithResponse(jobName, resourceGroupName, body, Context.NONE).getValue();
     }
 
     /**
      * Creates a new job or updates an existing job in the specified subscription.
-     *
+     * 
      * @param jobName The name of the import/export job.
      * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
-     *     subscription.
+     * subscription.
      * @param body The parameters used for creating the job.
      * @param clientTenantId The tenant ID of the client making the request.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return contains the job information.
+     * @return contains the job information along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<JobResponseInner>> createWithResponseAsync(
-        String jobName, String resourceGroupName, PutJobParameters body, String clientTenantId) {
+    private Mono<Response<JobResponseInner>> createWithResponseAsync(String jobName, String resourceGroupName,
+        PutJobParameters body, String clientTenantId) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (jobName == null) {
             return Mono.error(new IllegalArgumentException("Parameter jobName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -950,54 +763,39 @@ public final class JobsClientImpl implements JobsClient {
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .create(
-                            this.client.getEndpoint(),
-                            jobName,
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            this.client.getApiVersion(),
-                            this.client.getAcceptLanguage(),
-                            clientTenantId,
-                            body,
-                            accept,
-                            context))
+            .withContext(context -> service.create(this.client.getEndpoint(), jobName, this.client.getSubscriptionId(),
+                resourceGroupName, this.client.getApiVersion(), this.client.getAcceptLanguage(), clientTenantId, body,
+                accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Creates a new job or updates an existing job in the specified subscription.
-     *
+     * 
      * @param jobName The name of the import/export job.
      * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
-     *     subscription.
+     * subscription.
      * @param body The parameters used for creating the job.
      * @param clientTenantId The tenant ID of the client making the request.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return contains the job information.
+     * @return contains the job information along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<JobResponseInner>> createWithResponseAsync(
-        String jobName, String resourceGroupName, PutJobParameters body, String clientTenantId, Context context) {
+    private Mono<Response<JobResponseInner>> createWithResponseAsync(String jobName, String resourceGroupName,
+        PutJobParameters body, String clientTenantId, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (jobName == null) {
             return Mono.error(new IllegalArgumentException("Parameter jobName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1010,139 +808,91 @@ public final class JobsClientImpl implements JobsClient {
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .create(
-                this.client.getEndpoint(),
-                jobName,
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                this.client.getApiVersion(),
-                this.client.getAcceptLanguage(),
-                clientTenantId,
-                body,
-                accept,
-                context);
+        return service.create(this.client.getEndpoint(), jobName, this.client.getSubscriptionId(), resourceGroupName,
+            this.client.getApiVersion(), this.client.getAcceptLanguage(), clientTenantId, body, accept, context);
     }
 
     /**
      * Creates a new job or updates an existing job in the specified subscription.
-     *
+     * 
      * @param jobName The name of the import/export job.
      * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
-     *     subscription.
-     * @param body The parameters used for creating the job.
-     * @param clientTenantId The tenant ID of the client making the request.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return contains the job information.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<JobResponseInner> createAsync(
-        String jobName, String resourceGroupName, PutJobParameters body, String clientTenantId) {
-        return createWithResponseAsync(jobName, resourceGroupName, body, clientTenantId)
-            .flatMap(
-                (Response<JobResponseInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
-    }
-
-    /**
-     * Creates a new job or updates an existing job in the specified subscription.
-     *
-     * @param jobName The name of the import/export job.
-     * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
-     *     subscription.
+     * subscription.
      * @param body The parameters used for creating the job.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return contains the job information.
+     * @return contains the job information on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<JobResponseInner> createAsync(String jobName, String resourceGroupName, PutJobParameters body) {
         final String clientTenantId = null;
         return createWithResponseAsync(jobName, resourceGroupName, body, clientTenantId)
-            .flatMap(
-                (Response<JobResponseInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Creates a new job or updates an existing job in the specified subscription.
-     *
+     * 
      * @param jobName The name of the import/export job.
      * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
-     *     subscription.
+     * subscription.
+     * @param body The parameters used for creating the job.
+     * @param clientTenantId The tenant ID of the client making the request.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return contains the job information along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<JobResponseInner> createWithResponse(String jobName, String resourceGroupName,
+        PutJobParameters body, String clientTenantId, Context context) {
+        return createWithResponseAsync(jobName, resourceGroupName, body, clientTenantId, context).block();
+    }
+
+    /**
+     * Creates a new job or updates an existing job in the specified subscription.
+     * 
+     * @param jobName The name of the import/export job.
+     * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
+     * subscription.
      * @param body The parameters used for creating the job.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return contains the job information.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public JobResponseInner create(String jobName, String resourceGroupName, PutJobParameters body) {
         final String clientTenantId = null;
-        return createAsync(jobName, resourceGroupName, body, clientTenantId).block();
-    }
-
-    /**
-     * Creates a new job or updates an existing job in the specified subscription.
-     *
-     * @param jobName The name of the import/export job.
-     * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
-     *     subscription.
-     * @param body The parameters used for creating the job.
-     * @param clientTenantId The tenant ID of the client making the request.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return contains the job information.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<JobResponseInner> createWithResponse(
-        String jobName, String resourceGroupName, PutJobParameters body, String clientTenantId, Context context) {
-        return createWithResponseAsync(jobName, resourceGroupName, body, clientTenantId, context).block();
+        return createWithResponse(jobName, resourceGroupName, body, clientTenantId, Context.NONE).getValue();
     }
 
     /**
      * Deletes an existing job. Only jobs in the Creating or Completed states can be deleted.
-     *
+     * 
      * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
-     *     subscription.
+     * subscription.
      * @param jobName The name of the import/export job.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(String resourceGroupName, String jobName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
                 .error(new IllegalArgumentException("Parameter resourceGroupName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (jobName == null) {
             return Mono.error(new IllegalArgumentException("Parameter jobName is required and cannot be null."));
@@ -1150,109 +900,73 @@ public final class JobsClientImpl implements JobsClient {
         final String accept = "application/json";
         return FluxUtil
             .withContext(
-                context ->
-                    service
-                        .delete(
-                            this.client.getEndpoint(),
-                            resourceGroupName,
-                            this.client.getSubscriptionId(),
-                            jobName,
-                            this.client.getApiVersion(),
-                            this.client.getAcceptLanguage(),
-                            accept,
-                            context))
+                context -> service.delete(this.client.getEndpoint(), resourceGroupName, this.client.getSubscriptionId(),
+                    jobName, this.client.getApiVersion(), this.client.getAcceptLanguage(), accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Deletes an existing job. Only jobs in the Creating or Completed states can be deleted.
-     *
+     * 
      * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
-     *     subscription.
+     * subscription.
      * @param jobName The name of the import/export job.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(String resourceGroupName, String jobName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
                 .error(new IllegalArgumentException("Parameter resourceGroupName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (jobName == null) {
             return Mono.error(new IllegalArgumentException("Parameter jobName is required and cannot be null."));
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .delete(
-                this.client.getEndpoint(),
-                resourceGroupName,
-                this.client.getSubscriptionId(),
-                jobName,
-                this.client.getApiVersion(),
-                this.client.getAcceptLanguage(),
-                accept,
-                context);
+        return service.delete(this.client.getEndpoint(), resourceGroupName, this.client.getSubscriptionId(), jobName,
+            this.client.getApiVersion(), this.client.getAcceptLanguage(), accept, context);
     }
 
     /**
      * Deletes an existing job. Only jobs in the Creating or Completed states can be deleted.
-     *
+     * 
      * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
-     *     subscription.
+     * subscription.
      * @param jobName The name of the import/export job.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> deleteAsync(String resourceGroupName, String jobName) {
-        return deleteWithResponseAsync(resourceGroupName, jobName).flatMap((Response<Void> res) -> Mono.empty());
+        return deleteWithResponseAsync(resourceGroupName, jobName).flatMap(ignored -> Mono.empty());
     }
 
     /**
      * Deletes an existing job. Only jobs in the Creating or Completed states can be deleted.
-     *
+     * 
      * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
-     *     subscription.
-     * @param jobName The name of the import/export job.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public void delete(String resourceGroupName, String jobName) {
-        deleteAsync(resourceGroupName, jobName).block();
-    }
-
-    /**
-     * Deletes an existing job. Only jobs in the Creating or Completed states can be deleted.
-     *
-     * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
-     *     subscription.
+     * subscription.
      * @param jobName The name of the import/export job.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<Void> deleteWithResponse(String resourceGroupName, String jobName, Context context) {
@@ -1260,13 +974,28 @@ public final class JobsClientImpl implements JobsClient {
     }
 
     /**
-     * Get the next page of items.
-     *
-     * @param nextLink The nextLink parameter.
+     * Deletes an existing job. Only jobs in the Creating or Completed states can be deleted.
+     * 
+     * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
+     * subscription.
+     * @param jobName The name of the import/export job.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list jobs response.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public void delete(String resourceGroupName, String jobName) {
+        deleteWithResponse(resourceGroupName, jobName, Context.NONE);
+    }
+
+    /**
+     * Get the next page of items.
+     * 
+     * @param nextLink The URL to get the next list of items.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return list jobs response along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<JobResponseInner>> listBySubscriptionNextSinglePageAsync(String nextLink) {
@@ -1274,76 +1003,55 @@ public final class JobsClientImpl implements JobsClient {
             return Mono.error(new IllegalArgumentException("Parameter nextLink is required and cannot be null."));
         }
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .listBySubscriptionNext(
-                            nextLink, this.client.getEndpoint(), this.client.getAcceptLanguage(), accept, context))
-            .<PagedResponse<JobResponseInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null))
+            .withContext(context -> service.listBySubscriptionNext(nextLink, this.client.getEndpoint(),
+                this.client.getAcceptLanguage(), accept, context))
+            .<PagedResponse<JobResponseInner>>map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(),
+                res.getHeaders(), res.getValue().value(), res.getValue().nextLink(), null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Get the next page of items.
-     *
-     * @param nextLink The nextLink parameter.
+     * 
+     * @param nextLink The URL to get the next list of items.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list jobs response.
+     * @return list jobs response along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<JobResponseInner>> listBySubscriptionNextSinglePageAsync(
-        String nextLink, Context context) {
+    private Mono<PagedResponse<JobResponseInner>> listBySubscriptionNextSinglePageAsync(String nextLink,
+        Context context) {
         if (nextLink == null) {
             return Mono.error(new IllegalArgumentException("Parameter nextLink is required and cannot be null."));
         }
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
         return service
-            .listBySubscriptionNext(
-                nextLink, this.client.getEndpoint(), this.client.getAcceptLanguage(), accept, context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null));
+            .listBySubscriptionNext(nextLink, this.client.getEndpoint(), this.client.getAcceptLanguage(), accept,
+                context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), res.getValue().nextLink(), null));
     }
 
     /**
      * Get the next page of items.
-     *
-     * @param nextLink The nextLink parameter.
+     * 
+     * @param nextLink The URL to get the next list of items.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list jobs response.
+     * @return list jobs response along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<JobResponseInner>> listByResourceGroupNextSinglePageAsync(String nextLink) {
@@ -1351,65 +1059,44 @@ public final class JobsClientImpl implements JobsClient {
             return Mono.error(new IllegalArgumentException("Parameter nextLink is required and cannot be null."));
         }
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .listByResourceGroupNext(
-                            nextLink, this.client.getEndpoint(), this.client.getAcceptLanguage(), accept, context))
-            .<PagedResponse<JobResponseInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null))
+            .withContext(context -> service.listByResourceGroupNext(nextLink, this.client.getEndpoint(),
+                this.client.getAcceptLanguage(), accept, context))
+            .<PagedResponse<JobResponseInner>>map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(),
+                res.getHeaders(), res.getValue().value(), res.getValue().nextLink(), null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Get the next page of items.
-     *
-     * @param nextLink The nextLink parameter.
+     * 
+     * @param nextLink The URL to get the next list of items.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorResponseException thrown if the request is rejected by server.
+     * @throws ErrorResponseErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list jobs response.
+     * @return list jobs response along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<JobResponseInner>> listByResourceGroupNextSinglePageAsync(
-        String nextLink, Context context) {
+    private Mono<PagedResponse<JobResponseInner>> listByResourceGroupNextSinglePageAsync(String nextLink,
+        Context context) {
         if (nextLink == null) {
             return Mono.error(new IllegalArgumentException("Parameter nextLink is required and cannot be null."));
         }
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
         return service
-            .listByResourceGroupNext(
-                nextLink, this.client.getEndpoint(), this.client.getAcceptLanguage(), accept, context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null));
+            .listByResourceGroupNext(nextLink, this.client.getEndpoint(), this.client.getAcceptLanguage(), accept,
+                context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), res.getValue().nextLink(), null));
     }
 }

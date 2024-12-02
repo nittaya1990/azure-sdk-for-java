@@ -6,7 +6,6 @@ package com.azure.resourcemanager.frontdoor.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
@@ -17,8 +16,6 @@ import java.util.List;
  */
 @Fluent
 public final class RulesEngineRule {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RulesEngineRule.class);
-
     /*
      * A name to refer to this specific rule.
      */
@@ -26,36 +23,38 @@ public final class RulesEngineRule {
     private String name;
 
     /*
-     * A priority assigned to this rule.
+     * A priority assigned to this rule. 
      */
     @JsonProperty(value = "priority", required = true)
     private int priority;
 
     /*
-     * Actions to perform on the request and response if all of the match
-     * conditions are met.
+     * Actions to perform on the request and response if all of the match conditions are met.
      */
     @JsonProperty(value = "action", required = true)
     private RulesEngineAction action;
 
     /*
-     * A list of match conditions that must meet in order for the actions of
-     * this rule to run. Having no match conditions means the actions will
-     * always run.
+     * A list of match conditions that must meet in order for the actions of this rule to run. Having no match conditions means the actions will always run.
      */
     @JsonProperty(value = "matchConditions")
     private List<RulesEngineMatchCondition> matchConditions;
 
     /*
-     * If this rule is a match should the rules engine continue running the
-     * remaining rules or stop. If not present, defaults to Continue.
+     * If this rule is a match should the rules engine continue running the remaining rules or stop. If not present, defaults to Continue.
      */
     @JsonProperty(value = "matchProcessingBehavior")
     private MatchProcessingBehavior matchProcessingBehavior;
 
     /**
+     * Creates an instance of RulesEngineRule class.
+     */
+    public RulesEngineRule() {
+    }
+
+    /**
      * Get the name property: A name to refer to this specific rule.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -64,7 +63,7 @@ public final class RulesEngineRule {
 
     /**
      * Set the name property: A name to refer to this specific rule.
-     *
+     * 
      * @param name the name value to set.
      * @return the RulesEngineRule object itself.
      */
@@ -75,7 +74,7 @@ public final class RulesEngineRule {
 
     /**
      * Get the priority property: A priority assigned to this rule.
-     *
+     * 
      * @return the priority value.
      */
     public int priority() {
@@ -84,7 +83,7 @@ public final class RulesEngineRule {
 
     /**
      * Set the priority property: A priority assigned to this rule.
-     *
+     * 
      * @param priority the priority value to set.
      * @return the RulesEngineRule object itself.
      */
@@ -95,7 +94,7 @@ public final class RulesEngineRule {
 
     /**
      * Get the action property: Actions to perform on the request and response if all of the match conditions are met.
-     *
+     * 
      * @return the action value.
      */
     public RulesEngineAction action() {
@@ -104,7 +103,7 @@ public final class RulesEngineRule {
 
     /**
      * Set the action property: Actions to perform on the request and response if all of the match conditions are met.
-     *
+     * 
      * @param action the action value to set.
      * @return the RulesEngineRule object itself.
      */
@@ -116,7 +115,7 @@ public final class RulesEngineRule {
     /**
      * Get the matchConditions property: A list of match conditions that must meet in order for the actions of this rule
      * to run. Having no match conditions means the actions will always run.
-     *
+     * 
      * @return the matchConditions value.
      */
     public List<RulesEngineMatchCondition> matchConditions() {
@@ -126,7 +125,7 @@ public final class RulesEngineRule {
     /**
      * Set the matchConditions property: A list of match conditions that must meet in order for the actions of this rule
      * to run. Having no match conditions means the actions will always run.
-     *
+     * 
      * @param matchConditions the matchConditions value to set.
      * @return the RulesEngineRule object itself.
      */
@@ -138,7 +137,7 @@ public final class RulesEngineRule {
     /**
      * Get the matchProcessingBehavior property: If this rule is a match should the rules engine continue running the
      * remaining rules or stop. If not present, defaults to Continue.
-     *
+     * 
      * @return the matchProcessingBehavior value.
      */
     public MatchProcessingBehavior matchProcessingBehavior() {
@@ -148,7 +147,7 @@ public final class RulesEngineRule {
     /**
      * Set the matchProcessingBehavior property: If this rule is a match should the rules engine continue running the
      * remaining rules or stop. If not present, defaults to Continue.
-     *
+     * 
      * @param matchProcessingBehavior the matchProcessingBehavior value to set.
      * @return the RulesEngineRule object itself.
      */
@@ -159,19 +158,17 @@ public final class RulesEngineRule {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (name() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property name in model RulesEngineRule"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property name in model RulesEngineRule"));
         }
         if (action() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property action in model RulesEngineRule"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property action in model RulesEngineRule"));
         } else {
             action().validate();
         }
@@ -179,4 +176,6 @@ public final class RulesEngineRule {
             matchConditions().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(RulesEngineRule.class);
 }

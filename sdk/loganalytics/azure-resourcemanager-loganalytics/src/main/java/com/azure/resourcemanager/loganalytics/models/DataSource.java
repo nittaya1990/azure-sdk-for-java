@@ -61,6 +61,13 @@ public interface DataSource {
     Map<String, String> tags();
 
     /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
+
+    /**
      * Gets the inner com.azure.resourcemanager.loganalytics.fluent.models.DataSourceInner object.
      *
      * @return the inner object.
@@ -68,18 +75,16 @@ public interface DataSource {
     DataSourceInner innerModel();
 
     /** The entirety of the DataSource definition. */
-    interface Definition
-        extends DefinitionStages.Blank,
-            DefinitionStages.WithParentResource,
-            DefinitionStages.WithProperties,
-            DefinitionStages.WithKind,
-            DefinitionStages.WithCreate {
+    interface Definition extends DefinitionStages.Blank, DefinitionStages.WithParentResource,
+        DefinitionStages.WithProperties, DefinitionStages.WithKind, DefinitionStages.WithCreate {
     }
+
     /** The DataSource definition stages. */
     interface DefinitionStages {
         /** The first stage of the DataSource definition. */
         interface Blank extends WithParentResource {
         }
+
         /** The stage of the DataSource definition allowing to specify parent resource. */
         interface WithParentResource {
             /**
@@ -91,6 +96,7 @@ public interface DataSource {
              */
             WithProperties withExistingWorkspace(String resourceGroupName, String workspaceName);
         }
+
         /** The stage of the DataSource definition allowing to specify properties. */
         interface WithProperties {
             /**
@@ -103,6 +109,7 @@ public interface DataSource {
              */
             WithKind withProperties(Object properties);
         }
+
         /** The stage of the DataSource definition allowing to specify kind. */
         interface WithKind {
             /**
@@ -113,6 +120,7 @@ public interface DataSource {
              */
             WithCreate withKind(DataSourceKind kind);
         }
+
         /**
          * The stage of the DataSource definition which contains all the minimum required properties for the resource to
          * be created, but also allows for any other optional properties to be specified.
@@ -133,6 +141,7 @@ public interface DataSource {
              */
             DataSource create(Context context);
         }
+
         /** The stage of the DataSource definition allowing to specify tags. */
         interface WithTags {
             /**
@@ -143,6 +152,7 @@ public interface DataSource {
              */
             WithCreate withTags(Map<String, String> tags);
         }
+
         /** The stage of the DataSource definition allowing to specify etag. */
         interface WithEtag {
             /**
@@ -154,6 +164,7 @@ public interface DataSource {
             WithCreate withEtag(String etag);
         }
     }
+
     /**
      * Begins update for the DataSource resource.
      *
@@ -179,6 +190,7 @@ public interface DataSource {
          */
         DataSource apply(Context context);
     }
+
     /** The DataSource update stages. */
     interface UpdateStages {
         /** The stage of the DataSource update allowing to specify tags. */
@@ -191,6 +203,7 @@ public interface DataSource {
              */
             Update withTags(Map<String, String> tags);
         }
+
         /** The stage of the DataSource update allowing to specify properties. */
         interface WithProperties {
             /**
@@ -203,6 +216,7 @@ public interface DataSource {
              */
             Update withProperties(Object properties);
         }
+
         /** The stage of the DataSource update allowing to specify etag. */
         interface WithEtag {
             /**
@@ -213,6 +227,7 @@ public interface DataSource {
              */
             Update withEtag(String etag);
         }
+
         /** The stage of the DataSource update allowing to specify kind. */
         interface WithKind {
             /**
@@ -224,6 +239,7 @@ public interface DataSource {
             Update withKind(DataSourceKind kind);
         }
     }
+
     /**
      * Refreshes the resource to sync with Azure.
      *

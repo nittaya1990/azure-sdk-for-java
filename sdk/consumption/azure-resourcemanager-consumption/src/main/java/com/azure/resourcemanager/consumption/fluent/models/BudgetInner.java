@@ -5,9 +5,10 @@
 package com.azure.resourcemanager.consumption.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
 import com.azure.resourcemanager.consumption.models.BudgetFilter;
 import com.azure.resourcemanager.consumption.models.BudgetTimePeriod;
 import com.azure.resourcemanager.consumption.models.CategoryType;
@@ -15,232 +16,60 @@ import com.azure.resourcemanager.consumption.models.CurrentSpend;
 import com.azure.resourcemanager.consumption.models.ForecastSpend;
 import com.azure.resourcemanager.consumption.models.Notification;
 import com.azure.resourcemanager.consumption.models.TimeGrainType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Map;
 
-/** A budget resource. */
-@JsonFlatten
+/**
+ * A budget resource.
+ */
 @Fluent
-public class BudgetInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(BudgetInner.class);
+public final class BudgetInner extends ProxyResource {
+    /*
+     * The properties of the budget.
+     */
+    private BudgetProperties innerProperties;
 
     /*
-     * The category of the budget, whether the budget tracks cost or usage.
+     * eTag of the resource. To handle concurrent update scenario, this field will be used to determine whether the user
+     * is updating the latest version or not.
      */
-    @JsonProperty(value = "properties.category")
-    private CategoryType category;
-
-    /*
-     * The total amount of cost to track with the budget
-     */
-    @JsonProperty(value = "properties.amount")
-    private BigDecimal amount;
-
-    /*
-     * The time covered by a budget. Tracking of the amount will be reset based
-     * on the time grain. BillingMonth, BillingQuarter, and BillingAnnual are
-     * only supported by WD customers
-     */
-    @JsonProperty(value = "properties.timeGrain")
-    private TimeGrainType timeGrain;
-
-    /*
-     * Has start and end date of the budget. The start date must be first of
-     * the month and should be less than the end date. Budget start date must
-     * be on or after June 1, 2017. Future start date should not be more than
-     * twelve months. Past start date should  be selected within the timegrain
-     * period. There are no restrictions on the end date.
-     */
-    @JsonProperty(value = "properties.timePeriod")
-    private BudgetTimePeriod timePeriod;
-
-    /*
-     * May be used to filter budgets by user-specified dimensions and/or tags.
-     */
-    @JsonProperty(value = "properties.filter")
-    private BudgetFilter filter;
-
-    /*
-     * The current amount of cost which is being tracked for a budget.
-     */
-    @JsonProperty(value = "properties.currentSpend", access = JsonProperty.Access.WRITE_ONLY)
-    private CurrentSpend currentSpend;
-
-    /*
-     * Dictionary of notifications associated with the budget. Budget can have
-     * up to five notifications.
-     */
-    @JsonProperty(value = "properties.notifications")
-    private Map<String, Notification> notifications;
-
-    /*
-     * The forecasted cost which is being tracked for a budget.
-     */
-    @JsonProperty(value = "properties.forecastSpend", access = JsonProperty.Access.WRITE_ONLY)
-    private ForecastSpend forecastSpend;
-
-    /*
-     * eTag of the resource. To handle concurrent update scenario, this field
-     * will be used to determine whether the user is updating the latest
-     * version or not.
-     */
-    @JsonProperty(value = "eTag")
     private String etag;
 
-    /**
-     * Get the category property: The category of the budget, whether the budget tracks cost or usage.
-     *
-     * @return the category value.
+    /*
+     * The type of the resource.
      */
-    public CategoryType category() {
-        return this.category;
+    private String type;
+
+    /*
+     * The name of the resource.
+     */
+    private String name;
+
+    /*
+     * Fully qualified resource Id for the resource.
+     */
+    private String id;
+
+    /**
+     * Creates an instance of BudgetInner class.
+     */
+    public BudgetInner() {
     }
 
     /**
-     * Set the category property: The category of the budget, whether the budget tracks cost or usage.
-     *
-     * @param category the category value to set.
-     * @return the BudgetInner object itself.
+     * Get the innerProperties property: The properties of the budget.
+     * 
+     * @return the innerProperties value.
      */
-    public BudgetInner withCategory(CategoryType category) {
-        this.category = category;
-        return this;
-    }
-
-    /**
-     * Get the amount property: The total amount of cost to track with the budget.
-     *
-     * @return the amount value.
-     */
-    public BigDecimal amount() {
-        return this.amount;
-    }
-
-    /**
-     * Set the amount property: The total amount of cost to track with the budget.
-     *
-     * @param amount the amount value to set.
-     * @return the BudgetInner object itself.
-     */
-    public BudgetInner withAmount(BigDecimal amount) {
-        this.amount = amount;
-        return this;
-    }
-
-    /**
-     * Get the timeGrain property: The time covered by a budget. Tracking of the amount will be reset based on the time
-     * grain. BillingMonth, BillingQuarter, and BillingAnnual are only supported by WD customers.
-     *
-     * @return the timeGrain value.
-     */
-    public TimeGrainType timeGrain() {
-        return this.timeGrain;
-    }
-
-    /**
-     * Set the timeGrain property: The time covered by a budget. Tracking of the amount will be reset based on the time
-     * grain. BillingMonth, BillingQuarter, and BillingAnnual are only supported by WD customers.
-     *
-     * @param timeGrain the timeGrain value to set.
-     * @return the BudgetInner object itself.
-     */
-    public BudgetInner withTimeGrain(TimeGrainType timeGrain) {
-        this.timeGrain = timeGrain;
-        return this;
-    }
-
-    /**
-     * Get the timePeriod property: Has start and end date of the budget. The start date must be first of the month and
-     * should be less than the end date. Budget start date must be on or after June 1, 2017. Future start date should
-     * not be more than twelve months. Past start date should be selected within the timegrain period. There are no
-     * restrictions on the end date.
-     *
-     * @return the timePeriod value.
-     */
-    public BudgetTimePeriod timePeriod() {
-        return this.timePeriod;
-    }
-
-    /**
-     * Set the timePeriod property: Has start and end date of the budget. The start date must be first of the month and
-     * should be less than the end date. Budget start date must be on or after June 1, 2017. Future start date should
-     * not be more than twelve months. Past start date should be selected within the timegrain period. There are no
-     * restrictions on the end date.
-     *
-     * @param timePeriod the timePeriod value to set.
-     * @return the BudgetInner object itself.
-     */
-    public BudgetInner withTimePeriod(BudgetTimePeriod timePeriod) {
-        this.timePeriod = timePeriod;
-        return this;
-    }
-
-    /**
-     * Get the filter property: May be used to filter budgets by user-specified dimensions and/or tags.
-     *
-     * @return the filter value.
-     */
-    public BudgetFilter filter() {
-        return this.filter;
-    }
-
-    /**
-     * Set the filter property: May be used to filter budgets by user-specified dimensions and/or tags.
-     *
-     * @param filter the filter value to set.
-     * @return the BudgetInner object itself.
-     */
-    public BudgetInner withFilter(BudgetFilter filter) {
-        this.filter = filter;
-        return this;
-    }
-
-    /**
-     * Get the currentSpend property: The current amount of cost which is being tracked for a budget.
-     *
-     * @return the currentSpend value.
-     */
-    public CurrentSpend currentSpend() {
-        return this.currentSpend;
-    }
-
-    /**
-     * Get the notifications property: Dictionary of notifications associated with the budget. Budget can have up to
-     * five notifications.
-     *
-     * @return the notifications value.
-     */
-    public Map<String, Notification> notifications() {
-        return this.notifications;
-    }
-
-    /**
-     * Set the notifications property: Dictionary of notifications associated with the budget. Budget can have up to
-     * five notifications.
-     *
-     * @param notifications the notifications value to set.
-     * @return the BudgetInner object itself.
-     */
-    public BudgetInner withNotifications(Map<String, Notification> notifications) {
-        this.notifications = notifications;
-        return this;
-    }
-
-    /**
-     * Get the forecastSpend property: The forecasted cost which is being tracked for a budget.
-     *
-     * @return the forecastSpend value.
-     */
-    public ForecastSpend forecastSpend() {
-        return this.forecastSpend;
+    private BudgetProperties innerProperties() {
+        return this.innerProperties;
     }
 
     /**
      * Get the etag property: eTag of the resource. To handle concurrent update scenario, this field will be used to
      * determine whether the user is updating the latest version or not.
-     *
+     * 
      * @return the etag value.
      */
     public String etag() {
@@ -250,7 +79,7 @@ public class BudgetInner extends ProxyResource {
     /**
      * Set the etag property: eTag of the resource. To handle concurrent update scenario, this field will be used to
      * determine whether the user is updating the latest version or not.
-     *
+     * 
      * @param etag the etag value to set.
      * @return the BudgetInner object itself.
      */
@@ -260,32 +89,255 @@ public class BudgetInner extends ProxyResource {
     }
 
     /**
+     * Get the type property: The type of the resource.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
+     * Get the name property: The name of the resource.
+     * 
+     * @return the name value.
+     */
+    @Override
+    public String name() {
+        return this.name;
+    }
+
+    /**
+     * Get the id property: Fully qualified resource Id for the resource.
+     * 
+     * @return the id value.
+     */
+    @Override
+    public String id() {
+        return this.id;
+    }
+
+    /**
+     * Get the category property: The category of the budget, whether the budget tracks cost or usage.
+     * 
+     * @return the category value.
+     */
+    public CategoryType category() {
+        return this.innerProperties() == null ? null : this.innerProperties().category();
+    }
+
+    /**
+     * Set the category property: The category of the budget, whether the budget tracks cost or usage.
+     * 
+     * @param category the category value to set.
+     * @return the BudgetInner object itself.
+     */
+    public BudgetInner withCategory(CategoryType category) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new BudgetProperties();
+        }
+        this.innerProperties().withCategory(category);
+        return this;
+    }
+
+    /**
+     * Get the amount property: The total amount of cost to track with the budget.
+     * 
+     * @return the amount value.
+     */
+    public BigDecimal amount() {
+        return this.innerProperties() == null ? null : this.innerProperties().amount();
+    }
+
+    /**
+     * Set the amount property: The total amount of cost to track with the budget.
+     * 
+     * @param amount the amount value to set.
+     * @return the BudgetInner object itself.
+     */
+    public BudgetInner withAmount(BigDecimal amount) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new BudgetProperties();
+        }
+        this.innerProperties().withAmount(amount);
+        return this;
+    }
+
+    /**
+     * Get the timeGrain property: The time covered by a budget. Tracking of the amount will be reset based on the time
+     * grain. BillingMonth, BillingQuarter, and BillingAnnual are only supported by WD customers.
+     * 
+     * @return the timeGrain value.
+     */
+    public TimeGrainType timeGrain() {
+        return this.innerProperties() == null ? null : this.innerProperties().timeGrain();
+    }
+
+    /**
+     * Set the timeGrain property: The time covered by a budget. Tracking of the amount will be reset based on the time
+     * grain. BillingMonth, BillingQuarter, and BillingAnnual are only supported by WD customers.
+     * 
+     * @param timeGrain the timeGrain value to set.
+     * @return the BudgetInner object itself.
+     */
+    public BudgetInner withTimeGrain(TimeGrainType timeGrain) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new BudgetProperties();
+        }
+        this.innerProperties().withTimeGrain(timeGrain);
+        return this;
+    }
+
+    /**
+     * Get the timePeriod property: Has start and end date of the budget. The start date must be first of the month and
+     * should be less than the end date. Budget start date must be on or after June 1, 2017. Future start date should
+     * not be more than twelve months. Past start date should be selected within the timegrain period. There are no
+     * restrictions on the end date.
+     * 
+     * @return the timePeriod value.
+     */
+    public BudgetTimePeriod timePeriod() {
+        return this.innerProperties() == null ? null : this.innerProperties().timePeriod();
+    }
+
+    /**
+     * Set the timePeriod property: Has start and end date of the budget. The start date must be first of the month and
+     * should be less than the end date. Budget start date must be on or after June 1, 2017. Future start date should
+     * not be more than twelve months. Past start date should be selected within the timegrain period. There are no
+     * restrictions on the end date.
+     * 
+     * @param timePeriod the timePeriod value to set.
+     * @return the BudgetInner object itself.
+     */
+    public BudgetInner withTimePeriod(BudgetTimePeriod timePeriod) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new BudgetProperties();
+        }
+        this.innerProperties().withTimePeriod(timePeriod);
+        return this;
+    }
+
+    /**
+     * Get the filter property: May be used to filter budgets by user-specified dimensions and/or tags.
+     * 
+     * @return the filter value.
+     */
+    public BudgetFilter filter() {
+        return this.innerProperties() == null ? null : this.innerProperties().filter();
+    }
+
+    /**
+     * Set the filter property: May be used to filter budgets by user-specified dimensions and/or tags.
+     * 
+     * @param filter the filter value to set.
+     * @return the BudgetInner object itself.
+     */
+    public BudgetInner withFilter(BudgetFilter filter) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new BudgetProperties();
+        }
+        this.innerProperties().withFilter(filter);
+        return this;
+    }
+
+    /**
+     * Get the currentSpend property: The current amount of cost which is being tracked for a budget.
+     * 
+     * @return the currentSpend value.
+     */
+    public CurrentSpend currentSpend() {
+        return this.innerProperties() == null ? null : this.innerProperties().currentSpend();
+    }
+
+    /**
+     * Get the notifications property: Dictionary of notifications associated with the budget. Budget can have up to
+     * five notifications.
+     * 
+     * @return the notifications value.
+     */
+    public Map<String, Notification> notifications() {
+        return this.innerProperties() == null ? null : this.innerProperties().notifications();
+    }
+
+    /**
+     * Set the notifications property: Dictionary of notifications associated with the budget. Budget can have up to
+     * five notifications.
+     * 
+     * @param notifications the notifications value to set.
+     * @return the BudgetInner object itself.
+     */
+    public BudgetInner withNotifications(Map<String, Notification> notifications) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new BudgetProperties();
+        }
+        this.innerProperties().withNotifications(notifications);
+        return this;
+    }
+
+    /**
+     * Get the forecastSpend property: The forecasted cost which is being tracked for a budget.
+     * 
+     * @return the forecastSpend value.
+     */
+    public ForecastSpend forecastSpend() {
+        return this.innerProperties() == null ? null : this.innerProperties().forecastSpend();
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
-        if (timePeriod() != null) {
-            timePeriod().validate();
+        if (innerProperties() != null) {
+            innerProperties().validate();
         }
-        if (filter() != null) {
-            filter().validate();
-        }
-        if (currentSpend() != null) {
-            currentSpend().validate();
-        }
-        if (notifications() != null) {
-            notifications()
-                .values()
-                .forEach(
-                    e -> {
-                        if (e != null) {
-                            e.validate();
-                        }
-                    });
-        }
-        if (forecastSpend() != null) {
-            forecastSpend().validate();
-        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        jsonWriter.writeStringField("eTag", this.etag);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of BudgetInner from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of BudgetInner if the JsonReader was pointing to an instance of it, or null if it was
+     * pointing to JSON null.
+     * @throws IllegalStateException If the deserialized JSON object was missing any required properties.
+     * @throws IOException If an error occurs while reading the BudgetInner.
+     */
+    public static BudgetInner fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            BudgetInner deserializedBudgetInner = new BudgetInner();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("id".equals(fieldName)) {
+                    deserializedBudgetInner.id = reader.getString();
+                } else if ("name".equals(fieldName)) {
+                    deserializedBudgetInner.name = reader.getString();
+                } else if ("type".equals(fieldName)) {
+                    deserializedBudgetInner.type = reader.getString();
+                } else if ("properties".equals(fieldName)) {
+                    deserializedBudgetInner.innerProperties = BudgetProperties.fromJson(reader);
+                } else if ("eTag".equals(fieldName)) {
+                    deserializedBudgetInner.etag = reader.getString();
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedBudgetInner;
+        });
     }
 }

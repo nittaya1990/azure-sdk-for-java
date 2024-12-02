@@ -8,32 +8,55 @@ import com.azure.core.util.ExpandableStringEnum;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.Collection;
 
-/** Defines values for AdaptiveApplicationControlIssue. */
+/**
+ * An alert that machines within a group can have.
+ */
 public final class AdaptiveApplicationControlIssue extends ExpandableStringEnum<AdaptiveApplicationControlIssue> {
-    /** Static value ViolationsAudited for AdaptiveApplicationControlIssue. */
+    /**
+     * Static value ViolationsAudited for AdaptiveApplicationControlIssue.
+     */
     public static final AdaptiveApplicationControlIssue VIOLATIONS_AUDITED = fromString("ViolationsAudited");
 
-    /** Static value ViolationsBlocked for AdaptiveApplicationControlIssue. */
+    /**
+     * Static value ViolationsBlocked for AdaptiveApplicationControlIssue.
+     */
     public static final AdaptiveApplicationControlIssue VIOLATIONS_BLOCKED = fromString("ViolationsBlocked");
 
-    /** Static value MsiAndScriptViolationsAudited for AdaptiveApplicationControlIssue. */
-    public static final AdaptiveApplicationControlIssue MSI_AND_SCRIPT_VIOLATIONS_AUDITED =
-        fromString("MsiAndScriptViolationsAudited");
+    /**
+     * Static value MsiAndScriptViolationsAudited for AdaptiveApplicationControlIssue.
+     */
+    public static final AdaptiveApplicationControlIssue MSI_AND_SCRIPT_VIOLATIONS_AUDITED
+        = fromString("MsiAndScriptViolationsAudited");
 
-    /** Static value MsiAndScriptViolationsBlocked for AdaptiveApplicationControlIssue. */
-    public static final AdaptiveApplicationControlIssue MSI_AND_SCRIPT_VIOLATIONS_BLOCKED =
-        fromString("MsiAndScriptViolationsBlocked");
+    /**
+     * Static value MsiAndScriptViolationsBlocked for AdaptiveApplicationControlIssue.
+     */
+    public static final AdaptiveApplicationControlIssue MSI_AND_SCRIPT_VIOLATIONS_BLOCKED
+        = fromString("MsiAndScriptViolationsBlocked");
 
-    /** Static value ExecutableViolationsAudited for AdaptiveApplicationControlIssue. */
-    public static final AdaptiveApplicationControlIssue EXECUTABLE_VIOLATIONS_AUDITED =
-        fromString("ExecutableViolationsAudited");
+    /**
+     * Static value ExecutableViolationsAudited for AdaptiveApplicationControlIssue.
+     */
+    public static final AdaptiveApplicationControlIssue EXECUTABLE_VIOLATIONS_AUDITED
+        = fromString("ExecutableViolationsAudited");
 
-    /** Static value RulesViolatedManually for AdaptiveApplicationControlIssue. */
+    /**
+     * Static value RulesViolatedManually for AdaptiveApplicationControlIssue.
+     */
     public static final AdaptiveApplicationControlIssue RULES_VIOLATED_MANUALLY = fromString("RulesViolatedManually");
 
     /**
+     * Creates a new instance of AdaptiveApplicationControlIssue value.
+     * 
+     * @deprecated Use the {@link #fromString(String)} factory method.
+     */
+    @Deprecated
+    public AdaptiveApplicationControlIssue() {
+    }
+
+    /**
      * Creates or finds a AdaptiveApplicationControlIssue from its string representation.
-     *
+     * 
      * @param name a name to look for.
      * @return the corresponding AdaptiveApplicationControlIssue.
      */
@@ -42,7 +65,11 @@ public final class AdaptiveApplicationControlIssue extends ExpandableStringEnum<
         return fromString(name, AdaptiveApplicationControlIssue.class);
     }
 
-    /** @return known AdaptiveApplicationControlIssue values. */
+    /**
+     * Gets known AdaptiveApplicationControlIssue values.
+     * 
+     * @return known AdaptiveApplicationControlIssue values.
+     */
     public static Collection<AdaptiveApplicationControlIssue> values() {
         return values(AdaptiveApplicationControlIssue.class);
     }

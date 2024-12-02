@@ -5,21 +5,17 @@
 package com.azure.resourcemanager.eventgrid.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.eventgrid.models.DeliveryAttributeMapping;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The properties that represent the Azure Function destination of an event subscription. */
+/**
+ * The properties that represent the Azure Function destination of an event subscription.
+ */
 @Fluent
 public final class AzureFunctionEventSubscriptionDestinationProperties {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(AzureFunctionEventSubscriptionDestinationProperties.class);
-
     /*
-     * The Azure Resource Id that represents the endpoint of the Azure Function
-     * destination of an event subscription.
+     * The Azure Resource Id that represents the endpoint of the Azure Function destination of an event subscription.
      */
     @JsonProperty(value = "resourceId")
     private String resourceId;
@@ -43,9 +39,15 @@ public final class AzureFunctionEventSubscriptionDestinationProperties {
     private List<DeliveryAttributeMapping> deliveryAttributeMappings;
 
     /**
+     * Creates an instance of AzureFunctionEventSubscriptionDestinationProperties class.
+     */
+    public AzureFunctionEventSubscriptionDestinationProperties() {
+    }
+
+    /**
      * Get the resourceId property: The Azure Resource Id that represents the endpoint of the Azure Function destination
      * of an event subscription.
-     *
+     * 
      * @return the resourceId value.
      */
     public String resourceId() {
@@ -55,7 +57,7 @@ public final class AzureFunctionEventSubscriptionDestinationProperties {
     /**
      * Set the resourceId property: The Azure Resource Id that represents the endpoint of the Azure Function destination
      * of an event subscription.
-     *
+     * 
      * @param resourceId the resourceId value to set.
      * @return the AzureFunctionEventSubscriptionDestinationProperties object itself.
      */
@@ -66,7 +68,7 @@ public final class AzureFunctionEventSubscriptionDestinationProperties {
 
     /**
      * Get the maxEventsPerBatch property: Maximum number of events per batch.
-     *
+     * 
      * @return the maxEventsPerBatch value.
      */
     public Integer maxEventsPerBatch() {
@@ -75,7 +77,7 @@ public final class AzureFunctionEventSubscriptionDestinationProperties {
 
     /**
      * Set the maxEventsPerBatch property: Maximum number of events per batch.
-     *
+     * 
      * @param maxEventsPerBatch the maxEventsPerBatch value to set.
      * @return the AzureFunctionEventSubscriptionDestinationProperties object itself.
      */
@@ -86,7 +88,7 @@ public final class AzureFunctionEventSubscriptionDestinationProperties {
 
     /**
      * Get the preferredBatchSizeInKilobytes property: Preferred batch size in Kilobytes.
-     *
+     * 
      * @return the preferredBatchSizeInKilobytes value.
      */
     public Integer preferredBatchSizeInKilobytes() {
@@ -95,19 +97,19 @@ public final class AzureFunctionEventSubscriptionDestinationProperties {
 
     /**
      * Set the preferredBatchSizeInKilobytes property: Preferred batch size in Kilobytes.
-     *
+     * 
      * @param preferredBatchSizeInKilobytes the preferredBatchSizeInKilobytes value to set.
      * @return the AzureFunctionEventSubscriptionDestinationProperties object itself.
      */
-    public AzureFunctionEventSubscriptionDestinationProperties withPreferredBatchSizeInKilobytes(
-        Integer preferredBatchSizeInKilobytes) {
+    public AzureFunctionEventSubscriptionDestinationProperties
+        withPreferredBatchSizeInKilobytes(Integer preferredBatchSizeInKilobytes) {
         this.preferredBatchSizeInKilobytes = preferredBatchSizeInKilobytes;
         return this;
     }
 
     /**
      * Get the deliveryAttributeMappings property: Delivery attribute details.
-     *
+     * 
      * @return the deliveryAttributeMappings value.
      */
     public List<DeliveryAttributeMapping> deliveryAttributeMappings() {
@@ -116,19 +118,19 @@ public final class AzureFunctionEventSubscriptionDestinationProperties {
 
     /**
      * Set the deliveryAttributeMappings property: Delivery attribute details.
-     *
+     * 
      * @param deliveryAttributeMappings the deliveryAttributeMappings value to set.
      * @return the AzureFunctionEventSubscriptionDestinationProperties object itself.
      */
-    public AzureFunctionEventSubscriptionDestinationProperties withDeliveryAttributeMappings(
-        List<DeliveryAttributeMapping> deliveryAttributeMappings) {
+    public AzureFunctionEventSubscriptionDestinationProperties
+        withDeliveryAttributeMappings(List<DeliveryAttributeMapping> deliveryAttributeMappings) {
         this.deliveryAttributeMappings = deliveryAttributeMappings;
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

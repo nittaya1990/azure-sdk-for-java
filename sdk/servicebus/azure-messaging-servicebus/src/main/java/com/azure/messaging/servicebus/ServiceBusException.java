@@ -21,6 +21,10 @@ import java.util.function.Consumer;
 public final class ServiceBusException extends AzureException {
     private final transient ServiceBusErrorSource errorSource;
     private final transient ServiceBusFailureReason reason;
+
+    /**
+     * Whether the exception is transient.
+     */
     private final boolean isTransient;
 
     /**
@@ -52,7 +56,7 @@ public final class ServiceBusException extends AzureException {
     }
 
     /**
-     * Gets whether or not the exception is a transient error or not.
+     * Gets whether the exception is a transient error.
      *
      * @return {@code true} when user can retry the operation that generated the exception without additional
      *      intervention; false otherwise.
@@ -80,30 +84,43 @@ public final class ServiceBusException extends AzureException {
         switch (errorCondition) {
             case NOT_FOUND:
                 return ServiceBusFailureReason.MESSAGING_ENTITY_NOT_FOUND;
+
             case MESSAGE_LOCK_LOST:
                 return ServiceBusFailureReason.MESSAGE_LOCK_LOST;
+
             case MESSAGE_NOT_FOUND:
                 return ServiceBusFailureReason.MESSAGE_NOT_FOUND;
+
             case LINK_PAYLOAD_SIZE_EXCEEDED:
                 return ServiceBusFailureReason.MESSAGE_SIZE_EXCEEDED;
+
             case ENTITY_ALREADY_EXISTS:
                 return ServiceBusFailureReason.MESSAGING_ENTITY_ALREADY_EXISTS;
+
             case ENTITY_DISABLED_ERROR:
                 return ServiceBusFailureReason.MESSAGING_ENTITY_DISABLED;
+
             case RESOURCE_LIMIT_EXCEEDED:
                 return ServiceBusFailureReason.QUOTA_EXCEEDED;
+
             case SERVER_BUSY_ERROR:
                 return ServiceBusFailureReason.SERVICE_BUSY;
+
             case TIMEOUT_ERROR:
                 return ServiceBusFailureReason.SERVICE_TIMEOUT;
+
             case SESSION_CANNOT_BE_LOCKED:
                 return ServiceBusFailureReason.SESSION_CANNOT_BE_LOCKED;
+
             case SESSION_LOCK_LOST:
                 return ServiceBusFailureReason.SESSION_LOCK_LOST;
+
             case UNAUTHORIZED_ACCESS:
                 return ServiceBusFailureReason.UNAUTHORIZED;
+
             case PROTON_IO:
                 return ServiceBusFailureReason.SERVICE_COMMUNICATION_ERROR;
+
             default:
                 return ServiceBusFailureReason.GENERAL_ERROR;
         }

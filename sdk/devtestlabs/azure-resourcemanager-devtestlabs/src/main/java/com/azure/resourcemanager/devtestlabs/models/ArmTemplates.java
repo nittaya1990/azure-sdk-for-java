@@ -19,7 +19,7 @@ public interface ArmTemplates {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation as paginated response with {@link PagedIterable}.
      */
     PagedIterable<ArmTemplate> list(String resourceGroupName, String labName, String artifactSourceName);
 
@@ -37,17 +37,27 @@ public interface ArmTemplates {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation as paginated response with {@link PagedIterable}.
      */
-    PagedIterable<ArmTemplate> list(
-        String resourceGroupName,
-        String labName,
-        String artifactSourceName,
-        String expand,
-        String filter,
-        Integer top,
-        String orderby,
-        Context context);
+    PagedIterable<ArmTemplate> list(String resourceGroupName, String labName, String artifactSourceName, String expand,
+        String filter, Integer top, String orderby, Context context);
+
+    /**
+     * Get azure resource manager template.
+     *
+     * @param resourceGroupName The name of the resource group.
+     * @param labName The name of the lab.
+     * @param artifactSourceName The name of the artifact source.
+     * @param name The name of the azure resource manager template.
+     * @param expand Specify the $expand query. Example: 'properties($select=displayName)'.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return azure resource manager template along with {@link Response}.
+     */
+    Response<ArmTemplate> getWithResponse(String resourceGroupName, String labName, String artifactSourceName,
+        String name, String expand, Context context);
 
     /**
      * Get azure resource manager template.
@@ -62,26 +72,4 @@ public interface ArmTemplates {
      * @return azure resource manager template.
      */
     ArmTemplate get(String resourceGroupName, String labName, String artifactSourceName, String name);
-
-    /**
-     * Get azure resource manager template.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param labName The name of the lab.
-     * @param artifactSourceName The name of the artifact source.
-     * @param name The name of the azure resource manager template.
-     * @param expand Specify the $expand query. Example: 'properties($select=displayName)'.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return azure resource manager template.
-     */
-    Response<ArmTemplate> getWithResponse(
-        String resourceGroupName,
-        String labName,
-        String artifactSourceName,
-        String name,
-        String expand,
-        Context context);
 }

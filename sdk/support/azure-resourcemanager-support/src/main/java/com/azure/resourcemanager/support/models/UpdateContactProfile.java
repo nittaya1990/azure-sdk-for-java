@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.support.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Contact information associated with the support ticket. */
+/**
+ * Contact information associated with the support ticket.
+ */
 @Fluent
 public final class UpdateContactProfile {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(UpdateContactProfile.class);
-
     /*
      * First name.
      */
@@ -40,8 +38,7 @@ public final class UpdateContactProfile {
     private String primaryEmailAddress;
 
     /*
-     * Email addresses listed will be copied on any correspondence about the
-     * support ticket.
+     * Email addresses listed will be copied on any correspondence about the support ticket.
      */
     @JsonProperty(value = "additionalEmailAddresses")
     private List<String> additionalEmailAddresses;
@@ -53,9 +50,7 @@ public final class UpdateContactProfile {
     private String phoneNumber;
 
     /*
-     * Time zone of the user. This is the name of the time zone from [Microsoft
-     * Time Zone Index
-     * Values](https://support.microsoft.com/help/973627/microsoft-time-zone-index-values).
+     * Time zone of the user. This is the name of the time zone from [Microsoft Time Zone Index Values](https://support.microsoft.com/help/973627/microsoft-time-zone-index-values).
      */
     @JsonProperty(value = "preferredTimeZone")
     private String preferredTimeZone;
@@ -67,22 +62,20 @@ public final class UpdateContactProfile {
     private String country;
 
     /*
-     * Preferred language of support from Azure. Support languages vary based
-     * on the severity you choose for your support ticket. Learn more at [Azure
-     * Severity and
-     * responsiveness](https://azure.microsoft.com/support/plans/response/).
-     * Use the standard language-country code. Valid values are 'en-us' for
-     * English, 'zh-hans' for Chinese, 'es-es' for Spanish, 'fr-fr' for French,
-     * 'ja-jp' for Japanese, 'ko-kr' for Korean, 'ru-ru' for Russian, 'pt-br'
-     * for Portuguese, 'it-it' for Italian, 'zh-tw' for Chinese and 'de-de' for
-     * German.
+     * Preferred language of support from Azure. Support languages vary based on the severity you choose for your support ticket. Learn more at [Azure Severity and responsiveness](https://azure.microsoft.com/support/plans/response/). Use the standard language-country code. Valid values are 'en-us' for English, 'zh-hans' for Chinese, 'es-es' for Spanish, 'fr-fr' for French, 'ja-jp' for Japanese, 'ko-kr' for Korean, 'ru-ru' for Russian, 'pt-br' for Portuguese, 'it-it' for Italian, 'zh-tw' for Chinese and 'de-de' for German.
      */
     @JsonProperty(value = "preferredSupportLanguage")
     private String preferredSupportLanguage;
 
     /**
+     * Creates an instance of UpdateContactProfile class.
+     */
+    public UpdateContactProfile() {
+    }
+
+    /**
      * Get the firstName property: First name.
-     *
+     * 
      * @return the firstName value.
      */
     public String firstName() {
@@ -91,7 +84,7 @@ public final class UpdateContactProfile {
 
     /**
      * Set the firstName property: First name.
-     *
+     * 
      * @param firstName the firstName value to set.
      * @return the UpdateContactProfile object itself.
      */
@@ -102,7 +95,7 @@ public final class UpdateContactProfile {
 
     /**
      * Get the lastName property: Last name.
-     *
+     * 
      * @return the lastName value.
      */
     public String lastName() {
@@ -111,7 +104,7 @@ public final class UpdateContactProfile {
 
     /**
      * Set the lastName property: Last name.
-     *
+     * 
      * @param lastName the lastName value to set.
      * @return the UpdateContactProfile object itself.
      */
@@ -122,7 +115,7 @@ public final class UpdateContactProfile {
 
     /**
      * Get the preferredContactMethod property: Preferred contact method.
-     *
+     * 
      * @return the preferredContactMethod value.
      */
     public PreferredContactMethod preferredContactMethod() {
@@ -131,7 +124,7 @@ public final class UpdateContactProfile {
 
     /**
      * Set the preferredContactMethod property: Preferred contact method.
-     *
+     * 
      * @param preferredContactMethod the preferredContactMethod value to set.
      * @return the UpdateContactProfile object itself.
      */
@@ -142,7 +135,7 @@ public final class UpdateContactProfile {
 
     /**
      * Get the primaryEmailAddress property: Primary email address.
-     *
+     * 
      * @return the primaryEmailAddress value.
      */
     public String primaryEmailAddress() {
@@ -151,7 +144,7 @@ public final class UpdateContactProfile {
 
     /**
      * Set the primaryEmailAddress property: Primary email address.
-     *
+     * 
      * @param primaryEmailAddress the primaryEmailAddress value to set.
      * @return the UpdateContactProfile object itself.
      */
@@ -163,7 +156,7 @@ public final class UpdateContactProfile {
     /**
      * Get the additionalEmailAddresses property: Email addresses listed will be copied on any correspondence about the
      * support ticket.
-     *
+     * 
      * @return the additionalEmailAddresses value.
      */
     public List<String> additionalEmailAddresses() {
@@ -173,7 +166,7 @@ public final class UpdateContactProfile {
     /**
      * Set the additionalEmailAddresses property: Email addresses listed will be copied on any correspondence about the
      * support ticket.
-     *
+     * 
      * @param additionalEmailAddresses the additionalEmailAddresses value to set.
      * @return the UpdateContactProfile object itself.
      */
@@ -184,7 +177,7 @@ public final class UpdateContactProfile {
 
     /**
      * Get the phoneNumber property: Phone number. This is required if preferred contact method is phone.
-     *
+     * 
      * @return the phoneNumber value.
      */
     public String phoneNumber() {
@@ -193,7 +186,7 @@ public final class UpdateContactProfile {
 
     /**
      * Set the phoneNumber property: Phone number. This is required if preferred contact method is phone.
-     *
+     * 
      * @param phoneNumber the phoneNumber value to set.
      * @return the UpdateContactProfile object itself.
      */
@@ -205,7 +198,7 @@ public final class UpdateContactProfile {
     /**
      * Get the preferredTimeZone property: Time zone of the user. This is the name of the time zone from [Microsoft Time
      * Zone Index Values](https://support.microsoft.com/help/973627/microsoft-time-zone-index-values).
-     *
+     * 
      * @return the preferredTimeZone value.
      */
     public String preferredTimeZone() {
@@ -215,7 +208,7 @@ public final class UpdateContactProfile {
     /**
      * Set the preferredTimeZone property: Time zone of the user. This is the name of the time zone from [Microsoft Time
      * Zone Index Values](https://support.microsoft.com/help/973627/microsoft-time-zone-index-values).
-     *
+     * 
      * @param preferredTimeZone the preferredTimeZone value to set.
      * @return the UpdateContactProfile object itself.
      */
@@ -226,7 +219,7 @@ public final class UpdateContactProfile {
 
     /**
      * Get the country property: Country of the user. This is the ISO 3166-1 alpha-3 code.
-     *
+     * 
      * @return the country value.
      */
     public String country() {
@@ -235,7 +228,7 @@ public final class UpdateContactProfile {
 
     /**
      * Set the country property: Country of the user. This is the ISO 3166-1 alpha-3 code.
-     *
+     * 
      * @param country the country value to set.
      * @return the UpdateContactProfile object itself.
      */
@@ -251,7 +244,7 @@ public final class UpdateContactProfile {
      * Valid values are 'en-us' for English, 'zh-hans' for Chinese, 'es-es' for Spanish, 'fr-fr' for French, 'ja-jp' for
      * Japanese, 'ko-kr' for Korean, 'ru-ru' for Russian, 'pt-br' for Portuguese, 'it-it' for Italian, 'zh-tw' for
      * Chinese and 'de-de' for German.
-     *
+     * 
      * @return the preferredSupportLanguage value.
      */
     public String preferredSupportLanguage() {
@@ -265,7 +258,7 @@ public final class UpdateContactProfile {
      * Valid values are 'en-us' for English, 'zh-hans' for Chinese, 'es-es' for Spanish, 'fr-fr' for French, 'ja-jp' for
      * Japanese, 'ko-kr' for Korean, 'ru-ru' for Russian, 'pt-br' for Portuguese, 'it-it' for Italian, 'zh-tw' for
      * Chinese and 'de-de' for German.
-     *
+     * 
      * @param preferredSupportLanguage the preferredSupportLanguage value to set.
      * @return the UpdateContactProfile object itself.
      */
@@ -276,7 +269,7 @@ public final class UpdateContactProfile {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

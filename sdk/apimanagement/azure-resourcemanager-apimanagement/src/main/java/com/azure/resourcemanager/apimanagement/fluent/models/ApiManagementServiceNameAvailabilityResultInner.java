@@ -5,42 +5,37 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.models.NameAvailabilityReason;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Response of the CheckNameAvailability operation. */
 @Fluent
 public final class ApiManagementServiceNameAvailabilityResultInner {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(ApiManagementServiceNameAvailabilityResultInner.class);
-
     /*
-     * True if the name is available and can be used to create a new API
-     * Management service; otherwise false.
+     * True if the name is available and can be used to create a new API Management service; otherwise false.
      */
     @JsonProperty(value = "nameAvailable", access = JsonProperty.Access.WRITE_ONLY)
     private Boolean nameAvailable;
 
     /*
-     * If reason == invalid, provide the user with the reason why the given
-     * name is invalid, and provide the resource naming requirements so that
-     * the user can select a valid name. If reason == AlreadyExists, explain
-     * that <resourceName> is already in use, and direct them to select a
-     * different name.
+     * If reason == invalid, provide the user with the reason why the given name is invalid, and provide the resource
+     * naming requirements so that the user can select a valid name. If reason == AlreadyExists, explain that
+     * <resourceName> is already in use, and direct them to select a different name.
      */
     @JsonProperty(value = "message", access = JsonProperty.Access.WRITE_ONLY)
     private String message;
 
     /*
-     * Invalid indicates the name provided does not match the resource
-     * provider’s naming requirements (incorrect length, unsupported
-     * characters, etc.)  AlreadyExists indicates that the name is already in
-     * use and is therefore unavailable.
+     * Invalid indicates the name provided does not match the resource provider’s naming requirements (incorrect
+     * length, unsupported characters, etc.)  AlreadyExists indicates that the name is already in use and is therefore
+     * unavailable.
      */
     @JsonProperty(value = "reason")
     private NameAvailabilityReason reason;
+
+    /** Creates an instance of ApiManagementServiceNameAvailabilityResultInner class. */
+    public ApiManagementServiceNameAvailabilityResultInner() {
+    }
 
     /**
      * Get the nameAvailable property: True if the name is available and can be used to create a new API Management

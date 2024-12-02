@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Describes The SKU capabilities object. */
 @Immutable
 public final class ApiManagementSkuCapabilities {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApiManagementSkuCapabilities.class);
-
     /*
      * An invariant to describe the feature.
      */
@@ -25,6 +21,10 @@ public final class ApiManagementSkuCapabilities {
      */
     @JsonProperty(value = "value", access = JsonProperty.Access.WRITE_ONLY)
     private String value;
+
+    /** Creates an instance of ApiManagementSkuCapabilities class. */
+    public ApiManagementSkuCapabilities() {
+    }
 
     /**
      * Get the name property: An invariant to describe the feature.

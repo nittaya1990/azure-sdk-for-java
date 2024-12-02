@@ -2,7 +2,16 @@
 
 ## 1.0.0-beta.3 (Unreleased)
 
+### Breaking Changes
 
+- Merged the `Context` parameter into the `RequestOptions` parameter in methods of clients.
+- Modified `tagClassificationVersion` method, method takes one more `action` parameter.
+
+### Other Changes
+
+#### Dependency Updates
+
+- Upgraded `azure-core` to `1.23.0`.
 
 ## 1.0.0-beta.2 (2021-10-15)
 

@@ -24,8 +24,10 @@ import com.azure.resourcemanager.streamanalytics.models.JobType;
 import com.azure.resourcemanager.streamanalytics.models.Output;
 import com.azure.resourcemanager.streamanalytics.models.OutputErrorPolicy;
 import com.azure.resourcemanager.streamanalytics.models.OutputStartMode;
+import com.azure.resourcemanager.streamanalytics.models.ScaleStreamingJobParameters;
+import com.azure.resourcemanager.streamanalytics.models.Sku;
+import com.azure.resourcemanager.streamanalytics.models.StartStreamingJobParameters;
 import com.azure.resourcemanager.streamanalytics.models.StreamingJob;
-import com.azure.resourcemanager.streamanalytics.models.StreamingJobSku;
 import com.azure.resourcemanager.streamanalytics.models.Transformation;
 import java.time.OffsetDateTime;
 import java.util.Collections;
@@ -63,12 +65,16 @@ public final class StreamingJobImpl implements StreamingJob, StreamingJob.Defini
         }
     }
 
+    public Sku sku() {
+        return this.innerModel().sku();
+    }
+
     public Identity identity() {
         return this.innerModel().identity();
     }
 
-    public StreamingJobSku sku() {
-        return this.innerModel().sku();
+    public Sku skuPropertiesSku() {
+        return this.innerModel().skuPropertiesSku();
     }
 
     public String jobId() {
@@ -130,9 +136,8 @@ public final class StreamingJobImpl implements StreamingJob, StreamingJob.Defini
     public List<Input> inputs() {
         List<InputInner> inner = this.innerModel().inputs();
         if (inner != null) {
-            return Collections
-                .unmodifiableList(
-                    inner.stream().map(inner1 -> new InputImpl(inner1, this.manager())).collect(Collectors.toList()));
+            return Collections.unmodifiableList(
+                inner.stream().map(inner1 -> new InputImpl(inner1, this.manager())).collect(Collectors.toList()));
         } else {
             return Collections.emptyList();
         }
@@ -150,9 +155,8 @@ public final class StreamingJobImpl implements StreamingJob, StreamingJob.Defini
     public List<Output> outputs() {
         List<OutputInner> inner = this.innerModel().outputs();
         if (inner != null) {
-            return Collections
-                .unmodifiableList(
-                    inner.stream().map(inner1 -> new OutputImpl(inner1, this.manager())).collect(Collectors.toList()));
+            return Collections.unmodifiableList(
+                inner.stream().map(inner1 -> new OutputImpl(inner1, this.manager())).collect(Collectors.toList()));
         } else {
             return Collections.emptyList();
         }
@@ -161,12 +165,8 @@ public final class StreamingJobImpl implements StreamingJob, StreamingJob.Defini
     public List<Function> functions() {
         List<FunctionInner> inner = this.innerModel().functions();
         if (inner != null) {
-            return Collections
-                .unmodifiableList(
-                    inner
-                        .stream()
-                        .map(inner1 -> new FunctionImpl(inner1, this.manager()))
-                        .collect(Collectors.toList()));
+            return Collections.unmodifiableList(
+                inner.stream().map(inner1 -> new FunctionImpl(inner1, this.manager())).collect(Collectors.toList()));
         } else {
             return Collections.emptyList();
         }
@@ -200,6 +200,10 @@ public final class StreamingJobImpl implements StreamingJob, StreamingJob.Defini
         return this.location();
     }
 
+    public String resourceGroupName() {
+        return resourceGroupName;
+    }
+
     public StreamingJobInner innerModel() {
         return this.innerObject;
     }
@@ -224,22 +228,17 @@ public final class StreamingJobImpl implements StreamingJob, StreamingJob.Defini
     }
 
     public StreamingJob create() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getStreamingJobs()
-                .createOrReplace(
-                    resourceGroupName, jobName, this.innerModel(), createIfMatch, createIfNoneMatch, Context.NONE);
+        this.innerObject = serviceManager.serviceClient()
+            .getStreamingJobs()
+            .createOrReplace(resourceGroupName, jobName, this.innerModel(), createIfMatch, createIfNoneMatch,
+                Context.NONE);
         return this;
     }
 
     public StreamingJob create(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getStreamingJobs()
-                .createOrReplace(
-                    resourceGroupName, jobName, this.innerModel(), createIfMatch, createIfNoneMatch, context);
+        this.innerObject = serviceManager.serviceClient()
+            .getStreamingJobs()
+            .createOrReplace(resourceGroupName, jobName, this.innerModel(), createIfMatch, createIfNoneMatch, context);
         return this;
     }
 
@@ -257,54 +256,69 @@ public final class StreamingJobImpl implements StreamingJob, StreamingJob.Defini
     }
 
     public StreamingJob apply() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getStreamingJobs()
-                .updateWithResponse(resourceGroupName, jobName, this.innerModel(), updateIfMatch, Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getStreamingJobs()
+            .updateWithResponse(resourceGroupName, jobName, this.innerModel(), updateIfMatch, Context.NONE)
+            .getValue();
         return this;
     }
 
     public StreamingJob apply(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getStreamingJobs()
-                .updateWithResponse(resourceGroupName, jobName, this.innerModel(), updateIfMatch, context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getStreamingJobs()
+            .updateWithResponse(resourceGroupName, jobName, this.innerModel(), updateIfMatch, context)
+            .getValue();
         return this;
     }
 
-    StreamingJobImpl(
-        StreamingJobInner innerObject,
+    StreamingJobImpl(StreamingJobInner innerObject,
         com.azure.resourcemanager.streamanalytics.StreamAnalyticsManager serviceManager) {
         this.innerObject = innerObject;
         this.serviceManager = serviceManager;
-        this.resourceGroupName = Utils.getValueFromIdByName(innerObject.id(), "resourcegroups");
-        this.jobName = Utils.getValueFromIdByName(innerObject.id(), "streamingjobs");
+        this.resourceGroupName = ResourceManagerUtils.getValueFromIdByName(innerObject.id(), "resourcegroups");
+        this.jobName = ResourceManagerUtils.getValueFromIdByName(innerObject.id(), "streamingjobs");
     }
 
     public StreamingJob refresh() {
         String localExpand = null;
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getStreamingJobs()
-                .getByResourceGroupWithResponse(resourceGroupName, jobName, localExpand, Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getStreamingJobs()
+            .getByResourceGroupWithResponse(resourceGroupName, jobName, localExpand, Context.NONE)
+            .getValue();
         return this;
     }
 
     public StreamingJob refresh(Context context) {
         String localExpand = null;
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getStreamingJobs()
-                .getByResourceGroupWithResponse(resourceGroupName, jobName, localExpand, context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getStreamingJobs()
+            .getByResourceGroupWithResponse(resourceGroupName, jobName, localExpand, context)
+            .getValue();
         return this;
+    }
+
+    public void start() {
+        serviceManager.streamingJobs().start(resourceGroupName, jobName);
+    }
+
+    public void start(StartStreamingJobParameters startJobParameters, Context context) {
+        serviceManager.streamingJobs().start(resourceGroupName, jobName, startJobParameters, context);
+    }
+
+    public void stop() {
+        serviceManager.streamingJobs().stop(resourceGroupName, jobName);
+    }
+
+    public void stop(Context context) {
+        serviceManager.streamingJobs().stop(resourceGroupName, jobName, context);
+    }
+
+    public void scale() {
+        serviceManager.streamingJobs().scale(resourceGroupName, jobName);
+    }
+
+    public void scale(ScaleStreamingJobParameters scaleJobParameters, Context context) {
+        serviceManager.streamingJobs().scale(resourceGroupName, jobName, scaleJobParameters, context);
     }
 
     public StreamingJobImpl withRegion(Region location) {
@@ -322,13 +336,18 @@ public final class StreamingJobImpl implements StreamingJob, StreamingJob.Defini
         return this;
     }
 
+    public StreamingJobImpl withSku(Sku sku) {
+        this.innerModel().withSku(sku);
+        return this;
+    }
+
     public StreamingJobImpl withIdentity(Identity identity) {
         this.innerModel().withIdentity(identity);
         return this;
     }
 
-    public StreamingJobImpl withSku(StreamingJobSku sku) {
-        this.innerModel().withSku(sku);
+    public StreamingJobImpl withSkuPropertiesSku(Sku skuPropertiesSku) {
+        this.innerModel().withSkuPropertiesSku(skuPropertiesSku);
         return this;
     }
 
@@ -418,8 +437,13 @@ public final class StreamingJobImpl implements StreamingJob, StreamingJob.Defini
     }
 
     public StreamingJobImpl withIfMatch(String ifMatch) {
-        this.createIfMatch = ifMatch;
-        return this;
+        if (isInCreateMode()) {
+            this.createIfMatch = ifMatch;
+            return this;
+        } else {
+            this.updateIfMatch = ifMatch;
+            return this;
+        }
     }
 
     public StreamingJobImpl withIfNoneMatch(String ifNoneMatch) {
@@ -427,8 +451,7 @@ public final class StreamingJobImpl implements StreamingJob, StreamingJob.Defini
         return this;
     }
 
-    public StreamingJobImpl ifMatch(String ifMatch) {
-        this.updateIfMatch = ifMatch;
-        return this;
+    private boolean isInCreateMode() {
+        return this.innerModel().id() == null;
     }
 }

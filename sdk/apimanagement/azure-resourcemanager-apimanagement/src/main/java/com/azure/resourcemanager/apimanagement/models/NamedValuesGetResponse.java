@@ -20,16 +20,16 @@ public final class NamedValuesGetResponse extends ResponseBase<NamedValuesGetHea
      * @param value the deserialized value of the HTTP response.
      * @param headers the deserialized headers of the HTTP response.
      */
-    public NamedValuesGetResponse(
-        HttpRequest request,
-        int statusCode,
-        HttpHeaders rawHeaders,
-        NamedValueContractInner value,
-        NamedValuesGetHeaders headers) {
+    public NamedValuesGetResponse(HttpRequest request, int statusCode, HttpHeaders rawHeaders,
+        NamedValueContractInner value, NamedValuesGetHeaders headers) {
         super(request, statusCode, rawHeaders, value, headers);
     }
 
-    /** @return the deserialized response body. */
+    /**
+     * Gets the deserialized response body.
+     *
+     * @return the deserialized response body.
+     */
     @Override
     public NamedValueContractInner getValue() {
         return super.getValue();

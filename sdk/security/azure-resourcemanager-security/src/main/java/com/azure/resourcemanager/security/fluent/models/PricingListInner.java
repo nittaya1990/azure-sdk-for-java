@@ -6,15 +6,14 @@ package com.azure.resourcemanager.security.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** List of pricing configurations response. */
+/**
+ * List of pricing configurations response.
+ */
 @Fluent
 public final class PricingListInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PricingListInner.class);
-
     /*
      * List of pricing configurations
      */
@@ -22,8 +21,14 @@ public final class PricingListInner {
     private List<PricingInner> value;
 
     /**
+     * Creates an instance of PricingListInner class.
+     */
+    public PricingListInner() {
+    }
+
+    /**
      * Get the value property: List of pricing configurations.
-     *
+     * 
      * @return the value value.
      */
     public List<PricingInner> value() {
@@ -32,7 +37,7 @@ public final class PricingListInner {
 
     /**
      * Set the value property: List of pricing configurations.
-     *
+     * 
      * @param value the value value to set.
      * @return the PricingListInner object itself.
      */
@@ -43,16 +48,17 @@ public final class PricingListInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property value in model PricingListInner"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property value in model PricingListInner"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(PricingListInner.class);
 }

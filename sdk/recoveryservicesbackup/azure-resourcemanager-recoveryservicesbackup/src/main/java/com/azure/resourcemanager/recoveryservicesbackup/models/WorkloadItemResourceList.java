@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.recoveryservicesbackup.fluent.models.WorkloadItemResourceInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** List of WorkloadItem resources. */
+/**
+ * List of WorkloadItem resources.
+ */
 @Fluent
 public final class WorkloadItemResourceList extends ResourceList {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(WorkloadItemResourceList.class);
-
     /*
      * List of resources.
      */
@@ -23,8 +21,14 @@ public final class WorkloadItemResourceList extends ResourceList {
     private List<WorkloadItemResourceInner> value;
 
     /**
+     * Creates an instance of WorkloadItemResourceList class.
+     */
+    public WorkloadItemResourceList() {
+    }
+
+    /**
      * Get the value property: List of resources.
-     *
+     * 
      * @return the value value.
      */
     public List<WorkloadItemResourceInner> value() {
@@ -33,7 +37,7 @@ public final class WorkloadItemResourceList extends ResourceList {
 
     /**
      * Set the value property: List of resources.
-     *
+     * 
      * @param value the value value to set.
      * @return the WorkloadItemResourceList object itself.
      */
@@ -42,7 +46,9 @@ public final class WorkloadItemResourceList extends ResourceList {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public WorkloadItemResourceList withNextLink(String nextLink) {
         super.withNextLink(nextLink);
@@ -51,7 +57,7 @@ public final class WorkloadItemResourceList extends ResourceList {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

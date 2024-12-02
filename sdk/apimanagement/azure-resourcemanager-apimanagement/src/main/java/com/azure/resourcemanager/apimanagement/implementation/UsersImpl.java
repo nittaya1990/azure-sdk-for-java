@@ -21,17 +21,16 @@ import com.azure.resourcemanager.apimanagement.models.UserTokenResult;
 import com.azure.resourcemanager.apimanagement.models.Users;
 import com.azure.resourcemanager.apimanagement.models.UsersGetEntityTagResponse;
 import com.azure.resourcemanager.apimanagement.models.UsersGetResponse;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class UsersImpl implements Users {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(UsersImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(UsersImpl.class);
 
     private final UsersClient innerClient;
 
     private final com.azure.resourcemanager.apimanagement.ApiManagementManager serviceManager;
 
-    public UsersImpl(
-        UsersClient innerClient, com.azure.resourcemanager.apimanagement.ApiManagementManager serviceManager) {
+    public UsersImpl(UsersClient innerClient,
+        com.azure.resourcemanager.apimanagement.ApiManagementManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
     }
@@ -41,28 +40,31 @@ public final class UsersImpl implements Users {
         return Utils.mapPage(inner, inner1 -> new UserContractImpl(inner1, this.manager()));
     }
 
-    public PagedIterable<UserContract> listByService(
-        String resourceGroupName,
-        String serviceName,
-        String filter,
-        Integer top,
-        Integer skip,
-        Boolean expandGroups,
-        Context context) {
-        PagedIterable<UserContractInner> inner =
-            this
-                .serviceClient()
-                .listByService(resourceGroupName, serviceName, filter, top, skip, expandGroups, context);
+    public PagedIterable<UserContract> listByService(String resourceGroupName, String serviceName, String filter,
+        Integer top, Integer skip, Boolean expandGroups, Context context) {
+        PagedIterable<UserContractInner> inner = this.serviceClient()
+            .listByService(resourceGroupName, serviceName, filter, top, skip, expandGroups, context);
         return Utils.mapPage(inner, inner1 -> new UserContractImpl(inner1, this.manager()));
+    }
+
+    public UsersGetEntityTagResponse getEntityTagWithResponse(String resourceGroupName, String serviceName,
+        String userId, Context context) {
+        return this.serviceClient().getEntityTagWithResponse(resourceGroupName, serviceName, userId, context);
     }
 
     public void getEntityTag(String resourceGroupName, String serviceName, String userId) {
         this.serviceClient().getEntityTag(resourceGroupName, serviceName, userId);
     }
 
-    public UsersGetEntityTagResponse getEntityTagWithResponse(
-        String resourceGroupName, String serviceName, String userId, Context context) {
-        return this.serviceClient().getEntityTagWithResponse(resourceGroupName, serviceName, userId, context);
+    public Response<UserContract> getWithResponse(String resourceGroupName, String serviceName, String userId,
+        Context context) {
+        UsersGetResponse inner = this.serviceClient().getWithResponse(resourceGroupName, serviceName, userId, context);
+        if (inner != null) {
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
+                new UserContractImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
     }
 
     public UserContract get(String resourceGroupName, String serviceName, String userId) {
@@ -74,37 +76,27 @@ public final class UsersImpl implements Users {
         }
     }
 
-    public Response<UserContract> getWithResponse(
-        String resourceGroupName, String serviceName, String userId, Context context) {
-        UsersGetResponse inner = this.serviceClient().getWithResponse(resourceGroupName, serviceName, userId, context);
-        if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
-                new UserContractImpl(inner.getValue(), this.manager()));
-        } else {
-            return null;
-        }
+    public Response<Void> deleteWithResponse(String resourceGroupName, String serviceName, String userId,
+        String ifMatch, Boolean deleteSubscriptions, Boolean notify, AppType appType, Context context) {
+        return this.serviceClient()
+            .deleteWithResponse(resourceGroupName, serviceName, userId, ifMatch, deleteSubscriptions, notify, appType,
+                context);
     }
 
     public void delete(String resourceGroupName, String serviceName, String userId, String ifMatch) {
         this.serviceClient().delete(resourceGroupName, serviceName, userId, ifMatch);
     }
 
-    public Response<Void> deleteWithResponse(
-        String resourceGroupName,
-        String serviceName,
-        String userId,
-        String ifMatch,
-        Boolean deleteSubscriptions,
-        Boolean notify,
-        AppType appType,
-        Context context) {
-        return this
-            .serviceClient()
-            .deleteWithResponse(
-                resourceGroupName, serviceName, userId, ifMatch, deleteSubscriptions, notify, appType, context);
+    public Response<GenerateSsoUrlResult> generateSsoUrlWithResponse(String resourceGroupName, String serviceName,
+        String userId, Context context) {
+        Response<GenerateSsoUrlResultInner> inner
+            = this.serviceClient().generateSsoUrlWithResponse(resourceGroupName, serviceName, userId, context);
+        if (inner != null) {
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
+                new GenerateSsoUrlResultImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
     }
 
     public GenerateSsoUrlResult generateSsoUrl(String resourceGroupName, String serviceName, String userId) {
@@ -116,44 +108,24 @@ public final class UsersImpl implements Users {
         }
     }
 
-    public Response<GenerateSsoUrlResult> generateSsoUrlWithResponse(
-        String resourceGroupName, String serviceName, String userId, Context context) {
-        Response<GenerateSsoUrlResultInner> inner =
-            this.serviceClient().generateSsoUrlWithResponse(resourceGroupName, serviceName, userId, context);
+    public Response<UserTokenResult> getSharedAccessTokenWithResponse(String resourceGroupName, String serviceName,
+        String userId, UserTokenParameters parameters, Context context) {
+        Response<UserTokenResultInner> inner = this.serviceClient()
+            .getSharedAccessTokenWithResponse(resourceGroupName, serviceName, userId, parameters, context);
         if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
-                new GenerateSsoUrlResultImpl(inner.getValue(), this.manager()));
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
+                new UserTokenResultImpl(inner.getValue(), this.manager()));
         } else {
             return null;
         }
     }
 
-    public UserTokenResult getSharedAccessToken(
-        String resourceGroupName, String serviceName, String userId, UserTokenParameters parameters) {
-        UserTokenResultInner inner =
-            this.serviceClient().getSharedAccessToken(resourceGroupName, serviceName, userId, parameters);
+    public UserTokenResult getSharedAccessToken(String resourceGroupName, String serviceName, String userId,
+        UserTokenParameters parameters) {
+        UserTokenResultInner inner
+            = this.serviceClient().getSharedAccessToken(resourceGroupName, serviceName, userId, parameters);
         if (inner != null) {
             return new UserTokenResultImpl(inner, this.manager());
-        } else {
-            return null;
-        }
-    }
-
-    public Response<UserTokenResult> getSharedAccessTokenWithResponse(
-        String resourceGroupName, String serviceName, String userId, UserTokenParameters parameters, Context context) {
-        Response<UserTokenResultInner> inner =
-            this
-                .serviceClient()
-                .getSharedAccessTokenWithResponse(resourceGroupName, serviceName, userId, parameters, context);
-        if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
-                new UserTokenResultImpl(inner.getValue(), this.manager()));
         } else {
             return null;
         }
@@ -162,25 +134,18 @@ public final class UsersImpl implements Users {
     public UserContract getById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
         String userId = Utils.getValueFromIdByName(id, "users");
         if (userId == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'users'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'users'.", id)));
         }
         return this.getWithResponse(resourceGroupName, serviceName, userId, Context.NONE).getValue();
     }
@@ -188,25 +153,18 @@ public final class UsersImpl implements Users {
     public Response<UserContract> getByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
         String userId = Utils.getValueFromIdByName(id, "users");
         if (userId == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'users'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'users'.", id)));
         }
         return this.getWithResponse(resourceGroupName, serviceName, userId, context);
     }
@@ -214,70 +172,46 @@ public final class UsersImpl implements Users {
     public void deleteById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
         String userId = Utils.getValueFromIdByName(id, "users");
         if (userId == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'users'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'users'.", id)));
         }
         String localIfMatch = null;
         Boolean localDeleteSubscriptions = null;
         Boolean localNotify = null;
         AppType localAppType = null;
-        this
-            .deleteWithResponse(
-                resourceGroupName,
-                serviceName,
-                userId,
-                localIfMatch,
-                localDeleteSubscriptions,
-                localNotify,
-                localAppType,
-                Context.NONE)
-            .getValue();
+        this.deleteWithResponse(resourceGroupName, serviceName, userId, localIfMatch, localDeleteSubscriptions,
+            localNotify, localAppType, Context.NONE);
     }
 
-    public Response<Void> deleteByIdWithResponse(
-        String id, String ifMatch, Boolean deleteSubscriptions, Boolean notify, AppType appType, Context context) {
+    public Response<Void> deleteByIdWithResponse(String id, String ifMatch, Boolean deleteSubscriptions, Boolean notify,
+        AppType appType, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
         String userId = Utils.getValueFromIdByName(id, "users");
         if (userId == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'users'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'users'.", id)));
         }
-        return this
-            .deleteWithResponse(
-                resourceGroupName, serviceName, userId, ifMatch, deleteSubscriptions, notify, appType, context);
+        return this.deleteWithResponse(resourceGroupName, serviceName, userId, ifMatch, deleteSubscriptions, notify,
+            appType, context);
     }
 
     private UsersClient serviceClient() {

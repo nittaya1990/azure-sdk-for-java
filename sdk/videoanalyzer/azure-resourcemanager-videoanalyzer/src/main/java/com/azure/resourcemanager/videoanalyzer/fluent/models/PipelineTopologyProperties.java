@@ -10,15 +10,12 @@ import com.azure.resourcemanager.videoanalyzer.models.ParameterDeclaration;
 import com.azure.resourcemanager.videoanalyzer.models.ProcessorNodeBase;
 import com.azure.resourcemanager.videoanalyzer.models.SinkNodeBase;
 import com.azure.resourcemanager.videoanalyzer.models.SourceNodeBase;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Describes the properties of a pipeline topology. */
 @Fluent
 public final class PipelineTopologyProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PipelineTopologyProperties.class);
-
     /*
      * An optional description of the pipeline topology. It is recommended that
      * the expected use of the topology to be described here.
@@ -176,10 +173,8 @@ public final class PipelineTopologyProperties {
             parameters().forEach(e -> e.validate());
         }
         if (sources() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property sources in model PipelineTopologyProperties"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property sources in model PipelineTopologyProperties"));
         } else {
             sources().forEach(e -> e.validate());
         }
@@ -187,12 +182,12 @@ public final class PipelineTopologyProperties {
             processors().forEach(e -> e.validate());
         }
         if (sinks() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property sinks in model PipelineTopologyProperties"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property sinks in model PipelineTopologyProperties"));
         } else {
             sinks().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(PipelineTopologyProperties.class);
 }

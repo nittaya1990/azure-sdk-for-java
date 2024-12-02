@@ -28,7 +28,7 @@ public interface TagsClient {
     /**
      * Lists all Tags associated with the Operation.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -37,16 +37,16 @@ public interface TagsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Tag list representation.
+     * @return paged Tag list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<TagContractInner> listByOperation(
-        String resourceGroupName, String serviceName, String apiId, String operationId);
+    PagedIterable<TagContractInner> listByOperation(String resourceGroupName, String serviceName, String apiId,
+        String operationId);
 
     /**
      * Lists all Tags associated with the Operation.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -62,41 +62,16 @@ public interface TagsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Tag list representation.
+     * @return paged Tag list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<TagContractInner> listByOperation(
-        String resourceGroupName,
-        String serviceName,
-        String apiId,
-        String operationId,
-        String filter,
-        Integer top,
-        Integer skip,
-        Context context);
+    PagedIterable<TagContractInner> listByOperation(String resourceGroupName, String serviceName, String apiId,
+        String operationId, String filter, Integer top, Integer skip, Context context);
 
     /**
      * Gets the entity state version of the tag specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
-     *     revision has ;rev=n as a suffix where n is the revision number.
-     * @param operationId Operation identifier within an API. Must be unique in the current API Management service
-     *     instance.
-     * @param tagId Tag identifier. Must be unique in the current API Management service instance.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    void getEntityStateByOperation(
-        String resourceGroupName, String serviceName, String apiId, String operationId, String tagId);
-
-    /**
-     * Gets the entity state version of the tag specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -110,13 +85,51 @@ public interface TagsClient {
      * @return the entity state version of the tag specified by its identifier.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    TagsGetEntityStateByOperationResponse getEntityStateByOperationWithResponse(
-        String resourceGroupName, String serviceName, String apiId, String operationId, String tagId, Context context);
+    TagsGetEntityStateByOperationResponse getEntityStateByOperationWithResponse(String resourceGroupName,
+        String serviceName, String apiId, String operationId, String tagId, Context context);
+
+    /**
+     * Gets the entity state version of the tag specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
+     *     revision has ;rev=n as a suffix where n is the revision number.
+     * @param operationId Operation identifier within an API. Must be unique in the current API Management service
+     *     instance.
+     * @param tagId Tag identifier. Must be unique in the current API Management service instance.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    void getEntityStateByOperation(String resourceGroupName, String serviceName, String apiId, String operationId,
+        String tagId);
 
     /**
      * Get tag associated with the Operation.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
+     *     revision has ;rev=n as a suffix where n is the revision number.
+     * @param operationId Operation identifier within an API. Must be unique in the current API Management service
+     *     instance.
+     * @param tagId Tag identifier. Must be unique in the current API Management service instance.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return tag associated with the Operation.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    TagsGetByOperationResponse getByOperationWithResponse(String resourceGroupName, String serviceName, String apiId,
+        String operationId, String tagId, Context context);
+
+    /**
+     * Get tag associated with the Operation.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -129,13 +142,13 @@ public interface TagsClient {
      * @return tag associated with the Operation.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    TagContractInner getByOperation(
-        String resourceGroupName, String serviceName, String apiId, String operationId, String tagId);
+    TagContractInner getByOperation(String resourceGroupName, String serviceName, String apiId, String operationId,
+        String tagId);
 
     /**
-     * Get tag associated with the Operation.
+     * Assign tag to the Operation.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -146,16 +159,16 @@ public interface TagsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return tag associated with the Operation.
+     * @return tag Contract details along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    TagsGetByOperationResponse getByOperationWithResponse(
-        String resourceGroupName, String serviceName, String apiId, String operationId, String tagId, Context context);
+    Response<TagContractInner> assignToOperationWithResponse(String resourceGroupName, String serviceName, String apiId,
+        String operationId, String tagId, Context context);
 
     /**
      * Assign tag to the Operation.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -168,13 +181,13 @@ public interface TagsClient {
      * @return tag Contract details.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    TagContractInner assignToOperation(
-        String resourceGroupName, String serviceName, String apiId, String operationId, String tagId);
+    TagContractInner assignToOperation(String resourceGroupName, String serviceName, String apiId, String operationId,
+        String tagId);
 
     /**
-     * Assign tag to the Operation.
+     * Detach the tag from the Operation.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -185,16 +198,16 @@ public interface TagsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return tag Contract details.
+     * @return the {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<TagContractInner> assignToOperationWithResponse(
-        String resourceGroupName, String serviceName, String apiId, String operationId, String tagId, Context context);
+    Response<Void> detachFromOperationWithResponse(String resourceGroupName, String serviceName, String apiId,
+        String operationId, String tagId, Context context);
 
     /**
      * Detach the tag from the Operation.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -206,40 +219,20 @@ public interface TagsClient {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    void detachFromOperation(
-        String resourceGroupName, String serviceName, String apiId, String operationId, String tagId);
-
-    /**
-     * Detach the tag from the Operation.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
-     *     revision has ;rev=n as a suffix where n is the revision number.
-     * @param operationId Operation identifier within an API. Must be unique in the current API Management service
-     *     instance.
-     * @param tagId Tag identifier. Must be unique in the current API Management service instance.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<Void> detachFromOperationWithResponse(
-        String resourceGroupName, String serviceName, String apiId, String operationId, String tagId, Context context);
+    void detachFromOperation(String resourceGroupName, String serviceName, String apiId, String operationId,
+        String tagId);
 
     /**
      * Lists all Tags associated with the API.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Tag list representation.
+     * @return paged Tag list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<TagContractInner> listByApi(String resourceGroupName, String serviceName, String apiId);
@@ -247,7 +240,7 @@ public interface TagsClient {
     /**
      * Lists all Tags associated with the API.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -261,22 +254,34 @@ public interface TagsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Tag list representation.
+     * @return paged Tag list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<TagContractInner> listByApi(
-        String resourceGroupName,
-        String serviceName,
-        String apiId,
-        String filter,
-        Integer top,
-        Integer skip,
-        Context context);
+    PagedIterable<TagContractInner> listByApi(String resourceGroupName, String serviceName, String apiId, String filter,
+        Integer top, Integer skip, Context context);
 
     /**
      * Gets the entity state version of the tag specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
+     *     revision has ;rev=n as a suffix where n is the revision number.
+     * @param tagId Tag identifier. Must be unique in the current API Management service instance.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the entity state version of the tag specified by its identifier.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    TagsGetEntityStateByApiResponse getEntityStateByApiWithResponse(String resourceGroupName, String serviceName,
+        String apiId, String tagId, Context context);
+
+    /**
+     * Gets the entity state version of the tag specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -289,9 +294,9 @@ public interface TagsClient {
     void getEntityStateByApi(String resourceGroupName, String serviceName, String apiId, String tagId);
 
     /**
-     * Gets the entity state version of the tag specified by its identifier.
+     * Get tag associated with the API.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -300,16 +305,16 @@ public interface TagsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state version of the tag specified by its identifier.
+     * @return tag associated with the API.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    TagsGetEntityStateByApiResponse getEntityStateByApiWithResponse(
-        String resourceGroupName, String serviceName, String apiId, String tagId, Context context);
+    TagsGetByApiResponse getByApiWithResponse(String resourceGroupName, String serviceName, String apiId, String tagId,
+        Context context);
 
     /**
      * Get tag associated with the API.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -323,9 +328,9 @@ public interface TagsClient {
     TagContractInner getByApi(String resourceGroupName, String serviceName, String apiId, String tagId);
 
     /**
-     * Get tag associated with the API.
+     * Assign tag to the Api.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -334,16 +339,16 @@ public interface TagsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return tag associated with the API.
+     * @return tag Contract details.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    TagsGetByApiResponse getByApiWithResponse(
-        String resourceGroupName, String serviceName, String apiId, String tagId, Context context);
+    TagsAssignToApiResponse assignToApiWithResponse(String resourceGroupName, String serviceName, String apiId,
+        String tagId, Context context);
 
     /**
      * Assign tag to the Api.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -357,9 +362,9 @@ public interface TagsClient {
     TagContractInner assignToApi(String resourceGroupName, String serviceName, String apiId, String tagId);
 
     /**
-     * Assign tag to the Api.
+     * Detach the tag from the Api.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -368,16 +373,16 @@ public interface TagsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return tag Contract details.
+     * @return the {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    TagsAssignToApiResponse assignToApiWithResponse(
-        String resourceGroupName, String serviceName, String apiId, String tagId, Context context);
+    Response<Void> detachFromApiWithResponse(String resourceGroupName, String serviceName, String apiId, String tagId,
+        Context context);
 
     /**
      * Detach the tag from the Api.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -390,33 +395,15 @@ public interface TagsClient {
     void detachFromApi(String resourceGroupName, String serviceName, String apiId, String tagId);
 
     /**
-     * Detach the tag from the Api.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
-     *     revision has ;rev=n as a suffix where n is the revision number.
-     * @param tagId Tag identifier. Must be unique in the current API Management service instance.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<Void> detachFromApiWithResponse(
-        String resourceGroupName, String serviceName, String apiId, String tagId, Context context);
-
-    /**
      * Lists all Tags associated with the Product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Tag list representation.
+     * @return paged Tag list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<TagContractInner> listByProduct(String resourceGroupName, String serviceName, String productId);
@@ -424,7 +411,7 @@ public interface TagsClient {
     /**
      * Lists all Tags associated with the Product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @param filter | Field | Usage | Supported operators | Supported functions
@@ -437,22 +424,33 @@ public interface TagsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Tag list representation.
+     * @return paged Tag list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<TagContractInner> listByProduct(
-        String resourceGroupName,
-        String serviceName,
-        String productId,
-        String filter,
-        Integer top,
-        Integer skip,
-        Context context);
+    PagedIterable<TagContractInner> listByProduct(String resourceGroupName, String serviceName, String productId,
+        String filter, Integer top, Integer skip, Context context);
 
     /**
      * Gets the entity state version of the tag specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param productId Product identifier. Must be unique in the current API Management service instance.
+     * @param tagId Tag identifier. Must be unique in the current API Management service instance.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the entity state version of the tag specified by its identifier.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    TagsGetEntityStateByProductResponse getEntityStateByProductWithResponse(String resourceGroupName,
+        String serviceName, String productId, String tagId, Context context);
+
+    /**
+     * Gets the entity state version of the tag specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @param tagId Tag identifier. Must be unique in the current API Management service instance.
@@ -464,9 +462,9 @@ public interface TagsClient {
     void getEntityStateByProduct(String resourceGroupName, String serviceName, String productId, String tagId);
 
     /**
-     * Gets the entity state version of the tag specified by its identifier.
+     * Get tag associated with the Product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @param tagId Tag identifier. Must be unique in the current API Management service instance.
@@ -474,16 +472,16 @@ public interface TagsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state version of the tag specified by its identifier.
+     * @return tag associated with the Product.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    TagsGetEntityStateByProductResponse getEntityStateByProductWithResponse(
-        String resourceGroupName, String serviceName, String productId, String tagId, Context context);
+    TagsGetByProductResponse getByProductWithResponse(String resourceGroupName, String serviceName, String productId,
+        String tagId, Context context);
 
     /**
      * Get tag associated with the Product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @param tagId Tag identifier. Must be unique in the current API Management service instance.
@@ -496,9 +494,9 @@ public interface TagsClient {
     TagContractInner getByProduct(String resourceGroupName, String serviceName, String productId, String tagId);
 
     /**
-     * Get tag associated with the Product.
+     * Assign tag to the Product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @param tagId Tag identifier. Must be unique in the current API Management service instance.
@@ -506,16 +504,16 @@ public interface TagsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return tag associated with the Product.
+     * @return tag Contract details along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    TagsGetByProductResponse getByProductWithResponse(
-        String resourceGroupName, String serviceName, String productId, String tagId, Context context);
+    Response<TagContractInner> assignToProductWithResponse(String resourceGroupName, String serviceName,
+        String productId, String tagId, Context context);
 
     /**
      * Assign tag to the Product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @param tagId Tag identifier. Must be unique in the current API Management service instance.
@@ -528,9 +526,9 @@ public interface TagsClient {
     TagContractInner assignToProduct(String resourceGroupName, String serviceName, String productId, String tagId);
 
     /**
-     * Assign tag to the Product.
+     * Detach the tag from the Product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @param tagId Tag identifier. Must be unique in the current API Management service instance.
@@ -538,16 +536,16 @@ public interface TagsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return tag Contract details.
+     * @return the {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<TagContractInner> assignToProductWithResponse(
-        String resourceGroupName, String serviceName, String productId, String tagId, Context context);
+    Response<Void> detachFromProductWithResponse(String resourceGroupName, String serviceName, String productId,
+        String tagId, Context context);
 
     /**
      * Detach the tag from the Product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @param tagId Tag identifier. Must be unique in the current API Management service instance.
@@ -559,31 +557,14 @@ public interface TagsClient {
     void detachFromProduct(String resourceGroupName, String serviceName, String productId, String tagId);
 
     /**
-     * Detach the tag from the Product.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param productId Product identifier. Must be unique in the current API Management service instance.
-     * @param tagId Tag identifier. Must be unique in the current API Management service instance.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<Void> detachFromProductWithResponse(
-        String resourceGroupName, String serviceName, String productId, String tagId, Context context);
-
-    /**
      * Lists a collection of tags defined within a service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Tag list representation.
+     * @return paged Tag list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<TagContractInner> listByService(String resourceGroupName, String serviceName);
@@ -591,7 +572,7 @@ public interface TagsClient {
     /**
      * Lists a collection of tags defined within a service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -604,22 +585,32 @@ public interface TagsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Tag list representation.
+     * @return paged Tag list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<TagContractInner> listByService(
-        String resourceGroupName,
-        String serviceName,
-        String filter,
-        Integer top,
-        Integer skip,
-        String scope,
+    PagedIterable<TagContractInner> listByService(String resourceGroupName, String serviceName, String filter,
+        Integer top, Integer skip, String scope, Context context);
+
+    /**
+     * Gets the entity state version of the tag specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param tagId Tag identifier. Must be unique in the current API Management service instance.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the entity state version of the tag specified by its identifier.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    TagsGetEntityStateResponse getEntityStateWithResponse(String resourceGroupName, String serviceName, String tagId,
         Context context);
 
     /**
      * Gets the entity state version of the tag specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param tagId Tag identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -630,39 +621,9 @@ public interface TagsClient {
     void getEntityState(String resourceGroupName, String serviceName, String tagId);
 
     /**
-     * Gets the entity state version of the tag specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param tagId Tag identifier. Must be unique in the current API Management service instance.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state version of the tag specified by its identifier.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    TagsGetEntityStateResponse getEntityStateWithResponse(
-        String resourceGroupName, String serviceName, String tagId, Context context);
-
-    /**
      * Gets the details of the tag specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param tagId Tag identifier. Must be unique in the current API Management service instance.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the tag specified by its identifier.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    TagContractInner get(String resourceGroupName, String serviceName, String tagId);
-
-    /**
-     * Gets the details of the tag specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param tagId Tag identifier. Must be unique in the current API Management service instance.
      * @param context The context to associate with this operation.
@@ -675,25 +636,23 @@ public interface TagsClient {
     TagsGetResponse getWithResponse(String resourceGroupName, String serviceName, String tagId, Context context);
 
     /**
-     * Creates a tag.
+     * Gets the details of the tag specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param tagId Tag identifier. Must be unique in the current API Management service instance.
-     * @param parameters Create parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return tag Contract details.
+     * @return the details of the tag specified by its identifier.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    TagContractInner createOrUpdate(
-        String resourceGroupName, String serviceName, String tagId, TagCreateUpdateParameters parameters);
+    TagContractInner get(String resourceGroupName, String serviceName, String tagId);
 
     /**
      * Creates a tag.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param tagId Tag identifier. Must be unique in the current API Management service instance.
      * @param parameters Create parameters.
@@ -705,40 +664,29 @@ public interface TagsClient {
      * @return tag Contract details.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    TagsCreateOrUpdateResponse createOrUpdateWithResponse(
-        String resourceGroupName,
-        String serviceName,
-        String tagId,
-        TagCreateUpdateParameters parameters,
-        String ifMatch,
-        Context context);
+    TagsCreateOrUpdateResponse createOrUpdateWithResponse(String resourceGroupName, String serviceName, String tagId,
+        TagCreateUpdateParameters parameters, String ifMatch, Context context);
 
     /**
-     * Updates the details of the tag specified by its identifier.
+     * Creates a tag.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param tagId Tag identifier. Must be unique in the current API Management service instance.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @param parameters Update parameters.
+     * @param parameters Create parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return tag Contract details.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    TagContractInner update(
-        String resourceGroupName,
-        String serviceName,
-        String tagId,
-        String ifMatch,
+    TagContractInner createOrUpdate(String resourceGroupName, String serviceName, String tagId,
         TagCreateUpdateParameters parameters);
 
     /**
      * Updates the details of the tag specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param tagId Tag identifier. Must be unique in the current API Management service instance.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -751,18 +699,49 @@ public interface TagsClient {
      * @return tag Contract details.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    TagsUpdateResponse updateWithResponse(
-        String resourceGroupName,
-        String serviceName,
-        String tagId,
-        String ifMatch,
-        TagCreateUpdateParameters parameters,
+    TagsUpdateResponse updateWithResponse(String resourceGroupName, String serviceName, String tagId, String ifMatch,
+        TagCreateUpdateParameters parameters, Context context);
+
+    /**
+     * Updates the details of the tag specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param tagId Tag identifier. Must be unique in the current API Management service instance.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @param parameters Update parameters.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return tag Contract details.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    TagContractInner update(String resourceGroupName, String serviceName, String tagId, String ifMatch,
+        TagCreateUpdateParameters parameters);
+
+    /**
+     * Deletes specific tag of the API Management service instance.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param tagId Tag identifier. Must be unique in the current API Management service instance.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<Void> deleteWithResponse(String resourceGroupName, String serviceName, String tagId, String ifMatch,
         Context context);
 
     /**
      * Deletes specific tag of the API Management service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param tagId Tag identifier. Must be unique in the current API Management service instance.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -773,22 +752,4 @@ public interface TagsClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     void delete(String resourceGroupName, String serviceName, String tagId, String ifMatch);
-
-    /**
-     * Deletes specific tag of the API Management service instance.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param tagId Tag identifier. Must be unique in the current API Management service instance.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<Void> deleteWithResponse(
-        String resourceGroupName, String serviceName, String tagId, String ifMatch, Context context);
 }

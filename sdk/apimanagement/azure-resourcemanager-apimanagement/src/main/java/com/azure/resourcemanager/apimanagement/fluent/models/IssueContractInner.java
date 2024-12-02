@@ -6,22 +6,22 @@ package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.models.State;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
 /** Issue Contract details. */
 @Fluent
 public final class IssueContractInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(IssueContractInner.class);
-
     /*
      * Properties of the Issue.
      */
     @JsonProperty(value = "properties")
     private IssueContractProperties innerProperties;
+
+    /** Creates an instance of IssueContractInner class. */
+    public IssueContractInner() {
+    }
 
     /**
      * Get the innerProperties property: Properties of the Issue.

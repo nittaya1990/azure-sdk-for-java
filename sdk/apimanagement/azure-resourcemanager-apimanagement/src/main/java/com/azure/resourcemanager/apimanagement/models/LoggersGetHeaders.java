@@ -5,20 +5,28 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.azure.core.http.HttpHeaderName;
+import com.azure.core.http.HttpHeaders;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** The LoggersGetHeaders model. */
 @Fluent
 public final class LoggersGetHeaders {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(LoggersGetHeaders.class);
-
     /*
      * The Etag property.
      */
     @JsonProperty(value = "Etag")
     private String etag;
+
+    // HttpHeaders containing the raw property values.
+    /**
+     * Creates an instance of LoggersGetHeaders class.
+     *
+     * @param rawHeaders The raw HttpHeaders that will be used to create the property values.
+     */
+    public LoggersGetHeaders(HttpHeaders rawHeaders) {
+        this.etag = rawHeaders.getValue(HttpHeaderName.ETAG);
+    }
 
     /**
      * Get the etag property: The Etag property.

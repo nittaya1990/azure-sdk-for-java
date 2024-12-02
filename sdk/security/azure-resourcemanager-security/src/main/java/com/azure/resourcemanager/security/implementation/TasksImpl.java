@@ -13,11 +13,10 @@ import com.azure.resourcemanager.security.fluent.TasksClient;
 import com.azure.resourcemanager.security.fluent.models.SecurityTaskInner;
 import com.azure.resourcemanager.security.models.SecurityTask;
 import com.azure.resourcemanager.security.models.Tasks;
-import com.azure.resourcemanager.security.models.TasksTaskUpdateActionType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.azure.resourcemanager.security.models.TaskUpdateActionType;
 
 public final class TasksImpl implements Tasks {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TasksImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(TasksImpl.class);
 
     private final TasksClient innerClient;
 
@@ -30,22 +29,34 @@ public final class TasksImpl implements Tasks {
 
     public PagedIterable<SecurityTask> list() {
         PagedIterable<SecurityTaskInner> inner = this.serviceClient().list();
-        return Utils.mapPage(inner, inner1 -> new SecurityTaskImpl(inner1, this.manager()));
+        return ResourceManagerUtils.mapPage(inner, inner1 -> new SecurityTaskImpl(inner1, this.manager()));
     }
 
     public PagedIterable<SecurityTask> list(String filter, Context context) {
         PagedIterable<SecurityTaskInner> inner = this.serviceClient().list(filter, context);
-        return Utils.mapPage(inner, inner1 -> new SecurityTaskImpl(inner1, this.manager()));
+        return ResourceManagerUtils.mapPage(inner, inner1 -> new SecurityTaskImpl(inner1, this.manager()));
     }
 
     public PagedIterable<SecurityTask> listByHomeRegion(String ascLocation) {
         PagedIterable<SecurityTaskInner> inner = this.serviceClient().listByHomeRegion(ascLocation);
-        return Utils.mapPage(inner, inner1 -> new SecurityTaskImpl(inner1, this.manager()));
+        return ResourceManagerUtils.mapPage(inner, inner1 -> new SecurityTaskImpl(inner1, this.manager()));
     }
 
     public PagedIterable<SecurityTask> listByHomeRegion(String ascLocation, String filter, Context context) {
         PagedIterable<SecurityTaskInner> inner = this.serviceClient().listByHomeRegion(ascLocation, filter, context);
-        return Utils.mapPage(inner, inner1 -> new SecurityTaskImpl(inner1, this.manager()));
+        return ResourceManagerUtils.mapPage(inner, inner1 -> new SecurityTaskImpl(inner1, this.manager()));
+    }
+
+    public Response<SecurityTask> getSubscriptionLevelTaskWithResponse(String ascLocation, String taskName,
+        Context context) {
+        Response<SecurityTaskInner> inner
+            = this.serviceClient().getSubscriptionLevelTaskWithResponse(ascLocation, taskName, context);
+        if (inner != null) {
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
+                new SecurityTaskImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
     }
 
     public SecurityTask getSubscriptionLevelTask(String ascLocation, String taskName) {
@@ -57,49 +68,45 @@ public final class TasksImpl implements Tasks {
         }
     }
 
-    public Response<SecurityTask> getSubscriptionLevelTaskWithResponse(
-        String ascLocation, String taskName, Context context) {
-        Response<SecurityTaskInner> inner =
-            this.serviceClient().getSubscriptionLevelTaskWithResponse(ascLocation, taskName, context);
+    public Response<Void> updateSubscriptionLevelTaskStateWithResponse(String ascLocation, String taskName,
+        TaskUpdateActionType taskUpdateActionType, Context context) {
+        return this.serviceClient()
+            .updateSubscriptionLevelTaskStateWithResponse(ascLocation, taskName, taskUpdateActionType, context);
+    }
+
+    public void updateSubscriptionLevelTaskState(String ascLocation, String taskName,
+        TaskUpdateActionType taskUpdateActionType) {
+        this.serviceClient().updateSubscriptionLevelTaskState(ascLocation, taskName, taskUpdateActionType);
+    }
+
+    public PagedIterable<SecurityTask> listByResourceGroup(String resourceGroupName, String ascLocation) {
+        PagedIterable<SecurityTaskInner> inner
+            = this.serviceClient().listByResourceGroup(resourceGroupName, ascLocation);
+        return ResourceManagerUtils.mapPage(inner, inner1 -> new SecurityTaskImpl(inner1, this.manager()));
+    }
+
+    public PagedIterable<SecurityTask> listByResourceGroup(String resourceGroupName, String ascLocation, String filter,
+        Context context) {
+        PagedIterable<SecurityTaskInner> inner
+            = this.serviceClient().listByResourceGroup(resourceGroupName, ascLocation, filter, context);
+        return ResourceManagerUtils.mapPage(inner, inner1 -> new SecurityTaskImpl(inner1, this.manager()));
+    }
+
+    public Response<SecurityTask> getResourceGroupLevelTaskWithResponse(String resourceGroupName, String ascLocation,
+        String taskName, Context context) {
+        Response<SecurityTaskInner> inner = this.serviceClient()
+            .getResourceGroupLevelTaskWithResponse(resourceGroupName, ascLocation, taskName, context);
         if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
                 new SecurityTaskImpl(inner.getValue(), this.manager()));
         } else {
             return null;
         }
     }
 
-    public void updateSubscriptionLevelTaskState(
-        String ascLocation, String taskName, TasksTaskUpdateActionType taskUpdateActionType) {
-        this.serviceClient().updateSubscriptionLevelTaskState(ascLocation, taskName, taskUpdateActionType);
-    }
-
-    public Response<Void> updateSubscriptionLevelTaskStateWithResponse(
-        String ascLocation, String taskName, TasksTaskUpdateActionType taskUpdateActionType, Context context) {
-        return this
-            .serviceClient()
-            .updateSubscriptionLevelTaskStateWithResponse(ascLocation, taskName, taskUpdateActionType, context);
-    }
-
-    public PagedIterable<SecurityTask> listByResourceGroup(String resourceGroupName, String ascLocation) {
-        PagedIterable<SecurityTaskInner> inner =
-            this.serviceClient().listByResourceGroup(resourceGroupName, ascLocation);
-        return Utils.mapPage(inner, inner1 -> new SecurityTaskImpl(inner1, this.manager()));
-    }
-
-    public PagedIterable<SecurityTask> listByResourceGroup(
-        String resourceGroupName, String ascLocation, String filter, Context context) {
-        PagedIterable<SecurityTaskInner> inner =
-            this.serviceClient().listByResourceGroup(resourceGroupName, ascLocation, filter, context);
-        return Utils.mapPage(inner, inner1 -> new SecurityTaskImpl(inner1, this.manager()));
-    }
-
     public SecurityTask getResourceGroupLevelTask(String resourceGroupName, String ascLocation, String taskName) {
-        SecurityTaskInner inner =
-            this.serviceClient().getResourceGroupLevelTask(resourceGroupName, ascLocation, taskName);
+        SecurityTaskInner inner
+            = this.serviceClient().getResourceGroupLevelTask(resourceGroupName, ascLocation, taskName);
         if (inner != null) {
             return new SecurityTaskImpl(inner, this.manager());
         } else {
@@ -107,40 +114,17 @@ public final class TasksImpl implements Tasks {
         }
     }
 
-    public Response<SecurityTask> getResourceGroupLevelTaskWithResponse(
-        String resourceGroupName, String ascLocation, String taskName, Context context) {
-        Response<SecurityTaskInner> inner =
-            this
-                .serviceClient()
-                .getResourceGroupLevelTaskWithResponse(resourceGroupName, ascLocation, taskName, context);
-        if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
-                new SecurityTaskImpl(inner.getValue(), this.manager()));
-        } else {
-            return null;
-        }
+    public Response<Void> updateResourceGroupLevelTaskStateWithResponse(String resourceGroupName, String ascLocation,
+        String taskName, TaskUpdateActionType taskUpdateActionType, Context context) {
+        return this.serviceClient()
+            .updateResourceGroupLevelTaskStateWithResponse(resourceGroupName, ascLocation, taskName,
+                taskUpdateActionType, context);
     }
 
-    public void updateResourceGroupLevelTaskState(
-        String resourceGroupName, String ascLocation, String taskName, TasksTaskUpdateActionType taskUpdateActionType) {
-        this
-            .serviceClient()
+    public void updateResourceGroupLevelTaskState(String resourceGroupName, String ascLocation, String taskName,
+        TaskUpdateActionType taskUpdateActionType) {
+        this.serviceClient()
             .updateResourceGroupLevelTaskState(resourceGroupName, ascLocation, taskName, taskUpdateActionType);
-    }
-
-    public Response<Void> updateResourceGroupLevelTaskStateWithResponse(
-        String resourceGroupName,
-        String ascLocation,
-        String taskName,
-        TasksTaskUpdateActionType taskUpdateActionType,
-        Context context) {
-        return this
-            .serviceClient()
-            .updateResourceGroupLevelTaskStateWithResponse(
-                resourceGroupName, ascLocation, taskName, taskUpdateActionType, context);
     }
 
     private TasksClient serviceClient() {

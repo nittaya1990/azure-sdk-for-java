@@ -11,17 +11,16 @@ import com.azure.resourcemanager.loganalytics.fluent.ManagementGroupsClient;
 import com.azure.resourcemanager.loganalytics.fluent.models.ManagementGroupInner;
 import com.azure.resourcemanager.loganalytics.models.ManagementGroup;
 import com.azure.resourcemanager.loganalytics.models.ManagementGroups;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class ManagementGroupsImpl implements ManagementGroups {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ManagementGroupsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(ManagementGroupsImpl.class);
 
     private final ManagementGroupsClient innerClient;
 
     private final com.azure.resourcemanager.loganalytics.LogAnalyticsManager serviceManager;
 
-    public ManagementGroupsImpl(
-        ManagementGroupsClient innerClient, com.azure.resourcemanager.loganalytics.LogAnalyticsManager serviceManager) {
+    public ManagementGroupsImpl(ManagementGroupsClient innerClient,
+        com.azure.resourcemanager.loganalytics.LogAnalyticsManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
     }
@@ -32,8 +31,8 @@ public final class ManagementGroupsImpl implements ManagementGroups {
     }
 
     public PagedIterable<ManagementGroup> list(String resourceGroupName, String workspaceName, Context context) {
-        PagedIterable<ManagementGroupInner> inner =
-            this.serviceClient().list(resourceGroupName, workspaceName, context);
+        PagedIterable<ManagementGroupInner> inner
+            = this.serviceClient().list(resourceGroupName, workspaceName, context);
         return Utils.mapPage(inner, inner1 -> new ManagementGroupImpl(inner1, this.manager()));
     }
 

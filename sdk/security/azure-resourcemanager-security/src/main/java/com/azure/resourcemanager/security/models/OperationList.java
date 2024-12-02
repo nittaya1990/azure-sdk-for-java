@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.security.fluent.models.OperationInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** List of possible operations for Microsoft.Security resource provider. */
+/**
+ * List of possible operations for Microsoft.Security resource provider.
+ */
 @Fluent
 public final class OperationList {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OperationList.class);
-
     /*
      * List of Security operations
      */
@@ -29,8 +27,14 @@ public final class OperationList {
     private String nextLink;
 
     /**
+     * Creates an instance of OperationList class.
+     */
+    public OperationList() {
+    }
+
+    /**
      * Get the value property: List of Security operations.
-     *
+     * 
      * @return the value value.
      */
     public List<OperationInner> value() {
@@ -39,7 +43,7 @@ public final class OperationList {
 
     /**
      * Set the value property: List of Security operations.
-     *
+     * 
      * @param value the value value to set.
      * @return the OperationList object itself.
      */
@@ -50,7 +54,7 @@ public final class OperationList {
 
     /**
      * Get the nextLink property: The URI to fetch the next page.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -59,7 +63,7 @@ public final class OperationList {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

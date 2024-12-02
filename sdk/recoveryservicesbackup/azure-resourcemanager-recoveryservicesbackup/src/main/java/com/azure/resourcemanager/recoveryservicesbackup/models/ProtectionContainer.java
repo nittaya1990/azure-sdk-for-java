@@ -5,32 +5,40 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** Base class for container with backup items. Containers with specific workloads are derived from this class. */
+/**
+ * Base class for container with backup items. Containers with specific workloads are derived from this class.
+ */
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
-    include = JsonTypeInfo.As.PROPERTY,
     property = "containerType",
-    defaultImpl = ProtectionContainer.class)
+    defaultImpl = ProtectionContainer.class,
+    visible = true)
 @JsonTypeName("ProtectionContainer")
 @JsonSubTypes({
     @JsonSubTypes.Type(name = "DPMContainer", value = DpmContainer.class),
-    @JsonSubTypes.Type(name = "IaaSVMContainer", value = IaaSvmContainer.class),
+    @JsonSubTypes.Type(name = "IaasVMContainer", value = IaaSvmContainer.class),
     @JsonSubTypes.Type(name = "AzureWorkloadContainer", value = AzureWorkloadContainer.class),
     @JsonSubTypes.Type(name = "AzureSqlContainer", value = AzureSqlContainer.class),
     @JsonSubTypes.Type(name = "StorageContainer", value = AzureStorageContainer.class),
     @JsonSubTypes.Type(name = "GenericContainer", value = GenericContainer.class),
-    @JsonSubTypes.Type(name = "Windows", value = MabContainer.class)
-})
+    @JsonSubTypes.Type(name = "Windows", value = MabContainer.class) })
 @Fluent
 public class ProtectionContainer {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ProtectionContainer.class);
+    /*
+     * Type of the container. The value of this property for: 1. Compute Azure VM is Microsoft.Compute/virtualMachines 2.
+     * Classic Compute Azure VM is Microsoft.ClassicCompute/virtualMachines 3. Windows machines (like MAB, DPM etc) is
+     * Windows 4. Azure SQL instance is AzureSqlContainer. 5. Storage containers is StorageContainer. 6. Azure workload
+     * Backup is VMAppContainer
+     */
+    @JsonTypeId
+    @JsonProperty(value = "containerType", required = true)
+    private ProtectableContainerType containerType;
 
     /*
      * Friendly name of the container.
@@ -45,8 +53,7 @@ public class ProtectionContainer {
     private BackupManagementType backupManagementType;
 
     /*
-     * Status of registration of the container with the Recovery Services
-     * Vault.
+     * Status of registration of the container with the Recovery Services Vault.
      */
     @JsonProperty(value = "registrationStatus")
     private String registrationStatus;
@@ -57,9 +64,35 @@ public class ProtectionContainer {
     @JsonProperty(value = "healthStatus")
     private String healthStatus;
 
+    /*
+     * Type of the protectable object associated with this container
+     */
+    @JsonProperty(value = "protectableObjectType")
+    private String protectableObjectType;
+
+    /**
+     * Creates an instance of ProtectionContainer class.
+     */
+    public ProtectionContainer() {
+        this.containerType = ProtectableContainerType.fromString("ProtectionContainer");
+    }
+
+    /**
+     * Get the containerType property: Type of the container. The value of this property for: 1. Compute Azure VM is
+     * Microsoft.Compute/virtualMachines 2.
+     * Classic Compute Azure VM is Microsoft.ClassicCompute/virtualMachines 3. Windows machines (like MAB, DPM etc) is
+     * Windows 4. Azure SQL instance is AzureSqlContainer. 5. Storage containers is StorageContainer. 6. Azure workload
+     * Backup is VMAppContainer.
+     * 
+     * @return the containerType value.
+     */
+    public ProtectableContainerType containerType() {
+        return this.containerType;
+    }
+
     /**
      * Get the friendlyName property: Friendly name of the container.
-     *
+     * 
      * @return the friendlyName value.
      */
     public String friendlyName() {
@@ -68,7 +101,7 @@ public class ProtectionContainer {
 
     /**
      * Set the friendlyName property: Friendly name of the container.
-     *
+     * 
      * @param friendlyName the friendlyName value to set.
      * @return the ProtectionContainer object itself.
      */
@@ -79,7 +112,7 @@ public class ProtectionContainer {
 
     /**
      * Get the backupManagementType property: Type of backup management for the container.
-     *
+     * 
      * @return the backupManagementType value.
      */
     public BackupManagementType backupManagementType() {
@@ -88,7 +121,7 @@ public class ProtectionContainer {
 
     /**
      * Set the backupManagementType property: Type of backup management for the container.
-     *
+     * 
      * @param backupManagementType the backupManagementType value to set.
      * @return the ProtectionContainer object itself.
      */
@@ -99,7 +132,7 @@ public class ProtectionContainer {
 
     /**
      * Get the registrationStatus property: Status of registration of the container with the Recovery Services Vault.
-     *
+     * 
      * @return the registrationStatus value.
      */
     public String registrationStatus() {
@@ -108,7 +141,7 @@ public class ProtectionContainer {
 
     /**
      * Set the registrationStatus property: Status of registration of the container with the Recovery Services Vault.
-     *
+     * 
      * @param registrationStatus the registrationStatus value to set.
      * @return the ProtectionContainer object itself.
      */
@@ -119,7 +152,7 @@ public class ProtectionContainer {
 
     /**
      * Get the healthStatus property: Status of health of the container.
-     *
+     * 
      * @return the healthStatus value.
      */
     public String healthStatus() {
@@ -128,7 +161,7 @@ public class ProtectionContainer {
 
     /**
      * Set the healthStatus property: Status of health of the container.
-     *
+     * 
      * @param healthStatus the healthStatus value to set.
      * @return the ProtectionContainer object itself.
      */
@@ -138,8 +171,28 @@ public class ProtectionContainer {
     }
 
     /**
+     * Get the protectableObjectType property: Type of the protectable object associated with this container.
+     * 
+     * @return the protectableObjectType value.
+     */
+    public String protectableObjectType() {
+        return this.protectableObjectType;
+    }
+
+    /**
+     * Set the protectableObjectType property: Type of the protectable object associated with this container.
+     * 
+     * @param protectableObjectType the protectableObjectType value to set.
+     * @return the ProtectionContainer object itself.
+     */
+    public ProtectionContainer withProtectableObjectType(String protectableObjectType) {
+        this.protectableObjectType = protectableObjectType;
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

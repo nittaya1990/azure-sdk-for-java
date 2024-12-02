@@ -11,11 +11,11 @@ import java.util.Map;
 /**
  * Base interfaces for fluent resources.
  */
-public interface Resource extends
-        Indexable,
-        HasId,
-        HasName {
+public interface Resource extends Indexable, HasId, HasName {
 
+    /**
+     * A dummy resource that does nothing.
+     */
     Resource DUMMY = new Resource() {
         @Override
         public String type() {

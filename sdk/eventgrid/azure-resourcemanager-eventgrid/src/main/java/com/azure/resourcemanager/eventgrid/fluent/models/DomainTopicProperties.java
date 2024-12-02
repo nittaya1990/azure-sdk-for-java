@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.eventgrid.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.eventgrid.models.DomainTopicProvisioningState;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Properties of the Domain Topic. */
+/**
+ * Properties of the Domain Topic.
+ */
 @Immutable
 public final class DomainTopicProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DomainTopicProperties.class);
-
     /*
      * Provisioning state of the domain topic.
      */
@@ -22,8 +20,14 @@ public final class DomainTopicProperties {
     private DomainTopicProvisioningState provisioningState;
 
     /**
+     * Creates an instance of DomainTopicProperties class.
+     */
+    public DomainTopicProperties() {
+    }
+
+    /**
      * Get the provisioningState property: Provisioning state of the domain topic.
-     *
+     * 
      * @return the provisioningState value.
      */
     public DomainTopicProvisioningState provisioningState() {
@@ -32,7 +36,7 @@ public final class DomainTopicProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

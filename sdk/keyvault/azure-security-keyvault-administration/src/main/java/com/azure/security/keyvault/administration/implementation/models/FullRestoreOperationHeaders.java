@@ -5,26 +5,41 @@
 package com.azure.security.keyvault.administration.implementation.models;
 
 import com.azure.core.annotation.Fluent;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.azure.core.http.HttpHeaderName;
+import com.azure.core.http.HttpHeaders;
 
-/** The FullRestoreOperationHeaders model. */
+/**
+ * The FullRestoreOperationHeaders model.
+ */
 @Fluent
 public final class FullRestoreOperationHeaders {
     /*
      * The Retry-After property.
      */
-    @JsonProperty(value = "Retry-After")
     private Integer retryAfter;
 
     /*
      * The Azure-AsyncOperation property.
      */
-    @JsonProperty(value = "Azure-AsyncOperation")
     private String azureAsyncOperation;
+
+    // HttpHeaders containing the raw property values.
+    /**
+     * Creates an instance of FullRestoreOperationHeaders class.
+     * 
+     * @param rawHeaders The raw HttpHeaders that will be used to create the property values.
+     */
+    public FullRestoreOperationHeaders(HttpHeaders rawHeaders) {
+        String retryAfter = rawHeaders.getValue(HttpHeaderName.RETRY_AFTER);
+        if (retryAfter != null) {
+            this.retryAfter = Integer.parseInt(retryAfter);
+        }
+        this.azureAsyncOperation = rawHeaders.getValue(HttpHeaderName.AZURE_ASYNCOPERATION);
+    }
 
     /**
      * Get the retryAfter property: The Retry-After property.
-     *
+     * 
      * @return the retryAfter value.
      */
     public Integer getRetryAfter() {
@@ -33,7 +48,7 @@ public final class FullRestoreOperationHeaders {
 
     /**
      * Set the retryAfter property: The Retry-After property.
-     *
+     * 
      * @param retryAfter the retryAfter value to set.
      * @return the FullRestoreOperationHeaders object itself.
      */
@@ -44,7 +59,7 @@ public final class FullRestoreOperationHeaders {
 
     /**
      * Get the azureAsyncOperation property: The Azure-AsyncOperation property.
-     *
+     * 
      * @return the azureAsyncOperation value.
      */
     public String getAzureAsyncOperation() {
@@ -53,7 +68,7 @@ public final class FullRestoreOperationHeaders {
 
     /**
      * Set the azureAsyncOperation property: The Azure-AsyncOperation property.
-     *
+     * 
      * @param azureAsyncOperation the azureAsyncOperation value to set.
      * @return the FullRestoreOperationHeaders object itself.
      */

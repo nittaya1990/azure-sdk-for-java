@@ -5,29 +5,46 @@
 package com.azure.resourcemanager.containerregistry.models;
 
 import com.azure.core.util.ExpandableStringEnum;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.Collection;
 
-/** Defines values for TokenPasswordName. */
+/**
+ * The password name "password1" or "password2".
+ */
 public final class TokenPasswordName extends ExpandableStringEnum<TokenPasswordName> {
-    /** Static value password1 for TokenPasswordName. */
+    /**
+     * Static value password1 for TokenPasswordName.
+     */
     public static final TokenPasswordName PASSWORD1 = fromString("password1");
 
-    /** Static value password2 for TokenPasswordName. */
+    /**
+     * Static value password2 for TokenPasswordName.
+     */
     public static final TokenPasswordName PASSWORD2 = fromString("password2");
 
     /**
+     * Creates a new instance of TokenPasswordName value.
+     * 
+     * @deprecated Use the {@link #fromString(String)} factory method.
+     */
+    @Deprecated
+    public TokenPasswordName() {
+    }
+
+    /**
      * Creates or finds a TokenPasswordName from its string representation.
-     *
+     * 
      * @param name a name to look for.
      * @return the corresponding TokenPasswordName.
      */
-    @JsonCreator
     public static TokenPasswordName fromString(String name) {
         return fromString(name, TokenPasswordName.class);
     }
 
-    /** @return known TokenPasswordName values. */
+    /**
+     * Gets known TokenPasswordName values.
+     * 
+     * @return known TokenPasswordName values.
+     */
     public static Collection<TokenPasswordName> values() {
         return values(TokenPasswordName.class);
     }

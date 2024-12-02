@@ -5,21 +5,16 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.models.UserIdentityContractInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** User Entity Base Parameters set. */
 @Fluent
 public class UserEntityBaseParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(UserEntityBaseParameters.class);
-
     /*
-     * Account state. Specifies whether the user is active or not. Blocked
-     * users are unable to sign into the developer portal or call any APIs of
-     * subscribed products. Default state is Active.
+     * Account state. Specifies whether the user is active or not. Blocked users are unable to sign into the developer
+     * portal or call any APIs of subscribed products. Default state is Active.
      */
     @JsonProperty(value = "state")
     private UserState state;
@@ -35,6 +30,10 @@ public class UserEntityBaseParameters {
      */
     @JsonProperty(value = "identities")
     private List<UserIdentityContractInner> identities;
+
+    /** Creates an instance of UserEntityBaseParameters class. */
+    public UserEntityBaseParameters() {
+    }
 
     /**
      * Get the state property: Account state. Specifies whether the user is active or not. Blocked users are unable to

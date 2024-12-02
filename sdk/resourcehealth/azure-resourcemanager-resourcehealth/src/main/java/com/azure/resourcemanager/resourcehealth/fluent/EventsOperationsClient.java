@@ -13,29 +13,56 @@ import com.azure.resourcemanager.resourcehealth.fluent.models.EventInner;
 /** An instance of this class provides access to all the operations defined in EventsOperationsClient. */
 public interface EventsOperationsClient {
     /**
-     * Lists current service health events in the subscription.
+     * Lists service health events in the subscription.
      *
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the List events operation response.
+     * @return the List events operation response as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<EventInner> list();
 
     /**
-     * Lists current service health events in the subscription.
+     * Lists service health events in the subscription.
      *
      * @param filter The filter to apply on the operation. For more information please see
      *     https://docs.microsoft.com/en-us/rest/api/apimanagement/apis?redirectedfrom=MSDN.
-     * @param view setting view=full expands the article parameters.
+     * @param queryStartTime Specifies from when to return events, based on the lastUpdateTime property. For example,
+     *     queryStartTime = 7/24/2020 OR queryStartTime=7%2F24%2F2020.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the List events operation response.
+     * @return the List events operation response as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<EventInner> list(String filter, String view, Context context);
+    PagedIterable<EventInner> list(String filter, String queryStartTime, Context context);
+
+    /**
+     * Lists current service health events in the tenant.
+     *
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the List events operation response as paginated response with {@link PagedIterable}.
+     */
+    @ServiceMethod(returns = ReturnType.COLLECTION)
+    PagedIterable<EventInner> listByTenantId();
+
+    /**
+     * Lists current service health events in the tenant.
+     *
+     * @param filter The filter to apply on the operation. For more information please see
+     *     https://docs.microsoft.com/en-us/rest/api/apimanagement/apis?redirectedfrom=MSDN.
+     * @param queryStartTime Specifies from when to return events, based on the lastUpdateTime property. For example,
+     *     queryStartTime = 7/24/2020 OR queryStartTime=7%2F24%2F2020.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the List events operation response as paginated response with {@link PagedIterable}.
+     */
+    @ServiceMethod(returns = ReturnType.COLLECTION)
+    PagedIterable<EventInner> listByTenantId(String filter, String queryStartTime, Context context);
 
     /**
      * Lists current service health events for given resource.
@@ -48,7 +75,7 @@ public interface EventsOperationsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the List events operation response.
+     * @return the List events operation response as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<EventInner> listBySingleResource(String resourceUri);
@@ -63,13 +90,12 @@ public interface EventsOperationsClient {
      *     /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resource-provider-name}/{parentResourceType}/{parentResourceName}/{resourceType}/{resourceName}.
      * @param filter The filter to apply on the operation. For more information please see
      *     https://docs.microsoft.com/en-us/rest/api/apimanagement/apis?redirectedfrom=MSDN.
-     * @param view setting view=full expands the article parameters.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the List events operation response.
+     * @return the List events operation response as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<EventInner> listBySingleResource(String resourceUri, String filter, String view, Context context);
+    PagedIterable<EventInner> listBySingleResource(String resourceUri, String filter, Context context);
 }

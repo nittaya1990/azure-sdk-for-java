@@ -8,11 +8,11 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 
 public class GetAccount {
     public static void main(String[] args) {
-        AccountsClient client = new PurviewAccountClientBuilder()
+        AccountsClient client = new AccountsClientBuilder()
             .endpoint(System.getenv("ACCOUNT_ENDPOINT"))
             .credential(new DefaultAzureCredentialBuilder().build())
-            .buildAccountsClient();
-        BinaryData response = client.getAccountPropertiesWithResponse(null, null).getValue();
+            .buildClient();
+        BinaryData response = client.getAccountPropertiesWithResponse(null).getValue();
         System.out.println(response);
     }
 }

@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.mysqlflexibleserver.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.mysqlflexibleserver.fluent.models.DatabaseInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** A List of databases. */
+/**
+ * A List of databases.
+ */
 @Fluent
 public final class DatabaseListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DatabaseListResult.class);
-
     /*
      * The list of databases housed in a server
      */
@@ -29,8 +27,14 @@ public final class DatabaseListResult {
     private String nextLink;
 
     /**
+     * Creates an instance of DatabaseListResult class.
+     */
+    public DatabaseListResult() {
+    }
+
+    /**
      * Get the value property: The list of databases housed in a server.
-     *
+     * 
      * @return the value value.
      */
     public List<DatabaseInner> value() {
@@ -39,7 +43,7 @@ public final class DatabaseListResult {
 
     /**
      * Set the value property: The list of databases housed in a server.
-     *
+     * 
      * @param value the value value to set.
      * @return the DatabaseListResult object itself.
      */
@@ -50,7 +54,7 @@ public final class DatabaseListResult {
 
     /**
      * Get the nextLink property: The link used to get the next page of operations.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -59,7 +63,7 @@ public final class DatabaseListResult {
 
     /**
      * Set the nextLink property: The link used to get the next page of operations.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the DatabaseListResult object itself.
      */
@@ -70,7 +74,7 @@ public final class DatabaseListResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

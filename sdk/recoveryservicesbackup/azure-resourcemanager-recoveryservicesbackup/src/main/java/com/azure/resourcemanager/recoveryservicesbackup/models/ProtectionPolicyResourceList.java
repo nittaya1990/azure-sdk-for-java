@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.recoveryservicesbackup.fluent.models.ProtectionPolicyResourceInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** List of ProtectionPolicy resources. */
+/**
+ * List of ProtectionPolicy resources.
+ */
 @Fluent
 public final class ProtectionPolicyResourceList extends ResourceList {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ProtectionPolicyResourceList.class);
-
     /*
      * List of resources.
      */
@@ -23,8 +21,14 @@ public final class ProtectionPolicyResourceList extends ResourceList {
     private List<ProtectionPolicyResourceInner> value;
 
     /**
+     * Creates an instance of ProtectionPolicyResourceList class.
+     */
+    public ProtectionPolicyResourceList() {
+    }
+
+    /**
      * Get the value property: List of resources.
-     *
+     * 
      * @return the value value.
      */
     public List<ProtectionPolicyResourceInner> value() {
@@ -33,7 +37,7 @@ public final class ProtectionPolicyResourceList extends ResourceList {
 
     /**
      * Set the value property: List of resources.
-     *
+     * 
      * @param value the value value to set.
      * @return the ProtectionPolicyResourceList object itself.
      */
@@ -42,7 +46,9 @@ public final class ProtectionPolicyResourceList extends ResourceList {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ProtectionPolicyResourceList withNextLink(String nextLink) {
         super.withNextLink(nextLink);
@@ -51,7 +57,7 @@ public final class ProtectionPolicyResourceList extends ResourceList {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

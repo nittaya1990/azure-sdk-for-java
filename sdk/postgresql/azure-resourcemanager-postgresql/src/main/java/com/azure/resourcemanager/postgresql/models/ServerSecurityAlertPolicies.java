@@ -21,8 +21,8 @@ public interface ServerSecurityAlertPolicies {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return a server's security alert policy.
      */
-    ServerSecurityAlertPolicy get(
-        String resourceGroupName, String serverName, SecurityAlertPolicyName securityAlertPolicyName);
+    ServerSecurityAlertPolicy get(String resourceGroupName, String serverName,
+        SecurityAlertPolicyName securityAlertPolicyName);
 
     /**
      * Get a server's security alert policy.
@@ -34,10 +34,10 @@ public interface ServerSecurityAlertPolicies {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a server's security alert policy.
+     * @return a server's security alert policy along with {@link Response}.
      */
-    Response<ServerSecurityAlertPolicy> getWithResponse(
-        String resourceGroupName, String serverName, SecurityAlertPolicyName securityAlertPolicyName, Context context);
+    Response<ServerSecurityAlertPolicy> getWithResponse(String resourceGroupName, String serverName,
+        SecurityAlertPolicyName securityAlertPolicyName, Context context);
 
     /**
      * Get the server's threat detection policies.
@@ -71,7 +71,7 @@ public interface ServerSecurityAlertPolicies {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a server's security alert policy.
+     * @return a server's security alert policy along with {@link Response}.
      */
     ServerSecurityAlertPolicy getById(String id);
 
@@ -83,7 +83,7 @@ public interface ServerSecurityAlertPolicies {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a server's security alert policy.
+     * @return a server's security alert policy along with {@link Response}.
      */
     Response<ServerSecurityAlertPolicy> getByIdWithResponse(String id, Context context);
 

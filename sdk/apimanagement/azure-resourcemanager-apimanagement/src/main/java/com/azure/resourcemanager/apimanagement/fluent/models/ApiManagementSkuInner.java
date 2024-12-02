@@ -5,21 +5,17 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.models.ApiManagementSkuCapabilities;
 import com.azure.resourcemanager.apimanagement.models.ApiManagementSkuCapacity;
 import com.azure.resourcemanager.apimanagement.models.ApiManagementSkuCosts;
 import com.azure.resourcemanager.apimanagement.models.ApiManagementSkuLocationInfo;
 import com.azure.resourcemanager.apimanagement.models.ApiManagementSkuRestrictions;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Describes an available ApiManagement SKU. */
 @Immutable
 public final class ApiManagementSkuInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApiManagementSkuInner.class);
-
     /*
      * The type of resource the SKU applies to.
      */
@@ -33,8 +29,8 @@ public final class ApiManagementSkuInner {
     private String name;
 
     /*
-     * Specifies the tier of virtual machines in a scale set.<br /><br />
-     * Possible Values:<br /><br /> **Standard**<br /><br /> **Basic**
+     * Specifies the tier of virtual machines in a scale set.<br /><br /> Possible Values:<br /><br /> **Standard**<br
+     * /><br /> **Basic**
      */
     @JsonProperty(value = "tier", access = JsonProperty.Access.WRITE_ONLY)
     private String tier;
@@ -70,8 +66,7 @@ public final class ApiManagementSkuInner {
     private List<String> locations;
 
     /*
-     * A list of locations and availability zones in those locations where the
-     * SKU is available.
+     * A list of locations and availability zones in those locations where the SKU is available.
      */
     @JsonProperty(value = "locationInfo", access = JsonProperty.Access.WRITE_ONLY)
     private List<ApiManagementSkuLocationInfo> locationInfo;
@@ -95,11 +90,14 @@ public final class ApiManagementSkuInner {
     private List<ApiManagementSkuCapabilities> capabilities;
 
     /*
-     * The restrictions because of which SKU cannot be used. This is empty if
-     * there are no restrictions.
+     * The restrictions because of which SKU cannot be used. This is empty if there are no restrictions.
      */
     @JsonProperty(value = "restrictions", access = JsonProperty.Access.WRITE_ONLY)
     private List<ApiManagementSkuRestrictions> restrictions;
+
+    /** Creates an instance of ApiManagementSkuInner class. */
+    public ApiManagementSkuInner() {
+    }
 
     /**
      * Get the resourceType property: The type of resource the SKU applies to.

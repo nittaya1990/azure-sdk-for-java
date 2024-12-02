@@ -5,16 +5,12 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
 /** Request Report data. */
 @Fluent
 public final class RequestReportRecordContractInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RequestReportRecordContractInner.class);
-
     /*
      * API identifier path. /apis/{apiId}
      */
@@ -58,8 +54,7 @@ public final class RequestReportRecordContractInner {
     private String ipAddress;
 
     /*
-     * The HTTP status code received by the gateway as a result of forwarding
-     * this request to the backend.
+     * The HTTP status code received by the gateway as a result of forwarding this request to the backend.
      */
     @JsonProperty(value = "backendResponseCode")
     private String backendResponseCode;
@@ -77,17 +72,15 @@ public final class RequestReportRecordContractInner {
     private Integer responseSize;
 
     /*
-     * The date and time when this request was received by the gateway in ISO
-     * 8601 format.
+     * The date and time when this request was received by the gateway in ISO 8601 format.
      */
     @JsonProperty(value = "timestamp")
     private OffsetDateTime timestamp;
 
     /*
-     * Specifies if response cache was involved in generating the response. If
-     * the value is none, the cache was not used. If the value is hit, cached
-     * response was returned. If the value is miss, the cache was used but
-     * lookup resulted in a miss and request was fulfilled by the backend.
+     * Specifies if response cache was involved in generating the response. If the value is none, the cache was not
+     * used. If the value is hit, cached response was returned. If the value is miss, the cache was used but lookup
+     * resulted in a miss and request was fulfilled by the backend.
      */
     @JsonProperty(value = "cache")
     private String cache;
@@ -99,8 +92,7 @@ public final class RequestReportRecordContractInner {
     private Double apiTime;
 
     /*
-     * he time it took to forward this request to the backend and get the
-     * response back.
+     * he time it took to forward this request to the backend and get the response back.
      */
     @JsonProperty(value = "serviceTime")
     private Double serviceTime;
@@ -128,6 +120,10 @@ public final class RequestReportRecordContractInner {
      */
     @JsonProperty(value = "requestSize")
     private Integer requestSize;
+
+    /** Creates an instance of RequestReportRecordContractInner class. */
+    public RequestReportRecordContractInner() {
+    }
 
     /**
      * Get the apiId property: API identifier path. /apis/{apiId}.

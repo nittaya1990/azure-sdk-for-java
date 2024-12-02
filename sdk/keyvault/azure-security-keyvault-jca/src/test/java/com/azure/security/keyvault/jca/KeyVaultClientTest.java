@@ -18,12 +18,11 @@ public class KeyVaultClientTest {
 
     @BeforeAll
     public static void setEnvironmentProperty() {
-        keyVaultClient = new KeyVaultClient(
-            System.getenv("AZURE_KEYVAULT_ENDPOINT"),
-            System.getenv("AZURE_KEYVAULT_TENANT_ID"),
-            System.getenv("AZURE_KEYVAULT_CLIENT_ID"),
-            System.getenv("AZURE_KEYVAULT_CLIENT_SECRET"));
-        certificateName = System.getenv("AZURE_KEYVAULT_CERTIFICATE_NAME");
+        keyVaultClient = new KeyVaultClient(PropertyConvertorUtils.getPropertyValue("AZURE_KEYVAULT_ENDPOINT"),
+            PropertyConvertorUtils.getPropertyValue("AZURE_KEYVAULT_TENANT_ID"),
+            PropertyConvertorUtils.getPropertyValue("AZURE_KEYVAULT_CLIENT_ID"),
+            PropertyConvertorUtils.getPropertyValue("AZURE_KEYVAULT_CLIENT_SECRET"));
+        certificateName = PropertyConvertorUtils.getPropertyValue("AZURE_KEYVAULT_CERTIFICATE_NAME");
     }
 
     @Test
@@ -34,6 +33,11 @@ public class KeyVaultClientTest {
     @Test
     public void testGetCertificate() {
         assertNotNull(keyVaultClient.getCertificate(certificateName));
+    }
+
+    @Test
+    public void testGetCertificateChain() {
+        assertNotNull(keyVaultClient.getCertificateChain(certificateName));
     }
 
     @Test

@@ -6,14 +6,13 @@ package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The type of IoT Security recommendation. */
+/**
+ * The type of IoT Security recommendation.
+ */
 @Fluent
 public final class RecommendationConfigurationProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RecommendationConfigurationProperties.class);
-
     /*
      * The type of IoT Security recommendation.
      */
@@ -27,15 +26,20 @@ public final class RecommendationConfigurationProperties {
     private String name;
 
     /*
-     * Recommendation status. When the recommendation status is disabled
-     * recommendations are not generated.
+     * Recommendation status. When the recommendation status is disabled recommendations are not generated.
      */
     @JsonProperty(value = "status", required = true)
     private RecommendationConfigStatus status;
 
     /**
+     * Creates an instance of RecommendationConfigurationProperties class.
+     */
+    public RecommendationConfigurationProperties() {
+    }
+
+    /**
      * Get the recommendationType property: The type of IoT Security recommendation.
-     *
+     * 
      * @return the recommendationType value.
      */
     public RecommendationType recommendationType() {
@@ -44,7 +48,7 @@ public final class RecommendationConfigurationProperties {
 
     /**
      * Set the recommendationType property: The type of IoT Security recommendation.
-     *
+     * 
      * @param recommendationType the recommendationType value to set.
      * @return the RecommendationConfigurationProperties object itself.
      */
@@ -55,7 +59,7 @@ public final class RecommendationConfigurationProperties {
 
     /**
      * Get the name property: The name property.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -65,7 +69,7 @@ public final class RecommendationConfigurationProperties {
     /**
      * Get the status property: Recommendation status. When the recommendation status is disabled recommendations are
      * not generated.
-     *
+     * 
      * @return the status value.
      */
     public RecommendationConfigStatus status() {
@@ -75,7 +79,7 @@ public final class RecommendationConfigurationProperties {
     /**
      * Set the status property: Recommendation status. When the recommendation status is disabled recommendations are
      * not generated.
-     *
+     * 
      * @param status the status value to set.
      * @return the RecommendationConfigurationProperties object itself.
      */
@@ -86,21 +90,21 @@ public final class RecommendationConfigurationProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (recommendationType() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property recommendationType in model RecommendationConfigurationProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property recommendationType in model RecommendationConfigurationProperties"));
         }
         if (status() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property status in model RecommendationConfigurationProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property status in model RecommendationConfigurationProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(RecommendationConfigurationProperties.class);
 }

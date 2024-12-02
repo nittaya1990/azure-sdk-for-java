@@ -5,16 +5,12 @@
 package com.azure.resourcemanager.resourcehealth.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
 /** Update for service health event. */
 @Fluent
 public final class Update {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Update.class);
-
     /*
      * Summary text for the given update for the service health event.
      */
@@ -22,11 +18,14 @@ public final class Update {
     private String summary;
 
     /*
-     * It provides the Timestamp for the given update for the service health
-     * event.
+     * It provides the Timestamp for the given update for the service health event.
      */
     @JsonProperty(value = "updateDateTime")
     private OffsetDateTime updateDateTime;
+
+    /** Creates an instance of Update class. */
+    public Update() {
+    }
 
     /**
      * Get the summary property: Summary text for the given update for the service health event.

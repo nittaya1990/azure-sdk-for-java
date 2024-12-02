@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.hybridnetwork.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
-/** Tags object for patch operations. */
+/**
+ * Tags object for patch operations.
+ */
 @Fluent
 public final class TagsObject {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TagsObject.class);
-
     /*
      * Resource tags.
      */
@@ -24,8 +22,14 @@ public final class TagsObject {
     private Map<String, String> tags;
 
     /**
+     * Creates an instance of TagsObject class.
+     */
+    public TagsObject() {
+    }
+
+    /**
      * Get the tags property: Resource tags.
-     *
+     * 
      * @return the tags value.
      */
     public Map<String, String> tags() {
@@ -34,7 +38,7 @@ public final class TagsObject {
 
     /**
      * Set the tags property: Resource tags.
-     *
+     * 
      * @param tags the tags value to set.
      * @return the TagsObject object itself.
      */
@@ -45,7 +49,7 @@ public final class TagsObject {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

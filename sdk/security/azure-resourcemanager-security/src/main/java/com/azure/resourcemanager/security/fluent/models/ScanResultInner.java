@@ -6,16 +6,14 @@ package com.azure.resourcemanager.security.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.security.models.ScanResultProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** A vulnerability assessment scan result for a single rule. */
+/**
+ * A vulnerability assessment scan result for a single rule.
+ */
 @Fluent
 public final class ScanResultInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ScanResultInner.class);
-
     /*
      * A vulnerability assessment scan result properties for a single rule.
      */
@@ -23,8 +21,14 @@ public final class ScanResultInner extends ProxyResource {
     private ScanResultProperties properties;
 
     /**
+     * Creates an instance of ScanResultInner class.
+     */
+    public ScanResultInner() {
+    }
+
+    /**
      * Get the properties property: A vulnerability assessment scan result properties for a single rule.
-     *
+     * 
      * @return the properties value.
      */
     public ScanResultProperties properties() {
@@ -33,7 +37,7 @@ public final class ScanResultInner extends ProxyResource {
 
     /**
      * Set the properties property: A vulnerability assessment scan result properties for a single rule.
-     *
+     * 
      * @param properties the properties value to set.
      * @return the ScanResultInner object itself.
      */
@@ -44,7 +48,7 @@ public final class ScanResultInner extends ProxyResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

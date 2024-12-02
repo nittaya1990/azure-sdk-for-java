@@ -5,21 +5,27 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-/** Azure storage specific job. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "jobType")
+/**
+ * Azure storage specific job.
+ */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "jobType", defaultImpl = AzureStorageJob.class, visible = true)
 @JsonTypeName("AzureStorageJob")
 @Fluent
 public final class AzureStorageJob extends Job {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureStorageJob.class);
+    /*
+     * This property will be used as the discriminator for deciding the specific types in the polymorphic chain of types.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "jobType", required = true)
+    private String jobType = "AzureStorageJob";
 
     /*
      * Time elapsed during the execution of this job.
@@ -46,8 +52,7 @@ public final class AzureStorageJob extends Job {
     private String storageAccountName;
 
     /*
-     * Specifies whether the Storage account is a Classic or an Azure Resource
-     * Manager Storage account.
+     * Specifies whether the Storage account is a Classic or an Azure Resource Manager Storage account.
      */
     @JsonProperty(value = "storageAccountVersion")
     private String storageAccountVersion;
@@ -58,9 +63,32 @@ public final class AzureStorageJob extends Job {
     @JsonProperty(value = "extendedInfo")
     private AzureStorageJobExtendedInfo extendedInfo;
 
+    /*
+     * Indicated that whether the job is adhoc(true) or scheduled(false)
+     */
+    @JsonProperty(value = "isUserTriggered")
+    private Boolean isUserTriggered;
+
+    /**
+     * Creates an instance of AzureStorageJob class.
+     */
+    public AzureStorageJob() {
+    }
+
+    /**
+     * Get the jobType property: This property will be used as the discriminator for deciding the specific types in the
+     * polymorphic chain of types.
+     * 
+     * @return the jobType value.
+     */
+    @Override
+    public String jobType() {
+        return this.jobType;
+    }
+
     /**
      * Get the duration property: Time elapsed during the execution of this job.
-     *
+     * 
      * @return the duration value.
      */
     public Duration duration() {
@@ -69,7 +97,7 @@ public final class AzureStorageJob extends Job {
 
     /**
      * Set the duration property: Time elapsed during the execution of this job.
-     *
+     * 
      * @param duration the duration value to set.
      * @return the AzureStorageJob object itself.
      */
@@ -80,7 +108,7 @@ public final class AzureStorageJob extends Job {
 
     /**
      * Get the actionsInfo property: Gets or sets the state/actions applicable on this job like cancel/retry.
-     *
+     * 
      * @return the actionsInfo value.
      */
     public List<JobSupportedAction> actionsInfo() {
@@ -89,7 +117,7 @@ public final class AzureStorageJob extends Job {
 
     /**
      * Set the actionsInfo property: Gets or sets the state/actions applicable on this job like cancel/retry.
-     *
+     * 
      * @param actionsInfo the actionsInfo value to set.
      * @return the AzureStorageJob object itself.
      */
@@ -100,7 +128,7 @@ public final class AzureStorageJob extends Job {
 
     /**
      * Get the errorDetails property: Error details on execution of this job.
-     *
+     * 
      * @return the errorDetails value.
      */
     public List<AzureStorageErrorInfo> errorDetails() {
@@ -109,7 +137,7 @@ public final class AzureStorageJob extends Job {
 
     /**
      * Set the errorDetails property: Error details on execution of this job.
-     *
+     * 
      * @param errorDetails the errorDetails value to set.
      * @return the AzureStorageJob object itself.
      */
@@ -120,7 +148,7 @@ public final class AzureStorageJob extends Job {
 
     /**
      * Get the storageAccountName property: Specifies friendly name of the storage account.
-     *
+     * 
      * @return the storageAccountName value.
      */
     public String storageAccountName() {
@@ -129,7 +157,7 @@ public final class AzureStorageJob extends Job {
 
     /**
      * Set the storageAccountName property: Specifies friendly name of the storage account.
-     *
+     * 
      * @param storageAccountName the storageAccountName value to set.
      * @return the AzureStorageJob object itself.
      */
@@ -141,7 +169,7 @@ public final class AzureStorageJob extends Job {
     /**
      * Get the storageAccountVersion property: Specifies whether the Storage account is a Classic or an Azure Resource
      * Manager Storage account.
-     *
+     * 
      * @return the storageAccountVersion value.
      */
     public String storageAccountVersion() {
@@ -151,7 +179,7 @@ public final class AzureStorageJob extends Job {
     /**
      * Set the storageAccountVersion property: Specifies whether the Storage account is a Classic or an Azure Resource
      * Manager Storage account.
-     *
+     * 
      * @param storageAccountVersion the storageAccountVersion value to set.
      * @return the AzureStorageJob object itself.
      */
@@ -162,7 +190,7 @@ public final class AzureStorageJob extends Job {
 
     /**
      * Get the extendedInfo property: Additional information about the job.
-     *
+     * 
      * @return the extendedInfo value.
      */
     public AzureStorageJobExtendedInfo extendedInfo() {
@@ -171,7 +199,7 @@ public final class AzureStorageJob extends Job {
 
     /**
      * Set the extendedInfo property: Additional information about the job.
-     *
+     * 
      * @param extendedInfo the extendedInfo value to set.
      * @return the AzureStorageJob object itself.
      */
@@ -180,49 +208,83 @@ public final class AzureStorageJob extends Job {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * Get the isUserTriggered property: Indicated that whether the job is adhoc(true) or scheduled(false).
+     * 
+     * @return the isUserTriggered value.
+     */
+    public Boolean isUserTriggered() {
+        return this.isUserTriggered;
+    }
+
+    /**
+     * Set the isUserTriggered property: Indicated that whether the job is adhoc(true) or scheduled(false).
+     * 
+     * @param isUserTriggered the isUserTriggered value to set.
+     * @return the AzureStorageJob object itself.
+     */
+    public AzureStorageJob withIsUserTriggered(Boolean isUserTriggered) {
+        this.isUserTriggered = isUserTriggered;
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureStorageJob withEntityFriendlyName(String entityFriendlyName) {
         super.withEntityFriendlyName(entityFriendlyName);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureStorageJob withBackupManagementType(BackupManagementType backupManagementType) {
         super.withBackupManagementType(backupManagementType);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureStorageJob withOperation(String operation) {
         super.withOperation(operation);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureStorageJob withStatus(String status) {
         super.withStatus(status);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureStorageJob withStartTime(OffsetDateTime startTime) {
         super.withStartTime(startTime);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureStorageJob withEndTime(OffsetDateTime endTime) {
         super.withEndTime(endTime);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureStorageJob withActivityId(String activityId) {
         super.withActivityId(activityId);
@@ -231,7 +293,7 @@ public final class AzureStorageJob extends Job {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

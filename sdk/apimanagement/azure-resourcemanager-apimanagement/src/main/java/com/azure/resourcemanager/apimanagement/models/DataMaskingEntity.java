@@ -5,18 +5,13 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** The DataMaskingEntity model. */
 @Fluent
 public final class DataMaskingEntity {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DataMaskingEntity.class);
-
     /*
-     * The name of an entity to mask (e.g. a name of a header or a query
-     * parameter).
+     * The name of an entity to mask (e.g. a name of a header or a query parameter).
      */
     @JsonProperty(value = "value")
     private String value;
@@ -26,6 +21,10 @@ public final class DataMaskingEntity {
      */
     @JsonProperty(value = "mode")
     private DataMaskingMode mode;
+
+    /** Creates an instance of DataMaskingEntity class. */
+    public DataMaskingEntity() {
+    }
 
     /**
      * Get the value property: The name of an entity to mask (e.g. a name of a header or a query parameter).

@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.frontdoor.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.frontdoor.fluent.models.FrontendEndpointInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The properties needed to update a Front Door. */
+/**
+ * The properties needed to update a Front Door.
+ */
 @Fluent
 public class FrontDoorUpdateParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(FrontDoorUpdateParameters.class);
-
     /*
      * A friendly name for the frontDoor
      */
@@ -59,15 +57,20 @@ public class FrontDoorUpdateParameters {
     private BackendPoolsSettings backendPoolsSettings;
 
     /*
-     * Operational status of the Front Door load balancer. Permitted values are
-     * 'Enabled' or 'Disabled'
+     * Operational status of the Front Door load balancer. Permitted values are 'Enabled' or 'Disabled'
      */
     @JsonProperty(value = "enabledState")
     private FrontDoorEnabledState enabledState;
 
     /**
+     * Creates an instance of FrontDoorUpdateParameters class.
+     */
+    public FrontDoorUpdateParameters() {
+    }
+
+    /**
      * Get the friendlyName property: A friendly name for the frontDoor.
-     *
+     * 
      * @return the friendlyName value.
      */
     public String friendlyName() {
@@ -76,7 +79,7 @@ public class FrontDoorUpdateParameters {
 
     /**
      * Set the friendlyName property: A friendly name for the frontDoor.
-     *
+     * 
      * @param friendlyName the friendlyName value to set.
      * @return the FrontDoorUpdateParameters object itself.
      */
@@ -87,7 +90,7 @@ public class FrontDoorUpdateParameters {
 
     /**
      * Get the routingRules property: Routing rules associated with this Front Door.
-     *
+     * 
      * @return the routingRules value.
      */
     public List<RoutingRule> routingRules() {
@@ -96,7 +99,7 @@ public class FrontDoorUpdateParameters {
 
     /**
      * Set the routingRules property: Routing rules associated with this Front Door.
-     *
+     * 
      * @param routingRules the routingRules value to set.
      * @return the FrontDoorUpdateParameters object itself.
      */
@@ -107,7 +110,7 @@ public class FrontDoorUpdateParameters {
 
     /**
      * Get the loadBalancingSettings property: Load balancing settings associated with this Front Door instance.
-     *
+     * 
      * @return the loadBalancingSettings value.
      */
     public List<LoadBalancingSettingsModel> loadBalancingSettings() {
@@ -116,7 +119,7 @@ public class FrontDoorUpdateParameters {
 
     /**
      * Set the loadBalancingSettings property: Load balancing settings associated with this Front Door instance.
-     *
+     * 
      * @param loadBalancingSettings the loadBalancingSettings value to set.
      * @return the FrontDoorUpdateParameters object itself.
      */
@@ -127,7 +130,7 @@ public class FrontDoorUpdateParameters {
 
     /**
      * Get the healthProbeSettings property: Health probe settings associated with this Front Door instance.
-     *
+     * 
      * @return the healthProbeSettings value.
      */
     public List<HealthProbeSettingsModel> healthProbeSettings() {
@@ -136,7 +139,7 @@ public class FrontDoorUpdateParameters {
 
     /**
      * Set the healthProbeSettings property: Health probe settings associated with this Front Door instance.
-     *
+     * 
      * @param healthProbeSettings the healthProbeSettings value to set.
      * @return the FrontDoorUpdateParameters object itself.
      */
@@ -147,7 +150,7 @@ public class FrontDoorUpdateParameters {
 
     /**
      * Get the backendPools property: Backend pools available to routing rules.
-     *
+     * 
      * @return the backendPools value.
      */
     public List<BackendPool> backendPools() {
@@ -156,7 +159,7 @@ public class FrontDoorUpdateParameters {
 
     /**
      * Set the backendPools property: Backend pools available to routing rules.
-     *
+     * 
      * @param backendPools the backendPools value to set.
      * @return the FrontDoorUpdateParameters object itself.
      */
@@ -167,7 +170,7 @@ public class FrontDoorUpdateParameters {
 
     /**
      * Get the frontendEndpoints property: Frontend endpoints available to routing rules.
-     *
+     * 
      * @return the frontendEndpoints value.
      */
     public List<FrontendEndpointInner> frontendEndpoints() {
@@ -176,7 +179,7 @@ public class FrontDoorUpdateParameters {
 
     /**
      * Set the frontendEndpoints property: Frontend endpoints available to routing rules.
-     *
+     * 
      * @param frontendEndpoints the frontendEndpoints value to set.
      * @return the FrontDoorUpdateParameters object itself.
      */
@@ -187,7 +190,7 @@ public class FrontDoorUpdateParameters {
 
     /**
      * Get the backendPoolsSettings property: Settings for all backendPools.
-     *
+     * 
      * @return the backendPoolsSettings value.
      */
     public BackendPoolsSettings backendPoolsSettings() {
@@ -196,7 +199,7 @@ public class FrontDoorUpdateParameters {
 
     /**
      * Set the backendPoolsSettings property: Settings for all backendPools.
-     *
+     * 
      * @param backendPoolsSettings the backendPoolsSettings value to set.
      * @return the FrontDoorUpdateParameters object itself.
      */
@@ -208,7 +211,7 @@ public class FrontDoorUpdateParameters {
     /**
      * Get the enabledState property: Operational status of the Front Door load balancer. Permitted values are 'Enabled'
      * or 'Disabled'.
-     *
+     * 
      * @return the enabledState value.
      */
     public FrontDoorEnabledState enabledState() {
@@ -218,7 +221,7 @@ public class FrontDoorUpdateParameters {
     /**
      * Set the enabledState property: Operational status of the Front Door load balancer. Permitted values are 'Enabled'
      * or 'Disabled'.
-     *
+     * 
      * @param enabledState the enabledState value to set.
      * @return the FrontDoorUpdateParameters object itself.
      */
@@ -229,7 +232,7 @@ public class FrontDoorUpdateParameters {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

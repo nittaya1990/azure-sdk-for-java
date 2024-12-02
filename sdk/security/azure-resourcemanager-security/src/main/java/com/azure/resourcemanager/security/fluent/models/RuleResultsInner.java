@@ -6,16 +6,14 @@ package com.azure.resourcemanager.security.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.security.models.RuleResultsProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Rule results. */
+/**
+ * Rule results.
+ */
 @Fluent
 public final class RuleResultsInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RuleResultsInner.class);
-
     /*
      * Rule results properties.
      */
@@ -23,8 +21,14 @@ public final class RuleResultsInner extends ProxyResource {
     private RuleResultsProperties properties;
 
     /**
+     * Creates an instance of RuleResultsInner class.
+     */
+    public RuleResultsInner() {
+    }
+
+    /**
      * Get the properties property: Rule results properties.
-     *
+     * 
      * @return the properties value.
      */
     public RuleResultsProperties properties() {
@@ -33,7 +37,7 @@ public final class RuleResultsInner extends ProxyResource {
 
     /**
      * Set the properties property: Rule results properties.
-     *
+     * 
      * @param properties the properties value to set.
      * @return the RuleResultsInner object itself.
      */
@@ -44,7 +48,7 @@ public final class RuleResultsInner extends ProxyResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

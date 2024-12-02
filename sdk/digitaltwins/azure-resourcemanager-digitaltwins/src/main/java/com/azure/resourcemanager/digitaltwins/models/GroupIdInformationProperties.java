@@ -5,18 +5,14 @@
 package com.azure.resourcemanager.digitaltwins.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** The properties for a group information object. */
 @Fluent
-public class GroupIdInformationProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(GroupIdInformationProperties.class);
-
+public final class GroupIdInformationProperties {
     /*
-     * The group id
+     * The group id.
      */
     @JsonProperty(value = "groupId")
     private String groupId;
@@ -32,6 +28,10 @@ public class GroupIdInformationProperties {
      */
     @JsonProperty(value = "requiredZoneNames")
     private List<String> requiredZoneNames;
+
+    /** Creates an instance of GroupIdInformationProperties class. */
+    public GroupIdInformationProperties() {
+    }
 
     /**
      * Get the groupId property: The group id.

@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.quota.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Usage properties for the specified resource. */
+/**
+ * Usage properties for the specified resource.
+ */
 @Fluent
 public final class UsagesProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(UsagesProperties.class);
-
     /*
      * The quota limit properties for this resource.
      */
@@ -21,22 +19,19 @@ public final class UsagesProperties {
     private UsagesObject usages;
 
     /*
-     * The units for the quota usage, such as Count and Bytes. When requesting
-     * quota, use the **unit** value returned in the GET response in the
-     * request body of your PUT operation.
+     *  The units for the quota usage, such as Count and Bytes. When requesting quota, use the **unit** value returned in the GET response in the request body of your PUT operation.
      */
     @JsonProperty(value = "unit", access = JsonProperty.Access.WRITE_ONLY)
     private String unit;
 
     /*
-     * Resource name provided by the resource provider. Use this property name
-     * when requesting quota.
+     * Resource name provided by the resource provider. Use this property name when requesting quota.
      */
     @JsonProperty(value = "name")
     private ResourceName name;
 
     /*
-     * The name of the resource type.
+     * The name of the resource type. Optional field.
      */
     @JsonProperty(value = "resourceType")
     private String resourceType;
@@ -46,8 +41,7 @@ public final class UsagesProperties {
      * *P1D (per one day)
      * *PT1M (per one minute)
      * *PT1S (per one second).
-     * This parameter is optional because it is not relevant for all resources
-     * such as compute.
+     * This parameter is optional because it is not relevant for all resources such as compute.
      */
     @JsonProperty(value = "quotaPeriod", access = JsonProperty.Access.WRITE_ONLY)
     private String quotaPeriod;
@@ -65,8 +59,14 @@ public final class UsagesProperties {
     private Object properties;
 
     /**
+     * Creates an instance of UsagesProperties class.
+     */
+    public UsagesProperties() {
+    }
+
+    /**
      * Get the usages property: The quota limit properties for this resource.
-     *
+     * 
      * @return the usages value.
      */
     public UsagesObject usages() {
@@ -75,7 +75,7 @@ public final class UsagesProperties {
 
     /**
      * Set the usages property: The quota limit properties for this resource.
-     *
+     * 
      * @param usages the usages value to set.
      * @return the UsagesProperties object itself.
      */
@@ -87,7 +87,7 @@ public final class UsagesProperties {
     /**
      * Get the unit property: The units for the quota usage, such as Count and Bytes. When requesting quota, use the
      * **unit** value returned in the GET response in the request body of your PUT operation.
-     *
+     * 
      * @return the unit value.
      */
     public String unit() {
@@ -97,7 +97,7 @@ public final class UsagesProperties {
     /**
      * Get the name property: Resource name provided by the resource provider. Use this property name when requesting
      * quota.
-     *
+     * 
      * @return the name value.
      */
     public ResourceName name() {
@@ -107,7 +107,7 @@ public final class UsagesProperties {
     /**
      * Set the name property: Resource name provided by the resource provider. Use this property name when requesting
      * quota.
-     *
+     * 
      * @param name the name value to set.
      * @return the UsagesProperties object itself.
      */
@@ -117,8 +117,8 @@ public final class UsagesProperties {
     }
 
     /**
-     * Get the resourceType property: The name of the resource type.
-     *
+     * Get the resourceType property: The name of the resource type. Optional field.
+     * 
      * @return the resourceType value.
      */
     public String resourceType() {
@@ -126,8 +126,8 @@ public final class UsagesProperties {
     }
 
     /**
-     * Set the resourceType property: The name of the resource type.
-     *
+     * Set the resourceType property: The name of the resource type. Optional field.
+     * 
      * @param resourceType the resourceType value to set.
      * @return the UsagesProperties object itself.
      */
@@ -137,10 +137,12 @@ public final class UsagesProperties {
     }
 
     /**
-     * Get the quotaPeriod property: The time period for the summary of the quota usage values. For example: *P1D (per
-     * one day) *PT1M (per one minute) *PT1S (per one second). This parameter is optional because it is not relevant for
-     * all resources such as compute.
-     *
+     * Get the quotaPeriod property: The time period for the summary of the quota usage values. For example:
+     * *P1D (per one day)
+     * *PT1M (per one minute)
+     * *PT1S (per one second).
+     * This parameter is optional because it is not relevant for all resources such as compute.
+     * 
      * @return the quotaPeriod value.
      */
     public String quotaPeriod() {
@@ -149,7 +151,7 @@ public final class UsagesProperties {
 
     /**
      * Get the isQuotaApplicable property: States if quota can be requested for this resource.
-     *
+     * 
      * @return the isQuotaApplicable value.
      */
     public Boolean isQuotaApplicable() {
@@ -158,7 +160,7 @@ public final class UsagesProperties {
 
     /**
      * Get the properties property: Additional properties for the specific resource provider.
-     *
+     * 
      * @return the properties value.
      */
     public Object properties() {
@@ -167,7 +169,7 @@ public final class UsagesProperties {
 
     /**
      * Set the properties property: Additional properties for the specific resource provider.
-     *
+     * 
      * @param properties the properties value to set.
      * @return the UsagesProperties object itself.
      */
@@ -178,7 +180,7 @@ public final class UsagesProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

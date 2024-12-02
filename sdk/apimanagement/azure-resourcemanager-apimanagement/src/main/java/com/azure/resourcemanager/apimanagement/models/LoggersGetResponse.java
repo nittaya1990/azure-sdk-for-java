@@ -20,16 +20,16 @@ public final class LoggersGetResponse extends ResponseBase<LoggersGetHeaders, Lo
      * @param value the deserialized value of the HTTP response.
      * @param headers the deserialized headers of the HTTP response.
      */
-    public LoggersGetResponse(
-        HttpRequest request,
-        int statusCode,
-        HttpHeaders rawHeaders,
-        LoggerContractInner value,
+    public LoggersGetResponse(HttpRequest request, int statusCode, HttpHeaders rawHeaders, LoggerContractInner value,
         LoggersGetHeaders headers) {
         super(request, statusCode, rawHeaders, value, headers);
     }
 
-    /** @return the deserialized response body. */
+    /**
+     * Gets the deserialized response body.
+     *
+     * @return the deserialized response body.
+     */
     @Override
     public LoggerContractInner getValue() {
         return super.getValue();

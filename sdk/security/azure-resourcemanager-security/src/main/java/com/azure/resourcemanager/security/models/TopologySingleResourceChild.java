@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The TopologySingleResourceChild model. */
+/**
+ * The TopologySingleResourceChild model.
+ */
 @Immutable
 public final class TopologySingleResourceChild {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TopologySingleResourceChild.class);
-
     /*
      * Azure resource id which serves as child resource in topology view
      */
@@ -21,8 +19,14 @@ public final class TopologySingleResourceChild {
     private String resourceId;
 
     /**
+     * Creates an instance of TopologySingleResourceChild class.
+     */
+    public TopologySingleResourceChild() {
+    }
+
+    /**
      * Get the resourceId property: Azure resource id which serves as child resource in topology view.
-     *
+     * 
      * @return the resourceId value.
      */
     public String resourceId() {
@@ -31,7 +35,7 @@ public final class TopologySingleResourceChild {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

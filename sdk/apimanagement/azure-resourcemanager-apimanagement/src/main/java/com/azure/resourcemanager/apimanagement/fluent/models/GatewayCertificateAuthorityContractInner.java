@@ -6,20 +6,20 @@ package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Gateway certificate authority details. */
 @Fluent
 public final class GatewayCertificateAuthorityContractInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(GatewayCertificateAuthorityContractInner.class);
-
     /*
      * Gateway certificate authority details.
      */
     @JsonProperty(value = "properties")
     private GatewayCertificateAuthorityContractProperties innerProperties;
+
+    /** Creates an instance of GatewayCertificateAuthorityContractInner class. */
+    public GatewayCertificateAuthorityContractInner() {
+    }
 
     /**
      * Get the innerProperties property: Gateway certificate authority details.

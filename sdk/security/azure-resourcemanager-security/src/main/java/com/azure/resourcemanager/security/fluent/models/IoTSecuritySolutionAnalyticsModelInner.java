@@ -5,170 +5,148 @@
 package com.azure.resourcemanager.security.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.security.models.IoTSecurityAlertedDevice;
 import com.azure.resourcemanager.security.models.IoTSecurityDeviceAlert;
 import com.azure.resourcemanager.security.models.IoTSecurityDeviceRecommendation;
 import com.azure.resourcemanager.security.models.IoTSecuritySolutionAnalyticsModelPropertiesDevicesMetricsItem;
 import com.azure.resourcemanager.security.models.IoTSeverityMetrics;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Security analytics of your IoT Security solution. */
-@JsonFlatten
+/**
+ * Security analytics of your IoT Security solution.
+ */
 @Fluent
-public class IoTSecuritySolutionAnalyticsModelInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(IoTSecuritySolutionAnalyticsModelInner.class);
-
+public final class IoTSecuritySolutionAnalyticsModelInner extends ProxyResource {
     /*
-     * Security analytics of your IoT Security solution.
+     * Security Solution  Aggregated Alert data
      */
-    @JsonProperty(value = "properties.metrics", access = JsonProperty.Access.WRITE_ONLY)
-    private IoTSeverityMetrics metrics;
+    @JsonProperty(value = "properties")
+    private IoTSecuritySolutionAnalyticsModelProperties innerProperties;
 
-    /*
-     * Number of unhealthy devices within your IoT Security solution.
+    /**
+     * Creates an instance of IoTSecuritySolutionAnalyticsModelInner class.
      */
-    @JsonProperty(value = "properties.unhealthyDeviceCount", access = JsonProperty.Access.WRITE_ONLY)
-    private Long unhealthyDeviceCount;
+    public IoTSecuritySolutionAnalyticsModelInner() {
+    }
 
-    /*
-     * List of device metrics by the aggregation date.
+    /**
+     * Get the innerProperties property: Security Solution Aggregated Alert data.
+     * 
+     * @return the innerProperties value.
      */
-    @JsonProperty(value = "properties.devicesMetrics", access = JsonProperty.Access.WRITE_ONLY)
-    private List<IoTSecuritySolutionAnalyticsModelPropertiesDevicesMetricsItem> devicesMetrics;
-
-    /*
-     * List of the 3 devices with the most alerts.
-     */
-    @JsonProperty(value = "properties.topAlertedDevices")
-    private List<IoTSecurityAlertedDevice> topAlertedDevices;
-
-    /*
-     * List of the 3 most prevalent device alerts.
-     */
-    @JsonProperty(value = "properties.mostPrevalentDeviceAlerts")
-    private List<IoTSecurityDeviceAlert> mostPrevalentDeviceAlerts;
-
-    /*
-     * List of the 3 most prevalent device recommendations.
-     */
-    @JsonProperty(value = "properties.mostPrevalentDeviceRecommendations")
-    private List<IoTSecurityDeviceRecommendation> mostPrevalentDeviceRecommendations;
+    private IoTSecuritySolutionAnalyticsModelProperties innerProperties() {
+        return this.innerProperties;
+    }
 
     /**
      * Get the metrics property: Security analytics of your IoT Security solution.
-     *
+     * 
      * @return the metrics value.
      */
     public IoTSeverityMetrics metrics() {
-        return this.metrics;
+        return this.innerProperties() == null ? null : this.innerProperties().metrics();
     }
 
     /**
      * Get the unhealthyDeviceCount property: Number of unhealthy devices within your IoT Security solution.
-     *
+     * 
      * @return the unhealthyDeviceCount value.
      */
     public Long unhealthyDeviceCount() {
-        return this.unhealthyDeviceCount;
+        return this.innerProperties() == null ? null : this.innerProperties().unhealthyDeviceCount();
     }
 
     /**
      * Get the devicesMetrics property: List of device metrics by the aggregation date.
-     *
+     * 
      * @return the devicesMetrics value.
      */
     public List<IoTSecuritySolutionAnalyticsModelPropertiesDevicesMetricsItem> devicesMetrics() {
-        return this.devicesMetrics;
+        return this.innerProperties() == null ? null : this.innerProperties().devicesMetrics();
     }
 
     /**
      * Get the topAlertedDevices property: List of the 3 devices with the most alerts.
-     *
+     * 
      * @return the topAlertedDevices value.
      */
     public List<IoTSecurityAlertedDevice> topAlertedDevices() {
-        return this.topAlertedDevices;
+        return this.innerProperties() == null ? null : this.innerProperties().topAlertedDevices();
     }
 
     /**
      * Set the topAlertedDevices property: List of the 3 devices with the most alerts.
-     *
+     * 
      * @param topAlertedDevices the topAlertedDevices value to set.
      * @return the IoTSecuritySolutionAnalyticsModelInner object itself.
      */
-    public IoTSecuritySolutionAnalyticsModelInner withTopAlertedDevices(
-        List<IoTSecurityAlertedDevice> topAlertedDevices) {
-        this.topAlertedDevices = topAlertedDevices;
+    public IoTSecuritySolutionAnalyticsModelInner
+        withTopAlertedDevices(List<IoTSecurityAlertedDevice> topAlertedDevices) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new IoTSecuritySolutionAnalyticsModelProperties();
+        }
+        this.innerProperties().withTopAlertedDevices(topAlertedDevices);
         return this;
     }
 
     /**
      * Get the mostPrevalentDeviceAlerts property: List of the 3 most prevalent device alerts.
-     *
+     * 
      * @return the mostPrevalentDeviceAlerts value.
      */
     public List<IoTSecurityDeviceAlert> mostPrevalentDeviceAlerts() {
-        return this.mostPrevalentDeviceAlerts;
+        return this.innerProperties() == null ? null : this.innerProperties().mostPrevalentDeviceAlerts();
     }
 
     /**
      * Set the mostPrevalentDeviceAlerts property: List of the 3 most prevalent device alerts.
-     *
+     * 
      * @param mostPrevalentDeviceAlerts the mostPrevalentDeviceAlerts value to set.
      * @return the IoTSecuritySolutionAnalyticsModelInner object itself.
      */
-    public IoTSecuritySolutionAnalyticsModelInner withMostPrevalentDeviceAlerts(
-        List<IoTSecurityDeviceAlert> mostPrevalentDeviceAlerts) {
-        this.mostPrevalentDeviceAlerts = mostPrevalentDeviceAlerts;
+    public IoTSecuritySolutionAnalyticsModelInner
+        withMostPrevalentDeviceAlerts(List<IoTSecurityDeviceAlert> mostPrevalentDeviceAlerts) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new IoTSecuritySolutionAnalyticsModelProperties();
+        }
+        this.innerProperties().withMostPrevalentDeviceAlerts(mostPrevalentDeviceAlerts);
         return this;
     }
 
     /**
      * Get the mostPrevalentDeviceRecommendations property: List of the 3 most prevalent device recommendations.
-     *
+     * 
      * @return the mostPrevalentDeviceRecommendations value.
      */
     public List<IoTSecurityDeviceRecommendation> mostPrevalentDeviceRecommendations() {
-        return this.mostPrevalentDeviceRecommendations;
+        return this.innerProperties() == null ? null : this.innerProperties().mostPrevalentDeviceRecommendations();
     }
 
     /**
      * Set the mostPrevalentDeviceRecommendations property: List of the 3 most prevalent device recommendations.
-     *
+     * 
      * @param mostPrevalentDeviceRecommendations the mostPrevalentDeviceRecommendations value to set.
      * @return the IoTSecuritySolutionAnalyticsModelInner object itself.
      */
     public IoTSecuritySolutionAnalyticsModelInner withMostPrevalentDeviceRecommendations(
         List<IoTSecurityDeviceRecommendation> mostPrevalentDeviceRecommendations) {
-        this.mostPrevalentDeviceRecommendations = mostPrevalentDeviceRecommendations;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new IoTSecuritySolutionAnalyticsModelProperties();
+        }
+        this.innerProperties().withMostPrevalentDeviceRecommendations(mostPrevalentDeviceRecommendations);
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
-        if (metrics() != null) {
-            metrics().validate();
-        }
-        if (devicesMetrics() != null) {
-            devicesMetrics().forEach(e -> e.validate());
-        }
-        if (topAlertedDevices() != null) {
-            topAlertedDevices().forEach(e -> e.validate());
-        }
-        if (mostPrevalentDeviceAlerts() != null) {
-            mostPrevalentDeviceAlerts().forEach(e -> e.validate());
-        }
-        if (mostPrevalentDeviceRecommendations() != null) {
-            mostPrevalentDeviceRecommendations().forEach(e -> e.validate());
+        if (innerProperties() != null) {
+            innerProperties().validate();
         }
     }
 }

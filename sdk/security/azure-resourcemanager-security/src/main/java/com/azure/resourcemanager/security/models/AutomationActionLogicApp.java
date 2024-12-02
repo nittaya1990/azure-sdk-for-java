@@ -5,40 +5,62 @@
 package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * The logic app action that should be triggered. To learn more about Security Center's Workflow Automation
+ * The logic app action that should be triggered. To learn more about Microsoft Defender for Cloud's Workflow Automation
  * capabilities, visit https://aka.ms/ASCWorkflowAutomationLearnMore.
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "actionType")
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    property = "actionType",
+    defaultImpl = AutomationActionLogicApp.class,
+    visible = true)
 @JsonTypeName("LogicApp")
 @Fluent
 public final class AutomationActionLogicApp extends AutomationAction {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AutomationActionLogicApp.class);
+    /*
+     * The type of the action that will be triggered by the Automation
+     */
+    @JsonTypeId
+    @JsonProperty(value = "actionType", required = true)
+    private ActionType actionType = ActionType.LOGIC_APP;
 
     /*
-     * The triggered Logic App Azure Resource ID. This can also reside on other
-     * subscriptions, given that you have permissions to trigger the Logic App
+     * The triggered Logic App Azure Resource ID. This can also reside on other subscriptions, given that you have permissions to trigger the Logic App
      */
     @JsonProperty(value = "logicAppResourceId")
     private String logicAppResourceId;
 
     /*
-     * The Logic App trigger URI endpoint (it will not be included in any
-     * response).
+     * The Logic App trigger URI endpoint (it will not be included in any response).
      */
     @JsonProperty(value = "uri")
     private String uri;
 
     /**
+     * Creates an instance of AutomationActionLogicApp class.
+     */
+    public AutomationActionLogicApp() {
+    }
+
+    /**
+     * Get the actionType property: The type of the action that will be triggered by the Automation.
+     * 
+     * @return the actionType value.
+     */
+    @Override
+    public ActionType actionType() {
+        return this.actionType;
+    }
+
+    /**
      * Get the logicAppResourceId property: The triggered Logic App Azure Resource ID. This can also reside on other
      * subscriptions, given that you have permissions to trigger the Logic App.
-     *
+     * 
      * @return the logicAppResourceId value.
      */
     public String logicAppResourceId() {
@@ -48,7 +70,7 @@ public final class AutomationActionLogicApp extends AutomationAction {
     /**
      * Set the logicAppResourceId property: The triggered Logic App Azure Resource ID. This can also reside on other
      * subscriptions, given that you have permissions to trigger the Logic App.
-     *
+     * 
      * @param logicAppResourceId the logicAppResourceId value to set.
      * @return the AutomationActionLogicApp object itself.
      */
@@ -59,7 +81,7 @@ public final class AutomationActionLogicApp extends AutomationAction {
 
     /**
      * Get the uri property: The Logic App trigger URI endpoint (it will not be included in any response).
-     *
+     * 
      * @return the uri value.
      */
     public String uri() {
@@ -68,7 +90,7 @@ public final class AutomationActionLogicApp extends AutomationAction {
 
     /**
      * Set the uri property: The Logic App trigger URI endpoint (it will not be included in any response).
-     *
+     * 
      * @param uri the uri value to set.
      * @return the AutomationActionLogicApp object itself.
      */
@@ -79,7 +101,7 @@ public final class AutomationActionLogicApp extends AutomationAction {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

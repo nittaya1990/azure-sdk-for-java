@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.mysqlflexibleserver.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Network related properties of a server. */
+/**
+ * High availability properties of a server.
+ */
 @Fluent
 public final class HighAvailability {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(HighAvailability.class);
-
     /*
      * High availability mode for a server.
      */
@@ -33,8 +31,14 @@ public final class HighAvailability {
     private String standbyAvailabilityZone;
 
     /**
+     * Creates an instance of HighAvailability class.
+     */
+    public HighAvailability() {
+    }
+
+    /**
      * Get the mode property: High availability mode for a server.
-     *
+     * 
      * @return the mode value.
      */
     public HighAvailabilityMode mode() {
@@ -43,7 +47,7 @@ public final class HighAvailability {
 
     /**
      * Set the mode property: High availability mode for a server.
-     *
+     * 
      * @param mode the mode value to set.
      * @return the HighAvailability object itself.
      */
@@ -54,7 +58,7 @@ public final class HighAvailability {
 
     /**
      * Get the state property: The state of server high availability.
-     *
+     * 
      * @return the state value.
      */
     public HighAvailabilityState state() {
@@ -63,7 +67,7 @@ public final class HighAvailability {
 
     /**
      * Get the standbyAvailabilityZone property: Availability zone of the standby server.
-     *
+     * 
      * @return the standbyAvailabilityZone value.
      */
     public String standbyAvailabilityZone() {
@@ -72,7 +76,7 @@ public final class HighAvailability {
 
     /**
      * Set the standbyAvailabilityZone property: Availability zone of the standby server.
-     *
+     * 
      * @param standbyAvailabilityZone the standbyAvailabilityZone value to set.
      * @return the HighAvailability object itself.
      */
@@ -83,7 +87,7 @@ public final class HighAvailability {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

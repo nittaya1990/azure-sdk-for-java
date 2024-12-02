@@ -18,26 +18,24 @@ import com.azure.resourcemanager.deviceprovisioningservices.models.CertificateRe
 import com.azure.resourcemanager.deviceprovisioningservices.models.DpsCertificates;
 import com.azure.resourcemanager.deviceprovisioningservices.models.VerificationCodeRequest;
 import com.azure.resourcemanager.deviceprovisioningservices.models.VerificationCodeResponse;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.OffsetDateTime;
 
 public final class DpsCertificatesImpl implements DpsCertificates {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DpsCertificatesImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(DpsCertificatesImpl.class);
 
     private final DpsCertificatesClient innerClient;
 
     private final com.azure.resourcemanager.deviceprovisioningservices.IotDpsManager serviceManager;
 
-    public DpsCertificatesImpl(
-        DpsCertificatesClient innerClient,
+    public DpsCertificatesImpl(DpsCertificatesClient innerClient,
         com.azure.resourcemanager.deviceprovisioningservices.IotDpsManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
     }
 
     public CertificateResponse get(String certificateName, String resourceGroupName, String provisioningServiceName) {
-        CertificateResponseInner inner =
-            this.serviceClient().get(certificateName, resourceGroupName, provisioningServiceName);
+        CertificateResponseInner inner
+            = this.serviceClient().get(certificateName, resourceGroupName, provisioningServiceName);
         if (inner != null) {
             return new CertificateResponseImpl(inner, this.manager());
         } else {
@@ -45,62 +43,31 @@ public final class DpsCertificatesImpl implements DpsCertificates {
         }
     }
 
-    public Response<CertificateResponse> getWithResponse(
-        String certificateName,
-        String resourceGroupName,
-        String provisioningServiceName,
-        String ifMatch,
-        Context context) {
-        Response<CertificateResponseInner> inner =
-            this
-                .serviceClient()
-                .getWithResponse(certificateName, resourceGroupName, provisioningServiceName, ifMatch, context);
+    public Response<CertificateResponse> getWithResponse(String certificateName, String resourceGroupName,
+        String provisioningServiceName, String ifMatch, Context context) {
+        Response<CertificateResponseInner> inner = this.serviceClient()
+            .getWithResponse(certificateName, resourceGroupName, provisioningServiceName, ifMatch, context);
         if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
                 new CertificateResponseImpl(inner.getValue(), this.manager()));
         } else {
             return null;
         }
     }
 
-    public void delete(
-        String resourceGroupName, String ifMatch, String provisioningServiceName, String certificateName) {
+    public void delete(String resourceGroupName, String ifMatch, String provisioningServiceName,
+        String certificateName) {
         this.serviceClient().delete(resourceGroupName, ifMatch, provisioningServiceName, certificateName);
     }
 
-    public Response<Void> deleteWithResponse(
-        String resourceGroupName,
-        String ifMatch,
-        String provisioningServiceName,
-        String certificateName,
-        String certificateName1,
-        byte[] certificateRawBytes,
-        Boolean certificateIsVerified,
-        CertificatePurpose certificatePurpose,
-        OffsetDateTime certificateCreated,
-        OffsetDateTime certificateLastUpdated,
-        Boolean certificateHasPrivateKey,
-        String certificateNonce,
-        Context context) {
-        return this
-            .serviceClient()
-            .deleteWithResponse(
-                resourceGroupName,
-                ifMatch,
-                provisioningServiceName,
-                certificateName,
-                certificateName1,
-                certificateRawBytes,
-                certificateIsVerified,
-                certificatePurpose,
-                certificateCreated,
-                certificateLastUpdated,
-                certificateHasPrivateKey,
-                certificateNonce,
-                context);
+    public Response<Void> deleteWithResponse(String resourceGroupName, String ifMatch, String provisioningServiceName,
+        String certificateName, String certificateName1, byte[] certificateRawBytes, Boolean certificateIsVerified,
+        CertificatePurpose certificatePurpose, OffsetDateTime certificateCreated, OffsetDateTime certificateLastUpdated,
+        Boolean certificateHasPrivateKey, String certificateNonce, Context context) {
+        return this.serviceClient()
+            .deleteWithResponse(resourceGroupName, ifMatch, provisioningServiceName, certificateName, certificateName1,
+                certificateRawBytes, certificateIsVerified, certificatePurpose, certificateCreated,
+                certificateLastUpdated, certificateHasPrivateKey, certificateNonce, context);
     }
 
     public CertificateListDescription list(String resourceGroupName, String provisioningServiceName) {
@@ -112,27 +79,22 @@ public final class DpsCertificatesImpl implements DpsCertificates {
         }
     }
 
-    public Response<CertificateListDescription> listWithResponse(
-        String resourceGroupName, String provisioningServiceName, Context context) {
-        Response<CertificateListDescriptionInner> inner =
-            this.serviceClient().listWithResponse(resourceGroupName, provisioningServiceName, context);
+    public Response<CertificateListDescription> listWithResponse(String resourceGroupName,
+        String provisioningServiceName, Context context) {
+        Response<CertificateListDescriptionInner> inner
+            = this.serviceClient().listWithResponse(resourceGroupName, provisioningServiceName, context);
         if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
                 new CertificateListDescriptionImpl(inner.getValue(), this.manager()));
         } else {
             return null;
         }
     }
 
-    public VerificationCodeResponse generateVerificationCode(
-        String certificateName, String ifMatch, String resourceGroupName, String provisioningServiceName) {
-        VerificationCodeResponseInner inner =
-            this
-                .serviceClient()
-                .generateVerificationCode(certificateName, ifMatch, resourceGroupName, provisioningServiceName);
+    public VerificationCodeResponse generateVerificationCode(String certificateName, String ifMatch,
+        String resourceGroupName, String provisioningServiceName) {
+        VerificationCodeResponseInner inner = this.serviceClient()
+            .generateVerificationCode(certificateName, ifMatch, resourceGroupName, provisioningServiceName);
         if (inner != null) {
             return new VerificationCodeResponseImpl(inner, this.manager());
         } else {
@@ -140,58 +102,27 @@ public final class DpsCertificatesImpl implements DpsCertificates {
         }
     }
 
-    public Response<VerificationCodeResponse> generateVerificationCodeWithResponse(
-        String certificateName,
-        String ifMatch,
-        String resourceGroupName,
-        String provisioningServiceName,
-        String certificateName1,
-        byte[] certificateRawBytes,
-        Boolean certificateIsVerified,
-        CertificatePurpose certificatePurpose,
-        OffsetDateTime certificateCreated,
-        OffsetDateTime certificateLastUpdated,
-        Boolean certificateHasPrivateKey,
-        String certificateNonce,
-        Context context) {
-        Response<VerificationCodeResponseInner> inner =
-            this
-                .serviceClient()
-                .generateVerificationCodeWithResponse(
-                    certificateName,
-                    ifMatch,
-                    resourceGroupName,
-                    provisioningServiceName,
-                    certificateName1,
-                    certificateRawBytes,
-                    certificateIsVerified,
-                    certificatePurpose,
-                    certificateCreated,
-                    certificateLastUpdated,
-                    certificateHasPrivateKey,
-                    certificateNonce,
-                    context);
+    public Response<VerificationCodeResponse> generateVerificationCodeWithResponse(String certificateName,
+        String ifMatch, String resourceGroupName, String provisioningServiceName, String certificateName1,
+        byte[] certificateRawBytes, Boolean certificateIsVerified, CertificatePurpose certificatePurpose,
+        OffsetDateTime certificateCreated, OffsetDateTime certificateLastUpdated, Boolean certificateHasPrivateKey,
+        String certificateNonce, Context context) {
+        Response<VerificationCodeResponseInner> inner = this.serviceClient()
+            .generateVerificationCodeWithResponse(certificateName, ifMatch, resourceGroupName, provisioningServiceName,
+                certificateName1, certificateRawBytes, certificateIsVerified, certificatePurpose, certificateCreated,
+                certificateLastUpdated, certificateHasPrivateKey, certificateNonce, context);
         if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
                 new VerificationCodeResponseImpl(inner.getValue(), this.manager()));
         } else {
             return null;
         }
     }
 
-    public CertificateResponse verifyCertificate(
-        String certificateName,
-        String ifMatch,
-        String resourceGroupName,
-        String provisioningServiceName,
-        VerificationCodeRequest request) {
-        CertificateResponseInner inner =
-            this
-                .serviceClient()
-                .verifyCertificate(certificateName, ifMatch, resourceGroupName, provisioningServiceName, request);
+    public CertificateResponse verifyCertificate(String certificateName, String ifMatch, String resourceGroupName,
+        String provisioningServiceName, VerificationCodeRequest request) {
+        CertificateResponseInner inner = this.serviceClient()
+            .verifyCertificate(certificateName, ifMatch, resourceGroupName, provisioningServiceName, request);
         if (inner != null) {
             return new CertificateResponseImpl(inner, this.manager());
         } else {
@@ -199,44 +130,17 @@ public final class DpsCertificatesImpl implements DpsCertificates {
         }
     }
 
-    public Response<CertificateResponse> verifyCertificateWithResponse(
-        String certificateName,
-        String ifMatch,
-        String resourceGroupName,
-        String provisioningServiceName,
-        VerificationCodeRequest request,
-        String certificateName1,
-        byte[] certificateRawBytes,
-        Boolean certificateIsVerified,
-        CertificatePurpose certificatePurpose,
-        OffsetDateTime certificateCreated,
-        OffsetDateTime certificateLastUpdated,
-        Boolean certificateHasPrivateKey,
-        String certificateNonce,
-        Context context) {
-        Response<CertificateResponseInner> inner =
-            this
-                .serviceClient()
-                .verifyCertificateWithResponse(
-                    certificateName,
-                    ifMatch,
-                    resourceGroupName,
-                    provisioningServiceName,
-                    request,
-                    certificateName1,
-                    certificateRawBytes,
-                    certificateIsVerified,
-                    certificatePurpose,
-                    certificateCreated,
-                    certificateLastUpdated,
-                    certificateHasPrivateKey,
-                    certificateNonce,
-                    context);
+    public Response<CertificateResponse> verifyCertificateWithResponse(String certificateName, String ifMatch,
+        String resourceGroupName, String provisioningServiceName, VerificationCodeRequest request,
+        String certificateName1, byte[] certificateRawBytes, Boolean certificateIsVerified,
+        CertificatePurpose certificatePurpose, OffsetDateTime certificateCreated, OffsetDateTime certificateLastUpdated,
+        Boolean certificateHasPrivateKey, String certificateNonce, Context context) {
+        Response<CertificateResponseInner> inner = this.serviceClient()
+            .verifyCertificateWithResponse(certificateName, ifMatch, resourceGroupName, provisioningServiceName,
+                request, certificateName1, certificateRawBytes, certificateIsVerified, certificatePurpose,
+                certificateCreated, certificateLastUpdated, certificateHasPrivateKey, certificateNonce, context);
         if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
                 new CertificateResponseImpl(inner.getValue(), this.manager()));
         } else {
             return null;
@@ -246,28 +150,18 @@ public final class DpsCertificatesImpl implements DpsCertificates {
     public CertificateResponse getById(String id) {
         String certificateName = Utils.getValueFromIdByName(id, "certificates");
         if (certificateName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'certificates'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'certificates'.", id)));
         }
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
         String provisioningServiceName = Utils.getValueFromIdByName(id, "provisioningServices");
         if (provisioningServiceName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format(
-                                "The resource ID '%s' is not valid. Missing path segment 'provisioningServices'.",
-                                id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'provisioningServices'.", id)));
         }
         String localIfMatch = null;
         return this
@@ -278,28 +172,18 @@ public final class DpsCertificatesImpl implements DpsCertificates {
     public Response<CertificateResponse> getByIdWithResponse(String id, String ifMatch, Context context) {
         String certificateName = Utils.getValueFromIdByName(id, "certificates");
         if (certificateName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'certificates'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'certificates'.", id)));
         }
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
         String provisioningServiceName = Utils.getValueFromIdByName(id, "provisioningServices");
         if (provisioningServiceName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format(
-                                "The resource ID '%s' is not valid. Missing path segment 'provisioningServices'.",
-                                id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'provisioningServices'.", id)));
         }
         return this.getWithResponse(certificateName, resourceGroupName, provisioningServiceName, ifMatch, context);
     }
@@ -307,28 +191,18 @@ public final class DpsCertificatesImpl implements DpsCertificates {
     public void deleteById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
         String provisioningServiceName = Utils.getValueFromIdByName(id, "provisioningServices");
         if (provisioningServiceName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format(
-                                "The resource ID '%s' is not valid. Missing path segment 'provisioningServices'.",
-                                id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'provisioningServices'.", id)));
         }
         String certificateName = Utils.getValueFromIdByName(id, "certificates");
         if (certificateName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'certificates'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'certificates'.", id)));
         }
         String localIfMatch = null;
         String localCertificateName1 = null;
@@ -339,76 +213,34 @@ public final class DpsCertificatesImpl implements DpsCertificates {
         OffsetDateTime localCertificateLastUpdated = null;
         Boolean localCertificateHasPrivateKey = null;
         String localCertificateNonce = null;
-        this
-            .deleteWithResponse(
-                resourceGroupName,
-                localIfMatch,
-                provisioningServiceName,
-                certificateName,
-                localCertificateName1,
-                localCertificateRawBytes,
-                localCertificateIsVerified,
-                localCertificatePurpose,
-                localCertificateCreated,
-                localCertificateLastUpdated,
-                localCertificateHasPrivateKey,
-                localCertificateNonce,
-                Context.NONE)
-            .getValue();
+        this.deleteWithResponse(resourceGroupName, localIfMatch, provisioningServiceName, certificateName,
+            localCertificateName1, localCertificateRawBytes, localCertificateIsVerified, localCertificatePurpose,
+            localCertificateCreated, localCertificateLastUpdated, localCertificateHasPrivateKey, localCertificateNonce,
+            Context.NONE);
     }
 
-    public Response<Void> deleteByIdWithResponse(
-        String id,
-        String ifMatch,
-        String certificateName1,
-        byte[] certificateRawBytes,
-        Boolean certificateIsVerified,
-        CertificatePurpose certificatePurpose,
-        OffsetDateTime certificateCreated,
-        OffsetDateTime certificateLastUpdated,
-        Boolean certificateHasPrivateKey,
-        String certificateNonce,
-        Context context) {
+    public Response<Void> deleteByIdWithResponse(String id, String ifMatch, String certificateName1,
+        byte[] certificateRawBytes, Boolean certificateIsVerified, CertificatePurpose certificatePurpose,
+        OffsetDateTime certificateCreated, OffsetDateTime certificateLastUpdated, Boolean certificateHasPrivateKey,
+        String certificateNonce, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
         String provisioningServiceName = Utils.getValueFromIdByName(id, "provisioningServices");
         if (provisioningServiceName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format(
-                                "The resource ID '%s' is not valid. Missing path segment 'provisioningServices'.",
-                                id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'provisioningServices'.", id)));
         }
         String certificateName = Utils.getValueFromIdByName(id, "certificates");
         if (certificateName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'certificates'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'certificates'.", id)));
         }
-        return this
-            .deleteWithResponse(
-                resourceGroupName,
-                ifMatch,
-                provisioningServiceName,
-                certificateName,
-                certificateName1,
-                certificateRawBytes,
-                certificateIsVerified,
-                certificatePurpose,
-                certificateCreated,
-                certificateLastUpdated,
-                certificateHasPrivateKey,
-                certificateNonce,
-                context);
+        return this.deleteWithResponse(resourceGroupName, ifMatch, provisioningServiceName, certificateName,
+            certificateName1, certificateRawBytes, certificateIsVerified, certificatePurpose, certificateCreated,
+            certificateLastUpdated, certificateHasPrivateKey, certificateNonce, context);
     }
 
     private DpsCertificatesClient serviceClient() {

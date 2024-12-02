@@ -4,143 +4,66 @@
 
 package com.azure.resourcemanager.consumption.fluent.models;
 
-import com.azure.core.annotation.Immutable;
-import com.azure.core.annotation.JsonFlatten;
+import com.azure.core.annotation.Fluent;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
 import com.azure.resourcemanager.consumption.models.Amount;
 import com.azure.resourcemanager.consumption.models.CreditBalanceSummary;
 import com.azure.resourcemanager.consumption.models.Reseller;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.Map;
+import java.io.IOException;
 
-/** A credit summary resource. */
-@JsonFlatten
-@Immutable
-public class CreditSummaryInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CreditSummaryInner.class);
+/**
+ * A credit summary resource.
+ */
+@Fluent
+public final class CreditSummaryInner extends ProxyResource {
+    /*
+     * The properties of the credit summary.
+     */
+    private CreditSummaryProperties innerProperties;
 
     /*
-     * Credit Currency
+     * eTag of the resource. To handle concurrent update scenario, this field will be used to determine whether the user
+     * is updating the latest version or not.
      */
-    @JsonProperty(value = "properties.creditCurrency", access = JsonProperty.Access.WRITE_ONLY)
-    private String creditCurrency;
-
-    /*
-     * Billing Currency.
-     */
-    @JsonProperty(value = "properties.billingCurrency", access = JsonProperty.Access.WRITE_ONLY)
-    private String billingCurrency;
-
-    /*
-     * Summary of balances associated with this credit summary.
-     */
-    @JsonProperty(value = "properties.balanceSummary", access = JsonProperty.Access.WRITE_ONLY)
-    private CreditBalanceSummary balanceSummary;
-
-    /*
-     * Pending credit adjustments.
-     */
-    @JsonProperty(value = "properties.pendingCreditAdjustments", access = JsonProperty.Access.WRITE_ONLY)
-    private Amount pendingCreditAdjustments;
-
-    /*
-     * Expired credit.
-     */
-    @JsonProperty(value = "properties.expiredCredit", access = JsonProperty.Access.WRITE_ONLY)
-    private Amount expiredCredit;
-
-    /*
-     * Pending eligible charges.
-     */
-    @JsonProperty(value = "properties.pendingEligibleCharges", access = JsonProperty.Access.WRITE_ONLY)
-    private Amount pendingEligibleCharges;
-
-    /*
-     * Reseller details.
-     */
-    @JsonProperty(value = "properties.reseller", access = JsonProperty.Access.WRITE_ONLY)
-    private Reseller reseller;
-
-    /*
-     * Resource etag.
-     */
-    @JsonProperty(value = "etag", access = JsonProperty.Access.WRITE_ONLY)
     private String etag;
 
     /*
-     * Resource tags.
+     * The type of the resource.
      */
-    @JsonProperty(value = "tags", access = JsonProperty.Access.WRITE_ONLY)
-    private Map<String, String> tags;
+    private String type;
+
+    /*
+     * The name of the resource.
+     */
+    private String name;
+
+    /*
+     * Fully qualified resource Id for the resource.
+     */
+    private String id;
 
     /**
-     * Get the creditCurrency property: Credit Currency.
-     *
-     * @return the creditCurrency value.
+     * Creates an instance of CreditSummaryInner class.
      */
-    public String creditCurrency() {
-        return this.creditCurrency;
+    public CreditSummaryInner() {
     }
 
     /**
-     * Get the billingCurrency property: Billing Currency.
-     *
-     * @return the billingCurrency value.
+     * Get the innerProperties property: The properties of the credit summary.
+     * 
+     * @return the innerProperties value.
      */
-    public String billingCurrency() {
-        return this.billingCurrency;
+    private CreditSummaryProperties innerProperties() {
+        return this.innerProperties;
     }
 
     /**
-     * Get the balanceSummary property: Summary of balances associated with this credit summary.
-     *
-     * @return the balanceSummary value.
-     */
-    public CreditBalanceSummary balanceSummary() {
-        return this.balanceSummary;
-    }
-
-    /**
-     * Get the pendingCreditAdjustments property: Pending credit adjustments.
-     *
-     * @return the pendingCreditAdjustments value.
-     */
-    public Amount pendingCreditAdjustments() {
-        return this.pendingCreditAdjustments;
-    }
-
-    /**
-     * Get the expiredCredit property: Expired credit.
-     *
-     * @return the expiredCredit value.
-     */
-    public Amount expiredCredit() {
-        return this.expiredCredit;
-    }
-
-    /**
-     * Get the pendingEligibleCharges property: Pending eligible charges.
-     *
-     * @return the pendingEligibleCharges value.
-     */
-    public Amount pendingEligibleCharges() {
-        return this.pendingEligibleCharges;
-    }
-
-    /**
-     * Get the reseller property: Reseller details.
-     *
-     * @return the reseller value.
-     */
-    public Reseller reseller() {
-        return this.reseller;
-    }
-
-    /**
-     * Get the etag property: Resource etag.
-     *
+     * Get the etag property: eTag of the resource. To handle concurrent update scenario, this field will be used to
+     * determine whether the user is updating the latest version or not.
+     * 
      * @return the etag value.
      */
     public String etag() {
@@ -148,34 +71,173 @@ public class CreditSummaryInner extends ProxyResource {
     }
 
     /**
-     * Get the tags property: Resource tags.
-     *
-     * @return the tags value.
+     * Set the etag property: eTag of the resource. To handle concurrent update scenario, this field will be used to
+     * determine whether the user is updating the latest version or not.
+     * 
+     * @param etag the etag value to set.
+     * @return the CreditSummaryInner object itself.
      */
-    public Map<String, String> tags() {
-        return this.tags;
+    public CreditSummaryInner withEtag(String etag) {
+        this.etag = etag;
+        return this;
+    }
+
+    /**
+     * Get the type property: The type of the resource.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
+     * Get the name property: The name of the resource.
+     * 
+     * @return the name value.
+     */
+    @Override
+    public String name() {
+        return this.name;
+    }
+
+    /**
+     * Get the id property: Fully qualified resource Id for the resource.
+     * 
+     * @return the id value.
+     */
+    @Override
+    public String id() {
+        return this.id;
+    }
+
+    /**
+     * Get the balanceSummary property: Summary of balances associated with this credit summary.
+     * 
+     * @return the balanceSummary value.
+     */
+    public CreditBalanceSummary balanceSummary() {
+        return this.innerProperties() == null ? null : this.innerProperties().balanceSummary();
+    }
+
+    /**
+     * Get the pendingCreditAdjustments property: Pending credit adjustments.
+     * 
+     * @return the pendingCreditAdjustments value.
+     */
+    public Amount pendingCreditAdjustments() {
+        return this.innerProperties() == null ? null : this.innerProperties().pendingCreditAdjustments();
+    }
+
+    /**
+     * Get the expiredCredit property: Expired credit.
+     * 
+     * @return the expiredCredit value.
+     */
+    public Amount expiredCredit() {
+        return this.innerProperties() == null ? null : this.innerProperties().expiredCredit();
+    }
+
+    /**
+     * Get the pendingEligibleCharges property: Pending eligible charges.
+     * 
+     * @return the pendingEligibleCharges value.
+     */
+    public Amount pendingEligibleCharges() {
+        return this.innerProperties() == null ? null : this.innerProperties().pendingEligibleCharges();
+    }
+
+    /**
+     * Get the creditCurrency property: The credit currency.
+     * 
+     * @return the creditCurrency value.
+     */
+    public String creditCurrency() {
+        return this.innerProperties() == null ? null : this.innerProperties().creditCurrency();
+    }
+
+    /**
+     * Get the billingCurrency property: The billing currency.
+     * 
+     * @return the billingCurrency value.
+     */
+    public String billingCurrency() {
+        return this.innerProperties() == null ? null : this.innerProperties().billingCurrency();
+    }
+
+    /**
+     * Get the reseller property: Credit's reseller.
+     * 
+     * @return the reseller value.
+     */
+    public Reseller reseller() {
+        return this.innerProperties() == null ? null : this.innerProperties().reseller();
+    }
+
+    /**
+     * Get the etag property: The eTag for the resource.
+     * 
+     * @return the etag value.
+     */
+    public String etagPropertiesEtag() {
+        return this.innerProperties() == null ? null : this.innerProperties().etag();
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
-        if (balanceSummary() != null) {
-            balanceSummary().validate();
+        if (innerProperties() != null) {
+            innerProperties().validate();
         }
-        if (pendingCreditAdjustments() != null) {
-            pendingCreditAdjustments().validate();
-        }
-        if (expiredCredit() != null) {
-            expiredCredit().validate();
-        }
-        if (pendingEligibleCharges() != null) {
-            pendingEligibleCharges().validate();
-        }
-        if (reseller() != null) {
-            reseller().validate();
-        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        jsonWriter.writeStringField("eTag", this.etag);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of CreditSummaryInner from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of CreditSummaryInner if the JsonReader was pointing to an instance of it, or null if it was
+     * pointing to JSON null.
+     * @throws IllegalStateException If the deserialized JSON object was missing any required properties.
+     * @throws IOException If an error occurs while reading the CreditSummaryInner.
+     */
+    public static CreditSummaryInner fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            CreditSummaryInner deserializedCreditSummaryInner = new CreditSummaryInner();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("id".equals(fieldName)) {
+                    deserializedCreditSummaryInner.id = reader.getString();
+                } else if ("name".equals(fieldName)) {
+                    deserializedCreditSummaryInner.name = reader.getString();
+                } else if ("type".equals(fieldName)) {
+                    deserializedCreditSummaryInner.type = reader.getString();
+                } else if ("properties".equals(fieldName)) {
+                    deserializedCreditSummaryInner.innerProperties = CreditSummaryProperties.fromJson(reader);
+                } else if ("eTag".equals(fieldName)) {
+                    deserializedCreditSummaryInner.etag = reader.getString();
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedCreditSummaryInner;
+        });
     }
 }

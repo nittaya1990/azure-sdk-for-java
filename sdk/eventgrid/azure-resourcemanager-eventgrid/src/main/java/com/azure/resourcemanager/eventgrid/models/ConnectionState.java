@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.eventgrid.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** ConnectionState information. */
+/**
+ * ConnectionState information.
+ */
 @Fluent
 public final class ConnectionState {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ConnectionState.class);
-
     /*
      * Status of the connection.
      */
@@ -33,8 +31,14 @@ public final class ConnectionState {
     private String actionsRequired;
 
     /**
+     * Creates an instance of ConnectionState class.
+     */
+    public ConnectionState() {
+    }
+
+    /**
      * Get the status property: Status of the connection.
-     *
+     * 
      * @return the status value.
      */
     public PersistedConnectionStatus status() {
@@ -43,7 +47,7 @@ public final class ConnectionState {
 
     /**
      * Set the status property: Status of the connection.
-     *
+     * 
      * @param status the status value to set.
      * @return the ConnectionState object itself.
      */
@@ -54,7 +58,7 @@ public final class ConnectionState {
 
     /**
      * Get the description property: Description of the connection state.
-     *
+     * 
      * @return the description value.
      */
     public String description() {
@@ -63,7 +67,7 @@ public final class ConnectionState {
 
     /**
      * Set the description property: Description of the connection state.
-     *
+     * 
      * @param description the description value to set.
      * @return the ConnectionState object itself.
      */
@@ -74,7 +78,7 @@ public final class ConnectionState {
 
     /**
      * Get the actionsRequired property: Actions required (if any).
-     *
+     * 
      * @return the actionsRequired value.
      */
     public String actionsRequired() {
@@ -83,7 +87,7 @@ public final class ConnectionState {
 
     /**
      * Set the actionsRequired property: Actions required (if any).
-     *
+     * 
      * @param actionsRequired the actionsRequired value to set.
      * @return the ConnectionState object itself.
      */
@@ -94,7 +98,7 @@ public final class ConnectionState {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

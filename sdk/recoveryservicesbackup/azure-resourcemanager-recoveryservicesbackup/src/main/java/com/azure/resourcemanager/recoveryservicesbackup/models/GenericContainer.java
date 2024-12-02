@@ -5,18 +5,31 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** Base class for generic container of backup items. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "containerType")
+/**
+ * Base class for generic container of backup items.
+ */
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    property = "containerType",
+    defaultImpl = GenericContainer.class,
+    visible = true)
 @JsonTypeName("GenericContainer")
 @Fluent
 public final class GenericContainer extends ProtectionContainer {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(GenericContainer.class);
+    /*
+     * Type of the container. The value of this property for: 1. Compute Azure VM is Microsoft.Compute/virtualMachines 2.
+     * Classic Compute Azure VM is Microsoft.ClassicCompute/virtualMachines 3. Windows machines (like MAB, DPM etc) is
+     * Windows 4. Azure SQL instance is AzureSqlContainer. 5. Storage containers is StorageContainer. 6. Azure workload
+     * Backup is VMAppContainer
+     */
+    @JsonTypeId
+    @JsonProperty(value = "containerType", required = true)
+    private ProtectableContainerType containerType = ProtectableContainerType.GENERIC_CONTAINER;
 
     /*
      * Name of the container's fabric
@@ -31,8 +44,28 @@ public final class GenericContainer extends ProtectionContainer {
     private GenericContainerExtendedInfo extendedInformation;
 
     /**
+     * Creates an instance of GenericContainer class.
+     */
+    public GenericContainer() {
+    }
+
+    /**
+     * Get the containerType property: Type of the container. The value of this property for: 1. Compute Azure VM is
+     * Microsoft.Compute/virtualMachines 2.
+     * Classic Compute Azure VM is Microsoft.ClassicCompute/virtualMachines 3. Windows machines (like MAB, DPM etc) is
+     * Windows 4. Azure SQL instance is AzureSqlContainer. 5. Storage containers is StorageContainer. 6. Azure workload
+     * Backup is VMAppContainer.
+     * 
+     * @return the containerType value.
+     */
+    @Override
+    public ProtectableContainerType containerType() {
+        return this.containerType;
+    }
+
+    /**
      * Get the fabricName property: Name of the container's fabric.
-     *
+     * 
      * @return the fabricName value.
      */
     public String fabricName() {
@@ -41,7 +74,7 @@ public final class GenericContainer extends ProtectionContainer {
 
     /**
      * Set the fabricName property: Name of the container's fabric.
-     *
+     * 
      * @param fabricName the fabricName value to set.
      * @return the GenericContainer object itself.
      */
@@ -52,7 +85,7 @@ public final class GenericContainer extends ProtectionContainer {
 
     /**
      * Get the extendedInformation property: Extended information (not returned in List container API calls).
-     *
+     * 
      * @return the extendedInformation value.
      */
     public GenericContainerExtendedInfo extendedInformation() {
@@ -61,7 +94,7 @@ public final class GenericContainer extends ProtectionContainer {
 
     /**
      * Set the extendedInformation property: Extended information (not returned in List container API calls).
-     *
+     * 
      * @param extendedInformation the extendedInformation value to set.
      * @return the GenericContainer object itself.
      */
@@ -70,28 +103,36 @@ public final class GenericContainer extends ProtectionContainer {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public GenericContainer withFriendlyName(String friendlyName) {
         super.withFriendlyName(friendlyName);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public GenericContainer withBackupManagementType(BackupManagementType backupManagementType) {
         super.withBackupManagementType(backupManagementType);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public GenericContainer withRegistrationStatus(String registrationStatus) {
         super.withRegistrationStatus(registrationStatus);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public GenericContainer withHealthStatus(String healthStatus) {
         super.withHealthStatus(healthStatus);
@@ -99,8 +140,17 @@ public final class GenericContainer extends ProtectionContainer {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GenericContainer withProtectableObjectType(String protectableObjectType) {
+        super.withProtectableObjectType(protectableObjectType);
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

@@ -21,15 +21,12 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.videoanalyzer.fluent.PipelineJobOperationStatusesClient;
 import com.azure.resourcemanager.videoanalyzer.fluent.models.PipelineJobOperationStatusInner;
 import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in PipelineJobOperationStatusesClient. */
 public final class PipelineJobOperationStatusesClientImpl implements PipelineJobOperationStatusesClient {
-    private final ClientLogger logger = new ClientLogger(PipelineJobOperationStatusesClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final PipelineJobOperationStatusesService service;
 
@@ -42,10 +39,8 @@ public final class PipelineJobOperationStatusesClientImpl implements PipelineJob
      * @param client the instance of the service client containing this operation class.
      */
     PipelineJobOperationStatusesClientImpl(VideoAnalyzerManagementClientImpl client) {
-        this.service =
-            RestProxy
-                .create(
-                    PipelineJobOperationStatusesService.class, client.getHttpPipeline(), client.getSerializerAdapter());
+        this.service = RestProxy.create(PipelineJobOperationStatusesService.class, client.getHttpPipeline(),
+            client.getSerializerAdapter());
         this.client = client;
     }
 
@@ -56,22 +51,16 @@ public final class PipelineJobOperationStatusesClientImpl implements PipelineJob
     @Host("{$host}")
     @ServiceInterface(name = "VideoAnalyzerManagem")
     private interface PipelineJobOperationStatusesService {
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Media"
-                + "/videoAnalyzers/{accountName}/pipelineJobs/{pipelineJobName}/operationStatuses/{operationId}")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Media"
+            + "/videoAnalyzers/{accountName}/pipelineJobs/{pipelineJobName}/operationStatuses/{operationId}")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<PipelineJobOperationStatusInner>> get(
-            @HostParam("$host") String endpoint,
+        Mono<Response<PipelineJobOperationStatusInner>> get(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("accountName") String accountName,
-            @PathParam("pipelineJobName") String pipelineJobName,
-            @PathParam("operationId") String operationId,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("accountName") String accountName,
+            @PathParam("pipelineJobName") String pipelineJobName, @PathParam("operationId") String operationId,
+            @QueryParam("api-version") String apiVersion, @HeaderParam("Accept") String accept, Context context);
     }
 
     /**
@@ -84,22 +73,19 @@ public final class PipelineJobOperationStatusesClientImpl implements PipelineJob
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the operation status of a pipeline job with the given operationId.
+     * @return the operation status of a pipeline job with the given operationId along with {@link Response} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<PipelineJobOperationStatusInner>> getWithResponseAsync(
-        String resourceGroupName, String accountName, String pipelineJobName, String operationId) {
+    private Mono<Response<PipelineJobOperationStatusInner>> getWithResponseAsync(String resourceGroupName,
+        String accountName, String pipelineJobName, String operationId) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -118,18 +104,8 @@ public final class PipelineJobOperationStatusesClientImpl implements PipelineJob
         final String accept = "application/json";
         return FluxUtil
             .withContext(
-                context ->
-                    service
-                        .get(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            accountName,
-                            pipelineJobName,
-                            operationId,
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
+                context -> service.get(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+                    accountName, pipelineJobName, operationId, this.client.getApiVersion(), accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -144,22 +120,19 @@ public final class PipelineJobOperationStatusesClientImpl implements PipelineJob
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the operation status of a pipeline job with the given operationId.
+     * @return the operation status of a pipeline job with the given operationId along with {@link Response} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<PipelineJobOperationStatusInner>> getWithResponseAsync(
-        String resourceGroupName, String accountName, String pipelineJobName, String operationId, Context context) {
+    private Mono<Response<PipelineJobOperationStatusInner>> getWithResponseAsync(String resourceGroupName,
+        String accountName, String pipelineJobName, String operationId, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -177,17 +150,8 @@ public final class PipelineJobOperationStatusesClientImpl implements PipelineJob
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .get(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                accountName,
-                pipelineJobName,
-                operationId,
-                this.client.getApiVersion(),
-                accept,
-                context);
+        return service.get(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName, accountName,
+            pipelineJobName, operationId, this.client.getApiVersion(), accept, context);
     }
 
     /**
@@ -200,20 +164,14 @@ public final class PipelineJobOperationStatusesClientImpl implements PipelineJob
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the operation status of a pipeline job with the given operationId.
+     * @return the operation status of a pipeline job with the given operationId on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PipelineJobOperationStatusInner> getAsync(
-        String resourceGroupName, String accountName, String pipelineJobName, String operationId) {
+    private Mono<PipelineJobOperationStatusInner> getAsync(String resourceGroupName, String accountName,
+        String pipelineJobName, String operationId) {
         return getWithResponseAsync(resourceGroupName, accountName, pipelineJobName, operationId)
-            .flatMap(
-                (Response<PipelineJobOperationStatusInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
@@ -229,8 +187,8 @@ public final class PipelineJobOperationStatusesClientImpl implements PipelineJob
      * @return the operation status of a pipeline job with the given operationId.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public PipelineJobOperationStatusInner get(
-        String resourceGroupName, String accountName, String pipelineJobName, String operationId) {
+    public PipelineJobOperationStatusInner get(String resourceGroupName, String accountName, String pipelineJobName,
+        String operationId) {
         return getAsync(resourceGroupName, accountName, pipelineJobName, operationId).block();
     }
 
@@ -245,11 +203,11 @@ public final class PipelineJobOperationStatusesClientImpl implements PipelineJob
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the operation status of a pipeline job with the given operationId.
+     * @return the operation status of a pipeline job with the given operationId along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<PipelineJobOperationStatusInner> getWithResponse(
-        String resourceGroupName, String accountName, String pipelineJobName, String operationId, Context context) {
+    public Response<PipelineJobOperationStatusInner> getWithResponse(String resourceGroupName, String accountName,
+        String pipelineJobName, String operationId, Context context) {
         return getWithResponseAsync(resourceGroupName, accountName, pipelineJobName, operationId, context).block();
     }
 }

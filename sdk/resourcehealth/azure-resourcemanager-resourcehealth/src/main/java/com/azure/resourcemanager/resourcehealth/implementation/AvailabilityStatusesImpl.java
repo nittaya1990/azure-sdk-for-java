@@ -13,17 +13,15 @@ import com.azure.resourcemanager.resourcehealth.fluent.AvailabilityStatusesClien
 import com.azure.resourcemanager.resourcehealth.fluent.models.AvailabilityStatusInner;
 import com.azure.resourcemanager.resourcehealth.models.AvailabilityStatus;
 import com.azure.resourcemanager.resourcehealth.models.AvailabilityStatuses;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class AvailabilityStatusesImpl implements AvailabilityStatuses {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AvailabilityStatusesImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(AvailabilityStatusesImpl.class);
 
     private final AvailabilityStatusesClient innerClient;
 
     private final com.azure.resourcemanager.resourcehealth.ResourceHealthManager serviceManager;
 
-    public AvailabilityStatusesImpl(
-        AvailabilityStatusesClient innerClient,
+    public AvailabilityStatusesImpl(AvailabilityStatusesClient innerClient,
         com.azure.resourcemanager.resourcehealth.ResourceHealthManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
@@ -35,8 +33,8 @@ public final class AvailabilityStatusesImpl implements AvailabilityStatuses {
     }
 
     public PagedIterable<AvailabilityStatus> listBySubscriptionId(String filter, String expand, Context context) {
-        PagedIterable<AvailabilityStatusInner> inner =
-            this.serviceClient().listBySubscriptionId(filter, expand, context);
+        PagedIterable<AvailabilityStatusInner> inner
+            = this.serviceClient().listBySubscriptionId(filter, expand, context);
         return Utils.mapPage(inner, inner1 -> new AvailabilityStatusImpl(inner1, this.manager()));
     }
 
@@ -45,32 +43,29 @@ public final class AvailabilityStatusesImpl implements AvailabilityStatuses {
         return Utils.mapPage(inner, inner1 -> new AvailabilityStatusImpl(inner1, this.manager()));
     }
 
-    public PagedIterable<AvailabilityStatus> listByResourceGroup(
-        String resourceGroupName, String filter, String expand, Context context) {
-        PagedIterable<AvailabilityStatusInner> inner =
-            this.serviceClient().listByResourceGroup(resourceGroupName, filter, expand, context);
+    public PagedIterable<AvailabilityStatus> listByResourceGroup(String resourceGroupName, String filter, String expand,
+        Context context) {
+        PagedIterable<AvailabilityStatusInner> inner
+            = this.serviceClient().listByResourceGroup(resourceGroupName, filter, expand, context);
         return Utils.mapPage(inner, inner1 -> new AvailabilityStatusImpl(inner1, this.manager()));
+    }
+
+    public Response<AvailabilityStatus> getByResourceWithResponse(String resourceUri, String filter, String expand,
+        Context context) {
+        Response<AvailabilityStatusInner> inner
+            = this.serviceClient().getByResourceWithResponse(resourceUri, filter, expand, context);
+        if (inner != null) {
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
+                new AvailabilityStatusImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
     }
 
     public AvailabilityStatus getByResource(String resourceUri) {
         AvailabilityStatusInner inner = this.serviceClient().getByResource(resourceUri);
         if (inner != null) {
             return new AvailabilityStatusImpl(inner, this.manager());
-        } else {
-            return null;
-        }
-    }
-
-    public Response<AvailabilityStatus> getByResourceWithResponse(
-        String resourceUri, String filter, String expand, Context context) {
-        Response<AvailabilityStatusInner> inner =
-            this.serviceClient().getByResourceWithResponse(resourceUri, filter, expand, context);
-        if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
-                new AvailabilityStatusImpl(inner.getValue(), this.manager()));
         } else {
             return null;
         }

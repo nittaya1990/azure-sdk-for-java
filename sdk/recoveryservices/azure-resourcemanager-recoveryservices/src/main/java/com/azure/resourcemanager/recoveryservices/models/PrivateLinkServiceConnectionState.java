@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.recoveryservices.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Gets or sets private link service connection state. */
+/**
+ * Gets or sets private link service connection state.
+ */
 @Immutable
 public final class PrivateLinkServiceConnectionState {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PrivateLinkServiceConnectionState.class);
-
     /*
      * Gets or sets the status.
      */
@@ -33,8 +31,14 @@ public final class PrivateLinkServiceConnectionState {
     private String actionsRequired;
 
     /**
+     * Creates an instance of PrivateLinkServiceConnectionState class.
+     */
+    public PrivateLinkServiceConnectionState() {
+    }
+
+    /**
      * Get the status property: Gets or sets the status.
-     *
+     * 
      * @return the status value.
      */
     public PrivateEndpointConnectionStatus status() {
@@ -43,7 +47,7 @@ public final class PrivateLinkServiceConnectionState {
 
     /**
      * Get the description property: Gets or sets description.
-     *
+     * 
      * @return the description value.
      */
     public String description() {
@@ -52,7 +56,7 @@ public final class PrivateLinkServiceConnectionState {
 
     /**
      * Get the actionsRequired property: Gets or sets actions required.
-     *
+     * 
      * @return the actionsRequired value.
      */
     public String actionsRequired() {
@@ -61,7 +65,7 @@ public final class PrivateLinkServiceConnectionState {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

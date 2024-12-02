@@ -95,6 +95,13 @@ public interface PipelineTopology {
     List<SinkNodeBase> sinks();
 
     /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
+
+    /**
      * Gets the inner com.azure.resourcemanager.videoanalyzer.fluent.models.PipelineTopologyInner object.
      *
      * @return the inner object.
@@ -102,18 +109,16 @@ public interface PipelineTopology {
     PipelineTopologyInner innerModel();
 
     /** The entirety of the PipelineTopology definition. */
-    interface Definition
-        extends DefinitionStages.Blank,
-            DefinitionStages.WithParentResource,
-            DefinitionStages.WithKind,
-            DefinitionStages.WithSku,
-            DefinitionStages.WithCreate {
+    interface Definition extends DefinitionStages.Blank, DefinitionStages.WithParentResource, DefinitionStages.WithKind,
+        DefinitionStages.WithSku, DefinitionStages.WithCreate {
     }
+
     /** The PipelineTopology definition stages. */
     interface DefinitionStages {
         /** The first stage of the PipelineTopology definition. */
         interface Blank extends WithParentResource {
         }
+
         /** The stage of the PipelineTopology definition allowing to specify parent resource. */
         interface WithParentResource {
             /**
@@ -125,6 +130,7 @@ public interface PipelineTopology {
              */
             WithKind withExistingVideoAnalyzer(String resourceGroupName, String accountName);
         }
+
         /** The stage of the PipelineTopology definition allowing to specify kind. */
         interface WithKind {
             /**
@@ -135,6 +141,7 @@ public interface PipelineTopology {
              */
             WithSku withKind(Kind kind);
         }
+
         /** The stage of the PipelineTopology definition allowing to specify sku. */
         interface WithSku {
             /**
@@ -145,16 +152,13 @@ public interface PipelineTopology {
              */
             WithCreate withSku(Sku sku);
         }
+
         /**
          * The stage of the PipelineTopology definition which contains all the minimum required properties for the
          * resource to be created, but also allows for any other optional properties to be specified.
          */
-        interface WithCreate
-            extends DefinitionStages.WithDescription,
-                DefinitionStages.WithParameters,
-                DefinitionStages.WithSources,
-                DefinitionStages.WithProcessors,
-                DefinitionStages.WithSinks {
+        interface WithCreate extends DefinitionStages.WithDescription, DefinitionStages.WithParameters,
+            DefinitionStages.WithSources, DefinitionStages.WithProcessors, DefinitionStages.WithSinks {
             /**
              * Executes the create request.
              *
@@ -170,6 +174,7 @@ public interface PipelineTopology {
              */
             PipelineTopology create(Context context);
         }
+
         /** The stage of the PipelineTopology definition allowing to specify description. */
         interface WithDescription {
             /**
@@ -182,6 +187,7 @@ public interface PipelineTopology {
              */
             WithCreate withDescription(String description);
         }
+
         /** The stage of the PipelineTopology definition allowing to specify parameters. */
         interface WithParameters {
             /**
@@ -197,6 +203,7 @@ public interface PipelineTopology {
              */
             WithCreate withParameters(List<ParameterDeclaration> parameters);
         }
+
         /** The stage of the PipelineTopology definition allowing to specify sources. */
         interface WithSources {
             /**
@@ -209,6 +216,7 @@ public interface PipelineTopology {
              */
             WithCreate withSources(List<SourceNodeBase> sources);
         }
+
         /** The stage of the PipelineTopology definition allowing to specify processors. */
         interface WithProcessors {
             /**
@@ -221,6 +229,7 @@ public interface PipelineTopology {
              */
             WithCreate withProcessors(List<ProcessorNodeBase> processors);
         }
+
         /** The stage of the PipelineTopology definition allowing to specify sinks. */
         interface WithSinks {
             /**
@@ -233,6 +242,7 @@ public interface PipelineTopology {
             WithCreate withSinks(List<SinkNodeBase> sinks);
         }
     }
+
     /**
      * Begins update for the PipelineTopology resource.
      *
@@ -241,14 +251,8 @@ public interface PipelineTopology {
     PipelineTopology.Update update();
 
     /** The template for PipelineTopology update. */
-    interface Update
-        extends UpdateStages.WithKind,
-            UpdateStages.WithSku,
-            UpdateStages.WithDescription,
-            UpdateStages.WithParameters,
-            UpdateStages.WithSources,
-            UpdateStages.WithProcessors,
-            UpdateStages.WithSinks {
+    interface Update extends UpdateStages.WithKind, UpdateStages.WithSku, UpdateStages.WithDescription,
+        UpdateStages.WithParameters, UpdateStages.WithSources, UpdateStages.WithProcessors, UpdateStages.WithSinks {
         /**
          * Executes the update request.
          *
@@ -264,6 +268,7 @@ public interface PipelineTopology {
          */
         PipelineTopology apply(Context context);
     }
+
     /** The PipelineTopology update stages. */
     interface UpdateStages {
         /** The stage of the PipelineTopology update allowing to specify kind. */
@@ -276,6 +281,7 @@ public interface PipelineTopology {
              */
             Update withKind(Kind kind);
         }
+
         /** The stage of the PipelineTopology update allowing to specify sku. */
         interface WithSku {
             /**
@@ -286,6 +292,7 @@ public interface PipelineTopology {
              */
             Update withSku(Sku sku);
         }
+
         /** The stage of the PipelineTopology update allowing to specify description. */
         interface WithDescription {
             /**
@@ -298,6 +305,7 @@ public interface PipelineTopology {
              */
             Update withDescription(String description);
         }
+
         /** The stage of the PipelineTopology update allowing to specify parameters. */
         interface WithParameters {
             /**
@@ -313,6 +321,7 @@ public interface PipelineTopology {
              */
             Update withParameters(List<ParameterDeclaration> parameters);
         }
+
         /** The stage of the PipelineTopology update allowing to specify sources. */
         interface WithSources {
             /**
@@ -325,6 +334,7 @@ public interface PipelineTopology {
              */
             Update withSources(List<SourceNodeBase> sources);
         }
+
         /** The stage of the PipelineTopology update allowing to specify processors. */
         interface WithProcessors {
             /**
@@ -337,6 +347,7 @@ public interface PipelineTopology {
              */
             Update withProcessors(List<ProcessorNodeBase> processors);
         }
+
         /** The stage of the PipelineTopology update allowing to specify sinks. */
         interface WithSinks {
             /**
@@ -349,6 +360,7 @@ public interface PipelineTopology {
             Update withSinks(List<SinkNodeBase> sinks);
         }
     }
+
     /**
      * Refreshes the resource to sync with Azure.
      *

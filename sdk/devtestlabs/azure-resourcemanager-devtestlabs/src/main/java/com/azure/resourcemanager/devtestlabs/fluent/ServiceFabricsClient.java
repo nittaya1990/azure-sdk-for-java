@@ -26,7 +26,7 @@ public interface ServiceFabricsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<ServiceFabricInner> list(String resourceGroupName, String labName, String username);
@@ -45,18 +45,29 @@ public interface ServiceFabricsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<ServiceFabricInner> list(
-        String resourceGroupName,
-        String labName,
-        String username,
-        String expand,
-        String filter,
-        Integer top,
-        String orderby,
-        Context context);
+    PagedIterable<ServiceFabricInner> list(String resourceGroupName, String labName, String username, String expand,
+        String filter, Integer top, String orderby, Context context);
+
+    /**
+     * Get service fabric.
+     *
+     * @param resourceGroupName The name of the resource group.
+     * @param labName The name of the lab.
+     * @param username The name of the user profile.
+     * @param name The name of the service fabric.
+     * @param expand Specify the $expand query. Example: 'properties($expand=applicableSchedule)'.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return service fabric along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<ServiceFabricInner> getWithResponse(String resourceGroupName, String labName, String username, String name,
+        String expand, Context context);
 
     /**
      * Get service fabric.
@@ -74,24 +85,6 @@ public interface ServiceFabricsClient {
     ServiceFabricInner get(String resourceGroupName, String labName, String username, String name);
 
     /**
-     * Get service fabric.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param labName The name of the lab.
-     * @param username The name of the user profile.
-     * @param name The name of the service fabric.
-     * @param expand Specify the $expand query. Example: 'properties($expand=applicableSchedule)'.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return service fabric.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<ServiceFabricInner> getWithResponse(
-        String resourceGroupName, String labName, String username, String name, String expand, Context context);
-
-    /**
      * Create or replace an existing service fabric. This operation can take a while to complete.
      *
      * @param resourceGroupName The name of the resource group.
@@ -102,11 +95,11 @@ public interface ServiceFabricsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Service Fabric.
+     * @return the {@link SyncPoller} for polling of a Service Fabric.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<ServiceFabricInner>, ServiceFabricInner> beginCreateOrUpdate(
-        String resourceGroupName, String labName, String username, String name, ServiceFabricInner serviceFabric);
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<ServiceFabricInner>, ServiceFabricInner> beginCreateOrUpdate(String resourceGroupName,
+        String labName, String username, String name, ServiceFabricInner serviceFabric);
 
     /**
      * Create or replace an existing service fabric. This operation can take a while to complete.
@@ -120,16 +113,11 @@ public interface ServiceFabricsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Service Fabric.
+     * @return the {@link SyncPoller} for polling of a Service Fabric.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<ServiceFabricInner>, ServiceFabricInner> beginCreateOrUpdate(
-        String resourceGroupName,
-        String labName,
-        String username,
-        String name,
-        ServiceFabricInner serviceFabric,
-        Context context);
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<ServiceFabricInner>, ServiceFabricInner> beginCreateOrUpdate(String resourceGroupName,
+        String labName, String username, String name, ServiceFabricInner serviceFabric, Context context);
 
     /**
      * Create or replace an existing service fabric. This operation can take a while to complete.
@@ -145,8 +133,8 @@ public interface ServiceFabricsClient {
      * @return a Service Fabric.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    ServiceFabricInner createOrUpdate(
-        String resourceGroupName, String labName, String username, String name, ServiceFabricInner serviceFabric);
+    ServiceFabricInner createOrUpdate(String resourceGroupName, String labName, String username, String name,
+        ServiceFabricInner serviceFabric);
 
     /**
      * Create or replace an existing service fabric. This operation can take a while to complete.
@@ -163,13 +151,8 @@ public interface ServiceFabricsClient {
      * @return a Service Fabric.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    ServiceFabricInner createOrUpdate(
-        String resourceGroupName,
-        String labName,
-        String username,
-        String name,
-        ServiceFabricInner serviceFabric,
-        Context context);
+    ServiceFabricInner createOrUpdate(String resourceGroupName, String labName, String username, String name,
+        ServiceFabricInner serviceFabric, Context context);
 
     /**
      * Delete service fabric. This operation can take a while to complete.
@@ -181,11 +164,11 @@ public interface ServiceFabricsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<Void>, Void> beginDelete(
-        String resourceGroupName, String labName, String username, String name);
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<Void>, Void> beginDelete(String resourceGroupName, String labName, String username,
+        String name);
 
     /**
      * Delete service fabric. This operation can take a while to complete.
@@ -198,11 +181,11 @@ public interface ServiceFabricsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<Void>, Void> beginDelete(
-        String resourceGroupName, String labName, String username, String name, Context context);
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<Void>, Void> beginDelete(String resourceGroupName, String labName, String username,
+        String name, Context context);
 
     /**
      * Delete service fabric. This operation can take a while to complete.
@@ -241,14 +224,15 @@ public interface ServiceFabricsClient {
      * @param username The name of the user profile.
      * @param name The name of the service fabric.
      * @param serviceFabric A Service Fabric.
+     * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Service Fabric.
+     * @return a Service Fabric along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    ServiceFabricInner update(
-        String resourceGroupName, String labName, String username, String name, ServiceFabricFragment serviceFabric);
+    Response<ServiceFabricInner> updateWithResponse(String resourceGroupName, String labName, String username,
+        String name, ServiceFabricFragment serviceFabric, Context context);
 
     /**
      * Allows modifying tags of service fabrics. All other properties will be ignored.
@@ -258,20 +242,31 @@ public interface ServiceFabricsClient {
      * @param username The name of the user profile.
      * @param name The name of the service fabric.
      * @param serviceFabric A Service Fabric.
-     * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return a Service Fabric.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<ServiceFabricInner> updateWithResponse(
-        String resourceGroupName,
-        String labName,
-        String username,
-        String name,
-        ServiceFabricFragment serviceFabric,
-        Context context);
+    ServiceFabricInner update(String resourceGroupName, String labName, String username, String name,
+        ServiceFabricFragment serviceFabric);
+
+    /**
+     * Lists the applicable start/stop schedules, if any.
+     *
+     * @param resourceGroupName The name of the resource group.
+     * @param labName The name of the lab.
+     * @param username The name of the user profile.
+     * @param name The name of the service fabric.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return schedules applicable to a virtual machine along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<ApplicableScheduleInner> listApplicableSchedulesWithResponse(String resourceGroupName, String labName,
+        String username, String name, Context context);
 
     /**
      * Lists the applicable start/stop schedules, if any.
@@ -286,25 +281,8 @@ public interface ServiceFabricsClient {
      * @return schedules applicable to a virtual machine.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    ApplicableScheduleInner listApplicableSchedules(
-        String resourceGroupName, String labName, String username, String name);
-
-    /**
-     * Lists the applicable start/stop schedules, if any.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param labName The name of the lab.
-     * @param username The name of the user profile.
-     * @param name The name of the service fabric.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return schedules applicable to a virtual machine.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<ApplicableScheduleInner> listApplicableSchedulesWithResponse(
-        String resourceGroupName, String labName, String username, String name, Context context);
+    ApplicableScheduleInner listApplicableSchedules(String resourceGroupName, String labName, String username,
+        String name);
 
     /**
      * Start a service fabric. This operation can take a while to complete.
@@ -316,11 +294,11 @@ public interface ServiceFabricsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<Void>, Void> beginStart(
-        String resourceGroupName, String labName, String username, String name);
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<Void>, Void> beginStart(String resourceGroupName, String labName, String username,
+        String name);
 
     /**
      * Start a service fabric. This operation can take a while to complete.
@@ -333,11 +311,11 @@ public interface ServiceFabricsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<Void>, Void> beginStart(
-        String resourceGroupName, String labName, String username, String name, Context context);
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<Void>, Void> beginStart(String resourceGroupName, String labName, String username,
+        String name, Context context);
 
     /**
      * Start a service fabric. This operation can take a while to complete.
@@ -378,11 +356,11 @@ public interface ServiceFabricsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<Void>, Void> beginStop(
-        String resourceGroupName, String labName, String username, String name);
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<Void>, Void> beginStop(String resourceGroupName, String labName, String username,
+        String name);
 
     /**
      * Stop a service fabric This operation can take a while to complete.
@@ -395,11 +373,11 @@ public interface ServiceFabricsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<Void>, Void> beginStop(
-        String resourceGroupName, String labName, String username, String name, Context context);
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<Void>, Void> beginStop(String resourceGroupName, String labName, String username, String name,
+        Context context);
 
     /**
      * Stop a service fabric This operation can take a while to complete.

@@ -7,15 +7,14 @@ package com.azure.resourcemanager.security.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.security.fluent.models.RegulatoryComplianceAssessmentInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** List of regulatory compliance assessment response. */
+/**
+ * List of regulatory compliance assessment response.
+ */
 @Fluent
 public final class RegulatoryComplianceAssessmentList {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RegulatoryComplianceAssessmentList.class);
-
     /*
      * The value property.
      */
@@ -29,8 +28,14 @@ public final class RegulatoryComplianceAssessmentList {
     private String nextLink;
 
     /**
+     * Creates an instance of RegulatoryComplianceAssessmentList class.
+     */
+    public RegulatoryComplianceAssessmentList() {
+    }
+
+    /**
      * Get the value property: The value property.
-     *
+     * 
      * @return the value value.
      */
     public List<RegulatoryComplianceAssessmentInner> value() {
@@ -39,7 +44,7 @@ public final class RegulatoryComplianceAssessmentList {
 
     /**
      * Set the value property: The value property.
-     *
+     * 
      * @param value the value value to set.
      * @return the RegulatoryComplianceAssessmentList object itself.
      */
@@ -50,7 +55,7 @@ public final class RegulatoryComplianceAssessmentList {
 
     /**
      * Get the nextLink property: The URI to fetch the next page.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -59,17 +64,18 @@ public final class RegulatoryComplianceAssessmentList {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property value in model RegulatoryComplianceAssessmentList"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property value in model RegulatoryComplianceAssessmentList"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(RegulatoryComplianceAssessmentList.class);
 }

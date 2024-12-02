@@ -7,15 +7,12 @@ package com.azure.resourcemanager.applicationinsights.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.applicationinsights.fluent.models.ApplicationInsightsComponentInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Describes the list of Application Insights Resources. */
 @Fluent
 public final class ApplicationInsightsComponentListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApplicationInsightsComponentListResult.class);
-
     /*
      * List of Application Insights component definitions.
      */
@@ -23,11 +20,15 @@ public final class ApplicationInsightsComponentListResult {
     private List<ApplicationInsightsComponentInner> value;
 
     /*
-     * The URI to get the next set of Application Insights component
-     * definitions if too many components where returned in the result set.
+     * The URI to get the next set of Application Insights component definitions if too many components where returned
+     * in the result set.
      */
     @JsonProperty(value = "nextLink")
     private String nextLink;
+
+    /** Creates an instance of ApplicationInsightsComponentListResult class. */
+    public ApplicationInsightsComponentListResult() {
+    }
 
     /**
      * Get the value property: List of Application Insights component definitions.
@@ -78,12 +79,12 @@ public final class ApplicationInsightsComponentListResult {
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property value in model ApplicationInsightsComponentListResult"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property value in model ApplicationInsightsComponentListResult"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(ApplicationInsightsComponentListResult.class);
 }

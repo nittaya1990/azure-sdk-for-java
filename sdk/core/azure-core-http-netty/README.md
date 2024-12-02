@@ -7,6 +7,7 @@ Azure Core Netty HTTP client is a plugin for the `azure-core` HTTP client API.
 ### Prerequisites
 
 - A [Java Development Kit (JDK)][jdk_link], version 8 or later.
+  - Here are details about [Java 8 client compatibility with Azure Certificate Authority][java8_client_compatibility].
 
 ### Include the package
 #### Include the BOM file
@@ -47,7 +48,7 @@ add the direct dependency to your project as follows.
 <dependency>
     <groupId>com.azure</groupId>
     <artifactId>azure-core-http-netty</artifactId>
-    <version>1.11.2</version>
+    <version>1.15.7</version>
 </dependency>
 ```
 [//]: # ({x-version-update-end})
@@ -60,10 +61,12 @@ The following sections provide several code snippets covering some of the most c
 
 - [Create a Simple Client](#create-a-simple-client)
 - [Create a Client with Proxy](#create-a-client-with-proxy)
+- [Create a Client with HTTP/2 Support](#create-a-client-with-http2-support)
+- [Create a Client with Custom Max Chunk Size](#create-a-client-with-custom-max-chunk-size)
 
 ### Create a Simple Client
 
-Create a Netty Http client that uses port 80 and has no proxy.
+Create a Netty HttpClient that uses port 80 and has no proxy.
 
 ```java readme-sample-createBasicClient
 HttpClient client = new NettyAsyncHttpClientBuilder().build();
@@ -71,11 +74,47 @@ HttpClient client = new NettyAsyncHttpClientBuilder().build();
 
 ### Create a Client with Proxy
 
-Create a Netty Http client that is using a proxy.
+Create a Netty HttpClient that is using a proxy.
 
 ```java readme-sample-createProxyClient
 HttpClient client = new NettyAsyncHttpClientBuilder()
     .proxy(new ProxyOptions(ProxyOptions.Type.HTTP, new InetSocketAddress("<proxy-host>", 8888)))
+    .build();
+```
+
+### Create a Client with HTTP/2 Support
+
+Create a Netty HttpClient that supports both the HTTP/1.1 and HTTP/2 protocols, with HTTP/2 being the preferred
+protocol.
+
+```java readme-sample-useHttp2WithConfiguredNettyClient 
+// Constructs an HttpClient that supports both HTTP/1.1 and HTTP/2 with HTTP/2 being the preferred protocol.
+HttpClient client = new NettyAsyncHttpClientBuilder(reactor.netty.http.client.HttpClient.create()
+    .protocol(HttpProtocol.HTTP11, HttpProtocol.H2))
+    .build();
+```
+
+It is also possible to create a Netty HttpClient that only supports HTTP/2.
+
+```java readme-sample-useHttp2OnlyWithConfiguredNettyClient
+// Constructs an HttpClient that only supports HTTP/2.
+HttpClient client = new NettyAsyncHttpClientBuilder(reactor.netty.http.client.HttpClient.create()
+    .protocol(HttpProtocol.H2))
+    .build();
+```
+
+### Create a Client with Custom Max Chunk Size
+
+Create a Netty HttpClient that uses a custom max chunk size.
+
+```java readme-sample-customMaxChunkSize
+// Constructs an HttpClient with a modified max chunk size.
+// Max chunk size modifies the maximum size of ByteBufs returned by Netty (later converted to ByteBuffer).
+// Changing the chunk size can positively impact performance of APIs such as Storage's download to file methods
+// provided in azure-storage-blob, azure-storage-file-datalake, and azure-storage-file-shares (32KB - 64KB have
+// shown the most consistent improvement).
+HttpClient httpClient = new NettyAsyncHttpClientBuilder(reactor.netty.http.client.HttpClient.create()
+    .httpResponseDecoder(httpResponseDecoderSpec -> httpResponseDecoderSpec.maxChunkSize(64 * 1024)))
     .build();
 ```
 
@@ -105,7 +144,8 @@ For details on contributing to this repository, see the [contributing guide](htt
 1. Create new Pull Request
 
 <!-- Links -->
-[logging]: https://github.com/Azure/azure-sdk-for-java/wiki/Logging-with-Azure-SDK
+[logging]: https://github.com/Azure/azure-sdk-for-java/wiki/Logging-in-Azure-SDK
 [jdk_link]: https://docs.microsoft.com/java/azure/jdk/?view=azure-java-stable
+[java8_client_compatibility]: https://learn.microsoft.com/azure/security/fundamentals/azure-ca-details?tabs=root-and-subordinate-cas-list#client-compatibility-for-public-pkis
 
 ![Impressions](https://azure-sdk-impressions.azurewebsites.net/api/impressions/azure-sdk-for-java%2Fsdk%2Fcore%2Fazure-core-http-netty%2FREADME.png)

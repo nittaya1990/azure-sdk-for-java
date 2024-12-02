@@ -32,7 +32,7 @@ Various documentation is available to help you get started
 <dependency>
     <groupId>com.azure.resourcemanager</groupId>
     <artifactId>azure-resourcemanager-datafactory</artifactId>
-    <version>1.0.0-beta.7</version>
+    <version>1.0.0-beta.30</version>
 </dependency>
 ```
 [//]: # ({x-version-update-end})
@@ -41,19 +41,15 @@ Various documentation is available to help you get started
 
 Azure Management Libraries require a `TokenCredential` implementation for authentication and an `HttpClient` implementation for HTTP client.
 
-[Azure Identity][azure_identity] package and [Azure Core Netty HTTP][azure_core_http_netty] package provide the default implementation.
+[Azure Identity][azure_identity] and [Azure Core Netty HTTP][azure_core_http_netty] packages provide the default implementation.
 
 ### Authentication
 
-By default, Azure Active Directory token authentication depends on correct configure of following environment variables.
+Microsoft Entra ID token authentication relies on the [credential class][azure_identity_credentials] from [Azure Identity][azure_identity] package.
 
-- `AZURE_CLIENT_ID` for Azure client ID.
-- `AZURE_TENANT_ID` for Azure tenant ID.
-- `AZURE_CLIENT_SECRET` or `AZURE_CLIENT_CERTIFICATE_PATH` for client secret or client certificate.
+Azure subscription ID can be configured via `AZURE_SUBSCRIPTION_ID` environment variable.
 
-In addition, Azure subscription ID can be configured via environment variable `AZURE_SUBSCRIPTION_ID`.
-
-With above configuration, `azure` client can be authenticated by following code:
+Assuming the use of the `DefaultAzureCredential` credential class, the client can be authenticated using the following code:
 
 ```java
 AzureProfile profile = new AzureProfile(AzureEnvironment.AZURE);
@@ -78,7 +74,7 @@ See [API design][design] for general introduction on design and key concepts on 
 // storage account
 StorageAccount storageAccount = storageManager.storageAccounts().define(STORAGE_ACCOUNT)
     .withRegion(REGION)
-    .withExistingResourceGroup(RESOURCE_GROUP)
+    .withExistingResourceGroup(resourceGroup)
     .create();
 final String storageAccountKey = storageAccount.getKeys().iterator().next().value();
 final String connectionString = getStorageConnectionString(STORAGE_ACCOUNT, storageAccountKey, storageManager.environment());
@@ -86,7 +82,7 @@ final String connectionString = getStorageConnectionString(STORAGE_ACCOUNT, stor
 // container
 final String containerName = "adf";
 storageManager.blobContainers().defineContainer(containerName)
-    .withExistingBlobService(RESOURCE_GROUP, STORAGE_ACCOUNT)
+    .withExistingStorageAccount(resourceGroup, STORAGE_ACCOUNT)
     .withPublicAccess(PublicAccess.NONE)
     .create();
 
@@ -99,9 +95,9 @@ BlobClient blobClient = new BlobClientBuilder()
 blobClient.upload(BinaryData.fromString("data"));
 
 // data factory
-manager.factories().define(DATA_FACTORY)
+Factory dataFactory = manager.factories().define(DATA_FACTORY)
     .withRegion(REGION)
-    .withExistingResourceGroup(RESOURCE_GROUP)
+    .withExistingResourceGroup(resourceGroup)
     .create();
 
 // linked service
@@ -111,7 +107,7 @@ connectionStringProperty.put("value", connectionString);
 
 final String linkedServiceName = "LinkedService";
 manager.linkedServices().define(linkedServiceName)
-    .withExistingFactory(RESOURCE_GROUP, DATA_FACTORY)
+    .withExistingFactory(resourceGroup, DATA_FACTORY)
     .withProperties(new AzureStorageLinkedService()
         .withConnectionString(connectionStringProperty))
     .create();
@@ -119,7 +115,7 @@ manager.linkedServices().define(linkedServiceName)
 // input dataset
 final String inputDatasetName = "InputDataset";
 manager.datasets().define(inputDatasetName)
-    .withExistingFactory(RESOURCE_GROUP, DATA_FACTORY)
+    .withExistingFactory(resourceGroup, DATA_FACTORY)
     .withProperties(new AzureBlobDataset()
         .withLinkedServiceName(new LinkedServiceReference().withReferenceName(linkedServiceName))
         .withFolderPath(containerName)
@@ -130,7 +126,7 @@ manager.datasets().define(inputDatasetName)
 // output dataset
 final String outputDatasetName = "OutputDataset";
 manager.datasets().define(outputDatasetName)
-    .withExistingFactory(RESOURCE_GROUP, DATA_FACTORY)
+    .withExistingFactory(resourceGroup, DATA_FACTORY)
     .withProperties(new AzureBlobDataset()
         .withLinkedServiceName(new LinkedServiceReference().withReferenceName(linkedServiceName))
         .withFolderPath(containerName)
@@ -140,7 +136,7 @@ manager.datasets().define(outputDatasetName)
 
 // pipeline
 PipelineResource pipeline = manager.pipelines().define("CopyBlobPipeline")
-    .withExistingFactory(RESOURCE_GROUP, DATA_FACTORY)
+    .withExistingFactory(resourceGroup, DATA_FACTORY)
     .withActivities(Collections.singletonList(new CopyActivity()
         .withName("CopyBlob")
         .withSource(new BlobSource())
@@ -153,11 +149,11 @@ PipelineResource pipeline = manager.pipelines().define("CopyBlobPipeline")
 CreateRunResponse createRun = pipeline.createRun();
 
 // wait for completion
-PipelineRun pipelineRun = manager.pipelineRuns().get(RESOURCE_GROUP, DATA_FACTORY, createRun.runId());
+PipelineRun pipelineRun = manager.pipelineRuns().get(resourceGroup, DATA_FACTORY, createRun.runId());
 String runStatus = pipelineRun.status();
 while ("InProgress".equals(runStatus)) {
     sleepIfRunningAgainstService(10 * 1000);    // wait 10 seconds
-    pipelineRun = manager.pipelineRuns().get(RESOURCE_GROUP, DATA_FACTORY, createRun.runId());
+    pipelineRun = manager.pipelineRuns().get(resourceGroup, DATA_FACTORY, createRun.runId());
     runStatus = pipelineRun.status();
 }
 ```
@@ -170,20 +166,26 @@ while ("InProgress".equals(runStatus)) {
 
 ## Contributing
 
-For details on contributing to this repository, see the [contributing guide](https://github.com/Azure/azure-sdk-for-java/blob/main/CONTRIBUTING.md).
+For details on contributing to this repository, see the [contributing guide][cg].
 
-1. Fork it
-1. Create your feature branch (`git checkout -b my-new-feature`)
-1. Commit your changes (`git commit -am 'Add some feature'`)
-1. Push to the branch (`git push origin my-new-feature`)
-1. Create new Pull Request
+This project welcomes contributions and suggestions. Most contributions require you to agree to a Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us the rights to use your contribution. For details, visit <https://cla.microsoft.com>.
+
+When you submit a pull request, a CLA-bot will automatically determine whether you need to provide a CLA and decorate the PR appropriately (e.g., label, comment). Simply follow the instructions provided by the bot. You will only need to do this once across all repositories using our CLA.
+
+This project has adopted the [Microsoft Open Source Code of Conduct][coc]. For more information see the [Code of Conduct FAQ][coc_faq] or contact <opencode@microsoft.com> with any additional questions or comments.
 
 <!-- LINKS -->
 [survey]: https://microsoft.qualtrics.com/jfe/form/SV_ehN0lIk2FKEBkwd?Q_CHL=DOCS
 [docs]: https://azure.github.io/azure-sdk-for-java/
-[jdk]: https://docs.microsoft.com/java/azure/jdk/
+[jdk]: https://learn.microsoft.com/azure/developer/java/fundamentals/
 [azure_subscription]: https://azure.microsoft.com/free/
 [azure_identity]: https://github.com/Azure/azure-sdk-for-java/blob/main/sdk/identity/azure-identity
+[azure_identity_credentials]: https://github.com/Azure/azure-sdk-for-java/tree/main/sdk/identity/azure-identity#credentials
 [azure_core_http_netty]: https://github.com/Azure/azure-sdk-for-java/blob/main/sdk/core/azure-core-http-netty
 [authenticate]: https://github.com/Azure/azure-sdk-for-java/blob/main/sdk/resourcemanager/docs/AUTH.md
 [design]: https://github.com/Azure/azure-sdk-for-java/blob/main/sdk/resourcemanager/docs/DESIGN.md
+[cg]: https://github.com/Azure/azure-sdk-for-java/blob/main/CONTRIBUTING.md
+[coc]: https://opensource.microsoft.com/codeofconduct/
+[coc_faq]: https://opensource.microsoft.com/codeofconduct/faq/
+
+![Impressions](https://azure-sdk-impressions.azurewebsites.net/api/impressions/azure-sdk-for-java%2Fsdk%2Fdatafactory%2Fazure-resourcemanager-datafactory%2FREADME.png)

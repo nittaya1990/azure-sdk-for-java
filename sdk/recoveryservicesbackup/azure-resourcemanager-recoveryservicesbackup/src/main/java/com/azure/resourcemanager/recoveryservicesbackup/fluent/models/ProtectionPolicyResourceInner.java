@@ -6,17 +6,15 @@ package com.azure.resourcemanager.recoveryservicesbackup.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.Resource;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.recoveryservicesbackup.models.ProtectionPolicy;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
-/** Base class for backup policy. Workload-specific backup policies are derived from this class. */
+/**
+ * Base class for backup policy. Workload-specific backup policies are derived from this class.
+ */
 @Fluent
 public final class ProtectionPolicyResourceInner extends Resource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ProtectionPolicyResourceInner.class);
-
     /*
      * ProtectionPolicyResource properties
      */
@@ -30,8 +28,14 @@ public final class ProtectionPolicyResourceInner extends Resource {
     private String etag;
 
     /**
+     * Creates an instance of ProtectionPolicyResourceInner class.
+     */
+    public ProtectionPolicyResourceInner() {
+    }
+
+    /**
      * Get the properties property: ProtectionPolicyResource properties.
-     *
+     * 
      * @return the properties value.
      */
     public ProtectionPolicy properties() {
@@ -40,7 +44,7 @@ public final class ProtectionPolicyResourceInner extends Resource {
 
     /**
      * Set the properties property: ProtectionPolicyResource properties.
-     *
+     * 
      * @param properties the properties value to set.
      * @return the ProtectionPolicyResourceInner object itself.
      */
@@ -51,7 +55,7 @@ public final class ProtectionPolicyResourceInner extends Resource {
 
     /**
      * Get the etag property: Optional ETag.
-     *
+     * 
      * @return the etag value.
      */
     public String etag() {
@@ -60,7 +64,7 @@ public final class ProtectionPolicyResourceInner extends Resource {
 
     /**
      * Set the etag property: Optional ETag.
-     *
+     * 
      * @param etag the etag value to set.
      * @return the ProtectionPolicyResourceInner object itself.
      */
@@ -69,14 +73,18 @@ public final class ProtectionPolicyResourceInner extends Resource {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ProtectionPolicyResourceInner withLocation(String location) {
         super.withLocation(location);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ProtectionPolicyResourceInner withTags(Map<String, String> tags) {
         super.withTags(tags);
@@ -85,7 +93,7 @@ public final class ProtectionPolicyResourceInner extends Resource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

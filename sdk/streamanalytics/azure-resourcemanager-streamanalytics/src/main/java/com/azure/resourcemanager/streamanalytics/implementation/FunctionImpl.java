@@ -4,10 +4,13 @@
 
 package com.azure.resourcemanager.streamanalytics.implementation;
 
+import com.azure.core.http.rest.Response;
 import com.azure.core.util.Context;
 import com.azure.resourcemanager.streamanalytics.fluent.models.FunctionInner;
 import com.azure.resourcemanager.streamanalytics.models.Function;
 import com.azure.resourcemanager.streamanalytics.models.FunctionProperties;
+import com.azure.resourcemanager.streamanalytics.models.FunctionRetrieveDefaultDefinitionParameters;
+import com.azure.resourcemanager.streamanalytics.models.ResourceTestStatus;
 
 public final class FunctionImpl implements Function, Function.Definition, Function.Update {
     private FunctionInner innerObject;
@@ -28,6 +31,10 @@ public final class FunctionImpl implements Function, Function.Definition, Functi
 
     public String type() {
         return this.innerModel().type();
+    }
+
+    public String resourceGroupName() {
+        return resourceGroupName;
     }
 
     public FunctionInner innerModel() {
@@ -57,36 +64,20 @@ public final class FunctionImpl implements Function, Function.Definition, Functi
     }
 
     public Function create() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getFunctions()
-                .createOrReplaceWithResponse(
-                    resourceGroupName,
-                    jobName,
-                    functionName,
-                    this.innerModel(),
-                    createIfMatch,
-                    createIfNoneMatch,
-                    Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getFunctions()
+            .createOrReplaceWithResponse(resourceGroupName, jobName, functionName, this.innerModel(), createIfMatch,
+                createIfNoneMatch, Context.NONE)
+            .getValue();
         return this;
     }
 
     public Function create(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getFunctions()
-                .createOrReplaceWithResponse(
-                    resourceGroupName,
-                    jobName,
-                    functionName,
-                    this.innerModel(),
-                    createIfMatch,
-                    createIfNoneMatch,
-                    context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getFunctions()
+            .createOrReplaceWithResponse(resourceGroupName, jobName, functionName, this.innerModel(), createIfMatch,
+                createIfNoneMatch, context)
+            .getValue();
         return this;
     }
 
@@ -104,53 +95,64 @@ public final class FunctionImpl implements Function, Function.Definition, Functi
     }
 
     public Function apply() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getFunctions()
-                .updateWithResponse(
-                    resourceGroupName, jobName, functionName, this.innerModel(), updateIfMatch, Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getFunctions()
+            .updateWithResponse(resourceGroupName, jobName, functionName, this.innerModel(), updateIfMatch,
+                Context.NONE)
+            .getValue();
         return this;
     }
 
     public Function apply(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getFunctions()
-                .updateWithResponse(resourceGroupName, jobName, functionName, this.innerModel(), updateIfMatch, context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getFunctions()
+            .updateWithResponse(resourceGroupName, jobName, functionName, this.innerModel(), updateIfMatch, context)
+            .getValue();
         return this;
     }
 
-    FunctionImpl(
-        FunctionInner innerObject, com.azure.resourcemanager.streamanalytics.StreamAnalyticsManager serviceManager) {
+    FunctionImpl(FunctionInner innerObject,
+        com.azure.resourcemanager.streamanalytics.StreamAnalyticsManager serviceManager) {
         this.innerObject = innerObject;
         this.serviceManager = serviceManager;
-        this.resourceGroupName = Utils.getValueFromIdByName(innerObject.id(), "resourcegroups");
-        this.jobName = Utils.getValueFromIdByName(innerObject.id(), "streamingjobs");
-        this.functionName = Utils.getValueFromIdByName(innerObject.id(), "functions");
+        this.resourceGroupName = ResourceManagerUtils.getValueFromIdByName(innerObject.id(), "resourcegroups");
+        this.jobName = ResourceManagerUtils.getValueFromIdByName(innerObject.id(), "streamingjobs");
+        this.functionName = ResourceManagerUtils.getValueFromIdByName(innerObject.id(), "functions");
     }
 
     public Function refresh() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getFunctions()
-                .getWithResponse(resourceGroupName, jobName, functionName, Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getFunctions()
+            .getWithResponse(resourceGroupName, jobName, functionName, Context.NONE)
+            .getValue();
         return this;
     }
 
     public Function refresh(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getFunctions()
-                .getWithResponse(resourceGroupName, jobName, functionName, context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getFunctions()
+            .getWithResponse(resourceGroupName, jobName, functionName, context)
+            .getValue();
         return this;
+    }
+
+    public ResourceTestStatus test() {
+        return serviceManager.functions().test(resourceGroupName, jobName, functionName);
+    }
+
+    public ResourceTestStatus test(FunctionInner function, Context context) {
+        return serviceManager.functions().test(resourceGroupName, jobName, functionName, function, context);
+    }
+
+    public Response<Function> retrieveDefaultDefinitionWithResponse(
+        FunctionRetrieveDefaultDefinitionParameters functionRetrieveDefaultDefinitionParameters, Context context) {
+        return serviceManager.functions()
+            .retrieveDefaultDefinitionWithResponse(resourceGroupName, jobName, functionName,
+                functionRetrieveDefaultDefinitionParameters, context);
+    }
+
+    public Function retrieveDefaultDefinition() {
+        return serviceManager.functions().retrieveDefaultDefinition(resourceGroupName, jobName, functionName);
     }
 
     public FunctionImpl withProperties(FunctionProperties properties) {
@@ -164,8 +166,13 @@ public final class FunctionImpl implements Function, Function.Definition, Functi
     }
 
     public FunctionImpl withIfMatch(String ifMatch) {
-        this.createIfMatch = ifMatch;
-        return this;
+        if (isInCreateMode()) {
+            this.createIfMatch = ifMatch;
+            return this;
+        } else {
+            this.updateIfMatch = ifMatch;
+            return this;
+        }
     }
 
     public FunctionImpl withIfNoneMatch(String ifNoneMatch) {
@@ -173,8 +180,7 @@ public final class FunctionImpl implements Function, Function.Definition, Functi
         return this;
     }
 
-    public FunctionImpl ifMatch(String ifMatch) {
-        this.updateIfMatch = ifMatch;
-        return this;
+    private boolean isInCreateMode() {
+        return this.innerModel().id() == null;
     }
 }

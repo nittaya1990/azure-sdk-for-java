@@ -12,41 +12,37 @@ import com.azure.resourcemanager.botservice.fluent.PrivateLinkResourcesClient;
 import com.azure.resourcemanager.botservice.fluent.models.PrivateLinkResourceListResultInner;
 import com.azure.resourcemanager.botservice.models.PrivateLinkResourceListResult;
 import com.azure.resourcemanager.botservice.models.PrivateLinkResources;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class PrivateLinkResourcesImpl implements PrivateLinkResources {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PrivateLinkResourcesImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(PrivateLinkResourcesImpl.class);
 
     private final PrivateLinkResourcesClient innerClient;
 
     private final com.azure.resourcemanager.botservice.BotServiceManager serviceManager;
 
-    public PrivateLinkResourcesImpl(
-        PrivateLinkResourcesClient innerClient, com.azure.resourcemanager.botservice.BotServiceManager serviceManager) {
+    public PrivateLinkResourcesImpl(PrivateLinkResourcesClient innerClient,
+        com.azure.resourcemanager.botservice.BotServiceManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
     }
 
-    public PrivateLinkResourceListResult listByBotResource(String resourceGroupName, String resourceName) {
-        PrivateLinkResourceListResultInner inner =
-            this.serviceClient().listByBotResource(resourceGroupName, resourceName);
+    public Response<PrivateLinkResourceListResult> listByBotResourceWithResponse(String resourceGroupName,
+        String resourceName, Context context) {
+        Response<PrivateLinkResourceListResultInner> inner
+            = this.serviceClient().listByBotResourceWithResponse(resourceGroupName, resourceName, context);
         if (inner != null) {
-            return new PrivateLinkResourceListResultImpl(inner, this.manager());
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
+                new PrivateLinkResourceListResultImpl(inner.getValue(), this.manager()));
         } else {
             return null;
         }
     }
 
-    public Response<PrivateLinkResourceListResult> listByBotResourceWithResponse(
-        String resourceGroupName, String resourceName, Context context) {
-        Response<PrivateLinkResourceListResultInner> inner =
-            this.serviceClient().listByBotResourceWithResponse(resourceGroupName, resourceName, context);
+    public PrivateLinkResourceListResult listByBotResource(String resourceGroupName, String resourceName) {
+        PrivateLinkResourceListResultInner inner
+            = this.serviceClient().listByBotResource(resourceGroupName, resourceName);
         if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
-                new PrivateLinkResourceListResultImpl(inner.getValue(), this.manager()));
+            return new PrivateLinkResourceListResultImpl(inner, this.manager());
         } else {
             return null;
         }

@@ -7,7 +7,9 @@ import com.azure.core.util.Context;
 import com.azure.core.util.polling.PollResponse;
 import com.azure.core.util.polling.SyncPoller;
 import com.azure.storage.common.StorageSharedKeyCredential;
+import com.azure.storage.file.share.models.FilePermissionFormat;
 import com.azure.storage.file.share.models.CloseHandlesInfo;
+import com.azure.storage.file.share.models.CopyableFileSmbPropertiesList;
 import com.azure.storage.file.share.models.DownloadRetryOptions;
 import com.azure.storage.file.share.models.FileRange;
 import com.azure.storage.file.share.models.PermissionCopyModeType;
@@ -15,6 +17,7 @@ import com.azure.storage.file.share.models.ShareFileCopyInfo;
 import com.azure.storage.file.share.models.ShareFileHttpHeaders;
 import com.azure.storage.file.share.models.ShareFileInfo;
 import com.azure.storage.file.share.models.ShareFileMetadataInfo;
+import com.azure.storage.file.share.models.ShareFilePermission;
 import com.azure.storage.file.share.models.ShareFileProperties;
 import com.azure.storage.file.share.models.ShareFileRange;
 import com.azure.storage.file.share.models.ShareFileRangeList;
@@ -24,8 +27,12 @@ import com.azure.storage.file.share.models.ShareFileUploadRangeFromUrlInfo;
 import com.azure.storage.file.share.models.NtfsFileAttributes;
 import com.azure.storage.file.share.models.ShareFileUploadRangeOptions;
 import com.azure.storage.file.share.models.ShareRequestConditions;
+import com.azure.storage.file.share.options.ShareFileCopyOptions;
+import com.azure.storage.file.share.options.ShareFileCreateOptions;
 import com.azure.storage.file.share.options.ShareFileDownloadOptions;
 import com.azure.storage.file.share.options.ShareFileListRangesDiffOptions;
+import com.azure.storage.file.share.options.ShareFileRenameOptions;
+import com.azure.storage.file.share.options.ShareFileSetPropertiesOptions;
 import com.azure.storage.file.share.options.ShareFileUploadRangeFromUrlOptions;
 import com.azure.storage.file.share.sas.ShareFileSasPermission;
 import com.azure.storage.file.share.sas.ShareServiceSasSignatureValues;
@@ -55,6 +62,7 @@ public class ShareFileJavaDocCodeSamples {
     private String leaseId = "leaseId";
     ShareFileClient client = createClientWithSASToken();
     private Duration timeout = Duration.ofSeconds(30);
+    private String destinationPath = "destinationPath";
 
     /**
      * Generates code sample for {@link ShareFileClient} instantiation.
@@ -175,7 +183,8 @@ public class ShareFileJavaDocCodeSamples {
 
     /**
      * Generates a code sample for using {@link ShareFileClient#createWithResponse(long, ShareFileHttpHeaders, FileSmbProperties,
-     * String, Map, ShareRequestConditions, Duration, Context)}
+     * String, Map, ShareRequestConditions, Duration, Context)} and
+     * {@link ShareFileClient#createWithResponse(ShareFileCreateOptions, Duration, Context)}
      */
     public void createWithLease() {
         ShareFileClient fileClient = createClientWithSASToken();
@@ -201,6 +210,30 @@ public class ShareFileJavaDocCodeSamples {
             new Context(key1, value1));
         System.out.printf("Creating the file completed with status code %d", response.getStatusCode());
         // END: com.azure.storage.file.share.ShareFileClient.createWithResponse#long-ShareFileHttpHeaders-FileSmbProperties-String-Map-ShareRequestConditions-Duration-Context
+
+        // BEGIN: com.azure.storage.file.share.ShareFileClient.createWithResponse#ShareFileCreateOptions-Duration-Context
+        ShareFileCreateOptions options = new ShareFileCreateOptions(1024);
+
+        options.setShareFileHttpHeaders(new ShareFileHttpHeaders()
+            .setContentType("text/html")
+            .setContentEncoding("gzip")
+            .setContentLanguage("en")
+            .setCacheControl("no-transform")
+            .setContentDisposition("attachment"));
+        options.setSmbProperties(new FileSmbProperties()
+            .setNtfsFileAttributes(EnumSet.of(NtfsFileAttributes.READ_ONLY))
+            .setFileCreationTime(OffsetDateTime.now())
+            .setFileLastWriteTime(OffsetDateTime.now())
+            .setFilePermissionKey("filePermissionKey"));
+        options.setFilePermission("filePermission");
+        options.setFilePermissionFormat(FilePermissionFormat.BINARY);
+        options.setMetadata(Collections.singletonMap("directory", "metadata"));
+        options.setRequestConditions(new ShareRequestConditions().setLeaseId(leaseId));
+        // NOTE: filePermission and filePermissionKey should never be both set
+        Response<ShareFileInfo> response2 = fileClient.createWithResponse(options, Duration.ofSeconds(1),
+            new Context(key1, value1));
+        System.out.printf("Creating the file completed with status code %d", response2.getStatusCode());
+        // END: com.azure.storage.file.share.ShareFileClient.createWithResponse#ShareFileCreateOptions-Duration-Context
     }
 
     /**
@@ -246,6 +279,45 @@ public class ShareFileJavaDocCodeSamples {
         final ShareFileCopyInfo value = pollResponse.getValue();
         System.out.printf("Copy source: %s. Status: %s.%n", value.getCopySourceUrl(), value.getCopyStatus());
         // END: com.azure.storage.file.share.ShareFileClient.beginCopy#string-filesmbproperties-string-permissioncopymodetype-boolean-boolean-map-duration-ShareRequestConditions
+    }
+
+    /**
+     * Generates a code sample for using {@link ShareFileClient#beginCopy(String, ShareFileCopyOptions, Duration)}
+     */
+    public void beginCopy3() {
+        ShareFileClient fileClient = createClientWithSASToken();
+        // BEGIN: com.azure.storage.file.share.ShareFileClient.beginCopy#String-Duration-ShareFileCopyOptions
+        FileSmbProperties smbProperties = new FileSmbProperties()
+            .setNtfsFileAttributes(EnumSet.of(NtfsFileAttributes.READ_ONLY))
+            .setFileCreationTime(OffsetDateTime.now())
+            .setFileLastWriteTime(OffsetDateTime.now())
+            .setFilePermissionKey("filePermissionKey");
+        String filePermission = "filePermission";
+        // NOTE: filePermission and filePermissionKey should never be both set
+        boolean ignoreReadOnly = false; // Default value
+        boolean setArchiveAttribute = true; // Default value
+        ShareRequestConditions requestConditions = new ShareRequestConditions().setLeaseId(leaseId);
+        CopyableFileSmbPropertiesList list = new CopyableFileSmbPropertiesList().setCreatedOn(true).setLastWrittenOn(true);
+        // NOTE: FileSmbProperties and CopyableFileSmbPropertiesList should never be both set
+
+        ShareFileCopyOptions options = new ShareFileCopyOptions()
+            .setSmbProperties(smbProperties)
+            .setFilePermission(filePermission)
+            .setIgnoreReadOnly(ignoreReadOnly)
+            .setArchiveAttribute(setArchiveAttribute)
+            .setDestinationRequestConditions(requestConditions)
+            .setSmbPropertiesToCopy(list)
+            .setPermissionCopyModeType(PermissionCopyModeType.SOURCE)
+            .setMetadata(Collections.singletonMap("file", "metadata"))
+            .setFilePermissionFormat(FilePermissionFormat.BINARY);
+
+        SyncPoller<ShareFileCopyInfo, Void> poller = fileClient.beginCopy(
+            "https://{accountName}.file.core.windows.net?{SASToken}", options, Duration.ofSeconds(2));
+
+        final PollResponse<ShareFileCopyInfo> pollResponse = poller.poll();
+        final ShareFileCopyInfo value = pollResponse.getValue();
+        System.out.printf("Copy source: %s. Status: %s.%n", value.getCopySourceUrl(), value.getCopyStatus());
+        // END: com.azure.storage.file.share.ShareFileClient.beginCopy#String-Duration-ShareFileCopyOptions
     }
 
     /**
@@ -808,6 +880,7 @@ public class ShareFileJavaDocCodeSamples {
     /**
      * Generates a code sample for using {@link ShareFileClient#setPropertiesWithResponse(long, ShareFileHttpHeaders,
      * FileSmbProperties, String, ShareRequestConditions, Duration, Context)}
+     * and {@link ShareFileClient#setPropertiesWithResponse(ShareFileSetPropertiesOptions, Duration, Context)}
      */
     public void setHttpHeadersWithLease() {
         ShareFileClient fileClient = createClientWithSASToken();
@@ -830,6 +903,27 @@ public class ShareFileJavaDocCodeSamples {
             null);
         System.out.println("Setting the file httpHeaders completed.");
         // END: com.azure.storage.file.share.ShareFileClient.setPropertiesWithResponse#long-ShareFileHttpHeaders-FileSmbProperties-String-ShareRequestConditions-Duration-Context
+
+        // BEGIN: com.azure.storage.file.share.ShareFileClient.setPropertiesWithResponse#ShareFileSetPropertiesOptions-Duration-Context
+        ShareFileSetPropertiesOptions options = new ShareFileSetPropertiesOptions(1024);
+        options.setRequestConditions(new ShareRequestConditions().setLeaseId(leaseId));
+        options.setHttpHeaders(new ShareFileHttpHeaders()
+            .setContentType("text/html")
+            .setContentEncoding("gzip")
+            .setContentLanguage("en")
+            .setCacheControl("no-transform")
+            .setContentDisposition("attachment"));
+        options.setSmbProperties(new FileSmbProperties()
+            .setNtfsFileAttributes(EnumSet.of(NtfsFileAttributes.READ_ONLY))
+            .setFileCreationTime(OffsetDateTime.now())
+            .setFileLastWriteTime(OffsetDateTime.now())
+            .setFilePermissionKey("filePermissionKey"));
+        options.setFilePermissions(new ShareFilePermission().setPermission("filePermission")
+            .setPermissionFormat(FilePermissionFormat.BINARY));
+        // NOTE: filePermission and filePermissionKey should never be both set
+        fileClient.setPropertiesWithResponse(options, null, null);
+        System.out.println("Setting the file httpHeaders completed.");
+        // END: com.azure.storage.file.share.ShareFileClient.setPropertiesWithResponse#ShareFileSetPropertiesOptions-Duration-Context
     }
 
     /**
@@ -1031,6 +1125,36 @@ public class ShareFileJavaDocCodeSamples {
     }
 
     /**
+     * Code snippets for {@link ShareFileClient#rename(String)} and
+     * {@link ShareFileClient#renameWithResponse(com.azure.storage.file.share.options.ShareFileRenameOptions, Duration, Context)}
+     */
+    public void renameCodeSnippets() {
+        // BEGIN: com.azure.storage.file.share.ShareFileClient.rename#String
+        ShareFileClient renamedClient = client.rename(destinationPath);
+        System.out.println("File Client has been renamed");
+        // END: com.azure.storage.file.share.ShareFileClient.rename#String
+
+        // BEGIN: com.azure.storage.file.share.ShareFileClient.renameWithResponse#ShareFileRenameOptions-Duration-Context
+        FileSmbProperties smbProperties = new FileSmbProperties()
+            .setNtfsFileAttributes(EnumSet.of(NtfsFileAttributes.READ_ONLY))
+            .setFileCreationTime(OffsetDateTime.now())
+            .setFileLastWriteTime(OffsetDateTime.now())
+            .setFilePermissionKey("filePermissionKey");
+        ShareFileRenameOptions options = new ShareFileRenameOptions(destinationPath)
+            .setDestinationRequestConditions(new ShareRequestConditions().setLeaseId(leaseId))
+            .setSourceRequestConditions(new ShareRequestConditions().setLeaseId(leaseId))
+            .setIgnoreReadOnly(false)
+            .setReplaceIfExists(false)
+            .setFilePermission("filePermission")
+            .setSmbProperties(smbProperties);
+
+        ShareFileClient newRenamedClient = client.renameWithResponse(options, timeout, new Context(key1, value1))
+            .getValue();
+        System.out.println("File Client has been renamed");
+        // END: com.azure.storage.file.share.ShareFileClient.renameWithResponse#ShareFileRenameOptions-Duration-Context
+    }
+
+    /**
      * Generates a code sample for using {@link ShareFileClient#getShareSnapshotId()}
      */
     public void getShareSnapshotId() {
@@ -1101,5 +1225,28 @@ public class ShareFileJavaDocCodeSamples {
         // Client must be authenticated via StorageSharedKeyCredential
         shareFileClient.generateSas(values, new Context("key", "value"));
         // END: com.azure.storage.file.share.ShareFileClient.generateSas#ShareServiceSasSignatureValues-Context
+    }
+
+    /**
+     * Generates a code sample for using {@link ShareFileClient#deleteIfExists()} and
+     * {@link ShareFileClient#deleteIfExistsWithResponse(ShareRequestConditions, Duration, Context)}
+     */
+    public void deleteFileIfExistsCodeSnippets() {
+        ShareFileClient fileClient = createClientWithSASToken();
+        // BEGIN: com.azure.storage.file.share.ShareFileClient.deleteIfExists
+        boolean result = fileClient.deleteIfExists();
+        System.out.println("File deleted: " + result);
+        // END: com.azure.storage.file.share.ShareFileClient.deleteIfExists
+
+        // BEGIN: com.azure.storage.file.share.ShareFileClient.deleteIfExistsWithResponse#ShareRequestConditions-duration-context
+        ShareRequestConditions requestConditions = new ShareRequestConditions().setLeaseId(leaseId);
+        Response<Boolean> response = fileClient.deleteIfExistsWithResponse(requestConditions, Duration.ofSeconds(1),
+            new Context(key1, value1));
+        if (response.getStatusCode() == 404) {
+            System.out.println("Does not exist.");
+        } else {
+            System.out.printf("Delete completed with status %d%n", response.getStatusCode());
+        }
+        // END: com.azure.storage.file.share.ShareFileClient.deleteIfExistsWithResponse#ShareRequestConditions-duration-context
     }
 }

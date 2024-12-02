@@ -5,21 +5,21 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The object defining the schema of the exported Api Detail. */
+/** The object defining the schema of the exported API Detail. */
 @Fluent
 public final class ApiExportResultValue {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApiExportResultValue.class);
-
     /*
-     * Link to the Storage Blob containing the result of the export operation.
-     * The Blob Uri is only valid for 5 minutes.
+     * Link to the Storage Blob containing the result of the export operation. The Blob Uri is only valid for 5
+     * minutes.
      */
     @JsonProperty(value = "link")
     private String link;
+
+    /** Creates an instance of ApiExportResultValue class. */
+    public ApiExportResultValue() {
+    }
 
     /**
      * Get the link property: Link to the Storage Blob containing the result of the export operation. The Blob Uri is

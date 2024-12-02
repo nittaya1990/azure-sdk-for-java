@@ -8,185 +8,204 @@ import com.azure.core.http.rest.PagedIterable;
 import com.azure.core.http.rest.Response;
 import com.azure.core.util.Context;
 
-/** Resource collection API of Labs. */
+/**
+ * Resource collection API of Labs.
+ */
 public interface Labs {
     /**
-     * List labs in a given lab account.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param labAccountName The name of the lab Account.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * Get all labs for a subscription.
+     * 
+     * Returns a list of all labs for a subscription.
+     * 
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return paged list of labs as paginated response with {@link PagedIterable}.
      */
-    PagedIterable<Lab> list(String resourceGroupName, String labAccountName);
+    PagedIterable<Lab> list();
 
     /**
-     * List labs in a given lab account.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param labAccountName The name of the lab Account.
-     * @param expand Specify the $expand query. Example: 'properties($select=maxUsersInLab)'.
+     * Get all labs for a subscription.
+     * 
+     * Returns a list of all labs for a subscription.
+     * 
      * @param filter The filter to apply to the operation.
-     * @param top The maximum number of resources to return from the operation.
-     * @param orderby The ordering expression for the results, using OData notation.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return paged list of labs as paginated response with {@link PagedIterable}.
      */
-    PagedIterable<Lab> list(
-        String resourceGroupName,
-        String labAccountName,
-        String expand,
-        String filter,
-        Integer top,
-        String orderby,
-        Context context);
+    PagedIterable<Lab> list(String filter, Context context);
 
     /**
-     * Get lab.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param labAccountName The name of the lab Account.
-     * @param labName The name of the lab.
+     * Get all labs for a subscription and resource group.
+     * 
+     * Returns a list of all labs in a resource group.
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return lab.
+     * @return paged list of labs as paginated response with {@link PagedIterable}.
      */
-    Lab get(String resourceGroupName, String labAccountName, String labName);
+    PagedIterable<Lab> listByResourceGroup(String resourceGroupName);
 
     /**
-     * Get lab.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param labAccountName The name of the lab Account.
-     * @param labName The name of the lab.
-     * @param expand Specify the $expand query. Example: 'properties($select=maxUsersInLab)'.
+     * Get all labs for a subscription and resource group.
+     * 
+     * Returns a list of all labs in a resource group.
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return lab.
+     * @return paged list of labs as paginated response with {@link PagedIterable}.
      */
-    Response<Lab> getWithResponse(
-        String resourceGroupName, String labAccountName, String labName, String expand, Context context);
+    PagedIterable<Lab> listByResourceGroup(String resourceGroupName, Context context);
 
     /**
-     * Delete lab. This operation can take a while to complete.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param labAccountName The name of the lab Account.
-     * @param labName The name of the lab.
+     * Get a lab resource.
+     * 
+     * Returns the properties of a lab resource.
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param labName The name of the lab that uniquely identifies it within containing lab plan. Used in resource URIs.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the lab resource along with {@link Response}.
+     */
+    Response<Lab> getByResourceGroupWithResponse(String resourceGroupName, String labName, Context context);
+
+    /**
+     * Get a lab resource.
+     * 
+     * Returns the properties of a lab resource.
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param labName The name of the lab that uniquely identifies it within containing lab plan. Used in resource URIs.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the lab resource.
+     */
+    Lab getByResourceGroup(String resourceGroupName, String labName);
+
+    /**
+     * Deletes a lab resource.
+     * 
+     * Operation to delete a lab resource.
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param labName The name of the lab that uniquely identifies it within containing lab plan. Used in resource URIs.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
-    void delete(String resourceGroupName, String labAccountName, String labName);
+    void deleteByResourceGroup(String resourceGroupName, String labName);
 
     /**
-     * Delete lab. This operation can take a while to complete.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param labAccountName The name of the lab Account.
-     * @param labName The name of the lab.
+     * Deletes a lab resource.
+     * 
+     * Operation to delete a lab resource.
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param labName The name of the lab that uniquely identifies it within containing lab plan. Used in resource URIs.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
-    void delete(String resourceGroupName, String labAccountName, String labName, Context context);
+    void delete(String resourceGroupName, String labName, Context context);
 
     /**
-     * Add users to a lab.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param labAccountName The name of the lab Account.
-     * @param labName The name of the lab.
-     * @param addUsersPayload Payload for Add Users operation on a Lab.
+     * Publish or re-publish a lab.
+     * 
+     * Publish or re-publish a lab. This will create or update all lab resources, such as virtual machines.
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param labName The name of the lab that uniquely identifies it within containing lab plan. Used in resource URIs.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
-    void addUsers(String resourceGroupName, String labAccountName, String labName, AddUsersPayload addUsersPayload);
+    void publish(String resourceGroupName, String labName);
 
     /**
-     * Add users to a lab.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param labAccountName The name of the lab Account.
-     * @param labName The name of the lab.
-     * @param addUsersPayload Payload for Add Users operation on a Lab.
+     * Publish or re-publish a lab.
+     * 
+     * Publish or re-publish a lab. This will create or update all lab resources, such as virtual machines.
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param labName The name of the lab that uniquely identifies it within containing lab plan. Used in resource URIs.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
      */
-    Response<Void> addUsersWithResponse(
-        String resourceGroupName,
-        String labAccountName,
-        String labName,
-        AddUsersPayload addUsersPayload,
-        Context context);
+    void publish(String resourceGroupName, String labName, Context context);
 
     /**
-     * Register to managed lab.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param labAccountName The name of the lab Account.
-     * @param labName The name of the lab.
+     * Manually sync the lab group.
+     * 
+     * Action used to manually kick off an AAD group sync job.
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param labName The name of the lab that uniquely identifies it within containing lab plan. Used in resource URIs.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
-    void register(String resourceGroupName, String labAccountName, String labName);
+    void syncGroup(String resourceGroupName, String labName);
 
     /**
-     * Register to managed lab.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param labAccountName The name of the lab Account.
-     * @param labName The name of the lab.
+     * Manually sync the lab group.
+     * 
+     * Action used to manually kick off an AAD group sync job.
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param labName The name of the lab that uniquely identifies it within containing lab plan. Used in resource URIs.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
      */
-    Response<Void> registerWithResponse(
-        String resourceGroupName, String labAccountName, String labName, Context context);
+    void syncGroup(String resourceGroupName, String labName, Context context);
 
     /**
-     * Get lab.
-     *
+     * Get a lab resource.
+     * 
+     * Returns the properties of a lab resource.
+     * 
      * @param id the resource ID.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return lab.
+     * @return the lab resource along with {@link Response}.
      */
     Lab getById(String id);
 
     /**
-     * Get lab.
-     *
+     * Get a lab resource.
+     * 
+     * Returns the properties of a lab resource.
+     * 
      * @param id the resource ID.
-     * @param expand Specify the $expand query. Example: 'properties($select=maxUsersInLab)'.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return lab.
+     * @return the lab resource along with {@link Response}.
      */
-    Response<Lab> getByIdWithResponse(String id, String expand, Context context);
+    Response<Lab> getByIdWithResponse(String id, Context context);
 
     /**
-     * Delete lab. This operation can take a while to complete.
-     *
+     * Deletes a lab resource.
+     * 
+     * Operation to delete a lab resource.
+     * 
      * @param id the resource ID.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
@@ -195,8 +214,10 @@ public interface Labs {
     void deleteById(String id);
 
     /**
-     * Delete lab. This operation can take a while to complete.
-     *
+     * Deletes a lab resource.
+     * 
+     * Operation to delete a lab resource.
+     * 
      * @param id the resource ID.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -207,7 +228,7 @@ public interface Labs {
 
     /**
      * Begins definition for a new Lab resource.
-     *
+     * 
      * @param name resource name.
      * @return the first stage of the new Lab definition.
      */

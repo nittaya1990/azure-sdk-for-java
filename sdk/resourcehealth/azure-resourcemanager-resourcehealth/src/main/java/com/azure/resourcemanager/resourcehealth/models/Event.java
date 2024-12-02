@@ -4,6 +4,7 @@
 
 package com.azure.resourcemanager.resourcehealth.models;
 
+import com.azure.core.management.SystemData;
 import com.azure.resourcemanager.resourcehealth.fluent.models.EventInner;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -32,11 +33,26 @@ public interface Event {
     String type();
 
     /**
+     * Gets the systemData property: Azure Resource Manager metadata containing createdBy and modifiedBy information.
+     *
+     * @return the systemData value.
+     */
+    SystemData systemData();
+
+    /**
      * Gets the eventType property: Type of event.
      *
      * @return the eventType value.
      */
     EventTypeValues eventType();
+
+    /**
+     * Gets the eventSubType property: Sub type of the event. Currently used to determine retirement communications for
+     * health advisory events.
+     *
+     * @return the eventSubType value.
+     */
+    EventSubTypeValues eventSubType();
 
     /**
      * Gets the eventSource property: Source of event.
@@ -86,6 +102,20 @@ public interface Event {
      * @return the eventLevel value.
      */
     EventLevelValues eventLevel();
+
+    /**
+     * Gets the externalIncidentId property: The id of the Incident.
+     *
+     * @return the externalIncidentId value.
+     */
+    String externalIncidentId();
+
+    /**
+     * Gets the reason property: The reason for the Incident.
+     *
+     * @return the reason value.
+     */
+    String reason();
 
     /**
      * Gets the article property: Article of event.
@@ -151,6 +181,21 @@ public interface Event {
     Boolean enableMicrosoftSupport();
 
     /**
+     * Gets the description property: Contains the communication message for the event, that could include summary, root
+     * cause and other details.
+     *
+     * @return the description value.
+     */
+    String description();
+
+    /**
+     * Gets the platformInitiated property: Is true if the event is platform initiated.
+     *
+     * @return the platformInitiated value.
+     */
+    Boolean platformInitiated();
+
+    /**
      * Gets the enableChatWithUs property: Tells if we want to enable or disable Microsoft Support for this event.
      *
      * @return the enableChatWithUs value.
@@ -158,7 +203,10 @@ public interface Event {
     Boolean enableChatWithUs();
 
     /**
-     * Gets the priority property: Priority level of the event.
+     * Gets the priority property: Priority level of the event. Has value from 0 to 23. 0 is the highest priority.
+     * Service issue events have higher priority followed by planned maintenance and health advisory. Critical events
+     * have higher priority followed by error, warning and informational. Furthermore, active events have higher
+     * priority than resolved.
      *
      * @return the priority value.
      */
@@ -177,6 +225,49 @@ public interface Event {
      * @return the hirStage value.
      */
     String hirStage();
+
+    /**
+     * Gets the additionalInformation property: Additional information.
+     *
+     * @return the additionalInformation value.
+     */
+    EventPropertiesAdditionalInformation additionalInformation();
+
+    /**
+     * Gets the duration property: duration in seconds.
+     *
+     * @return the duration value.
+     */
+    Integer duration();
+
+    /**
+     * Gets the impactType property: The type of the impact.
+     *
+     * @return the impactType value.
+     */
+    String impactType();
+
+    /**
+     * Gets the maintenanceId property: Unique identifier for planned maintenance event.
+     *
+     * @return the maintenanceId value.
+     */
+    String maintenanceId();
+
+    /**
+     * Gets the maintenanceType property: The type of planned maintenance event.
+     *
+     * @return the maintenanceType value.
+     */
+    String maintenanceType();
+
+    /**
+     * Gets the argQuery property: Azure Resource Graph query to fetch the affected resources from their existing Azure
+     * Resource Graph locations.
+     *
+     * @return the argQuery value.
+     */
+    String argQuery();
 
     /**
      * Gets the inner com.azure.resourcemanager.resourcehealth.fluent.models.EventInner object.

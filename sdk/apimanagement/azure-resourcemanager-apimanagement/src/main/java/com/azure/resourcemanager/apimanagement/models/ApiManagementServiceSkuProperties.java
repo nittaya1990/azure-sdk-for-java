@@ -6,14 +6,11 @@ package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** API Management service resource SKU properties. */
 @Fluent
 public final class ApiManagementServiceSkuProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApiManagementServiceSkuProperties.class);
-
     /*
      * Name of the Sku.
      */
@@ -21,11 +18,14 @@ public final class ApiManagementServiceSkuProperties {
     private SkuType name;
 
     /*
-     * Capacity of the SKU (number of deployed units of the SKU). For
-     * Consumption SKU capacity must be specified as 0.
+     * Capacity of the SKU (number of deployed units of the SKU). For Consumption SKU capacity must be specified as 0.
      */
     @JsonProperty(value = "capacity", required = true)
     private int capacity;
+
+    /** Creates an instance of ApiManagementServiceSkuProperties class. */
+    public ApiManagementServiceSkuProperties() {
+    }
 
     /**
      * Get the name property: Name of the Sku.
@@ -76,10 +76,10 @@ public final class ApiManagementServiceSkuProperties {
      */
     public void validate() {
         if (name() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property name in model ApiManagementServiceSkuProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property name in model ApiManagementServiceSkuProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(ApiManagementServiceSkuProperties.class);
 }

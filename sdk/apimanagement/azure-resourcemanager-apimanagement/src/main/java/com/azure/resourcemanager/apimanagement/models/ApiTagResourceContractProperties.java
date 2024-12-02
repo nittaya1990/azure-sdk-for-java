@@ -5,16 +5,12 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** API contract properties for the Tag Resources. */
 @Fluent
 public final class ApiTagResourceContractProperties extends ApiEntityBaseContract {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApiTagResourceContractProperties.class);
-
     /*
      * API identifier in the form /apis/{apiId}.
      */
@@ -34,10 +30,9 @@ public final class ApiTagResourceContractProperties extends ApiEntityBaseContrac
     private String serviceUrl;
 
     /*
-     * Relative URL uniquely identifying this API and all of its resource paths
-     * within the API Management service instance. It is appended to the API
-     * endpoint base URL specified during the service instance creation to form
-     * a public URL for this API.
+     * Relative URL uniquely identifying this API and all of its resource paths within the API Management service
+     * instance. It is appended to the API endpoint base URL specified during the service instance creation to form a
+     * public URL for this API.
      */
     @JsonProperty(value = "path")
     private String path;
@@ -47,6 +42,10 @@ public final class ApiTagResourceContractProperties extends ApiEntityBaseContrac
      */
     @JsonProperty(value = "protocols")
     private List<Protocol> protocols;
+
+    /** Creates an instance of ApiTagResourceContractProperties class. */
+    public ApiTagResourceContractProperties() {
+    }
 
     /**
      * Get the id property: API identifier in the form /apis/{apiId}.
@@ -161,16 +160,16 @@ public final class ApiTagResourceContractProperties extends ApiEntityBaseContrac
 
     /** {@inheritDoc} */
     @Override
-    public ApiTagResourceContractProperties withAuthenticationSettings(
-        AuthenticationSettingsContract authenticationSettings) {
+    public ApiTagResourceContractProperties
+        withAuthenticationSettings(AuthenticationSettingsContract authenticationSettings) {
         super.withAuthenticationSettings(authenticationSettings);
         return this;
     }
 
     /** {@inheritDoc} */
     @Override
-    public ApiTagResourceContractProperties withSubscriptionKeyParameterNames(
-        SubscriptionKeyParameterNamesContract subscriptionKeyParameterNames) {
+    public ApiTagResourceContractProperties
+        withSubscriptionKeyParameterNames(SubscriptionKeyParameterNamesContract subscriptionKeyParameterNames) {
         super.withSubscriptionKeyParameterNames(subscriptionKeyParameterNames);
         return this;
     }
@@ -228,6 +227,27 @@ public final class ApiTagResourceContractProperties extends ApiEntityBaseContrac
     @Override
     public ApiTagResourceContractProperties withSubscriptionRequired(Boolean subscriptionRequired) {
         super.withSubscriptionRequired(subscriptionRequired);
+        return this;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public ApiTagResourceContractProperties withTermsOfServiceUrl(String termsOfServiceUrl) {
+        super.withTermsOfServiceUrl(termsOfServiceUrl);
+        return this;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public ApiTagResourceContractProperties withContact(ApiContactInformation contact) {
+        super.withContact(contact);
+        return this;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public ApiTagResourceContractProperties withLicense(ApiLicenseInformation license) {
+        super.withLicense(license);
         return this;
     }
 

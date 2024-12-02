@@ -5,39 +5,50 @@
 package com.azure.resourcemanager.resourcehealth.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.core.management.SystemData;
 import com.azure.resourcemanager.resourcehealth.models.StatusActiveEvent;
 import com.azure.resourcemanager.resourcehealth.models.StatusBanner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 import java.util.List;
 
 /** The Get EmergingIssues operation response. */
-@JsonFlatten
 @Fluent
-public class EmergingIssuesGetResultInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(EmergingIssuesGetResultInner.class);
+public final class EmergingIssuesGetResultInner extends ProxyResource {
+    /*
+     * The emerging issue entity properties.
+     */
+    @JsonProperty(value = "properties")
+    private EmergingIssue innerProperties;
 
     /*
-     * Timestamp for when last time refreshed for ongoing emerging issue.
+     * Azure Resource Manager metadata containing createdBy and modifiedBy information.
      */
-    @JsonProperty(value = "properties.refreshTimestamp")
-    private OffsetDateTime refreshTimestamp;
+    @JsonProperty(value = "systemData", access = JsonProperty.Access.WRITE_ONLY)
+    private SystemData systemData;
 
-    /*
-     * The list of emerging issues of banner type.
-     */
-    @JsonProperty(value = "properties.statusBanners")
-    private List<StatusBanner> statusBanners;
+    /** Creates an instance of EmergingIssuesGetResultInner class. */
+    public EmergingIssuesGetResultInner() {
+    }
 
-    /*
-     * The list of emerging issues of active event type.
+    /**
+     * Get the innerProperties property: The emerging issue entity properties.
+     *
+     * @return the innerProperties value.
      */
-    @JsonProperty(value = "properties.statusActiveEvents")
-    private List<StatusActiveEvent> statusActiveEvents;
+    private EmergingIssue innerProperties() {
+        return this.innerProperties;
+    }
+
+    /**
+     * Get the systemData property: Azure Resource Manager metadata containing createdBy and modifiedBy information.
+     *
+     * @return the systemData value.
+     */
+    public SystemData systemData() {
+        return this.systemData;
+    }
 
     /**
      * Get the refreshTimestamp property: Timestamp for when last time refreshed for ongoing emerging issue.
@@ -45,7 +56,7 @@ public class EmergingIssuesGetResultInner extends ProxyResource {
      * @return the refreshTimestamp value.
      */
     public OffsetDateTime refreshTimestamp() {
-        return this.refreshTimestamp;
+        return this.innerProperties() == null ? null : this.innerProperties().refreshTimestamp();
     }
 
     /**
@@ -55,7 +66,10 @@ public class EmergingIssuesGetResultInner extends ProxyResource {
      * @return the EmergingIssuesGetResultInner object itself.
      */
     public EmergingIssuesGetResultInner withRefreshTimestamp(OffsetDateTime refreshTimestamp) {
-        this.refreshTimestamp = refreshTimestamp;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EmergingIssue();
+        }
+        this.innerProperties().withRefreshTimestamp(refreshTimestamp);
         return this;
     }
 
@@ -65,7 +79,7 @@ public class EmergingIssuesGetResultInner extends ProxyResource {
      * @return the statusBanners value.
      */
     public List<StatusBanner> statusBanners() {
-        return this.statusBanners;
+        return this.innerProperties() == null ? null : this.innerProperties().statusBanners();
     }
 
     /**
@@ -75,7 +89,10 @@ public class EmergingIssuesGetResultInner extends ProxyResource {
      * @return the EmergingIssuesGetResultInner object itself.
      */
     public EmergingIssuesGetResultInner withStatusBanners(List<StatusBanner> statusBanners) {
-        this.statusBanners = statusBanners;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EmergingIssue();
+        }
+        this.innerProperties().withStatusBanners(statusBanners);
         return this;
     }
 
@@ -85,7 +102,7 @@ public class EmergingIssuesGetResultInner extends ProxyResource {
      * @return the statusActiveEvents value.
      */
     public List<StatusActiveEvent> statusActiveEvents() {
-        return this.statusActiveEvents;
+        return this.innerProperties() == null ? null : this.innerProperties().statusActiveEvents();
     }
 
     /**
@@ -95,7 +112,10 @@ public class EmergingIssuesGetResultInner extends ProxyResource {
      * @return the EmergingIssuesGetResultInner object itself.
      */
     public EmergingIssuesGetResultInner withStatusActiveEvents(List<StatusActiveEvent> statusActiveEvents) {
-        this.statusActiveEvents = statusActiveEvents;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EmergingIssue();
+        }
+        this.innerProperties().withStatusActiveEvents(statusActiveEvents);
         return this;
     }
 
@@ -105,11 +125,8 @@ public class EmergingIssuesGetResultInner extends ProxyResource {
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
-        if (statusBanners() != null) {
-            statusBanners().forEach(e -> e.validate());
-        }
-        if (statusActiveEvents() != null) {
-            statusActiveEvents().forEach(e -> e.validate());
+        if (innerProperties() != null) {
+            innerProperties().validate();
         }
     }
 }

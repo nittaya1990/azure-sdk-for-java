@@ -6,15 +6,14 @@ package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The JitNetworkAccessPolicyInitiateRequest model. */
+/**
+ * The JitNetworkAccessPolicyInitiateRequest model.
+ */
 @Fluent
 public final class JitNetworkAccessPolicyInitiateRequest {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(JitNetworkAccessPolicyInitiateRequest.class);
-
     /*
      * A list of virtual machines & ports to open access for
      */
@@ -28,8 +27,14 @@ public final class JitNetworkAccessPolicyInitiateRequest {
     private String justification;
 
     /**
+     * Creates an instance of JitNetworkAccessPolicyInitiateRequest class.
+     */
+    public JitNetworkAccessPolicyInitiateRequest() {
+    }
+
+    /**
      * Get the virtualMachines property: A list of virtual machines &amp; ports to open access for.
-     *
+     * 
      * @return the virtualMachines value.
      */
     public List<JitNetworkAccessPolicyInitiateVirtualMachine> virtualMachines() {
@@ -38,19 +43,19 @@ public final class JitNetworkAccessPolicyInitiateRequest {
 
     /**
      * Set the virtualMachines property: A list of virtual machines &amp; ports to open access for.
-     *
+     * 
      * @param virtualMachines the virtualMachines value to set.
      * @return the JitNetworkAccessPolicyInitiateRequest object itself.
      */
-    public JitNetworkAccessPolicyInitiateRequest withVirtualMachines(
-        List<JitNetworkAccessPolicyInitiateVirtualMachine> virtualMachines) {
+    public JitNetworkAccessPolicyInitiateRequest
+        withVirtualMachines(List<JitNetworkAccessPolicyInitiateVirtualMachine> virtualMachines) {
         this.virtualMachines = virtualMachines;
         return this;
     }
 
     /**
      * Get the justification property: The justification for making the initiate request.
-     *
+     * 
      * @return the justification value.
      */
     public String justification() {
@@ -59,7 +64,7 @@ public final class JitNetworkAccessPolicyInitiateRequest {
 
     /**
      * Set the justification property: The justification for making the initiate request.
-     *
+     * 
      * @param justification the justification value to set.
      * @return the JitNetworkAccessPolicyInitiateRequest object itself.
      */
@@ -70,17 +75,18 @@ public final class JitNetworkAccessPolicyInitiateRequest {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (virtualMachines() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property virtualMachines in model JitNetworkAccessPolicyInitiateRequest"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property virtualMachines in model JitNetworkAccessPolicyInitiateRequest"));
         } else {
             virtualMachines().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(JitNetworkAccessPolicyInitiateRequest.class);
 }

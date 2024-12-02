@@ -5,72 +5,55 @@
 package com.azure.resourcemanager.dns.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.management.Resource;
 import com.azure.core.management.SubResource;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
 import com.azure.resourcemanager.dns.models.ZoneType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
-/** Describes a DNS zone. */
-@JsonFlatten
+/**
+ * Describes a DNS zone.
+ */
 @Fluent
-public class ZoneInner extends Resource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ZoneInner.class);
-
+public final class ZoneInner extends Resource {
     /*
      * The etag of the zone.
      */
-    @JsonProperty(value = "etag")
     private String etag;
 
     /*
-     * The maximum number of record sets that can be created in this DNS zone.
-     * This is a read-only property and any attempt to set this value will be
-     * ignored.
+     * The properties of the zone.
      */
-    @JsonProperty(value = "properties.maxNumberOfRecordSets", access = JsonProperty.Access.WRITE_ONLY)
-    private Long maxNumberOfRecordSets;
+    private ZoneProperties innerProperties;
 
     /*
-     * The current number of record sets in this DNS zone.  This is a read-only
-     * property and any attempt to set this value will be ignored.
+     * Fully qualified resource Id for the resource.
      */
-    @JsonProperty(value = "properties.numberOfRecordSets", access = JsonProperty.Access.WRITE_ONLY)
-    private Long numberOfRecordSets;
+    private String id;
 
     /*
-     * The name servers for this DNS zone. This is a read-only property and any
-     * attempt to set this value will be ignored.
+     * The name of the resource.
      */
-    @JsonProperty(value = "properties.nameServers", access = JsonProperty.Access.WRITE_ONLY)
-    private List<String> nameServers;
+    private String name;
 
     /*
-     * The type of this DNS zone (Public or Private).
+     * The type of the resource.
      */
-    @JsonProperty(value = "properties.zoneType")
-    private ZoneType zoneType;
+    private String type;
 
-    /*
-     * A list of references to virtual networks that register hostnames in this
-     * DNS zone. This is a only when ZoneType is Private.
+    /**
+     * Creates an instance of ZoneInner class.
      */
-    @JsonProperty(value = "properties.registrationVirtualNetworks")
-    private List<SubResource> registrationVirtualNetworks;
-
-    /*
-     * A list of references to virtual networks that resolve records in this
-     * DNS zone. This is a only when ZoneType is Private.
-     */
-    @JsonProperty(value = "properties.resolutionVirtualNetworks")
-    private List<SubResource> resolutionVirtualNetworks;
+    public ZoneInner() {
+    }
 
     /**
      * Get the etag property: The etag of the zone.
-     *
+     * 
      * @return the etag value.
      */
     public String etag() {
@@ -79,7 +62,7 @@ public class ZoneInner extends Resource {
 
     /**
      * Set the etag property: The etag of the zone.
-     *
+     * 
      * @param etag the etag value to set.
      * @return the ZoneInner object itself.
      */
@@ -89,104 +72,236 @@ public class ZoneInner extends Resource {
     }
 
     /**
+     * Get the innerProperties property: The properties of the zone.
+     * 
+     * @return the innerProperties value.
+     */
+    private ZoneProperties innerProperties() {
+        return this.innerProperties;
+    }
+
+    /**
+     * Get the id property: Fully qualified resource Id for the resource.
+     * 
+     * @return the id value.
+     */
+    @Override
+    public String id() {
+        return this.id;
+    }
+
+    /**
+     * Get the name property: The name of the resource.
+     * 
+     * @return the name value.
+     */
+    @Override
+    public String name() {
+        return this.name;
+    }
+
+    /**
+     * Get the type property: The type of the resource.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ZoneInner withLocation(String location) {
+        super.withLocation(location);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ZoneInner withTags(Map<String, String> tags) {
+        super.withTags(tags);
+        return this;
+    }
+
+    /**
      * Get the maxNumberOfRecordSets property: The maximum number of record sets that can be created in this DNS zone.
      * This is a read-only property and any attempt to set this value will be ignored.
-     *
+     * 
      * @return the maxNumberOfRecordSets value.
      */
     public Long maxNumberOfRecordSets() {
-        return this.maxNumberOfRecordSets;
+        return this.innerProperties() == null ? null : this.innerProperties().maxNumberOfRecordSets();
+    }
+
+    /**
+     * Get the maxNumberOfRecordsPerRecordSet property: The maximum number of records per record set that can be created
+     * in this DNS zone. This is a read-only property and any attempt to set this value will be ignored.
+     * 
+     * @return the maxNumberOfRecordsPerRecordSet value.
+     */
+    public Long maxNumberOfRecordsPerRecordSet() {
+        return this.innerProperties() == null ? null : this.innerProperties().maxNumberOfRecordsPerRecordSet();
     }
 
     /**
      * Get the numberOfRecordSets property: The current number of record sets in this DNS zone. This is a read-only
      * property and any attempt to set this value will be ignored.
-     *
+     * 
      * @return the numberOfRecordSets value.
      */
     public Long numberOfRecordSets() {
-        return this.numberOfRecordSets;
+        return this.innerProperties() == null ? null : this.innerProperties().numberOfRecordSets();
     }
 
     /**
      * Get the nameServers property: The name servers for this DNS zone. This is a read-only property and any attempt to
      * set this value will be ignored.
-     *
+     * 
      * @return the nameServers value.
      */
     public List<String> nameServers() {
-        return this.nameServers;
+        return this.innerProperties() == null ? null : this.innerProperties().nameServers();
     }
 
     /**
      * Get the zoneType property: The type of this DNS zone (Public or Private).
-     *
+     * 
      * @return the zoneType value.
      */
     public ZoneType zoneType() {
-        return this.zoneType;
+        return this.innerProperties() == null ? null : this.innerProperties().zoneType();
     }
 
     /**
      * Set the zoneType property: The type of this DNS zone (Public or Private).
-     *
+     * 
      * @param zoneType the zoneType value to set.
      * @return the ZoneInner object itself.
      */
     public ZoneInner withZoneType(ZoneType zoneType) {
-        this.zoneType = zoneType;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new ZoneProperties();
+        }
+        this.innerProperties().withZoneType(zoneType);
         return this;
     }
 
     /**
      * Get the registrationVirtualNetworks property: A list of references to virtual networks that register hostnames in
      * this DNS zone. This is a only when ZoneType is Private.
-     *
+     * 
      * @return the registrationVirtualNetworks value.
      */
     public List<SubResource> registrationVirtualNetworks() {
-        return this.registrationVirtualNetworks;
+        return this.innerProperties() == null ? null : this.innerProperties().registrationVirtualNetworks();
     }
 
     /**
      * Set the registrationVirtualNetworks property: A list of references to virtual networks that register hostnames in
      * this DNS zone. This is a only when ZoneType is Private.
-     *
+     * 
      * @param registrationVirtualNetworks the registrationVirtualNetworks value to set.
      * @return the ZoneInner object itself.
      */
     public ZoneInner withRegistrationVirtualNetworks(List<SubResource> registrationVirtualNetworks) {
-        this.registrationVirtualNetworks = registrationVirtualNetworks;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new ZoneProperties();
+        }
+        this.innerProperties().withRegistrationVirtualNetworks(registrationVirtualNetworks);
         return this;
     }
 
     /**
      * Get the resolutionVirtualNetworks property: A list of references to virtual networks that resolve records in this
      * DNS zone. This is a only when ZoneType is Private.
-     *
+     * 
      * @return the resolutionVirtualNetworks value.
      */
     public List<SubResource> resolutionVirtualNetworks() {
-        return this.resolutionVirtualNetworks;
+        return this.innerProperties() == null ? null : this.innerProperties().resolutionVirtualNetworks();
     }
 
     /**
      * Set the resolutionVirtualNetworks property: A list of references to virtual networks that resolve records in this
      * DNS zone. This is a only when ZoneType is Private.
-     *
+     * 
      * @param resolutionVirtualNetworks the resolutionVirtualNetworks value to set.
      * @return the ZoneInner object itself.
      */
     public ZoneInner withResolutionVirtualNetworks(List<SubResource> resolutionVirtualNetworks) {
-        this.resolutionVirtualNetworks = resolutionVirtualNetworks;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new ZoneProperties();
+        }
+        this.innerProperties().withResolutionVirtualNetworks(resolutionVirtualNetworks);
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
+        if (innerProperties() != null) {
+            innerProperties().validate();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeStringField("location", location());
+        jsonWriter.writeMapField("tags", tags(), (writer, element) -> writer.writeString(element));
+        jsonWriter.writeStringField("etag", this.etag);
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of ZoneInner from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of ZoneInner if the JsonReader was pointing to an instance of it, or null if it was pointing
+     * to JSON null.
+     * @throws IllegalStateException If the deserialized JSON object was missing any required properties.
+     * @throws IOException If an error occurs while reading the ZoneInner.
+     */
+    public static ZoneInner fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            ZoneInner deserializedZoneInner = new ZoneInner();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("id".equals(fieldName)) {
+                    deserializedZoneInner.id = reader.getString();
+                } else if ("name".equals(fieldName)) {
+                    deserializedZoneInner.name = reader.getString();
+                } else if ("type".equals(fieldName)) {
+                    deserializedZoneInner.type = reader.getString();
+                } else if ("location".equals(fieldName)) {
+                    deserializedZoneInner.withLocation(reader.getString());
+                } else if ("tags".equals(fieldName)) {
+                    Map<String, String> tags = reader.readMap(reader1 -> reader1.getString());
+                    deserializedZoneInner.withTags(tags);
+                } else if ("etag".equals(fieldName)) {
+                    deserializedZoneInner.etag = reader.getString();
+                } else if ("properties".equals(fieldName)) {
+                    deserializedZoneInner.innerProperties = ZoneProperties.fromJson(reader);
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedZoneInner;
+        });
     }
 }

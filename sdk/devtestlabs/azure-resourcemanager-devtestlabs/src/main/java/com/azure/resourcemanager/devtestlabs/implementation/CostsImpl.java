@@ -12,10 +12,9 @@ import com.azure.resourcemanager.devtestlabs.fluent.CostsClient;
 import com.azure.resourcemanager.devtestlabs.fluent.models.LabCostInner;
 import com.azure.resourcemanager.devtestlabs.models.Costs;
 import com.azure.resourcemanager.devtestlabs.models.LabCost;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class CostsImpl implements Costs {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CostsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(CostsImpl.class);
 
     private final CostsClient innerClient;
 
@@ -24,6 +23,18 @@ public final class CostsImpl implements Costs {
     public CostsImpl(CostsClient innerClient, com.azure.resourcemanager.devtestlabs.DevTestLabsManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
+    }
+
+    public Response<LabCost> getWithResponse(String resourceGroupName, String labName, String name, String expand,
+        Context context) {
+        Response<LabCostInner> inner
+            = this.serviceClient().getWithResponse(resourceGroupName, labName, name, expand, context);
+        if (inner != null) {
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
+                new LabCostImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
     }
 
     public LabCost get(String resourceGroupName, String labName, String name) {
@@ -35,43 +46,21 @@ public final class CostsImpl implements Costs {
         }
     }
 
-    public Response<LabCost> getWithResponse(
-        String resourceGroupName, String labName, String name, String expand, Context context) {
-        Response<LabCostInner> inner =
-            this.serviceClient().getWithResponse(resourceGroupName, labName, name, expand, context);
-        if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
-                new LabCostImpl(inner.getValue(), this.manager()));
-        } else {
-            return null;
-        }
-    }
-
     public LabCost getById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
         String labName = Utils.getValueFromIdByName(id, "labs");
         if (labName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'labs'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'labs'.", id)));
         }
         String name = Utils.getValueFromIdByName(id, "costs");
         if (name == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'costs'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'costs'.", id)));
         }
         String localExpand = null;
         return this.getWithResponse(resourceGroupName, labName, name, localExpand, Context.NONE).getValue();
@@ -80,25 +69,18 @@ public final class CostsImpl implements Costs {
     public Response<LabCost> getByIdWithResponse(String id, String expand, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
         String labName = Utils.getValueFromIdByName(id, "labs");
         if (labName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'labs'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'labs'.", id)));
         }
         String name = Utils.getValueFromIdByName(id, "costs");
         if (name == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'costs'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'costs'.", id)));
         }
         return this.getWithResponse(resourceGroupName, labName, name, expand, context);
     }

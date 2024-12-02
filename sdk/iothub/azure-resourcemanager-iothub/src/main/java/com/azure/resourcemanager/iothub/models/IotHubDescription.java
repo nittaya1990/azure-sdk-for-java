@@ -7,6 +7,7 @@ package com.azure.resourcemanager.iothub.models;
 import com.azure.core.http.rest.PagedIterable;
 import com.azure.core.http.rest.Response;
 import com.azure.core.management.Region;
+import com.azure.core.management.SystemData;
 import com.azure.core.util.Context;
 import com.azure.resourcemanager.iothub.fluent.models.IotHubDescriptionInner;
 import java.util.Map;
@@ -78,6 +79,13 @@ public interface IotHubDescription {
     ArmIdentity identity();
 
     /**
+     * Gets the systemData property: The system meta data relating to this resource.
+     *
+     * @return the systemData value.
+     */
+    SystemData systemData();
+
+    /**
      * Gets the region of the resource.
      *
      * @return the region of the resource.
@@ -92,6 +100,13 @@ public interface IotHubDescription {
     String regionName();
 
     /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
+
+    /**
      * Gets the inner com.azure.resourcemanager.iothub.fluent.models.IotHubDescriptionInner object.
      *
      * @return the inner object.
@@ -99,18 +114,16 @@ public interface IotHubDescription {
     IotHubDescriptionInner innerModel();
 
     /** The entirety of the IotHubDescription definition. */
-    interface Definition
-        extends DefinitionStages.Blank,
-            DefinitionStages.WithLocation,
-            DefinitionStages.WithResourceGroup,
-            DefinitionStages.WithSku,
-            DefinitionStages.WithCreate {
+    interface Definition extends DefinitionStages.Blank, DefinitionStages.WithLocation,
+        DefinitionStages.WithResourceGroup, DefinitionStages.WithSku, DefinitionStages.WithCreate {
     }
+
     /** The IotHubDescription definition stages. */
     interface DefinitionStages {
         /** The first stage of the IotHubDescription definition. */
         interface Blank extends WithLocation {
         }
+
         /** The stage of the IotHubDescription definition allowing to specify location. */
         interface WithLocation {
             /**
@@ -129,6 +142,7 @@ public interface IotHubDescription {
              */
             WithResourceGroup withRegion(String location);
         }
+
         /** The stage of the IotHubDescription definition allowing to specify parent resource. */
         interface WithResourceGroup {
             /**
@@ -139,6 +153,7 @@ public interface IotHubDescription {
              */
             WithSku withExistingResourceGroup(String resourceGroupName);
         }
+
         /** The stage of the IotHubDescription definition allowing to specify sku. */
         interface WithSku {
             /**
@@ -149,16 +164,13 @@ public interface IotHubDescription {
              */
             WithCreate withSku(IotHubSkuInfo sku);
         }
+
         /**
          * The stage of the IotHubDescription definition which contains all the minimum required properties for the
          * resource to be created, but also allows for any other optional properties to be specified.
          */
-        interface WithCreate
-            extends DefinitionStages.WithTags,
-                DefinitionStages.WithEtag,
-                DefinitionStages.WithProperties,
-                DefinitionStages.WithIdentity,
-                DefinitionStages.WithIfMatch {
+        interface WithCreate extends DefinitionStages.WithTags, DefinitionStages.WithEtag,
+            DefinitionStages.WithProperties, DefinitionStages.WithIdentity, DefinitionStages.WithIfMatch {
             /**
              * Executes the create request.
              *
@@ -174,6 +186,7 @@ public interface IotHubDescription {
              */
             IotHubDescription create(Context context);
         }
+
         /** The stage of the IotHubDescription definition allowing to specify tags. */
         interface WithTags {
             /**
@@ -184,6 +197,7 @@ public interface IotHubDescription {
              */
             WithCreate withTags(Map<String, String> tags);
         }
+
         /** The stage of the IotHubDescription definition allowing to specify etag. */
         interface WithEtag {
             /**
@@ -196,6 +210,7 @@ public interface IotHubDescription {
              */
             WithCreate withEtag(String etag);
         }
+
         /** The stage of the IotHubDescription definition allowing to specify properties. */
         interface WithProperties {
             /**
@@ -206,6 +221,7 @@ public interface IotHubDescription {
              */
             WithCreate withProperties(IotHubProperties properties);
         }
+
         /** The stage of the IotHubDescription definition allowing to specify identity. */
         interface WithIdentity {
             /**
@@ -216,6 +232,7 @@ public interface IotHubDescription {
              */
             WithCreate withIdentity(ArmIdentity identity);
         }
+
         /** The stage of the IotHubDescription definition allowing to specify ifMatch. */
         interface WithIfMatch {
             /**
@@ -229,6 +246,7 @@ public interface IotHubDescription {
             WithCreate withIfMatch(String ifMatch);
         }
     }
+
     /**
      * Begins update for the IotHubDescription resource.
      *
@@ -253,6 +271,7 @@ public interface IotHubDescription {
          */
         IotHubDescription apply(Context context);
     }
+
     /** The IotHubDescription update stages. */
     interface UpdateStages {
         /** The stage of the IotHubDescription update allowing to specify tags. */
@@ -266,6 +285,7 @@ public interface IotHubDescription {
             Update withTags(Map<String, String> tags);
         }
     }
+
     /**
      * Refreshes the resource to sync with Azure.
      *
@@ -283,17 +303,23 @@ public interface IotHubDescription {
 
     /**
      * Get the security metadata for an IoT hub. For more information, see:
+     * https://docs.microsoft.com/azure/iot-hub/iot-hub-devguide-security
+     *
+     * <p>Get the security metadata for an IoT hub. For more information, see:
      * https://docs.microsoft.com/azure/iot-hub/iot-hub-devguide-security.
      *
      * @throws com.azure.resourcemanager.iothub.models.ErrorDetailsException thrown if the request is rejected by
      *     server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the security metadata for an IoT hub.
+     * @return the security metadata for an IoT hub as paginated response with {@link PagedIterable}.
      */
     PagedIterable<SharedAccessSignatureAuthorizationRule> listKeys();
 
     /**
      * Get the security metadata for an IoT hub. For more information, see:
+     * https://docs.microsoft.com/azure/iot-hub/iot-hub-devguide-security
+     *
+     * <p>Get the security metadata for an IoT hub. For more information, see:
      * https://docs.microsoft.com/azure/iot-hub/iot-hub-devguide-security.
      *
      * @param context The context to associate with this operation.
@@ -301,13 +327,36 @@ public interface IotHubDescription {
      * @throws com.azure.resourcemanager.iothub.models.ErrorDetailsException thrown if the request is rejected by
      *     server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the security metadata for an IoT hub.
+     * @return the security metadata for an IoT hub as paginated response with {@link PagedIterable}.
      */
     PagedIterable<SharedAccessSignatureAuthorizationRule> listKeys(Context context);
 
     /**
      * Exports all the device identities in the IoT hub identity registry to an Azure Storage blob container. For more
      * information, see:
+     * https://docs.microsoft.com/azure/iot-hub/iot-hub-devguide-identity-registry#import-and-export-device-identities
+     *
+     * <p>Exports all the device identities in the IoT hub identity registry to an Azure Storage blob container. For
+     * more information, see:
+     * https://docs.microsoft.com/azure/iot-hub/iot-hub-devguide-identity-registry#import-and-export-device-identities.
+     *
+     * @param exportDevicesParameters The parameters that specify the export devices operation.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.resourcemanager.iothub.models.ErrorDetailsException thrown if the request is rejected by
+     *     server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the properties of the Job Response object along with {@link Response}.
+     */
+    Response<JobResponse> exportDevicesWithResponse(ExportDevicesRequest exportDevicesParameters, Context context);
+
+    /**
+     * Exports all the device identities in the IoT hub identity registry to an Azure Storage blob container. For more
+     * information, see:
+     * https://docs.microsoft.com/azure/iot-hub/iot-hub-devguide-identity-registry#import-and-export-device-identities
+     *
+     * <p>Exports all the device identities in the IoT hub identity registry to an Azure Storage blob container. For
+     * more information, see:
      * https://docs.microsoft.com/azure/iot-hub/iot-hub-devguide-identity-registry#import-and-export-device-identities.
      *
      * @param exportDevicesParameters The parameters that specify the export devices operation.
@@ -320,23 +369,31 @@ public interface IotHubDescription {
     JobResponse exportDevices(ExportDevicesRequest exportDevicesParameters);
 
     /**
-     * Exports all the device identities in the IoT hub identity registry to an Azure Storage blob container. For more
+     * Import, update, or delete device identities in the IoT hub identity registry from a blob. For more information,
+     * see:
+     * https://docs.microsoft.com/azure/iot-hub/iot-hub-devguide-identity-registry#import-and-export-device-identities
+     *
+     * <p>Import, update, or delete device identities in the IoT hub identity registry from a blob. For more
      * information, see:
      * https://docs.microsoft.com/azure/iot-hub/iot-hub-devguide-identity-registry#import-and-export-device-identities.
      *
-     * @param exportDevicesParameters The parameters that specify the export devices operation.
+     * @param importDevicesParameters The parameters that specify the import devices operation.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.resourcemanager.iothub.models.ErrorDetailsException thrown if the request is rejected by
      *     server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the properties of the Job Response object.
+     * @return the properties of the Job Response object along with {@link Response}.
      */
-    Response<JobResponse> exportDevicesWithResponse(ExportDevicesRequest exportDevicesParameters, Context context);
+    Response<JobResponse> importDevicesWithResponse(ImportDevicesRequest importDevicesParameters, Context context);
 
     /**
      * Import, update, or delete device identities in the IoT hub identity registry from a blob. For more information,
      * see:
+     * https://docs.microsoft.com/azure/iot-hub/iot-hub-devguide-identity-registry#import-and-export-device-identities
+     *
+     * <p>Import, update, or delete device identities in the IoT hub identity registry from a blob. For more
+     * information, see:
      * https://docs.microsoft.com/azure/iot-hub/iot-hub-devguide-identity-registry#import-and-export-device-identities.
      *
      * @param importDevicesParameters The parameters that specify the import devices operation.
@@ -347,19 +404,4 @@ public interface IotHubDescription {
      * @return the properties of the Job Response object.
      */
     JobResponse importDevices(ImportDevicesRequest importDevicesParameters);
-
-    /**
-     * Import, update, or delete device identities in the IoT hub identity registry from a blob. For more information,
-     * see:
-     * https://docs.microsoft.com/azure/iot-hub/iot-hub-devguide-identity-registry#import-and-export-device-identities.
-     *
-     * @param importDevicesParameters The parameters that specify the import devices operation.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.resourcemanager.iothub.models.ErrorDetailsException thrown if the request is rejected by
-     *     server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the properties of the Job Response object.
-     */
-    Response<JobResponse> importDevicesWithResponse(ImportDevicesRequest importDevicesParameters, Context context);
 }

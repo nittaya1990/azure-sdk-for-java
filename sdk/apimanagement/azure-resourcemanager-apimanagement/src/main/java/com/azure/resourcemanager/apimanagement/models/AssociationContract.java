@@ -6,21 +6,21 @@ package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.models.AssociationContractProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Association entity details. */
 @Fluent
 public final class AssociationContract extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AssociationContract.class);
-
     /*
      * Association entity contract properties.
      */
     @JsonProperty(value = "properties")
     private AssociationContractProperties innerProperties;
+
+    /** Creates an instance of AssociationContract class. */
+    public AssociationContract() {
+    }
 
     /**
      * Get the innerProperties property: Association entity contract properties.

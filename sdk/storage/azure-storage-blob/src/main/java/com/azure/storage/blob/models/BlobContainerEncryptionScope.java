@@ -5,32 +5,34 @@
 package com.azure.storage.blob.models;
 
 import com.azure.core.annotation.Fluent;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
-/** Parameter group. */
+/**
+ * Parameter group.
+ */
 @Fluent
-@JacksonXmlRootElement(localName = "blob-container-encryption-scope")
 public final class BlobContainerEncryptionScope {
     /*
-     * Optional.  Version 2019-07-07 and later.  Specifies the default
-     * encryption scope to set on the container and use for all future writes.
+     * Optional. Version 2019-07-07 and later. Specifies the default encryption scope to set on the container and use
+     * for all future writes.
      */
-    @JsonProperty(value = "defaultEncryptionScope")
     private String defaultEncryptionScope;
 
     /*
-     * Optional.  Version 2019-07-07 and newer.  If true, prevents any request
-     * from specifying a different encryption scope than the scope set on the
-     * container.
+     * Optional. Version 2019-07-07 and newer. If true, prevents any request from specifying a different encryption
+     * scope than the scope set on the container.
      */
-    @JsonProperty(value = "encryptionScopeOverridePrevented")
     private Boolean encryptionScopeOverridePrevented;
+
+    /**
+     * Creates an instance of BlobContainerEncryptionScope class.
+     */
+    public BlobContainerEncryptionScope() {
+    }
 
     /**
      * Get the defaultEncryptionScope property: Optional. Version 2019-07-07 and later. Specifies the default encryption
      * scope to set on the container and use for all future writes.
-     *
+     * 
      * @return the defaultEncryptionScope value.
      */
     public String getDefaultEncryptionScope() {
@@ -40,7 +42,7 @@ public final class BlobContainerEncryptionScope {
     /**
      * Set the defaultEncryptionScope property: Optional. Version 2019-07-07 and later. Specifies the default encryption
      * scope to set on the container and use for all future writes.
-     *
+     * 
      * @param defaultEncryptionScope the defaultEncryptionScope value to set.
      * @return the BlobContainerEncryptionScope object itself.
      */
@@ -52,7 +54,7 @@ public final class BlobContainerEncryptionScope {
     /**
      * Get the encryptionScopeOverridePrevented property: Optional. Version 2019-07-07 and newer. If true, prevents any
      * request from specifying a different encryption scope than the scope set on the container.
-     *
+     * 
      * @return the encryptionScopeOverridePrevented value.
      */
     public boolean isEncryptionScopeOverridePrevented() {
@@ -63,7 +65,7 @@ public final class BlobContainerEncryptionScope {
     /**
      * Set the encryptionScopeOverridePrevented property: Optional. Version 2019-07-07 and newer. If true, prevents any
      * request from specifying a different encryption scope than the scope set on the container.
-     *
+     * 
      * @param encryptionScopeOverridePrevented the encryptionScopeOverridePrevented value to set.
      * @return the BlobContainerEncryptionScope object itself.
      */

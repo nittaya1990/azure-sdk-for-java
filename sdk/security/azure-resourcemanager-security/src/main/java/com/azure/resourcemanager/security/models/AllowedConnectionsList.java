@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.security.fluent.models.AllowedConnectionsResourceInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** List of all possible traffic between Azure resources. */
+/**
+ * List of all possible traffic between Azure resources.
+ */
 @Immutable
 public final class AllowedConnectionsList {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AllowedConnectionsList.class);
-
     /*
      * The value property.
      */
@@ -29,8 +27,14 @@ public final class AllowedConnectionsList {
     private String nextLink;
 
     /**
+     * Creates an instance of AllowedConnectionsList class.
+     */
+    public AllowedConnectionsList() {
+    }
+
+    /**
      * Get the value property: The value property.
-     *
+     * 
      * @return the value value.
      */
     public List<AllowedConnectionsResourceInner> value() {
@@ -39,7 +43,7 @@ public final class AllowedConnectionsList {
 
     /**
      * Get the nextLink property: The URI to fetch the next page.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -48,7 +52,7 @@ public final class AllowedConnectionsList {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

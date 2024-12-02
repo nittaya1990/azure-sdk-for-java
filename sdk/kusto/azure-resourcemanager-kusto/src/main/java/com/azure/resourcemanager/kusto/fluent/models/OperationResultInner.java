@@ -5,17 +5,14 @@
 package com.azure.resourcemanager.kusto.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.resourcemanager.kusto.models.ProvisioningState;
 import com.azure.resourcemanager.kusto.models.Status;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
 /** Operation Result Entity. */
 @Fluent
 public final class OperationResultInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OperationResultInner.class);
-
     /*
      * ID of the resource.
      */
@@ -63,6 +60,10 @@ public final class OperationResultInner {
      */
     @JsonProperty(value = "error")
     private OperationResultErrorProperties innerError;
+
+    /** Creates an instance of OperationResultInner class. */
+    public OperationResultInner() {
+    }
 
     /**
      * Get the id property: ID of the resource.
@@ -190,6 +191,15 @@ public final class OperationResultInner {
         }
         this.innerProperties().withOperationKind(operationKind);
         return this;
+    }
+
+    /**
+     * Get the provisioningState property: The provisioned state of the resource.
+     *
+     * @return the provisioningState value.
+     */
+    public ProvisioningState provisioningState() {
+        return this.innerProperties() == null ? null : this.innerProperties().provisioningState();
     }
 
     /**

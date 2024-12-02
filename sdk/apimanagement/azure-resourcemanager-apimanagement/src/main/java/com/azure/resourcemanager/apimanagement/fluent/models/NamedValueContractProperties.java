@@ -8,26 +8,21 @@ import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.models.KeyVaultContractProperties;
 import com.azure.resourcemanager.apimanagement.models.NamedValueEntityBaseParameters;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** NamedValue Contract properties. */
 @Fluent
 public final class NamedValueContractProperties extends NamedValueEntityBaseParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(NamedValueContractProperties.class);
-
     /*
-     * Unique name of NamedValue. It may contain only letters, digits, period,
-     * dash, and underscore characters.
+     * Unique name of NamedValue. It may contain only letters, digits, period, dash, and underscore characters.
      */
     @JsonProperty(value = "displayName", required = true)
     private String displayName;
 
     /*
-     * Value of the NamedValue. Can contain policy expressions. It may not be
-     * empty or consist only of whitespace. This property will not be filled on
-     * 'GET' operations! Use '/listSecrets' POST request to get the value.
+     * Value of the NamedValue. Can contain policy expressions. It may not be empty or consist only of whitespace. This
+     * property will not be filled on 'GET' operations! Use '/listSecrets' POST request to get the value.
      */
     @JsonProperty(value = "value")
     private String value;
@@ -37,6 +32,10 @@ public final class NamedValueContractProperties extends NamedValueEntityBasePara
      */
     @JsonProperty(value = "keyVault")
     private KeyVaultContractProperties keyVault;
+
+    /** Creates an instance of NamedValueContractProperties class. */
+    public NamedValueContractProperties() {
+    }
 
     /**
      * Get the displayName property: Unique name of NamedValue. It may contain only letters, digits, period, dash, and
@@ -127,13 +126,13 @@ public final class NamedValueContractProperties extends NamedValueEntityBasePara
     public void validate() {
         super.validate();
         if (displayName() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property displayName in model NamedValueContractProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property displayName in model NamedValueContractProperties"));
         }
         if (keyVault() != null) {
             keyVault().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(NamedValueContractProperties.class);
 }

@@ -5,17 +5,13 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.models.RequestReportRecordContractInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Paged Report records list representation. */
 @Fluent
 public final class RequestReportCollection {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RequestReportCollection.class);
-
     /*
      * Page values.
      */
@@ -27,6 +23,10 @@ public final class RequestReportCollection {
      */
     @JsonProperty(value = "count")
     private Long count;
+
+    /** Creates an instance of RequestReportCollection class. */
+    public RequestReportCollection() {
+    }
 
     /**
      * Get the value property: Page values.

@@ -5,26 +5,42 @@
 package com.azure.resourcemanager.postgresqlflexibleserver.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.postgresqlflexibleserver.models.DelegatedSubnetUsage;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Virtual network subnet usage data. */
+/**
+ * Virtual network subnet usage data.
+ */
 @Immutable
 public final class VirtualNetworkSubnetUsageResultInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(VirtualNetworkSubnetUsageResultInner.class);
-
     /*
      * The delegatedSubnetsUsage property.
      */
     @JsonProperty(value = "delegatedSubnetsUsage", access = JsonProperty.Access.WRITE_ONLY)
     private List<DelegatedSubnetUsage> delegatedSubnetsUsage;
 
+    /*
+     * location of the delegated subnet usage
+     */
+    @JsonProperty(value = "location", access = JsonProperty.Access.WRITE_ONLY)
+    private String location;
+
+    /*
+     * subscriptionId of the delegated subnet usage
+     */
+    @JsonProperty(value = "subscriptionId", access = JsonProperty.Access.WRITE_ONLY)
+    private String subscriptionId;
+
+    /**
+     * Creates an instance of VirtualNetworkSubnetUsageResultInner class.
+     */
+    public VirtualNetworkSubnetUsageResultInner() {
+    }
+
     /**
      * Get the delegatedSubnetsUsage property: The delegatedSubnetsUsage property.
-     *
+     * 
      * @return the delegatedSubnetsUsage value.
      */
     public List<DelegatedSubnetUsage> delegatedSubnetsUsage() {
@@ -32,8 +48,26 @@ public final class VirtualNetworkSubnetUsageResultInner {
     }
 
     /**
+     * Get the location property: location of the delegated subnet usage.
+     * 
+     * @return the location value.
+     */
+    public String location() {
+        return this.location;
+    }
+
+    /**
+     * Get the subscriptionId property: subscriptionId of the delegated subnet usage.
+     * 
+     * @return the subscriptionId value.
+     */
+    public String subscriptionId() {
+        return this.subscriptionId;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

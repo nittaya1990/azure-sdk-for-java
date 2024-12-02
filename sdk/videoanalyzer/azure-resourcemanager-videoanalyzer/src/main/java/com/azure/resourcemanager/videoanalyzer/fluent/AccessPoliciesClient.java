@@ -21,7 +21,7 @@ public interface AccessPoliciesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of AccessPolicyEntity items.
+     * @return a collection of AccessPolicyEntity items as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<AccessPolicyEntityInner> list(String resourceGroupName, String accountName);
@@ -37,11 +37,11 @@ public interface AccessPoliciesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of AccessPolicyEntity items.
+     * @return a collection of AccessPolicyEntity items as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<AccessPolicyEntityInner> list(
-        String resourceGroupName, String accountName, Integer top, Context context);
+    PagedIterable<AccessPolicyEntityInner> list(String resourceGroupName, String accountName, Integer top,
+        Context context);
 
     /**
      * Retrieves an existing access policy resource with the given name.
@@ -67,11 +67,12 @@ public interface AccessPoliciesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return access policies help define the authentication rules, and control access to specific video resources.
+     * @return access policies help define the authentication rules, and control access to specific video resources
+     *     along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<AccessPolicyEntityInner> getWithResponse(
-        String resourceGroupName, String accountName, String accessPolicyName, Context context);
+    Response<AccessPolicyEntityInner> getWithResponse(String resourceGroupName, String accountName,
+        String accessPolicyName, Context context);
 
     /**
      * Creates a new access policy resource or updates an existing one with the given name.
@@ -86,8 +87,8 @@ public interface AccessPoliciesClient {
      * @return access policies help define the authentication rules, and control access to specific video resources.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    AccessPolicyEntityInner createOrUpdate(
-        String resourceGroupName, String accountName, String accessPolicyName, AccessPolicyEntityInner parameters);
+    AccessPolicyEntityInner createOrUpdate(String resourceGroupName, String accountName, String accessPolicyName,
+        AccessPolicyEntityInner parameters);
 
     /**
      * Creates a new access policy resource or updates an existing one with the given name.
@@ -100,15 +101,12 @@ public interface AccessPoliciesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return access policies help define the authentication rules, and control access to specific video resources.
+     * @return access policies help define the authentication rules, and control access to specific video resources
+     *     along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<AccessPolicyEntityInner> createOrUpdateWithResponse(
-        String resourceGroupName,
-        String accountName,
-        String accessPolicyName,
-        AccessPolicyEntityInner parameters,
-        Context context);
+    Response<AccessPolicyEntityInner> createOrUpdateWithResponse(String resourceGroupName, String accountName,
+        String accessPolicyName, AccessPolicyEntityInner parameters, Context context);
 
     /**
      * Deletes an existing access policy resource with the given name.
@@ -133,11 +131,11 @@ public interface AccessPoliciesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<Void> deleteWithResponse(
-        String resourceGroupName, String accountName, String accessPolicyName, Context context);
+    Response<Void> deleteWithResponse(String resourceGroupName, String accountName, String accessPolicyName,
+        Context context);
 
     /**
      * Updates individual properties of an existing access policy resource with the given name.
@@ -152,8 +150,8 @@ public interface AccessPoliciesClient {
      * @return access policies help define the authentication rules, and control access to specific video resources.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    AccessPolicyEntityInner update(
-        String resourceGroupName, String accountName, String accessPolicyName, AccessPolicyEntityInner parameters);
+    AccessPolicyEntityInner update(String resourceGroupName, String accountName, String accessPolicyName,
+        AccessPolicyEntityInner parameters);
 
     /**
      * Updates individual properties of an existing access policy resource with the given name.
@@ -166,13 +164,10 @@ public interface AccessPoliciesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return access policies help define the authentication rules, and control access to specific video resources.
+     * @return access policies help define the authentication rules, and control access to specific video resources
+     *     along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<AccessPolicyEntityInner> updateWithResponse(
-        String resourceGroupName,
-        String accountName,
-        String accessPolicyName,
-        AccessPolicyEntityInner parameters,
-        Context context);
+    Response<AccessPolicyEntityInner> updateWithResponse(String resourceGroupName, String accountName,
+        String accessPolicyName, AccessPolicyEntityInner parameters, Context context);
 }

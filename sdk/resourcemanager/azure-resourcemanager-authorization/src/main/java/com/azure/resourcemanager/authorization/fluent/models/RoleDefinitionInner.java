@@ -5,69 +5,48 @@
 package com.azure.resourcemanager.authorization.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonSerializable;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import java.io.IOException;
+import java.time.OffsetDateTime;
 import java.util.List;
 
-/** Role definition. */
-@JsonFlatten
+/**
+ * Role definition.
+ */
 @Fluent
-public class RoleDefinitionInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RoleDefinitionInner.class);
-
+public final class RoleDefinitionInner implements JsonSerializable<RoleDefinitionInner> {
     /*
      * The role definition ID.
      */
-    @JsonProperty(value = "id", access = JsonProperty.Access.WRITE_ONLY)
     private String id;
 
     /*
      * The role definition name.
      */
-    @JsonProperty(value = "name", access = JsonProperty.Access.WRITE_ONLY)
     private String name;
 
     /*
      * The role definition type.
      */
-    @JsonProperty(value = "type", access = JsonProperty.Access.WRITE_ONLY)
     private String type;
 
     /*
-     * The role name.
+     * Role definition properties.
      */
-    @JsonProperty(value = "properties.roleName")
-    private String roleName;
+    private RoleDefinitionProperties innerProperties;
 
-    /*
-     * The role definition description.
+    /**
+     * Creates an instance of RoleDefinitionInner class.
      */
-    @JsonProperty(value = "properties.description")
-    private String description;
-
-    /*
-     * The role type.
-     */
-    @JsonProperty(value = "properties.type")
-    private String roleType;
-
-    /*
-     * Role definition permissions.
-     */
-    @JsonProperty(value = "properties.permissions")
-    private List<PermissionInner> permissions;
-
-    /*
-     * Role definition assignable scopes.
-     */
-    @JsonProperty(value = "properties.assignableScopes")
-    private List<String> assignableScopes;
+    public RoleDefinitionInner() {
+    }
 
     /**
      * Get the id property: The role definition ID.
-     *
+     * 
      * @return the id value.
      */
     public String id() {
@@ -76,7 +55,7 @@ public class RoleDefinitionInner {
 
     /**
      * Get the name property: The role definition name.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -85,7 +64,7 @@ public class RoleDefinitionInner {
 
     /**
      * Get the type property: The role definition type.
-     *
+     * 
      * @return the type value.
      */
     public String type() {
@@ -93,113 +72,215 @@ public class RoleDefinitionInner {
     }
 
     /**
+     * Get the innerProperties property: Role definition properties.
+     * 
+     * @return the innerProperties value.
+     */
+    private RoleDefinitionProperties innerProperties() {
+        return this.innerProperties;
+    }
+
+    /**
      * Get the roleName property: The role name.
-     *
+     * 
      * @return the roleName value.
      */
     public String roleName() {
-        return this.roleName;
+        return this.innerProperties() == null ? null : this.innerProperties().roleName();
     }
 
     /**
      * Set the roleName property: The role name.
-     *
+     * 
      * @param roleName the roleName value to set.
      * @return the RoleDefinitionInner object itself.
      */
     public RoleDefinitionInner withRoleName(String roleName) {
-        this.roleName = roleName;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new RoleDefinitionProperties();
+        }
+        this.innerProperties().withRoleName(roleName);
         return this;
     }
 
     /**
      * Get the description property: The role definition description.
-     *
+     * 
      * @return the description value.
      */
     public String description() {
-        return this.description;
+        return this.innerProperties() == null ? null : this.innerProperties().description();
     }
 
     /**
      * Set the description property: The role definition description.
-     *
+     * 
      * @param description the description value to set.
      * @return the RoleDefinitionInner object itself.
      */
     public RoleDefinitionInner withDescription(String description) {
-        this.description = description;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new RoleDefinitionProperties();
+        }
+        this.innerProperties().withDescription(description);
         return this;
     }
 
     /**
      * Get the roleType property: The role type.
-     *
+     * 
      * @return the roleType value.
      */
     public String roleType() {
-        return this.roleType;
+        return this.innerProperties() == null ? null : this.innerProperties().roleType();
     }
 
     /**
      * Set the roleType property: The role type.
-     *
+     * 
      * @param roleType the roleType value to set.
      * @return the RoleDefinitionInner object itself.
      */
     public RoleDefinitionInner withRoleType(String roleType) {
-        this.roleType = roleType;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new RoleDefinitionProperties();
+        }
+        this.innerProperties().withRoleType(roleType);
         return this;
     }
 
     /**
      * Get the permissions property: Role definition permissions.
-     *
+     * 
      * @return the permissions value.
      */
     public List<PermissionInner> permissions() {
-        return this.permissions;
+        return this.innerProperties() == null ? null : this.innerProperties().permissions();
     }
 
     /**
      * Set the permissions property: Role definition permissions.
-     *
+     * 
      * @param permissions the permissions value to set.
      * @return the RoleDefinitionInner object itself.
      */
     public RoleDefinitionInner withPermissions(List<PermissionInner> permissions) {
-        this.permissions = permissions;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new RoleDefinitionProperties();
+        }
+        this.innerProperties().withPermissions(permissions);
         return this;
     }
 
     /**
      * Get the assignableScopes property: Role definition assignable scopes.
-     *
+     * 
      * @return the assignableScopes value.
      */
     public List<String> assignableScopes() {
-        return this.assignableScopes;
+        return this.innerProperties() == null ? null : this.innerProperties().assignableScopes();
     }
 
     /**
      * Set the assignableScopes property: Role definition assignable scopes.
-     *
+     * 
      * @param assignableScopes the assignableScopes value to set.
      * @return the RoleDefinitionInner object itself.
      */
     public RoleDefinitionInner withAssignableScopes(List<String> assignableScopes) {
-        this.assignableScopes = assignableScopes;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new RoleDefinitionProperties();
+        }
+        this.innerProperties().withAssignableScopes(assignableScopes);
         return this;
     }
 
     /**
+     * Get the createdOn property: Time it was created.
+     * 
+     * @return the createdOn value.
+     */
+    public OffsetDateTime createdOn() {
+        return this.innerProperties() == null ? null : this.innerProperties().createdOn();
+    }
+
+    /**
+     * Get the updatedOn property: Time it was updated.
+     * 
+     * @return the updatedOn value.
+     */
+    public OffsetDateTime updatedOn() {
+        return this.innerProperties() == null ? null : this.innerProperties().updatedOn();
+    }
+
+    /**
+     * Get the createdBy property: Id of the user who created the assignment.
+     * 
+     * @return the createdBy value.
+     */
+    public String createdBy() {
+        return this.innerProperties() == null ? null : this.innerProperties().createdBy();
+    }
+
+    /**
+     * Get the updatedBy property: Id of the user who updated the assignment.
+     * 
+     * @return the updatedBy value.
+     */
+    public String updatedBy() {
+        return this.innerProperties() == null ? null : this.innerProperties().updatedBy();
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
-        if (permissions() != null) {
-            permissions().forEach(e -> e.validate());
+        if (innerProperties() != null) {
+            innerProperties().validate();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of RoleDefinitionInner from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of RoleDefinitionInner if the JsonReader was pointing to an instance of it, or null if it was
+     * pointing to JSON null.
+     * @throws IOException If an error occurs while reading the RoleDefinitionInner.
+     */
+    public static RoleDefinitionInner fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            RoleDefinitionInner deserializedRoleDefinitionInner = new RoleDefinitionInner();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("id".equals(fieldName)) {
+                    deserializedRoleDefinitionInner.id = reader.getString();
+                } else if ("name".equals(fieldName)) {
+                    deserializedRoleDefinitionInner.name = reader.getString();
+                } else if ("type".equals(fieldName)) {
+                    deserializedRoleDefinitionInner.type = reader.getString();
+                } else if ("properties".equals(fieldName)) {
+                    deserializedRoleDefinitionInner.innerProperties = RoleDefinitionProperties.fromJson(reader);
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedRoleDefinitionInner;
+        });
     }
 }

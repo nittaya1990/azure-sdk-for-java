@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.security.fluent.models.SecureScoreItemInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** List of secure scores. */
+/**
+ * List of secure scores.
+ */
 @Immutable
 public final class SecureScoresList {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SecureScoresList.class);
-
     /*
      * Collection of secure scores in this page
      */
@@ -29,8 +27,14 @@ public final class SecureScoresList {
     private String nextLink;
 
     /**
+     * Creates an instance of SecureScoresList class.
+     */
+    public SecureScoresList() {
+    }
+
+    /**
      * Get the value property: Collection of secure scores in this page.
-     *
+     * 
      * @return the value value.
      */
     public List<SecureScoreItemInner> value() {
@@ -39,7 +43,7 @@ public final class SecureScoresList {
 
     /**
      * Get the nextLink property: The URI to fetch the next page.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -48,7 +52,7 @@ public final class SecureScoresList {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

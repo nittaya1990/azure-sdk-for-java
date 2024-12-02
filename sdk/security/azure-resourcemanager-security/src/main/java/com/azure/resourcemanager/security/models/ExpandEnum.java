@@ -8,17 +8,32 @@ import com.azure.core.util.ExpandableStringEnum;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.Collection;
 
-/** Defines values for ExpandEnum. */
+/**
+ * Defines values for ExpandEnum.
+ */
 public final class ExpandEnum extends ExpandableStringEnum<ExpandEnum> {
-    /** Static value links for ExpandEnum. */
+    /**
+     * Static value links for ExpandEnum.
+     */
     public static final ExpandEnum LINKS = fromString("links");
 
-    /** Static value metadata for ExpandEnum. */
+    /**
+     * Static value metadata for ExpandEnum.
+     */
     public static final ExpandEnum METADATA = fromString("metadata");
 
     /**
+     * Creates a new instance of ExpandEnum value.
+     * 
+     * @deprecated Use the {@link #fromString(String)} factory method.
+     */
+    @Deprecated
+    public ExpandEnum() {
+    }
+
+    /**
      * Creates or finds a ExpandEnum from its string representation.
-     *
+     * 
      * @param name a name to look for.
      * @return the corresponding ExpandEnum.
      */
@@ -27,7 +42,11 @@ public final class ExpandEnum extends ExpandableStringEnum<ExpandEnum> {
         return fromString(name, ExpandEnum.class);
     }
 
-    /** @return known ExpandEnum values. */
+    /**
+     * Gets known ExpandEnum values.
+     * 
+     * @return known ExpandEnum values.
+     */
     public static Collection<ExpandEnum> values() {
         return values(ExpandEnum.class);
     }

@@ -4,12 +4,10 @@
 
 package com.azure.resourcemanager.synapse.implementation;
 
-import com.azure.core.http.rest.Response;
 import com.azure.core.management.Region;
 import com.azure.core.util.Context;
 import com.azure.resourcemanager.synapse.fluent.models.SqlPoolInner;
 import com.azure.resourcemanager.synapse.models.CreateMode;
-import com.azure.resourcemanager.synapse.models.ResourceMoveDefinition;
 import com.azure.resourcemanager.synapse.models.Sku;
 import com.azure.resourcemanager.synapse.models.SqlPool;
 import com.azure.resourcemanager.synapse.models.SqlPoolPatchInfo;
@@ -104,6 +102,10 @@ public final class SqlPoolImpl implements SqlPool, SqlPool.Definition, SqlPool.U
         return this.location();
     }
 
+    public String resourceGroupName() {
+        return resourceGroupName;
+    }
+
     public SqlPoolInner innerModel() {
         return this.innerObject;
     }
@@ -127,20 +129,16 @@ public final class SqlPoolImpl implements SqlPool, SqlPool.Definition, SqlPool.U
     }
 
     public SqlPool create() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getSqlPools()
-                .create(resourceGroupName, workspaceName, sqlPoolName, this.innerModel(), Context.NONE);
+        this.innerObject = serviceManager.serviceClient()
+            .getSqlPools()
+            .create(resourceGroupName, workspaceName, sqlPoolName, this.innerModel(), Context.NONE);
         return this;
     }
 
     public SqlPool create(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getSqlPools()
-                .create(resourceGroupName, workspaceName, sqlPoolName, this.innerModel(), context);
+        this.innerObject = serviceManager.serviceClient()
+            .getSqlPools()
+            .create(resourceGroupName, workspaceName, sqlPoolName, this.innerModel(), context);
         return this;
     }
 
@@ -156,77 +154,57 @@ public final class SqlPoolImpl implements SqlPool, SqlPool.Definition, SqlPool.U
     }
 
     public SqlPool apply() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getSqlPools()
-                .updateWithResponse(resourceGroupName, workspaceName, sqlPoolName, updateSqlPoolInfo, Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getSqlPools()
+            .update(resourceGroupName, workspaceName, sqlPoolName, updateSqlPoolInfo, Context.NONE);
         return this;
     }
 
     public SqlPool apply(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getSqlPools()
-                .updateWithResponse(resourceGroupName, workspaceName, sqlPoolName, updateSqlPoolInfo, context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getSqlPools()
+            .update(resourceGroupName, workspaceName, sqlPoolName, updateSqlPoolInfo, context);
         return this;
     }
 
     SqlPoolImpl(SqlPoolInner innerObject, com.azure.resourcemanager.synapse.SynapseManager serviceManager) {
         this.innerObject = innerObject;
         this.serviceManager = serviceManager;
-        this.resourceGroupName = Utils.getValueFromIdByName(innerObject.id(), "resourceGroups");
-        this.workspaceName = Utils.getValueFromIdByName(innerObject.id(), "workspaces");
-        this.sqlPoolName = Utils.getValueFromIdByName(innerObject.id(), "sqlPools");
+        this.resourceGroupName = ResourceManagerUtils.getValueFromIdByName(innerObject.id(), "resourceGroups");
+        this.workspaceName = ResourceManagerUtils.getValueFromIdByName(innerObject.id(), "workspaces");
+        this.sqlPoolName = ResourceManagerUtils.getValueFromIdByName(innerObject.id(), "sqlPools");
     }
 
     public SqlPool refresh() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getSqlPools()
-                .getWithResponse(resourceGroupName, workspaceName, sqlPoolName, Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getSqlPools()
+            .getWithResponse(resourceGroupName, workspaceName, sqlPoolName, Context.NONE)
+            .getValue();
         return this;
     }
 
     public SqlPool refresh(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getSqlPools()
-                .getWithResponse(resourceGroupName, workspaceName, sqlPoolName, context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getSqlPools()
+            .getWithResponse(resourceGroupName, workspaceName, sqlPoolName, context)
+            .getValue();
         return this;
     }
 
-    public Object pause() {
+    public SqlPool pause() {
         return serviceManager.sqlPools().pause(resourceGroupName, workspaceName, sqlPoolName);
     }
 
-    public Object pause(Context context) {
+    public SqlPool pause(Context context) {
         return serviceManager.sqlPools().pause(resourceGroupName, workspaceName, sqlPoolName, context);
     }
 
-    public Object resume() {
+    public SqlPool resume() {
         return serviceManager.sqlPools().resume(resourceGroupName, workspaceName, sqlPoolName);
     }
 
-    public Object resume(Context context) {
+    public SqlPool resume(Context context) {
         return serviceManager.sqlPools().resume(resourceGroupName, workspaceName, sqlPoolName, context);
-    }
-
-    public void rename(ResourceMoveDefinition parameters) {
-        serviceManager.sqlPools().rename(resourceGroupName, workspaceName, sqlPoolName, parameters);
-    }
-
-    public Response<Void> renameWithResponse(ResourceMoveDefinition parameters, Context context) {
-        return serviceManager
-            .sqlPools()
-            .renameWithResponse(resourceGroupName, workspaceName, sqlPoolName, parameters, context);
     }
 
     public SqlPoolImpl withRegion(Region location) {
@@ -270,13 +248,8 @@ public final class SqlPoolImpl implements SqlPool, SqlPool.Definition, SqlPool.U
     }
 
     public SqlPoolImpl withCollation(String collation) {
-        if (isInCreateMode()) {
-            this.innerModel().withCollation(collation);
-            return this;
-        } else {
-            this.updateSqlPoolInfo.withCollation(collation);
-            return this;
-        }
+        this.innerModel().withCollation(collation);
+        return this;
     }
 
     public SqlPoolImpl withSourceDatabaseId(String sourceDatabaseId) {
@@ -309,24 +282,9 @@ public final class SqlPoolImpl implements SqlPool, SqlPool.Definition, SqlPool.U
         }
     }
 
-    public SqlPoolImpl withStatus(String status) {
-        if (isInCreateMode()) {
-            this.innerModel().withStatus(status);
-            return this;
-        } else {
-            this.updateSqlPoolInfo.withStatus(status);
-            return this;
-        }
-    }
-
     public SqlPoolImpl withRestorePointInTime(OffsetDateTime restorePointInTime) {
-        if (isInCreateMode()) {
-            this.innerModel().withRestorePointInTime(restorePointInTime);
-            return this;
-        } else {
-            this.updateSqlPoolInfo.withRestorePointInTime(restorePointInTime);
-            return this;
-        }
+        this.innerModel().withRestorePointInTime(restorePointInTime);
+        return this;
     }
 
     public SqlPoolImpl withCreateMode(CreateMode createMode) {
@@ -335,16 +293,6 @@ public final class SqlPoolImpl implements SqlPool, SqlPool.Definition, SqlPool.U
             return this;
         } else {
             this.updateSqlPoolInfo.withCreateMode(createMode);
-            return this;
-        }
-    }
-
-    public SqlPoolImpl withCreationDate(OffsetDateTime creationDate) {
-        if (isInCreateMode()) {
-            this.innerModel().withCreationDate(creationDate);
-            return this;
-        } else {
-            this.updateSqlPoolInfo.withCreationDate(creationDate);
             return this;
         }
     }
@@ -360,13 +308,8 @@ public final class SqlPoolImpl implements SqlPool, SqlPool.Definition, SqlPool.U
     }
 
     public SqlPoolImpl withSourceDatabaseDeletionDate(OffsetDateTime sourceDatabaseDeletionDate) {
-        if (isInCreateMode()) {
-            this.innerModel().withSourceDatabaseDeletionDate(sourceDatabaseDeletionDate);
-            return this;
-        } else {
-            this.updateSqlPoolInfo.withSourceDatabaseDeletionDate(sourceDatabaseDeletionDate);
-            return this;
-        }
+        this.innerModel().withSourceDatabaseDeletionDate(sourceDatabaseDeletionDate);
+        return this;
     }
 
     private boolean isInCreateMode() {

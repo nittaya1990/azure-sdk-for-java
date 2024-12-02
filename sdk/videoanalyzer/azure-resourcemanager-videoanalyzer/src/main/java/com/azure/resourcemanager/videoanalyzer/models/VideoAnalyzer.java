@@ -126,6 +126,13 @@ public interface VideoAnalyzer {
     String regionName();
 
     /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
+
+    /**
      * Gets the inner com.azure.resourcemanager.videoanalyzer.fluent.models.VideoAnalyzerInner object.
      *
      * @return the inner object.
@@ -133,17 +140,16 @@ public interface VideoAnalyzer {
     VideoAnalyzerInner innerModel();
 
     /** The entirety of the VideoAnalyzer definition. */
-    interface Definition
-        extends DefinitionStages.Blank,
-            DefinitionStages.WithLocation,
-            DefinitionStages.WithResourceGroup,
-            DefinitionStages.WithCreate {
+    interface Definition extends DefinitionStages.Blank, DefinitionStages.WithLocation,
+        DefinitionStages.WithResourceGroup, DefinitionStages.WithCreate {
     }
+
     /** The VideoAnalyzer definition stages. */
     interface DefinitionStages {
         /** The first stage of the VideoAnalyzer definition. */
         interface Blank extends WithLocation {
         }
+
         /** The stage of the VideoAnalyzer definition allowing to specify location. */
         interface WithLocation {
             /**
@@ -162,6 +168,7 @@ public interface VideoAnalyzer {
              */
             WithResourceGroup withRegion(String location);
         }
+
         /** The stage of the VideoAnalyzer definition allowing to specify parent resource. */
         interface WithResourceGroup {
             /**
@@ -172,18 +179,14 @@ public interface VideoAnalyzer {
              */
             WithCreate withExistingResourceGroup(String resourceGroupName);
         }
+
         /**
          * The stage of the VideoAnalyzer definition which contains all the minimum required properties for the resource
          * to be created, but also allows for any other optional properties to be specified.
          */
-        interface WithCreate
-            extends DefinitionStages.WithTags,
-                DefinitionStages.WithIdentity,
-                DefinitionStages.WithStorageAccounts,
-                DefinitionStages.WithEncryption,
-                DefinitionStages.WithIotHubs,
-                DefinitionStages.WithPublicNetworkAccess,
-                DefinitionStages.WithNetworkAccessControl {
+        interface WithCreate extends DefinitionStages.WithTags, DefinitionStages.WithIdentity,
+            DefinitionStages.WithStorageAccounts, DefinitionStages.WithEncryption, DefinitionStages.WithIotHubs,
+            DefinitionStages.WithPublicNetworkAccess, DefinitionStages.WithNetworkAccessControl {
             /**
              * Executes the create request.
              *
@@ -199,6 +202,7 @@ public interface VideoAnalyzer {
              */
             VideoAnalyzer create(Context context);
         }
+
         /** The stage of the VideoAnalyzer definition allowing to specify tags. */
         interface WithTags {
             /**
@@ -209,6 +213,7 @@ public interface VideoAnalyzer {
              */
             WithCreate withTags(Map<String, String> tags);
         }
+
         /** The stage of the VideoAnalyzer definition allowing to specify identity. */
         interface WithIdentity {
             /**
@@ -219,6 +224,7 @@ public interface VideoAnalyzer {
              */
             WithCreate withIdentity(VideoAnalyzerIdentity identity);
         }
+
         /** The stage of the VideoAnalyzer definition allowing to specify storageAccounts. */
         interface WithStorageAccounts {
             /**
@@ -229,6 +235,7 @@ public interface VideoAnalyzer {
              */
             WithCreate withStorageAccounts(List<StorageAccount> storageAccounts);
         }
+
         /** The stage of the VideoAnalyzer definition allowing to specify encryption. */
         interface WithEncryption {
             /**
@@ -239,6 +246,7 @@ public interface VideoAnalyzer {
              */
             WithCreate withEncryption(AccountEncryption encryption);
         }
+
         /** The stage of the VideoAnalyzer definition allowing to specify iotHubs. */
         interface WithIotHubs {
             /**
@@ -249,6 +257,7 @@ public interface VideoAnalyzer {
              */
             WithCreate withIotHubs(List<IotHub> iotHubs);
         }
+
         /** The stage of the VideoAnalyzer definition allowing to specify publicNetworkAccess. */
         interface WithPublicNetworkAccess {
             /**
@@ -261,6 +270,7 @@ public interface VideoAnalyzer {
              */
             WithCreate withPublicNetworkAccess(PublicNetworkAccess publicNetworkAccess);
         }
+
         /** The stage of the VideoAnalyzer definition allowing to specify networkAccessControl. */
         interface WithNetworkAccessControl {
             /**
@@ -272,6 +282,7 @@ public interface VideoAnalyzer {
             WithCreate withNetworkAccessControl(NetworkAccessControl networkAccessControl);
         }
     }
+
     /**
      * Begins update for the VideoAnalyzer resource.
      *
@@ -280,14 +291,9 @@ public interface VideoAnalyzer {
     VideoAnalyzer.Update update();
 
     /** The template for VideoAnalyzer update. */
-    interface Update
-        extends UpdateStages.WithTags,
-            UpdateStages.WithIdentity,
-            UpdateStages.WithStorageAccounts,
-            UpdateStages.WithEncryption,
-            UpdateStages.WithIotHubs,
-            UpdateStages.WithPublicNetworkAccess,
-            UpdateStages.WithNetworkAccessControl {
+    interface Update extends UpdateStages.WithTags, UpdateStages.WithIdentity, UpdateStages.WithStorageAccounts,
+        UpdateStages.WithEncryption, UpdateStages.WithIotHubs, UpdateStages.WithPublicNetworkAccess,
+        UpdateStages.WithNetworkAccessControl {
         /**
          * Executes the update request.
          *
@@ -303,6 +309,7 @@ public interface VideoAnalyzer {
          */
         VideoAnalyzer apply(Context context);
     }
+
     /** The VideoAnalyzer update stages. */
     interface UpdateStages {
         /** The stage of the VideoAnalyzer update allowing to specify tags. */
@@ -315,6 +322,7 @@ public interface VideoAnalyzer {
              */
             Update withTags(Map<String, String> tags);
         }
+
         /** The stage of the VideoAnalyzer update allowing to specify identity. */
         interface WithIdentity {
             /**
@@ -325,6 +333,7 @@ public interface VideoAnalyzer {
              */
             Update withIdentity(VideoAnalyzerIdentity identity);
         }
+
         /** The stage of the VideoAnalyzer update allowing to specify storageAccounts. */
         interface WithStorageAccounts {
             /**
@@ -335,6 +344,7 @@ public interface VideoAnalyzer {
              */
             Update withStorageAccounts(List<StorageAccount> storageAccounts);
         }
+
         /** The stage of the VideoAnalyzer update allowing to specify encryption. */
         interface WithEncryption {
             /**
@@ -345,6 +355,7 @@ public interface VideoAnalyzer {
              */
             Update withEncryption(AccountEncryption encryption);
         }
+
         /** The stage of the VideoAnalyzer update allowing to specify iotHubs. */
         interface WithIotHubs {
             /**
@@ -355,6 +366,7 @@ public interface VideoAnalyzer {
              */
             Update withIotHubs(List<IotHub> iotHubs);
         }
+
         /** The stage of the VideoAnalyzer update allowing to specify publicNetworkAccess. */
         interface WithPublicNetworkAccess {
             /**
@@ -367,6 +379,7 @@ public interface VideoAnalyzer {
              */
             Update withPublicNetworkAccess(PublicNetworkAccess publicNetworkAccess);
         }
+
         /** The stage of the VideoAnalyzer update allowing to specify networkAccessControl. */
         interface WithNetworkAccessControl {
             /**
@@ -378,6 +391,7 @@ public interface VideoAnalyzer {
             Update withNetworkAccessControl(NetworkAccessControl networkAccessControl);
         }
     }
+
     /**
      * Refreshes the resource to sync with Azure.
      *

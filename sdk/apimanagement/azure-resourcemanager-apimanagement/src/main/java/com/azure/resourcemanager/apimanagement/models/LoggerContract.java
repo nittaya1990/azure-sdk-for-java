@@ -70,6 +70,13 @@ public interface LoggerContract {
     String resourceId();
 
     /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
+
+    /**
      * Gets the inner com.azure.resourcemanager.apimanagement.fluent.models.LoggerContractInner object.
      *
      * @return the inner object.
@@ -80,33 +87,32 @@ public interface LoggerContract {
     interface Definition
         extends DefinitionStages.Blank, DefinitionStages.WithParentResource, DefinitionStages.WithCreate {
     }
+
     /** The LoggerContract definition stages. */
     interface DefinitionStages {
         /** The first stage of the LoggerContract definition. */
         interface Blank extends WithParentResource {
         }
+
         /** The stage of the LoggerContract definition allowing to specify parent resource. */
         interface WithParentResource {
             /**
              * Specifies resourceGroupName, serviceName.
              *
-             * @param resourceGroupName The name of the resource group.
+             * @param resourceGroupName The name of the resource group. The name is case insensitive.
              * @param serviceName The name of the API Management service.
              * @return the next definition stage.
              */
             WithCreate withExistingService(String resourceGroupName, String serviceName);
         }
+
         /**
          * The stage of the LoggerContract definition which contains all the minimum required properties for the
          * resource to be created, but also allows for any other optional properties to be specified.
          */
         interface WithCreate
-            extends DefinitionStages.WithLoggerType,
-                DefinitionStages.WithDescription,
-                DefinitionStages.WithCredentials,
-                DefinitionStages.WithIsBuffered,
-                DefinitionStages.WithResourceId,
-                DefinitionStages.WithIfMatch {
+            extends DefinitionStages.WithLoggerType, DefinitionStages.WithDescription, DefinitionStages.WithCredentials,
+            DefinitionStages.WithIsBuffered, DefinitionStages.WithResourceId, DefinitionStages.WithIfMatch {
             /**
              * Executes the create request.
              *
@@ -122,6 +128,7 @@ public interface LoggerContract {
              */
             LoggerContract create(Context context);
         }
+
         /** The stage of the LoggerContract definition allowing to specify loggerType. */
         interface WithLoggerType {
             /**
@@ -132,6 +139,7 @@ public interface LoggerContract {
              */
             WithCreate withLoggerType(LoggerType loggerType);
         }
+
         /** The stage of the LoggerContract definition allowing to specify description. */
         interface WithDescription {
             /**
@@ -142,6 +150,7 @@ public interface LoggerContract {
              */
             WithCreate withDescription(String description);
         }
+
         /** The stage of the LoggerContract definition allowing to specify credentials. */
         interface WithCredentials {
             /**
@@ -154,6 +163,7 @@ public interface LoggerContract {
              */
             WithCreate withCredentials(Map<String, String> credentials);
         }
+
         /** The stage of the LoggerContract definition allowing to specify isBuffered. */
         interface WithIsBuffered {
             /**
@@ -166,6 +176,7 @@ public interface LoggerContract {
              */
             WithCreate withIsBuffered(Boolean isBuffered);
         }
+
         /** The stage of the LoggerContract definition allowing to specify resourceId. */
         interface WithResourceId {
             /**
@@ -178,6 +189,7 @@ public interface LoggerContract {
              */
             WithCreate withResourceId(String resourceId);
         }
+
         /** The stage of the LoggerContract definition allowing to specify ifMatch. */
         interface WithIfMatch {
             /**
@@ -191,6 +203,7 @@ public interface LoggerContract {
             WithCreate withIfMatch(String ifMatch);
         }
     }
+
     /**
      * Begins update for the LoggerContract resource.
      *
@@ -199,12 +212,8 @@ public interface LoggerContract {
     LoggerContract.Update update();
 
     /** The template for LoggerContract update. */
-    interface Update
-        extends UpdateStages.WithLoggerType,
-            UpdateStages.WithDescription,
-            UpdateStages.WithCredentials,
-            UpdateStages.WithIsBuffered,
-            UpdateStages.WithIfMatch {
+    interface Update extends UpdateStages.WithLoggerType, UpdateStages.WithDescription, UpdateStages.WithCredentials,
+        UpdateStages.WithIsBuffered, UpdateStages.WithIfMatch {
         /**
          * Executes the update request.
          *
@@ -220,6 +229,7 @@ public interface LoggerContract {
          */
         LoggerContract apply(Context context);
     }
+
     /** The LoggerContract update stages. */
     interface UpdateStages {
         /** The stage of the LoggerContract update allowing to specify loggerType. */
@@ -232,6 +242,7 @@ public interface LoggerContract {
              */
             Update withLoggerType(LoggerType loggerType);
         }
+
         /** The stage of the LoggerContract update allowing to specify description. */
         interface WithDescription {
             /**
@@ -242,6 +253,7 @@ public interface LoggerContract {
              */
             Update withDescription(String description);
         }
+
         /** The stage of the LoggerContract update allowing to specify credentials. */
         interface WithCredentials {
             /**
@@ -252,6 +264,7 @@ public interface LoggerContract {
              */
             Update withCredentials(Map<String, String> credentials);
         }
+
         /** The stage of the LoggerContract update allowing to specify isBuffered. */
         interface WithIsBuffered {
             /**
@@ -264,6 +277,7 @@ public interface LoggerContract {
              */
             Update withIsBuffered(Boolean isBuffered);
         }
+
         /** The stage of the LoggerContract update allowing to specify ifMatch. */
         interface WithIfMatch {
             /**
@@ -277,6 +291,7 @@ public interface LoggerContract {
             Update withIfMatch(String ifMatch);
         }
     }
+
     /**
      * Refreshes the resource to sync with Azure.
      *

@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.resourcehealth.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Recommended action for the service health event. */
 @Fluent
 public final class EventPropertiesRecommendedActionsItem {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(EventPropertiesRecommendedActionsItem.class);
-
     /*
      * Recommended action group Id for the service health event.
      */
@@ -25,6 +21,10 @@ public final class EventPropertiesRecommendedActionsItem {
      */
     @JsonProperty(value = "actionText")
     private String actionText;
+
+    /** Creates an instance of EventPropertiesRecommendedActionsItem class. */
+    public EventPropertiesRecommendedActionsItem() {
+    }
 
     /**
      * Get the groupId property: Recommended action group Id for the service health event.

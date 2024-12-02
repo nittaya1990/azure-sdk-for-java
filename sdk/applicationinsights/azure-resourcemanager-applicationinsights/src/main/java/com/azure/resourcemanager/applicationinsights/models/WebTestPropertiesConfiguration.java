@@ -5,20 +5,20 @@
 package com.azure.resourcemanager.applicationinsights.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** An XML configuration specification for a WebTest. */
 @Fluent
 public final class WebTestPropertiesConfiguration {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(WebTestPropertiesConfiguration.class);
-
     /*
      * The XML specification of a WebTest to run against an application.
      */
     @JsonProperty(value = "WebTest")
     private String webTest;
+
+    /** Creates an instance of WebTestPropertiesConfiguration class. */
+    public WebTestPropertiesConfiguration() {
+    }
 
     /**
      * Get the webTest property: The XML specification of a WebTest to run against an application.

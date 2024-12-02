@@ -21,16 +21,17 @@ public final class GatewayCertificateAuthoritiesCreateOrUpdateResponse
      * @param value the deserialized value of the HTTP response.
      * @param headers the deserialized headers of the HTTP response.
      */
-    public GatewayCertificateAuthoritiesCreateOrUpdateResponse(
-        HttpRequest request,
-        int statusCode,
-        HttpHeaders rawHeaders,
-        GatewayCertificateAuthorityContractInner value,
+    public GatewayCertificateAuthoritiesCreateOrUpdateResponse(HttpRequest request, int statusCode,
+        HttpHeaders rawHeaders, GatewayCertificateAuthorityContractInner value,
         GatewayCertificateAuthoritiesCreateOrUpdateHeaders headers) {
         super(request, statusCode, rawHeaders, value, headers);
     }
 
-    /** @return the deserialized response body. */
+    /**
+     * Gets the deserialized response body.
+     *
+     * @return the deserialized response body.
+     */
     @Override
     public GatewayCertificateAuthorityContractInner getValue() {
         return super.getValue();

@@ -29,7 +29,6 @@ import com.azure.core.management.exception.ManagementException;
 import com.azure.core.management.polling.PollResult;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.core.util.polling.PollerFlux;
 import com.azure.core.util.polling.SyncPoller;
 import com.azure.resourcemanager.loganalytics.fluent.LinkedServicesClient;
@@ -41,8 +40,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in LinkedServicesClient. */
 public final class LinkedServicesClientImpl implements LinkedServicesClient {
-    private final ClientLogger logger = new ClientLogger(LinkedServicesClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final LinkedServicesService service;
 
@@ -55,8 +52,8 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
      * @param client the instance of the service client containing this operation class.
      */
     LinkedServicesClientImpl(OperationalInsightsManagementClientImpl client) {
-        this.service =
-            RestProxy.create(LinkedServicesService.class, client.getHttpPipeline(), client.getSerializerAdapter());
+        this.service
+            = RestProxy.create(LinkedServicesService.class, client.getHttpPipeline(), client.getSerializerAdapter());
         this.client = client;
     }
 
@@ -66,70 +63,44 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
      */
     @Host("{$host}")
     @ServiceInterface(name = "OperationalInsightsM")
-    private interface LinkedServicesService {
-        @Headers({"Content-Type: application/json"})
-        @Put(
-            "/subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.OperationalInsights"
-                + "/workspaces/{workspaceName}/linkedServices/{linkedServiceName}")
-        @ExpectedResponses({200, 201})
+    public interface LinkedServicesService {
+        @Headers({ "Content-Type: application/json" })
+        @Put("/subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/linkedServices/{linkedServiceName}")
+        @ExpectedResponses({ 200, 201, 202 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> createOrUpdate(
-            @HostParam("$host") String endpoint,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("workspaceName") String workspaceName,
+        Mono<Response<Flux<ByteBuffer>>> createOrUpdate(@HostParam("$host") String endpoint,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("workspaceName") String workspaceName,
             @PathParam("linkedServiceName") String linkedServiceName,
-            @PathParam("subscriptionId") String subscriptionId,
-            @QueryParam("api-version") String apiVersion,
-            @BodyParam("application/json") LinkedServiceInner parameters,
-            @HeaderParam("Accept") String accept,
+            @PathParam("subscriptionId") String subscriptionId, @QueryParam("api-version") String apiVersion,
+            @BodyParam("application/json") LinkedServiceInner parameters, @HeaderParam("Accept") String accept,
             Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Delete(
-            "/subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.OperationalInsights"
-                + "/workspaces/{workspaceName}/linkedServices/{linkedServiceName}")
-        @ExpectedResponses({200, 204})
+        @Headers({ "Content-Type: application/json" })
+        @Delete("/subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/linkedServices/{linkedServiceName}")
+        @ExpectedResponses({ 200, 202, 204 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> delete(
-            @HostParam("$host") String endpoint,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("workspaceName") String workspaceName,
-            @PathParam("linkedServiceName") String linkedServiceName,
-            @QueryParam("api-version") String apiVersion,
-            @PathParam("subscriptionId") String subscriptionId,
-            @HeaderParam("Accept") String accept,
-            Context context);
+        Mono<Response<Flux<ByteBuffer>>> delete(@HostParam("$host") String endpoint,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("workspaceName") String workspaceName,
+            @PathParam("linkedServiceName") String linkedServiceName, @QueryParam("api-version") String apiVersion,
+            @PathParam("subscriptionId") String subscriptionId, @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.OperationalInsights"
-                + "/workspaces/{workspaceName}/linkedServices/{linkedServiceName}")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/linkedServices/{linkedServiceName}")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<LinkedServiceInner>> get(
-            @HostParam("$host") String endpoint,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("workspaceName") String workspaceName,
-            @PathParam("linkedServiceName") String linkedServiceName,
-            @QueryParam("api-version") String apiVersion,
-            @PathParam("subscriptionId") String subscriptionId,
-            @HeaderParam("Accept") String accept,
-            Context context);
+        Mono<Response<LinkedServiceInner>> get(@HostParam("$host") String endpoint,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("workspaceName") String workspaceName,
+            @PathParam("linkedServiceName") String linkedServiceName, @QueryParam("api-version") String apiVersion,
+            @PathParam("subscriptionId") String subscriptionId, @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.OperationalInsights"
-                + "/workspaces/{workspaceName}/linkedServices")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/linkedServices")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<LinkedServiceListResult>> listByWorkspace(
-            @HostParam("$host") String endpoint,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("workspaceName") String workspaceName,
-            @QueryParam("api-version") String apiVersion,
-            @PathParam("subscriptionId") String subscriptionId,
-            @HeaderParam("Accept") String accept,
-            Context context);
+        Mono<Response<LinkedServiceListResult>> listByWorkspace(@HostParam("$host") String endpoint,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("workspaceName") String workspaceName,
+            @QueryParam("api-version") String apiVersion, @PathParam("subscriptionId") String subscriptionId,
+            @HeaderParam("Accept") String accept, Context context);
     }
 
     /**
@@ -142,16 +113,15 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the top level Linked service resource container.
+     * @return the top level Linked service resource container along with {@link Response} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(
-        String resourceGroupName, String workspaceName, String linkedServiceName, LinkedServiceInner parameters) {
+    private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(String resourceGroupName,
+        String workspaceName, String linkedServiceName, LinkedServiceInner parameters) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -165,31 +135,19 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
                 .error(new IllegalArgumentException("Parameter linkedServiceName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (parameters == null) {
             return Mono.error(new IllegalArgumentException("Parameter parameters is required and cannot be null."));
         } else {
             parameters.validate();
         }
+        final String apiVersion = "2020-08-01";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .createOrUpdate(
-                            this.client.getEndpoint(),
-                            resourceGroupName,
-                            workspaceName,
-                            linkedServiceName,
-                            this.client.getSubscriptionId(),
-                            this.client.getApiVersion(),
-                            parameters,
-                            accept,
-                            context))
+            .withContext(context -> service.createOrUpdate(this.client.getEndpoint(), resourceGroupName, workspaceName,
+                linkedServiceName, this.client.getSubscriptionId(), apiVersion, parameters, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -204,20 +162,15 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the top level Linked service resource container.
+     * @return the top level Linked service resource container along with {@link Response} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String linkedServiceName,
-        LinkedServiceInner parameters,
-        Context context) {
+    private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(String resourceGroupName,
+        String workspaceName, String linkedServiceName, LinkedServiceInner parameters, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -231,29 +184,19 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
                 .error(new IllegalArgumentException("Parameter linkedServiceName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (parameters == null) {
             return Mono.error(new IllegalArgumentException("Parameter parameters is required and cannot be null."));
         } else {
             parameters.validate();
         }
+        final String apiVersion = "2020-08-01";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .createOrUpdate(
-                this.client.getEndpoint(),
-                resourceGroupName,
-                workspaceName,
-                linkedServiceName,
-                this.client.getSubscriptionId(),
-                this.client.getApiVersion(),
-                parameters,
-                accept,
-                context);
+        return service.createOrUpdate(this.client.getEndpoint(), resourceGroupName, workspaceName, linkedServiceName,
+            this.client.getSubscriptionId(), apiVersion, parameters, accept, context);
     }
 
     /**
@@ -266,17 +209,15 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the top level Linked service resource container.
+     * @return the {@link PollerFlux} for polling of the top level Linked service resource container.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<LinkedServiceInner>, LinkedServiceInner> beginCreateOrUpdateAsync(
         String resourceGroupName, String workspaceName, String linkedServiceName, LinkedServiceInner parameters) {
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            createOrUpdateWithResponseAsync(resourceGroupName, workspaceName, linkedServiceName, parameters);
-        return this
-            .client
-            .<LinkedServiceInner, LinkedServiceInner>getLroResult(
-                mono, this.client.getHttpPipeline(), LinkedServiceInner.class, LinkedServiceInner.class, Context.NONE);
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = createOrUpdateWithResponseAsync(resourceGroupName, workspaceName, linkedServiceName, parameters);
+        return this.client.<LinkedServiceInner, LinkedServiceInner>getLroResult(mono, this.client.getHttpPipeline(),
+            LinkedServiceInner.class, LinkedServiceInner.class, this.client.getContext());
     }
 
     /**
@@ -290,22 +231,17 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the top level Linked service resource container.
+     * @return the {@link PollerFlux} for polling of the top level Linked service resource container.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<LinkedServiceInner>, LinkedServiceInner> beginCreateOrUpdateAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String linkedServiceName,
-        LinkedServiceInner parameters,
+        String resourceGroupName, String workspaceName, String linkedServiceName, LinkedServiceInner parameters,
         Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            createOrUpdateWithResponseAsync(resourceGroupName, workspaceName, linkedServiceName, parameters, context);
-        return this
-            .client
-            .<LinkedServiceInner, LinkedServiceInner>getLroResult(
-                mono, this.client.getHttpPipeline(), LinkedServiceInner.class, LinkedServiceInner.class, context);
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = createOrUpdateWithResponseAsync(resourceGroupName, workspaceName, linkedServiceName, parameters, context);
+        return this.client.<LinkedServiceInner, LinkedServiceInner>getLroResult(mono, this.client.getHttpPipeline(),
+            LinkedServiceInner.class, LinkedServiceInner.class, context);
     }
 
     /**
@@ -318,12 +254,12 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the top level Linked service resource container.
+     * @return the {@link SyncPoller} for polling of the top level Linked service resource container.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public SyncPoller<PollResult<LinkedServiceInner>, LinkedServiceInner> beginCreateOrUpdate(
-        String resourceGroupName, String workspaceName, String linkedServiceName, LinkedServiceInner parameters) {
-        return beginCreateOrUpdateAsync(resourceGroupName, workspaceName, linkedServiceName, parameters)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<LinkedServiceInner>, LinkedServiceInner> beginCreateOrUpdate(String resourceGroupName,
+        String workspaceName, String linkedServiceName, LinkedServiceInner parameters) {
+        return this.beginCreateOrUpdateAsync(resourceGroupName, workspaceName, linkedServiceName, parameters)
             .getSyncPoller();
     }
 
@@ -338,16 +274,12 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the top level Linked service resource container.
+     * @return the {@link SyncPoller} for polling of the top level Linked service resource container.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public SyncPoller<PollResult<LinkedServiceInner>, LinkedServiceInner> beginCreateOrUpdate(
-        String resourceGroupName,
-        String workspaceName,
-        String linkedServiceName,
-        LinkedServiceInner parameters,
-        Context context) {
-        return beginCreateOrUpdateAsync(resourceGroupName, workspaceName, linkedServiceName, parameters, context)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<LinkedServiceInner>, LinkedServiceInner> beginCreateOrUpdate(String resourceGroupName,
+        String workspaceName, String linkedServiceName, LinkedServiceInner parameters, Context context) {
+        return this.beginCreateOrUpdateAsync(resourceGroupName, workspaceName, linkedServiceName, parameters, context)
             .getSyncPoller();
     }
 
@@ -361,13 +293,12 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the top level Linked service resource container.
+     * @return the top level Linked service resource container on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<LinkedServiceInner> createOrUpdateAsync(
-        String resourceGroupName, String workspaceName, String linkedServiceName, LinkedServiceInner parameters) {
-        return beginCreateOrUpdateAsync(resourceGroupName, workspaceName, linkedServiceName, parameters)
-            .last()
+    private Mono<LinkedServiceInner> createOrUpdateAsync(String resourceGroupName, String workspaceName,
+        String linkedServiceName, LinkedServiceInner parameters) {
+        return beginCreateOrUpdateAsync(resourceGroupName, workspaceName, linkedServiceName, parameters).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
@@ -382,17 +313,12 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the top level Linked service resource container.
+     * @return the top level Linked service resource container on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<LinkedServiceInner> createOrUpdateAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String linkedServiceName,
-        LinkedServiceInner parameters,
-        Context context) {
-        return beginCreateOrUpdateAsync(resourceGroupName, workspaceName, linkedServiceName, parameters, context)
-            .last()
+    private Mono<LinkedServiceInner> createOrUpdateAsync(String resourceGroupName, String workspaceName,
+        String linkedServiceName, LinkedServiceInner parameters, Context context) {
+        return beginCreateOrUpdateAsync(resourceGroupName, workspaceName, linkedServiceName, parameters, context).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
@@ -409,8 +335,8 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
      * @return the top level Linked service resource container.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public LinkedServiceInner createOrUpdate(
-        String resourceGroupName, String workspaceName, String linkedServiceName, LinkedServiceInner parameters) {
+    public LinkedServiceInner createOrUpdate(String resourceGroupName, String workspaceName, String linkedServiceName,
+        LinkedServiceInner parameters) {
         return createOrUpdateAsync(resourceGroupName, workspaceName, linkedServiceName, parameters).block();
     }
 
@@ -428,12 +354,8 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
      * @return the top level Linked service resource container.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public LinkedServiceInner createOrUpdate(
-        String resourceGroupName,
-        String workspaceName,
-        String linkedServiceName,
-        LinkedServiceInner parameters,
-        Context context) {
+    public LinkedServiceInner createOrUpdate(String resourceGroupName, String workspaceName, String linkedServiceName,
+        LinkedServiceInner parameters, Context context) {
         return createOrUpdateAsync(resourceGroupName, workspaceName, linkedServiceName, parameters, context).block();
     }
 
@@ -446,16 +368,15 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the top level Linked service resource container.
+     * @return the top level Linked service resource container along with {@link Response} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(
-        String resourceGroupName, String workspaceName, String linkedServiceName) {
+    private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(String resourceGroupName, String workspaceName,
+        String linkedServiceName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -469,25 +390,14 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
                 .error(new IllegalArgumentException("Parameter linkedServiceName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
+        final String apiVersion = "2020-08-01";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .delete(
-                            this.client.getEndpoint(),
-                            resourceGroupName,
-                            workspaceName,
-                            linkedServiceName,
-                            this.client.getApiVersion(),
-                            this.client.getSubscriptionId(),
-                            accept,
-                            context))
+            .withContext(context -> service.delete(this.client.getEndpoint(), resourceGroupName, workspaceName,
+                linkedServiceName, apiVersion, this.client.getSubscriptionId(), accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -501,16 +411,15 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the top level Linked service resource container.
+     * @return the top level Linked service resource container along with {@link Response} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(
-        String resourceGroupName, String workspaceName, String linkedServiceName, Context context) {
+    private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(String resourceGroupName, String workspaceName,
+        String linkedServiceName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -524,23 +433,14 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
                 .error(new IllegalArgumentException("Parameter linkedServiceName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
+        final String apiVersion = "2020-08-01";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .delete(
-                this.client.getEndpoint(),
-                resourceGroupName,
-                workspaceName,
-                linkedServiceName,
-                this.client.getApiVersion(),
-                this.client.getSubscriptionId(),
-                accept,
-                context);
+        return service.delete(this.client.getEndpoint(), resourceGroupName, workspaceName, linkedServiceName,
+            apiVersion, this.client.getSubscriptionId(), accept, context);
     }
 
     /**
@@ -552,17 +452,15 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the top level Linked service resource container.
+     * @return the {@link PollerFlux} for polling of the top level Linked service resource container.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private PollerFlux<PollResult<LinkedServiceInner>, LinkedServiceInner> beginDeleteAsync(
-        String resourceGroupName, String workspaceName, String linkedServiceName) {
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            deleteWithResponseAsync(resourceGroupName, workspaceName, linkedServiceName);
-        return this
-            .client
-            .<LinkedServiceInner, LinkedServiceInner>getLroResult(
-                mono, this.client.getHttpPipeline(), LinkedServiceInner.class, LinkedServiceInner.class, Context.NONE);
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<LinkedServiceInner>, LinkedServiceInner> beginDeleteAsync(String resourceGroupName,
+        String workspaceName, String linkedServiceName) {
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = deleteWithResponseAsync(resourceGroupName, workspaceName, linkedServiceName);
+        return this.client.<LinkedServiceInner, LinkedServiceInner>getLroResult(mono, this.client.getHttpPipeline(),
+            LinkedServiceInner.class, LinkedServiceInner.class, this.client.getContext());
     }
 
     /**
@@ -575,18 +473,16 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the top level Linked service resource container.
+     * @return the {@link PollerFlux} for polling of the top level Linked service resource container.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private PollerFlux<PollResult<LinkedServiceInner>, LinkedServiceInner> beginDeleteAsync(
-        String resourceGroupName, String workspaceName, String linkedServiceName, Context context) {
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<LinkedServiceInner>, LinkedServiceInner> beginDeleteAsync(String resourceGroupName,
+        String workspaceName, String linkedServiceName, Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            deleteWithResponseAsync(resourceGroupName, workspaceName, linkedServiceName, context);
-        return this
-            .client
-            .<LinkedServiceInner, LinkedServiceInner>getLroResult(
-                mono, this.client.getHttpPipeline(), LinkedServiceInner.class, LinkedServiceInner.class, context);
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = deleteWithResponseAsync(resourceGroupName, workspaceName, linkedServiceName, context);
+        return this.client.<LinkedServiceInner, LinkedServiceInner>getLroResult(mono, this.client.getHttpPipeline(),
+            LinkedServiceInner.class, LinkedServiceInner.class, context);
     }
 
     /**
@@ -598,12 +494,12 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the top level Linked service resource container.
+     * @return the {@link SyncPoller} for polling of the top level Linked service resource container.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public SyncPoller<PollResult<LinkedServiceInner>, LinkedServiceInner> beginDelete(
-        String resourceGroupName, String workspaceName, String linkedServiceName) {
-        return beginDeleteAsync(resourceGroupName, workspaceName, linkedServiceName).getSyncPoller();
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<LinkedServiceInner>, LinkedServiceInner> beginDelete(String resourceGroupName,
+        String workspaceName, String linkedServiceName) {
+        return this.beginDeleteAsync(resourceGroupName, workspaceName, linkedServiceName).getSyncPoller();
     }
 
     /**
@@ -616,12 +512,12 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the top level Linked service resource container.
+     * @return the {@link SyncPoller} for polling of the top level Linked service resource container.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public SyncPoller<PollResult<LinkedServiceInner>, LinkedServiceInner> beginDelete(
-        String resourceGroupName, String workspaceName, String linkedServiceName, Context context) {
-        return beginDeleteAsync(resourceGroupName, workspaceName, linkedServiceName, context).getSyncPoller();
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<LinkedServiceInner>, LinkedServiceInner> beginDelete(String resourceGroupName,
+        String workspaceName, String linkedServiceName, Context context) {
+        return this.beginDeleteAsync(resourceGroupName, workspaceName, linkedServiceName, context).getSyncPoller();
     }
 
     /**
@@ -633,13 +529,12 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the top level Linked service resource container.
+     * @return the top level Linked service resource container on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<LinkedServiceInner> deleteAsync(
-        String resourceGroupName, String workspaceName, String linkedServiceName) {
-        return beginDeleteAsync(resourceGroupName, workspaceName, linkedServiceName)
-            .last()
+    private Mono<LinkedServiceInner> deleteAsync(String resourceGroupName, String workspaceName,
+        String linkedServiceName) {
+        return beginDeleteAsync(resourceGroupName, workspaceName, linkedServiceName).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
@@ -653,13 +548,12 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the top level Linked service resource container.
+     * @return the top level Linked service resource container on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<LinkedServiceInner> deleteAsync(
-        String resourceGroupName, String workspaceName, String linkedServiceName, Context context) {
-        return beginDeleteAsync(resourceGroupName, workspaceName, linkedServiceName, context)
-            .last()
+    private Mono<LinkedServiceInner> deleteAsync(String resourceGroupName, String workspaceName,
+        String linkedServiceName, Context context) {
+        return beginDeleteAsync(resourceGroupName, workspaceName, linkedServiceName, context).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
@@ -692,8 +586,8 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
      * @return the top level Linked service resource container.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public LinkedServiceInner delete(
-        String resourceGroupName, String workspaceName, String linkedServiceName, Context context) {
+    public LinkedServiceInner delete(String resourceGroupName, String workspaceName, String linkedServiceName,
+        Context context) {
         return deleteAsync(resourceGroupName, workspaceName, linkedServiceName, context).block();
     }
 
@@ -706,16 +600,14 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a linked service instance.
+     * @return a linked service instance along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<LinkedServiceInner>> getWithResponseAsync(
-        String resourceGroupName, String workspaceName, String linkedServiceName) {
+    private Mono<Response<LinkedServiceInner>> getWithResponseAsync(String resourceGroupName, String workspaceName,
+        String linkedServiceName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -729,25 +621,14 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
                 .error(new IllegalArgumentException("Parameter linkedServiceName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
+        final String apiVersion = "2020-08-01";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .get(
-                            this.client.getEndpoint(),
-                            resourceGroupName,
-                            workspaceName,
-                            linkedServiceName,
-                            this.client.getApiVersion(),
-                            this.client.getSubscriptionId(),
-                            accept,
-                            context))
+            .withContext(context -> service.get(this.client.getEndpoint(), resourceGroupName, workspaceName,
+                linkedServiceName, apiVersion, this.client.getSubscriptionId(), accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -761,16 +642,14 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a linked service instance.
+     * @return a linked service instance along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<LinkedServiceInner>> getWithResponseAsync(
-        String resourceGroupName, String workspaceName, String linkedServiceName, Context context) {
+    private Mono<Response<LinkedServiceInner>> getWithResponseAsync(String resourceGroupName, String workspaceName,
+        String linkedServiceName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -784,23 +663,14 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
                 .error(new IllegalArgumentException("Parameter linkedServiceName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
+        final String apiVersion = "2020-08-01";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .get(
-                this.client.getEndpoint(),
-                resourceGroupName,
-                workspaceName,
-                linkedServiceName,
-                this.client.getApiVersion(),
-                this.client.getSubscriptionId(),
-                accept,
-                context);
+        return service.get(this.client.getEndpoint(), resourceGroupName, workspaceName, linkedServiceName, apiVersion,
+            this.client.getSubscriptionId(), accept, context);
     }
 
     /**
@@ -812,20 +682,31 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a linked service instance.
+     * @return a linked service instance on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<LinkedServiceInner> getAsync(
-        String resourceGroupName, String workspaceName, String linkedServiceName) {
+    private Mono<LinkedServiceInner> getAsync(String resourceGroupName, String workspaceName,
+        String linkedServiceName) {
         return getWithResponseAsync(resourceGroupName, workspaceName, linkedServiceName)
-            .flatMap(
-                (Response<LinkedServiceInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
+    }
+
+    /**
+     * Gets a linked service instance.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param linkedServiceName Name of the linked service.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a linked service instance along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<LinkedServiceInner> getWithResponse(String resourceGroupName, String workspaceName,
+        String linkedServiceName, Context context) {
+        return getWithResponseAsync(resourceGroupName, workspaceName, linkedServiceName, context).block();
     }
 
     /**
@@ -841,25 +722,7 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public LinkedServiceInner get(String resourceGroupName, String workspaceName, String linkedServiceName) {
-        return getAsync(resourceGroupName, workspaceName, linkedServiceName).block();
-    }
-
-    /**
-     * Gets a linked service instance.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param linkedServiceName Name of the linked service.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a linked service instance.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<LinkedServiceInner> getWithResponse(
-        String resourceGroupName, String workspaceName, String linkedServiceName, Context context) {
-        return getWithResponseAsync(resourceGroupName, workspaceName, linkedServiceName, context).block();
+        return getWithResponse(resourceGroupName, workspaceName, linkedServiceName, Context.NONE).getValue();
     }
 
     /**
@@ -870,16 +733,15 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the linked services instances in a workspace.
+     * @return the linked services instances in a workspace along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<LinkedServiceInner>> listByWorkspaceSinglePageAsync(
-        String resourceGroupName, String workspaceName) {
+    private Mono<PagedResponse<LinkedServiceInner>> listByWorkspaceSinglePageAsync(String resourceGroupName,
+        String workspaceName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -889,28 +751,16 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
+        final String apiVersion = "2020-08-01";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .listByWorkspace(
-                            this.client.getEndpoint(),
-                            resourceGroupName,
-                            workspaceName,
-                            this.client.getApiVersion(),
-                            this.client.getSubscriptionId(),
-                            accept,
-                            context))
-            .<PagedResponse<LinkedServiceInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(), res.getStatusCode(), res.getHeaders(), res.getValue().value(), null, null))
+            .withContext(context -> service.listByWorkspace(this.client.getEndpoint(), resourceGroupName, workspaceName,
+                apiVersion, this.client.getSubscriptionId(), accept, context))
+            .<PagedResponse<LinkedServiceInner>>map(res -> new PagedResponseBase<>(res.getRequest(),
+                res.getStatusCode(), res.getHeaders(), res.getValue().value(), null, null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -923,16 +773,15 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the linked services instances in a workspace.
+     * @return the linked services instances in a workspace along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<LinkedServiceInner>> listByWorkspaceSinglePageAsync(
-        String resourceGroupName, String workspaceName, Context context) {
+    private Mono<PagedResponse<LinkedServiceInner>> listByWorkspaceSinglePageAsync(String resourceGroupName,
+        String workspaceName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -942,26 +791,17 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
+        final String apiVersion = "2020-08-01";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
         return service
-            .listByWorkspace(
-                this.client.getEndpoint(),
-                resourceGroupName,
-                workspaceName,
-                this.client.getApiVersion(),
-                this.client.getSubscriptionId(),
-                accept,
-                context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(), res.getStatusCode(), res.getHeaders(), res.getValue().value(), null, null));
+            .listByWorkspace(this.client.getEndpoint(), resourceGroupName, workspaceName, apiVersion,
+                this.client.getSubscriptionId(), accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), null, null));
     }
 
     /**
@@ -972,7 +812,7 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the linked services instances in a workspace.
+     * @return the linked services instances in a workspace as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<LinkedServiceInner> listByWorkspaceAsync(String resourceGroupName, String workspaceName) {
@@ -988,11 +828,11 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the linked services instances in a workspace.
+     * @return the linked services instances in a workspace as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<LinkedServiceInner> listByWorkspaceAsync(
-        String resourceGroupName, String workspaceName, Context context) {
+    private PagedFlux<LinkedServiceInner> listByWorkspaceAsync(String resourceGroupName, String workspaceName,
+        Context context) {
         return new PagedFlux<>(() -> listByWorkspaceSinglePageAsync(resourceGroupName, workspaceName, context));
     }
 
@@ -1004,7 +844,7 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the linked services instances in a workspace.
+     * @return the linked services instances in a workspace as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<LinkedServiceInner> listByWorkspace(String resourceGroupName, String workspaceName) {
@@ -1020,11 +860,11 @@ public final class LinkedServicesClientImpl implements LinkedServicesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the linked services instances in a workspace.
+     * @return the linked services instances in a workspace as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<LinkedServiceInner> listByWorkspace(
-        String resourceGroupName, String workspaceName, Context context) {
+    public PagedIterable<LinkedServiceInner> listByWorkspace(String resourceGroupName, String workspaceName,
+        Context context) {
         return new PagedIterable<>(listByWorkspaceAsync(resourceGroupName, workspaceName, context));
     }
 }

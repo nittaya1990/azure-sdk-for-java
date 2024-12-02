@@ -5,8 +5,6 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
@@ -14,14 +12,16 @@ import java.util.Map;
 /** Tenant access information contract of the API Management service. */
 @Fluent
 public final class TenantSettingsContractProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TenantSettingsContractProperties.class);
-
     /*
      * Tenant settings
      */
     @JsonProperty(value = "settings")
     @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
     private Map<String, String> settings;
+
+    /** Creates an instance of TenantSettingsContractProperties class. */
+    public TenantSettingsContractProperties() {
+    }
 
     /**
      * Get the settings property: Tenant settings.

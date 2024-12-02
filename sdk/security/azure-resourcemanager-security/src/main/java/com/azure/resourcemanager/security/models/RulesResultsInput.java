@@ -5,17 +5,16 @@
 package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.Map;
 
-/** Rules results input. */
+/**
+ * Rules results input.
+ */
 @Fluent
 public final class RulesResultsInput {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RulesResultsInput.class);
-
     /*
      * Take results from latest scan.
      */
@@ -27,11 +26,18 @@ public final class RulesResultsInput {
      * Leave this field empty it LatestScan == true.
      */
     @JsonProperty(value = "results")
+    @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
     private Map<String, List<List<String>>> results;
 
     /**
+     * Creates an instance of RulesResultsInput class.
+     */
+    public RulesResultsInput() {
+    }
+
+    /**
      * Get the latestScan property: Take results from latest scan.
-     *
+     * 
      * @return the latestScan value.
      */
     public Boolean latestScan() {
@@ -40,7 +46,7 @@ public final class RulesResultsInput {
 
     /**
      * Set the latestScan property: Take results from latest scan.
-     *
+     * 
      * @param latestScan the latestScan value to set.
      * @return the RulesResultsInput object itself.
      */
@@ -50,9 +56,9 @@ public final class RulesResultsInput {
     }
 
     /**
-     * Get the results property: Expected results to be inserted into the baseline. Leave this field empty it LatestScan
-     * == true.
-     *
+     * Get the results property: Expected results to be inserted into the baseline.
+     * Leave this field empty it LatestScan == true.
+     * 
      * @return the results value.
      */
     public Map<String, List<List<String>>> results() {
@@ -60,9 +66,9 @@ public final class RulesResultsInput {
     }
 
     /**
-     * Set the results property: Expected results to be inserted into the baseline. Leave this field empty it LatestScan
-     * == true.
-     *
+     * Set the results property: Expected results to be inserted into the baseline.
+     * Leave this field empty it LatestScan == true.
+     * 
      * @param results the results value to set.
      * @return the RulesResultsInput object itself.
      */
@@ -73,7 +79,7 @@ public final class RulesResultsInput {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

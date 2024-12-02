@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.mysqlflexibleserver.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Server version capabilities. */
+/**
+ * Server version capabilities.
+ */
 @Immutable
 public final class ServerVersionCapability {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ServerVersionCapability.class);
-
     /*
      * server version
      */
@@ -28,8 +26,14 @@ public final class ServerVersionCapability {
     private List<SkuCapability> supportedSkus;
 
     /**
+     * Creates an instance of ServerVersionCapability class.
+     */
+    public ServerVersionCapability() {
+    }
+
+    /**
      * Get the name property: server version.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -38,7 +42,7 @@ public final class ServerVersionCapability {
 
     /**
      * Get the supportedSkus property: A list of supported Skus.
-     *
+     * 
      * @return the supportedSkus value.
      */
     public List<SkuCapability> supportedSkus() {
@@ -47,7 +51,7 @@ public final class ServerVersionCapability {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

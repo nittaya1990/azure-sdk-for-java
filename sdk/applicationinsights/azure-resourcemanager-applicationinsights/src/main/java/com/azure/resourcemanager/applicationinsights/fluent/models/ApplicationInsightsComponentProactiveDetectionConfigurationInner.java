@@ -5,19 +5,13 @@
 package com.azure.resourcemanager.applicationinsights.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.applicationinsights.models.ApplicationInsightsComponentProactiveDetectionConfigurationRuleDefinitions;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Properties that define a ProactiveDetection configuration. */
 @Fluent
 public final class ApplicationInsightsComponentProactiveDetectionConfigurationInner {
-    @JsonIgnore
-    private final ClientLogger logger =
-        new ClientLogger(ApplicationInsightsComponentProactiveDetectionConfigurationInner.class);
-
     /*
      * The rule name
      */
@@ -31,8 +25,7 @@ public final class ApplicationInsightsComponentProactiveDetectionConfigurationIn
     private Boolean enabled;
 
     /*
-     * A flag that indicated whether notifications on this rule should be sent
-     * to subscription owners
+     * A flag that indicated whether notifications on this rule should be sent to subscription owners
      */
     @JsonProperty(value = "SendEmailsToSubscriptionOwners")
     private Boolean sendEmailsToSubscriptionOwners;
@@ -50,11 +43,14 @@ public final class ApplicationInsightsComponentProactiveDetectionConfigurationIn
     private String lastUpdatedTime;
 
     /*
-     * Static definitions of the ProactiveDetection configuration rule (same
-     * values for all components).
+     * Static definitions of the ProactiveDetection configuration rule (same values for all components).
      */
     @JsonProperty(value = "RuleDefinitions")
     private ApplicationInsightsComponentProactiveDetectionConfigurationRuleDefinitions ruleDefinitions;
+
+    /** Creates an instance of ApplicationInsightsComponentProactiveDetectionConfigurationInner class. */
+    public ApplicationInsightsComponentProactiveDetectionConfigurationInner() {
+    }
 
     /**
      * Get the name property: The rule name.
@@ -113,8 +109,8 @@ public final class ApplicationInsightsComponentProactiveDetectionConfigurationIn
      * @param sendEmailsToSubscriptionOwners the sendEmailsToSubscriptionOwners value to set.
      * @return the ApplicationInsightsComponentProactiveDetectionConfigurationInner object itself.
      */
-    public ApplicationInsightsComponentProactiveDetectionConfigurationInner withSendEmailsToSubscriptionOwners(
-        Boolean sendEmailsToSubscriptionOwners) {
+    public ApplicationInsightsComponentProactiveDetectionConfigurationInner
+        withSendEmailsToSubscriptionOwners(Boolean sendEmailsToSubscriptionOwners) {
         this.sendEmailsToSubscriptionOwners = sendEmailsToSubscriptionOwners;
         return this;
     }
@@ -134,8 +130,8 @@ public final class ApplicationInsightsComponentProactiveDetectionConfigurationIn
      * @param customEmails the customEmails value to set.
      * @return the ApplicationInsightsComponentProactiveDetectionConfigurationInner object itself.
      */
-    public ApplicationInsightsComponentProactiveDetectionConfigurationInner withCustomEmails(
-        List<String> customEmails) {
+    public ApplicationInsightsComponentProactiveDetectionConfigurationInner
+        withCustomEmails(List<String> customEmails) {
         this.customEmails = customEmails;
         return this;
     }
@@ -155,8 +151,8 @@ public final class ApplicationInsightsComponentProactiveDetectionConfigurationIn
      * @param lastUpdatedTime the lastUpdatedTime value to set.
      * @return the ApplicationInsightsComponentProactiveDetectionConfigurationInner object itself.
      */
-    public ApplicationInsightsComponentProactiveDetectionConfigurationInner withLastUpdatedTime(
-        String lastUpdatedTime) {
+    public ApplicationInsightsComponentProactiveDetectionConfigurationInner
+        withLastUpdatedTime(String lastUpdatedTime) {
         this.lastUpdatedTime = lastUpdatedTime;
         return this;
     }

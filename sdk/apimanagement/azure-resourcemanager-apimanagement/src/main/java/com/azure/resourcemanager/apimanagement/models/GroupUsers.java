@@ -13,20 +13,20 @@ public interface GroupUsers {
     /**
      * Lists a collection of user entities associated with the group.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Users list representation.
+     * @return paged Users list representation as paginated response with {@link PagedIterable}.
      */
     PagedIterable<UserContract> list(String resourceGroupName, String serviceName, String groupId);
 
     /**
      * Lists a collection of user entities associated with the group.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @param filter | Field | Usage | Supported operators | Supported functions
@@ -43,21 +43,31 @@ public interface GroupUsers {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Users list representation.
+     * @return paged Users list representation as paginated response with {@link PagedIterable}.
      */
-    PagedIterable<UserContract> list(
-        String resourceGroupName,
-        String serviceName,
-        String groupId,
-        String filter,
-        Integer top,
-        Integer skip,
-        Context context);
+    PagedIterable<UserContract> list(String resourceGroupName, String serviceName, String groupId, String filter,
+        Integer top, Integer skip, Context context);
 
     /**
      * Checks that user entity specified by identifier is associated with the group entity.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param groupId Group identifier. Must be unique in the current API Management service instance.
+     * @param userId User identifier. Must be unique in the current API Management service instance.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return whether resource exists along with {@link Response}.
+     */
+    Response<Boolean> checkEntityExistsWithResponse(String resourceGroupName, String serviceName, String groupId,
+        String userId, Context context);
+
+    /**
+     * Checks that user entity specified by identifier is associated with the group entity.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @param userId User identifier. Must be unique in the current API Management service instance.
@@ -69,9 +79,9 @@ public interface GroupUsers {
     boolean checkEntityExists(String resourceGroupName, String serviceName, String groupId, String userId);
 
     /**
-     * Checks that user entity specified by identifier is associated with the group entity.
+     * Add existing user to existing group.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @param userId User identifier. Must be unique in the current API Management service instance.
@@ -79,15 +89,15 @@ public interface GroupUsers {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return user details along with {@link Response}.
      */
-    Response<Boolean> checkEntityExistsWithResponse(
-        String resourceGroupName, String serviceName, String groupId, String userId, Context context);
+    Response<UserContract> createWithResponse(String resourceGroupName, String serviceName, String groupId,
+        String userId, Context context);
 
     /**
      * Add existing user to existing group.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @param userId User identifier. Must be unique in the current API Management service instance.
@@ -99,9 +109,9 @@ public interface GroupUsers {
     UserContract create(String resourceGroupName, String serviceName, String groupId, String userId);
 
     /**
-     * Add existing user to existing group.
+     * Remove existing user from existing group.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @param userId User identifier. Must be unique in the current API Management service instance.
@@ -109,15 +119,15 @@ public interface GroupUsers {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return user details.
+     * @return the {@link Response}.
      */
-    Response<UserContract> createWithResponse(
-        String resourceGroupName, String serviceName, String groupId, String userId, Context context);
+    Response<Void> deleteWithResponse(String resourceGroupName, String serviceName, String groupId, String userId,
+        Context context);
 
     /**
      * Remove existing user from existing group.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @param userId User identifier. Must be unique in the current API Management service instance.
@@ -126,20 +136,4 @@ public interface GroupUsers {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     void delete(String resourceGroupName, String serviceName, String groupId, String userId);
-
-    /**
-     * Remove existing user from existing group.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param groupId Group identifier. Must be unique in the current API Management service instance.
-     * @param userId User identifier. Must be unique in the current API Management service instance.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    Response<Void> deleteWithResponse(
-        String resourceGroupName, String serviceName, String groupId, String userId, Context context);
 }

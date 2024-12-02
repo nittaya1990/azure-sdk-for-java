@@ -15,7 +15,7 @@ import com.azure.storage.blob.BlobServiceClient;
 public final class BlobContainerListDetails {
     private boolean retrieveMetadata;
     private boolean retrieveDeleted;
-    private boolean retrieveSystem;
+    private boolean retrieveSystemContainers;
 
     /**
      * Constructs an unpopulated {@link BlobContainerListDetails}.
@@ -68,22 +68,24 @@ public final class BlobContainerListDetails {
      *
      * @return a flag indicating whether system containers should be returned in the listing
      */
-    public boolean getRetrieveSystem() {
-        return this.retrieveSystem;
+    public boolean getRetrieveSystemContainers() {
+        return this.retrieveSystemContainers;
     }
 
     /**
      * Whether system containers should be returned.
      *
-     * @param retrieveSystem Flag indicating whether system containers should be returned
+     * @param retrieveSystemContainers Flag indicating whether system containers should be returned
      * @return the updated ContainerListDetails object
      */
-    public BlobContainerListDetails setRetrieveSystem(boolean retrieveSystem) {
-        this.retrieveSystem = retrieveSystem;
+    public BlobContainerListDetails setRetrieveSystemContainers(boolean retrieveSystemContainers) {
+        this.retrieveSystemContainers = retrieveSystemContainers;
         return this;
     }
 
     /**
+     * Gets the listing flags.
+     *
      * @return the listing flags
      * @deprecated {@link BlobContainerListDetails} now contains multiple options.
      * This will only convert result of {{@link #setRetrieveMetadata(boolean)}} for backwards compatibility.

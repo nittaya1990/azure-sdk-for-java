@@ -7,17 +7,13 @@ package com.azure.resourcemanager.apimanagement.fluent.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.models.SubscriptionState;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Parameters supplied to the Create subscription operation. */
 @Fluent
 public final class SubscriptionCreateParameterProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SubscriptionCreateParameterProperties.class);
-
     /*
-     * User (user id path) for whom subscription is being created in form
-     * /users/{userId}
+     * User (user id path) for whom subscription is being created in form /users/{userId}
      */
     @JsonProperty(value = "ownerId")
     private String ownerId;
@@ -35,29 +31,24 @@ public final class SubscriptionCreateParameterProperties {
     private String displayName;
 
     /*
-     * Primary subscription key. If not specified during request key will be
-     * generated automatically.
+     * Primary subscription key. If not specified during request key will be generated automatically.
      */
     @JsonProperty(value = "primaryKey")
     private String primaryKey;
 
     /*
-     * Secondary subscription key. If not specified during request key will be
-     * generated automatically.
+     * Secondary subscription key. If not specified during request key will be generated automatically.
      */
     @JsonProperty(value = "secondaryKey")
     private String secondaryKey;
 
     /*
-     * Initial subscription state. If no value is specified, subscription is
-     * created with Submitted state. Possible states are * active – the
-     * subscription is active, * suspended – the subscription is blocked, and
-     * the subscriber cannot call any APIs of the product, * submitted – the
-     * subscription request has been made by the developer, but has not yet
-     * been approved or rejected, * rejected – the subscription request has
-     * been denied by an administrator, * cancelled – the subscription has been
-     * cancelled by the developer or administrator, * expired – the
-     * subscription reached its expiration date and was deactivated.
+     * Initial subscription state. If no value is specified, subscription is created with Submitted state. Possible
+     * states are * active – the subscription is active, * suspended – the subscription is blocked, and the subscriber
+     * cannot call any APIs of the product, * submitted – the subscription request has been made by the developer, but
+     * has not yet been approved or rejected, * rejected – the subscription request has been denied by an
+     * administrator, * cancelled – the subscription has been cancelled by the developer or administrator, * expired –
+     * the subscription reached its expiration date and was deactivated.
      */
     @JsonProperty(value = "state")
     private SubscriptionState state;
@@ -67,6 +58,10 @@ public final class SubscriptionCreateParameterProperties {
      */
     @JsonProperty(value = "allowTracing")
     private Boolean allowTracing;
+
+    /** Creates an instance of SubscriptionCreateParameterProperties class. */
+    public SubscriptionCreateParameterProperties() {
+    }
 
     /**
      * Get the ownerId property: User (user id path) for whom subscription is being created in form /users/{userId}.
@@ -229,16 +224,14 @@ public final class SubscriptionCreateParameterProperties {
      */
     public void validate() {
         if (scope() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property scope in model SubscriptionCreateParameterProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property scope in model SubscriptionCreateParameterProperties"));
         }
         if (displayName() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property displayName in model SubscriptionCreateParameterProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property displayName in model SubscriptionCreateParameterProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(SubscriptionCreateParameterProperties.class);
 }

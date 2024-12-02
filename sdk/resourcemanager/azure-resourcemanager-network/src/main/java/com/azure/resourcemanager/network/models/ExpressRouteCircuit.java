@@ -15,11 +15,8 @@ import java.util.Map;
 
 /** Entry point for Express Route Circuit management API in Azure. */
 @Fluent
-public interface ExpressRouteCircuit
-    extends GroupableResource<NetworkManager, ExpressRouteCircuitInner>,
-        Refreshable<ExpressRouteCircuit>,
-        Updatable<ExpressRouteCircuit.Update>,
-        UpdatableWithTags<ExpressRouteCircuit> {
+public interface ExpressRouteCircuit extends GroupableResource<NetworkManager, ExpressRouteCircuitInner>,
+    Refreshable<ExpressRouteCircuit>, Updatable<ExpressRouteCircuit.Update>, UpdatableWithTags<ExpressRouteCircuit> {
 
     // Actions
 
@@ -64,14 +61,9 @@ public interface ExpressRouteCircuit
     String provisioningState();
 
     /** The entirety of the express route circuit definition. */
-    interface Definition
-        extends DefinitionStages.Blank,
-            DefinitionStages.WithGroup,
-            DefinitionStages.WithServiceProvider,
-            DefinitionStages.WithPeeringLocation,
-            DefinitionStages.WithBandwidth,
-            DefinitionStages.WithSku,
-            DefinitionStages.WithCreate {
+    interface Definition extends DefinitionStages.Blank, DefinitionStages.WithGroup,
+        DefinitionStages.WithServiceProvider, DefinitionStages.WithPeeringLocation, DefinitionStages.WithBandwidth,
+        DefinitionStages.WithSku, DefinitionStages.WithCreate {
     }
 
     /** Grouping of express route circuit definition stages. */
@@ -86,31 +78,66 @@ public interface ExpressRouteCircuit
 
         /** The stage of express route circuit definition allowing to specify service provider name. */
         interface WithServiceProvider {
+            /**
+             * Specifies the service provider name for the express route circuit.
+             *
+             * @param serviceProviderName the service provider name
+             * @return the next stage of the definition
+             */
             WithPeeringLocation withServiceProvider(String serviceProviderName);
         }
 
         /** The stage of express route circuit definition allowing to specify service provider peering location. */
         interface WithPeeringLocation {
+            /**
+             * Specifies the location for the express route circuit.
+             *
+             * @param location the location
+             * @return the next stage of the definition
+             */
             WithBandwidth withPeeringLocation(String location);
         }
 
         /** The stage of express route circuit definition allowing to specify service provider bandwidth. */
         interface WithBandwidth {
+            /**
+             * Specifies the bandwidth in Mbps for the express route circuit.
+             *
+             * @param bandwidthInMbps the bandwidth in Mbps
+             * @return the next stage of the definition
+             */
             WithSku withBandwidthInMbps(int bandwidthInMbps);
         }
 
         /** The stage of express route circuit definition allowing to specify SKU tier and family. */
         interface WithSku {
+            /**
+             * Specifies the SKU type for the express route circuit.
+             *
+             * @param skuType the SKU type
+             * @return the next stage of the definition
+             */
             WithCreate withSku(ExpressRouteCircuitSkuType skuType);
         }
 
         /** The stage of express route circuit definition allowing to enable/disable classic operations. */
         interface WithAllowClassicOperations {
+            /**
+             * Specifies whether classic operations are enabled.
+             *
+             * @return the next stage of the definition
+             */
             WithCreate withClassicOperations();
         }
 
         /** The stage of definition allowing to add authorization. */
         interface WithAuthorization {
+            /**
+             * Specifies the authorization name for the express route circuit.
+             *
+             * @param authorizationName the authorization name
+             * @return the next stage of the definition
+             */
             WithCreate withAuthorization(String authorizationName);
         }
 
@@ -118,11 +145,8 @@ public interface ExpressRouteCircuit
          * The stage of the express route circuit definition which contains all the minimum required inputs for the
          * resource to be created, but also allows for any other optional settings to be specified.
          */
-        interface WithCreate
-            extends Creatable<ExpressRouteCircuit>,
-                Resource.DefinitionWithTags<WithCreate>,
-                WithAllowClassicOperations,
-                WithAuthorization {
+        interface WithCreate extends Creatable<ExpressRouteCircuit>, Resource.DefinitionWithTags<WithCreate>,
+            WithAllowClassicOperations, WithAuthorization {
         }
     }
 
@@ -130,34 +154,58 @@ public interface ExpressRouteCircuit
     interface UpdateStages {
         /** The stage of express route circuit update allowing to specify service provider bandwidth. */
         interface WithBandwidth {
+            /**
+             * Specifies the bandwidth in Mbps for the express route circuit.
+             *
+             * @param bandwidthInMbps the bandwidth in Mbps
+             * @return the next stage of the update
+             */
             Update withBandwidthInMbps(int bandwidthInMbps);
         }
 
         /** The stage of express route circuit update allowing to specify SKU tier and family. */
         interface WithSku {
+            /**
+             * Specifies the SKU for the express route circuit.
+             *
+             * @param sku the SKI
+             * @return the next stage of the update
+             */
             Update withSku(ExpressRouteCircuitSkuType sku);
         }
 
         /** The stage of express route circuit update allowing to enable/disable classic operations. */
         interface WithAllowClassicOperations {
+            /**
+             * Specifies whether classic operations are enabled.
+             *
+             * @return the next stage of the update
+             */
             Update withClassicOperations();
 
+            /**
+             * Specifies whether classic operations are disabled.
+             *
+             * @return the next stage of the update
+             */
             Update withoutClassicOperations();
         }
 
         /** The stage of express route circuit update allowing to add authorization. */
         interface WithAuthorization {
+            /**
+             * Specifies the authorization name for the express route circuit.
+             *
+             * @param authorizationName the authorization name
+             * @return the next stage of the update
+             */
             Update withAuthorization(String authorizationName);
         }
     }
 
     /** The template for a express route circuit update operation, containing all the settings that can be modified. */
     interface Update
-        extends Appliable<ExpressRouteCircuit>,
-            Resource.UpdateWithTags<Update>,
-            UpdateStages.WithBandwidth,
-            UpdateStages.WithSku,
-            UpdateStages.WithAllowClassicOperations,
-            UpdateStages.WithAuthorization {
+        extends Appliable<ExpressRouteCircuit>, Resource.UpdateWithTags<Update>, UpdateStages.WithBandwidth,
+        UpdateStages.WithSku, UpdateStages.WithAllowClassicOperations, UpdateStages.WithAuthorization {
     }
 }

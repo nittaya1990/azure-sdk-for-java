@@ -21,16 +21,16 @@ public final class CertificatesCreateOrUpdateResponse
      * @param value the deserialized value of the HTTP response.
      * @param headers the deserialized headers of the HTTP response.
      */
-    public CertificatesCreateOrUpdateResponse(
-        HttpRequest request,
-        int statusCode,
-        HttpHeaders rawHeaders,
-        CertificateContractInner value,
-        CertificatesCreateOrUpdateHeaders headers) {
+    public CertificatesCreateOrUpdateResponse(HttpRequest request, int statusCode, HttpHeaders rawHeaders,
+        CertificateContractInner value, CertificatesCreateOrUpdateHeaders headers) {
         super(request, statusCode, rawHeaders, value, headers);
     }
 
-    /** @return the deserialized response body. */
+    /**
+     * Gets the deserialized response body.
+     *
+     * @return the deserialized response body.
+     */
     @Override
     public CertificateContractInner getValue() {
         return super.getValue();

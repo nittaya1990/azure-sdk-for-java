@@ -6,8 +6,6 @@ package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
@@ -15,14 +13,16 @@ import java.util.Map;
 /** Content type contract details. */
 @Fluent
 public final class ContentItemContractInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ContentItemContractInner.class);
-
     /*
      * Properties of the content item.
      */
     @JsonProperty(value = "properties")
     @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
     private Map<String, Object> properties;
+
+    /** Creates an instance of ContentItemContractInner class. */
+    public ContentItemContractInner() {
+    }
 
     /**
      * Get the properties property: Properties of the content item.

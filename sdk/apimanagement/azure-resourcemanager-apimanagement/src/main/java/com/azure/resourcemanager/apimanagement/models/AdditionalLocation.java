@@ -6,18 +6,14 @@ package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Description of an additional API Management resource location. */
 @Fluent
 public final class AdditionalLocation {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AdditionalLocation.class);
-
     /*
-     * The location name of the additional region among Azure Data center
-     * regions.
+     * The location name of the additional region among Azure Data center regions.
      */
     @JsonProperty(value = "location", required = true)
     private String location;
@@ -29,28 +25,31 @@ public final class AdditionalLocation {
     private ApiManagementServiceSkuProperties sku;
 
     /*
-     * A list of availability zones denoting where the resource needs to come
-     * from.
+     * A list of availability zones denoting where the resource needs to come from.
      */
     @JsonProperty(value = "zones")
     private List<String> zones;
 
     /*
-     * Public Static Load Balanced IP addresses of the API Management service
-     * in the additional location. Available only for Basic, Standard, Premium
-     * and Isolated SKU.
+     * Public Static Load Balanced IP addresses of the API Management service in the additional location. Available
+     * only for Basic, Standard, Premium and Isolated SKU.
      */
     @JsonProperty(value = "publicIPAddresses", access = JsonProperty.Access.WRITE_ONLY)
     private List<String> publicIpAddresses;
 
     /*
-     * Private Static Load Balanced IP addresses of the API Management service
-     * which is deployed in an Internal Virtual Network in a particular
-     * additional location. Available only for Basic, Standard, Premium and
-     * Isolated SKU.
+     * Private Static Load Balanced IP addresses of the API Management service which is deployed in an Internal Virtual
+     * Network in a particular additional location. Available only for Basic, Standard, Premium and Isolated SKU.
      */
     @JsonProperty(value = "privateIPAddresses", access = JsonProperty.Access.WRITE_ONLY)
     private List<String> privateIpAddresses;
+
+    /*
+     * Public Standard SKU IP V4 based IP address to be associated with Virtual Network deployed service in the
+     * location. Supported only for Premium SKU being deployed in Virtual Network.
+     */
+    @JsonProperty(value = "publicIpAddressId")
+    private String publicIpAddressId;
 
     /*
      * Virtual network configuration for the location.
@@ -65,12 +64,34 @@ public final class AdditionalLocation {
     private String gatewayRegionalUrl;
 
     /*
-     * Property only valid for an Api Management service deployed in multiple
-     * locations. This can be used to disable the gateway in this additional
-     * location.
+     * Property can be used to enable NAT Gateway for this API Management service.
+     */
+    @JsonProperty(value = "natGatewayState")
+    private NatGatewayState natGatewayState;
+
+    /*
+     * Outbound public IPV4 address prefixes associated with NAT Gateway deployed service. Available only for Premium
+     * SKU on stv2 platform.
+     */
+    @JsonProperty(value = "outboundPublicIPAddresses", access = JsonProperty.Access.WRITE_ONLY)
+    private List<String> outboundPublicIpAddresses;
+
+    /*
+     * Property only valid for an Api Management service deployed in multiple locations. This can be used to disable
+     * the gateway in this additional location.
      */
     @JsonProperty(value = "disableGateway")
     private Boolean disableGateway;
+
+    /*
+     * Compute Platform Version running the service.
+     */
+    @JsonProperty(value = "platformVersion", access = JsonProperty.Access.WRITE_ONLY)
+    private PlatformVersion platformVersion;
+
+    /** Creates an instance of AdditionalLocation class. */
+    public AdditionalLocation() {
+    }
 
     /**
      * Get the location property: The location name of the additional region among Azure Data center regions.
@@ -154,6 +175,28 @@ public final class AdditionalLocation {
     }
 
     /**
+     * Get the publicIpAddressId property: Public Standard SKU IP V4 based IP address to be associated with Virtual
+     * Network deployed service in the location. Supported only for Premium SKU being deployed in Virtual Network.
+     *
+     * @return the publicIpAddressId value.
+     */
+    public String publicIpAddressId() {
+        return this.publicIpAddressId;
+    }
+
+    /**
+     * Set the publicIpAddressId property: Public Standard SKU IP V4 based IP address to be associated with Virtual
+     * Network deployed service in the location. Supported only for Premium SKU being deployed in Virtual Network.
+     *
+     * @param publicIpAddressId the publicIpAddressId value to set.
+     * @return the AdditionalLocation object itself.
+     */
+    public AdditionalLocation withPublicIpAddressId(String publicIpAddressId) {
+        this.publicIpAddressId = publicIpAddressId;
+        return this;
+    }
+
+    /**
      * Get the virtualNetworkConfiguration property: Virtual network configuration for the location.
      *
      * @return the virtualNetworkConfiguration value.
@@ -183,6 +226,36 @@ public final class AdditionalLocation {
     }
 
     /**
+     * Get the natGatewayState property: Property can be used to enable NAT Gateway for this API Management service.
+     *
+     * @return the natGatewayState value.
+     */
+    public NatGatewayState natGatewayState() {
+        return this.natGatewayState;
+    }
+
+    /**
+     * Set the natGatewayState property: Property can be used to enable NAT Gateway for this API Management service.
+     *
+     * @param natGatewayState the natGatewayState value to set.
+     * @return the AdditionalLocation object itself.
+     */
+    public AdditionalLocation withNatGatewayState(NatGatewayState natGatewayState) {
+        this.natGatewayState = natGatewayState;
+        return this;
+    }
+
+    /**
+     * Get the outboundPublicIpAddresses property: Outbound public IPV4 address prefixes associated with NAT Gateway
+     * deployed service. Available only for Premium SKU on stv2 platform.
+     *
+     * @return the outboundPublicIpAddresses value.
+     */
+    public List<String> outboundPublicIpAddresses() {
+        return this.outboundPublicIpAddresses;
+    }
+
+    /**
      * Get the disableGateway property: Property only valid for an Api Management service deployed in multiple
      * locations. This can be used to disable the gateway in this additional location.
      *
@@ -205,20 +278,27 @@ public final class AdditionalLocation {
     }
 
     /**
+     * Get the platformVersion property: Compute Platform Version running the service.
+     *
+     * @return the platformVersion value.
+     */
+    public PlatformVersion platformVersion() {
+        return this.platformVersion;
+    }
+
+    /**
      * Validates the instance.
      *
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (location() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property location in model AdditionalLocation"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property location in model AdditionalLocation"));
         }
         if (sku() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property sku in model AdditionalLocation"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property sku in model AdditionalLocation"));
         } else {
             sku().validate();
         }
@@ -226,4 +306,6 @@ public final class AdditionalLocation {
             virtualNetworkConfiguration().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(AdditionalLocation.class);
 }

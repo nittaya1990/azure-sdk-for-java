@@ -7,9 +7,14 @@ package com.azure.resourcemanager.streamanalytics.implementation;
 import com.azure.core.util.Context;
 import com.azure.resourcemanager.streamanalytics.fluent.models.OutputInner;
 import com.azure.resourcemanager.streamanalytics.models.Diagnostics;
+import com.azure.resourcemanager.streamanalytics.models.LastOutputEventTimestamp;
 import com.azure.resourcemanager.streamanalytics.models.Output;
 import com.azure.resourcemanager.streamanalytics.models.OutputDataSource;
+import com.azure.resourcemanager.streamanalytics.models.OutputWatermarkProperties;
+import com.azure.resourcemanager.streamanalytics.models.ResourceTestStatus;
 import com.azure.resourcemanager.streamanalytics.models.Serialization;
+import java.util.Collections;
+import java.util.List;
 
 public final class OutputImpl implements Output, Output.Definition, Output.Update {
     private OutputInner innerObject;
@@ -20,6 +25,14 @@ public final class OutputImpl implements Output, Output.Definition, Output.Updat
         return this.innerModel().id();
     }
 
+    public String name() {
+        return this.innerModel().name();
+    }
+
+    public String type() {
+        return this.innerModel().type();
+    }
+
     public OutputDataSource datasource() {
         return this.innerModel().datasource();
     }
@@ -28,7 +41,7 @@ public final class OutputImpl implements Output, Output.Definition, Output.Updat
         return this.innerModel().timeWindow();
     }
 
-    public Float sizeWindow() {
+    public Integer sizeWindow() {
         return this.innerModel().sizeWindow();
     }
 
@@ -44,12 +57,21 @@ public final class OutputImpl implements Output, Output.Definition, Output.Updat
         return this.innerModel().etag();
     }
 
-    public String name() {
-        return this.innerModel().name();
+    public List<LastOutputEventTimestamp> lastOutputEventTimestamps() {
+        List<LastOutputEventTimestamp> inner = this.innerModel().lastOutputEventTimestamps();
+        if (inner != null) {
+            return Collections.unmodifiableList(inner);
+        } else {
+            return Collections.emptyList();
+        }
     }
 
-    public String type() {
-        return this.innerModel().type();
+    public OutputWatermarkProperties watermarkSettings() {
+        return this.innerModel().watermarkSettings();
+    }
+
+    public String resourceGroupName() {
+        return resourceGroupName;
     }
 
     public OutputInner innerModel() {
@@ -79,36 +101,20 @@ public final class OutputImpl implements Output, Output.Definition, Output.Updat
     }
 
     public Output create() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getOutputs()
-                .createOrReplaceWithResponse(
-                    resourceGroupName,
-                    jobName,
-                    outputName,
-                    this.innerModel(),
-                    createIfMatch,
-                    createIfNoneMatch,
-                    Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getOutputs()
+            .createOrReplaceWithResponse(resourceGroupName, jobName, outputName, this.innerModel(), createIfMatch,
+                createIfNoneMatch, Context.NONE)
+            .getValue();
         return this;
     }
 
     public Output create(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getOutputs()
-                .createOrReplaceWithResponse(
-                    resourceGroupName,
-                    jobName,
-                    outputName,
-                    this.innerModel(),
-                    createIfMatch,
-                    createIfNoneMatch,
-                    context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getOutputs()
+            .createOrReplaceWithResponse(resourceGroupName, jobName, outputName, this.innerModel(), createIfMatch,
+                createIfNoneMatch, context)
+            .getValue();
         return this;
     }
 
@@ -126,52 +132,56 @@ public final class OutputImpl implements Output, Output.Definition, Output.Updat
     }
 
     public Output apply() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getOutputs()
-                .updateWithResponse(
-                    resourceGroupName, jobName, outputName, this.innerModel(), updateIfMatch, Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getOutputs()
+            .updateWithResponse(resourceGroupName, jobName, outputName, this.innerModel(), updateIfMatch, Context.NONE)
+            .getValue();
         return this;
     }
 
     public Output apply(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getOutputs()
-                .updateWithResponse(resourceGroupName, jobName, outputName, this.innerModel(), updateIfMatch, context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getOutputs()
+            .updateWithResponse(resourceGroupName, jobName, outputName, this.innerModel(), updateIfMatch, context)
+            .getValue();
         return this;
     }
 
-    OutputImpl(
-        OutputInner innerObject, com.azure.resourcemanager.streamanalytics.StreamAnalyticsManager serviceManager) {
+    OutputImpl(OutputInner innerObject,
+        com.azure.resourcemanager.streamanalytics.StreamAnalyticsManager serviceManager) {
         this.innerObject = innerObject;
         this.serviceManager = serviceManager;
-        this.resourceGroupName = Utils.getValueFromIdByName(innerObject.id(), "resourcegroups");
-        this.jobName = Utils.getValueFromIdByName(innerObject.id(), "streamingjobs");
-        this.outputName = Utils.getValueFromIdByName(innerObject.id(), "outputs");
+        this.resourceGroupName = ResourceManagerUtils.getValueFromIdByName(innerObject.id(), "resourcegroups");
+        this.jobName = ResourceManagerUtils.getValueFromIdByName(innerObject.id(), "streamingjobs");
+        this.outputName = ResourceManagerUtils.getValueFromIdByName(innerObject.id(), "outputs");
     }
 
     public Output refresh() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getOutputs()
-                .getWithResponse(resourceGroupName, jobName, outputName, Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getOutputs()
+            .getWithResponse(resourceGroupName, jobName, outputName, Context.NONE)
+            .getValue();
         return this;
     }
 
     public Output refresh(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getOutputs()
-                .getWithResponse(resourceGroupName, jobName, outputName, context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getOutputs()
+            .getWithResponse(resourceGroupName, jobName, outputName, context)
+            .getValue();
+        return this;
+    }
+
+    public ResourceTestStatus test() {
+        return serviceManager.outputs().test(resourceGroupName, jobName, outputName);
+    }
+
+    public ResourceTestStatus test(OutputInner output, Context context) {
+        return serviceManager.outputs().test(resourceGroupName, jobName, outputName, output, context);
+    }
+
+    public OutputImpl withName(String name) {
+        this.innerModel().withName(name);
         return this;
     }
 
@@ -185,7 +195,7 @@ public final class OutputImpl implements Output, Output.Definition, Output.Updat
         return this;
     }
 
-    public OutputImpl withSizeWindow(Float sizeWindow) {
+    public OutputImpl withSizeWindow(Integer sizeWindow) {
         this.innerModel().withSizeWindow(sizeWindow);
         return this;
     }
@@ -195,14 +205,19 @@ public final class OutputImpl implements Output, Output.Definition, Output.Updat
         return this;
     }
 
-    public OutputImpl withName(String name) {
-        this.innerModel().withName(name);
+    public OutputImpl withWatermarkSettings(OutputWatermarkProperties watermarkSettings) {
+        this.innerModel().withWatermarkSettings(watermarkSettings);
         return this;
     }
 
     public OutputImpl withIfMatch(String ifMatch) {
-        this.createIfMatch = ifMatch;
-        return this;
+        if (isInCreateMode()) {
+            this.createIfMatch = ifMatch;
+            return this;
+        } else {
+            this.updateIfMatch = ifMatch;
+            return this;
+        }
     }
 
     public OutputImpl withIfNoneMatch(String ifNoneMatch) {
@@ -210,8 +225,7 @@ public final class OutputImpl implements Output, Output.Definition, Output.Updat
         return this;
     }
 
-    public OutputImpl ifMatch(String ifMatch) {
-        this.updateIfMatch = ifMatch;
-        return this;
+    private boolean isInCreateMode() {
+        return this.innerModel().id() == null;
     }
 }

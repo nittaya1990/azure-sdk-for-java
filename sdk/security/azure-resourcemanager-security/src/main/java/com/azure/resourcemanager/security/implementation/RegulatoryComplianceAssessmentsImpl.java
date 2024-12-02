@@ -13,78 +13,55 @@ import com.azure.resourcemanager.security.fluent.RegulatoryComplianceAssessments
 import com.azure.resourcemanager.security.fluent.models.RegulatoryComplianceAssessmentInner;
 import com.azure.resourcemanager.security.models.RegulatoryComplianceAssessment;
 import com.azure.resourcemanager.security.models.RegulatoryComplianceAssessments;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class RegulatoryComplianceAssessmentsImpl implements RegulatoryComplianceAssessments {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RegulatoryComplianceAssessmentsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(RegulatoryComplianceAssessmentsImpl.class);
 
     private final RegulatoryComplianceAssessmentsClient innerClient;
 
     private final com.azure.resourcemanager.security.SecurityManager serviceManager;
 
-    public RegulatoryComplianceAssessmentsImpl(
-        RegulatoryComplianceAssessmentsClient innerClient,
+    public RegulatoryComplianceAssessmentsImpl(RegulatoryComplianceAssessmentsClient innerClient,
         com.azure.resourcemanager.security.SecurityManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
     }
 
-    public PagedIterable<RegulatoryComplianceAssessment> list(
-        String regulatoryComplianceStandardName, String regulatoryComplianceControlName) {
-        PagedIterable<RegulatoryComplianceAssessmentInner> inner =
-            this.serviceClient().list(regulatoryComplianceStandardName, regulatoryComplianceControlName);
-        return Utils.mapPage(inner, inner1 -> new RegulatoryComplianceAssessmentImpl(inner1, this.manager()));
+    public PagedIterable<RegulatoryComplianceAssessment> list(String regulatoryComplianceStandardName,
+        String regulatoryComplianceControlName) {
+        PagedIterable<RegulatoryComplianceAssessmentInner> inner
+            = this.serviceClient().list(regulatoryComplianceStandardName, regulatoryComplianceControlName);
+        return ResourceManagerUtils.mapPage(inner,
+            inner1 -> new RegulatoryComplianceAssessmentImpl(inner1, this.manager()));
     }
 
-    public PagedIterable<RegulatoryComplianceAssessment> list(
-        String regulatoryComplianceStandardName,
-        String regulatoryComplianceControlName,
-        String filter,
-        Context context) {
-        PagedIterable<RegulatoryComplianceAssessmentInner> inner =
-            this
-                .serviceClient()
-                .list(regulatoryComplianceStandardName, regulatoryComplianceControlName, filter, context);
-        return Utils.mapPage(inner, inner1 -> new RegulatoryComplianceAssessmentImpl(inner1, this.manager()));
+    public PagedIterable<RegulatoryComplianceAssessment> list(String regulatoryComplianceStandardName,
+        String regulatoryComplianceControlName, String filter, Context context) {
+        PagedIterable<RegulatoryComplianceAssessmentInner> inner = this.serviceClient()
+            .list(regulatoryComplianceStandardName, regulatoryComplianceControlName, filter, context);
+        return ResourceManagerUtils.mapPage(inner,
+            inner1 -> new RegulatoryComplianceAssessmentImpl(inner1, this.manager()));
     }
 
-    public RegulatoryComplianceAssessment get(
-        String regulatoryComplianceStandardName,
-        String regulatoryComplianceControlName,
-        String regulatoryComplianceAssessmentName) {
-        RegulatoryComplianceAssessmentInner inner =
-            this
-                .serviceClient()
-                .get(
-                    regulatoryComplianceStandardName,
-                    regulatoryComplianceControlName,
-                    regulatoryComplianceAssessmentName);
+    public Response<RegulatoryComplianceAssessment> getWithResponse(String regulatoryComplianceStandardName,
+        String regulatoryComplianceControlName, String regulatoryComplianceAssessmentName, Context context) {
+        Response<RegulatoryComplianceAssessmentInner> inner = this.serviceClient()
+            .getWithResponse(regulatoryComplianceStandardName, regulatoryComplianceControlName,
+                regulatoryComplianceAssessmentName, context);
         if (inner != null) {
-            return new RegulatoryComplianceAssessmentImpl(inner, this.manager());
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
+                new RegulatoryComplianceAssessmentImpl(inner.getValue(), this.manager()));
         } else {
             return null;
         }
     }
 
-    public Response<RegulatoryComplianceAssessment> getWithResponse(
-        String regulatoryComplianceStandardName,
-        String regulatoryComplianceControlName,
-        String regulatoryComplianceAssessmentName,
-        Context context) {
-        Response<RegulatoryComplianceAssessmentInner> inner =
-            this
-                .serviceClient()
-                .getWithResponse(
-                    regulatoryComplianceStandardName,
-                    regulatoryComplianceControlName,
-                    regulatoryComplianceAssessmentName,
-                    context);
+    public RegulatoryComplianceAssessment get(String regulatoryComplianceStandardName,
+        String regulatoryComplianceControlName, String regulatoryComplianceAssessmentName) {
+        RegulatoryComplianceAssessmentInner inner = this.serviceClient()
+            .get(regulatoryComplianceStandardName, regulatoryComplianceControlName, regulatoryComplianceAssessmentName);
         if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
-                new RegulatoryComplianceAssessmentImpl(inner.getValue(), this.manager()));
+            return new RegulatoryComplianceAssessmentImpl(inner, this.manager());
         } else {
             return null;
         }

@@ -13,29 +13,39 @@ import com.azure.resourcemanager.security.fluent.AlertsSuppressionRulesClient;
 import com.azure.resourcemanager.security.fluent.models.AlertsSuppressionRuleInner;
 import com.azure.resourcemanager.security.models.AlertsSuppressionRule;
 import com.azure.resourcemanager.security.models.AlertsSuppressionRules;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class AlertsSuppressionRulesImpl implements AlertsSuppressionRules {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AlertsSuppressionRulesImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(AlertsSuppressionRulesImpl.class);
 
     private final AlertsSuppressionRulesClient innerClient;
 
     private final com.azure.resourcemanager.security.SecurityManager serviceManager;
 
-    public AlertsSuppressionRulesImpl(
-        AlertsSuppressionRulesClient innerClient, com.azure.resourcemanager.security.SecurityManager serviceManager) {
+    public AlertsSuppressionRulesImpl(AlertsSuppressionRulesClient innerClient,
+        com.azure.resourcemanager.security.SecurityManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
     }
 
     public PagedIterable<AlertsSuppressionRule> list() {
         PagedIterable<AlertsSuppressionRuleInner> inner = this.serviceClient().list();
-        return Utils.mapPage(inner, inner1 -> new AlertsSuppressionRuleImpl(inner1, this.manager()));
+        return ResourceManagerUtils.mapPage(inner, inner1 -> new AlertsSuppressionRuleImpl(inner1, this.manager()));
     }
 
     public PagedIterable<AlertsSuppressionRule> list(String alertType, Context context) {
         PagedIterable<AlertsSuppressionRuleInner> inner = this.serviceClient().list(alertType, context);
-        return Utils.mapPage(inner, inner1 -> new AlertsSuppressionRuleImpl(inner1, this.manager()));
+        return ResourceManagerUtils.mapPage(inner, inner1 -> new AlertsSuppressionRuleImpl(inner1, this.manager()));
+    }
+
+    public Response<AlertsSuppressionRule> getWithResponse(String alertsSuppressionRuleName, Context context) {
+        Response<AlertsSuppressionRuleInner> inner
+            = this.serviceClient().getWithResponse(alertsSuppressionRuleName, context);
+        if (inner != null) {
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
+                new AlertsSuppressionRuleImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
     }
 
     public AlertsSuppressionRule get(String alertsSuppressionRuleName) {
@@ -47,24 +57,22 @@ public final class AlertsSuppressionRulesImpl implements AlertsSuppressionRules 
         }
     }
 
-    public Response<AlertsSuppressionRule> getWithResponse(String alertsSuppressionRuleName, Context context) {
-        Response<AlertsSuppressionRuleInner> inner =
-            this.serviceClient().getWithResponse(alertsSuppressionRuleName, context);
+    public Response<AlertsSuppressionRule> updateWithResponse(String alertsSuppressionRuleName,
+        AlertsSuppressionRuleInner alertsSuppressionRule, Context context) {
+        Response<AlertsSuppressionRuleInner> inner
+            = this.serviceClient().updateWithResponse(alertsSuppressionRuleName, alertsSuppressionRule, context);
         if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
                 new AlertsSuppressionRuleImpl(inner.getValue(), this.manager()));
         } else {
             return null;
         }
     }
 
-    public AlertsSuppressionRule update(
-        String alertsSuppressionRuleName, AlertsSuppressionRuleInner alertsSuppressionRule) {
-        AlertsSuppressionRuleInner inner =
-            this.serviceClient().update(alertsSuppressionRuleName, alertsSuppressionRule);
+    public AlertsSuppressionRule update(String alertsSuppressionRuleName,
+        AlertsSuppressionRuleInner alertsSuppressionRule) {
+        AlertsSuppressionRuleInner inner
+            = this.serviceClient().update(alertsSuppressionRuleName, alertsSuppressionRule);
         if (inner != null) {
             return new AlertsSuppressionRuleImpl(inner, this.manager());
         } else {
@@ -72,27 +80,12 @@ public final class AlertsSuppressionRulesImpl implements AlertsSuppressionRules 
         }
     }
 
-    public Response<AlertsSuppressionRule> updateWithResponse(
-        String alertsSuppressionRuleName, AlertsSuppressionRuleInner alertsSuppressionRule, Context context) {
-        Response<AlertsSuppressionRuleInner> inner =
-            this.serviceClient().updateWithResponse(alertsSuppressionRuleName, alertsSuppressionRule, context);
-        if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
-                new AlertsSuppressionRuleImpl(inner.getValue(), this.manager()));
-        } else {
-            return null;
-        }
+    public Response<Void> deleteWithResponse(String alertsSuppressionRuleName, Context context) {
+        return this.serviceClient().deleteWithResponse(alertsSuppressionRuleName, context);
     }
 
     public void delete(String alertsSuppressionRuleName) {
         this.serviceClient().delete(alertsSuppressionRuleName);
-    }
-
-    public Response<Void> deleteWithResponse(String alertsSuppressionRuleName, Context context) {
-        return this.serviceClient().deleteWithResponse(alertsSuppressionRuleName, context);
     }
 
     private AlertsSuppressionRulesClient serviceClient() {

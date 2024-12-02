@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.resourcehealth.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Display text of link. */
 @Fluent
 public final class LinkDisplayText {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(LinkDisplayText.class);
-
     /*
      * Display text of link.
      */
@@ -25,6 +21,10 @@ public final class LinkDisplayText {
      */
     @JsonProperty(value = "localizedValue")
     private String localizedValue;
+
+    /** Creates an instance of LinkDisplayText class. */
+    public LinkDisplayText() {
+    }
 
     /**
      * Get the value property: Display text of link.

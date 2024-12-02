@@ -5,8 +5,6 @@
 package com.azure.resourcemanager.videoanalyzer.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -20,12 +18,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("#Microsoft.VideoAnalyzer.SourceNodeBase")
 @JsonSubTypes({
     @JsonSubTypes.Type(name = "#Microsoft.VideoAnalyzer.RtspSource", value = RtspSource.class),
-    @JsonSubTypes.Type(name = "#Microsoft.VideoAnalyzer.VideoSource", value = VideoSource.class)
-})
+    @JsonSubTypes.Type(name = "#Microsoft.VideoAnalyzer.VideoSource", value = VideoSource.class) })
 @Fluent
 public class SourceNodeBase extends NodeBase {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SourceNodeBase.class);
-
     /** {@inheritDoc} */
     @Override
     public SourceNodeBase withName(String name) {

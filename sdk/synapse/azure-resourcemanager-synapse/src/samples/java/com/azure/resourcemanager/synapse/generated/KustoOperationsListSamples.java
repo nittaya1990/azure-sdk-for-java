@@ -4,19 +4,21 @@
 
 package com.azure.resourcemanager.synapse.generated;
 
-import com.azure.core.util.Context;
-
-/** Samples for KustoOperations List. */
+/**
+ * Samples for KustoOperations List.
+ */
 public final class KustoOperationsListSamples {
     /*
-     * x-ms-original-file: specification/synapse/resource-manager/Microsoft.Synapse/preview/2021-06-01-preview/examples/KustoOperationsList.json
+     * x-ms-original-file:
+     * specification/synapse/resource-manager/Microsoft.Synapse/preview/2021-06-01-preview/examples/KustoOperationsList.
+     * json
      */
     /**
      * Sample code: KustoOperationsList.
-     *
+     * 
      * @param manager Entry point to SynapseManager.
      */
     public static void kustoOperationsList(com.azure.resourcemanager.synapse.SynapseManager manager) {
-        manager.kustoOperations().list(Context.NONE);
+        manager.kustoOperations().list(com.azure.core.util.Context.NONE);
     }
 }

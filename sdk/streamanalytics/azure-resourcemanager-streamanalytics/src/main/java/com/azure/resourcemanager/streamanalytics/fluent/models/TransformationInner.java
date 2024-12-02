@@ -5,115 +5,53 @@
 package com.azure.resourcemanager.streamanalytics.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.management.SubResource;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * A transformation object, containing all information associated with the named transformation. All transformations are
  * contained under a streaming job.
  */
-@JsonFlatten
 @Fluent
-public class TransformationInner extends SubResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TransformationInner.class);
-
+public final class TransformationInner extends SubResource {
     /*
-     * Specifies the number of streaming units that the streaming job uses.
+     * The properties that are associated with a transformation. Required on PUT (CreateOrReplace) requests.
      */
-    @JsonProperty(value = "properties.streamingUnits")
-    private Integer streamingUnits;
-
-    /*
-     * Specifies the query that will be run in the streaming job. You can learn
-     * more about the Stream Analytics Query Language (SAQL) here:
-     * https://msdn.microsoft.com/library/azure/dn834998 . Required on PUT
-     * (CreateOrReplace) requests.
-     */
-    @JsonProperty(value = "properties.query")
-    private String query;
-
-    /*
-     * The current entity tag for the transformation. This is an opaque string.
-     * You can use it to detect whether the resource has changed between
-     * requests. You can also use it in the If-Match or If-None-Match headers
-     * for write operations for optimistic concurrency.
-     */
-    @JsonProperty(value = "properties.etag", access = JsonProperty.Access.WRITE_ONLY)
-    private String etag;
+    private TransformationProperties innerProperties;
 
     /*
      * Resource name
      */
-    @JsonProperty(value = "name")
     private String name;
 
     /*
      * Resource type
      */
-    @JsonProperty(value = "type", access = JsonProperty.Access.WRITE_ONLY)
     private String type;
 
     /**
-     * Get the streamingUnits property: Specifies the number of streaming units that the streaming job uses.
-     *
-     * @return the streamingUnits value.
+     * Creates an instance of TransformationInner class.
      */
-    public Integer streamingUnits() {
-        return this.streamingUnits;
+    public TransformationInner() {
     }
 
     /**
-     * Set the streamingUnits property: Specifies the number of streaming units that the streaming job uses.
-     *
-     * @param streamingUnits the streamingUnits value to set.
-     * @return the TransformationInner object itself.
-     */
-    public TransformationInner withStreamingUnits(Integer streamingUnits) {
-        this.streamingUnits = streamingUnits;
-        return this;
-    }
-
-    /**
-     * Get the query property: Specifies the query that will be run in the streaming job. You can learn more about the
-     * Stream Analytics Query Language (SAQL) here: https://msdn.microsoft.com/library/azure/dn834998 . Required on PUT
+     * Get the innerProperties property: The properties that are associated with a transformation. Required on PUT
      * (CreateOrReplace) requests.
-     *
-     * @return the query value.
+     * 
+     * @return the innerProperties value.
      */
-    public String query() {
-        return this.query;
-    }
-
-    /**
-     * Set the query property: Specifies the query that will be run in the streaming job. You can learn more about the
-     * Stream Analytics Query Language (SAQL) here: https://msdn.microsoft.com/library/azure/dn834998 . Required on PUT
-     * (CreateOrReplace) requests.
-     *
-     * @param query the query value to set.
-     * @return the TransformationInner object itself.
-     */
-    public TransformationInner withQuery(String query) {
-        this.query = query;
-        return this;
-    }
-
-    /**
-     * Get the etag property: The current entity tag for the transformation. This is an opaque string. You can use it to
-     * detect whether the resource has changed between requests. You can also use it in the If-Match or If-None-Match
-     * headers for write operations for optimistic concurrency.
-     *
-     * @return the etag value.
-     */
-    public String etag() {
-        return this.etag;
+    private TransformationProperties innerProperties() {
+        return this.innerProperties;
     }
 
     /**
      * Get the name property: Resource name.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -122,7 +60,7 @@ public class TransformationInner extends SubResource {
 
     /**
      * Set the name property: Resource name.
-     *
+     * 
      * @param name the name value to set.
      * @return the TransformationInner object itself.
      */
@@ -133,14 +71,16 @@ public class TransformationInner extends SubResource {
 
     /**
      * Get the type property: Resource type.
-     *
+     * 
      * @return the type value.
      */
     public String type() {
         return this.type;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public TransformationInner withId(String id) {
         super.withId(id);
@@ -148,10 +88,141 @@ public class TransformationInner extends SubResource {
     }
 
     /**
+     * Get the streamingUnits property: Specifies the number of streaming units that the streaming job uses.
+     * 
+     * @return the streamingUnits value.
+     */
+    public Integer streamingUnits() {
+        return this.innerProperties() == null ? null : this.innerProperties().streamingUnits();
+    }
+
+    /**
+     * Set the streamingUnits property: Specifies the number of streaming units that the streaming job uses.
+     * 
+     * @param streamingUnits the streamingUnits value to set.
+     * @return the TransformationInner object itself.
+     */
+    public TransformationInner withStreamingUnits(Integer streamingUnits) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new TransformationProperties();
+        }
+        this.innerProperties().withStreamingUnits(streamingUnits);
+        return this;
+    }
+
+    /**
+     * Get the validStreamingUnits property: Specifies the valid streaming units a streaming job can scale to.
+     * 
+     * @return the validStreamingUnits value.
+     */
+    public List<Integer> validStreamingUnits() {
+        return this.innerProperties() == null ? null : this.innerProperties().validStreamingUnits();
+    }
+
+    /**
+     * Set the validStreamingUnits property: Specifies the valid streaming units a streaming job can scale to.
+     * 
+     * @param validStreamingUnits the validStreamingUnits value to set.
+     * @return the TransformationInner object itself.
+     */
+    public TransformationInner withValidStreamingUnits(List<Integer> validStreamingUnits) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new TransformationProperties();
+        }
+        this.innerProperties().withValidStreamingUnits(validStreamingUnits);
+        return this;
+    }
+
+    /**
+     * Get the query property: Specifies the query that will be run in the streaming job. You can learn more about the
+     * Stream Analytics Query Language (SAQL) here: https://msdn.microsoft.com/library/azure/dn834998 . Required on PUT
+     * (CreateOrReplace) requests.
+     * 
+     * @return the query value.
+     */
+    public String query() {
+        return this.innerProperties() == null ? null : this.innerProperties().query();
+    }
+
+    /**
+     * Set the query property: Specifies the query that will be run in the streaming job. You can learn more about the
+     * Stream Analytics Query Language (SAQL) here: https://msdn.microsoft.com/library/azure/dn834998 . Required on PUT
+     * (CreateOrReplace) requests.
+     * 
+     * @param query the query value to set.
+     * @return the TransformationInner object itself.
+     */
+    public TransformationInner withQuery(String query) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new TransformationProperties();
+        }
+        this.innerProperties().withQuery(query);
+        return this;
+    }
+
+    /**
+     * Get the etag property: The current entity tag for the transformation. This is an opaque string. You can use it to
+     * detect whether the resource has changed between requests. You can also use it in the If-Match or If-None-Match
+     * headers for write operations for optimistic concurrency.
+     * 
+     * @return the etag value.
+     */
+    public String etag() {
+        return this.innerProperties() == null ? null : this.innerProperties().etag();
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
+        if (innerProperties() != null) {
+            innerProperties().validate();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeStringField("id", id());
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        jsonWriter.writeStringField("name", this.name);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of TransformationInner from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of TransformationInner if the JsonReader was pointing to an instance of it, or null if it was
+     * pointing to JSON null.
+     * @throws IOException If an error occurs while reading the TransformationInner.
+     */
+    public static TransformationInner fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            TransformationInner deserializedTransformationInner = new TransformationInner();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("id".equals(fieldName)) {
+                    deserializedTransformationInner.withId(reader.getString());
+                } else if ("properties".equals(fieldName)) {
+                    deserializedTransformationInner.innerProperties = TransformationProperties.fromJson(reader);
+                } else if ("name".equals(fieldName)) {
+                    deserializedTransformationInner.name = reader.getString();
+                } else if ("type".equals(fieldName)) {
+                    deserializedTransformationInner.type = reader.getString();
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedTransformationInner;
+        });
     }
 }

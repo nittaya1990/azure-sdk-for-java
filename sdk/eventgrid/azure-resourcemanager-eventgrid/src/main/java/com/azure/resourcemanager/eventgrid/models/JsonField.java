@@ -5,8 +5,6 @@
 package com.azure.resourcemanager.eventgrid.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -16,19 +14,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @Fluent
 public final class JsonField {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(JsonField.class);
-
     /*
-     * Name of a field in the input event schema that's to be used as the
-     * source of a mapping.
+     * Name of a field in the input event schema that's to be used as the source of a mapping.
      */
     @JsonProperty(value = "sourceField")
     private String sourceField;
 
     /**
+     * Creates an instance of JsonField class.
+     */
+    public JsonField() {
+    }
+
+    /**
      * Get the sourceField property: Name of a field in the input event schema that's to be used as the source of a
      * mapping.
-     *
+     * 
      * @return the sourceField value.
      */
     public String sourceField() {
@@ -38,7 +39,7 @@ public final class JsonField {
     /**
      * Set the sourceField property: Name of a field in the input event schema that's to be used as the source of a
      * mapping.
-     *
+     * 
      * @param sourceField the sourceField value to set.
      * @return the JsonField object itself.
      */
@@ -49,7 +50,7 @@ public final class JsonField {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

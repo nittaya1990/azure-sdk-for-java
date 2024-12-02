@@ -148,6 +148,13 @@ public interface CustomImage {
     String regionName();
 
     /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
+
+    /**
      * Gets the inner com.azure.resourcemanager.devtestlabs.fluent.models.CustomImageInner object.
      *
      * @return the inner object.
@@ -155,17 +162,16 @@ public interface CustomImage {
     CustomImageInner innerModel();
 
     /** The entirety of the CustomImage definition. */
-    interface Definition
-        extends DefinitionStages.Blank,
-            DefinitionStages.WithLocation,
-            DefinitionStages.WithParentResource,
-            DefinitionStages.WithCreate {
+    interface Definition extends DefinitionStages.Blank, DefinitionStages.WithLocation,
+        DefinitionStages.WithParentResource, DefinitionStages.WithCreate {
     }
+
     /** The CustomImage definition stages. */
     interface DefinitionStages {
         /** The first stage of the CustomImage definition. */
         interface Blank extends WithLocation {
         }
+
         /** The stage of the CustomImage definition allowing to specify location. */
         interface WithLocation {
             /**
@@ -184,6 +190,7 @@ public interface CustomImage {
              */
             WithParentResource withRegion(String location);
         }
+
         /** The stage of the CustomImage definition allowing to specify parent resource. */
         interface WithParentResource {
             /**
@@ -195,21 +202,15 @@ public interface CustomImage {
              */
             WithCreate withExistingLab(String resourceGroupName, String labName);
         }
+
         /**
          * The stage of the CustomImage definition which contains all the minimum required properties for the resource
          * to be created, but also allows for any other optional properties to be specified.
          */
-        interface WithCreate
-            extends DefinitionStages.WithTags,
-                DefinitionStages.WithVm,
-                DefinitionStages.WithVhd,
-                DefinitionStages.WithDescription,
-                DefinitionStages.WithAuthor,
-                DefinitionStages.WithManagedImageId,
-                DefinitionStages.WithManagedSnapshotId,
-                DefinitionStages.WithDataDiskStorageInfo,
-                DefinitionStages.WithCustomImagePlan,
-                DefinitionStages.WithIsPlanAuthorized {
+        interface WithCreate extends DefinitionStages.WithTags, DefinitionStages.WithVm, DefinitionStages.WithVhd,
+            DefinitionStages.WithDescription, DefinitionStages.WithAuthor, DefinitionStages.WithManagedImageId,
+            DefinitionStages.WithManagedSnapshotId, DefinitionStages.WithDataDiskStorageInfo,
+            DefinitionStages.WithCustomImagePlan, DefinitionStages.WithIsPlanAuthorized {
             /**
              * Executes the create request.
              *
@@ -225,6 +226,7 @@ public interface CustomImage {
              */
             CustomImage create(Context context);
         }
+
         /** The stage of the CustomImage definition allowing to specify tags. */
         interface WithTags {
             /**
@@ -235,6 +237,7 @@ public interface CustomImage {
              */
             WithCreate withTags(Map<String, String> tags);
         }
+
         /** The stage of the CustomImage definition allowing to specify vm. */
         interface WithVm {
             /**
@@ -245,6 +248,7 @@ public interface CustomImage {
              */
             WithCreate withVm(CustomImagePropertiesFromVm vm);
         }
+
         /** The stage of the CustomImage definition allowing to specify vhd. */
         interface WithVhd {
             /**
@@ -255,6 +259,7 @@ public interface CustomImage {
              */
             WithCreate withVhd(CustomImagePropertiesCustom vhd);
         }
+
         /** The stage of the CustomImage definition allowing to specify description. */
         interface WithDescription {
             /**
@@ -265,6 +270,7 @@ public interface CustomImage {
              */
             WithCreate withDescription(String description);
         }
+
         /** The stage of the CustomImage definition allowing to specify author. */
         interface WithAuthor {
             /**
@@ -275,6 +281,7 @@ public interface CustomImage {
              */
             WithCreate withAuthor(String author);
         }
+
         /** The stage of the CustomImage definition allowing to specify managedImageId. */
         interface WithManagedImageId {
             /**
@@ -285,6 +292,7 @@ public interface CustomImage {
              */
             WithCreate withManagedImageId(String managedImageId);
         }
+
         /** The stage of the CustomImage definition allowing to specify managedSnapshotId. */
         interface WithManagedSnapshotId {
             /**
@@ -295,6 +303,7 @@ public interface CustomImage {
              */
             WithCreate withManagedSnapshotId(String managedSnapshotId);
         }
+
         /** The stage of the CustomImage definition allowing to specify dataDiskStorageInfo. */
         interface WithDataDiskStorageInfo {
             /**
@@ -306,6 +315,7 @@ public interface CustomImage {
              */
             WithCreate withDataDiskStorageInfo(List<DataDiskStorageTypeInfo> dataDiskStorageInfo);
         }
+
         /** The stage of the CustomImage definition allowing to specify customImagePlan. */
         interface WithCustomImagePlan {
             /**
@@ -316,6 +326,7 @@ public interface CustomImage {
              */
             WithCreate withCustomImagePlan(CustomImagePropertiesFromPlan customImagePlan);
         }
+
         /** The stage of the CustomImage definition allowing to specify isPlanAuthorized. */
         interface WithIsPlanAuthorized {
             /**
@@ -329,6 +340,7 @@ public interface CustomImage {
             WithCreate withIsPlanAuthorized(Boolean isPlanAuthorized);
         }
     }
+
     /**
      * Begins update for the CustomImage resource.
      *
@@ -353,6 +365,7 @@ public interface CustomImage {
          */
         CustomImage apply(Context context);
     }
+
     /** The CustomImage update stages. */
     interface UpdateStages {
         /** The stage of the CustomImage update allowing to specify tags. */
@@ -366,6 +379,7 @@ public interface CustomImage {
             Update withTags(Map<String, String> tags);
         }
     }
+
     /**
      * Refreshes the resource to sync with Azure.
      *

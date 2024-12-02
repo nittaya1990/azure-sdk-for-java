@@ -7,29 +7,15 @@ package com.azure.resourcemanager.synapse.models;
 import com.azure.core.http.rest.Response;
 import com.azure.core.util.Context;
 
-/** Resource collection API of SqlPoolDataWarehouseUserActivities. */
+/**
+ * Resource collection API of SqlPoolDataWarehouseUserActivities.
+ */
 public interface SqlPoolDataWarehouseUserActivities {
     /**
+     * Get SQL pool user activities
+     * 
      * Gets the user activities of a SQL pool which includes running and suspended queries.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param sqlPoolName SQL pool name.
-     * @param dataWarehouseUserActivityName The activity name of the Sql pool.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the user activities of a SQL pool which includes running and suspended queries.
-     */
-    DataWarehouseUserActivities get(
-        String resourceGroupName,
-        String workspaceName,
-        String sqlPoolName,
-        DataWarehouseUserActivityName dataWarehouseUserActivityName);
-
-    /**
-     * Gets the user activities of a SQL pool which includes running and suspended queries.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param sqlPoolName SQL pool name.
@@ -38,12 +24,26 @@ public interface SqlPoolDataWarehouseUserActivities {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the user activities of a SQL pool which includes running and suspended queries along with
+     * {@link Response}.
+     */
+    Response<DataWarehouseUserActivities> getWithResponse(String resourceGroupName, String workspaceName,
+        String sqlPoolName, DataWarehouseUserActivityName dataWarehouseUserActivityName, Context context);
+
+    /**
+     * Get SQL pool user activities
+     * 
+     * Gets the user activities of a SQL pool which includes running and suspended queries.
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param sqlPoolName SQL pool name.
+     * @param dataWarehouseUserActivityName The activity name of the Sql pool.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return the user activities of a SQL pool which includes running and suspended queries.
      */
-    Response<DataWarehouseUserActivities> getWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String sqlPoolName,
-        DataWarehouseUserActivityName dataWarehouseUserActivityName,
-        Context context);
+    DataWarehouseUserActivities get(String resourceGroupName, String workspaceName, String sqlPoolName,
+        DataWarehouseUserActivityName dataWarehouseUserActivityName);
 }

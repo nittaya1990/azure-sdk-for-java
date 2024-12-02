@@ -5,16 +5,11 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Gateway hostname configuration details. */
 @Fluent
 public final class GatewayHostnameConfigurationContractProperties {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(GatewayHostnameConfigurationContractProperties.class);
-
     /*
      * Hostname value. Supports valid domain name, partial or full wildcard
      */
@@ -22,8 +17,7 @@ public final class GatewayHostnameConfigurationContractProperties {
     private String hostname;
 
     /*
-     * Identifier of Certificate entity that will be used for TLS connection
-     * establishment
+     * Identifier of Certificate entity that will be used for TLS connection establishment
      */
     @JsonProperty(value = "certificateId")
     private String certificateId;
@@ -51,6 +45,10 @@ public final class GatewayHostnameConfigurationContractProperties {
      */
     @JsonProperty(value = "http2Enabled")
     private Boolean http2Enabled;
+
+    /** Creates an instance of GatewayHostnameConfigurationContractProperties class. */
+    public GatewayHostnameConfigurationContractProperties() {
+    }
 
     /**
      * Get the hostname property: Hostname value. Supports valid domain name, partial or full wildcard.
@@ -109,8 +107,8 @@ public final class GatewayHostnameConfigurationContractProperties {
      * @param negotiateClientCertificate the negotiateClientCertificate value to set.
      * @return the GatewayHostnameConfigurationContractProperties object itself.
      */
-    public GatewayHostnameConfigurationContractProperties withNegotiateClientCertificate(
-        Boolean negotiateClientCertificate) {
+    public GatewayHostnameConfigurationContractProperties
+        withNegotiateClientCertificate(Boolean negotiateClientCertificate) {
         this.negotiateClientCertificate = negotiateClientCertificate;
         return this;
     }

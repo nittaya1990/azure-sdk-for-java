@@ -6,19 +6,15 @@ package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
 /** Details about connectivity to a resource. */
 @Fluent
 public final class ConnectivityStatusContract {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ConnectivityStatusContract.class);
-
     /*
-     * The hostname of the resource which the service depends on. This can be
-     * the database, storage or any other azure resource on which the service
-     * depends upon.
+     * The hostname of the resource which the service depends on. This can be the database, storage or any other azure
+     * resource on which the service depends upon.
      */
     @JsonProperty(value = "name", required = true)
     private String name;
@@ -36,21 +32,18 @@ public final class ConnectivityStatusContract {
     private String error;
 
     /*
-     * The date when the resource connectivity status was last updated. This
-     * status should be updated every 15 minutes. If this status has not been
-     * updated, then it means that the service has lost network connectivity to
-     * the resource, from inside the Virtual Network.The date conforms to the
-     * following format: `yyyy-MM-ddTHH:mm:ssZ` as specified by the ISO 8601
-     * standard.
+     * The date when the resource connectivity status was last updated. This status should be updated every 15 minutes.
+     * If this status has not been updated, then it means that the service has lost network connectivity to the
+     * resource, from inside the Virtual Network.The date conforms to the following format: `yyyy-MM-ddTHH:mm:ssZ` as
+     * specified by the ISO 8601 standard.
      *
      */
     @JsonProperty(value = "lastUpdated", required = true)
     private OffsetDateTime lastUpdated;
 
     /*
-     * The date when the resource connectivity status last Changed from success
-     * to failure or vice-versa. The date conforms to the following format:
-     * `yyyy-MM-ddTHH:mm:ssZ` as specified by the ISO 8601 standard.
+     * The date when the resource connectivity status last Changed from success to failure or vice-versa. The date
+     * conforms to the following format: `yyyy-MM-ddTHH:mm:ssZ` as specified by the ISO 8601 standard.
      *
      */
     @JsonProperty(value = "lastStatusChange", required = true)
@@ -67,6 +60,10 @@ public final class ConnectivityStatusContract {
      */
     @JsonProperty(value = "isOptional", required = true)
     private boolean isOptional;
+
+    /** Creates an instance of ConnectivityStatusContract class. */
+    public ConnectivityStatusContract() {
+    }
 
     /**
      * Get the name property: The hostname of the resource which the service depends on. This can be the database,
@@ -227,33 +224,26 @@ public final class ConnectivityStatusContract {
      */
     public void validate() {
         if (name() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property name in model ConnectivityStatusContract"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property name in model ConnectivityStatusContract"));
         }
         if (status() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property status in model ConnectivityStatusContract"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property status in model ConnectivityStatusContract"));
         }
         if (lastUpdated() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property lastUpdated in model ConnectivityStatusContract"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property lastUpdated in model ConnectivityStatusContract"));
         }
         if (lastStatusChange() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property lastStatusChange in model ConnectivityStatusContract"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property lastStatusChange in model ConnectivityStatusContract"));
         }
         if (resourceType() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property resourceType in model ConnectivityStatusContract"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property resourceType in model ConnectivityStatusContract"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(ConnectivityStatusContract.class);
 }

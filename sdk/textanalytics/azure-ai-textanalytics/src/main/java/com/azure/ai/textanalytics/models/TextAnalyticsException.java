@@ -14,9 +14,19 @@ public class TextAnalyticsException extends AzureException {
     private static final String ERROR_CODE = "ErrorCodeValue";
     private static final String TARGET = "target";
 
+    /**
+     * The service returned error code value.
+     */
     private final TextAnalyticsErrorCode errorCode;
+
+    /**
+     * The target for this exception.
+     */
     private final String target;
 
+    /**
+     * The error information list fot this exception.
+     */
     private IterableStream<TextAnalyticsError> errors;
 
     static {
@@ -24,7 +34,7 @@ public class TextAnalyticsException extends AzureException {
     }
 
     /**
-     * Initializes a new instance of the {@link TextAnalyticsException} class.
+     * Initializes a new instance of the {@code TextAnalyticsException} class.
      * @param message Text contains any additional details of the exception.
      * @param errorCode The service returned error code value.
      * @param target The target for this exception.
@@ -37,8 +47,12 @@ public class TextAnalyticsException extends AzureException {
 
     @Override
     public String getMessage() {
-        StringBuilder baseMessage = new StringBuilder().append(super.getMessage()).append(" ").append(ERROR_CODE)
-            .append(": {").append(errorCode).append("}");
+        StringBuilder baseMessage = new StringBuilder().append(super.getMessage())
+            .append(" ")
+            .append(ERROR_CODE)
+            .append(": {")
+            .append(errorCode)
+            .append("}");
 
         if (this.target == null) {
             return baseMessage.toString();
@@ -71,7 +85,7 @@ public class TextAnalyticsException extends AzureException {
      * @return {@link IterableStream} of {@link TextAnalyticsError}.
      */
     public IterableStream<TextAnalyticsError> getErrors() {
-        return this.errors;
+        return this.errors == null ? IterableStream.of(null) : this.errors;
     }
 
     /**

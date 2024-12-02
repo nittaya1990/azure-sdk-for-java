@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.storagecache.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.storagecache.models.ApiOperationPropertiesServiceSpecification;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Additional details about an operation. */
+/**
+ * Additional details about an operation.
+ */
 @Fluent
 public final class ApiOperationProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApiOperationProperties.class);
-
     /*
      * Specification of the all the metrics provided for a resource type.
      */
@@ -22,8 +20,14 @@ public final class ApiOperationProperties {
     private ApiOperationPropertiesServiceSpecification serviceSpecification;
 
     /**
+     * Creates an instance of ApiOperationProperties class.
+     */
+    public ApiOperationProperties() {
+    }
+
+    /**
      * Get the serviceSpecification property: Specification of the all the metrics provided for a resource type.
-     *
+     * 
      * @return the serviceSpecification value.
      */
     public ApiOperationPropertiesServiceSpecification serviceSpecification() {
@@ -32,19 +36,19 @@ public final class ApiOperationProperties {
 
     /**
      * Set the serviceSpecification property: Specification of the all the metrics provided for a resource type.
-     *
+     * 
      * @param serviceSpecification the serviceSpecification value to set.
      * @return the ApiOperationProperties object itself.
      */
-    public ApiOperationProperties withServiceSpecification(
-        ApiOperationPropertiesServiceSpecification serviceSpecification) {
+    public ApiOperationProperties
+        withServiceSpecification(ApiOperationPropertiesServiceSpecification serviceSpecification) {
         this.serviceSpecification = serviceSpecification;
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

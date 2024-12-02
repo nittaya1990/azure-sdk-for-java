@@ -102,7 +102,7 @@ class WindowsVolumeLegacyEncryptionMonitorImpl implements DiskVolumeEncryptionMo
             || ((String) publicSettings.get("VolumeType")).equalsIgnoreCase("All")
             || ((String) publicSettings.get("VolumeType")).equalsIgnoreCase("Data")) {
             String encryptionOperation = (String) publicSettings.get("EncryptionOperation");
-            if (encryptionOperation != null && encryptionOperation.equalsIgnoreCase("EnableEncryption")) {
+            if (encryptionOperation != null && "EnableEncryption".equalsIgnoreCase(encryptionOperation)) {
                 return EncryptionStatus.ENCRYPTED;
             }
             return EncryptionStatus.NOT_ENCRYPTED;
@@ -125,23 +125,20 @@ class WindowsVolumeLegacyEncryptionMonitorImpl implements DiskVolumeEncryptionMo
     public Mono<DiskVolumeEncryptionMonitor> refreshAsync() {
         final WindowsVolumeLegacyEncryptionMonitorImpl self = this;
         // Refreshes the cached Windows virtual machine and installed encryption extension
-        return retrieveVirtualMachineAsync()
-            .map(
-                virtualMachine -> {
-                    self.virtualMachine = virtualMachine;
-                    if (virtualMachine.resources() != null) {
-                        for (VirtualMachineExtensionInner extension : virtualMachine.resources()) {
-                            if (EncryptionExtensionIdentifier.isEncryptionPublisherName(extension.publisher())
-                                && EncryptionExtensionIdentifier
-                                    .isEncryptionTypeName(
-                                        extension.typePropertiesType(), OperatingSystemTypes.WINDOWS)) {
-                                self.encryptionExtension = extension;
-                                break;
-                            }
-                        }
+        return retrieveVirtualMachineAsync().map(virtualMachine -> {
+            self.virtualMachine = virtualMachine;
+            if (virtualMachine.resources() != null) {
+                for (VirtualMachineExtensionInner extension : virtualMachine.resources()) {
+                    if (EncryptionExtensionIdentifier.isEncryptionPublisherName(extension.publisher())
+                        && EncryptionExtensionIdentifier.isEncryptionTypeName(extension.typePropertiesType(),
+                            OperatingSystemTypes.WINDOWS)) {
+                        self.encryptionExtension = extension;
+                        break;
                     }
-                    return self;
-                });
+                }
+            }
+            return self;
+        });
     }
 
     /**

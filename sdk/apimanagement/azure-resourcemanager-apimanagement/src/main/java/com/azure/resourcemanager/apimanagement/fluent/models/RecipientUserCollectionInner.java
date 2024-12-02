@@ -5,16 +5,12 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Paged Recipient User list representation. */
 @Fluent
 public final class RecipientUserCollectionInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RecipientUserCollectionInner.class);
-
     /*
      * Page values.
      */
@@ -32,6 +28,10 @@ public final class RecipientUserCollectionInner {
      */
     @JsonProperty(value = "nextLink")
     private String nextLink;
+
+    /** Creates an instance of RecipientUserCollectionInner class. */
+    public RecipientUserCollectionInner() {
+    }
 
     /**
      * Get the value property: Page values.

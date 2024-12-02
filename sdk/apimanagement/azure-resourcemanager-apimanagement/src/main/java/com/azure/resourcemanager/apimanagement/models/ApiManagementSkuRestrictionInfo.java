@@ -5,16 +5,12 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** The ApiManagementSkuRestrictionInfo model. */
 @Immutable
 public final class ApiManagementSkuRestrictionInfo {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApiManagementSkuRestrictionInfo.class);
-
     /*
      * Locations where the SKU is restricted
      */
@@ -26,6 +22,10 @@ public final class ApiManagementSkuRestrictionInfo {
      */
     @JsonProperty(value = "zones", access = JsonProperty.Access.WRITE_ONLY)
     private List<String> zones;
+
+    /** Creates an instance of ApiManagementSkuRestrictionInfo class. */
+    public ApiManagementSkuRestrictionInfo() {
+    }
 
     /**
      * Get the locations property: Locations where the SKU is restricted.

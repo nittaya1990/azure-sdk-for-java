@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Disk information. */
+/**
+ * Disk information.
+ */
 @Fluent
 public final class DiskInformation {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DiskInformation.class);
-
     /*
      * The lun property.
      */
@@ -27,8 +25,14 @@ public final class DiskInformation {
     private String name;
 
     /**
+     * Creates an instance of DiskInformation class.
+     */
+    public DiskInformation() {
+    }
+
+    /**
      * Get the lun property: The lun property.
-     *
+     * 
      * @return the lun value.
      */
     public Integer lun() {
@@ -37,7 +41,7 @@ public final class DiskInformation {
 
     /**
      * Set the lun property: The lun property.
-     *
+     * 
      * @param lun the lun value to set.
      * @return the DiskInformation object itself.
      */
@@ -48,7 +52,7 @@ public final class DiskInformation {
 
     /**
      * Get the name property: The name property.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -57,7 +61,7 @@ public final class DiskInformation {
 
     /**
      * Set the name property: The name property.
-     *
+     * 
      * @param name the name value to set.
      * @return the DiskInformation object itself.
      */
@@ -68,7 +72,7 @@ public final class DiskInformation {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

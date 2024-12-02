@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.mysqlflexibleserver.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Represents a resource name availability. */
+/**
+ * Represents a resource name availability.
+ */
 @Fluent
 public final class NameAvailabilityInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(NameAvailabilityInner.class);
-
     /*
      * Error Message.
      */
@@ -33,8 +31,14 @@ public final class NameAvailabilityInner {
     private String reason;
 
     /**
+     * Creates an instance of NameAvailabilityInner class.
+     */
+    public NameAvailabilityInner() {
+    }
+
+    /**
      * Get the message property: Error Message.
-     *
+     * 
      * @return the message value.
      */
     public String message() {
@@ -43,7 +47,7 @@ public final class NameAvailabilityInner {
 
     /**
      * Set the message property: Error Message.
-     *
+     * 
      * @param message the message value to set.
      * @return the NameAvailabilityInner object itself.
      */
@@ -54,7 +58,7 @@ public final class NameAvailabilityInner {
 
     /**
      * Get the nameAvailable property: Indicates whether the resource name is available.
-     *
+     * 
      * @return the nameAvailable value.
      */
     public Boolean nameAvailable() {
@@ -63,7 +67,7 @@ public final class NameAvailabilityInner {
 
     /**
      * Set the nameAvailable property: Indicates whether the resource name is available.
-     *
+     * 
      * @param nameAvailable the nameAvailable value to set.
      * @return the NameAvailabilityInner object itself.
      */
@@ -74,7 +78,7 @@ public final class NameAvailabilityInner {
 
     /**
      * Get the reason property: Reason for name being unavailable.
-     *
+     * 
      * @return the reason value.
      */
     public String reason() {
@@ -83,7 +87,7 @@ public final class NameAvailabilityInner {
 
     /**
      * Set the reason property: Reason for name being unavailable.
-     *
+     * 
      * @param reason the reason value to set.
      * @return the NameAvailabilityInner object itself.
      */
@@ -94,7 +98,7 @@ public final class NameAvailabilityInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

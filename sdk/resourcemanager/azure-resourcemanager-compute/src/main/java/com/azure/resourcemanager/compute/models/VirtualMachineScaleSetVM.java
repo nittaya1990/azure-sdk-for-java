@@ -14,6 +14,8 @@ import com.azure.resourcemanager.resources.fluentcore.model.Appliable;
 import com.azure.resourcemanager.resources.fluentcore.model.HasInnerModel;
 import com.azure.resourcemanager.resources.fluentcore.model.Refreshable;
 import com.azure.resourcemanager.resources.fluentcore.model.Updatable;
+
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 import reactor.core.publisher.Mono;
@@ -21,11 +23,8 @@ import reactor.core.publisher.Mono;
 /** An immutable client-side representation of a virtual machine instance in an Azure virtual machine scale set. */
 @Fluent
 public interface VirtualMachineScaleSetVM
-    extends Resource,
-        ChildResource<VirtualMachineScaleSet>,
-        Refreshable<VirtualMachineScaleSetVM>,
-        Updatable<VirtualMachineScaleSetVM.Update>,
-        HasInnerModel<VirtualMachineScaleSetVMInner> {
+    extends Resource, ChildResource<VirtualMachineScaleSet>, Refreshable<VirtualMachineScaleSetVM>,
+    Updatable<VirtualMachineScaleSetVM.Update>, HasInnerModel<VirtualMachineScaleSetVMInner> {
     /** @return the instance ID assigned to this virtual machine instance */
     String instanceId();
 
@@ -146,6 +145,16 @@ public interface VirtualMachineScaleSetVM
     /** @return true if managed disk is used for the virtual machine's disks (os, data) */
     boolean isManagedDiskEnabled();
 
+    /** Shuts down the virtual machine instance, move them to new node, and powers them back on. */
+    void redeploy();
+
+    /**
+     * Shuts down the virtual machine instance, move them to new node, and powers them back on.
+     *
+     * @return a representation of the deferred computation of this call
+     */
+    Mono<Void> redeployAsync();
+
     /** Updates the version of the installed operating system in the virtual machine instance. */
     void reimage();
 
@@ -175,6 +184,21 @@ public interface VirtualMachineScaleSetVM
      * @return a representation of the deferred computation of this call
      */
     Mono<Void> powerOffAsync();
+
+    /**
+     * Stops the virtual machine instance.
+     *
+     * @param skipShutdown power off without graceful shutdown
+     */
+    void powerOff(boolean skipShutdown);
+
+    /**
+     * Stops the virtual machine instances.
+     *
+     * @param skipShutdown power off without graceful shutdown
+     * @return a representation of the deferred computation of this call.
+     */
+    Mono<Void> powerOffAsync(boolean skipShutdown);
 
     /** Starts the virtual machine instance. */
     void start();
@@ -240,6 +264,14 @@ public interface VirtualMachineScaleSetVM
      */
     VirtualMachineScaleSetNetworkInterface getNetworkInterface(String name);
 
+    /**
+     * Gets a network interface associated with this virtual machine instance.
+     *
+     * @param name the name of the network interface
+     * @return the network interface
+     */
+    Mono<VirtualMachineScaleSetNetworkInterface> getNetworkInterfaceAsync(String name);
+
     /** @return the network interfaces associated with this virtual machine instance. */
     PagedIterable<VirtualMachineScaleSetNetworkInterface> listNetworkInterfaces();
 
@@ -257,6 +289,9 @@ public interface VirtualMachineScaleSetVM
 
     /** @return The network profile config for the vm. */
     VirtualMachineScaleSetVMNetworkProfileConfiguration networkProfileConfiguration();
+
+    /** @return the time at which the Virtual Machine resource was created */
+    OffsetDateTime timeCreated();
 
     /** The template for an update operation, containing all the settings that can be modified. */
     interface Update extends Appliable<VirtualMachineScaleSetVM> {
@@ -279,8 +314,8 @@ public interface VirtualMachineScaleSetVM
          * @param storageAccountTypes the storage account type
          * @return the next stage of the update
          */
-        Update withExistingDataDisk(
-            Disk dataDisk, int lun, CachingTypes cachingTypes, StorageAccountTypes storageAccountTypes);
+        Update withExistingDataDisk(Disk dataDisk, int lun, CachingTypes cachingTypes,
+            StorageAccountTypes storageAccountTypes);
 
         /**
          * Detaches an existing data disk from this VMSS virtual machine.

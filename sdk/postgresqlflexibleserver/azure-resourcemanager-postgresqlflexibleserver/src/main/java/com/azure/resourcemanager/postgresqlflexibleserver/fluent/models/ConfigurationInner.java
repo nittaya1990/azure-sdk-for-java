@@ -7,16 +7,14 @@ package com.azure.resourcemanager.postgresqlflexibleserver.fluent.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.ProxyResource;
 import com.azure.core.management.SystemData;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.postgresqlflexibleserver.models.ConfigurationDataType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Represents a Configuration. */
+/**
+ * Represents a Configuration.
+ */
 @Fluent
 public final class ConfigurationInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ConfigurationInner.class);
-
     /*
      * The properties of a configuration.
      */
@@ -24,14 +22,20 @@ public final class ConfigurationInner extends ProxyResource {
     private ConfigurationProperties innerProperties;
 
     /*
-     * The system metadata relating to this resource.
+     * Azure Resource Manager metadata containing createdBy and modifiedBy information.
      */
     @JsonProperty(value = "systemData", access = JsonProperty.Access.WRITE_ONLY)
     private SystemData systemData;
 
     /**
+     * Creates an instance of ConfigurationInner class.
+     */
+    public ConfigurationInner() {
+    }
+
+    /**
      * Get the innerProperties property: The properties of a configuration.
-     *
+     * 
      * @return the innerProperties value.
      */
     private ConfigurationProperties innerProperties() {
@@ -39,8 +43,8 @@ public final class ConfigurationInner extends ProxyResource {
     }
 
     /**
-     * Get the systemData property: The system metadata relating to this resource.
-     *
+     * Get the systemData property: Azure Resource Manager metadata containing createdBy and modifiedBy information.
+     * 
      * @return the systemData value.
      */
     public SystemData systemData() {
@@ -49,7 +53,7 @@ public final class ConfigurationInner extends ProxyResource {
 
     /**
      * Get the value property: Value of the configuration.
-     *
+     * 
      * @return the value value.
      */
     public String value() {
@@ -58,7 +62,7 @@ public final class ConfigurationInner extends ProxyResource {
 
     /**
      * Set the value property: Value of the configuration.
-     *
+     * 
      * @param value the value value to set.
      * @return the ConfigurationInner object itself.
      */
@@ -72,7 +76,7 @@ public final class ConfigurationInner extends ProxyResource {
 
     /**
      * Get the description property: Description of the configuration.
-     *
+     * 
      * @return the description value.
      */
     public String description() {
@@ -81,7 +85,7 @@ public final class ConfigurationInner extends ProxyResource {
 
     /**
      * Get the defaultValue property: Default value of the configuration.
-     *
+     * 
      * @return the defaultValue value.
      */
     public String defaultValue() {
@@ -90,7 +94,7 @@ public final class ConfigurationInner extends ProxyResource {
 
     /**
      * Get the dataType property: Data type of the configuration.
-     *
+     * 
      * @return the dataType value.
      */
     public ConfigurationDataType dataType() {
@@ -99,7 +103,7 @@ public final class ConfigurationInner extends ProxyResource {
 
     /**
      * Get the allowedValues property: Allowed values of the configuration.
-     *
+     * 
      * @return the allowedValues value.
      */
     public String allowedValues() {
@@ -108,7 +112,7 @@ public final class ConfigurationInner extends ProxyResource {
 
     /**
      * Get the source property: Source of the configuration.
-     *
+     * 
      * @return the source value.
      */
     public String source() {
@@ -117,7 +121,7 @@ public final class ConfigurationInner extends ProxyResource {
 
     /**
      * Set the source property: Source of the configuration.
-     *
+     * 
      * @param source the source value to set.
      * @return the ConfigurationInner object itself.
      */
@@ -130,8 +134,53 @@ public final class ConfigurationInner extends ProxyResource {
     }
 
     /**
+     * Get the isDynamicConfig property: Configuration dynamic or static.
+     * 
+     * @return the isDynamicConfig value.
+     */
+    public Boolean isDynamicConfig() {
+        return this.innerProperties() == null ? null : this.innerProperties().isDynamicConfig();
+    }
+
+    /**
+     * Get the isReadOnly property: Configuration read-only or not.
+     * 
+     * @return the isReadOnly value.
+     */
+    public Boolean isReadOnly() {
+        return this.innerProperties() == null ? null : this.innerProperties().isReadOnly();
+    }
+
+    /**
+     * Get the isConfigPendingRestart property: Configuration is pending restart or not.
+     * 
+     * @return the isConfigPendingRestart value.
+     */
+    public Boolean isConfigPendingRestart() {
+        return this.innerProperties() == null ? null : this.innerProperties().isConfigPendingRestart();
+    }
+
+    /**
+     * Get the unit property: Configuration unit.
+     * 
+     * @return the unit value.
+     */
+    public String unit() {
+        return this.innerProperties() == null ? null : this.innerProperties().unit();
+    }
+
+    /**
+     * Get the documentationLink property: Configuration documentation link.
+     * 
+     * @return the documentationLink value.
+     */
+    public String documentationLink() {
+        return this.innerProperties() == null ? null : this.innerProperties().documentationLink();
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

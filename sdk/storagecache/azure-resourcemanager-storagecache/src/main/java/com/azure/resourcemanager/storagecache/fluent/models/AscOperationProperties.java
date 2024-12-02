@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.storagecache.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
-/** Additional operation-specific output. */
+/**
+ * Additional operation-specific output.
+ */
 @Fluent
 public final class AscOperationProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AscOperationProperties.class);
-
     /*
      * Additional operation-specific output.
      */
@@ -24,8 +22,14 @@ public final class AscOperationProperties {
     private Map<String, Object> output;
 
     /**
+     * Creates an instance of AscOperationProperties class.
+     */
+    public AscOperationProperties() {
+    }
+
+    /**
      * Get the output property: Additional operation-specific output.
-     *
+     * 
      * @return the output value.
      */
     public Map<String, Object> output() {
@@ -34,7 +38,7 @@ public final class AscOperationProperties {
 
     /**
      * Set the output property: Additional operation-specific output.
-     *
+     * 
      * @param output the output value to set.
      * @return the AscOperationProperties object itself.
      */
@@ -45,7 +49,7 @@ public final class AscOperationProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

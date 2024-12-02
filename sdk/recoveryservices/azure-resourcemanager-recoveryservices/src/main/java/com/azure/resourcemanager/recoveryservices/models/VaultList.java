@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.recoveryservices.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.recoveryservices.fluent.models.VaultInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The response model for a list of Vaults. */
+/**
+ * The response model for a list of Vaults.
+ */
 @Fluent
 public final class VaultList {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(VaultList.class);
-
     /*
      * The value property.
      */
@@ -29,8 +27,14 @@ public final class VaultList {
     private String nextLink;
 
     /**
+     * Creates an instance of VaultList class.
+     */
+    public VaultList() {
+    }
+
+    /**
      * Get the value property: The value property.
-     *
+     * 
      * @return the value value.
      */
     public List<VaultInner> value() {
@@ -39,7 +43,7 @@ public final class VaultList {
 
     /**
      * Set the value property: The value property.
-     *
+     * 
      * @param value the value value to set.
      * @return the VaultList object itself.
      */
@@ -50,7 +54,7 @@ public final class VaultList {
 
     /**
      * Get the nextLink property: The nextLink property.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -59,7 +63,7 @@ public final class VaultList {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

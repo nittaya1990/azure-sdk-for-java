@@ -5,17 +5,13 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.models.DiagnosticContractInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Paged Diagnostic list representation. */
 @Fluent
 public final class DiagnosticCollection {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DiagnosticCollection.class);
-
     /*
      * Page values.
      */
@@ -33,6 +29,10 @@ public final class DiagnosticCollection {
      */
     @JsonProperty(value = "nextLink")
     private String nextLink;
+
+    /** Creates an instance of DiagnosticCollection class. */
+    public DiagnosticCollection() {
+    }
 
     /**
      * Get the value property: Page values.

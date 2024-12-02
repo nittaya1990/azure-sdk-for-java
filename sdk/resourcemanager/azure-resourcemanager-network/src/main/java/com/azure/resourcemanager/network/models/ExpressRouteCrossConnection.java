@@ -14,11 +14,9 @@ import java.util.Map;
 
 /** Entry point for Express Route Cross Connection management API in Azure. */
 @Fluent
-public interface ExpressRouteCrossConnection
-    extends GroupableResource<NetworkManager, ExpressRouteCrossConnectionInner>,
-        Refreshable<ExpressRouteCrossConnection>,
-        Updatable<ExpressRouteCrossConnection.Update>,
-        UpdatableWithTags<ExpressRouteCrossConnection> {
+public interface ExpressRouteCrossConnection extends
+    GroupableResource<NetworkManager, ExpressRouteCrossConnectionInner>, Refreshable<ExpressRouteCrossConnection>,
+    Updatable<ExpressRouteCrossConnection.Update>, UpdatableWithTags<ExpressRouteCrossConnection> {
 
     /** @return entry point to manage express route peerings associated with express route circuit */
     ExpressRouteCrossConnectionPeerings peerings();
@@ -59,11 +57,23 @@ public interface ExpressRouteCrossConnection
          * The stage of express route cross connection update allowing to specify service provider provisioning state.
          */
         interface WithServiceProviderProviosioningState {
+            /**
+             * Specifies the service provider provisioning state for the express route cross connection.
+             *
+             * @param state the service provider provisioning state
+             * @return next stage of update
+             */
             Update withServiceProviderProvisioningState(ServiceProviderProvisioningState state);
         }
 
         /** The stage of express route cross connection update allowing to specify service provider notes. */
         interface WithServiceProviderNotes {
+            /**
+             * Specifies the service provider notes for the express route cross connection.
+             *
+             * @param notes the service provider notes
+             * @return next stage of update
+             */
             Update withServiceProviderNotes(String notes);
         }
     }
@@ -72,10 +82,7 @@ public interface ExpressRouteCrossConnection
      * The template for a express route cross connection update operation, containing all the settings that can be
      * modified.
      */
-    interface Update
-        extends Appliable<ExpressRouteCrossConnection>,
-            Resource.UpdateWithTags<Update>,
-            UpdateStages.WithServiceProviderProviosioningState,
-            UpdateStages.WithServiceProviderNotes {
+    interface Update extends Appliable<ExpressRouteCrossConnection>, Resource.UpdateWithTags<Update>,
+        UpdateStages.WithServiceProviderProviosioningState, UpdateStages.WithServiceProviderNotes {
     }
 }

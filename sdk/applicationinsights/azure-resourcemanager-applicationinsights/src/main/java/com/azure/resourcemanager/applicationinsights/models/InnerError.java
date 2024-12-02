@@ -5,16 +5,12 @@
 package com.azure.resourcemanager.applicationinsights.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
 /** Inner error. */
 @Fluent
 public final class InnerError {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(InnerError.class);
-
     /*
      * Provides correlation for request
      */
@@ -26,6 +22,10 @@ public final class InnerError {
      */
     @JsonProperty(value = "time")
     private OffsetDateTime time;
+
+    /** Creates an instance of InnerError class. */
+    public InnerError() {
+    }
 
     /**
      * Get the diagnosticcontext property: Provides correlation for request.

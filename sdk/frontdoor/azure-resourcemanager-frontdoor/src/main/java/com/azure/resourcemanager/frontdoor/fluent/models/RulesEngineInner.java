@@ -5,12 +5,9 @@
 package com.azure.resourcemanager.frontdoor.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.frontdoor.models.FrontDoorResourceState;
 import com.azure.resourcemanager.frontdoor.models.RulesEngineRule;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
@@ -18,60 +15,71 @@ import java.util.List;
  * A rules engine configuration containing a list of rules that will run to modify the runtime behavior of the request
  * and response.
  */
-@JsonFlatten
 @Fluent
-public class RulesEngineInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RulesEngineInner.class);
-
+public final class RulesEngineInner extends ProxyResource {
     /*
-     * A list of rules that define a particular Rules Engine Configuration.
+     * Properties of the Rules Engine Configuration.
      */
-    @JsonProperty(value = "properties.rules")
-    private List<RulesEngineRule> rules;
+    @JsonProperty(value = "properties")
+    private RulesEngineProperties innerProperties;
 
-    /*
+    /**
+     * Creates an instance of RulesEngineInner class.
+     */
+    public RulesEngineInner() {
+    }
+
+    /**
+     * Get the innerProperties property: Properties of the Rules Engine Configuration.
+     * 
+     * @return the innerProperties value.
+     */
+    private RulesEngineProperties innerProperties() {
+        return this.innerProperties;
+    }
+
+    /**
+     * Get the resourceState property: Resource status of the Front Door or Front Door SubResource.
+     * 
      * Resource status.
+     * 
+     * @return the resourceState value.
      */
-    @JsonProperty(value = "properties.resourceState", access = JsonProperty.Access.WRITE_ONLY)
-    private FrontDoorResourceState resourceState;
+    public FrontDoorResourceState resourceState() {
+        return this.innerProperties() == null ? null : this.innerProperties().resourceState();
+    }
 
     /**
      * Get the rules property: A list of rules that define a particular Rules Engine Configuration.
-     *
+     * 
      * @return the rules value.
      */
     public List<RulesEngineRule> rules() {
-        return this.rules;
+        return this.innerProperties() == null ? null : this.innerProperties().rules();
     }
 
     /**
      * Set the rules property: A list of rules that define a particular Rules Engine Configuration.
-     *
+     * 
      * @param rules the rules value to set.
      * @return the RulesEngineInner object itself.
      */
     public RulesEngineInner withRules(List<RulesEngineRule> rules) {
-        this.rules = rules;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new RulesEngineProperties();
+        }
+        this.innerProperties().withRules(rules);
         return this;
     }
 
     /**
-     * Get the resourceState property: Resource status.
-     *
-     * @return the resourceState value.
-     */
-    public FrontDoorResourceState resourceState() {
-        return this.resourceState;
-    }
-
-    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
-        if (rules() != null) {
-            rules().forEach(e -> e.validate());
+        if (innerProperties() != null) {
+            innerProperties().validate();
         }
     }
 }

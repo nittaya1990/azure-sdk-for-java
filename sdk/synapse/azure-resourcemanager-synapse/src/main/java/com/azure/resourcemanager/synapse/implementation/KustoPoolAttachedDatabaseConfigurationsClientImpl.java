@@ -29,7 +29,6 @@ import com.azure.core.management.exception.ManagementException;
 import com.azure.core.management.polling.PollResult;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.core.util.polling.PollerFlux;
 import com.azure.core.util.polling.SyncPoller;
 import com.azure.resourcemanager.synapse.fluent.KustoPoolAttachedDatabaseConfigurationsClient;
@@ -45,26 +44,24 @@ import reactor.core.publisher.Mono;
  */
 public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
     implements KustoPoolAttachedDatabaseConfigurationsClient {
-    private final ClientLogger logger = new ClientLogger(KustoPoolAttachedDatabaseConfigurationsClientImpl.class);
-
-    /** The proxy service used to perform REST calls. */
+    /**
+     * The proxy service used to perform REST calls.
+     */
     private final KustoPoolAttachedDatabaseConfigurationsService service;
 
-    /** The service client containing this operation class. */
+    /**
+     * The service client containing this operation class.
+     */
     private final SynapseManagementClientImpl client;
 
     /**
      * Initializes an instance of KustoPoolAttachedDatabaseConfigurationsClientImpl.
-     *
+     * 
      * @param client the instance of the service client containing this operation class.
      */
     KustoPoolAttachedDatabaseConfigurationsClientImpl(SynapseManagementClientImpl client) {
-        this.service =
-            RestProxy
-                .create(
-                    KustoPoolAttachedDatabaseConfigurationsService.class,
-                    client.getHttpPipeline(),
-                    client.getSerializerAdapter());
+        this.service = RestProxy.create(KustoPoolAttachedDatabaseConfigurationsService.class, client.getHttpPipeline(),
+            client.getSerializerAdapter());
         this.client = client;
     }
 
@@ -74,98 +71,70 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
      */
     @Host("{$host}")
     @ServiceInterface(name = "SynapseManagementCli")
-    private interface KustoPoolAttachedDatabaseConfigurationsService {
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
-                + "/{workspaceName}/kustoPools/{kustoPoolName}/attachedDatabaseConfigurations")
-        @ExpectedResponses({200})
+    public interface KustoPoolAttachedDatabaseConfigurationsService {
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces/{workspaceName}/kustoPools/{kustoPoolName}/attachedDatabaseConfigurations")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<AttachedDatabaseConfigurationListResult>> listByKustoPool(
-            @HostParam("$host") String endpoint,
-            @PathParam("workspaceName") String workspaceName,
-            @PathParam("kustoPoolName") String kustoPoolName,
+        Mono<Response<AttachedDatabaseConfigurationListResult>> listByKustoPool(@HostParam("$host") String endpoint,
+            @PathParam("workspaceName") String workspaceName, @PathParam("kustoPoolName") String kustoPoolName,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
-                + "/{workspaceName}/kustoPools/{kustoPoolName}/attachedDatabaseConfigurations"
-                + "/{attachedDatabaseConfigurationName}")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces/{workspaceName}/kustoPools/{kustoPoolName}/attachedDatabaseConfigurations/{attachedDatabaseConfigurationName}")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<AttachedDatabaseConfigurationInner>> get(
-            @HostParam("$host") String endpoint,
-            @PathParam("workspaceName") String workspaceName,
-            @PathParam("kustoPoolName") String kustoPoolName,
+        Mono<Response<AttachedDatabaseConfigurationInner>> get(@HostParam("$host") String endpoint,
+            @PathParam("workspaceName") String workspaceName, @PathParam("kustoPoolName") String kustoPoolName,
             @PathParam("attachedDatabaseConfigurationName") String attachedDatabaseConfigurationName,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Put(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
-                + "/{workspaceName}/kustoPools/{kustoPoolName}/attachedDatabaseConfigurations"
-                + "/{attachedDatabaseConfigurationName}")
-        @ExpectedResponses({200, 201, 202})
+        @Headers({ "Content-Type: application/json" })
+        @Put("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces/{workspaceName}/kustoPools/{kustoPoolName}/attachedDatabaseConfigurations/{attachedDatabaseConfigurationName}")
+        @ExpectedResponses({ 200, 201, 202 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> createOrUpdate(
-            @HostParam("$host") String endpoint,
-            @PathParam("workspaceName") String workspaceName,
-            @PathParam("kustoPoolName") String kustoPoolName,
+        Mono<Response<Flux<ByteBuffer>>> createOrUpdate(@HostParam("$host") String endpoint,
+            @PathParam("workspaceName") String workspaceName, @PathParam("kustoPoolName") String kustoPoolName,
             @PathParam("attachedDatabaseConfigurationName") String attachedDatabaseConfigurationName,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @QueryParam("api-version") String apiVersion,
+            @PathParam("resourceGroupName") String resourceGroupName, @QueryParam("api-version") String apiVersion,
             @BodyParam("application/json") AttachedDatabaseConfigurationInner parameters,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Delete(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
-                + "/{workspaceName}/kustoPools/{kustoPoolName}/attachedDatabaseConfigurations"
-                + "/{attachedDatabaseConfigurationName}")
-        @ExpectedResponses({200, 202, 204})
+        @Headers({ "Content-Type: application/json" })
+        @Delete("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces/{workspaceName}/kustoPools/{kustoPoolName}/attachedDatabaseConfigurations/{attachedDatabaseConfigurationName}")
+        @ExpectedResponses({ 200, 202, 204 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> delete(
-            @HostParam("$host") String endpoint,
-            @PathParam("workspaceName") String workspaceName,
-            @PathParam("kustoPoolName") String kustoPoolName,
+        Mono<Response<Flux<ByteBuffer>>> delete(@HostParam("$host") String endpoint,
+            @PathParam("workspaceName") String workspaceName, @PathParam("kustoPoolName") String kustoPoolName,
             @PathParam("attachedDatabaseConfigurationName") String attachedDatabaseConfigurationName,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
     }
 
     /**
      * Returns the list of attached database configurations of the given Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list attached database configurations operation response.
+     * @return the list attached database configurations operation response along with {@link PagedResponse} on
+     * successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<AttachedDatabaseConfigurationInner>> listByKustoPoolSinglePageAsync(
-        String workspaceName, String kustoPoolName, String resourceGroupName) {
+    private Mono<PagedResponse<AttachedDatabaseConfigurationInner>> listByKustoPoolSinglePageAsync(String workspaceName,
+        String kustoPoolName, String resourceGroupName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -174,10 +143,8 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
             return Mono.error(new IllegalArgumentException("Parameter kustoPoolName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -186,28 +153,16 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .listByKustoPool(
-                            this.client.getEndpoint(),
-                            workspaceName,
-                            kustoPoolName,
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            apiVersion,
-                            accept,
-                            context))
-            .<PagedResponse<AttachedDatabaseConfigurationInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(), res.getStatusCode(), res.getHeaders(), res.getValue().value(), null, null))
+            .withContext(context -> service.listByKustoPool(this.client.getEndpoint(), workspaceName, kustoPoolName,
+                this.client.getSubscriptionId(), resourceGroupName, apiVersion, accept, context))
+            .<PagedResponse<AttachedDatabaseConfigurationInner>>map(res -> new PagedResponseBase<>(res.getRequest(),
+                res.getStatusCode(), res.getHeaders(), res.getValue().value(), null, null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Returns the list of attached database configurations of the given Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -215,16 +170,15 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list attached database configurations operation response.
+     * @return the list attached database configurations operation response along with {@link PagedResponse} on
+     * successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<AttachedDatabaseConfigurationInner>> listByKustoPoolSinglePageAsync(
-        String workspaceName, String kustoPoolName, String resourceGroupName, Context context) {
+    private Mono<PagedResponse<AttachedDatabaseConfigurationInner>> listByKustoPoolSinglePageAsync(String workspaceName,
+        String kustoPoolName, String resourceGroupName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -233,10 +187,8 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
             return Mono.error(new IllegalArgumentException("Parameter kustoPoolName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -246,41 +198,33 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
         final String accept = "application/json";
         context = this.client.mergeContext(context);
         return service
-            .listByKustoPool(
-                this.client.getEndpoint(),
-                workspaceName,
-                kustoPoolName,
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                apiVersion,
-                accept,
-                context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(), res.getStatusCode(), res.getHeaders(), res.getValue().value(), null, null));
+            .listByKustoPool(this.client.getEndpoint(), workspaceName, kustoPoolName, this.client.getSubscriptionId(),
+                resourceGroupName, apiVersion, accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), null, null));
     }
 
     /**
      * Returns the list of attached database configurations of the given Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list attached database configurations operation response.
+     * @return the list attached database configurations operation response as paginated response with
+     * {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<AttachedDatabaseConfigurationInner> listByKustoPoolAsync(
-        String workspaceName, String kustoPoolName, String resourceGroupName) {
+    private PagedFlux<AttachedDatabaseConfigurationInner> listByKustoPoolAsync(String workspaceName,
+        String kustoPoolName, String resourceGroupName) {
         return new PagedFlux<>(() -> listByKustoPoolSinglePageAsync(workspaceName, kustoPoolName, resourceGroupName));
     }
 
     /**
      * Returns the list of attached database configurations of the given Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -288,35 +232,37 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list attached database configurations operation response.
+     * @return the list attached database configurations operation response as paginated response with
+     * {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<AttachedDatabaseConfigurationInner> listByKustoPoolAsync(
-        String workspaceName, String kustoPoolName, String resourceGroupName, Context context) {
+    private PagedFlux<AttachedDatabaseConfigurationInner> listByKustoPoolAsync(String workspaceName,
+        String kustoPoolName, String resourceGroupName, Context context) {
         return new PagedFlux<>(
             () -> listByKustoPoolSinglePageAsync(workspaceName, kustoPoolName, resourceGroupName, context));
     }
 
     /**
      * Returns the list of attached database configurations of the given Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list attached database configurations operation response.
+     * @return the list attached database configurations operation response as paginated response with
+     * {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<AttachedDatabaseConfigurationInner> listByKustoPool(
-        String workspaceName, String kustoPoolName, String resourceGroupName) {
+    public PagedIterable<AttachedDatabaseConfigurationInner> listByKustoPool(String workspaceName, String kustoPoolName,
+        String resourceGroupName) {
         return new PagedIterable<>(listByKustoPoolAsync(workspaceName, kustoPoolName, resourceGroupName));
     }
 
     /**
      * Returns the list of attached database configurations of the given Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -324,17 +270,18 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list attached database configurations operation response.
+     * @return the list attached database configurations operation response as paginated response with
+     * {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<AttachedDatabaseConfigurationInner> listByKustoPool(
-        String workspaceName, String kustoPoolName, String resourceGroupName, Context context) {
+    public PagedIterable<AttachedDatabaseConfigurationInner> listByKustoPool(String workspaceName, String kustoPoolName,
+        String resourceGroupName, Context context) {
         return new PagedIterable<>(listByKustoPoolAsync(workspaceName, kustoPoolName, resourceGroupName, context));
     }
 
     /**
      * Returns an attached database configuration.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param attachedDatabaseConfigurationName The name of the attached database configuration.
@@ -342,19 +289,15 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing an attached database configuration.
+     * @return class representing an attached database configuration along with {@link Response} on successful
+     * completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<AttachedDatabaseConfigurationInner>> getWithResponseAsync(
-        String workspaceName,
-        String kustoPoolName,
-        String attachedDatabaseConfigurationName,
-        String resourceGroupName) {
+    private Mono<Response<AttachedDatabaseConfigurationInner>> getWithResponseAsync(String workspaceName,
+        String kustoPoolName, String attachedDatabaseConfigurationName, String resourceGroupName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -363,16 +306,12 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
             return Mono.error(new IllegalArgumentException("Parameter kustoPoolName is required and cannot be null."));
         }
         if (attachedDatabaseConfigurationName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter attachedDatabaseConfigurationName is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter attachedDatabaseConfigurationName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -381,25 +320,15 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .get(
-                            this.client.getEndpoint(),
-                            workspaceName,
-                            kustoPoolName,
-                            attachedDatabaseConfigurationName,
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            apiVersion,
-                            accept,
-                            context))
+            .withContext(context -> service.get(this.client.getEndpoint(), workspaceName, kustoPoolName,
+                attachedDatabaseConfigurationName, this.client.getSubscriptionId(), resourceGroupName, apiVersion,
+                accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Returns an attached database configuration.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param attachedDatabaseConfigurationName The name of the attached database configuration.
@@ -408,20 +337,15 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing an attached database configuration.
+     * @return class representing an attached database configuration along with {@link Response} on successful
+     * completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<AttachedDatabaseConfigurationInner>> getWithResponseAsync(
-        String workspaceName,
-        String kustoPoolName,
-        String attachedDatabaseConfigurationName,
-        String resourceGroupName,
-        Context context) {
+    private Mono<Response<AttachedDatabaseConfigurationInner>> getWithResponseAsync(String workspaceName,
+        String kustoPoolName, String attachedDatabaseConfigurationName, String resourceGroupName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -430,16 +354,12 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
             return Mono.error(new IllegalArgumentException("Parameter kustoPoolName is required and cannot be null."));
         }
         if (attachedDatabaseConfigurationName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter attachedDatabaseConfigurationName is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter attachedDatabaseConfigurationName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -448,22 +368,13 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .get(
-                this.client.getEndpoint(),
-                workspaceName,
-                kustoPoolName,
-                attachedDatabaseConfigurationName,
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                apiVersion,
-                accept,
-                context);
+        return service.get(this.client.getEndpoint(), workspaceName, kustoPoolName, attachedDatabaseConfigurationName,
+            this.client.getSubscriptionId(), resourceGroupName, apiVersion, accept, context);
     }
 
     /**
      * Returns an attached database configuration.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param attachedDatabaseConfigurationName The name of the attached database configuration.
@@ -471,49 +382,18 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing an attached database configuration.
+     * @return class representing an attached database configuration on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<AttachedDatabaseConfigurationInner> getAsync(
-        String workspaceName,
-        String kustoPoolName,
-        String attachedDatabaseConfigurationName,
-        String resourceGroupName) {
+    private Mono<AttachedDatabaseConfigurationInner> getAsync(String workspaceName, String kustoPoolName,
+        String attachedDatabaseConfigurationName, String resourceGroupName) {
         return getWithResponseAsync(workspaceName, kustoPoolName, attachedDatabaseConfigurationName, resourceGroupName)
-            .flatMap(
-                (Response<AttachedDatabaseConfigurationInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Returns an attached database configuration.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param attachedDatabaseConfigurationName The name of the attached database configuration.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing an attached database configuration.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public AttachedDatabaseConfigurationInner get(
-        String workspaceName,
-        String kustoPoolName,
-        String attachedDatabaseConfigurationName,
-        String resourceGroupName) {
-        return getAsync(workspaceName, kustoPoolName, attachedDatabaseConfigurationName, resourceGroupName).block();
-    }
-
-    /**
-     * Returns an attached database configuration.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param attachedDatabaseConfigurationName The name of the attached database configuration.
@@ -522,23 +402,37 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return class representing an attached database configuration along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<AttachedDatabaseConfigurationInner> getWithResponse(String workspaceName, String kustoPoolName,
+        String attachedDatabaseConfigurationName, String resourceGroupName, Context context) {
+        return getWithResponseAsync(workspaceName, kustoPoolName, attachedDatabaseConfigurationName, resourceGroupName,
+            context).block();
+    }
+
+    /**
+     * Returns an attached database configuration.
+     * 
+     * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param attachedDatabaseConfigurationName The name of the attached database configuration.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return class representing an attached database configuration.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<AttachedDatabaseConfigurationInner> getWithResponse(
-        String workspaceName,
-        String kustoPoolName,
-        String attachedDatabaseConfigurationName,
-        String resourceGroupName,
-        Context context) {
-        return getWithResponseAsync(
-                workspaceName, kustoPoolName, attachedDatabaseConfigurationName, resourceGroupName, context)
-            .block();
+    public AttachedDatabaseConfigurationInner get(String workspaceName, String kustoPoolName,
+        String attachedDatabaseConfigurationName, String resourceGroupName) {
+        return getWithResponse(workspaceName, kustoPoolName, attachedDatabaseConfigurationName, resourceGroupName,
+            Context.NONE).getValue();
     }
 
     /**
      * Creates or updates an attached database configuration.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param attachedDatabaseConfigurationName The name of the attached database configuration.
@@ -547,20 +441,16 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing an attached database configuration.
+     * @return class representing an attached database configuration along with {@link Response} on successful
+     * completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(
-        String workspaceName,
-        String kustoPoolName,
-        String attachedDatabaseConfigurationName,
-        String resourceGroupName,
+    private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(String workspaceName, String kustoPoolName,
+        String attachedDatabaseConfigurationName, String resourceGroupName,
         AttachedDatabaseConfigurationInner parameters) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -569,16 +459,12 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
             return Mono.error(new IllegalArgumentException("Parameter kustoPoolName is required and cannot be null."));
         }
         if (attachedDatabaseConfigurationName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter attachedDatabaseConfigurationName is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter attachedDatabaseConfigurationName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -592,26 +478,15 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .createOrUpdate(
-                            this.client.getEndpoint(),
-                            workspaceName,
-                            kustoPoolName,
-                            attachedDatabaseConfigurationName,
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            apiVersion,
-                            parameters,
-                            accept,
-                            context))
+            .withContext(context -> service.createOrUpdate(this.client.getEndpoint(), workspaceName, kustoPoolName,
+                attachedDatabaseConfigurationName, this.client.getSubscriptionId(), resourceGroupName, apiVersion,
+                parameters, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Creates or updates an attached database configuration.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param attachedDatabaseConfigurationName The name of the attached database configuration.
@@ -621,21 +496,16 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing an attached database configuration.
+     * @return class representing an attached database configuration along with {@link Response} on successful
+     * completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(
-        String workspaceName,
-        String kustoPoolName,
-        String attachedDatabaseConfigurationName,
-        String resourceGroupName,
-        AttachedDatabaseConfigurationInner parameters,
-        Context context) {
+    private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(String workspaceName, String kustoPoolName,
+        String attachedDatabaseConfigurationName, String resourceGroupName,
+        AttachedDatabaseConfigurationInner parameters, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -644,16 +514,12 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
             return Mono.error(new IllegalArgumentException("Parameter kustoPoolName is required and cannot be null."));
         }
         if (attachedDatabaseConfigurationName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter attachedDatabaseConfigurationName is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter attachedDatabaseConfigurationName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -667,23 +533,14 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .createOrUpdate(
-                this.client.getEndpoint(),
-                workspaceName,
-                kustoPoolName,
-                attachedDatabaseConfigurationName,
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                apiVersion,
-                parameters,
-                accept,
-                context);
+        return service.createOrUpdate(this.client.getEndpoint(), workspaceName, kustoPoolName,
+            attachedDatabaseConfigurationName, this.client.getSubscriptionId(), resourceGroupName, apiVersion,
+            parameters, accept, context);
     }
 
     /**
      * Creates or updates an attached database configuration.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param attachedDatabaseConfigurationName The name of the attached database configuration.
@@ -692,32 +549,22 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing an attached database configuration.
+     * @return the {@link PollerFlux} for polling of class representing an attached database configuration.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<AttachedDatabaseConfigurationInner>, AttachedDatabaseConfigurationInner>
-        beginCreateOrUpdateAsync(
-            String workspaceName,
-            String kustoPoolName,
-            String attachedDatabaseConfigurationName,
-            String resourceGroupName,
-            AttachedDatabaseConfigurationInner parameters) {
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            createOrUpdateWithResponseAsync(
-                workspaceName, kustoPoolName, attachedDatabaseConfigurationName, resourceGroupName, parameters);
-        return this
-            .client
-            .<AttachedDatabaseConfigurationInner, AttachedDatabaseConfigurationInner>getLroResult(
-                mono,
-                this.client.getHttpPipeline(),
-                AttachedDatabaseConfigurationInner.class,
-                AttachedDatabaseConfigurationInner.class,
-                Context.NONE);
+        beginCreateOrUpdateAsync(String workspaceName, String kustoPoolName, String attachedDatabaseConfigurationName,
+            String resourceGroupName, AttachedDatabaseConfigurationInner parameters) {
+        Mono<Response<Flux<ByteBuffer>>> mono = createOrUpdateWithResponseAsync(workspaceName, kustoPoolName,
+            attachedDatabaseConfigurationName, resourceGroupName, parameters);
+        return this.client.<AttachedDatabaseConfigurationInner, AttachedDatabaseConfigurationInner>getLroResult(mono,
+            this.client.getHttpPipeline(), AttachedDatabaseConfigurationInner.class,
+            AttachedDatabaseConfigurationInner.class, this.client.getContext());
     }
 
     /**
      * Creates or updates an attached database configuration.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param attachedDatabaseConfigurationName The name of the attached database configuration.
@@ -727,65 +574,46 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing an attached database configuration.
+     * @return the {@link PollerFlux} for polling of class representing an attached database configuration.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<AttachedDatabaseConfigurationInner>, AttachedDatabaseConfigurationInner>
-        beginCreateOrUpdateAsync(
-            String workspaceName,
-            String kustoPoolName,
-            String attachedDatabaseConfigurationName,
-            String resourceGroupName,
-            AttachedDatabaseConfigurationInner parameters,
-            Context context) {
+        beginCreateOrUpdateAsync(String workspaceName, String kustoPoolName, String attachedDatabaseConfigurationName,
+            String resourceGroupName, AttachedDatabaseConfigurationInner parameters, Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            createOrUpdateWithResponseAsync(
-                workspaceName,
-                kustoPoolName,
-                attachedDatabaseConfigurationName,
-                resourceGroupName,
-                parameters,
-                context);
+        Mono<Response<Flux<ByteBuffer>>> mono = createOrUpdateWithResponseAsync(workspaceName, kustoPoolName,
+            attachedDatabaseConfigurationName, resourceGroupName, parameters, context);
+        return this.client.<AttachedDatabaseConfigurationInner, AttachedDatabaseConfigurationInner>getLroResult(mono,
+            this.client.getHttpPipeline(), AttachedDatabaseConfigurationInner.class,
+            AttachedDatabaseConfigurationInner.class, context);
+    }
+
+    /**
+     * Creates or updates an attached database configuration.
+     * 
+     * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param attachedDatabaseConfigurationName The name of the attached database configuration.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param parameters The database parameters supplied to the CreateOrUpdate operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of class representing an attached database configuration.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<AttachedDatabaseConfigurationInner>, AttachedDatabaseConfigurationInner>
+        beginCreateOrUpdate(String workspaceName, String kustoPoolName, String attachedDatabaseConfigurationName,
+            String resourceGroupName, AttachedDatabaseConfigurationInner parameters) {
         return this
-            .client
-            .<AttachedDatabaseConfigurationInner, AttachedDatabaseConfigurationInner>getLroResult(
-                mono,
-                this.client.getHttpPipeline(),
-                AttachedDatabaseConfigurationInner.class,
-                AttachedDatabaseConfigurationInner.class,
-                context);
-    }
-
-    /**
-     * Creates or updates an attached database configuration.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param attachedDatabaseConfigurationName The name of the attached database configuration.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param parameters The database parameters supplied to the CreateOrUpdate operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing an attached database configuration.
-     */
-    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<AttachedDatabaseConfigurationInner>, AttachedDatabaseConfigurationInner>
-        beginCreateOrUpdate(
-            String workspaceName,
-            String kustoPoolName,
-            String attachedDatabaseConfigurationName,
-            String resourceGroupName,
-            AttachedDatabaseConfigurationInner parameters) {
-        return beginCreateOrUpdateAsync(
-                workspaceName, kustoPoolName, attachedDatabaseConfigurationName, resourceGroupName, parameters)
+            .beginCreateOrUpdateAsync(workspaceName, kustoPoolName, attachedDatabaseConfigurationName,
+                resourceGroupName, parameters)
             .getSyncPoller();
     }
 
     /**
      * Creates or updates an attached database configuration.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param attachedDatabaseConfigurationName The name of the attached database configuration.
@@ -795,25 +623,64 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing an attached database configuration.
+     * @return the {@link SyncPoller} for polling of class representing an attached database configuration.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<AttachedDatabaseConfigurationInner>, AttachedDatabaseConfigurationInner>
-        beginCreateOrUpdate(
-            String workspaceName,
-            String kustoPoolName,
-            String attachedDatabaseConfigurationName,
-            String resourceGroupName,
-            AttachedDatabaseConfigurationInner parameters,
-            Context context) {
-        return beginCreateOrUpdateAsync(
-                workspaceName, kustoPoolName, attachedDatabaseConfigurationName, resourceGroupName, parameters, context)
+        beginCreateOrUpdate(String workspaceName, String kustoPoolName, String attachedDatabaseConfigurationName,
+            String resourceGroupName, AttachedDatabaseConfigurationInner parameters, Context context) {
+        return this
+            .beginCreateOrUpdateAsync(workspaceName, kustoPoolName, attachedDatabaseConfigurationName,
+                resourceGroupName, parameters, context)
             .getSyncPoller();
     }
 
     /**
      * Creates or updates an attached database configuration.
-     *
+     * 
+     * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param attachedDatabaseConfigurationName The name of the attached database configuration.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param parameters The database parameters supplied to the CreateOrUpdate operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return class representing an attached database configuration on successful completion of {@link Mono}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    private Mono<AttachedDatabaseConfigurationInner> createOrUpdateAsync(String workspaceName, String kustoPoolName,
+        String attachedDatabaseConfigurationName, String resourceGroupName,
+        AttachedDatabaseConfigurationInner parameters) {
+        return beginCreateOrUpdateAsync(workspaceName, kustoPoolName, attachedDatabaseConfigurationName,
+            resourceGroupName, parameters).last().flatMap(this.client::getLroFinalResultOrError);
+    }
+
+    /**
+     * Creates or updates an attached database configuration.
+     * 
+     * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param attachedDatabaseConfigurationName The name of the attached database configuration.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param parameters The database parameters supplied to the CreateOrUpdate operation.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return class representing an attached database configuration on successful completion of {@link Mono}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    private Mono<AttachedDatabaseConfigurationInner> createOrUpdateAsync(String workspaceName, String kustoPoolName,
+        String attachedDatabaseConfigurationName, String resourceGroupName,
+        AttachedDatabaseConfigurationInner parameters, Context context) {
+        return beginCreateOrUpdateAsync(workspaceName, kustoPoolName, attachedDatabaseConfigurationName,
+            resourceGroupName, parameters, context).last().flatMap(this.client::getLroFinalResultOrError);
+    }
+
+    /**
+     * Creates or updates an attached database configuration.
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param attachedDatabaseConfigurationName The name of the attached database configuration.
@@ -825,21 +692,16 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
      * @return class representing an attached database configuration.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<AttachedDatabaseConfigurationInner> createOrUpdateAsync(
-        String workspaceName,
-        String kustoPoolName,
-        String attachedDatabaseConfigurationName,
-        String resourceGroupName,
+    public AttachedDatabaseConfigurationInner createOrUpdate(String workspaceName, String kustoPoolName,
+        String attachedDatabaseConfigurationName, String resourceGroupName,
         AttachedDatabaseConfigurationInner parameters) {
-        return beginCreateOrUpdateAsync(
-                workspaceName, kustoPoolName, attachedDatabaseConfigurationName, resourceGroupName, parameters)
-            .last()
-            .flatMap(this.client::getLroFinalResultOrError);
+        return createOrUpdateAsync(workspaceName, kustoPoolName, attachedDatabaseConfigurationName, resourceGroupName,
+            parameters).block();
     }
 
     /**
      * Creates or updates an attached database configuration.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param attachedDatabaseConfigurationName The name of the attached database configuration.
@@ -852,74 +714,16 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
      * @return class representing an attached database configuration.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<AttachedDatabaseConfigurationInner> createOrUpdateAsync(
-        String workspaceName,
-        String kustoPoolName,
-        String attachedDatabaseConfigurationName,
-        String resourceGroupName,
-        AttachedDatabaseConfigurationInner parameters,
-        Context context) {
-        return beginCreateOrUpdateAsync(
-                workspaceName, kustoPoolName, attachedDatabaseConfigurationName, resourceGroupName, parameters, context)
-            .last()
-            .flatMap(this.client::getLroFinalResultOrError);
-    }
-
-    /**
-     * Creates or updates an attached database configuration.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param attachedDatabaseConfigurationName The name of the attached database configuration.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param parameters The database parameters supplied to the CreateOrUpdate operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing an attached database configuration.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public AttachedDatabaseConfigurationInner createOrUpdate(
-        String workspaceName,
-        String kustoPoolName,
-        String attachedDatabaseConfigurationName,
-        String resourceGroupName,
-        AttachedDatabaseConfigurationInner parameters) {
-        return createOrUpdateAsync(
-                workspaceName, kustoPoolName, attachedDatabaseConfigurationName, resourceGroupName, parameters)
-            .block();
-    }
-
-    /**
-     * Creates or updates an attached database configuration.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param attachedDatabaseConfigurationName The name of the attached database configuration.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param parameters The database parameters supplied to the CreateOrUpdate operation.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing an attached database configuration.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public AttachedDatabaseConfigurationInner createOrUpdate(
-        String workspaceName,
-        String kustoPoolName,
-        String attachedDatabaseConfigurationName,
-        String resourceGroupName,
-        AttachedDatabaseConfigurationInner parameters,
-        Context context) {
-        return createOrUpdateAsync(
-                workspaceName, kustoPoolName, attachedDatabaseConfigurationName, resourceGroupName, parameters, context)
-            .block();
+    public AttachedDatabaseConfigurationInner createOrUpdate(String workspaceName, String kustoPoolName,
+        String attachedDatabaseConfigurationName, String resourceGroupName,
+        AttachedDatabaseConfigurationInner parameters, Context context) {
+        return createOrUpdateAsync(workspaceName, kustoPoolName, attachedDatabaseConfigurationName, resourceGroupName,
+            parameters, context).block();
     }
 
     /**
      * Deletes the attached database configuration with the given name.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param attachedDatabaseConfigurationName The name of the attached database configuration.
@@ -927,19 +731,14 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(
-        String workspaceName,
-        String kustoPoolName,
-        String attachedDatabaseConfigurationName,
-        String resourceGroupName) {
+    private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(String workspaceName, String kustoPoolName,
+        String attachedDatabaseConfigurationName, String resourceGroupName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -948,16 +747,12 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
             return Mono.error(new IllegalArgumentException("Parameter kustoPoolName is required and cannot be null."));
         }
         if (attachedDatabaseConfigurationName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter attachedDatabaseConfigurationName is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter attachedDatabaseConfigurationName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -966,25 +761,15 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .delete(
-                            this.client.getEndpoint(),
-                            workspaceName,
-                            kustoPoolName,
-                            attachedDatabaseConfigurationName,
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            apiVersion,
-                            accept,
-                            context))
+            .withContext(context -> service.delete(this.client.getEndpoint(), workspaceName, kustoPoolName,
+                attachedDatabaseConfigurationName, this.client.getSubscriptionId(), resourceGroupName, apiVersion,
+                accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Deletes the attached database configuration with the given name.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param attachedDatabaseConfigurationName The name of the attached database configuration.
@@ -993,20 +778,14 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(
-        String workspaceName,
-        String kustoPoolName,
-        String attachedDatabaseConfigurationName,
-        String resourceGroupName,
-        Context context) {
+    private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(String workspaceName, String kustoPoolName,
+        String attachedDatabaseConfigurationName, String resourceGroupName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -1015,16 +794,12 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
             return Mono.error(new IllegalArgumentException("Parameter kustoPoolName is required and cannot be null."));
         }
         if (attachedDatabaseConfigurationName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter attachedDatabaseConfigurationName is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter attachedDatabaseConfigurationName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1033,22 +808,14 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .delete(
-                this.client.getEndpoint(),
-                workspaceName,
-                kustoPoolName,
-                attachedDatabaseConfigurationName,
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                apiVersion,
-                accept,
-                context);
+        return service.delete(this.client.getEndpoint(), workspaceName, kustoPoolName,
+            attachedDatabaseConfigurationName, this.client.getSubscriptionId(), resourceGroupName, apiVersion, accept,
+            context);
     }
 
     /**
      * Deletes the attached database configuration with the given name.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param attachedDatabaseConfigurationName The name of the attached database configuration.
@@ -1056,24 +823,20 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    private PollerFlux<PollResult<Void>, Void> beginDeleteAsync(
-        String workspaceName,
-        String kustoPoolName,
-        String attachedDatabaseConfigurationName,
-        String resourceGroupName) {
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            deleteWithResponseAsync(workspaceName, kustoPoolName, attachedDatabaseConfigurationName, resourceGroupName);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, Context.NONE);
+    private PollerFlux<PollResult<Void>, Void> beginDeleteAsync(String workspaceName, String kustoPoolName,
+        String attachedDatabaseConfigurationName, String resourceGroupName) {
+        Mono<Response<Flux<ByteBuffer>>> mono = deleteWithResponseAsync(workspaceName, kustoPoolName,
+            attachedDatabaseConfigurationName, resourceGroupName);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            this.client.getContext());
     }
 
     /**
      * Deletes the attached database configuration with the given name.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param attachedDatabaseConfigurationName The name of the attached database configuration.
@@ -1082,74 +845,62 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    private PollerFlux<PollResult<Void>, Void> beginDeleteAsync(
-        String workspaceName,
-        String kustoPoolName,
-        String attachedDatabaseConfigurationName,
-        String resourceGroupName,
-        Context context) {
+    private PollerFlux<PollResult<Void>, Void> beginDeleteAsync(String workspaceName, String kustoPoolName,
+        String attachedDatabaseConfigurationName, String resourceGroupName, Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            deleteWithResponseAsync(
-                workspaceName, kustoPoolName, attachedDatabaseConfigurationName, resourceGroupName, context);
+        Mono<Response<Flux<ByteBuffer>>> mono = deleteWithResponseAsync(workspaceName, kustoPoolName,
+            attachedDatabaseConfigurationName, resourceGroupName, context);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            context);
+    }
+
+    /**
+     * Deletes the attached database configuration with the given name.
+     * 
+     * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param attachedDatabaseConfigurationName The name of the attached database configuration.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of long-running operation.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<Void>, Void> beginDelete(String workspaceName, String kustoPoolName,
+        String attachedDatabaseConfigurationName, String resourceGroupName) {
+        return this.beginDeleteAsync(workspaceName, kustoPoolName, attachedDatabaseConfigurationName, resourceGroupName)
+            .getSyncPoller();
+    }
+
+    /**
+     * Deletes the attached database configuration with the given name.
+     * 
+     * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param attachedDatabaseConfigurationName The name of the attached database configuration.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of long-running operation.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<Void>, Void> beginDelete(String workspaceName, String kustoPoolName,
+        String attachedDatabaseConfigurationName, String resourceGroupName, Context context) {
         return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, context);
-    }
-
-    /**
-     * Deletes the attached database configuration with the given name.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param attachedDatabaseConfigurationName The name of the attached database configuration.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
-     */
-    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<Void>, Void> beginDelete(
-        String workspaceName,
-        String kustoPoolName,
-        String attachedDatabaseConfigurationName,
-        String resourceGroupName) {
-        return beginDeleteAsync(workspaceName, kustoPoolName, attachedDatabaseConfigurationName, resourceGroupName)
+            .beginDeleteAsync(workspaceName, kustoPoolName, attachedDatabaseConfigurationName, resourceGroupName,
+                context)
             .getSyncPoller();
     }
 
     /**
      * Deletes the attached database configuration with the given name.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param attachedDatabaseConfigurationName The name of the attached database configuration.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
-     */
-    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<Void>, Void> beginDelete(
-        String workspaceName,
-        String kustoPoolName,
-        String attachedDatabaseConfigurationName,
-        String resourceGroupName,
-        Context context) {
-        return beginDeleteAsync(
-                workspaceName, kustoPoolName, attachedDatabaseConfigurationName, resourceGroupName, context)
-            .getSyncPoller();
-    }
-
-    /**
-     * Deletes the attached database configuration with the given name.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param attachedDatabaseConfigurationName The name of the attached database configuration.
@@ -1157,13 +908,10 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> deleteAsync(
-        String workspaceName,
-        String kustoPoolName,
-        String attachedDatabaseConfigurationName,
+    private Mono<Void> deleteAsync(String workspaceName, String kustoPoolName, String attachedDatabaseConfigurationName,
         String resourceGroupName) {
         return beginDeleteAsync(workspaceName, kustoPoolName, attachedDatabaseConfigurationName, resourceGroupName)
             .last()
@@ -1172,7 +920,7 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
 
     /**
      * Deletes the attached database configuration with the given name.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param attachedDatabaseConfigurationName The name of the attached database configuration.
@@ -1181,24 +929,18 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> deleteAsync(
-        String workspaceName,
-        String kustoPoolName,
-        String attachedDatabaseConfigurationName,
-        String resourceGroupName,
-        Context context) {
-        return beginDeleteAsync(
-                workspaceName, kustoPoolName, attachedDatabaseConfigurationName, resourceGroupName, context)
-            .last()
-            .flatMap(this.client::getLroFinalResultOrError);
+    private Mono<Void> deleteAsync(String workspaceName, String kustoPoolName, String attachedDatabaseConfigurationName,
+        String resourceGroupName, Context context) {
+        return beginDeleteAsync(workspaceName, kustoPoolName, attachedDatabaseConfigurationName, resourceGroupName,
+            context).last().flatMap(this.client::getLroFinalResultOrError);
     }
 
     /**
      * Deletes the attached database configuration with the given name.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param attachedDatabaseConfigurationName The name of the attached database configuration.
@@ -1208,17 +950,14 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public void delete(
-        String workspaceName,
-        String kustoPoolName,
-        String attachedDatabaseConfigurationName,
+    public void delete(String workspaceName, String kustoPoolName, String attachedDatabaseConfigurationName,
         String resourceGroupName) {
         deleteAsync(workspaceName, kustoPoolName, attachedDatabaseConfigurationName, resourceGroupName).block();
     }
 
     /**
      * Deletes the attached database configuration with the given name.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param attachedDatabaseConfigurationName The name of the attached database configuration.
@@ -1229,12 +968,8 @@ public final class KustoPoolAttachedDatabaseConfigurationsClientImpl
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public void delete(
-        String workspaceName,
-        String kustoPoolName,
-        String attachedDatabaseConfigurationName,
-        String resourceGroupName,
-        Context context) {
+    public void delete(String workspaceName, String kustoPoolName, String attachedDatabaseConfigurationName,
+        String resourceGroupName, Context context) {
         deleteAsync(workspaceName, kustoPoolName, attachedDatabaseConfigurationName, resourceGroupName, context)
             .block();
     }

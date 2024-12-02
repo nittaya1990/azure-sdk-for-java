@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.security.fluent.models.AscLocationInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** List of locations where ASC saves your data. */
+/**
+ * List of locations where ASC saves your data.
+ */
 @Immutable
 public final class AscLocationList {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AscLocationList.class);
-
     /*
      * The value property.
      */
@@ -29,8 +27,14 @@ public final class AscLocationList {
     private String nextLink;
 
     /**
+     * Creates an instance of AscLocationList class.
+     */
+    public AscLocationList() {
+    }
+
+    /**
      * Get the value property: The value property.
-     *
+     * 
      * @return the value value.
      */
     public List<AscLocationInner> value() {
@@ -39,7 +43,7 @@ public final class AscLocationList {
 
     /**
      * Get the nextLink property: The URI to fetch the next page.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -48,7 +52,7 @@ public final class AscLocationList {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

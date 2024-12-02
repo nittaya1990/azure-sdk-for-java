@@ -5,21 +5,21 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.models.CertificateCreateOrUpdateProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Certificate create or update details. */
 @Fluent
 public final class CertificateCreateOrUpdateParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CertificateCreateOrUpdateParameters.class);
-
     /*
      * Certificate create or update properties details.
      */
     @JsonProperty(value = "properties")
     private CertificateCreateOrUpdateProperties innerProperties;
+
+    /** Creates an instance of CertificateCreateOrUpdateParameters class. */
+    public CertificateCreateOrUpdateParameters() {
+    }
 
     /**
      * Get the innerProperties property: Certificate create or update properties details.

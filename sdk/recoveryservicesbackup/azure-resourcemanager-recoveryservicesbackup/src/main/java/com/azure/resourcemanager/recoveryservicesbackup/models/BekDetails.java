@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** BEK is bitlocker encryption key. */
+/**
+ * BEK is bitlocker encryption key.
+ */
 @Fluent
 public final class BekDetails {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(BekDetails.class);
-
     /*
      * Secret is BEK.
      */
@@ -33,8 +31,14 @@ public final class BekDetails {
     private String secretData;
 
     /**
+     * Creates an instance of BekDetails class.
+     */
+    public BekDetails() {
+    }
+
+    /**
      * Get the secretUrl property: Secret is BEK.
-     *
+     * 
      * @return the secretUrl value.
      */
     public String secretUrl() {
@@ -43,7 +47,7 @@ public final class BekDetails {
 
     /**
      * Set the secretUrl property: Secret is BEK.
-     *
+     * 
      * @param secretUrl the secretUrl value to set.
      * @return the BekDetails object itself.
      */
@@ -54,7 +58,7 @@ public final class BekDetails {
 
     /**
      * Get the secretVaultId property: ID of the Key Vault where this Secret is stored.
-     *
+     * 
      * @return the secretVaultId value.
      */
     public String secretVaultId() {
@@ -63,7 +67,7 @@ public final class BekDetails {
 
     /**
      * Set the secretVaultId property: ID of the Key Vault where this Secret is stored.
-     *
+     * 
      * @param secretVaultId the secretVaultId value to set.
      * @return the BekDetails object itself.
      */
@@ -74,7 +78,7 @@ public final class BekDetails {
 
     /**
      * Get the secretData property: BEK data.
-     *
+     * 
      * @return the secretData value.
      */
     public String secretData() {
@@ -83,7 +87,7 @@ public final class BekDetails {
 
     /**
      * Set the secretData property: BEK data.
-     *
+     * 
      * @param secretData the secretData value to set.
      * @return the BekDetails object itself.
      */
@@ -94,7 +98,7 @@ public final class BekDetails {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -11,11 +11,28 @@ import com.azure.core.util.Context;
 import com.azure.resourcemanager.security.fluent.models.AdaptiveApplicationControlGroupInner;
 import com.azure.resourcemanager.security.fluent.models.AdaptiveApplicationControlGroupsInner;
 
-/** An instance of this class provides access to all the operations defined in AdaptiveApplicationControlsClient. */
+/**
+ * An instance of this class provides access to all the operations defined in AdaptiveApplicationControlsClient.
+ */
 public interface AdaptiveApplicationControlsClient {
     /**
      * Gets a list of application control machine groups for the subscription.
-     *
+     * 
+     * @param includePathRecommendations Include the policy rules.
+     * @param summary Return output in a summarized form.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a list of application control machine groups for the subscription along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<AdaptiveApplicationControlGroupsInner> listWithResponse(Boolean includePathRecommendations,
+        Boolean summary, Context context);
+
+    /**
+     * Gets a list of application control machine groups for the subscription.
+     * 
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return a list of application control machine groups for the subscription.
@@ -24,25 +41,26 @@ public interface AdaptiveApplicationControlsClient {
     AdaptiveApplicationControlGroupsInner list();
 
     /**
-     * Gets a list of application control machine groups for the subscription.
-     *
-     * @param includePathRecommendations Include the policy rules.
-     * @param summary Return output in a summarized form.
+     * Gets an application control VM/server group.
+     * 
+     * @param ascLocation The location where ASC stores the data of the subscription. can be retrieved from Get
+     * locations.
+     * @param groupName Name of an application control machine group.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of application control machine groups for the subscription.
+     * @return an application control VM/server group along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<AdaptiveApplicationControlGroupsInner> listWithResponse(
-        Boolean includePathRecommendations, Boolean summary, Context context);
+    Response<AdaptiveApplicationControlGroupInner> getWithResponse(String ascLocation, String groupName,
+        Context context);
 
     /**
      * Gets an application control VM/server group.
-     *
+     * 
      * @param ascLocation The location where ASC stores the data of the subscription. can be retrieved from Get
-     *     locations.
+     * locations.
      * @param groupName Name of an application control machine group.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
@@ -53,26 +71,27 @@ public interface AdaptiveApplicationControlsClient {
     AdaptiveApplicationControlGroupInner get(String ascLocation, String groupName);
 
     /**
-     * Gets an application control VM/server group.
-     *
+     * Update an application control machine group.
+     * 
      * @param ascLocation The location where ASC stores the data of the subscription. can be retrieved from Get
-     *     locations.
+     * locations.
      * @param groupName Name of an application control machine group.
+     * @param body The body parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an application control VM/server group.
+     * @return the response body along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<AdaptiveApplicationControlGroupInner> getWithResponse(
-        String ascLocation, String groupName, Context context);
+    Response<AdaptiveApplicationControlGroupInner> putWithResponse(String ascLocation, String groupName,
+        AdaptiveApplicationControlGroupInner body, Context context);
 
     /**
      * Update an application control machine group.
-     *
+     * 
      * @param ascLocation The location where ASC stores the data of the subscription. can be retrieved from Get
-     *     locations.
+     * locations.
      * @param groupName Name of an application control machine group.
      * @param body The body parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -81,31 +100,29 @@ public interface AdaptiveApplicationControlsClient {
      * @return the response.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    AdaptiveApplicationControlGroupInner put(
-        String ascLocation, String groupName, AdaptiveApplicationControlGroupInner body);
-
-    /**
-     * Update an application control machine group.
-     *
-     * @param ascLocation The location where ASC stores the data of the subscription. can be retrieved from Get
-     *     locations.
-     * @param groupName Name of an application control machine group.
-     * @param body The body parameter.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<AdaptiveApplicationControlGroupInner> putWithResponse(
-        String ascLocation, String groupName, AdaptiveApplicationControlGroupInner body, Context context);
+    AdaptiveApplicationControlGroupInner put(String ascLocation, String groupName,
+        AdaptiveApplicationControlGroupInner body);
 
     /**
      * Delete an application control machine group.
-     *
+     * 
      * @param ascLocation The location where ASC stores the data of the subscription. can be retrieved from Get
-     *     locations.
+     * locations.
+     * @param groupName Name of an application control machine group.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<Void> deleteWithResponse(String ascLocation, String groupName, Context context);
+
+    /**
+     * Delete an application control machine group.
+     * 
+     * @param ascLocation The location where ASC stores the data of the subscription. can be retrieved from Get
+     * locations.
      * @param groupName Name of an application control machine group.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
@@ -113,19 +130,4 @@ public interface AdaptiveApplicationControlsClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     void delete(String ascLocation, String groupName);
-
-    /**
-     * Delete an application control machine group.
-     *
-     * @param ascLocation The location where ASC stores the data of the subscription. can be retrieved from Get
-     *     locations.
-     * @param groupName Name of an application control machine group.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<Void> deleteWithResponse(String ascLocation, String groupName, Context context);
 }

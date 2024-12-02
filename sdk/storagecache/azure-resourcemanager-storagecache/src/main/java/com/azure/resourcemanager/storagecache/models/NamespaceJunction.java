@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.storagecache.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** A namespace junction. */
+/**
+ * A namespace junction.
+ */
 @Fluent
 public final class NamespaceJunction {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(NamespaceJunction.class);
-
     /*
-     * Namespace path on a Cache for a Storage Target.
+     * Namespace path on a cache for a Storage Target.
      */
     @JsonProperty(value = "namespacePath")
     private String namespacePath;
@@ -39,8 +37,14 @@ public final class NamespaceJunction {
     private String nfsAccessPolicy;
 
     /**
-     * Get the namespacePath property: Namespace path on a Cache for a Storage Target.
-     *
+     * Creates an instance of NamespaceJunction class.
+     */
+    public NamespaceJunction() {
+    }
+
+    /**
+     * Get the namespacePath property: Namespace path on a cache for a Storage Target.
+     * 
      * @return the namespacePath value.
      */
     public String namespacePath() {
@@ -48,8 +52,8 @@ public final class NamespaceJunction {
     }
 
     /**
-     * Set the namespacePath property: Namespace path on a Cache for a Storage Target.
-     *
+     * Set the namespacePath property: Namespace path on a cache for a Storage Target.
+     * 
      * @param namespacePath the namespacePath value to set.
      * @return the NamespaceJunction object itself.
      */
@@ -60,7 +64,7 @@ public final class NamespaceJunction {
 
     /**
      * Get the targetPath property: Path in Storage Target to which namespacePath points.
-     *
+     * 
      * @return the targetPath value.
      */
     public String targetPath() {
@@ -69,7 +73,7 @@ public final class NamespaceJunction {
 
     /**
      * Set the targetPath property: Path in Storage Target to which namespacePath points.
-     *
+     * 
      * @param targetPath the targetPath value to set.
      * @return the NamespaceJunction object itself.
      */
@@ -80,7 +84,7 @@ public final class NamespaceJunction {
 
     /**
      * Get the nfsExport property: NFS export where targetPath exists.
-     *
+     * 
      * @return the nfsExport value.
      */
     public String nfsExport() {
@@ -89,7 +93,7 @@ public final class NamespaceJunction {
 
     /**
      * Set the nfsExport property: NFS export where targetPath exists.
-     *
+     * 
      * @param nfsExport the nfsExport value to set.
      * @return the NamespaceJunction object itself.
      */
@@ -100,7 +104,7 @@ public final class NamespaceJunction {
 
     /**
      * Get the nfsAccessPolicy property: Name of the access policy applied to this junction.
-     *
+     * 
      * @return the nfsAccessPolicy value.
      */
     public String nfsAccessPolicy() {
@@ -109,7 +113,7 @@ public final class NamespaceJunction {
 
     /**
      * Set the nfsAccessPolicy property: Name of the access policy applied to this junction.
-     *
+     * 
      * @param nfsAccessPolicy the nfsAccessPolicy value to set.
      * @return the NamespaceJunction object itself.
      */
@@ -120,7 +124,7 @@ public final class NamespaceJunction {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

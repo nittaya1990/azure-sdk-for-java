@@ -8,21 +8,38 @@ import com.azure.core.util.ExpandableStringEnum;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.Collection;
 
-/** Defines values for AssessedResourceType. */
+/**
+ * Sub-assessment resource type.
+ */
 public final class AssessedResourceType extends ExpandableStringEnum<AssessedResourceType> {
-    /** Static value SqlServerVulnerability for AssessedResourceType. */
+    /**
+     * Static value SqlServerVulnerability for AssessedResourceType.
+     */
     public static final AssessedResourceType SQL_SERVER_VULNERABILITY = fromString("SqlServerVulnerability");
 
-    /** Static value ContainerRegistryVulnerability for AssessedResourceType. */
-    public static final AssessedResourceType CONTAINER_REGISTRY_VULNERABILITY =
-        fromString("ContainerRegistryVulnerability");
+    /**
+     * Static value ContainerRegistryVulnerability for AssessedResourceType.
+     */
+    public static final AssessedResourceType CONTAINER_REGISTRY_VULNERABILITY
+        = fromString("ContainerRegistryVulnerability");
 
-    /** Static value ServerVulnerability for AssessedResourceType. */
+    /**
+     * Static value ServerVulnerability for AssessedResourceType.
+     */
     public static final AssessedResourceType SERVER_VULNERABILITY = fromString("ServerVulnerability");
 
     /**
+     * Creates a new instance of AssessedResourceType value.
+     * 
+     * @deprecated Use the {@link #fromString(String)} factory method.
+     */
+    @Deprecated
+    public AssessedResourceType() {
+    }
+
+    /**
      * Creates or finds a AssessedResourceType from its string representation.
-     *
+     * 
      * @param name a name to look for.
      * @return the corresponding AssessedResourceType.
      */
@@ -31,7 +48,11 @@ public final class AssessedResourceType extends ExpandableStringEnum<AssessedRes
         return fromString(name, AssessedResourceType.class);
     }
 
-    /** @return known AssessedResourceType values. */
+    /**
+     * Gets known AssessedResourceType values.
+     * 
+     * @return known AssessedResourceType values.
+     */
     public static Collection<AssessedResourceType> values() {
         return values(AssessedResourceType.class);
     }

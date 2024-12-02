@@ -5,25 +5,32 @@
 package com.azure.resourcemanager.mysqlflexibleserver.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.mysqlflexibleserver.models.Backup;
+import com.azure.resourcemanager.mysqlflexibleserver.models.DataEncryption;
 import com.azure.resourcemanager.mysqlflexibleserver.models.HighAvailability;
 import com.azure.resourcemanager.mysqlflexibleserver.models.MaintenanceWindow;
+import com.azure.resourcemanager.mysqlflexibleserver.models.Network;
 import com.azure.resourcemanager.mysqlflexibleserver.models.ReplicationRole;
+import com.azure.resourcemanager.mysqlflexibleserver.models.ServerVersion;
 import com.azure.resourcemanager.mysqlflexibleserver.models.Storage;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The properties that can be updated for a server. */
+/**
+ * The properties that can be updated for a server.
+ */
 @Fluent
 public final class ServerPropertiesForUpdate {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ServerPropertiesForUpdate.class);
-
     /*
      * The password of the administrator login.
      */
     @JsonProperty(value = "administratorLoginPassword")
     private String administratorLoginPassword;
+
+    /*
+     * Server version.
+     */
+    @JsonProperty(value = "version")
+    private ServerVersion version;
 
     /*
      * Storage related properties of a server.
@@ -55,9 +62,27 @@ public final class ServerPropertiesForUpdate {
     @JsonProperty(value = "replicationRole")
     private ReplicationRole replicationRole;
 
+    /*
+     * The Data Encryption for CMK.
+     */
+    @JsonProperty(value = "dataEncryption")
+    private DataEncryption dataEncryption;
+
+    /*
+     * Network related properties of a server
+     */
+    @JsonProperty(value = "network")
+    private Network network;
+
+    /**
+     * Creates an instance of ServerPropertiesForUpdate class.
+     */
+    public ServerPropertiesForUpdate() {
+    }
+
     /**
      * Get the administratorLoginPassword property: The password of the administrator login.
-     *
+     * 
      * @return the administratorLoginPassword value.
      */
     public String administratorLoginPassword() {
@@ -66,7 +91,7 @@ public final class ServerPropertiesForUpdate {
 
     /**
      * Set the administratorLoginPassword property: The password of the administrator login.
-     *
+     * 
      * @param administratorLoginPassword the administratorLoginPassword value to set.
      * @return the ServerPropertiesForUpdate object itself.
      */
@@ -76,8 +101,28 @@ public final class ServerPropertiesForUpdate {
     }
 
     /**
+     * Get the version property: Server version.
+     * 
+     * @return the version value.
+     */
+    public ServerVersion version() {
+        return this.version;
+    }
+
+    /**
+     * Set the version property: Server version.
+     * 
+     * @param version the version value to set.
+     * @return the ServerPropertiesForUpdate object itself.
+     */
+    public ServerPropertiesForUpdate withVersion(ServerVersion version) {
+        this.version = version;
+        return this;
+    }
+
+    /**
      * Get the storage property: Storage related properties of a server.
-     *
+     * 
      * @return the storage value.
      */
     public Storage storage() {
@@ -86,7 +131,7 @@ public final class ServerPropertiesForUpdate {
 
     /**
      * Set the storage property: Storage related properties of a server.
-     *
+     * 
      * @param storage the storage value to set.
      * @return the ServerPropertiesForUpdate object itself.
      */
@@ -97,7 +142,7 @@ public final class ServerPropertiesForUpdate {
 
     /**
      * Get the backup property: Backup related properties of a server.
-     *
+     * 
      * @return the backup value.
      */
     public Backup backup() {
@@ -106,7 +151,7 @@ public final class ServerPropertiesForUpdate {
 
     /**
      * Set the backup property: Backup related properties of a server.
-     *
+     * 
      * @param backup the backup value to set.
      * @return the ServerPropertiesForUpdate object itself.
      */
@@ -117,7 +162,7 @@ public final class ServerPropertiesForUpdate {
 
     /**
      * Get the highAvailability property: High availability related properties of a server.
-     *
+     * 
      * @return the highAvailability value.
      */
     public HighAvailability highAvailability() {
@@ -126,7 +171,7 @@ public final class ServerPropertiesForUpdate {
 
     /**
      * Set the highAvailability property: High availability related properties of a server.
-     *
+     * 
      * @param highAvailability the highAvailability value to set.
      * @return the ServerPropertiesForUpdate object itself.
      */
@@ -137,7 +182,7 @@ public final class ServerPropertiesForUpdate {
 
     /**
      * Get the maintenanceWindow property: Maintenance window of a server.
-     *
+     * 
      * @return the maintenanceWindow value.
      */
     public MaintenanceWindow maintenanceWindow() {
@@ -146,7 +191,7 @@ public final class ServerPropertiesForUpdate {
 
     /**
      * Set the maintenanceWindow property: Maintenance window of a server.
-     *
+     * 
      * @param maintenanceWindow the maintenanceWindow value to set.
      * @return the ServerPropertiesForUpdate object itself.
      */
@@ -157,7 +202,7 @@ public final class ServerPropertiesForUpdate {
 
     /**
      * Get the replicationRole property: The replication role of the server.
-     *
+     * 
      * @return the replicationRole value.
      */
     public ReplicationRole replicationRole() {
@@ -166,7 +211,7 @@ public final class ServerPropertiesForUpdate {
 
     /**
      * Set the replicationRole property: The replication role of the server.
-     *
+     * 
      * @param replicationRole the replicationRole value to set.
      * @return the ServerPropertiesForUpdate object itself.
      */
@@ -176,8 +221,48 @@ public final class ServerPropertiesForUpdate {
     }
 
     /**
+     * Get the dataEncryption property: The Data Encryption for CMK.
+     * 
+     * @return the dataEncryption value.
+     */
+    public DataEncryption dataEncryption() {
+        return this.dataEncryption;
+    }
+
+    /**
+     * Set the dataEncryption property: The Data Encryption for CMK.
+     * 
+     * @param dataEncryption the dataEncryption value to set.
+     * @return the ServerPropertiesForUpdate object itself.
+     */
+    public ServerPropertiesForUpdate withDataEncryption(DataEncryption dataEncryption) {
+        this.dataEncryption = dataEncryption;
+        return this;
+    }
+
+    /**
+     * Get the network property: Network related properties of a server.
+     * 
+     * @return the network value.
+     */
+    public Network network() {
+        return this.network;
+    }
+
+    /**
+     * Set the network property: Network related properties of a server.
+     * 
+     * @param network the network value to set.
+     * @return the ServerPropertiesForUpdate object itself.
+     */
+    public ServerPropertiesForUpdate withNetwork(Network network) {
+        this.network = network;
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
@@ -192,6 +277,12 @@ public final class ServerPropertiesForUpdate {
         }
         if (maintenanceWindow() != null) {
             maintenanceWindow().validate();
+        }
+        if (dataEncryption() != null) {
+            dataEncryption().validate();
+        }
+        if (network() != null) {
+            network().validate();
         }
     }
 }

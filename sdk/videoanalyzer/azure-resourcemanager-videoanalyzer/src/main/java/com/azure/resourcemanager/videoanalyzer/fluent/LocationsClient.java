@@ -24,8 +24,8 @@ public interface LocationsClient {
      * @return the check availability result.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    CheckNameAvailabilityResponseInner checkNameAvailability(
-        String locationName, CheckNameAvailabilityRequest parameters);
+    CheckNameAvailabilityResponseInner checkNameAvailability(String locationName,
+        CheckNameAvailabilityRequest parameters);
 
     /**
      * Checks whether the Video Analyzer resource name is available.
@@ -36,9 +36,9 @@ public interface LocationsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the check availability result.
+     * @return the check availability result along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<CheckNameAvailabilityResponseInner> checkNameAvailabilityWithResponse(
-        String locationName, CheckNameAvailabilityRequest parameters, Context context);
+    Response<CheckNameAvailabilityResponseInner> checkNameAvailabilityWithResponse(String locationName,
+        CheckNameAvailabilityRequest parameters, Context context);
 }

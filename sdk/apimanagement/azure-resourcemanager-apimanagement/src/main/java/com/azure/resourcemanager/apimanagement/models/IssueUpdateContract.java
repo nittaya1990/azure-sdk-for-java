@@ -5,22 +5,22 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.models.IssueUpdateContractProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
 /** Issue update Parameters. */
 @Fluent
 public final class IssueUpdateContract {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(IssueUpdateContract.class);
-
     /*
      * Issue entity Update contract properties.
      */
     @JsonProperty(value = "properties")
     private IssueUpdateContractProperties innerProperties;
+
+    /** Creates an instance of IssueUpdateContract class. */
+    public IssueUpdateContract() {
+    }
 
     /**
      * Get the innerProperties property: Issue entity Update contract properties.

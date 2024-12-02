@@ -60,6 +60,13 @@ public interface CacheContract {
     String resourceId();
 
     /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
+
+    /**
      * Gets the inner com.azure.resourcemanager.apimanagement.fluent.models.CacheContractInner object.
      *
      * @return the inner object.
@@ -70,32 +77,31 @@ public interface CacheContract {
     interface Definition
         extends DefinitionStages.Blank, DefinitionStages.WithParentResource, DefinitionStages.WithCreate {
     }
+
     /** The CacheContract definition stages. */
     interface DefinitionStages {
         /** The first stage of the CacheContract definition. */
         interface Blank extends WithParentResource {
         }
+
         /** The stage of the CacheContract definition allowing to specify parent resource. */
         interface WithParentResource {
             /**
              * Specifies resourceGroupName, serviceName.
              *
-             * @param resourceGroupName The name of the resource group.
+             * @param resourceGroupName The name of the resource group. The name is case insensitive.
              * @param serviceName The name of the API Management service.
              * @return the next definition stage.
              */
             WithCreate withExistingService(String resourceGroupName, String serviceName);
         }
+
         /**
          * The stage of the CacheContract definition which contains all the minimum required properties for the resource
          * to be created, but also allows for any other optional properties to be specified.
          */
-        interface WithCreate
-            extends DefinitionStages.WithDescription,
-                DefinitionStages.WithConnectionString,
-                DefinitionStages.WithUseFromLocation,
-                DefinitionStages.WithResourceId,
-                DefinitionStages.WithIfMatch {
+        interface WithCreate extends DefinitionStages.WithDescription, DefinitionStages.WithConnectionString,
+            DefinitionStages.WithUseFromLocation, DefinitionStages.WithResourceId, DefinitionStages.WithIfMatch {
             /**
              * Executes the create request.
              *
@@ -111,6 +117,7 @@ public interface CacheContract {
              */
             CacheContract create(Context context);
         }
+
         /** The stage of the CacheContract definition allowing to specify description. */
         interface WithDescription {
             /**
@@ -121,6 +128,7 @@ public interface CacheContract {
              */
             WithCreate withDescription(String description);
         }
+
         /** The stage of the CacheContract definition allowing to specify connectionString. */
         interface WithConnectionString {
             /**
@@ -131,6 +139,7 @@ public interface CacheContract {
              */
             WithCreate withConnectionString(String connectionString);
         }
+
         /** The stage of the CacheContract definition allowing to specify useFromLocation. */
         interface WithUseFromLocation {
             /**
@@ -143,6 +152,7 @@ public interface CacheContract {
              */
             WithCreate withUseFromLocation(String useFromLocation);
         }
+
         /** The stage of the CacheContract definition allowing to specify resourceId. */
         interface WithResourceId {
             /**
@@ -153,6 +163,7 @@ public interface CacheContract {
              */
             WithCreate withResourceId(String resourceId);
         }
+
         /** The stage of the CacheContract definition allowing to specify ifMatch. */
         interface WithIfMatch {
             /**
@@ -166,6 +177,7 @@ public interface CacheContract {
             WithCreate withIfMatch(String ifMatch);
         }
     }
+
     /**
      * Begins update for the CacheContract resource.
      *
@@ -174,12 +186,8 @@ public interface CacheContract {
     CacheContract.Update update();
 
     /** The template for CacheContract update. */
-    interface Update
-        extends UpdateStages.WithDescription,
-            UpdateStages.WithConnectionString,
-            UpdateStages.WithUseFromLocation,
-            UpdateStages.WithResourceId,
-            UpdateStages.WithIfMatch {
+    interface Update extends UpdateStages.WithDescription, UpdateStages.WithConnectionString,
+        UpdateStages.WithUseFromLocation, UpdateStages.WithResourceId, UpdateStages.WithIfMatch {
         /**
          * Executes the update request.
          *
@@ -195,6 +203,7 @@ public interface CacheContract {
          */
         CacheContract apply(Context context);
     }
+
     /** The CacheContract update stages. */
     interface UpdateStages {
         /** The stage of the CacheContract update allowing to specify description. */
@@ -207,6 +216,7 @@ public interface CacheContract {
              */
             Update withDescription(String description);
         }
+
         /** The stage of the CacheContract update allowing to specify connectionString. */
         interface WithConnectionString {
             /**
@@ -217,6 +227,7 @@ public interface CacheContract {
              */
             Update withConnectionString(String connectionString);
         }
+
         /** The stage of the CacheContract update allowing to specify useFromLocation. */
         interface WithUseFromLocation {
             /**
@@ -229,6 +240,7 @@ public interface CacheContract {
              */
             Update withUseFromLocation(String useFromLocation);
         }
+
         /** The stage of the CacheContract update allowing to specify resourceId. */
         interface WithResourceId {
             /**
@@ -239,6 +251,7 @@ public interface CacheContract {
              */
             Update withResourceId(String resourceId);
         }
+
         /** The stage of the CacheContract update allowing to specify ifMatch. */
         interface WithIfMatch {
             /**
@@ -252,6 +265,7 @@ public interface CacheContract {
             Update withIfMatch(String ifMatch);
         }
     }
+
     /**
      * Refreshes the resource to sync with Azure.
      *

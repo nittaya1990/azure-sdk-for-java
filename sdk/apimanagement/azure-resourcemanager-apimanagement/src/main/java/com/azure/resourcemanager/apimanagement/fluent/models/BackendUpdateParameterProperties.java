@@ -5,21 +5,17 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.models.BackendBaseParameters;
 import com.azure.resourcemanager.apimanagement.models.BackendCredentialsContract;
 import com.azure.resourcemanager.apimanagement.models.BackendProperties;
 import com.azure.resourcemanager.apimanagement.models.BackendProtocol;
 import com.azure.resourcemanager.apimanagement.models.BackendProxyContract;
 import com.azure.resourcemanager.apimanagement.models.BackendTlsProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Parameters supplied to the Update Backend operation. */
 @Fluent
 public final class BackendUpdateParameterProperties extends BackendBaseParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(BackendUpdateParameterProperties.class);
-
     /*
      * Runtime Url of the Backend.
      */
@@ -31,6 +27,10 @@ public final class BackendUpdateParameterProperties extends BackendBaseParameter
      */
     @JsonProperty(value = "protocol")
     private BackendProtocol protocol;
+
+    /** Creates an instance of BackendUpdateParameterProperties class. */
+    public BackendUpdateParameterProperties() {
+    }
 
     /**
      * Get the url property: Runtime Url of the Backend.

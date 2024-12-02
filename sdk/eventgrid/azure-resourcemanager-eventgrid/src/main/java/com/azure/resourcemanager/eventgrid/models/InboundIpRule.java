@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.eventgrid.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The InboundIpRule model. */
+/**
+ * The InboundIpRule model.
+ */
 @Fluent
 public final class InboundIpRule {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(InboundIpRule.class);
-
     /*
      * IP Address in CIDR notation e.g., 10.0.0.0/8.
      */
@@ -27,8 +25,14 @@ public final class InboundIpRule {
     private IpActionType action;
 
     /**
+     * Creates an instance of InboundIpRule class.
+     */
+    public InboundIpRule() {
+    }
+
+    /**
      * Get the ipMask property: IP Address in CIDR notation e.g., 10.0.0.0/8.
-     *
+     * 
      * @return the ipMask value.
      */
     public String ipMask() {
@@ -37,7 +41,7 @@ public final class InboundIpRule {
 
     /**
      * Set the ipMask property: IP Address in CIDR notation e.g., 10.0.0.0/8.
-     *
+     * 
      * @param ipMask the ipMask value to set.
      * @return the InboundIpRule object itself.
      */
@@ -48,7 +52,7 @@ public final class InboundIpRule {
 
     /**
      * Get the action property: Action to perform based on the match or no match of the IpMask.
-     *
+     * 
      * @return the action value.
      */
     public IpActionType action() {
@@ -57,7 +61,7 @@ public final class InboundIpRule {
 
     /**
      * Set the action property: Action to perform based on the match or no match of the IpMask.
-     *
+     * 
      * @param action the action value to set.
      * @return the InboundIpRule object itself.
      */
@@ -68,7 +72,7 @@ public final class InboundIpRule {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

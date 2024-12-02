@@ -68,6 +68,13 @@ public interface ServiceRunner {
     String regionName();
 
     /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
+
+    /**
      * Gets the inner com.azure.resourcemanager.devtestlabs.fluent.models.ServiceRunnerInner object.
      *
      * @return the inner object.
@@ -75,17 +82,16 @@ public interface ServiceRunner {
     ServiceRunnerInner innerModel();
 
     /** The entirety of the ServiceRunner definition. */
-    interface Definition
-        extends DefinitionStages.Blank,
-            DefinitionStages.WithLocation,
-            DefinitionStages.WithParentResource,
-            DefinitionStages.WithCreate {
+    interface Definition extends DefinitionStages.Blank, DefinitionStages.WithLocation,
+        DefinitionStages.WithParentResource, DefinitionStages.WithCreate {
     }
+
     /** The ServiceRunner definition stages. */
     interface DefinitionStages {
         /** The first stage of the ServiceRunner definition. */
         interface Blank extends WithLocation {
         }
+
         /** The stage of the ServiceRunner definition allowing to specify location. */
         interface WithLocation {
             /**
@@ -104,6 +110,7 @@ public interface ServiceRunner {
              */
             WithParentResource withRegion(String location);
         }
+
         /** The stage of the ServiceRunner definition allowing to specify parent resource. */
         interface WithParentResource {
             /**
@@ -115,6 +122,7 @@ public interface ServiceRunner {
              */
             WithCreate withExistingLab(String resourceGroupName, String labName);
         }
+
         /**
          * The stage of the ServiceRunner definition which contains all the minimum required properties for the resource
          * to be created, but also allows for any other optional properties to be specified.
@@ -135,6 +143,7 @@ public interface ServiceRunner {
              */
             ServiceRunner create(Context context);
         }
+
         /** The stage of the ServiceRunner definition allowing to specify tags. */
         interface WithTags {
             /**
@@ -145,6 +154,7 @@ public interface ServiceRunner {
              */
             WithCreate withTags(Map<String, String> tags);
         }
+
         /** The stage of the ServiceRunner definition allowing to specify identity. */
         interface WithIdentity {
             /**
@@ -156,6 +166,7 @@ public interface ServiceRunner {
             WithCreate withIdentity(IdentityProperties identity);
         }
     }
+
     /**
      * Begins update for the ServiceRunner resource.
      *
@@ -180,6 +191,7 @@ public interface ServiceRunner {
          */
         ServiceRunner apply(Context context);
     }
+
     /** The ServiceRunner update stages. */
     interface UpdateStages {
         /** The stage of the ServiceRunner update allowing to specify tags. */
@@ -192,6 +204,7 @@ public interface ServiceRunner {
              */
             Update withTags(Map<String, String> tags);
         }
+
         /** The stage of the ServiceRunner update allowing to specify identity. */
         interface WithIdentity {
             /**
@@ -203,6 +216,7 @@ public interface ServiceRunner {
             Update withIdentity(IdentityProperties identity);
         }
     }
+
     /**
      * Refreshes the resource to sync with Azure.
      *

@@ -38,11 +38,11 @@ public interface QueryTextsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return represents a Query Text.
+     * @return represents a Query Text along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<QueryTextInner> getWithResponse(
-        String resourceGroupName, String serverName, String queryId, Context context);
+    Response<QueryTextInner> getWithResponse(String resourceGroupName, String serverName, String queryId,
+        Context context);
 
     /**
      * Retrieve the Query-Store query texts for specified queryIds.
@@ -71,6 +71,6 @@ public interface QueryTextsClient {
      * @return a list of query texts.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<QueryTextInner> listByServer(
-        String resourceGroupName, String serverName, List<String> queryIds, Context context);
+    PagedIterable<QueryTextInner> listByServer(String resourceGroupName, String serverName, List<String> queryIds,
+        Context context);
 }

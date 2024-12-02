@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.recoveryservicesbackup.fluent.models.ClientDiscoveryValueForSingleApiInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Operations List response which contains list of available APIs. */
+/**
+ * Operations List response which contains list of available APIs.
+ */
 @Fluent
 public final class ClientDiscoveryResponse {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ClientDiscoveryResponse.class);
-
     /*
      * List of available operations.
      */
@@ -29,8 +27,14 @@ public final class ClientDiscoveryResponse {
     private String nextLink;
 
     /**
+     * Creates an instance of ClientDiscoveryResponse class.
+     */
+    public ClientDiscoveryResponse() {
+    }
+
+    /**
      * Get the value property: List of available operations.
-     *
+     * 
      * @return the value value.
      */
     public List<ClientDiscoveryValueForSingleApiInner> value() {
@@ -39,7 +43,7 @@ public final class ClientDiscoveryResponse {
 
     /**
      * Set the value property: List of available operations.
-     *
+     * 
      * @param value the value value to set.
      * @return the ClientDiscoveryResponse object itself.
      */
@@ -50,7 +54,7 @@ public final class ClientDiscoveryResponse {
 
     /**
      * Get the nextLink property: Link to the next chunk of Response.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -59,7 +63,7 @@ public final class ClientDiscoveryResponse {
 
     /**
      * Set the nextLink property: Link to the next chunk of Response.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the ClientDiscoveryResponse object itself.
      */
@@ -70,7 +74,7 @@ public final class ClientDiscoveryResponse {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

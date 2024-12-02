@@ -13,20 +13,20 @@ public interface ApiIssues {
     /**
      * Lists all issues associated with the specified API.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Issue list representation.
+     * @return paged Issue list representation as paginated response with {@link PagedIterable}.
      */
     PagedIterable<IssueContract> listByService(String resourceGroupName, String serviceName, String apiId);
 
     /**
      * Lists all issues associated with the specified API.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param filter | Field | Usage | Supported operators | Supported functions
@@ -40,22 +40,31 @@ public interface ApiIssues {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Issue list representation.
+     * @return paged Issue list representation as paginated response with {@link PagedIterable}.
      */
-    PagedIterable<IssueContract> listByService(
-        String resourceGroupName,
-        String serviceName,
-        String apiId,
-        String filter,
-        Boolean expandCommentsAttachments,
-        Integer top,
-        Integer skip,
-        Context context);
+    PagedIterable<IssueContract> listByService(String resourceGroupName, String serviceName, String apiId,
+        String filter, Boolean expandCommentsAttachments, Integer top, Integer skip, Context context);
 
     /**
      * Gets the entity state (Etag) version of the Issue for an API specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param apiId API identifier. Must be unique in the current API Management service instance.
+     * @param issueId Issue identifier. Must be unique in the current API Management service instance.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the entity state (Etag) version of the Issue for an API specified by its identifier.
+     */
+    ApiIssuesGetEntityTagResponse getEntityTagWithResponse(String resourceGroupName, String serviceName, String apiId,
+        String issueId, Context context);
+
+    /**
+     * Gets the entity state (Etag) version of the Issue for an API specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param issueId Issue identifier. Must be unique in the current API Management service instance.
@@ -66,25 +75,26 @@ public interface ApiIssues {
     void getEntityTag(String resourceGroupName, String serviceName, String apiId, String issueId);
 
     /**
-     * Gets the entity state (Etag) version of the Issue for an API specified by its identifier.
+     * Gets the details of the Issue for an API specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param issueId Issue identifier. Must be unique in the current API Management service instance.
+     * @param expandCommentsAttachments Expand the comment attachments.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the Issue for an API specified by its identifier.
+     * @return the details of the Issue for an API specified by its identifier.
      */
-    ApiIssuesGetEntityTagResponse getEntityTagWithResponse(
-        String resourceGroupName, String serviceName, String apiId, String issueId, Context context);
+    Response<IssueContract> getWithResponse(String resourceGroupName, String serviceName, String apiId, String issueId,
+        Boolean expandCommentsAttachments, Context context);
 
     /**
      * Gets the details of the Issue for an API specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param issueId Issue identifier. Must be unique in the current API Management service instance.
@@ -96,31 +106,27 @@ public interface ApiIssues {
     IssueContract get(String resourceGroupName, String serviceName, String apiId, String issueId);
 
     /**
-     * Gets the details of the Issue for an API specified by its identifier.
+     * Deletes the specified Issue from an API.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param issueId Issue identifier. Must be unique in the current API Management service instance.
-     * @param expandCommentsAttachments Expand the comment attachments.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the Issue for an API specified by its identifier.
+     * @return the {@link Response}.
      */
-    Response<IssueContract> getWithResponse(
-        String resourceGroupName,
-        String serviceName,
-        String apiId,
-        String issueId,
-        Boolean expandCommentsAttachments,
-        Context context);
+    Response<Void> deleteWithResponse(String resourceGroupName, String serviceName, String apiId, String issueId,
+        String ifMatch, Context context);
 
     /**
      * Deletes the specified Issue from an API.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param issueId Issue identifier. Must be unique in the current API Management service instance.
@@ -131,24 +137,6 @@ public interface ApiIssues {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     void delete(String resourceGroupName, String serviceName, String apiId, String issueId, String ifMatch);
-
-    /**
-     * Deletes the specified Issue from an API.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param apiId API identifier. Must be unique in the current API Management service instance.
-     * @param issueId Issue identifier. Must be unique in the current API Management service instance.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    Response<Void> deleteWithResponse(
-        String resourceGroupName, String serviceName, String apiId, String issueId, String ifMatch, Context context);
 
     /**
      * Gets the details of the Issue for an API specified by its identifier.
@@ -194,7 +182,7 @@ public interface ApiIssues {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
     Response<Void> deleteByIdWithResponse(String id, String ifMatch, Context context);
 

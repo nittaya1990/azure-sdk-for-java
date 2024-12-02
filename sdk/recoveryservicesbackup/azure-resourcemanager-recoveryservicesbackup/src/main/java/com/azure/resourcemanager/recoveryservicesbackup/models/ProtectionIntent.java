@@ -5,27 +5,35 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** Base class for backup ProtectionIntent. */
+/**
+ * Base class for backup ProtectionIntent.
+ */
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
-    include = JsonTypeInfo.As.PROPERTY,
     property = "protectionIntentItemType",
-    defaultImpl = ProtectionIntent.class)
+    defaultImpl = ProtectionIntent.class,
+    visible = true)
 @JsonTypeName("ProtectionIntent")
 @JsonSubTypes({
     @JsonSubTypes.Type(name = "RecoveryServiceVaultItem", value = AzureRecoveryServiceVaultProtectionIntent.class),
-    @JsonSubTypes.Type(name = "AzureResourceItem", value = AzureResourceProtectionIntent.class)
-})
+    @JsonSubTypes.Type(name = "AzureResourceItem", value = AzureResourceProtectionIntent.class),
+    @JsonSubTypes.Type(
+        name = "AzureWorkloadContainerAutoProtectionIntent",
+        value = AzureWorkloadContainerAutoProtectionIntent.class) })
 @Fluent
 public class ProtectionIntent {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ProtectionIntent.class);
+    /*
+     * backup protectionIntent type.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "protectionIntentItemType", required = true)
+    private ProtectionIntentItemType protectionIntentItemType;
 
     /*
      * Type of backup management for the backed up item.
@@ -40,8 +48,7 @@ public class ProtectionIntent {
     private String sourceResourceId;
 
     /*
-     * ID of the item which is getting protected, In case of Azure Vm , it is
-     * ProtectedItemId
+     * ID of the item which is getting protected, In case of Azure Vm , it is ProtectedItemId
      */
     @JsonProperty(value = "itemId")
     private String itemId;
@@ -59,8 +66,24 @@ public class ProtectionIntent {
     private ProtectionStatus protectionState;
 
     /**
+     * Creates an instance of ProtectionIntent class.
+     */
+    public ProtectionIntent() {
+        this.protectionIntentItemType = ProtectionIntentItemType.fromString("ProtectionIntent");
+    }
+
+    /**
+     * Get the protectionIntentItemType property: backup protectionIntent type.
+     * 
+     * @return the protectionIntentItemType value.
+     */
+    public ProtectionIntentItemType protectionIntentItemType() {
+        return this.protectionIntentItemType;
+    }
+
+    /**
      * Get the backupManagementType property: Type of backup management for the backed up item.
-     *
+     * 
      * @return the backupManagementType value.
      */
     public BackupManagementType backupManagementType() {
@@ -69,7 +92,7 @@ public class ProtectionIntent {
 
     /**
      * Set the backupManagementType property: Type of backup management for the backed up item.
-     *
+     * 
      * @param backupManagementType the backupManagementType value to set.
      * @return the ProtectionIntent object itself.
      */
@@ -80,7 +103,7 @@ public class ProtectionIntent {
 
     /**
      * Get the sourceResourceId property: ARM ID of the resource to be backed up.
-     *
+     * 
      * @return the sourceResourceId value.
      */
     public String sourceResourceId() {
@@ -89,7 +112,7 @@ public class ProtectionIntent {
 
     /**
      * Set the sourceResourceId property: ARM ID of the resource to be backed up.
-     *
+     * 
      * @param sourceResourceId the sourceResourceId value to set.
      * @return the ProtectionIntent object itself.
      */
@@ -100,7 +123,7 @@ public class ProtectionIntent {
 
     /**
      * Get the itemId property: ID of the item which is getting protected, In case of Azure Vm , it is ProtectedItemId.
-     *
+     * 
      * @return the itemId value.
      */
     public String itemId() {
@@ -109,7 +132,7 @@ public class ProtectionIntent {
 
     /**
      * Set the itemId property: ID of the item which is getting protected, In case of Azure Vm , it is ProtectedItemId.
-     *
+     * 
      * @param itemId the itemId value to set.
      * @return the ProtectionIntent object itself.
      */
@@ -120,7 +143,7 @@ public class ProtectionIntent {
 
     /**
      * Get the policyId property: ID of the backup policy with which this item is backed up.
-     *
+     * 
      * @return the policyId value.
      */
     public String policyId() {
@@ -129,7 +152,7 @@ public class ProtectionIntent {
 
     /**
      * Set the policyId property: ID of the backup policy with which this item is backed up.
-     *
+     * 
      * @param policyId the policyId value to set.
      * @return the ProtectionIntent object itself.
      */
@@ -140,7 +163,7 @@ public class ProtectionIntent {
 
     /**
      * Get the protectionState property: Backup state of this backup item.
-     *
+     * 
      * @return the protectionState value.
      */
     public ProtectionStatus protectionState() {
@@ -149,7 +172,7 @@ public class ProtectionIntent {
 
     /**
      * Set the protectionState property: Backup state of this backup item.
-     *
+     * 
      * @param protectionState the protectionState value to set.
      * @return the ProtectionIntent object itself.
      */
@@ -160,7 +183,7 @@ public class ProtectionIntent {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

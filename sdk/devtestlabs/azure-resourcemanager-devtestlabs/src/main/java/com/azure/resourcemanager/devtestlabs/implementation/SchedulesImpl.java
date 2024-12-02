@@ -14,17 +14,16 @@ import com.azure.resourcemanager.devtestlabs.fluent.models.ScheduleInner;
 import com.azure.resourcemanager.devtestlabs.models.Schedule;
 import com.azure.resourcemanager.devtestlabs.models.ScheduleFragment;
 import com.azure.resourcemanager.devtestlabs.models.Schedules;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class SchedulesImpl implements Schedules {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SchedulesImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(SchedulesImpl.class);
 
     private final SchedulesClient innerClient;
 
     private final com.azure.resourcemanager.devtestlabs.DevTestLabsManager serviceManager;
 
-    public SchedulesImpl(
-        SchedulesClient innerClient, com.azure.resourcemanager.devtestlabs.DevTestLabsManager serviceManager) {
+    public SchedulesImpl(SchedulesClient innerClient,
+        com.azure.resourcemanager.devtestlabs.DevTestLabsManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
     }
@@ -34,17 +33,23 @@ public final class SchedulesImpl implements Schedules {
         return Utils.mapPage(inner, inner1 -> new ScheduleImpl(inner1, this.manager()));
     }
 
-    public PagedIterable<Schedule> list(
-        String resourceGroupName,
-        String labName,
-        String expand,
-        String filter,
-        Integer top,
-        String orderby,
-        Context context) {
-        PagedIterable<ScheduleInner> inner =
-            this.serviceClient().list(resourceGroupName, labName, expand, filter, top, orderby, context);
+    public PagedIterable<Schedule> list(String resourceGroupName, String labName, String expand, String filter,
+        Integer top, String orderby, Context context) {
+        PagedIterable<ScheduleInner> inner
+            = this.serviceClient().list(resourceGroupName, labName, expand, filter, top, orderby, context);
         return Utils.mapPage(inner, inner1 -> new ScheduleImpl(inner1, this.manager()));
+    }
+
+    public Response<Schedule> getWithResponse(String resourceGroupName, String labName, String name, String expand,
+        Context context) {
+        Response<ScheduleInner> inner
+            = this.serviceClient().getWithResponse(resourceGroupName, labName, name, expand, context);
+        if (inner != null) {
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
+                new ScheduleImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
     }
 
     public Schedule get(String resourceGroupName, String labName, String name) {
@@ -56,15 +61,12 @@ public final class SchedulesImpl implements Schedules {
         }
     }
 
-    public Response<Schedule> getWithResponse(
-        String resourceGroupName, String labName, String name, String expand, Context context) {
-        Response<ScheduleInner> inner =
-            this.serviceClient().getWithResponse(resourceGroupName, labName, name, expand, context);
+    public Response<Schedule> createOrUpdateWithResponse(String resourceGroupName, String labName, String name,
+        ScheduleInner schedule, Context context) {
+        Response<ScheduleInner> inner
+            = this.serviceClient().createOrUpdateWithResponse(resourceGroupName, labName, name, schedule, context);
         if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
                 new ScheduleImpl(inner.getValue(), this.manager()));
         } else {
             return null;
@@ -80,48 +82,30 @@ public final class SchedulesImpl implements Schedules {
         }
     }
 
-    public Response<Schedule> createOrUpdateWithResponse(
-        String resourceGroupName, String labName, String name, ScheduleInner schedule, Context context) {
-        Response<ScheduleInner> inner =
-            this.serviceClient().createOrUpdateWithResponse(resourceGroupName, labName, name, schedule, context);
-        if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
-                new ScheduleImpl(inner.getValue(), this.manager()));
-        } else {
-            return null;
-        }
+    public Response<Void> deleteWithResponse(String resourceGroupName, String labName, String name, Context context) {
+        return this.serviceClient().deleteWithResponse(resourceGroupName, labName, name, context);
     }
 
     public void delete(String resourceGroupName, String labName, String name) {
         this.serviceClient().delete(resourceGroupName, labName, name);
     }
 
-    public Response<Void> deleteWithResponse(String resourceGroupName, String labName, String name, Context context) {
-        return this.serviceClient().deleteWithResponse(resourceGroupName, labName, name, context);
+    public Response<Schedule> updateWithResponse(String resourceGroupName, String labName, String name,
+        ScheduleFragment schedule, Context context) {
+        Response<ScheduleInner> inner
+            = this.serviceClient().updateWithResponse(resourceGroupName, labName, name, schedule, context);
+        if (inner != null) {
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
+                new ScheduleImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
     }
 
     public Schedule update(String resourceGroupName, String labName, String name, ScheduleFragment schedule) {
         ScheduleInner inner = this.serviceClient().update(resourceGroupName, labName, name, schedule);
         if (inner != null) {
             return new ScheduleImpl(inner, this.manager());
-        } else {
-            return null;
-        }
-    }
-
-    public Response<Schedule> updateWithResponse(
-        String resourceGroupName, String labName, String name, ScheduleFragment schedule, Context context) {
-        Response<ScheduleInner> inner =
-            this.serviceClient().updateWithResponse(resourceGroupName, labName, name, schedule, context);
-        if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
-                new ScheduleImpl(inner.getValue(), this.manager()));
         } else {
             return null;
         }
@@ -140,10 +124,10 @@ public final class SchedulesImpl implements Schedules {
         return Utils.mapPage(inner, inner1 -> new ScheduleImpl(inner1, this.manager()));
     }
 
-    public PagedIterable<Schedule> listApplicable(
-        String resourceGroupName, String labName, String name, Context context) {
-        PagedIterable<ScheduleInner> inner =
-            this.serviceClient().listApplicable(resourceGroupName, labName, name, context);
+    public PagedIterable<Schedule> listApplicable(String resourceGroupName, String labName, String name,
+        Context context) {
+        PagedIterable<ScheduleInner> inner
+            = this.serviceClient().listApplicable(resourceGroupName, labName, name, context);
         return Utils.mapPage(inner, inner1 -> new ScheduleImpl(inner1, this.manager()));
     }
 

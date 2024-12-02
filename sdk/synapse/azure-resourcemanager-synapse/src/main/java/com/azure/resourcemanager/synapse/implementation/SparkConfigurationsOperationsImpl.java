@@ -11,33 +11,33 @@ import com.azure.resourcemanager.synapse.fluent.SparkConfigurationsOperationsCli
 import com.azure.resourcemanager.synapse.fluent.models.SparkConfigurationResourceInner;
 import com.azure.resourcemanager.synapse.models.SparkConfigurationResource;
 import com.azure.resourcemanager.synapse.models.SparkConfigurationsOperations;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class SparkConfigurationsOperationsImpl implements SparkConfigurationsOperations {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SparkConfigurationsOperationsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(SparkConfigurationsOperationsImpl.class);
 
     private final SparkConfigurationsOperationsClient innerClient;
 
     private final com.azure.resourcemanager.synapse.SynapseManager serviceManager;
 
-    public SparkConfigurationsOperationsImpl(
-        SparkConfigurationsOperationsClient innerClient,
+    public SparkConfigurationsOperationsImpl(SparkConfigurationsOperationsClient innerClient,
         com.azure.resourcemanager.synapse.SynapseManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
     }
 
     public PagedIterable<SparkConfigurationResource> listByWorkspace(String resourceGroupName, String workspaceName) {
-        PagedIterable<SparkConfigurationResourceInner> inner =
-            this.serviceClient().listByWorkspace(resourceGroupName, workspaceName);
-        return Utils.mapPage(inner, inner1 -> new SparkConfigurationResourceImpl(inner1, this.manager()));
+        PagedIterable<SparkConfigurationResourceInner> inner
+            = this.serviceClient().listByWorkspace(resourceGroupName, workspaceName);
+        return ResourceManagerUtils.mapPage(inner,
+            inner1 -> new SparkConfigurationResourceImpl(inner1, this.manager()));
     }
 
-    public PagedIterable<SparkConfigurationResource> listByWorkspace(
-        String resourceGroupName, String workspaceName, Context context) {
-        PagedIterable<SparkConfigurationResourceInner> inner =
-            this.serviceClient().listByWorkspace(resourceGroupName, workspaceName, context);
-        return Utils.mapPage(inner, inner1 -> new SparkConfigurationResourceImpl(inner1, this.manager()));
+    public PagedIterable<SparkConfigurationResource> listByWorkspace(String resourceGroupName, String workspaceName,
+        Context context) {
+        PagedIterable<SparkConfigurationResourceInner> inner
+            = this.serviceClient().listByWorkspace(resourceGroupName, workspaceName, context);
+        return ResourceManagerUtils.mapPage(inner,
+            inner1 -> new SparkConfigurationResourceImpl(inner1, this.manager()));
     }
 
     private SparkConfigurationsOperationsClient serviceClient() {

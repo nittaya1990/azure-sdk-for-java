@@ -15,7 +15,7 @@ import java.util.Map;
 /** A client-side representation for a Kubernetes cluster agent pool. */
 @Fluent
 public interface KubernetesClusterAgentPool
-    extends ChildResource<KubernetesCluster>, HasInnerModel<ManagedClusterAgentPoolProfile> {
+    extends ChildResource<KubernetesCluster>, HasInnerModel<ManagedClusterAgentPoolProfile>, AgentPool {
 
     /** @return the provisioning state of the agent pool */
     String provisioningState();
@@ -96,6 +96,30 @@ public interface KubernetesClusterAgentPool
      */
     Map<String, String> tags();
 
+    //    /**
+    //     * Starts the agent pool.
+    //     */
+    //    void start();
+    //
+    //    /**
+    //     * Starts the agent pool.
+    //     *
+    //     * @return A {@link Mono} that completes when a successful response is received.
+    //     */
+    //    Mono<Void> startAsync();
+    //
+    //    /**
+    //     * Stops the agent pool.
+    //     */
+    //    void stop();
+    //
+    //    /**
+    //     * Stops the agent pool.
+    //     *
+    //     * @return A {@link Mono} that completes when a successful response is received.
+    //     */
+    //    Mono<Void>  stopAsync();
+
     // Fluent interfaces
 
     /**
@@ -103,15 +127,10 @@ public interface KubernetesClusterAgentPool
      *
      * @param <ParentT> the stage of the container service definition to return to after attaching this definition
      */
-    interface Definition<ParentT>
-        extends DefinitionStages.Blank<ParentT>,
-            DefinitionStages.WithOSType<ParentT>,
-            DefinitionStages.WithOSDiskSize<ParentT>,
-            DefinitionStages.WithAgentPoolType<ParentT>,
-            DefinitionStages.WithAgentPoolVirtualMachineCount<ParentT>,
-            DefinitionStages.WithMaxPodsCount<ParentT>,
-            DefinitionStages.WithVirtualNetwork<ParentT>,
-            DefinitionStages.WithAttach<ParentT> {
+    interface Definition<ParentT> extends DefinitionStages.Blank<ParentT>, DefinitionStages.WithOSType<ParentT>,
+        DefinitionStages.WithOSDiskSize<ParentT>, DefinitionStages.WithAgentPoolType<ParentT>,
+        DefinitionStages.WithAgentPoolVirtualMachineCount<ParentT>, DefinitionStages.WithMaxPodsCount<ParentT>,
+        DefinitionStages.WithVirtualNetwork<ParentT>, DefinitionStages.WithAttach<ParentT> {
     }
 
     /** Grouping of container service agent pool definition stages as a part of parent container service definition. */
@@ -412,40 +431,40 @@ public interface KubernetesClusterAgentPool
         }
 
         /**
+         * The stage of a container service agent pool definition allowing to specify FIPS-enabled OS for an agent pool machines.
+         *
+         * @param <ParentT> the stage of the container service definition to return to after attaching this definition
+         */
+        interface WithFips<ParentT> {
+            /**
+             * Specify to use an FIPS-enabled OS for agent pool machines.
+             *
+             * @return the next stage of the definition
+             * @see <a href="https://docs.microsoft.com/azure/aks/use-multiple-node-pools#add-a-fips-enabled-node-pool-preview">
+             *     Add a FIPS-enabled node pool</a> for more details.
+             */
+            WithAttach<ParentT> withFipsEnabled();
+        }
+
+        /**
          * The final stage of a container service agent pool definition. At this stage, any remaining optional settings
          * can be specified, or the container service agent pool can be attached to the parent container service
          * definition.
          *
          * @param <ParentT> the stage of the container service definition to return to after attaching this definition
          */
-        interface WithAttach<ParentT>
-            extends WithOSType<ParentT>,
-                WithOSDiskSize<ParentT>,
-                WithAgentPoolType<ParentT>,
-                WithAgentPoolVirtualMachineCount<ParentT>,
-                WithMaxPodsCount<ParentT>,
-                WithVirtualNetwork<ParentT>,
-                WithAgentPoolMode<ParentT>,
-                WithAutoScaling<ParentT>,
-                WithAvailabilityZones<ParentT>,
-                WithNodeLabelsTaints<ParentT>,
-                WithVMPriority<ParentT>,
-                WithBillingProfile<ParentT>,
-                WithDiskType<ParentT>,
-                WithTags<ParentT>,
-                Attachable.InDefinition<ParentT> {
+        interface WithAttach<ParentT> extends WithOSType<ParentT>, WithOSDiskSize<ParentT>, WithAgentPoolType<ParentT>,
+            WithAgentPoolVirtualMachineCount<ParentT>, WithMaxPodsCount<ParentT>, WithVirtualNetwork<ParentT>,
+            WithAgentPoolMode<ParentT>, WithAutoScaling<ParentT>, WithAvailabilityZones<ParentT>,
+            WithNodeLabelsTaints<ParentT>, WithVMPriority<ParentT>, WithBillingProfile<ParentT>, WithDiskType<ParentT>,
+            WithFips<ParentT>, WithTags<ParentT>, Attachable.InDefinition<ParentT> {
         }
     }
 
     /** The template for an update operation, containing all the settings that can be modified. */
-    interface Update<ParentT>
-        extends Settable<ParentT>,
-            UpdateStages.WithAgentPoolVirtualMachineCount<ParentT>,
-            UpdateStages.WithAutoScaling<ParentT>,
-            UpdateStages.WithAgentPoolMode<ParentT>,
-            UpdateStages.WithDiskType<ParentT>,
-            UpdateStages.WithTags<ParentT>
-    {
+    interface Update<ParentT> extends Settable<ParentT>, UpdateStages.WithAgentPoolVirtualMachineCount<ParentT>,
+        UpdateStages.WithAutoScaling<ParentT>, UpdateStages.WithAgentPoolMode<ParentT>,
+        UpdateStages.WithDiskType<ParentT>, UpdateStages.WithTags<ParentT> {
     }
 
     /** Grouping of agent pool update stages. */

@@ -8,7 +8,7 @@ import com.azure.core.util.ExpandableStringEnum;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.Collection;
 
-/** Defines values for StageValues. */
+/** The stage of this active event. */
 public final class StageValues extends ExpandableStringEnum<StageValues> {
     /** Static value Active for StageValues. */
     public static final StageValues ACTIVE = fromString("Active");
@@ -18,6 +18,15 @@ public final class StageValues extends ExpandableStringEnum<StageValues> {
 
     /** Static value Archived for StageValues. */
     public static final StageValues ARCHIVED = fromString("Archived");
+
+    /**
+     * Creates a new instance of StageValues value.
+     *
+     * @deprecated Use the {@link #fromString(String)} factory method.
+     */
+    @Deprecated
+    public StageValues() {
+    }
 
     /**
      * Creates or finds a StageValues from its string representation.
@@ -30,7 +39,11 @@ public final class StageValues extends ExpandableStringEnum<StageValues> {
         return fromString(name, StageValues.class);
     }
 
-    /** @return known StageValues values. */
+    /**
+     * Gets known StageValues values.
+     *
+     * @return known StageValues values.
+     */
     public static Collection<StageValues> values() {
         return values(StageValues.class);
     }

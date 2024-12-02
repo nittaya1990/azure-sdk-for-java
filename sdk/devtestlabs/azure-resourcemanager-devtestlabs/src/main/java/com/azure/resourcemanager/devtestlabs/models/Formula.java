@@ -118,6 +118,13 @@ public interface Formula {
     String regionName();
 
     /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
+
+    /**
      * Gets the inner com.azure.resourcemanager.devtestlabs.fluent.models.FormulaInner object.
      *
      * @return the inner object.
@@ -125,17 +132,16 @@ public interface Formula {
     FormulaInner innerModel();
 
     /** The entirety of the Formula definition. */
-    interface Definition
-        extends DefinitionStages.Blank,
-            DefinitionStages.WithLocation,
-            DefinitionStages.WithParentResource,
-            DefinitionStages.WithCreate {
+    interface Definition extends DefinitionStages.Blank, DefinitionStages.WithLocation,
+        DefinitionStages.WithParentResource, DefinitionStages.WithCreate {
     }
+
     /** The Formula definition stages. */
     interface DefinitionStages {
         /** The first stage of the Formula definition. */
         interface Blank extends WithLocation {
         }
+
         /** The stage of the Formula definition allowing to specify location. */
         interface WithLocation {
             /**
@@ -154,6 +160,7 @@ public interface Formula {
              */
             WithParentResource withRegion(String location);
         }
+
         /** The stage of the Formula definition allowing to specify parent resource. */
         interface WithParentResource {
             /**
@@ -165,16 +172,13 @@ public interface Formula {
              */
             WithCreate withExistingLab(String resourceGroupName, String labName);
         }
+
         /**
          * The stage of the Formula definition which contains all the minimum required properties for the resource to be
          * created, but also allows for any other optional properties to be specified.
          */
-        interface WithCreate
-            extends DefinitionStages.WithTags,
-                DefinitionStages.WithDescription,
-                DefinitionStages.WithOsType,
-                DefinitionStages.WithFormulaContent,
-                DefinitionStages.WithVm {
+        interface WithCreate extends DefinitionStages.WithTags, DefinitionStages.WithDescription,
+            DefinitionStages.WithOsType, DefinitionStages.WithFormulaContent, DefinitionStages.WithVm {
             /**
              * Executes the create request.
              *
@@ -190,6 +194,7 @@ public interface Formula {
              */
             Formula create(Context context);
         }
+
         /** The stage of the Formula definition allowing to specify tags. */
         interface WithTags {
             /**
@@ -200,6 +205,7 @@ public interface Formula {
              */
             WithCreate withTags(Map<String, String> tags);
         }
+
         /** The stage of the Formula definition allowing to specify description. */
         interface WithDescription {
             /**
@@ -210,6 +216,7 @@ public interface Formula {
              */
             WithCreate withDescription(String description);
         }
+
         /** The stage of the Formula definition allowing to specify osType. */
         interface WithOsType {
             /**
@@ -220,6 +227,7 @@ public interface Formula {
              */
             WithCreate withOsType(String osType);
         }
+
         /** The stage of the Formula definition allowing to specify formulaContent. */
         interface WithFormulaContent {
             /**
@@ -230,6 +238,7 @@ public interface Formula {
              */
             WithCreate withFormulaContent(LabVirtualMachineCreationParameter formulaContent);
         }
+
         /** The stage of the Formula definition allowing to specify vm. */
         interface WithVm {
             /**
@@ -241,6 +250,7 @@ public interface Formula {
             WithCreate withVm(FormulaPropertiesFromVm vm);
         }
     }
+
     /**
      * Begins update for the Formula resource.
      *
@@ -265,6 +275,7 @@ public interface Formula {
          */
         Formula apply(Context context);
     }
+
     /** The Formula update stages. */
     interface UpdateStages {
         /** The stage of the Formula update allowing to specify tags. */
@@ -278,6 +289,7 @@ public interface Formula {
             Update withTags(Map<String, String> tags);
         }
     }
+
     /**
      * Refreshes the resource to sync with Azure.
      *

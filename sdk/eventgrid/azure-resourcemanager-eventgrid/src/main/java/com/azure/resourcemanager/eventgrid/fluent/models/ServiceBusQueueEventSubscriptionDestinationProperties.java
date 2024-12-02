@@ -5,21 +5,17 @@
 package com.azure.resourcemanager.eventgrid.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.eventgrid.models.DeliveryAttributeMapping;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The properties that represent the Service Bus destination of an event subscription. */
+/**
+ * The properties that represent the Service Bus destination of an event subscription.
+ */
 @Fluent
 public final class ServiceBusQueueEventSubscriptionDestinationProperties {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(ServiceBusQueueEventSubscriptionDestinationProperties.class);
-
     /*
-     * The Azure Resource Id that represents the endpoint of the Service Bus
-     * destination of an event subscription.
+     * The Azure Resource Id that represents the endpoint of the Service Bus destination of an event subscription.
      */
     @JsonProperty(value = "resourceId")
     private String resourceId;
@@ -31,9 +27,15 @@ public final class ServiceBusQueueEventSubscriptionDestinationProperties {
     private List<DeliveryAttributeMapping> deliveryAttributeMappings;
 
     /**
+     * Creates an instance of ServiceBusQueueEventSubscriptionDestinationProperties class.
+     */
+    public ServiceBusQueueEventSubscriptionDestinationProperties() {
+    }
+
+    /**
      * Get the resourceId property: The Azure Resource Id that represents the endpoint of the Service Bus destination of
      * an event subscription.
-     *
+     * 
      * @return the resourceId value.
      */
     public String resourceId() {
@@ -43,7 +45,7 @@ public final class ServiceBusQueueEventSubscriptionDestinationProperties {
     /**
      * Set the resourceId property: The Azure Resource Id that represents the endpoint of the Service Bus destination of
      * an event subscription.
-     *
+     * 
      * @param resourceId the resourceId value to set.
      * @return the ServiceBusQueueEventSubscriptionDestinationProperties object itself.
      */
@@ -54,7 +56,7 @@ public final class ServiceBusQueueEventSubscriptionDestinationProperties {
 
     /**
      * Get the deliveryAttributeMappings property: Delivery attribute details.
-     *
+     * 
      * @return the deliveryAttributeMappings value.
      */
     public List<DeliveryAttributeMapping> deliveryAttributeMappings() {
@@ -63,19 +65,19 @@ public final class ServiceBusQueueEventSubscriptionDestinationProperties {
 
     /**
      * Set the deliveryAttributeMappings property: Delivery attribute details.
-     *
+     * 
      * @param deliveryAttributeMappings the deliveryAttributeMappings value to set.
      * @return the ServiceBusQueueEventSubscriptionDestinationProperties object itself.
      */
-    public ServiceBusQueueEventSubscriptionDestinationProperties withDeliveryAttributeMappings(
-        List<DeliveryAttributeMapping> deliveryAttributeMappings) {
+    public ServiceBusQueueEventSubscriptionDestinationProperties
+        withDeliveryAttributeMappings(List<DeliveryAttributeMapping> deliveryAttributeMappings) {
         this.deliveryAttributeMappings = deliveryAttributeMappings;
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

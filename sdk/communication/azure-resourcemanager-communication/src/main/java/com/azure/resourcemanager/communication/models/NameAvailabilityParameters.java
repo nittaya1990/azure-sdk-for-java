@@ -5,84 +5,43 @@
 package com.azure.resourcemanager.communication.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Data POST-ed to the nameAvailability action. */
+/**
+ * Data POST-ed to the nameAvailability action.
+ */
 @Fluent
-public final class NameAvailabilityParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(NameAvailabilityParameters.class);
-
-    /*
-     * The resource type. Should be always
-     * "Microsoft.Communication/CommunicationServices".
-     */
-    @JsonProperty(value = "type", required = true)
-    private String type;
-
-    /*
-     * The CommunicationService name to validate.
-     * e.g."my-CommunicationService-name-here"
-     */
-    @JsonProperty(value = "name", required = true)
-    private String name;
-
+public final class NameAvailabilityParameters extends CheckNameAvailabilityRequest {
     /**
-     * Get the type property: The resource type. Should be always "Microsoft.Communication/CommunicationServices".
-     *
-     * @return the type value.
+     * Creates an instance of NameAvailabilityParameters class.
      */
-    public String type() {
-        return this.type;
+    public NameAvailabilityParameters() {
     }
 
     /**
-     * Set the type property: The resource type. Should be always "Microsoft.Communication/CommunicationServices".
-     *
-     * @param type the type value to set.
-     * @return the NameAvailabilityParameters object itself.
+     * {@inheritDoc}
      */
-    public NameAvailabilityParameters withType(String type) {
-        this.type = type;
+    @Override
+    public NameAvailabilityParameters withName(String name) {
+        super.withName(name);
         return this;
     }
 
     /**
-     * Get the name property: The CommunicationService name to validate. e.g."my-CommunicationService-name-here".
-     *
-     * @return the name value.
+     * {@inheritDoc}
      */
-    public String name() {
-        return this.name;
-    }
-
-    /**
-     * Set the name property: The CommunicationService name to validate. e.g."my-CommunicationService-name-here".
-     *
-     * @param name the name value to set.
-     * @return the NameAvailabilityParameters object itself.
-     */
-    public NameAvailabilityParameters withName(String name) {
-        this.name = name;
+    @Override
+    public NameAvailabilityParameters withType(String type) {
+        super.withType(type);
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
+    @Override
     public void validate() {
-        if (type() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property type in model NameAvailabilityParameters"));
-        }
-        if (name() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property name in model NameAvailabilityParameters"));
-        }
+        super.validate();
     }
 }

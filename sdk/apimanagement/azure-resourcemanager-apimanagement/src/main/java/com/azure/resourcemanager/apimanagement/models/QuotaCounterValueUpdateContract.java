@@ -5,21 +5,21 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.models.QuotaCounterValueContractProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Quota counter value details. */
 @Fluent
 public final class QuotaCounterValueUpdateContract {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(QuotaCounterValueUpdateContract.class);
-
     /*
      * Quota counter value details.
      */
     @JsonProperty(value = "properties")
     private QuotaCounterValueContractProperties innerProperties;
+
+    /** Creates an instance of QuotaCounterValueUpdateContract class. */
+    public QuotaCounterValueUpdateContract() {
+    }
 
     /**
      * Get the innerProperties property: Quota counter value details.

@@ -12,26 +12,32 @@ import com.azure.core.util.Context;
 import com.azure.resourcemanager.synapse.fluent.models.SqlPoolSecurityAlertPolicyInner;
 import com.azure.resourcemanager.synapse.models.SecurityAlertPolicyName;
 
-/** An instance of this class provides access to all the operations defined in SqlPoolSecurityAlertPoliciesClient. */
+/**
+ * An instance of this class provides access to all the operations defined in SqlPoolSecurityAlertPoliciesClient.
+ */
 public interface SqlPoolSecurityAlertPoliciesClient {
     /**
+     * List Sql pool's security alert policies
+     * 
      * Get a list of Sql pool's security alert policies.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param sqlPoolName SQL pool name.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Sql pool's security alert policies.
+     * @return a list of Sql pool's security alert policies as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<SqlPoolSecurityAlertPolicyInner> list(
-        String resourceGroupName, String workspaceName, String sqlPoolName);
+    PagedIterable<SqlPoolSecurityAlertPolicyInner> list(String resourceGroupName, String workspaceName,
+        String sqlPoolName);
 
     /**
+     * List Sql pool's security alert policies
+     * 
      * Get a list of Sql pool's security alert policies.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param sqlPoolName SQL pool name.
@@ -39,15 +45,36 @@ public interface SqlPoolSecurityAlertPoliciesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Sql pool's security alert policies.
+     * @return a list of Sql pool's security alert policies as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<SqlPoolSecurityAlertPolicyInner> list(
-        String resourceGroupName, String workspaceName, String sqlPoolName, Context context);
+    PagedIterable<SqlPoolSecurityAlertPolicyInner> list(String resourceGroupName, String workspaceName,
+        String sqlPoolName, Context context);
 
     /**
+     * Get a Sql pool's security alert policy
+     * 
      * Get a Sql pool's security alert policy.
-     *
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param sqlPoolName SQL pool name.
+     * @param securityAlertPolicyName The name of the security alert policy.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a Sql pool's security alert policy along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<SqlPoolSecurityAlertPolicyInner> getWithResponse(String resourceGroupName, String workspaceName,
+        String sqlPoolName, SecurityAlertPolicyName securityAlertPolicyName, Context context);
+
+    /**
+     * Get a Sql pool's security alert policy
+     * 
+     * Get a Sql pool's security alert policy.
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param sqlPoolName SQL pool name.
@@ -58,36 +85,35 @@ public interface SqlPoolSecurityAlertPoliciesClient {
      * @return a Sql pool's security alert policy.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    SqlPoolSecurityAlertPolicyInner get(
-        String resourceGroupName,
-        String workspaceName,
-        String sqlPoolName,
+    SqlPoolSecurityAlertPolicyInner get(String resourceGroupName, String workspaceName, String sqlPoolName,
         SecurityAlertPolicyName securityAlertPolicyName);
 
     /**
-     * Get a Sql pool's security alert policy.
-     *
+     * Create or update a Sql pool's security alert policy
+     * 
+     * Create or update a Sql pool's security alert policy.
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param sqlPoolName SQL pool name.
      * @param securityAlertPolicyName The name of the security alert policy.
+     * @param parameters The Sql pool security alert policy.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Sql pool's security alert policy.
+     * @return a Sql pool security alert policy along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<SqlPoolSecurityAlertPolicyInner> getWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String sqlPoolName,
-        SecurityAlertPolicyName securityAlertPolicyName,
+    Response<SqlPoolSecurityAlertPolicyInner> createOrUpdateWithResponse(String resourceGroupName, String workspaceName,
+        String sqlPoolName, SecurityAlertPolicyName securityAlertPolicyName, SqlPoolSecurityAlertPolicyInner parameters,
         Context context);
 
     /**
+     * Create or update a Sql pool's security alert policy
+     * 
      * Create or update a Sql pool's security alert policy.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param sqlPoolName SQL pool name.
@@ -99,33 +125,6 @@ public interface SqlPoolSecurityAlertPoliciesClient {
      * @return a Sql pool security alert policy.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    SqlPoolSecurityAlertPolicyInner createOrUpdate(
-        String resourceGroupName,
-        String workspaceName,
-        String sqlPoolName,
-        SecurityAlertPolicyName securityAlertPolicyName,
-        SqlPoolSecurityAlertPolicyInner parameters);
-
-    /**
-     * Create or update a Sql pool's security alert policy.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param sqlPoolName SQL pool name.
-     * @param securityAlertPolicyName The name of the security alert policy.
-     * @param parameters The Sql pool security alert policy.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Sql pool security alert policy.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<SqlPoolSecurityAlertPolicyInner> createOrUpdateWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String sqlPoolName,
-        SecurityAlertPolicyName securityAlertPolicyName,
-        SqlPoolSecurityAlertPolicyInner parameters,
-        Context context);
+    SqlPoolSecurityAlertPolicyInner createOrUpdate(String resourceGroupName, String workspaceName, String sqlPoolName,
+        SecurityAlertPolicyName securityAlertPolicyName, SqlPoolSecurityAlertPolicyInner parameters);
 }

@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Terms of service contract properties. */
 @Fluent
 public final class TermsOfServiceProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TermsOfServiceProperties.class);
-
     /*
      * A terms of service text.
      */
@@ -31,6 +27,10 @@ public final class TermsOfServiceProperties {
      */
     @JsonProperty(value = "consentRequired")
     private Boolean consentRequired;
+
+    /** Creates an instance of TermsOfServiceProperties class. */
+    public TermsOfServiceProperties() {
+    }
 
     /**
      * Get the text property: A terms of service text.

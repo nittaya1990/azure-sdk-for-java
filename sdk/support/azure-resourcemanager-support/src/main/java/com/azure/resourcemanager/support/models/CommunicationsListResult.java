@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.support.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.support.fluent.models.CommunicationDetailsInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Collection of Communication resources. */
+/**
+ * Collection of Communication resources.
+ */
 @Fluent
 public final class CommunicationsListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CommunicationsListResult.class);
-
     /*
      * List of Communication resources.
      */
@@ -29,8 +27,14 @@ public final class CommunicationsListResult {
     private String nextLink;
 
     /**
+     * Creates an instance of CommunicationsListResult class.
+     */
+    public CommunicationsListResult() {
+    }
+
+    /**
      * Get the value property: List of Communication resources.
-     *
+     * 
      * @return the value value.
      */
     public List<CommunicationDetailsInner> value() {
@@ -39,7 +43,7 @@ public final class CommunicationsListResult {
 
     /**
      * Set the value property: List of Communication resources.
-     *
+     * 
      * @param value the value value to set.
      * @return the CommunicationsListResult object itself.
      */
@@ -50,7 +54,7 @@ public final class CommunicationsListResult {
 
     /**
      * Get the nextLink property: The URI to fetch the next page of Communication resources.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -59,7 +63,7 @@ public final class CommunicationsListResult {
 
     /**
      * Set the nextLink property: The URI to fetch the next page of Communication resources.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the CommunicationsListResult object itself.
      */
@@ -70,7 +74,7 @@ public final class CommunicationsListResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.recoveryservicesbackup.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The token information details. */
+/**
+ * The token information details.
+ */
 @Fluent
 public final class TokenInformationInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TokenInformationInner.class);
-
     /*
      * Token value.
      */
@@ -33,8 +31,14 @@ public final class TokenInformationInner {
     private String securityPin;
 
     /**
+     * Creates an instance of TokenInformationInner class.
+     */
+    public TokenInformationInner() {
+    }
+
+    /**
      * Get the token property: Token value.
-     *
+     * 
      * @return the token value.
      */
     public String token() {
@@ -43,7 +47,7 @@ public final class TokenInformationInner {
 
     /**
      * Set the token property: Token value.
-     *
+     * 
      * @param token the token value to set.
      * @return the TokenInformationInner object itself.
      */
@@ -54,7 +58,7 @@ public final class TokenInformationInner {
 
     /**
      * Get the expiryTimeInUtcTicks property: Expiry time of token.
-     *
+     * 
      * @return the expiryTimeInUtcTicks value.
      */
     public Long expiryTimeInUtcTicks() {
@@ -63,7 +67,7 @@ public final class TokenInformationInner {
 
     /**
      * Set the expiryTimeInUtcTicks property: Expiry time of token.
-     *
+     * 
      * @param expiryTimeInUtcTicks the expiryTimeInUtcTicks value to set.
      * @return the TokenInformationInner object itself.
      */
@@ -74,7 +78,7 @@ public final class TokenInformationInner {
 
     /**
      * Get the securityPin property: Security PIN.
-     *
+     * 
      * @return the securityPin value.
      */
     public String securityPin() {
@@ -83,7 +87,7 @@ public final class TokenInformationInner {
 
     /**
      * Set the securityPin property: Security PIN.
-     *
+     * 
      * @param securityPin the securityPin value to set.
      * @return the TokenInformationInner object itself.
      */
@@ -94,7 +98,7 @@ public final class TokenInformationInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

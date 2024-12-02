@@ -16,7 +16,7 @@ cd azure-sdk-for-java/sdk/cosmos
 - Run the following maven command to build:
 
 ```bash
-mvn -e -Dgpg.skip -DskipTests -Dmaven.javadoc.skip=true -Dspotbugs.skip=true -Dcheckstyle.skip=true -Drevapi.skip=true -pl ,com.azure:azure-cosmos clean install
+mvn -e -Dgpg.skip -DskipTests -Dmaven.javadoc.skip=true -Dcodesnippet.skip=true -Dspotbugs.skip=true -Dcheckstyle.skip=true -Drevapi.skip=true -pl ,com.azure:azure-cosmos clean install
 ```
 
 ## Running Tests from Command Line
@@ -39,6 +39,6 @@ mvn test -DACCOUNT_HOST="https://REPLACE_ME_WITH_YOURS.documents.azure.com:443/"
 
 - or you can simply put your endpoint credentials in TestConfigurations.java
 - The SDK tests are written using TestNG framework, if you use Eclipse you may have to
-  add TestNG plugin to your eclipse IDE as explained [here](https://testng.org/doc/eclipse.html).
+  add TestNG plugin to your eclipse IDE as explained [here](https://testng.org/#_eclipse_plug_in_2).
   Intellij has builtin support for TestNG.
 - Now you can run the tests in your Intellij/Eclipse IDE.

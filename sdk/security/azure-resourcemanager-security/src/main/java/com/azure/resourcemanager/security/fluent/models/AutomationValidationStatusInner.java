@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.security.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The security automation model state property bag. */
+/**
+ * The security automation model state property bag.
+ */
 @Fluent
 public final class AutomationValidationStatusInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AutomationValidationStatusInner.class);
-
     /*
      * Indicates whether the model is valid or not.
      */
@@ -27,8 +25,14 @@ public final class AutomationValidationStatusInner {
     private String message;
 
     /**
+     * Creates an instance of AutomationValidationStatusInner class.
+     */
+    public AutomationValidationStatusInner() {
+    }
+
+    /**
      * Get the isValid property: Indicates whether the model is valid or not.
-     *
+     * 
      * @return the isValid value.
      */
     public Boolean isValid() {
@@ -37,7 +41,7 @@ public final class AutomationValidationStatusInner {
 
     /**
      * Set the isValid property: Indicates whether the model is valid or not.
-     *
+     * 
      * @param isValid the isValid value to set.
      * @return the AutomationValidationStatusInner object itself.
      */
@@ -48,7 +52,7 @@ public final class AutomationValidationStatusInner {
 
     /**
      * Get the message property: The validation message.
-     *
+     * 
      * @return the message value.
      */
     public String message() {
@@ -57,7 +61,7 @@ public final class AutomationValidationStatusInner {
 
     /**
      * Set the message property: The validation message.
-     *
+     * 
      * @param message the message value to set.
      * @return the AutomationValidationStatusInner object itself.
      */
@@ -68,7 +72,7 @@ public final class AutomationValidationStatusInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

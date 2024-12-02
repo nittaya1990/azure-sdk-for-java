@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.healthcareapis.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Export operation configuration information. */
+/**
+ * Export operation configuration information.
+ */
 @Fluent
 public final class ServiceExportConfigurationInfo {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ServiceExportConfigurationInfo.class);
-
     /*
      * The name of the default export storage account.
      */
@@ -21,8 +19,14 @@ public final class ServiceExportConfigurationInfo {
     private String storageAccountName;
 
     /**
+     * Creates an instance of ServiceExportConfigurationInfo class.
+     */
+    public ServiceExportConfigurationInfo() {
+    }
+
+    /**
      * Get the storageAccountName property: The name of the default export storage account.
-     *
+     * 
      * @return the storageAccountName value.
      */
     public String storageAccountName() {
@@ -31,7 +35,7 @@ public final class ServiceExportConfigurationInfo {
 
     /**
      * Set the storageAccountName property: The name of the default export storage account.
-     *
+     * 
      * @param storageAccountName the storageAccountName value to set.
      * @return the ServiceExportConfigurationInfo object itself.
      */
@@ -42,7 +46,7 @@ public final class ServiceExportConfigurationInfo {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

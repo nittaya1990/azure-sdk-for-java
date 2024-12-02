@@ -20,16 +20,16 @@ public final class GatewaysListKeysResponse extends ResponseBase<GatewaysListKey
      * @param value the deserialized value of the HTTP response.
      * @param headers the deserialized headers of the HTTP response.
      */
-    public GatewaysListKeysResponse(
-        HttpRequest request,
-        int statusCode,
-        HttpHeaders rawHeaders,
-        GatewayKeysContractInner value,
-        GatewaysListKeysHeaders headers) {
+    public GatewaysListKeysResponse(HttpRequest request, int statusCode, HttpHeaders rawHeaders,
+        GatewayKeysContractInner value, GatewaysListKeysHeaders headers) {
         super(request, statusCode, rawHeaders, value, headers);
     }
 
-    /** @return the deserialized response body. */
+    /**
+     * Gets the deserialized response body.
+     *
+     * @return the deserialized response body.
+     */
     @Override
     public GatewayKeysContractInner getValue() {
         return super.getValue();

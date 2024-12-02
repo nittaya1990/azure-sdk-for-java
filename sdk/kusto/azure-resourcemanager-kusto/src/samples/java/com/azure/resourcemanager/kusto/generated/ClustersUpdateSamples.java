@@ -4,13 +4,12 @@
 
 package com.azure.resourcemanager.kusto.generated;
 
-import com.azure.core.util.Context;
 import com.azure.resourcemanager.kusto.models.Cluster;
 
 /** Samples for Clusters Update. */
 public final class ClustersUpdateSamples {
     /*
-     * x-ms-original-file: specification/azure-kusto/resource-manager/Microsoft.Kusto/stable/2021-08-27/examples/KustoClustersUpdate.json
+     * x-ms-original-file: specification/azure-kusto/resource-manager/Microsoft.Kusto/stable/2023-08-15/examples/KustoClustersUpdate.json
      */
     /**
      * Sample code: KustoClustersUpdate.
@@ -21,7 +20,7 @@ public final class ClustersUpdateSamples {
         Cluster resource =
             manager
                 .clusters()
-                .getByResourceGroupWithResponse("kustorptest", "kustoclusterrptest4", Context.NONE)
+                .getByResourceGroupWithResponse("kustorptest", "kustoCluster2", com.azure.core.util.Context.NONE)
                 .getValue();
         resource.update().withIfMatch("*").apply();
     }

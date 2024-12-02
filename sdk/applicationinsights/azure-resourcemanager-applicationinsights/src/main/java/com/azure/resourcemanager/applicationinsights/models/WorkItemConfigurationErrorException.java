@@ -26,11 +26,12 @@ public final class WorkItemConfigurationErrorException extends ManagementExcepti
      * @param response the HTTP response.
      * @param value the deserialized response value.
      */
-    public WorkItemConfigurationErrorException(
-        String message, HttpResponse response, WorkItemConfigurationError value) {
+    public WorkItemConfigurationErrorException(String message, HttpResponse response,
+        WorkItemConfigurationError value) {
         super(message, response, value);
     }
 
+    /** {@inheritDoc} */
     @Override
     public WorkItemConfigurationError getValue() {
         return (WorkItemConfigurationError) super.getValue();

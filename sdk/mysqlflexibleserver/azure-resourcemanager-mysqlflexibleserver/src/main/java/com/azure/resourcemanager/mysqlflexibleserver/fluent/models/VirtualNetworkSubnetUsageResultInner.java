@@ -5,16 +5,26 @@
 package com.azure.resourcemanager.mysqlflexibleserver.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.mysqlflexibleserver.models.DelegatedSubnetUsage;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Virtual network subnet usage data. */
+/**
+ * Virtual network subnet usage data.
+ */
 @Immutable
 public final class VirtualNetworkSubnetUsageResultInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(VirtualNetworkSubnetUsageResultInner.class);
+    /*
+     * The location name.
+     */
+    @JsonProperty(value = "location", access = JsonProperty.Access.WRITE_ONLY)
+    private String location;
+
+    /*
+     * The subscription id.
+     */
+    @JsonProperty(value = "subscriptionId", access = JsonProperty.Access.WRITE_ONLY)
+    private String subscriptionId;
 
     /*
      * A list of delegated subnet usage
@@ -23,8 +33,32 @@ public final class VirtualNetworkSubnetUsageResultInner {
     private List<DelegatedSubnetUsage> delegatedSubnetsUsage;
 
     /**
+     * Creates an instance of VirtualNetworkSubnetUsageResultInner class.
+     */
+    public VirtualNetworkSubnetUsageResultInner() {
+    }
+
+    /**
+     * Get the location property: The location name.
+     * 
+     * @return the location value.
+     */
+    public String location() {
+        return this.location;
+    }
+
+    /**
+     * Get the subscriptionId property: The subscription id.
+     * 
+     * @return the subscriptionId value.
+     */
+    public String subscriptionId() {
+        return this.subscriptionId;
+    }
+
+    /**
      * Get the delegatedSubnetsUsage property: A list of delegated subnet usage.
-     *
+     * 
      * @return the delegatedSubnetsUsage value.
      */
     public List<DelegatedSubnetUsage> delegatedSubnetsUsage() {
@@ -33,7 +67,7 @@ public final class VirtualNetworkSubnetUsageResultInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

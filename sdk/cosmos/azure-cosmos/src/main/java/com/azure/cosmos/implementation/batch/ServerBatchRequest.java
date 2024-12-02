@@ -3,6 +3,7 @@
 
 package com.azure.cosmos.implementation.batch;
 
+import com.azure.cosmos.CosmosItemSerializer;
 import com.azure.cosmos.implementation.JsonSerializable;
 import com.azure.cosmos.implementation.Utils;
 import com.azure.cosmos.implementation.apachecommons.collections.list.UnmodifiableList;
@@ -49,7 +50,9 @@ public abstract class ServerBatchRequest {
      *
      * @return Any pending operations that were not included in the request.
      */
-    final List<CosmosItemOperation> createBodyOfBatchRequest(final List<CosmosItemOperation> operations) {
+    final List<CosmosItemOperation> createBodyOfBatchRequest(
+        final List<CosmosItemOperation> operations,
+        final CosmosItemSerializer effectiveItemSerializer) {
 
         checkNotNull(operations, "expected non-null operations");
 
@@ -60,16 +63,14 @@ public abstract class ServerBatchRequest {
 
         for(CosmosItemOperation operation : operations) {
             JsonSerializable operationJsonSerializable;
+            int operationSerializedLength;
 
-            if (operation instanceof ItemBatchOperation<?>) {
-                operationJsonSerializable = ((ItemBatchOperation<?>) operation).serializeOperation();
-            } else if (operation instanceof ItemBulkOperation<?, ?>) {
-                operationJsonSerializable = ((ItemBulkOperation<?, ?>) operation).serializeOperation();
+            if (operation instanceof CosmosItemOperationBase) {
+                operationJsonSerializable = ((CosmosItemOperationBase) operation).getSerializedOperation(effectiveItemSerializer);
+                operationSerializedLength = ((CosmosItemOperationBase) operation).getSerializedLength(effectiveItemSerializer);
             } else {
                 throw new UnsupportedOperationException("Unknown CosmosItemOperation.");
             }
-
-            int operationSerializedLength = getOperationSerializedLength(operationJsonSerializable);
 
             if (totalOperationCount != 0 &&
                 (totalSerializedLength + operationSerializedLength > this.maxBodyLength || totalOperationCount + 1 > this.maxOperationCount)) {
@@ -122,11 +123,5 @@ public abstract class ServerBatchRequest {
 
     void setShouldContinueOnError(boolean shouldContinueOnError) {
         this.shouldContinueOnError = shouldContinueOnError;
-    }
-
-    private int getOperationSerializedLength(JsonSerializable operationSerializable) {
-        String serializedValue = operationSerializable.toString();
-
-        return serializedValue.codePointCount(0, serializedValue.length());
     }
 }

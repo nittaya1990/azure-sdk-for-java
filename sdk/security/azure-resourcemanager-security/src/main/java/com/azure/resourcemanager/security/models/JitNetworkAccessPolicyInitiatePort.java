@@ -6,15 +6,14 @@ package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
-/** The JitNetworkAccessPolicyInitiatePort model. */
+/**
+ * The JitNetworkAccessPolicyInitiatePort model.
+ */
 @Fluent
 public final class JitNetworkAccessPolicyInitiatePort {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(JitNetworkAccessPolicyInitiatePort.class);
-
     /*
      * The number property.
      */
@@ -22,8 +21,7 @@ public final class JitNetworkAccessPolicyInitiatePort {
     private int number;
 
     /*
-     * Source of the allowed traffic. If omitted, the request will be for the
-     * source IP address of the initiate request.
+     * Source of the allowed traffic. If omitted, the request will be for the source IP address of the initiate request.
      */
     @JsonProperty(value = "allowedSourceAddressPrefix")
     private String allowedSourceAddressPrefix;
@@ -35,8 +33,14 @@ public final class JitNetworkAccessPolicyInitiatePort {
     private OffsetDateTime endTimeUtc;
 
     /**
+     * Creates an instance of JitNetworkAccessPolicyInitiatePort class.
+     */
+    public JitNetworkAccessPolicyInitiatePort() {
+    }
+
+    /**
      * Get the number property: The number property.
-     *
+     * 
      * @return the number value.
      */
     public int number() {
@@ -45,7 +49,7 @@ public final class JitNetworkAccessPolicyInitiatePort {
 
     /**
      * Set the number property: The number property.
-     *
+     * 
      * @param number the number value to set.
      * @return the JitNetworkAccessPolicyInitiatePort object itself.
      */
@@ -57,7 +61,7 @@ public final class JitNetworkAccessPolicyInitiatePort {
     /**
      * Get the allowedSourceAddressPrefix property: Source of the allowed traffic. If omitted, the request will be for
      * the source IP address of the initiate request.
-     *
+     * 
      * @return the allowedSourceAddressPrefix value.
      */
     public String allowedSourceAddressPrefix() {
@@ -67,7 +71,7 @@ public final class JitNetworkAccessPolicyInitiatePort {
     /**
      * Set the allowedSourceAddressPrefix property: Source of the allowed traffic. If omitted, the request will be for
      * the source IP address of the initiate request.
-     *
+     * 
      * @param allowedSourceAddressPrefix the allowedSourceAddressPrefix value to set.
      * @return the JitNetworkAccessPolicyInitiatePort object itself.
      */
@@ -78,7 +82,7 @@ public final class JitNetworkAccessPolicyInitiatePort {
 
     /**
      * Get the endTimeUtc property: The time to close the request in UTC.
-     *
+     * 
      * @return the endTimeUtc value.
      */
     public OffsetDateTime endTimeUtc() {
@@ -87,7 +91,7 @@ public final class JitNetworkAccessPolicyInitiatePort {
 
     /**
      * Set the endTimeUtc property: The time to close the request in UTC.
-     *
+     * 
      * @param endTimeUtc the endTimeUtc value to set.
      * @return the JitNetworkAccessPolicyInitiatePort object itself.
      */
@@ -98,15 +102,16 @@ public final class JitNetworkAccessPolicyInitiatePort {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (endTimeUtc() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property endTimeUtc in model JitNetworkAccessPolicyInitiatePort"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property endTimeUtc in model JitNetworkAccessPolicyInitiatePort"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(JitNetworkAccessPolicyInitiatePort.class);
 }

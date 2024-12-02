@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Sampling settings for Diagnostic. */
 @Fluent
 public final class SamplingSettings {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SamplingSettings.class);
-
     /*
      * Sampling type.
      */
@@ -25,6 +21,10 @@ public final class SamplingSettings {
      */
     @JsonProperty(value = "percentage")
     private Double percentage;
+
+    /** Creates an instance of SamplingSettings class. */
+    public SamplingSettings() {
+    }
 
     /**
      * Get the samplingType property: Sampling type.

@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.recoveryservices.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Details of the certificate to be uploaded to the vault. */
+/**
+ * Details of the certificate to be uploaded to the vault.
+ */
 @Fluent
 public final class CertificateRequest {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CertificateRequest.class);
-
     /*
      * Raw certificate data.
      */
@@ -21,8 +19,14 @@ public final class CertificateRequest {
     private RawCertificateData properties;
 
     /**
+     * Creates an instance of CertificateRequest class.
+     */
+    public CertificateRequest() {
+    }
+
+    /**
      * Get the properties property: Raw certificate data.
-     *
+     * 
      * @return the properties value.
      */
     public RawCertificateData properties() {
@@ -31,7 +35,7 @@ public final class CertificateRequest {
 
     /**
      * Set the properties property: Raw certificate data.
-     *
+     * 
      * @param properties the properties value to set.
      * @return the CertificateRequest object itself.
      */
@@ -42,7 +46,7 @@ public final class CertificateRequest {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -8,17 +8,32 @@ import com.azure.core.util.ExpandableStringEnum;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.Collection;
 
-/** Defines values for FrontDoorEnabledState. */
+/**
+ * Operational status of the Front Door load balancer. Permitted values are 'Enabled' or 'Disabled'.
+ */
 public final class FrontDoorEnabledState extends ExpandableStringEnum<FrontDoorEnabledState> {
-    /** Static value Enabled for FrontDoorEnabledState. */
+    /**
+     * Static value Enabled for FrontDoorEnabledState.
+     */
     public static final FrontDoorEnabledState ENABLED = fromString("Enabled");
 
-    /** Static value Disabled for FrontDoorEnabledState. */
+    /**
+     * Static value Disabled for FrontDoorEnabledState.
+     */
     public static final FrontDoorEnabledState DISABLED = fromString("Disabled");
 
     /**
+     * Creates a new instance of FrontDoorEnabledState value.
+     * 
+     * @deprecated Use the {@link #fromString(String)} factory method.
+     */
+    @Deprecated
+    public FrontDoorEnabledState() {
+    }
+
+    /**
      * Creates or finds a FrontDoorEnabledState from its string representation.
-     *
+     * 
      * @param name a name to look for.
      * @return the corresponding FrontDoorEnabledState.
      */
@@ -27,7 +42,11 @@ public final class FrontDoorEnabledState extends ExpandableStringEnum<FrontDoorE
         return fromString(name, FrontDoorEnabledState.class);
     }
 
-    /** @return known FrontDoorEnabledState values. */
+    /**
+     * Gets known FrontDoorEnabledState values.
+     * 
+     * @return known FrontDoorEnabledState values.
+     */
     public static Collection<FrontDoorEnabledState> values() {
         return values(FrontDoorEnabledState.class);
     }

@@ -5,31 +5,38 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.List;
 import java.util.Map;
 
-/** AzureWorkload-specific restore. */
+/**
+ * AzureWorkload-specific restore.
+ */
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
-    include = JsonTypeInfo.As.PROPERTY,
     property = "objectType",
-    defaultImpl = AzureWorkloadRestoreRequest.class)
+    defaultImpl = AzureWorkloadRestoreRequest.class,
+    visible = true)
 @JsonTypeName("AzureWorkloadRestoreRequest")
 @JsonSubTypes({
     @JsonSubTypes.Type(
         name = "AzureWorkloadPointInTimeRestoreRequest",
         value = AzureWorkloadPointInTimeRestoreRequest.class),
     @JsonSubTypes.Type(name = "AzureWorkloadSAPHanaRestoreRequest", value = AzureWorkloadSapHanaRestoreRequest.class),
-    @JsonSubTypes.Type(name = "AzureWorkloadSQLRestoreRequest", value = AzureWorkloadSqlRestoreRequest.class)
-})
+    @JsonSubTypes.Type(name = "AzureWorkloadSQLRestoreRequest", value = AzureWorkloadSqlRestoreRequest.class) })
 @Fluent
 public class AzureWorkloadRestoreRequest extends RestoreRequest {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureWorkloadRestoreRequest.class);
+    /*
+     * This property will be used as the discriminator for deciding the specific types in the polymorphic chain of types.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "objectType", required = true)
+    private String objectType = "AzureWorkloadRestoreRequest";
 
     /*
      * Type of this recovery.
@@ -38,8 +45,7 @@ public class AzureWorkloadRestoreRequest extends RestoreRequest {
     private RecoveryType recoveryType;
 
     /*
-     * Fully qualified ARM ID of the VM on which workload that was running is
-     * being recovered.
+     * Fully qualified ARM ID of the VM on which workload that was running is being recovered.
      */
     @JsonProperty(value = "sourceResourceId")
     private String sourceResourceId;
@@ -48,6 +54,7 @@ public class AzureWorkloadRestoreRequest extends RestoreRequest {
      * Workload specific property bag.
      */
     @JsonProperty(value = "propertyBag")
+    @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
     private Map<String, String> propertyBag;
 
     /*
@@ -57,15 +64,58 @@ public class AzureWorkloadRestoreRequest extends RestoreRequest {
     private TargetRestoreInfo targetInfo;
 
     /*
-     * Defines whether the current recovery mode is file restore or database
-     * restore
+     * Defines whether the current recovery mode is file restore or database restore
      */
     @JsonProperty(value = "recoveryMode")
     private RecoveryMode recoveryMode;
 
+    /*
+     * Defines the Resource group of the Target VM
+     */
+    @JsonProperty(value = "targetResourceGroupName")
+    private String targetResourceGroupName;
+
+    /*
+     * User Assigned managed identity details
+     * Currently used for snapshot.
+     */
+    @JsonProperty(value = "userAssignedManagedIdentityDetails")
+    private UserAssignedManagedIdentityDetails userAssignedManagedIdentityDetails;
+
+    /*
+     * Additional details for snapshot recovery
+     * Currently used for snapshot for SAP Hana.
+     */
+    @JsonProperty(value = "snapshotRestoreParameters")
+    private SnapshotRestoreParameters snapshotRestoreParameters;
+
+    /*
+     * This is the complete ARM Id of the target VM
+     * For e.g. /subscriptions/{subId}/resourcegroups/{rg}/provider/Microsoft.Compute/virtualmachines/{vm}
+     */
+    @JsonProperty(value = "targetVirtualMachineId")
+    private String targetVirtualMachineId;
+
+    /**
+     * Creates an instance of AzureWorkloadRestoreRequest class.
+     */
+    public AzureWorkloadRestoreRequest() {
+    }
+
+    /**
+     * Get the objectType property: This property will be used as the discriminator for deciding the specific types in
+     * the polymorphic chain of types.
+     * 
+     * @return the objectType value.
+     */
+    @Override
+    public String objectType() {
+        return this.objectType;
+    }
+
     /**
      * Get the recoveryType property: Type of this recovery.
-     *
+     * 
      * @return the recoveryType value.
      */
     public RecoveryType recoveryType() {
@@ -74,7 +124,7 @@ public class AzureWorkloadRestoreRequest extends RestoreRequest {
 
     /**
      * Set the recoveryType property: Type of this recovery.
-     *
+     * 
      * @param recoveryType the recoveryType value to set.
      * @return the AzureWorkloadRestoreRequest object itself.
      */
@@ -86,7 +136,7 @@ public class AzureWorkloadRestoreRequest extends RestoreRequest {
     /**
      * Get the sourceResourceId property: Fully qualified ARM ID of the VM on which workload that was running is being
      * recovered.
-     *
+     * 
      * @return the sourceResourceId value.
      */
     public String sourceResourceId() {
@@ -96,7 +146,7 @@ public class AzureWorkloadRestoreRequest extends RestoreRequest {
     /**
      * Set the sourceResourceId property: Fully qualified ARM ID of the VM on which workload that was running is being
      * recovered.
-     *
+     * 
      * @param sourceResourceId the sourceResourceId value to set.
      * @return the AzureWorkloadRestoreRequest object itself.
      */
@@ -107,7 +157,7 @@ public class AzureWorkloadRestoreRequest extends RestoreRequest {
 
     /**
      * Get the propertyBag property: Workload specific property bag.
-     *
+     * 
      * @return the propertyBag value.
      */
     public Map<String, String> propertyBag() {
@@ -116,7 +166,7 @@ public class AzureWorkloadRestoreRequest extends RestoreRequest {
 
     /**
      * Set the propertyBag property: Workload specific property bag.
-     *
+     * 
      * @param propertyBag the propertyBag value to set.
      * @return the AzureWorkloadRestoreRequest object itself.
      */
@@ -127,7 +177,7 @@ public class AzureWorkloadRestoreRequest extends RestoreRequest {
 
     /**
      * Get the targetInfo property: Details of target database.
-     *
+     * 
      * @return the targetInfo value.
      */
     public TargetRestoreInfo targetInfo() {
@@ -136,7 +186,7 @@ public class AzureWorkloadRestoreRequest extends RestoreRequest {
 
     /**
      * Set the targetInfo property: Details of target database.
-     *
+     * 
      * @param targetInfo the targetInfo value to set.
      * @return the AzureWorkloadRestoreRequest object itself.
      */
@@ -147,7 +197,7 @@ public class AzureWorkloadRestoreRequest extends RestoreRequest {
 
     /**
      * Get the recoveryMode property: Defines whether the current recovery mode is file restore or database restore.
-     *
+     * 
      * @return the recoveryMode value.
      */
     public RecoveryMode recoveryMode() {
@@ -156,7 +206,7 @@ public class AzureWorkloadRestoreRequest extends RestoreRequest {
 
     /**
      * Set the recoveryMode property: Defines whether the current recovery mode is file restore or database restore.
-     *
+     * 
      * @param recoveryMode the recoveryMode value to set.
      * @return the AzureWorkloadRestoreRequest object itself.
      */
@@ -166,8 +216,105 @@ public class AzureWorkloadRestoreRequest extends RestoreRequest {
     }
 
     /**
+     * Get the targetResourceGroupName property: Defines the Resource group of the Target VM.
+     * 
+     * @return the targetResourceGroupName value.
+     */
+    public String targetResourceGroupName() {
+        return this.targetResourceGroupName;
+    }
+
+    /**
+     * Set the targetResourceGroupName property: Defines the Resource group of the Target VM.
+     * 
+     * @param targetResourceGroupName the targetResourceGroupName value to set.
+     * @return the AzureWorkloadRestoreRequest object itself.
+     */
+    public AzureWorkloadRestoreRequest withTargetResourceGroupName(String targetResourceGroupName) {
+        this.targetResourceGroupName = targetResourceGroupName;
+        return this;
+    }
+
+    /**
+     * Get the userAssignedManagedIdentityDetails property: User Assigned managed identity details
+     * Currently used for snapshot.
+     * 
+     * @return the userAssignedManagedIdentityDetails value.
+     */
+    public UserAssignedManagedIdentityDetails userAssignedManagedIdentityDetails() {
+        return this.userAssignedManagedIdentityDetails;
+    }
+
+    /**
+     * Set the userAssignedManagedIdentityDetails property: User Assigned managed identity details
+     * Currently used for snapshot.
+     * 
+     * @param userAssignedManagedIdentityDetails the userAssignedManagedIdentityDetails value to set.
+     * @return the AzureWorkloadRestoreRequest object itself.
+     */
+    public AzureWorkloadRestoreRequest
+        withUserAssignedManagedIdentityDetails(UserAssignedManagedIdentityDetails userAssignedManagedIdentityDetails) {
+        this.userAssignedManagedIdentityDetails = userAssignedManagedIdentityDetails;
+        return this;
+    }
+
+    /**
+     * Get the snapshotRestoreParameters property: Additional details for snapshot recovery
+     * Currently used for snapshot for SAP Hana.
+     * 
+     * @return the snapshotRestoreParameters value.
+     */
+    public SnapshotRestoreParameters snapshotRestoreParameters() {
+        return this.snapshotRestoreParameters;
+    }
+
+    /**
+     * Set the snapshotRestoreParameters property: Additional details for snapshot recovery
+     * Currently used for snapshot for SAP Hana.
+     * 
+     * @param snapshotRestoreParameters the snapshotRestoreParameters value to set.
+     * @return the AzureWorkloadRestoreRequest object itself.
+     */
+    public AzureWorkloadRestoreRequest
+        withSnapshotRestoreParameters(SnapshotRestoreParameters snapshotRestoreParameters) {
+        this.snapshotRestoreParameters = snapshotRestoreParameters;
+        return this;
+    }
+
+    /**
+     * Get the targetVirtualMachineId property: This is the complete ARM Id of the target VM
+     * For e.g. /subscriptions/{subId}/resourcegroups/{rg}/provider/Microsoft.Compute/virtualmachines/{vm}.
+     * 
+     * @return the targetVirtualMachineId value.
+     */
+    public String targetVirtualMachineId() {
+        return this.targetVirtualMachineId;
+    }
+
+    /**
+     * Set the targetVirtualMachineId property: This is the complete ARM Id of the target VM
+     * For e.g. /subscriptions/{subId}/resourcegroups/{rg}/provider/Microsoft.Compute/virtualmachines/{vm}.
+     * 
+     * @param targetVirtualMachineId the targetVirtualMachineId value to set.
+     * @return the AzureWorkloadRestoreRequest object itself.
+     */
+    public AzureWorkloadRestoreRequest withTargetVirtualMachineId(String targetVirtualMachineId) {
+        this.targetVirtualMachineId = targetVirtualMachineId;
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AzureWorkloadRestoreRequest withResourceGuardOperationRequests(List<String> resourceGuardOperationRequests) {
+        super.withResourceGuardOperationRequests(resourceGuardOperationRequests);
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
@@ -175,6 +322,12 @@ public class AzureWorkloadRestoreRequest extends RestoreRequest {
         super.validate();
         if (targetInfo() != null) {
             targetInfo().validate();
+        }
+        if (userAssignedManagedIdentityDetails() != null) {
+            userAssignedManagedIdentityDetails().validate();
+        }
+        if (snapshotRestoreParameters() != null) {
+            snapshotRestoreParameters().validate();
         }
     }
 }

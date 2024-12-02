@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.mysqlflexibleserver.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Server edition capabilities. */
+/**
+ * Server edition capabilities.
+ */
 @Immutable
 public final class ServerEditionCapability {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ServerEditionCapability.class);
-
     /*
      * Server edition name
      */
@@ -34,8 +32,14 @@ public final class ServerEditionCapability {
     private List<ServerVersionCapability> supportedServerVersions;
 
     /**
+     * Creates an instance of ServerEditionCapability class.
+     */
+    public ServerEditionCapability() {
+    }
+
+    /**
      * Get the name property: Server edition name.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -44,7 +48,7 @@ public final class ServerEditionCapability {
 
     /**
      * Get the supportedStorageEditions property: A list of supported storage editions.
-     *
+     * 
      * @return the supportedStorageEditions value.
      */
     public List<StorageEditionCapability> supportedStorageEditions() {
@@ -53,7 +57,7 @@ public final class ServerEditionCapability {
 
     /**
      * Get the supportedServerVersions property: A list of supported server versions.
-     *
+     * 
      * @return the supportedServerVersions value.
      */
     public List<ServerVersionCapability> supportedServerVersions() {
@@ -62,7 +66,7 @@ public final class ServerEditionCapability {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

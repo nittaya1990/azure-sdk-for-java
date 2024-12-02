@@ -6,32 +6,35 @@ package com.azure.resourcemanager.storagecache.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Active Directory admin credentials used to join the HPC Cache to a domain. */
+/**
+ * Active Directory admin credentials used to join the HPC Cache to a domain.
+ */
 @Fluent
 public final class CacheActiveDirectorySettingsCredentials {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CacheActiveDirectorySettingsCredentials.class);
-
     /*
-     * Username of the Active Directory domain administrator. This value is
-     * stored encrypted and not returned on response.
+     * Username of the Active Directory domain administrator. This value is stored encrypted and not returned on response.
      */
     @JsonProperty(value = "username", required = true)
     private String username;
 
     /*
-     * Plain text password of the Active Directory domain administrator. This
-     * value is stored encrypted and not returned on response.
+     * Plain text password of the Active Directory domain administrator. This value is stored encrypted and not returned on response.
      */
-    @JsonProperty(value = "password", required = true)
+    @JsonProperty(value = "password")
     private String password;
+
+    /**
+     * Creates an instance of CacheActiveDirectorySettingsCredentials class.
+     */
+    public CacheActiveDirectorySettingsCredentials() {
+    }
 
     /**
      * Get the username property: Username of the Active Directory domain administrator. This value is stored encrypted
      * and not returned on response.
-     *
+     * 
      * @return the username value.
      */
     public String username() {
@@ -41,7 +44,7 @@ public final class CacheActiveDirectorySettingsCredentials {
     /**
      * Set the username property: Username of the Active Directory domain administrator. This value is stored encrypted
      * and not returned on response.
-     *
+     * 
      * @param username the username value to set.
      * @return the CacheActiveDirectorySettingsCredentials object itself.
      */
@@ -53,7 +56,7 @@ public final class CacheActiveDirectorySettingsCredentials {
     /**
      * Get the password property: Plain text password of the Active Directory domain administrator. This value is stored
      * encrypted and not returned on response.
-     *
+     * 
      * @return the password value.
      */
     public String password() {
@@ -63,7 +66,7 @@ public final class CacheActiveDirectorySettingsCredentials {
     /**
      * Set the password property: Plain text password of the Active Directory domain administrator. This value is stored
      * encrypted and not returned on response.
-     *
+     * 
      * @param password the password value to set.
      * @return the CacheActiveDirectorySettingsCredentials object itself.
      */
@@ -74,21 +77,16 @@ public final class CacheActiveDirectorySettingsCredentials {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (username() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property username in model CacheActiveDirectorySettingsCredentials"));
-        }
-        if (password() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property password in model CacheActiveDirectorySettingsCredentials"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property username in model CacheActiveDirectorySettingsCredentials"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(CacheActiveDirectorySettingsCredentials.class);
 }

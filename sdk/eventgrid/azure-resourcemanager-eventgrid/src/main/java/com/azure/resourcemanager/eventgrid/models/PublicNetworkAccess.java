@@ -8,17 +8,39 @@ import com.azure.core.util.ExpandableStringEnum;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.Collection;
 
-/** Defines values for PublicNetworkAccess. */
+/**
+ * This determines if traffic is allowed over public network. By default it is enabled.
+ * You can further restrict to specific IPs by configuring &lt;seealso
+ * cref="P:Microsoft.Azure.Events.ResourceProvider.Common.Contracts.DomainProperties.InboundIpRules" /&gt;.
+ */
 public final class PublicNetworkAccess extends ExpandableStringEnum<PublicNetworkAccess> {
-    /** Static value Enabled for PublicNetworkAccess. */
+    /**
+     * Static value Enabled for PublicNetworkAccess.
+     */
     public static final PublicNetworkAccess ENABLED = fromString("Enabled");
 
-    /** Static value Disabled for PublicNetworkAccess. */
+    /**
+     * Static value Disabled for PublicNetworkAccess.
+     */
     public static final PublicNetworkAccess DISABLED = fromString("Disabled");
 
     /**
+     * Static value SecuredByPerimeter for PublicNetworkAccess.
+     */
+    public static final PublicNetworkAccess SECURED_BY_PERIMETER = fromString("SecuredByPerimeter");
+
+    /**
+     * Creates a new instance of PublicNetworkAccess value.
+     * 
+     * @deprecated Use the {@link #fromString(String)} factory method.
+     */
+    @Deprecated
+    public PublicNetworkAccess() {
+    }
+
+    /**
      * Creates or finds a PublicNetworkAccess from its string representation.
-     *
+     * 
      * @param name a name to look for.
      * @return the corresponding PublicNetworkAccess.
      */
@@ -27,7 +49,11 @@ public final class PublicNetworkAccess extends ExpandableStringEnum<PublicNetwor
         return fromString(name, PublicNetworkAccess.class);
     }
 
-    /** @return known PublicNetworkAccess values. */
+    /**
+     * Gets known PublicNetworkAccess values.
+     * 
+     * @return known PublicNetworkAccess values.
+     */
     public static Collection<PublicNetworkAccess> values() {
         return values(PublicNetworkAccess.class);
     }

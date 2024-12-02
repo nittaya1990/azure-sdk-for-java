@@ -5,77 +5,92 @@
 package com.azure.analytics.synapse.artifacts.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import java.io.IOException;
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Map;
 
-/** SQL pool A SQL Analytics pool. */
-@JsonFlatten
+/**
+ * SQL pool
+ * 
+ * A SQL Analytics pool.
+ */
 @Fluent
 public class SqlPool extends TrackedResource {
     /*
-     * Sku SQL pool SKU
+     * Sku
+     * 
+     * SQL pool SKU
      */
-    @JsonProperty(value = "sku")
     private Sku sku;
 
     /*
      * Maximum size in bytes
      */
-    @JsonProperty(value = "properties.maxSizeBytes")
     private Long maxSizeBytes;
 
     /*
      * Collation mode
      */
-    @JsonProperty(value = "properties.collation")
     private String collation;
 
     /*
      * Source database to create from
      */
-    @JsonProperty(value = "properties.sourceDatabaseId")
     private String sourceDatabaseId;
 
     /*
      * Backup database to restore from
      */
-    @JsonProperty(value = "properties.recoverableDatabaseId")
     private String recoverableDatabaseId;
 
     /*
      * Resource state
      */
-    @JsonProperty(value = "properties.provisioningState")
     private String provisioningState;
 
     /*
      * Resource status
      */
-    @JsonProperty(value = "properties.status")
     private String status;
 
     /*
      * Snapshot time to restore
      */
-    @JsonProperty(value = "properties.restorePointInTime")
     private String restorePointInTime;
 
     /*
-     * What is this?
+     * Specifies the mode of sql pool creation.
+     * 
+     * Default: regular sql pool creation.
+     * 
+     * PointInTimeRestore: Creates a sql pool by restoring a point in time backup of an existing sql pool. sourceDatabaseId must be specified as the resource ID of the existing sql pool, and restorePointInTime must be specified.
+     * 
+     * Recovery: Creates a sql pool by a geo-replicated backup. sourceDatabaseId  must be specified as the recoverableDatabaseId to restore.
+     * 
+     * Restore: Creates a sql pool by restoring a backup of a deleted sql  pool. SourceDatabaseId should be the sql pool's original resource ID. SourceDatabaseId and sourceDatabaseDeletionDate must be specified.
      */
-    @JsonProperty(value = "properties.createMode")
-    private String createMode;
+    private CreateMode createMode;
 
     /*
      * Date the SQL pool was created
      */
-    @JsonProperty(value = "properties.creationDate")
     private OffsetDateTime creationDate;
 
     /**
-     * Get the sku property: Sku SQL pool SKU.
-     *
+     * Creates an instance of SqlPool class.
+     */
+    public SqlPool() {
+    }
+
+    /**
+     * Get the sku property: Sku
+     * 
+     * SQL pool SKU.
+     * 
      * @return the sku value.
      */
     public Sku getSku() {
@@ -83,8 +98,10 @@ public class SqlPool extends TrackedResource {
     }
 
     /**
-     * Set the sku property: Sku SQL pool SKU.
-     *
+     * Set the sku property: Sku
+     * 
+     * SQL pool SKU.
+     * 
      * @param sku the sku value to set.
      * @return the SqlPool object itself.
      */
@@ -95,7 +112,7 @@ public class SqlPool extends TrackedResource {
 
     /**
      * Get the maxSizeBytes property: Maximum size in bytes.
-     *
+     * 
      * @return the maxSizeBytes value.
      */
     public Long getMaxSizeBytes() {
@@ -104,7 +121,7 @@ public class SqlPool extends TrackedResource {
 
     /**
      * Set the maxSizeBytes property: Maximum size in bytes.
-     *
+     * 
      * @param maxSizeBytes the maxSizeBytes value to set.
      * @return the SqlPool object itself.
      */
@@ -115,7 +132,7 @@ public class SqlPool extends TrackedResource {
 
     /**
      * Get the collation property: Collation mode.
-     *
+     * 
      * @return the collation value.
      */
     public String getCollation() {
@@ -124,7 +141,7 @@ public class SqlPool extends TrackedResource {
 
     /**
      * Set the collation property: Collation mode.
-     *
+     * 
      * @param collation the collation value to set.
      * @return the SqlPool object itself.
      */
@@ -135,7 +152,7 @@ public class SqlPool extends TrackedResource {
 
     /**
      * Get the sourceDatabaseId property: Source database to create from.
-     *
+     * 
      * @return the sourceDatabaseId value.
      */
     public String getSourceDatabaseId() {
@@ -144,7 +161,7 @@ public class SqlPool extends TrackedResource {
 
     /**
      * Set the sourceDatabaseId property: Source database to create from.
-     *
+     * 
      * @param sourceDatabaseId the sourceDatabaseId value to set.
      * @return the SqlPool object itself.
      */
@@ -155,7 +172,7 @@ public class SqlPool extends TrackedResource {
 
     /**
      * Get the recoverableDatabaseId property: Backup database to restore from.
-     *
+     * 
      * @return the recoverableDatabaseId value.
      */
     public String getRecoverableDatabaseId() {
@@ -164,7 +181,7 @@ public class SqlPool extends TrackedResource {
 
     /**
      * Set the recoverableDatabaseId property: Backup database to restore from.
-     *
+     * 
      * @param recoverableDatabaseId the recoverableDatabaseId value to set.
      * @return the SqlPool object itself.
      */
@@ -175,7 +192,7 @@ public class SqlPool extends TrackedResource {
 
     /**
      * Get the provisioningState property: Resource state.
-     *
+     * 
      * @return the provisioningState value.
      */
     public String getProvisioningState() {
@@ -184,7 +201,7 @@ public class SqlPool extends TrackedResource {
 
     /**
      * Set the provisioningState property: Resource state.
-     *
+     * 
      * @param provisioningState the provisioningState value to set.
      * @return the SqlPool object itself.
      */
@@ -195,7 +212,7 @@ public class SqlPool extends TrackedResource {
 
     /**
      * Get the status property: Resource status.
-     *
+     * 
      * @return the status value.
      */
     public String getStatus() {
@@ -204,7 +221,7 @@ public class SqlPool extends TrackedResource {
 
     /**
      * Set the status property: Resource status.
-     *
+     * 
      * @param status the status value to set.
      * @return the SqlPool object itself.
      */
@@ -215,7 +232,7 @@ public class SqlPool extends TrackedResource {
 
     /**
      * Get the restorePointInTime property: Snapshot time to restore.
-     *
+     * 
      * @return the restorePointInTime value.
      */
     public String getRestorePointInTime() {
@@ -224,7 +241,7 @@ public class SqlPool extends TrackedResource {
 
     /**
      * Set the restorePointInTime property: Snapshot time to restore.
-     *
+     * 
      * @param restorePointInTime the restorePointInTime value to set.
      * @return the SqlPool object itself.
      */
@@ -234,28 +251,52 @@ public class SqlPool extends TrackedResource {
     }
 
     /**
-     * Get the createMode property: What is this?.
-     *
+     * Get the createMode property: Specifies the mode of sql pool creation.
+     * 
+     * Default: regular sql pool creation.
+     * 
+     * PointInTimeRestore: Creates a sql pool by restoring a point in time backup of an existing sql pool.
+     * sourceDatabaseId must be specified as the resource ID of the existing sql pool, and restorePointInTime must be
+     * specified.
+     * 
+     * Recovery: Creates a sql pool by a geo-replicated backup. sourceDatabaseId must be specified as the
+     * recoverableDatabaseId to restore.
+     * 
+     * Restore: Creates a sql pool by restoring a backup of a deleted sql pool. SourceDatabaseId should be the sql
+     * pool's original resource ID. SourceDatabaseId and sourceDatabaseDeletionDate must be specified.
+     * 
      * @return the createMode value.
      */
-    public String getCreateMode() {
+    public CreateMode getCreateMode() {
         return this.createMode;
     }
 
     /**
-     * Set the createMode property: What is this?.
-     *
+     * Set the createMode property: Specifies the mode of sql pool creation.
+     * 
+     * Default: regular sql pool creation.
+     * 
+     * PointInTimeRestore: Creates a sql pool by restoring a point in time backup of an existing sql pool.
+     * sourceDatabaseId must be specified as the resource ID of the existing sql pool, and restorePointInTime must be
+     * specified.
+     * 
+     * Recovery: Creates a sql pool by a geo-replicated backup. sourceDatabaseId must be specified as the
+     * recoverableDatabaseId to restore.
+     * 
+     * Restore: Creates a sql pool by restoring a backup of a deleted sql pool. SourceDatabaseId should be the sql
+     * pool's original resource ID. SourceDatabaseId and sourceDatabaseDeletionDate must be specified.
+     * 
      * @param createMode the createMode value to set.
      * @return the SqlPool object itself.
      */
-    public SqlPool setCreateMode(String createMode) {
+    public SqlPool setCreateMode(CreateMode createMode) {
         this.createMode = createMode;
         return this;
     }
 
     /**
      * Get the creationDate property: Date the SQL pool was created.
-     *
+     * 
      * @return the creationDate value.
      */
     public OffsetDateTime getCreationDate() {
@@ -264,12 +305,130 @@ public class SqlPool extends TrackedResource {
 
     /**
      * Set the creationDate property: Date the SQL pool was created.
-     *
+     * 
      * @param creationDate the creationDate value to set.
      * @return the SqlPool object itself.
      */
     public SqlPool setCreationDate(OffsetDateTime creationDate) {
         this.creationDate = creationDate;
         return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SqlPool setTags(Map<String, String> tags) {
+        super.setTags(tags);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SqlPool setLocation(String location) {
+        super.setLocation(location);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeStringField("location", getLocation());
+        jsonWriter.writeMapField("tags", getTags(), (writer, element) -> writer.writeString(element));
+        jsonWriter.writeJsonField("sku", this.sku);
+        if (maxSizeBytes != null
+            || collation != null
+            || sourceDatabaseId != null
+            || recoverableDatabaseId != null
+            || provisioningState != null
+            || status != null
+            || restorePointInTime != null
+            || createMode != null
+            || creationDate != null) {
+            jsonWriter.writeStartObject("properties");
+            jsonWriter.writeNumberField("maxSizeBytes", this.maxSizeBytes);
+            jsonWriter.writeStringField("collation", this.collation);
+            jsonWriter.writeStringField("sourceDatabaseId", this.sourceDatabaseId);
+            jsonWriter.writeStringField("recoverableDatabaseId", this.recoverableDatabaseId);
+            jsonWriter.writeStringField("provisioningState", this.provisioningState);
+            jsonWriter.writeStringField("status", this.status);
+            jsonWriter.writeStringField("restorePointInTime", this.restorePointInTime);
+            jsonWriter.writeStringField("createMode", this.createMode == null ? null : this.createMode.toString());
+            jsonWriter.writeStringField("creationDate",
+                this.creationDate == null ? null : DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(this.creationDate));
+            jsonWriter.writeEndObject();
+        }
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of SqlPool from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of SqlPool if the JsonReader was pointing to an instance of it, or null if it was pointing to
+     * JSON null.
+     * @throws IllegalStateException If the deserialized JSON object was missing any required properties.
+     * @throws IOException If an error occurs while reading the SqlPool.
+     */
+    public static SqlPool fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            SqlPool deserializedSqlPool = new SqlPool();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("location".equals(fieldName)) {
+                    deserializedSqlPool.setLocation(reader.getString());
+                } else if ("id".equals(fieldName)) {
+                    deserializedSqlPool.setId(reader.getString());
+                } else if ("name".equals(fieldName)) {
+                    deserializedSqlPool.setName(reader.getString());
+                } else if ("type".equals(fieldName)) {
+                    deserializedSqlPool.setType(reader.getString());
+                } else if ("tags".equals(fieldName)) {
+                    Map<String, String> tags = reader.readMap(reader1 -> reader1.getString());
+                    deserializedSqlPool.setTags(tags);
+                } else if ("sku".equals(fieldName)) {
+                    deserializedSqlPool.sku = Sku.fromJson(reader);
+                } else if ("properties".equals(fieldName) && reader.currentToken() == JsonToken.START_OBJECT) {
+                    while (reader.nextToken() != JsonToken.END_OBJECT) {
+                        fieldName = reader.getFieldName();
+                        reader.nextToken();
+
+                        if ("maxSizeBytes".equals(fieldName)) {
+                            deserializedSqlPool.maxSizeBytes = reader.getNullable(JsonReader::getLong);
+                        } else if ("collation".equals(fieldName)) {
+                            deserializedSqlPool.collation = reader.getString();
+                        } else if ("sourceDatabaseId".equals(fieldName)) {
+                            deserializedSqlPool.sourceDatabaseId = reader.getString();
+                        } else if ("recoverableDatabaseId".equals(fieldName)) {
+                            deserializedSqlPool.recoverableDatabaseId = reader.getString();
+                        } else if ("provisioningState".equals(fieldName)) {
+                            deserializedSqlPool.provisioningState = reader.getString();
+                        } else if ("status".equals(fieldName)) {
+                            deserializedSqlPool.status = reader.getString();
+                        } else if ("restorePointInTime".equals(fieldName)) {
+                            deserializedSqlPool.restorePointInTime = reader.getString();
+                        } else if ("createMode".equals(fieldName)) {
+                            deserializedSqlPool.createMode = CreateMode.fromString(reader.getString());
+                        } else if ("creationDate".equals(fieldName)) {
+                            deserializedSqlPool.creationDate
+                                = reader.getNullable(nonNullReader -> OffsetDateTime.parse(nonNullReader.getString()));
+                        } else {
+                            reader.skipChildren();
+                        }
+                    }
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedSqlPool;
+        });
     }
 }

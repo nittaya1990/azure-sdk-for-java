@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** User identity details. */
 @Fluent
 public final class UserIdentityContractInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(UserIdentityContractInner.class);
-
     /*
      * Identity provider name.
      */
@@ -25,6 +21,10 @@ public final class UserIdentityContractInner {
      */
     @JsonProperty(value = "id")
     private String id;
+
+    /** Creates an instance of UserIdentityContractInner class. */
+    public UserIdentityContractInner() {
+    }
 
     /**
      * Get the provider property: Identity provider name.

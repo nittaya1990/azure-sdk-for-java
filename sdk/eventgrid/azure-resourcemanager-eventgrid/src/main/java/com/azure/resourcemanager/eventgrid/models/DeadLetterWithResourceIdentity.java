@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.eventgrid.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Information about the deadletter destination with resource identity. */
+/**
+ * Information about the deadletter destination with resource identity.
+ */
 @Fluent
-public class DeadLetterWithResourceIdentity {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DeadLetterWithResourceIdentity.class);
-
+public final class DeadLetterWithResourceIdentity {
     /*
      * The identity to use when dead-lettering events.
      */
@@ -21,18 +19,21 @@ public class DeadLetterWithResourceIdentity {
     private EventSubscriptionIdentity identity;
 
     /*
-     * Information about the destination where events have to be delivered for
-     * the event subscription.
-     * Uses the managed identity setup on the parent resource (namely, topic or
-     * domain) to acquire the authentication tokens being used during delivery
-     * / dead-lettering.
+     * Information about the destination where events have to be delivered for the event subscription.
+     * Uses the managed identity setup on the parent resource (namely, topic or domain) to acquire the authentication tokens being used during dead-lettering.
      */
     @JsonProperty(value = "deadLetterDestination")
     private DeadLetterDestination deadLetterDestination;
 
     /**
+     * Creates an instance of DeadLetterWithResourceIdentity class.
+     */
+    public DeadLetterWithResourceIdentity() {
+    }
+
+    /**
      * Get the identity property: The identity to use when dead-lettering events.
-     *
+     * 
      * @return the identity value.
      */
     public EventSubscriptionIdentity identity() {
@@ -41,7 +42,7 @@ public class DeadLetterWithResourceIdentity {
 
     /**
      * Set the identity property: The identity to use when dead-lettering events.
-     *
+     * 
      * @param identity the identity value to set.
      * @return the DeadLetterWithResourceIdentity object itself.
      */
@@ -52,9 +53,10 @@ public class DeadLetterWithResourceIdentity {
 
     /**
      * Get the deadLetterDestination property: Information about the destination where events have to be delivered for
-     * the event subscription. Uses the managed identity setup on the parent resource (namely, topic or domain) to
-     * acquire the authentication tokens being used during delivery / dead-lettering.
-     *
+     * the event subscription.
+     * Uses the managed identity setup on the parent resource (namely, topic or domain) to acquire the authentication
+     * tokens being used during dead-lettering.
+     * 
      * @return the deadLetterDestination value.
      */
     public DeadLetterDestination deadLetterDestination() {
@@ -63,9 +65,10 @@ public class DeadLetterWithResourceIdentity {
 
     /**
      * Set the deadLetterDestination property: Information about the destination where events have to be delivered for
-     * the event subscription. Uses the managed identity setup on the parent resource (namely, topic or domain) to
-     * acquire the authentication tokens being used during delivery / dead-lettering.
-     *
+     * the event subscription.
+     * Uses the managed identity setup on the parent resource (namely, topic or domain) to acquire the authentication
+     * tokens being used during dead-lettering.
+     * 
      * @param deadLetterDestination the deadLetterDestination value to set.
      * @return the DeadLetterWithResourceIdentity object itself.
      */
@@ -76,7 +79,7 @@ public class DeadLetterWithResourceIdentity {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

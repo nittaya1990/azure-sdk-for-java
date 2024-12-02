@@ -5,144 +5,170 @@
 package com.azure.resourcemanager.streamanalytics.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonSerializable;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import com.azure.resourcemanager.streamanalytics.fluent.models.PrivateLinkServiceConnectionProperties;
+import java.io.IOException;
 import java.util.List;
 
-/** A grouping of information about the connection to the remote resource. */
-@JsonFlatten
+/**
+ * A grouping of information about the connection to the remote resource.
+ */
 @Fluent
-public class PrivateLinkServiceConnection {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PrivateLinkServiceConnection.class);
-
+public final class PrivateLinkServiceConnection implements JsonSerializable<PrivateLinkServiceConnection> {
     /*
-     * The resource id of the private link service. Required on PUT
-     * (CreateOrUpdate) requests.
+     * Bag of properties defining a privatelinkServiceConnection.
      */
-    @JsonProperty(value = "properties.privateLinkServiceId")
-    private String privateLinkServiceId;
+    private PrivateLinkServiceConnectionProperties innerProperties;
 
-    /*
-     * The ID(s) of the group(s) obtained from the remote resource that this
-     * private endpoint should connect to. Required on PUT (CreateOrUpdate)
-     * requests.
+    /**
+     * Creates an instance of PrivateLinkServiceConnection class.
      */
-    @JsonProperty(value = "properties.groupIds")
-    private List<String> groupIds;
+    public PrivateLinkServiceConnection() {
+    }
 
-    /*
-     * A message passed to the owner of the remote resource with this
-     * connection request. Restricted to 140 chars.
+    /**
+     * Get the innerProperties property: Bag of properties defining a privatelinkServiceConnection.
+     * 
+     * @return the innerProperties value.
      */
-    @JsonProperty(value = "properties.requestMessage")
-    private String requestMessage;
-
-    /*
-     * A collection of read-only information about the state of the connection
-     * to the private remote resource.
-     */
-    @JsonProperty(value = "properties.privateLinkServiceConnectionState")
-    private PrivateLinkConnectionState privateLinkServiceConnectionState;
+    private PrivateLinkServiceConnectionProperties innerProperties() {
+        return this.innerProperties;
+    }
 
     /**
      * Get the privateLinkServiceId property: The resource id of the private link service. Required on PUT
      * (CreateOrUpdate) requests.
-     *
+     * 
      * @return the privateLinkServiceId value.
      */
     public String privateLinkServiceId() {
-        return this.privateLinkServiceId;
+        return this.innerProperties() == null ? null : this.innerProperties().privateLinkServiceId();
     }
 
     /**
      * Set the privateLinkServiceId property: The resource id of the private link service. Required on PUT
      * (CreateOrUpdate) requests.
-     *
+     * 
      * @param privateLinkServiceId the privateLinkServiceId value to set.
      * @return the PrivateLinkServiceConnection object itself.
      */
     public PrivateLinkServiceConnection withPrivateLinkServiceId(String privateLinkServiceId) {
-        this.privateLinkServiceId = privateLinkServiceId;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new PrivateLinkServiceConnectionProperties();
+        }
+        this.innerProperties().withPrivateLinkServiceId(privateLinkServiceId);
         return this;
     }
 
     /**
      * Get the groupIds property: The ID(s) of the group(s) obtained from the remote resource that this private endpoint
      * should connect to. Required on PUT (CreateOrUpdate) requests.
-     *
+     * 
      * @return the groupIds value.
      */
     public List<String> groupIds() {
-        return this.groupIds;
+        return this.innerProperties() == null ? null : this.innerProperties().groupIds();
     }
 
     /**
      * Set the groupIds property: The ID(s) of the group(s) obtained from the remote resource that this private endpoint
      * should connect to. Required on PUT (CreateOrUpdate) requests.
-     *
+     * 
      * @param groupIds the groupIds value to set.
      * @return the PrivateLinkServiceConnection object itself.
      */
     public PrivateLinkServiceConnection withGroupIds(List<String> groupIds) {
-        this.groupIds = groupIds;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new PrivateLinkServiceConnectionProperties();
+        }
+        this.innerProperties().withGroupIds(groupIds);
         return this;
     }
 
     /**
      * Get the requestMessage property: A message passed to the owner of the remote resource with this connection
      * request. Restricted to 140 chars.
-     *
+     * 
      * @return the requestMessage value.
      */
     public String requestMessage() {
-        return this.requestMessage;
-    }
-
-    /**
-     * Set the requestMessage property: A message passed to the owner of the remote resource with this connection
-     * request. Restricted to 140 chars.
-     *
-     * @param requestMessage the requestMessage value to set.
-     * @return the PrivateLinkServiceConnection object itself.
-     */
-    public PrivateLinkServiceConnection withRequestMessage(String requestMessage) {
-        this.requestMessage = requestMessage;
-        return this;
+        return this.innerProperties() == null ? null : this.innerProperties().requestMessage();
     }
 
     /**
      * Get the privateLinkServiceConnectionState property: A collection of read-only information about the state of the
      * connection to the private remote resource.
-     *
+     * 
      * @return the privateLinkServiceConnectionState value.
      */
     public PrivateLinkConnectionState privateLinkServiceConnectionState() {
-        return this.privateLinkServiceConnectionState;
+        return this.innerProperties() == null ? null : this.innerProperties().privateLinkServiceConnectionState();
     }
 
     /**
      * Set the privateLinkServiceConnectionState property: A collection of read-only information about the state of the
      * connection to the private remote resource.
-     *
+     * 
      * @param privateLinkServiceConnectionState the privateLinkServiceConnectionState value to set.
      * @return the PrivateLinkServiceConnection object itself.
      */
-    public PrivateLinkServiceConnection withPrivateLinkServiceConnectionState(
-        PrivateLinkConnectionState privateLinkServiceConnectionState) {
-        this.privateLinkServiceConnectionState = privateLinkServiceConnectionState;
+    public PrivateLinkServiceConnection
+        withPrivateLinkServiceConnectionState(PrivateLinkConnectionState privateLinkServiceConnectionState) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new PrivateLinkServiceConnectionProperties();
+        }
+        this.innerProperties().withPrivateLinkServiceConnectionState(privateLinkServiceConnectionState);
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
-        if (privateLinkServiceConnectionState() != null) {
-            privateLinkServiceConnectionState().validate();
+        if (innerProperties() != null) {
+            innerProperties().validate();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of PrivateLinkServiceConnection from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of PrivateLinkServiceConnection if the JsonReader was pointing to an instance of it, or null
+     * if it was pointing to JSON null.
+     * @throws IOException If an error occurs while reading the PrivateLinkServiceConnection.
+     */
+    public static PrivateLinkServiceConnection fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            PrivateLinkServiceConnection deserializedPrivateLinkServiceConnection = new PrivateLinkServiceConnection();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("properties".equals(fieldName)) {
+                    deserializedPrivateLinkServiceConnection.innerProperties
+                        = PrivateLinkServiceConnectionProperties.fromJson(reader);
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedPrivateLinkServiceConnection;
+        });
     }
 }

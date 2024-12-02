@@ -25,12 +25,12 @@ public interface GatewaysClient {
     /**
      * Lists a collection of gateways registered with service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Gateway list representation.
+     * @return paged Gateway list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<GatewayContractInner> listByService(String resourceGroupName, String serviceName);
@@ -38,7 +38,7 @@ public interface GatewaysClient {
     /**
      * Lists a collection of gateways registered with service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -51,16 +51,33 @@ public interface GatewaysClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Gateway list representation.
+     * @return paged Gateway list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<GatewayContractInner> listByService(
-        String resourceGroupName, String serviceName, String filter, Integer top, Integer skip, Context context);
+    PagedIterable<GatewayContractInner> listByService(String resourceGroupName, String serviceName, String filter,
+        Integer top, Integer skip, Context context);
 
     /**
      * Gets the entity state (Etag) version of the Gateway specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
+     *     not have value 'managed'.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the entity state (Etag) version of the Gateway specified by its identifier.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    GatewaysGetEntityTagResponse getEntityTagWithResponse(String resourceGroupName, String serviceName,
+        String gatewayId, Context context);
+
+    /**
+     * Gets the entity state (Etag) version of the Gateway specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
@@ -72,9 +89,9 @@ public interface GatewaysClient {
     void getEntityTag(String resourceGroupName, String serviceName, String gatewayId);
 
     /**
-     * Gets the entity state (Etag) version of the Gateway specified by its identifier.
+     * Gets the details of the Gateway specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
@@ -82,16 +99,16 @@ public interface GatewaysClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the Gateway specified by its identifier.
+     * @return the details of the Gateway specified by its identifier.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    GatewaysGetEntityTagResponse getEntityTagWithResponse(
-        String resourceGroupName, String serviceName, String gatewayId, Context context);
+    GatewaysGetResponse getWithResponse(String resourceGroupName, String serviceName, String gatewayId,
+        Context context);
 
     /**
      * Gets the details of the Gateway specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
@@ -104,43 +121,9 @@ public interface GatewaysClient {
     GatewayContractInner get(String resourceGroupName, String serviceName, String gatewayId);
 
     /**
-     * Gets the details of the Gateway specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
-     *     not have value 'managed'.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the Gateway specified by its identifier.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    GatewaysGetResponse getWithResponse(
-        String resourceGroupName, String serviceName, String gatewayId, Context context);
-
-    /**
      * Creates or updates a Gateway to be used in Api Management instance.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
-     *     not have value 'managed'.
-     * @param parameters Gateway details.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return gateway details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    GatewayContractInner createOrUpdate(
-        String resourceGroupName, String serviceName, String gatewayId, GatewayContractInner parameters);
-
-    /**
-     * Creates or updates a Gateway to be used in Api Management instance.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
@@ -153,23 +136,16 @@ public interface GatewaysClient {
      * @return gateway details.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    GatewaysCreateOrUpdateResponse createOrUpdateWithResponse(
-        String resourceGroupName,
-        String serviceName,
-        String gatewayId,
-        GatewayContractInner parameters,
-        String ifMatch,
-        Context context);
+    GatewaysCreateOrUpdateResponse createOrUpdateWithResponse(String resourceGroupName, String serviceName,
+        String gatewayId, GatewayContractInner parameters, String ifMatch, Context context);
 
     /**
-     * Updates the details of the gateway specified by its identifier.
+     * Creates or updates a Gateway to be used in Api Management instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
      * @param parameters Gateway details.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
@@ -177,17 +153,13 @@ public interface GatewaysClient {
      * @return gateway details.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    GatewayContractInner update(
-        String resourceGroupName,
-        String serviceName,
-        String gatewayId,
-        String ifMatch,
+    GatewayContractInner createOrUpdate(String resourceGroupName, String serviceName, String gatewayId,
         GatewayContractInner parameters);
 
     /**
      * Updates the details of the gateway specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
@@ -201,18 +173,51 @@ public interface GatewaysClient {
      * @return gateway details.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    GatewaysUpdateResponse updateWithResponse(
-        String resourceGroupName,
-        String serviceName,
-        String gatewayId,
-        String ifMatch,
-        GatewayContractInner parameters,
+    GatewaysUpdateResponse updateWithResponse(String resourceGroupName, String serviceName, String gatewayId,
+        String ifMatch, GatewayContractInner parameters, Context context);
+
+    /**
+     * Updates the details of the gateway specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
+     *     not have value 'managed'.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @param parameters Gateway details.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return gateway details.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    GatewayContractInner update(String resourceGroupName, String serviceName, String gatewayId, String ifMatch,
+        GatewayContractInner parameters);
+
+    /**
+     * Deletes specific Gateway.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
+     *     not have value 'managed'.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<Void> deleteWithResponse(String resourceGroupName, String serviceName, String gatewayId, String ifMatch,
         Context context);
 
     /**
      * Deletes specific Gateway.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
@@ -226,28 +231,26 @@ public interface GatewaysClient {
     void delete(String resourceGroupName, String serviceName, String gatewayId, String ifMatch);
 
     /**
-     * Deletes specific Gateway.
+     * Retrieves gateway keys.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return gateway authentication keys.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<Void> deleteWithResponse(
-        String resourceGroupName, String serviceName, String gatewayId, String ifMatch, Context context);
+    GatewaysListKeysResponse listKeysWithResponse(String resourceGroupName, String serviceName, String gatewayId,
+        Context context);
 
     /**
      * Retrieves gateway keys.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
@@ -260,26 +263,27 @@ public interface GatewaysClient {
     GatewayKeysContractInner listKeys(String resourceGroupName, String serviceName, String gatewayId);
 
     /**
-     * Retrieves gateway keys.
+     * Regenerates specified gateway key invalidating any tokens created with it.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
+     * @param parameters Gateway key regeneration request contract properties.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return gateway authentication keys.
+     * @return the {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    GatewaysListKeysResponse listKeysWithResponse(
-        String resourceGroupName, String serviceName, String gatewayId, Context context);
+    Response<Void> regenerateKeyWithResponse(String resourceGroupName, String serviceName, String gatewayId,
+        GatewayKeyRegenerationRequestContract parameters, Context context);
 
     /**
      * Regenerates specified gateway key invalidating any tokens created with it.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
@@ -289,38 +293,31 @@ public interface GatewaysClient {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    void regenerateKey(
-        String resourceGroupName,
-        String serviceName,
-        String gatewayId,
+    void regenerateKey(String resourceGroupName, String serviceName, String gatewayId,
         GatewayKeyRegenerationRequestContract parameters);
 
     /**
-     * Regenerates specified gateway key invalidating any tokens created with it.
+     * Gets the Shared Access Authorization Token for the gateway.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
-     * @param parameters Gateway key regeneration request contract properties.
+     * @param parameters Gateway token request contract properties.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the Shared Access Authorization Token for the gateway along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<Void> regenerateKeyWithResponse(
-        String resourceGroupName,
-        String serviceName,
-        String gatewayId,
-        GatewayKeyRegenerationRequestContract parameters,
-        Context context);
+    Response<GatewayTokenContractInner> generateTokenWithResponse(String resourceGroupName, String serviceName,
+        String gatewayId, GatewayTokenRequestContract parameters, Context context);
 
     /**
      * Gets the Shared Access Authorization Token for the gateway.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
      *     not have value 'managed'.
@@ -331,28 +328,6 @@ public interface GatewaysClient {
      * @return the Shared Access Authorization Token for the gateway.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    GatewayTokenContractInner generateToken(
-        String resourceGroupName, String serviceName, String gatewayId, GatewayTokenRequestContract parameters);
-
-    /**
-     * Gets the Shared Access Authorization Token for the gateway.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service instance. Must
-     *     not have value 'managed'.
-     * @param parameters Gateway token request contract properties.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the Shared Access Authorization Token for the gateway.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<GatewayTokenContractInner> generateTokenWithResponse(
-        String resourceGroupName,
-        String serviceName,
-        String gatewayId,
-        GatewayTokenRequestContract parameters,
-        Context context);
+    GatewayTokenContractInner generateToken(String resourceGroupName, String serviceName, String gatewayId,
+        GatewayTokenRequestContract parameters);
 }

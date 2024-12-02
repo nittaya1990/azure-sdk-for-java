@@ -5,17 +5,13 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.models.NamedValueContractInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Paged NamedValue list representation. */
 @Fluent
 public final class NamedValueCollection {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(NamedValueCollection.class);
-
     /*
      * Page values.
      */
@@ -33,6 +29,10 @@ public final class NamedValueCollection {
      */
     @JsonProperty(value = "nextLink")
     private String nextLink;
+
+    /** Creates an instance of NamedValueCollection class. */
+    public NamedValueCollection() {
+    }
 
     /**
      * Get the value property: Page values.

@@ -13,48 +13,44 @@ import com.azure.resourcemanager.security.fluent.LocationsClient;
 import com.azure.resourcemanager.security.fluent.models.AscLocationInner;
 import com.azure.resourcemanager.security.models.AscLocation;
 import com.azure.resourcemanager.security.models.Locations;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class LocationsImpl implements Locations {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(LocationsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(LocationsImpl.class);
 
     private final LocationsClient innerClient;
 
     private final com.azure.resourcemanager.security.SecurityManager serviceManager;
 
-    public LocationsImpl(
-        LocationsClient innerClient, com.azure.resourcemanager.security.SecurityManager serviceManager) {
+    public LocationsImpl(LocationsClient innerClient,
+        com.azure.resourcemanager.security.SecurityManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
     }
 
     public PagedIterable<AscLocation> list() {
         PagedIterable<AscLocationInner> inner = this.serviceClient().list();
-        return Utils.mapPage(inner, inner1 -> new AscLocationImpl(inner1, this.manager()));
+        return ResourceManagerUtils.mapPage(inner, inner1 -> new AscLocationImpl(inner1, this.manager()));
     }
 
     public PagedIterable<AscLocation> list(Context context) {
         PagedIterable<AscLocationInner> inner = this.serviceClient().list(context);
-        return Utils.mapPage(inner, inner1 -> new AscLocationImpl(inner1, this.manager()));
+        return ResourceManagerUtils.mapPage(inner, inner1 -> new AscLocationImpl(inner1, this.manager()));
+    }
+
+    public Response<AscLocation> getWithResponse(String ascLocation, Context context) {
+        Response<AscLocationInner> inner = this.serviceClient().getWithResponse(ascLocation, context);
+        if (inner != null) {
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
+                new AscLocationImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
     }
 
     public AscLocation get(String ascLocation) {
         AscLocationInner inner = this.serviceClient().get(ascLocation);
         if (inner != null) {
             return new AscLocationImpl(inner, this.manager());
-        } else {
-            return null;
-        }
-    }
-
-    public Response<AscLocation> getWithResponse(String ascLocation, Context context) {
-        Response<AscLocationInner> inner = this.serviceClient().getWithResponse(ascLocation, context);
-        if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
-                new AscLocationImpl(inner.getValue(), this.manager()));
         } else {
             return null;
         }

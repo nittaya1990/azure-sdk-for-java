@@ -10,11 +10,28 @@ import com.azure.core.http.rest.Response;
 import com.azure.core.util.Context;
 import com.azure.resourcemanager.botservice.fluent.models.PrivateLinkResourceListResultInner;
 
-/** An instance of this class provides access to all the operations defined in PrivateLinkResourcesClient. */
+/**
+ * An instance of this class provides access to all the operations defined in PrivateLinkResourcesClient.
+ */
 public interface PrivateLinkResourcesClient {
     /**
      * Gets the private link resources that need to be created for a Bot.
-     *
+     * 
+     * @param resourceGroupName The name of the Bot resource group in the user subscription.
+     * @param resourceName The name of the Bot resource.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the private link resources that need to be created for a Bot along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<PrivateLinkResourceListResultInner> listByBotResourceWithResponse(String resourceGroupName,
+        String resourceName, Context context);
+
+    /**
+     * Gets the private link resources that need to be created for a Bot.
+     * 
      * @param resourceGroupName The name of the Bot resource group in the user subscription.
      * @param resourceName The name of the Bot resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -24,19 +41,4 @@ public interface PrivateLinkResourcesClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     PrivateLinkResourceListResultInner listByBotResource(String resourceGroupName, String resourceName);
-
-    /**
-     * Gets the private link resources that need to be created for a Bot.
-     *
-     * @param resourceGroupName The name of the Bot resource group in the user subscription.
-     * @param resourceName The name of the Bot resource.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the private link resources that need to be created for a Bot.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<PrivateLinkResourceListResultInner> listByBotResourceWithResponse(
-        String resourceGroupName, String resourceName, Context context);
 }

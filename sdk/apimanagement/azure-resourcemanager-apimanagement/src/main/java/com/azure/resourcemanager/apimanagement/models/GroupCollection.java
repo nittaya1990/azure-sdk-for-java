@@ -5,17 +5,13 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.models.GroupContractInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Paged Group list representation. */
 @Fluent
 public final class GroupCollection {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(GroupCollection.class);
-
     /*
      * Page values.
      */
@@ -33,6 +29,10 @@ public final class GroupCollection {
      */
     @JsonProperty(value = "nextLink")
     private String nextLink;
+
+    /** Creates an instance of GroupCollection class. */
+    public GroupCollection() {
+    }
 
     /**
      * Get the value property: Page values.

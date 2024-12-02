@@ -65,15 +65,16 @@ public interface PacketCapture extends HasInnerModel<PacketCaptureResultInner>, 
     Mono<PacketCaptureStatus> getStatusAsync();
 
     /** The entirety of the packet capture definition. */
-    interface Definition
-        extends PacketCapture.DefinitionStages.WithTarget,
-            PacketCapture.DefinitionStages.WithStorageLocation,
-            PacketCapture.DefinitionStages.WithCreateAndStoragePath {
+    interface Definition extends PacketCapture.DefinitionStages.WithTarget,
+        PacketCapture.DefinitionStages.WithStorageLocation, PacketCapture.DefinitionStages.WithCreateAndStoragePath {
     }
 
     /** Grouping of Packet Capture definition stages. */
     interface DefinitionStages {
 
+        /**
+         * The stage of the Packet Capture definition allowing to specify the target.
+         */
         interface WithTarget {
             /**
              * Set target resource ID, only VM is currently supported.
@@ -84,6 +85,9 @@ public interface PacketCapture extends HasInnerModel<PacketCaptureResultInner>, 
             WithStorageLocation withTarget(String target);
         }
 
+        /**
+         * The stage of the Packet Capture definition allowing to specify the storage location.
+         */
         interface WithStorageLocation {
             /**
              * The ID of the storage account to save the packet capture session. Required if no local file path is
@@ -105,6 +109,10 @@ public interface PacketCapture extends HasInnerModel<PacketCaptureResultInner>, 
             WithCreate withFilePath(String filePath);
         }
 
+        /**
+         * The stage of the Packet Capture definition which contains all the minimum required inputs for the resource
+         * to be created, but also allows for any other optional settings to be specified.
+         */
         interface WithCreate extends Creatable<PacketCapture> {
             /**
              * Set number of bytes captured per packet, the remaining bytes are truncated.
@@ -138,6 +146,10 @@ public interface PacketCapture extends HasInnerModel<PacketCaptureResultInner>, 
             PCFilter.DefinitionStages.Blank<WithCreate> definePacketCaptureFilter();
         }
 
+        /**
+         * The stage of the Packet Capture definition which contains all the minimum required inputs for the resource
+         * to be created, but also allows for any other optional settings to be specified.
+         */
         interface WithCreateAndStoragePath extends WithCreate {
             /**
              * The URI of the storage path to save the packet capture. Must be a well-formed URI describing the location

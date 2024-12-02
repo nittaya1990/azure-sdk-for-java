@@ -5,21 +5,21 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.models.DeployConfigurationParameterProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Deploy Tenant Configuration Contract. */
 @Fluent
 public final class DeployConfigurationParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DeployConfigurationParameters.class);
-
     /*
      * Deploy Configuration Parameter contract properties.
      */
     @JsonProperty(value = "properties")
     private DeployConfigurationParameterProperties innerProperties;
+
+    /** Creates an instance of DeployConfigurationParameters class. */
+    public DeployConfigurationParameters() {
+    }
 
     /**
      * Get the innerProperties property: Deploy Configuration Parameter contract properties.

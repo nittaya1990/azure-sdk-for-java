@@ -18,7 +18,24 @@ public interface NetworkStatusClient {
      * Gets the Connectivity Status to the external resources on which the Api Management service depends from inside
      * the Cloud Service. This also returns the DNS Servers as visible to the CloudService.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the Connectivity Status to the external resources on which the Api Management service depends from inside
+     *     the Cloud Service along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<List<NetworkStatusContractByLocationInner>> listByServiceWithResponse(String resourceGroupName,
+        String serviceName, Context context);
+
+    /**
+     * Gets the Connectivity Status to the external resources on which the Api Management service depends from inside
+     * the Cloud Service. This also returns the DNS Servers as visible to the CloudService.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
@@ -33,24 +50,26 @@ public interface NetworkStatusClient {
      * Gets the Connectivity Status to the external resources on which the Api Management service depends from inside
      * the Cloud Service. This also returns the DNS Servers as visible to the CloudService.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
+     * @param locationName Location in which the API Management service is deployed. This is one of the Azure Regions
+     *     like West US, East US, South Central US.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return the Connectivity Status to the external resources on which the Api Management service depends from inside
-     *     the Cloud Service.
+     *     the Cloud Service along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<List<NetworkStatusContractByLocationInner>> listByServiceWithResponse(
-        String resourceGroupName, String serviceName, Context context);
+    Response<NetworkStatusContractInner> listByLocationWithResponse(String resourceGroupName, String serviceName,
+        String locationName, Context context);
 
     /**
      * Gets the Connectivity Status to the external resources on which the Api Management service depends from inside
      * the Cloud Service. This also returns the DNS Servers as visible to the CloudService.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param locationName Location in which the API Management service is deployed. This is one of the Azure Regions
      *     like West US, East US, South Central US.
@@ -62,23 +81,4 @@ public interface NetworkStatusClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     NetworkStatusContractInner listByLocation(String resourceGroupName, String serviceName, String locationName);
-
-    /**
-     * Gets the Connectivity Status to the external resources on which the Api Management service depends from inside
-     * the Cloud Service. This also returns the DNS Servers as visible to the CloudService.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param locationName Location in which the API Management service is deployed. This is one of the Azure Regions
-     *     like West US, East US, South Central US.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the Connectivity Status to the external resources on which the Api Management service depends from inside
-     *     the Cloud Service.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<NetworkStatusContractInner> listByLocationWithResponse(
-        String resourceGroupName, String serviceName, String locationName, Context context);
 }

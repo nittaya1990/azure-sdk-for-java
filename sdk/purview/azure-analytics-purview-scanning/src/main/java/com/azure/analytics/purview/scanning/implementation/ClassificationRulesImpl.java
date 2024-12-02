@@ -5,7 +5,9 @@
 package com.azure.analytics.purview.scanning.implementation;
 
 import com.azure.core.annotation.Delete;
+import com.azure.core.annotation.ExpectedResponses;
 import com.azure.core.annotation.Get;
+import com.azure.core.annotation.HeaderParam;
 import com.azure.core.annotation.Host;
 import com.azure.core.annotation.HostParam;
 import com.azure.core.annotation.PathParam;
@@ -15,7 +17,11 @@ import com.azure.core.annotation.QueryParam;
 import com.azure.core.annotation.ReturnType;
 import com.azure.core.annotation.ServiceInterface;
 import com.azure.core.annotation.ServiceMethod;
+import com.azure.core.annotation.UnexpectedResponseExceptionType;
+import com.azure.core.exception.ClientAuthenticationException;
 import com.azure.core.exception.HttpResponseException;
+import com.azure.core.exception.ResourceModifiedException;
+import com.azure.core.exception.ResourceNotFoundException;
 import com.azure.core.http.rest.PagedFlux;
 import com.azure.core.http.rest.PagedIterable;
 import com.azure.core.http.rest.PagedResponse;
@@ -45,9 +51,8 @@ public final class ClassificationRulesImpl {
      * @param client the instance of the service client containing this operation class.
      */
     ClassificationRulesImpl(PurviewScanningClientImpl client) {
-        this.service =
-                RestProxy.create(
-                        ClassificationRulesService.class, client.getHttpPipeline(), client.getSerializerAdapter());
+        this.service = RestProxy.create(ClassificationRulesService.class, client.getHttpPipeline(),
+            client.getSerializerAdapter());
         this.client = client;
     }
 
@@ -57,197 +62,254 @@ public final class ClassificationRulesImpl {
      */
     @Host("{Endpoint}")
     @ServiceInterface(name = "PurviewScanningClien")
-    private interface ClassificationRulesService {
+    public interface ClassificationRulesService {
         @Get("/classificationrules/{classificationRuleName}")
-        Mono<Response<BinaryData>> get(
-                @HostParam("Endpoint") String endpoint,
-                @PathParam("classificationRuleName") String classificationRuleName,
-                @QueryParam("api-version") String apiVersion,
-                RequestOptions requestOptions,
-                Context context);
+        @ExpectedResponses({ 200 })
+        @UnexpectedResponseExceptionType(value = ClientAuthenticationException.class, code = { 401 })
+        @UnexpectedResponseExceptionType(value = ResourceNotFoundException.class, code = { 404 })
+        @UnexpectedResponseExceptionType(value = ResourceModifiedException.class, code = { 409 })
+        @UnexpectedResponseExceptionType(HttpResponseException.class)
+        Mono<Response<BinaryData>> get(@HostParam("Endpoint") String endpoint,
+            @PathParam("classificationRuleName") String classificationRuleName,
+            @QueryParam("api-version") String apiVersion, @HeaderParam("Accept") String accept,
+            RequestOptions requestOptions, Context context);
+
+        @Get("/classificationrules/{classificationRuleName}")
+        @ExpectedResponses({ 200 })
+        @UnexpectedResponseExceptionType(value = ClientAuthenticationException.class, code = { 401 })
+        @UnexpectedResponseExceptionType(value = ResourceNotFoundException.class, code = { 404 })
+        @UnexpectedResponseExceptionType(value = ResourceModifiedException.class, code = { 409 })
+        @UnexpectedResponseExceptionType(HttpResponseException.class)
+        Response<BinaryData> getSync(@HostParam("Endpoint") String endpoint,
+            @PathParam("classificationRuleName") String classificationRuleName,
+            @QueryParam("api-version") String apiVersion, @HeaderParam("Accept") String accept,
+            RequestOptions requestOptions, Context context);
 
         @Put("/classificationrules/{classificationRuleName}")
-        Mono<Response<BinaryData>> createOrUpdate(
-                @HostParam("Endpoint") String endpoint,
-                @PathParam("classificationRuleName") String classificationRuleName,
-                @QueryParam("api-version") String apiVersion,
-                RequestOptions requestOptions,
-                Context context);
+        @ExpectedResponses({ 200, 201 })
+        @UnexpectedResponseExceptionType(value = ClientAuthenticationException.class, code = { 401 })
+        @UnexpectedResponseExceptionType(value = ResourceNotFoundException.class, code = { 404 })
+        @UnexpectedResponseExceptionType(value = ResourceModifiedException.class, code = { 409 })
+        @UnexpectedResponseExceptionType(HttpResponseException.class)
+        Mono<Response<BinaryData>> createOrUpdate(@HostParam("Endpoint") String endpoint,
+            @PathParam("classificationRuleName") String classificationRuleName,
+            @QueryParam("api-version") String apiVersion, @HeaderParam("Accept") String accept,
+            RequestOptions requestOptions, Context context);
+
+        @Put("/classificationrules/{classificationRuleName}")
+        @ExpectedResponses({ 200, 201 })
+        @UnexpectedResponseExceptionType(value = ClientAuthenticationException.class, code = { 401 })
+        @UnexpectedResponseExceptionType(value = ResourceNotFoundException.class, code = { 404 })
+        @UnexpectedResponseExceptionType(value = ResourceModifiedException.class, code = { 409 })
+        @UnexpectedResponseExceptionType(HttpResponseException.class)
+        Response<BinaryData> createOrUpdateSync(@HostParam("Endpoint") String endpoint,
+            @PathParam("classificationRuleName") String classificationRuleName,
+            @QueryParam("api-version") String apiVersion, @HeaderParam("Accept") String accept,
+            RequestOptions requestOptions, Context context);
 
         @Delete("/classificationrules/{classificationRuleName}")
-        Mono<Response<BinaryData>> delete(
-                @HostParam("Endpoint") String endpoint,
-                @PathParam("classificationRuleName") String classificationRuleName,
-                @QueryParam("api-version") String apiVersion,
-                RequestOptions requestOptions,
-                Context context);
+        @ExpectedResponses({ 200, 204 })
+        @UnexpectedResponseExceptionType(value = ClientAuthenticationException.class, code = { 401 })
+        @UnexpectedResponseExceptionType(value = ResourceNotFoundException.class, code = { 404 })
+        @UnexpectedResponseExceptionType(value = ResourceModifiedException.class, code = { 409 })
+        @UnexpectedResponseExceptionType(HttpResponseException.class)
+        Mono<Response<BinaryData>> delete(@HostParam("Endpoint") String endpoint,
+            @PathParam("classificationRuleName") String classificationRuleName,
+            @QueryParam("api-version") String apiVersion, @HeaderParam("Accept") String accept,
+            RequestOptions requestOptions, Context context);
+
+        @Delete("/classificationrules/{classificationRuleName}")
+        @ExpectedResponses({ 200, 204 })
+        @UnexpectedResponseExceptionType(value = ClientAuthenticationException.class, code = { 401 })
+        @UnexpectedResponseExceptionType(value = ResourceNotFoundException.class, code = { 404 })
+        @UnexpectedResponseExceptionType(value = ResourceModifiedException.class, code = { 409 })
+        @UnexpectedResponseExceptionType(HttpResponseException.class)
+        Response<BinaryData> deleteSync(@HostParam("Endpoint") String endpoint,
+            @PathParam("classificationRuleName") String classificationRuleName,
+            @QueryParam("api-version") String apiVersion, @HeaderParam("Accept") String accept,
+            RequestOptions requestOptions, Context context);
 
         @Get("/classificationrules")
-        Mono<Response<BinaryData>> listAll(
-                @HostParam("Endpoint") String endpoint,
-                @QueryParam("api-version") String apiVersion,
-                RequestOptions requestOptions,
-                Context context);
+        @ExpectedResponses({ 200 })
+        @UnexpectedResponseExceptionType(value = ClientAuthenticationException.class, code = { 401 })
+        @UnexpectedResponseExceptionType(value = ResourceNotFoundException.class, code = { 404 })
+        @UnexpectedResponseExceptionType(value = ResourceModifiedException.class, code = { 409 })
+        @UnexpectedResponseExceptionType(HttpResponseException.class)
+        Mono<Response<BinaryData>> listAll(@HostParam("Endpoint") String endpoint,
+            @QueryParam("api-version") String apiVersion, @HeaderParam("Accept") String accept,
+            RequestOptions requestOptions, Context context);
+
+        @Get("/classificationrules")
+        @ExpectedResponses({ 200 })
+        @UnexpectedResponseExceptionType(value = ClientAuthenticationException.class, code = { 401 })
+        @UnexpectedResponseExceptionType(value = ResourceNotFoundException.class, code = { 404 })
+        @UnexpectedResponseExceptionType(value = ResourceModifiedException.class, code = { 409 })
+        @UnexpectedResponseExceptionType(HttpResponseException.class)
+        Response<BinaryData> listAllSync(@HostParam("Endpoint") String endpoint,
+            @QueryParam("api-version") String apiVersion, @HeaderParam("Accept") String accept,
+            RequestOptions requestOptions, Context context);
 
         @Get("/classificationrules/{classificationRuleName}/versions")
-        Mono<Response<BinaryData>> listVersionsByClassificationRuleName(
-                @HostParam("Endpoint") String endpoint,
-                @PathParam("classificationRuleName") String classificationRuleName,
-                @QueryParam("api-version") String apiVersion,
-                RequestOptions requestOptions,
-                Context context);
+        @ExpectedResponses({ 200 })
+        @UnexpectedResponseExceptionType(value = ClientAuthenticationException.class, code = { 401 })
+        @UnexpectedResponseExceptionType(value = ResourceNotFoundException.class, code = { 404 })
+        @UnexpectedResponseExceptionType(value = ResourceModifiedException.class, code = { 409 })
+        @UnexpectedResponseExceptionType(HttpResponseException.class)
+        Mono<Response<BinaryData>> listVersionsByClassificationRuleName(@HostParam("Endpoint") String endpoint,
+            @PathParam("classificationRuleName") String classificationRuleName,
+            @QueryParam("api-version") String apiVersion, @HeaderParam("Accept") String accept,
+            RequestOptions requestOptions, Context context);
+
+        @Get("/classificationrules/{classificationRuleName}/versions")
+        @ExpectedResponses({ 200 })
+        @UnexpectedResponseExceptionType(value = ClientAuthenticationException.class, code = { 401 })
+        @UnexpectedResponseExceptionType(value = ResourceNotFoundException.class, code = { 404 })
+        @UnexpectedResponseExceptionType(value = ResourceModifiedException.class, code = { 409 })
+        @UnexpectedResponseExceptionType(HttpResponseException.class)
+        Response<BinaryData> listVersionsByClassificationRuleNameSync(@HostParam("Endpoint") String endpoint,
+            @PathParam("classificationRuleName") String classificationRuleName,
+            @QueryParam("api-version") String apiVersion, @HeaderParam("Accept") String accept,
+            RequestOptions requestOptions, Context context);
 
         @Post("/classificationrules/{classificationRuleName}/versions/{classificationRuleVersion}/:tag")
-        Mono<Response<BinaryData>> tagClassificationVersion(
-                @HostParam("Endpoint") String endpoint,
-                @PathParam("classificationRuleName") String classificationRuleName,
-                @PathParam("classificationRuleVersion") int classificationRuleVersion,
-                @QueryParam("api-version") String apiVersion,
-                RequestOptions requestOptions,
-                Context context);
+        @ExpectedResponses({ 202 })
+        @UnexpectedResponseExceptionType(value = ClientAuthenticationException.class, code = { 401 })
+        @UnexpectedResponseExceptionType(value = ResourceNotFoundException.class, code = { 404 })
+        @UnexpectedResponseExceptionType(value = ResourceModifiedException.class, code = { 409 })
+        @UnexpectedResponseExceptionType(HttpResponseException.class)
+        Mono<Response<BinaryData>> tagClassificationVersion(@HostParam("Endpoint") String endpoint,
+            @PathParam("classificationRuleName") String classificationRuleName,
+            @PathParam("classificationRuleVersion") int classificationRuleVersion, @QueryParam("action") String action,
+            @QueryParam("api-version") String apiVersion, @HeaderParam("Accept") String accept,
+            RequestOptions requestOptions, Context context);
+
+        @Post("/classificationrules/{classificationRuleName}/versions/{classificationRuleVersion}/:tag")
+        @ExpectedResponses({ 202 })
+        @UnexpectedResponseExceptionType(value = ClientAuthenticationException.class, code = { 401 })
+        @UnexpectedResponseExceptionType(value = ResourceNotFoundException.class, code = { 404 })
+        @UnexpectedResponseExceptionType(value = ResourceModifiedException.class, code = { 409 })
+        @UnexpectedResponseExceptionType(HttpResponseException.class)
+        Response<BinaryData> tagClassificationVersionSync(@HostParam("Endpoint") String endpoint,
+            @PathParam("classificationRuleName") String classificationRuleName,
+            @PathParam("classificationRuleVersion") int classificationRuleVersion, @QueryParam("action") String action,
+            @QueryParam("api-version") String apiVersion, @HeaderParam("Accept") String accept,
+            RequestOptions requestOptions, Context context);
 
         @Get("{nextLink}")
-        Mono<Response<BinaryData>> listAllNext(
-                @PathParam(value = "nextLink", encoded = true) String nextLink,
-                @HostParam("Endpoint") String endpoint,
-                RequestOptions requestOptions,
-                Context context);
+        @ExpectedResponses({ 200 })
+        @UnexpectedResponseExceptionType(value = ClientAuthenticationException.class, code = { 401 })
+        @UnexpectedResponseExceptionType(value = ResourceNotFoundException.class, code = { 404 })
+        @UnexpectedResponseExceptionType(value = ResourceModifiedException.class, code = { 409 })
+        @UnexpectedResponseExceptionType(HttpResponseException.class)
+        Mono<Response<BinaryData>> listAllNext(@PathParam(value = "nextLink", encoded = true) String nextLink,
+            @HostParam("Endpoint") String endpoint, @HeaderParam("Accept") String accept, RequestOptions requestOptions,
+            Context context);
 
         @Get("{nextLink}")
+        @ExpectedResponses({ 200 })
+        @UnexpectedResponseExceptionType(value = ClientAuthenticationException.class, code = { 401 })
+        @UnexpectedResponseExceptionType(value = ResourceNotFoundException.class, code = { 404 })
+        @UnexpectedResponseExceptionType(value = ResourceModifiedException.class, code = { 409 })
+        @UnexpectedResponseExceptionType(HttpResponseException.class)
+        Response<BinaryData> listAllNextSync(@PathParam(value = "nextLink", encoded = true) String nextLink,
+            @HostParam("Endpoint") String endpoint, @HeaderParam("Accept") String accept, RequestOptions requestOptions,
+            Context context);
+
+        @Get("{nextLink}")
+        @ExpectedResponses({ 200 })
+        @UnexpectedResponseExceptionType(value = ClientAuthenticationException.class, code = { 401 })
+        @UnexpectedResponseExceptionType(value = ResourceNotFoundException.class, code = { 404 })
+        @UnexpectedResponseExceptionType(value = ResourceModifiedException.class, code = { 409 })
+        @UnexpectedResponseExceptionType(HttpResponseException.class)
         Mono<Response<BinaryData>> listVersionsByClassificationRuleNameNext(
-                @PathParam(value = "nextLink", encoded = true) String nextLink,
-                @HostParam("Endpoint") String endpoint,
-                RequestOptions requestOptions,
-                Context context);
+            @PathParam(value = "nextLink", encoded = true) String nextLink, @HostParam("Endpoint") String endpoint,
+            @HeaderParam("Accept") String accept, RequestOptions requestOptions, Context context);
+
+        @Get("{nextLink}")
+        @ExpectedResponses({ 200 })
+        @UnexpectedResponseExceptionType(value = ClientAuthenticationException.class, code = { 401 })
+        @UnexpectedResponseExceptionType(value = ResourceNotFoundException.class, code = { 404 })
+        @UnexpectedResponseExceptionType(value = ResourceModifiedException.class, code = { 409 })
+        @UnexpectedResponseExceptionType(HttpResponseException.class)
+        Response<BinaryData> listVersionsByClassificationRuleNameNextSync(
+            @PathParam(value = "nextLink", encoded = true) String nextLink, @HostParam("Endpoint") String endpoint,
+            @HeaderParam("Accept") String accept, RequestOptions requestOptions, Context context);
     }
 
     /**
      * Get a classification rule.
      *
-     * <p><strong>Query Parameters</strong>
-     *
-     * <table border="1">
-     *     <caption>Query Parameters</caption>
-     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
-     *     <tr><td>apiVersion</td><td>String</td><td>Yes</td><td>Api Version</td></tr>
-     * </table>
-     *
      * <p><strong>Response Body Schema</strong>
      *
      * <pre>{@code
      * {
-     *     id: String
-     *     name: String
+     *     id: String (Optional)
+     *     name: String (Optional)
      * }
      * }</pre>
      *
      * @param classificationRuleName The classificationRuleName parameter.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @throws HttpResponseException thrown if status code is 400 or above, if throwOnError in requestOptions is not
-     *     false.
-     * @return a classification rule.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @throws ClientAuthenticationException thrown if the request is rejected by server on status code 401.
+     * @throws ResourceNotFoundException thrown if the request is rejected by server on status code 404.
+     * @throws ResourceModifiedException thrown if the request is rejected by server on status code 409.
+     * @return a classification rule along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<Response<BinaryData>> getWithResponseAsync(
-            String classificationRuleName, RequestOptions requestOptions) {
-        return FluxUtil.withContext(
-                context ->
-                        service.get(
-                                this.client.getEndpoint(),
-                                classificationRuleName,
-                                this.client.getServiceVersion().getVersion(),
-                                requestOptions,
-                                context));
+    public Mono<Response<BinaryData>> getWithResponseAsync(String classificationRuleName,
+        RequestOptions requestOptions) {
+        final String accept = "application/json";
+        return FluxUtil.withContext(context -> service.get(this.client.getEndpoint(), classificationRuleName,
+            this.client.getServiceVersion().getVersion(), accept, requestOptions, context));
     }
 
     /**
      * Get a classification rule.
      *
-     * <p><strong>Query Parameters</strong>
-     *
-     * <table border="1">
-     *     <caption>Query Parameters</caption>
-     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
-     *     <tr><td>apiVersion</td><td>String</td><td>Yes</td><td>Api Version</td></tr>
-     * </table>
-     *
      * <p><strong>Response Body Schema</strong>
      *
      * <pre>{@code
      * {
-     *     id: String
-     *     name: String
+     *     id: String (Optional)
+     *     name: String (Optional)
      * }
      * }</pre>
      *
      * @param classificationRuleName The classificationRuleName parameter.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @param context The context to associate with this operation.
-     * @throws HttpResponseException thrown if status code is 400 or above, if throwOnError in requestOptions is not
-     *     false.
-     * @return a classification rule.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @throws ClientAuthenticationException thrown if the request is rejected by server on status code 401.
+     * @throws ResourceNotFoundException thrown if the request is rejected by server on status code 404.
+     * @throws ResourceModifiedException thrown if the request is rejected by server on status code 409.
+     * @return a classification rule along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<Response<BinaryData>> getWithResponseAsync(
-            String classificationRuleName, RequestOptions requestOptions, Context context) {
-        return service.get(
-                this.client.getEndpoint(),
-                classificationRuleName,
-                this.client.getServiceVersion().getVersion(),
-                requestOptions,
-                context);
-    }
-
-    /**
-     * Get a classification rule.
-     *
-     * <p><strong>Query Parameters</strong>
-     *
-     * <table border="1">
-     *     <caption>Query Parameters</caption>
-     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
-     *     <tr><td>apiVersion</td><td>String</td><td>Yes</td><td>Api Version</td></tr>
-     * </table>
-     *
-     * <p><strong>Response Body Schema</strong>
-     *
-     * <pre>{@code
-     * {
-     *     id: String
-     *     name: String
-     * }
-     * }</pre>
-     *
-     * @param classificationRuleName The classificationRuleName parameter.
-     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @param context The context to associate with this operation.
-     * @throws HttpResponseException thrown if status code is 400 or above, if throwOnError in requestOptions is not
-     *     false.
-     * @return a classification rule.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<BinaryData> getWithResponse(
-            String classificationRuleName, RequestOptions requestOptions, Context context) {
-        return getWithResponseAsync(classificationRuleName, requestOptions, context).block();
+    public Response<BinaryData> getWithResponse(String classificationRuleName, RequestOptions requestOptions) {
+        final String accept = "application/json";
+        return service.getSync(this.client.getEndpoint(), classificationRuleName,
+            this.client.getServiceVersion().getVersion(), accept, requestOptions, Context.NONE);
     }
 
     /**
      * Creates or Updates a classification rule.
      *
-     * <p><strong>Query Parameters</strong>
+     * <p><strong>Header Parameters</strong>
      *
      * <table border="1">
-     *     <caption>Query Parameters</caption>
+     *     <caption>Header Parameters</caption>
      *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
-     *     <tr><td>apiVersion</td><td>String</td><td>Yes</td><td>Api Version</td></tr>
+     *     <tr><td>Content-Type</td><td>String</td><td>No</td><td>The content type. Allowed values: "application/json".</td></tr>
      * </table>
+     *
+     * You can add these to a request with {@link RequestOptions#addHeader}
      *
      * <p><strong>Request Body Schema</strong>
      *
      * <pre>{@code
      * {
-     *     id: String
-     *     name: String
+     *     id: String (Optional)
+     *     name: String (Optional)
      * }
      * }</pre>
      *
@@ -255,47 +317,46 @@ public final class ClassificationRulesImpl {
      *
      * <pre>{@code
      * {
-     *     id: String
-     *     name: String
+     *     id: String (Optional)
+     *     name: String (Optional)
      * }
      * }</pre>
      *
      * @param classificationRuleName The classificationRuleName parameter.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @throws HttpResponseException thrown if status code is 400 or above, if throwOnError in requestOptions is not
-     *     false.
-     * @return the response.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @throws ClientAuthenticationException thrown if the request is rejected by server on status code 401.
+     * @throws ResourceNotFoundException thrown if the request is rejected by server on status code 404.
+     * @throws ResourceModifiedException thrown if the request is rejected by server on status code 409.
+     * @return the response body along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<Response<BinaryData>> upsertWithResponseAsync(
-            String classificationRuleName, RequestOptions requestOptions) {
-        return FluxUtil.withContext(
-                context ->
-                        service.createOrUpdate(
-                                this.client.getEndpoint(),
-                                classificationRuleName,
-                                this.client.getServiceVersion().getVersion(),
-                                requestOptions,
-                                context));
+    public Mono<Response<BinaryData>> createOrUpdateWithResponseAsync(String classificationRuleName,
+        RequestOptions requestOptions) {
+        final String accept = "application/json";
+        return FluxUtil.withContext(context -> service.createOrUpdate(this.client.getEndpoint(), classificationRuleName,
+            this.client.getServiceVersion().getVersion(), accept, requestOptions, context));
     }
 
     /**
      * Creates or Updates a classification rule.
      *
-     * <p><strong>Query Parameters</strong>
+     * <p><strong>Header Parameters</strong>
      *
      * <table border="1">
-     *     <caption>Query Parameters</caption>
+     *     <caption>Header Parameters</caption>
      *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
-     *     <tr><td>apiVersion</td><td>String</td><td>Yes</td><td>Api Version</td></tr>
+     *     <tr><td>Content-Type</td><td>String</td><td>No</td><td>The content type. Allowed values: "application/json".</td></tr>
      * </table>
+     *
+     * You can add these to a request with {@link RequestOptions#addHeader}
      *
      * <p><strong>Request Body Schema</strong>
      *
      * <pre>{@code
      * {
-     *     id: String
-     *     name: String
+     *     id: String (Optional)
+     *     name: String (Optional)
      * }
      * }</pre>
      *
@@ -303,655 +364,339 @@ public final class ClassificationRulesImpl {
      *
      * <pre>{@code
      * {
-     *     id: String
-     *     name: String
+     *     id: String (Optional)
+     *     name: String (Optional)
      * }
      * }</pre>
      *
      * @param classificationRuleName The classificationRuleName parameter.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @param context The context to associate with this operation.
-     * @throws HttpResponseException thrown if status code is 400 or above, if throwOnError in requestOptions is not
-     *     false.
-     * @return the response.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @throws ClientAuthenticationException thrown if the request is rejected by server on status code 401.
+     * @throws ResourceNotFoundException thrown if the request is rejected by server on status code 404.
+     * @throws ResourceModifiedException thrown if the request is rejected by server on status code 409.
+     * @return the response body along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<Response<BinaryData>> upsertWithResponseAsync(
-            String classificationRuleName, RequestOptions requestOptions, Context context) {
-        return service.createOrUpdate(
-                this.client.getEndpoint(),
-                classificationRuleName,
-                this.client.getServiceVersion().getVersion(),
-                requestOptions,
-                context);
-    }
-
-    /**
-     * Creates or Updates a classification rule.
-     *
-     * <p><strong>Query Parameters</strong>
-     *
-     * <table border="1">
-     *     <caption>Query Parameters</caption>
-     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
-     *     <tr><td>apiVersion</td><td>String</td><td>Yes</td><td>Api Version</td></tr>
-     * </table>
-     *
-     * <p><strong>Request Body Schema</strong>
-     *
-     * <pre>{@code
-     * {
-     *     id: String
-     *     name: String
-     * }
-     * }</pre>
-     *
-     * <p><strong>Response Body Schema</strong>
-     *
-     * <pre>{@code
-     * {
-     *     id: String
-     *     name: String
-     * }
-     * }</pre>
-     *
-     * @param classificationRuleName The classificationRuleName parameter.
-     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @param context The context to associate with this operation.
-     * @throws HttpResponseException thrown if status code is 400 or above, if throwOnError in requestOptions is not
-     *     false.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<BinaryData> upsertWithResponse(
-            String classificationRuleName, RequestOptions requestOptions, Context context) {
-        return upsertWithResponseAsync(classificationRuleName, requestOptions, context).block();
+    public Response<BinaryData> createOrUpdateWithResponse(String classificationRuleName,
+        RequestOptions requestOptions) {
+        final String accept = "application/json";
+        return service.createOrUpdateSync(this.client.getEndpoint(), classificationRuleName,
+            this.client.getServiceVersion().getVersion(), accept, requestOptions, Context.NONE);
     }
 
     /**
      * Deletes a classification rule.
      *
-     * <p><strong>Query Parameters</strong>
-     *
-     * <table border="1">
-     *     <caption>Query Parameters</caption>
-     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
-     *     <tr><td>apiVersion</td><td>String</td><td>Yes</td><td>Api Version</td></tr>
-     * </table>
-     *
      * <p><strong>Response Body Schema</strong>
      *
      * <pre>{@code
      * {
-     *     id: String
-     *     name: String
+     *     id: String (Optional)
+     *     name: String (Optional)
      * }
      * }</pre>
      *
      * @param classificationRuleName The classificationRuleName parameter.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @throws HttpResponseException thrown if status code is 400 or above, if throwOnError in requestOptions is not
-     *     false.
-     * @return the response.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @throws ClientAuthenticationException thrown if the request is rejected by server on status code 401.
+     * @throws ResourceNotFoundException thrown if the request is rejected by server on status code 404.
+     * @throws ResourceModifiedException thrown if the request is rejected by server on status code 409.
+     * @return the response body along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<Response<BinaryData>> deleteWithResponseAsync(
-            String classificationRuleName, RequestOptions requestOptions) {
-        return FluxUtil.withContext(
-                context ->
-                        service.delete(
-                                this.client.getEndpoint(),
-                                classificationRuleName,
-                                this.client.getServiceVersion().getVersion(),
-                                requestOptions,
-                                context));
+    public Mono<Response<BinaryData>> deleteWithResponseAsync(String classificationRuleName,
+        RequestOptions requestOptions) {
+        final String accept = "application/json";
+        return FluxUtil.withContext(context -> service.delete(this.client.getEndpoint(), classificationRuleName,
+            this.client.getServiceVersion().getVersion(), accept, requestOptions, context));
     }
 
     /**
      * Deletes a classification rule.
      *
-     * <p><strong>Query Parameters</strong>
-     *
-     * <table border="1">
-     *     <caption>Query Parameters</caption>
-     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
-     *     <tr><td>apiVersion</td><td>String</td><td>Yes</td><td>Api Version</td></tr>
-     * </table>
-     *
      * <p><strong>Response Body Schema</strong>
      *
      * <pre>{@code
      * {
-     *     id: String
-     *     name: String
+     *     id: String (Optional)
+     *     name: String (Optional)
      * }
      * }</pre>
      *
      * @param classificationRuleName The classificationRuleName parameter.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @param context The context to associate with this operation.
-     * @throws HttpResponseException thrown if status code is 400 or above, if throwOnError in requestOptions is not
-     *     false.
-     * @return the response.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @throws ClientAuthenticationException thrown if the request is rejected by server on status code 401.
+     * @throws ResourceNotFoundException thrown if the request is rejected by server on status code 404.
+     * @throws ResourceModifiedException thrown if the request is rejected by server on status code 409.
+     * @return the response body along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<Response<BinaryData>> deleteWithResponseAsync(
-            String classificationRuleName, RequestOptions requestOptions, Context context) {
-        return service.delete(
-                this.client.getEndpoint(),
-                classificationRuleName,
-                this.client.getServiceVersion().getVersion(),
-                requestOptions,
-                context);
-    }
-
-    /**
-     * Deletes a classification rule.
-     *
-     * <p><strong>Query Parameters</strong>
-     *
-     * <table border="1">
-     *     <caption>Query Parameters</caption>
-     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
-     *     <tr><td>apiVersion</td><td>String</td><td>Yes</td><td>Api Version</td></tr>
-     * </table>
-     *
-     * <p><strong>Response Body Schema</strong>
-     *
-     * <pre>{@code
-     * {
-     *     id: String
-     *     name: String
-     * }
-     * }</pre>
-     *
-     * @param classificationRuleName The classificationRuleName parameter.
-     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @param context The context to associate with this operation.
-     * @throws HttpResponseException thrown if status code is 400 or above, if throwOnError in requestOptions is not
-     *     false.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<BinaryData> deleteWithResponse(
-            String classificationRuleName, RequestOptions requestOptions, Context context) {
-        return deleteWithResponseAsync(classificationRuleName, requestOptions, context).block();
+    public Response<BinaryData> deleteWithResponse(String classificationRuleName, RequestOptions requestOptions) {
+        final String accept = "application/json";
+        return service.deleteSync(this.client.getEndpoint(), classificationRuleName,
+            this.client.getServiceVersion().getVersion(), accept, requestOptions, Context.NONE);
     }
 
     /**
      * List classification rules in Account.
      *
-     * <p><strong>Query Parameters</strong>
-     *
-     * <table border="1">
-     *     <caption>Query Parameters</caption>
-     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
-     *     <tr><td>apiVersion</td><td>String</td><td>Yes</td><td>Api Version</td></tr>
-     * </table>
-     *
      * <p><strong>Response Body Schema</strong>
      *
      * <pre>{@code
      * {
-     *     value: [
-     *         {
-     *             id: String
-     *             name: String
-     *         }
-     *     ]
-     *     nextLink: String
-     *     count: Long
+     *     id: String (Optional)
+     *     name: String (Optional)
      * }
      * }</pre>
      *
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @throws HttpResponseException thrown if status code is 400 or above, if throwOnError in requestOptions is not
-     *     false.
-     * @return the response.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @throws ClientAuthenticationException thrown if the request is rejected by server on status code 401.
+     * @throws ResourceNotFoundException thrown if the request is rejected by server on status code 404.
+     * @throws ResourceModifiedException thrown if the request is rejected by server on status code 409.
+     * @return the response body along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<PagedResponse<BinaryData>> listAllSinglePageAsync(RequestOptions requestOptions) {
-        return FluxUtil.withContext(
-                        context ->
-                                service.listAll(
-                                        this.client.getEndpoint(),
-                                        this.client.getServiceVersion().getVersion(),
-                                        requestOptions,
-                                        context))
-                .map(
-                        res ->
-                                new PagedResponseBase<>(
-                                        res.getRequest(),
-                                        res.getStatusCode(),
-                                        res.getHeaders(),
-                                        getValues(res.getValue(), "value"),
-                                        getNextLink(res.getValue(), "nextLink"),
-                                        null));
+    private Mono<PagedResponse<BinaryData>> listAllSinglePageAsync(RequestOptions requestOptions) {
+        final String accept = "application/json";
+        return FluxUtil
+            .withContext(context -> service.listAll(this.client.getEndpoint(),
+                this.client.getServiceVersion().getVersion(), accept, requestOptions, context))
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                getValues(res.getValue(), "value"), getNextLink(res.getValue(), "nextLink"), null));
     }
 
     /**
      * List classification rules in Account.
      *
-     * <p><strong>Query Parameters</strong>
-     *
-     * <table border="1">
-     *     <caption>Query Parameters</caption>
-     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
-     *     <tr><td>apiVersion</td><td>String</td><td>Yes</td><td>Api Version</td></tr>
-     * </table>
-     *
      * <p><strong>Response Body Schema</strong>
      *
      * <pre>{@code
      * {
-     *     value: [
-     *         {
-     *             id: String
-     *             name: String
-     *         }
-     *     ]
-     *     nextLink: String
-     *     count: Long
+     *     id: String (Optional)
+     *     name: String (Optional)
      * }
      * }</pre>
      *
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @param context The context to associate with this operation.
-     * @throws HttpResponseException thrown if status code is 400 or above, if throwOnError in requestOptions is not
-     *     false.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<PagedResponse<BinaryData>> listAllSinglePageAsync(RequestOptions requestOptions, Context context) {
-        return service.listAll(
-                        this.client.getEndpoint(),
-                        this.client.getServiceVersion().getVersion(),
-                        requestOptions,
-                        context)
-                .map(
-                        res ->
-                                new PagedResponseBase<>(
-                                        res.getRequest(),
-                                        res.getStatusCode(),
-                                        res.getHeaders(),
-                                        getValues(res.getValue(), "value"),
-                                        getNextLink(res.getValue(), "nextLink"),
-                                        null));
-    }
-
-    /**
-     * List classification rules in Account.
-     *
-     * <p><strong>Query Parameters</strong>
-     *
-     * <table border="1">
-     *     <caption>Query Parameters</caption>
-     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
-     *     <tr><td>apiVersion</td><td>String</td><td>Yes</td><td>Api Version</td></tr>
-     * </table>
-     *
-     * <p><strong>Response Body Schema</strong>
-     *
-     * <pre>{@code
-     * {
-     *     value: [
-     *         {
-     *             id: String
-     *             name: String
-     *         }
-     *     ]
-     *     nextLink: String
-     *     count: Long
-     * }
-     * }</pre>
-     *
-     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @throws HttpResponseException thrown if status code is 400 or above, if throwOnError in requestOptions is not
-     *     false.
-     * @return the response.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @throws ClientAuthenticationException thrown if the request is rejected by server on status code 401.
+     * @throws ResourceNotFoundException thrown if the request is rejected by server on status code 404.
+     * @throws ResourceModifiedException thrown if the request is rejected by server on status code 409.
+     * @return the paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedFlux<BinaryData> listAllAsync(RequestOptions requestOptions) {
-        return new PagedFlux<>(
-                () -> listAllSinglePageAsync(requestOptions), nextLink -> listAllNextSinglePageAsync(nextLink, null));
+        RequestOptions requestOptionsForNextPage = new RequestOptions();
+        requestOptionsForNextPage.setContext(
+            requestOptions != null && requestOptions.getContext() != null ? requestOptions.getContext() : Context.NONE);
+        return new PagedFlux<>(() -> listAllSinglePageAsync(requestOptions),
+            nextLink -> listAllNextSinglePageAsync(nextLink, requestOptionsForNextPage));
     }
 
     /**
      * List classification rules in Account.
      *
-     * <p><strong>Query Parameters</strong>
-     *
-     * <table border="1">
-     *     <caption>Query Parameters</caption>
-     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
-     *     <tr><td>apiVersion</td><td>String</td><td>Yes</td><td>Api Version</td></tr>
-     * </table>
-     *
      * <p><strong>Response Body Schema</strong>
      *
      * <pre>{@code
      * {
-     *     value: [
-     *         {
-     *             id: String
-     *             name: String
-     *         }
-     *     ]
-     *     nextLink: String
-     *     count: Long
+     *     id: String (Optional)
+     *     name: String (Optional)
      * }
      * }</pre>
      *
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @param context The context to associate with this operation.
-     * @throws HttpResponseException thrown if status code is 400 or above, if throwOnError in requestOptions is not
-     *     false.
-     * @return the response.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @throws ClientAuthenticationException thrown if the request is rejected by server on status code 401.
+     * @throws ResourceNotFoundException thrown if the request is rejected by server on status code 404.
+     * @throws ResourceModifiedException thrown if the request is rejected by server on status code 409.
+     * @return the response body along with {@link PagedResponse}.
      */
-    @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedFlux<BinaryData> listAllAsync(RequestOptions requestOptions, Context context) {
-        return new PagedFlux<>(
-                () -> listAllSinglePageAsync(requestOptions, context),
-                nextLink -> listAllNextSinglePageAsync(nextLink, null, context));
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    private PagedResponse<BinaryData> listAllSinglePage(RequestOptions requestOptions) {
+        final String accept = "application/json";
+        Response<BinaryData> res = service.listAllSync(this.client.getEndpoint(),
+            this.client.getServiceVersion().getVersion(), accept, requestOptions, Context.NONE);
+        return new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+            getValues(res.getValue(), "value"), getNextLink(res.getValue(), "nextLink"), null);
     }
 
     /**
      * List classification rules in Account.
      *
-     * <p><strong>Query Parameters</strong>
-     *
-     * <table border="1">
-     *     <caption>Query Parameters</caption>
-     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
-     *     <tr><td>apiVersion</td><td>String</td><td>Yes</td><td>Api Version</td></tr>
-     * </table>
-     *
      * <p><strong>Response Body Schema</strong>
      *
      * <pre>{@code
      * {
-     *     value: [
-     *         {
-     *             id: String
-     *             name: String
-     *         }
-     *     ]
-     *     nextLink: String
-     *     count: Long
+     *     id: String (Optional)
+     *     name: String (Optional)
      * }
      * }</pre>
      *
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @param context The context to associate with this operation.
-     * @throws HttpResponseException thrown if status code is 400 or above, if throwOnError in requestOptions is not
-     *     false.
-     * @return the response.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @throws ClientAuthenticationException thrown if the request is rejected by server on status code 401.
+     * @throws ResourceNotFoundException thrown if the request is rejected by server on status code 404.
+     * @throws ResourceModifiedException thrown if the request is rejected by server on status code 409.
+     * @return the paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<BinaryData> listAll(RequestOptions requestOptions, Context context) {
-        return new PagedIterable<>(listAllAsync(requestOptions, context));
+    public PagedIterable<BinaryData> listAll(RequestOptions requestOptions) {
+        RequestOptions requestOptionsForNextPage = new RequestOptions();
+        requestOptionsForNextPage.setContext(
+            requestOptions != null && requestOptions.getContext() != null ? requestOptions.getContext() : Context.NONE);
+        return new PagedIterable<>(() -> listAllSinglePage(requestOptions),
+            nextLink -> listAllNextSinglePage(nextLink, requestOptionsForNextPage));
     }
 
     /**
      * Lists the rule versions of a classification rule.
      *
-     * <p><strong>Query Parameters</strong>
-     *
-     * <table border="1">
-     *     <caption>Query Parameters</caption>
-     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
-     *     <tr><td>apiVersion</td><td>String</td><td>Yes</td><td>Api Version</td></tr>
-     * </table>
-     *
      * <p><strong>Response Body Schema</strong>
      *
      * <pre>{@code
      * {
-     *     value: [
-     *         {
-     *             id: String
-     *             name: String
-     *         }
-     *     ]
-     *     nextLink: String
-     *     count: Long
+     *     id: String (Optional)
+     *     name: String (Optional)
      * }
      * }</pre>
      *
      * @param classificationRuleName The classificationRuleName parameter.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @throws HttpResponseException thrown if status code is 400 or above, if throwOnError in requestOptions is not
-     *     false.
-     * @return the response.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @throws ClientAuthenticationException thrown if the request is rejected by server on status code 401.
+     * @throws ResourceNotFoundException thrown if the request is rejected by server on status code 404.
+     * @throws ResourceModifiedException thrown if the request is rejected by server on status code 409.
+     * @return the response body along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<PagedResponse<BinaryData>> listVersionsByClassificationRuleNameSinglePageAsync(
-            String classificationRuleName, RequestOptions requestOptions) {
-        return FluxUtil.withContext(
-                        context ->
-                                service.listVersionsByClassificationRuleName(
-                                        this.client.getEndpoint(),
-                                        classificationRuleName,
-                                        this.client.getServiceVersion().getVersion(),
-                                        requestOptions,
-                                        context))
-                .map(
-                        res ->
-                                new PagedResponseBase<>(
-                                        res.getRequest(),
-                                        res.getStatusCode(),
-                                        res.getHeaders(),
-                                        getValues(res.getValue(), "value"),
-                                        getNextLink(res.getValue(), "nextLink"),
-                                        null));
+    private Mono<PagedResponse<BinaryData>> listVersionsByClassificationRuleNameSinglePageAsync(
+        String classificationRuleName, RequestOptions requestOptions) {
+        final String accept = "application/json";
+        return FluxUtil
+            .withContext(context -> service.listVersionsByClassificationRuleName(this.client.getEndpoint(),
+                classificationRuleName, this.client.getServiceVersion().getVersion(), accept, requestOptions, context))
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                getValues(res.getValue(), "value"), getNextLink(res.getValue(), "nextLink"), null));
     }
 
     /**
      * Lists the rule versions of a classification rule.
      *
-     * <p><strong>Query Parameters</strong>
-     *
-     * <table border="1">
-     *     <caption>Query Parameters</caption>
-     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
-     *     <tr><td>apiVersion</td><td>String</td><td>Yes</td><td>Api Version</td></tr>
-     * </table>
-     *
      * <p><strong>Response Body Schema</strong>
      *
      * <pre>{@code
      * {
-     *     value: [
-     *         {
-     *             id: String
-     *             name: String
-     *         }
-     *     ]
-     *     nextLink: String
-     *     count: Long
+     *     id: String (Optional)
+     *     name: String (Optional)
      * }
      * }</pre>
      *
      * @param classificationRuleName The classificationRuleName parameter.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @param context The context to associate with this operation.
-     * @throws HttpResponseException thrown if status code is 400 or above, if throwOnError in requestOptions is not
-     *     false.
-     * @return the response.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @throws ClientAuthenticationException thrown if the request is rejected by server on status code 401.
+     * @throws ResourceNotFoundException thrown if the request is rejected by server on status code 404.
+     * @throws ResourceModifiedException thrown if the request is rejected by server on status code 409.
+     * @return the paginated response with {@link PagedFlux}.
+     */
+    @ServiceMethod(returns = ReturnType.COLLECTION)
+    public PagedFlux<BinaryData> listVersionsByClassificationRuleNameAsync(String classificationRuleName,
+        RequestOptions requestOptions) {
+        RequestOptions requestOptionsForNextPage = new RequestOptions();
+        requestOptionsForNextPage.setContext(
+            requestOptions != null && requestOptions.getContext() != null ? requestOptions.getContext() : Context.NONE);
+        return new PagedFlux<>(
+            () -> listVersionsByClassificationRuleNameSinglePageAsync(classificationRuleName, requestOptions),
+            nextLink -> listVersionsByClassificationRuleNameNextSinglePageAsync(nextLink, requestOptionsForNextPage));
+    }
+
+    /**
+     * Lists the rule versions of a classification rule.
+     *
+     * <p><strong>Response Body Schema</strong>
+     *
+     * <pre>{@code
+     * {
+     *     id: String (Optional)
+     *     name: String (Optional)
+     * }
+     * }</pre>
+     *
+     * @param classificationRuleName The classificationRuleName parameter.
+     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @throws ClientAuthenticationException thrown if the request is rejected by server on status code 401.
+     * @throws ResourceNotFoundException thrown if the request is rejected by server on status code 404.
+     * @throws ResourceModifiedException thrown if the request is rejected by server on status code 409.
+     * @return the response body along with {@link PagedResponse}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<PagedResponse<BinaryData>> listVersionsByClassificationRuleNameSinglePageAsync(
-            String classificationRuleName, RequestOptions requestOptions, Context context) {
-        return service.listVersionsByClassificationRuleName(
-                        this.client.getEndpoint(),
-                        classificationRuleName,
-                        this.client.getServiceVersion().getVersion(),
-                        requestOptions,
-                        context)
-                .map(
-                        res ->
-                                new PagedResponseBase<>(
-                                        res.getRequest(),
-                                        res.getStatusCode(),
-                                        res.getHeaders(),
-                                        getValues(res.getValue(), "value"),
-                                        getNextLink(res.getValue(), "nextLink"),
-                                        null));
+    private PagedResponse<BinaryData> listVersionsByClassificationRuleNameSinglePage(String classificationRuleName,
+        RequestOptions requestOptions) {
+        final String accept = "application/json";
+        Response<BinaryData> res = service.listVersionsByClassificationRuleNameSync(this.client.getEndpoint(),
+            classificationRuleName, this.client.getServiceVersion().getVersion(), accept, requestOptions, Context.NONE);
+        return new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+            getValues(res.getValue(), "value"), getNextLink(res.getValue(), "nextLink"), null);
     }
 
     /**
      * Lists the rule versions of a classification rule.
      *
-     * <p><strong>Query Parameters</strong>
-     *
-     * <table border="1">
-     *     <caption>Query Parameters</caption>
-     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
-     *     <tr><td>apiVersion</td><td>String</td><td>Yes</td><td>Api Version</td></tr>
-     * </table>
-     *
      * <p><strong>Response Body Schema</strong>
      *
      * <pre>{@code
      * {
-     *     value: [
-     *         {
-     *             id: String
-     *             name: String
-     *         }
-     *     ]
-     *     nextLink: String
-     *     count: Long
+     *     id: String (Optional)
+     *     name: String (Optional)
      * }
      * }</pre>
      *
      * @param classificationRuleName The classificationRuleName parameter.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @throws HttpResponseException thrown if status code is 400 or above, if throwOnError in requestOptions is not
-     *     false.
-     * @return the response.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @throws ClientAuthenticationException thrown if the request is rejected by server on status code 401.
+     * @throws ResourceNotFoundException thrown if the request is rejected by server on status code 404.
+     * @throws ResourceModifiedException thrown if the request is rejected by server on status code 409.
+     * @return the paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedFlux<BinaryData> listVersionsByClassificationRuleNameAsync(
-            String classificationRuleName, RequestOptions requestOptions) {
-        return new PagedFlux<>(
-                () -> listVersionsByClassificationRuleNameSinglePageAsync(classificationRuleName, requestOptions),
-                nextLink -> listVersionsByClassificationRuleNameNextSinglePageAsync(nextLink, null));
-    }
-
-    /**
-     * Lists the rule versions of a classification rule.
-     *
-     * <p><strong>Query Parameters</strong>
-     *
-     * <table border="1">
-     *     <caption>Query Parameters</caption>
-     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
-     *     <tr><td>apiVersion</td><td>String</td><td>Yes</td><td>Api Version</td></tr>
-     * </table>
-     *
-     * <p><strong>Response Body Schema</strong>
-     *
-     * <pre>{@code
-     * {
-     *     value: [
-     *         {
-     *             id: String
-     *             name: String
-     *         }
-     *     ]
-     *     nextLink: String
-     *     count: Long
-     * }
-     * }</pre>
-     *
-     * @param classificationRuleName The classificationRuleName parameter.
-     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @param context The context to associate with this operation.
-     * @throws HttpResponseException thrown if status code is 400 or above, if throwOnError in requestOptions is not
-     *     false.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedFlux<BinaryData> listVersionsByClassificationRuleNameAsync(
-            String classificationRuleName, RequestOptions requestOptions, Context context) {
-        return new PagedFlux<>(
-                () ->
-                        listVersionsByClassificationRuleNameSinglePageAsync(
-                                classificationRuleName, requestOptions, context),
-                nextLink -> listVersionsByClassificationRuleNameNextSinglePageAsync(nextLink, null, context));
-    }
-
-    /**
-     * Lists the rule versions of a classification rule.
-     *
-     * <p><strong>Query Parameters</strong>
-     *
-     * <table border="1">
-     *     <caption>Query Parameters</caption>
-     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
-     *     <tr><td>apiVersion</td><td>String</td><td>Yes</td><td>Api Version</td></tr>
-     * </table>
-     *
-     * <p><strong>Response Body Schema</strong>
-     *
-     * <pre>{@code
-     * {
-     *     value: [
-     *         {
-     *             id: String
-     *             name: String
-     *         }
-     *     ]
-     *     nextLink: String
-     *     count: Long
-     * }
-     * }</pre>
-     *
-     * @param classificationRuleName The classificationRuleName parameter.
-     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @param context The context to associate with this operation.
-     * @throws HttpResponseException thrown if status code is 400 or above, if throwOnError in requestOptions is not
-     *     false.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<BinaryData> listVersionsByClassificationRuleName(
-            String classificationRuleName, RequestOptions requestOptions, Context context) {
+    public PagedIterable<BinaryData> listVersionsByClassificationRuleName(String classificationRuleName,
+        RequestOptions requestOptions) {
+        RequestOptions requestOptionsForNextPage = new RequestOptions();
+        requestOptionsForNextPage.setContext(
+            requestOptions != null && requestOptions.getContext() != null ? requestOptions.getContext() : Context.NONE);
         return new PagedIterable<>(
-                listVersionsByClassificationRuleNameAsync(classificationRuleName, requestOptions, context));
+            () -> listVersionsByClassificationRuleNameSinglePage(classificationRuleName, requestOptions),
+            nextLink -> listVersionsByClassificationRuleNameNextSinglePage(nextLink, requestOptionsForNextPage));
     }
 
     /**
      * Sets Classification Action on a specific classification rule version.
      *
-     * <p><strong>Query Parameters</strong>
-     *
-     * <table border="1">
-     *     <caption>Query Parameters</caption>
-     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
-     *     <tr><td>action</td><td>String</td><td>Yes</td><td>The action parameter</td></tr>
-     *     <tr><td>apiVersion</td><td>String</td><td>Yes</td><td>Api Version</td></tr>
-     * </table>
-     *
      * <p><strong>Response Body Schema</strong>
      *
      * <pre>{@code
      * {
-     *     scanResultId: String
-     *     startTime: String
-     *     endTime: String
-     *     status: String(Accepted/InProgress/TransientFailure/Succeeded/Failed/Canceled)
-     *     error: {
-     *         code: String
-     *         message: String
-     *         target: String
-     *         details: [
-     *             {
-     *                 code: String
-     *                 message: String
-     *                 target: String
-     *                 details: [
+     *     scanResultId: String (Optional)
+     *     startTime: OffsetDateTime (Optional)
+     *     endTime: OffsetDateTime (Optional)
+     *     status: String(Accepted/InProgress/TransientFailure/Succeeded/Failed/Canceled) (Optional)
+     *     error (Optional): {
+     *         code: String (Optional)
+     *         message: String (Optional)
+     *         target: String (Optional)
+     *         details (Optional): [
+     *              (Optional){
+     *                 code: String (Optional)
+     *                 message: String (Optional)
+     *                 target: String (Optional)
+     *                 details (Optional): [
      *                     (recursive schema, see above)
      *                 ]
      *             }
@@ -962,55 +707,44 @@ public final class ClassificationRulesImpl {
      *
      * @param classificationRuleName The classificationRuleName parameter.
      * @param classificationRuleVersion The classificationRuleVersion parameter.
+     * @param action The action parameter. Allowed values: "Keep", "Delete".
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @throws HttpResponseException thrown if status code is 400 or above, if throwOnError in requestOptions is not
-     *     false.
-     * @return the response.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @throws ClientAuthenticationException thrown if the request is rejected by server on status code 401.
+     * @throws ResourceNotFoundException thrown if the request is rejected by server on status code 404.
+     * @throws ResourceModifiedException thrown if the request is rejected by server on status code 409.
+     * @return the response body along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<Response<BinaryData>> tagClassificationVersionWithResponseAsync(
-            String classificationRuleName, int classificationRuleVersion, RequestOptions requestOptions) {
-        return FluxUtil.withContext(
-                context ->
-                        service.tagClassificationVersion(
-                                this.client.getEndpoint(),
-                                classificationRuleName,
-                                classificationRuleVersion,
-                                this.client.getServiceVersion().getVersion(),
-                                requestOptions,
-                                context));
+    public Mono<Response<BinaryData>> tagClassificationVersionWithResponseAsync(String classificationRuleName,
+        int classificationRuleVersion, String action, RequestOptions requestOptions) {
+        final String accept = "application/json";
+        return FluxUtil.withContext(context -> service.tagClassificationVersion(this.client.getEndpoint(),
+            classificationRuleName, classificationRuleVersion, action, this.client.getServiceVersion().getVersion(),
+            accept, requestOptions, context));
     }
 
     /**
      * Sets Classification Action on a specific classification rule version.
      *
-     * <p><strong>Query Parameters</strong>
-     *
-     * <table border="1">
-     *     <caption>Query Parameters</caption>
-     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
-     *     <tr><td>action</td><td>String</td><td>Yes</td><td>The action parameter</td></tr>
-     *     <tr><td>apiVersion</td><td>String</td><td>Yes</td><td>Api Version</td></tr>
-     * </table>
-     *
      * <p><strong>Response Body Schema</strong>
      *
      * <pre>{@code
      * {
-     *     scanResultId: String
-     *     startTime: String
-     *     endTime: String
-     *     status: String(Accepted/InProgress/TransientFailure/Succeeded/Failed/Canceled)
-     *     error: {
-     *         code: String
-     *         message: String
-     *         target: String
-     *         details: [
-     *             {
-     *                 code: String
-     *                 message: String
-     *                 target: String
-     *                 details: [
+     *     scanResultId: String (Optional)
+     *     startTime: OffsetDateTime (Optional)
+     *     endTime: OffsetDateTime (Optional)
+     *     status: String(Accepted/InProgress/TransientFailure/Succeeded/Failed/Canceled) (Optional)
+     *     error (Optional): {
+     *         code: String (Optional)
+     *         message: String (Optional)
+     *         target: String (Optional)
+     *         details (Optional): [
+     *              (Optional){
+     *                 code: String (Optional)
+     *                 message: String (Optional)
+     *                 target: String (Optional)
+     *                 details (Optional): [
      *                     (recursive schema, see above)
      *                 ]
      *             }
@@ -1021,82 +755,21 @@ public final class ClassificationRulesImpl {
      *
      * @param classificationRuleName The classificationRuleName parameter.
      * @param classificationRuleVersion The classificationRuleVersion parameter.
+     * @param action The action parameter. Allowed values: "Keep", "Delete".
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @param context The context to associate with this operation.
-     * @throws HttpResponseException thrown if status code is 400 or above, if throwOnError in requestOptions is not
-     *     false.
-     * @return the response.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @throws ClientAuthenticationException thrown if the request is rejected by server on status code 401.
+     * @throws ResourceNotFoundException thrown if the request is rejected by server on status code 404.
+     * @throws ResourceModifiedException thrown if the request is rejected by server on status code 409.
+     * @return the response body along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<Response<BinaryData>> tagClassificationVersionWithResponseAsync(
-            String classificationRuleName,
-            int classificationRuleVersion,
-            RequestOptions requestOptions,
-            Context context) {
-        return service.tagClassificationVersion(
-                this.client.getEndpoint(),
-                classificationRuleName,
-                classificationRuleVersion,
-                this.client.getServiceVersion().getVersion(),
-                requestOptions,
-                context);
-    }
-
-    /**
-     * Sets Classification Action on a specific classification rule version.
-     *
-     * <p><strong>Query Parameters</strong>
-     *
-     * <table border="1">
-     *     <caption>Query Parameters</caption>
-     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
-     *     <tr><td>action</td><td>String</td><td>Yes</td><td>The action parameter</td></tr>
-     *     <tr><td>apiVersion</td><td>String</td><td>Yes</td><td>Api Version</td></tr>
-     * </table>
-     *
-     * <p><strong>Response Body Schema</strong>
-     *
-     * <pre>{@code
-     * {
-     *     scanResultId: String
-     *     startTime: String
-     *     endTime: String
-     *     status: String(Accepted/InProgress/TransientFailure/Succeeded/Failed/Canceled)
-     *     error: {
-     *         code: String
-     *         message: String
-     *         target: String
-     *         details: [
-     *             {
-     *                 code: String
-     *                 message: String
-     *                 target: String
-     *                 details: [
-     *                     (recursive schema, see above)
-     *                 ]
-     *             }
-     *         ]
-     *     }
-     * }
-     * }</pre>
-     *
-     * @param classificationRuleName The classificationRuleName parameter.
-     * @param classificationRuleVersion The classificationRuleVersion parameter.
-     * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @param context The context to associate with this operation.
-     * @throws HttpResponseException thrown if status code is 400 or above, if throwOnError in requestOptions is not
-     *     false.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<BinaryData> tagClassificationVersionWithResponse(
-            String classificationRuleName,
-            int classificationRuleVersion,
-            RequestOptions requestOptions,
-            Context context) {
-        return tagClassificationVersionWithResponseAsync(
-                        classificationRuleName, classificationRuleVersion, requestOptions, context)
-                .block();
+    public Response<BinaryData> tagClassificationVersionWithResponse(String classificationRuleName,
+        int classificationRuleVersion, String action, RequestOptions requestOptions) {
+        final String accept = "application/json";
+        return service.tagClassificationVersionSync(this.client.getEndpoint(), classificationRuleName,
+            classificationRuleVersion, action, this.client.getServiceVersion().getVersion(), accept, requestOptions,
+            Context.NONE);
     }
 
     /**
@@ -1106,36 +779,28 @@ public final class ClassificationRulesImpl {
      *
      * <pre>{@code
      * {
-     *     value: [
-     *         {
-     *             id: String
-     *             name: String
-     *         }
-     *     ]
-     *     nextLink: String
-     *     count: Long
+     *     id: String (Optional)
+     *     name: String (Optional)
      * }
      * }</pre>
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @throws HttpResponseException thrown if status code is 400 or above, if throwOnError in requestOptions is not
-     *     false.
-     * @return the response.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @throws ClientAuthenticationException thrown if the request is rejected by server on status code 401.
+     * @throws ResourceNotFoundException thrown if the request is rejected by server on status code 404.
+     * @throws ResourceModifiedException thrown if the request is rejected by server on status code 409.
+     * @return the response body along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<PagedResponse<BinaryData>> listAllNextSinglePageAsync(String nextLink, RequestOptions requestOptions) {
-        return FluxUtil.withContext(
-                        context -> service.listAllNext(nextLink, this.client.getEndpoint(), requestOptions, context))
-                .map(
-                        res ->
-                                new PagedResponseBase<>(
-                                        res.getRequest(),
-                                        res.getStatusCode(),
-                                        res.getHeaders(),
-                                        getValues(res.getValue(), "value"),
-                                        getNextLink(res.getValue(), "nextLink"),
-                                        null));
+    private Mono<PagedResponse<BinaryData>> listAllNextSinglePageAsync(String nextLink, RequestOptions requestOptions) {
+        final String accept = "application/json";
+        return FluxUtil
+            .withContext(
+                context -> service.listAllNext(nextLink, this.client.getEndpoint(), accept, requestOptions, context))
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                getValues(res.getValue(), "value"), getNextLink(res.getValue(), "nextLink"), null));
     }
 
     /**
@@ -1145,37 +810,27 @@ public final class ClassificationRulesImpl {
      *
      * <pre>{@code
      * {
-     *     value: [
-     *         {
-     *             id: String
-     *             name: String
-     *         }
-     *     ]
-     *     nextLink: String
-     *     count: Long
+     *     id: String (Optional)
+     *     name: String (Optional)
      * }
      * }</pre>
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @param context The context to associate with this operation.
-     * @throws HttpResponseException thrown if status code is 400 or above, if throwOnError in requestOptions is not
-     *     false.
-     * @return the response.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @throws ClientAuthenticationException thrown if the request is rejected by server on status code 401.
+     * @throws ResourceNotFoundException thrown if the request is rejected by server on status code 404.
+     * @throws ResourceModifiedException thrown if the request is rejected by server on status code 409.
+     * @return the response body along with {@link PagedResponse}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<PagedResponse<BinaryData>> listAllNextSinglePageAsync(
-            String nextLink, RequestOptions requestOptions, Context context) {
-        return service.listAllNext(nextLink, this.client.getEndpoint(), requestOptions, context)
-                .map(
-                        res ->
-                                new PagedResponseBase<>(
-                                        res.getRequest(),
-                                        res.getStatusCode(),
-                                        res.getHeaders(),
-                                        getValues(res.getValue(), "value"),
-                                        getNextLink(res.getValue(), "nextLink"),
-                                        null));
+    private PagedResponse<BinaryData> listAllNextSinglePage(String nextLink, RequestOptions requestOptions) {
+        final String accept = "application/json";
+        Response<BinaryData> res
+            = service.listAllNextSync(nextLink, this.client.getEndpoint(), accept, requestOptions, Context.NONE);
+        return new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+            getValues(res.getValue(), "value"), getNextLink(res.getValue(), "nextLink"), null);
     }
 
     /**
@@ -1185,39 +840,29 @@ public final class ClassificationRulesImpl {
      *
      * <pre>{@code
      * {
-     *     value: [
-     *         {
-     *             id: String
-     *             name: String
-     *         }
-     *     ]
-     *     nextLink: String
-     *     count: Long
+     *     id: String (Optional)
+     *     name: String (Optional)
      * }
      * }</pre>
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @throws HttpResponseException thrown if status code is 400 or above, if throwOnError in requestOptions is not
-     *     false.
-     * @return the response.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @throws ClientAuthenticationException thrown if the request is rejected by server on status code 401.
+     * @throws ResourceNotFoundException thrown if the request is rejected by server on status code 404.
+     * @throws ResourceModifiedException thrown if the request is rejected by server on status code 409.
+     * @return the response body along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<PagedResponse<BinaryData>> listVersionsByClassificationRuleNameNextSinglePageAsync(
-            String nextLink, RequestOptions requestOptions) {
-        return FluxUtil.withContext(
-                        context ->
-                                service.listVersionsByClassificationRuleNameNext(
-                                        nextLink, this.client.getEndpoint(), requestOptions, context))
-                .map(
-                        res ->
-                                new PagedResponseBase<>(
-                                        res.getRequest(),
-                                        res.getStatusCode(),
-                                        res.getHeaders(),
-                                        getValues(res.getValue(), "value"),
-                                        getNextLink(res.getValue(), "nextLink"),
-                                        null));
+    private Mono<PagedResponse<BinaryData>> listVersionsByClassificationRuleNameNextSinglePageAsync(String nextLink,
+        RequestOptions requestOptions) {
+        final String accept = "application/json";
+        return FluxUtil
+            .withContext(context -> service.listVersionsByClassificationRuleNameNext(nextLink,
+                this.client.getEndpoint(), accept, requestOptions, context))
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                getValues(res.getValue(), "value"), getNextLink(res.getValue(), "nextLink"), null));
     }
 
     /**
@@ -1227,38 +872,28 @@ public final class ClassificationRulesImpl {
      *
      * <pre>{@code
      * {
-     *     value: [
-     *         {
-     *             id: String
-     *             name: String
-     *         }
-     *     ]
-     *     nextLink: String
-     *     count: Long
+     *     id: String (Optional)
+     *     name: String (Optional)
      * }
      * }</pre>
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @param context The context to associate with this operation.
-     * @throws HttpResponseException thrown if status code is 400 or above, if throwOnError in requestOptions is not
-     *     false.
-     * @return the response.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @throws ClientAuthenticationException thrown if the request is rejected by server on status code 401.
+     * @throws ResourceNotFoundException thrown if the request is rejected by server on status code 404.
+     * @throws ResourceModifiedException thrown if the request is rejected by server on status code 409.
+     * @return the response body along with {@link PagedResponse}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<PagedResponse<BinaryData>> listVersionsByClassificationRuleNameNextSinglePageAsync(
-            String nextLink, RequestOptions requestOptions, Context context) {
-        return service.listVersionsByClassificationRuleNameNext(
-                        nextLink, this.client.getEndpoint(), requestOptions, context)
-                .map(
-                        res ->
-                                new PagedResponseBase<>(
-                                        res.getRequest(),
-                                        res.getStatusCode(),
-                                        res.getHeaders(),
-                                        getValues(res.getValue(), "value"),
-                                        getNextLink(res.getValue(), "nextLink"),
-                                        null));
+    private PagedResponse<BinaryData> listVersionsByClassificationRuleNameNextSinglePage(String nextLink,
+        RequestOptions requestOptions) {
+        final String accept = "application/json";
+        Response<BinaryData> res = service.listVersionsByClassificationRuleNameNextSync(nextLink,
+            this.client.getEndpoint(), accept, requestOptions, Context.NONE);
+        return new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+            getValues(res.getValue(), "value"), getNextLink(res.getValue(), "nextLink"), null);
     }
 
     private List<BinaryData> getValues(BinaryData binaryData, String path) {

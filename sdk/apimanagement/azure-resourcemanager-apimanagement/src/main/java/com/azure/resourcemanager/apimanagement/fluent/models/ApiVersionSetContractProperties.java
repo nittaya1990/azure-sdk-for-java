@@ -8,14 +8,11 @@ import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.models.ApiVersionSetEntityBase;
 import com.azure.resourcemanager.apimanagement.models.VersioningScheme;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Properties of an API Version Set. */
 @Fluent
 public final class ApiVersionSetContractProperties extends ApiVersionSetEntityBase {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApiVersionSetContractProperties.class);
-
     /*
      * Name of API Version Set
      */
@@ -23,11 +20,14 @@ public final class ApiVersionSetContractProperties extends ApiVersionSetEntityBa
     private String displayName;
 
     /*
-     * An value that determines where the API Version identifier will be
-     * located in a HTTP request.
+     * An value that determines where the API Version identifier will be located in a HTTP request.
      */
     @JsonProperty(value = "versioningScheme", required = true)
     private VersioningScheme versioningScheme;
+
+    /** Creates an instance of ApiVersionSetContractProperties class. */
+    public ApiVersionSetContractProperties() {
+    }
 
     /**
      * Get the displayName property: Name of API Version Set.
@@ -101,16 +101,14 @@ public final class ApiVersionSetContractProperties extends ApiVersionSetEntityBa
     public void validate() {
         super.validate();
         if (displayName() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property displayName in model ApiVersionSetContractProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property displayName in model ApiVersionSetContractProperties"));
         }
         if (versioningScheme() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property versioningScheme in model ApiVersionSetContractProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property versioningScheme in model ApiVersionSetContractProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(ApiVersionSetContractProperties.class);
 }

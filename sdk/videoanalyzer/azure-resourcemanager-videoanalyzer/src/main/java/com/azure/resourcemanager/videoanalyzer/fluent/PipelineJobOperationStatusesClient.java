@@ -25,8 +25,8 @@ public interface PipelineJobOperationStatusesClient {
      * @return the operation status of a pipeline job with the given operationId.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    PipelineJobOperationStatusInner get(
-        String resourceGroupName, String accountName, String pipelineJobName, String operationId);
+    PipelineJobOperationStatusInner get(String resourceGroupName, String accountName, String pipelineJobName,
+        String operationId);
 
     /**
      * Get the operation status of a pipeline job with the given operationId.
@@ -39,9 +39,9 @@ public interface PipelineJobOperationStatusesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the operation status of a pipeline job with the given operationId.
+     * @return the operation status of a pipeline job with the given operationId along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<PipelineJobOperationStatusInner> getWithResponse(
-        String resourceGroupName, String accountName, String pipelineJobName, String operationId, Context context);
+    Response<PipelineJobOperationStatusInner> getWithResponse(String resourceGroupName, String accountName,
+        String pipelineJobName, String operationId, Context context);
 }

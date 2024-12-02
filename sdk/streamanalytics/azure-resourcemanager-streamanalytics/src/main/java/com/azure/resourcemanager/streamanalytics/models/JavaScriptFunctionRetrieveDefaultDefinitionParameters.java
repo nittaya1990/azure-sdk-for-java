@@ -5,84 +5,153 @@
 package com.azure.resourcemanager.streamanalytics.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import com.azure.resourcemanager.streamanalytics.fluent.models.JavaScriptFunctionBindingRetrievalProperties;
+import java.io.IOException;
 
-/** The parameters needed to retrieve the default function definition for a JavaScript function. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "bindingType")
-@JsonTypeName("Microsoft.StreamAnalytics/JavascriptUdf")
-@JsonFlatten
+/**
+ * The parameters needed to retrieve the default function definition for a JavaScript function.
+ */
 @Fluent
-public class JavaScriptFunctionRetrieveDefaultDefinitionParameters extends FunctionRetrieveDefaultDefinitionParameters {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(JavaScriptFunctionRetrieveDefaultDefinitionParameters.class);
+public final class JavaScriptFunctionRetrieveDefaultDefinitionParameters
+    extends FunctionRetrieveDefaultDefinitionParameters {
+    /*
+     * Indicates the function binding type.
+     */
+    private String bindingType = "Microsoft.StreamAnalytics/JavascriptUdf";
 
     /*
-     * The JavaScript code containing a single function definition. For
-     * example: 'function (x, y) { return x + y; }'.
+     * The binding retrieval properties associated with a JavaScript function.
      */
-    @JsonProperty(value = "bindingRetrievalProperties.script")
-    private String script;
+    private JavaScriptFunctionBindingRetrievalProperties innerBindingRetrievalProperties;
 
-    /*
-     * The function type.
+    /**
+     * Creates an instance of JavaScriptFunctionRetrieveDefaultDefinitionParameters class.
      */
-    @JsonProperty(value = "bindingRetrievalProperties.udfType")
-    private UdfType udfType;
+    public JavaScriptFunctionRetrieveDefaultDefinitionParameters() {
+    }
+
+    /**
+     * Get the bindingType property: Indicates the function binding type.
+     * 
+     * @return the bindingType value.
+     */
+    @Override
+    public String bindingType() {
+        return this.bindingType;
+    }
+
+    /**
+     * Get the innerBindingRetrievalProperties property: The binding retrieval properties associated with a JavaScript
+     * function.
+     * 
+     * @return the innerBindingRetrievalProperties value.
+     */
+    private JavaScriptFunctionBindingRetrievalProperties innerBindingRetrievalProperties() {
+        return this.innerBindingRetrievalProperties;
+    }
 
     /**
      * Get the script property: The JavaScript code containing a single function definition. For example: 'function (x,
      * y) { return x + y; }'.
-     *
+     * 
      * @return the script value.
      */
     public String script() {
-        return this.script;
+        return this.innerBindingRetrievalProperties() == null ? null : this.innerBindingRetrievalProperties().script();
     }
 
     /**
      * Set the script property: The JavaScript code containing a single function definition. For example: 'function (x,
      * y) { return x + y; }'.
-     *
+     * 
      * @param script the script value to set.
      * @return the JavaScriptFunctionRetrieveDefaultDefinitionParameters object itself.
      */
     public JavaScriptFunctionRetrieveDefaultDefinitionParameters withScript(String script) {
-        this.script = script;
+        if (this.innerBindingRetrievalProperties() == null) {
+            this.innerBindingRetrievalProperties = new JavaScriptFunctionBindingRetrievalProperties();
+        }
+        this.innerBindingRetrievalProperties().withScript(script);
         return this;
     }
 
     /**
      * Get the udfType property: The function type.
-     *
+     * 
      * @return the udfType value.
      */
     public UdfType udfType() {
-        return this.udfType;
+        return this.innerBindingRetrievalProperties() == null ? null : this.innerBindingRetrievalProperties().udfType();
     }
 
     /**
      * Set the udfType property: The function type.
-     *
+     * 
      * @param udfType the udfType value to set.
      * @return the JavaScriptFunctionRetrieveDefaultDefinitionParameters object itself.
      */
     public JavaScriptFunctionRetrieveDefaultDefinitionParameters withUdfType(UdfType udfType) {
-        this.udfType = udfType;
+        if (this.innerBindingRetrievalProperties() == null) {
+            this.innerBindingRetrievalProperties = new JavaScriptFunctionBindingRetrievalProperties();
+        }
+        this.innerBindingRetrievalProperties().withUdfType(udfType);
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
-        super.validate();
+        if (innerBindingRetrievalProperties() != null) {
+            innerBindingRetrievalProperties().validate();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeStringField("bindingType", this.bindingType);
+        jsonWriter.writeJsonField("bindingRetrievalProperties", this.innerBindingRetrievalProperties);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of JavaScriptFunctionRetrieveDefaultDefinitionParameters from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of JavaScriptFunctionRetrieveDefaultDefinitionParameters if the JsonReader was pointing to an
+     * instance of it, or null if it was pointing to JSON null.
+     * @throws IOException If an error occurs while reading the JavaScriptFunctionRetrieveDefaultDefinitionParameters.
+     */
+    public static JavaScriptFunctionRetrieveDefaultDefinitionParameters fromJson(JsonReader jsonReader)
+        throws IOException {
+        return jsonReader.readObject(reader -> {
+            JavaScriptFunctionRetrieveDefaultDefinitionParameters deserializedJavaScriptFunctionRetrieveDefaultDefinitionParameters
+                = new JavaScriptFunctionRetrieveDefaultDefinitionParameters();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("bindingType".equals(fieldName)) {
+                    deserializedJavaScriptFunctionRetrieveDefaultDefinitionParameters.bindingType = reader.getString();
+                } else if ("bindingRetrievalProperties".equals(fieldName)) {
+                    deserializedJavaScriptFunctionRetrieveDefaultDefinitionParameters.innerBindingRetrievalProperties
+                        = JavaScriptFunctionBindingRetrievalProperties.fromJson(reader);
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedJavaScriptFunctionRetrieveDefaultDefinitionParameters;
+        });
     }
 }

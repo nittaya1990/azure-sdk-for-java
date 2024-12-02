@@ -14,6 +14,11 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Performs searching operations.
  */
 public class SearchDocumentsTest extends ServiceTest<SearchPerfStressOptions> {
+    /**
+     * Creates the search operations performance test.
+     *
+     * @param options Performance test configuration options.
+     */
     public SearchDocumentsTest(SearchPerfStressOptions options) {
         super(options);
     }
@@ -30,11 +35,10 @@ public class SearchDocumentsTest extends ServiceTest<SearchPerfStressOptions> {
     @Override
     public void run() {
         AtomicInteger count = new AtomicInteger();
-        searchClient.search("").iterator()
-            .forEachRemaining(result -> {
-                result.getDocument(Hotel.class);
-                count.incrementAndGet();
-            });
+        searchClient.search("").iterator().forEachRemaining(result -> {
+            result.getDocument(Hotel.class);
+            count.incrementAndGet();
+        });
 
         assert count.get() > 0;
     }
@@ -44,8 +48,7 @@ public class SearchDocumentsTest extends ServiceTest<SearchPerfStressOptions> {
         return searchAsyncClient.search("")
             .map(result -> result.getDocument(Hotel.class))
             .count()
-            .flatMap(count -> count > 0
-                ? Mono.empty()
-                : Mono.error(new RuntimeException("Expected autocomplete results.")));
+            .flatMap(
+                count -> count > 0 ? Mono.empty() : Mono.error(new RuntimeException("Expected autocomplete results.")));
     }
 }

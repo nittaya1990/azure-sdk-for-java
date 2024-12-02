@@ -7,16 +7,11 @@ package com.azure.resourcemanager.videoanalyzer.fluent.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.exception.ManagementError;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Status of private endpoint connection operation. */
 @Fluent
 public final class VideoAnalyzerPrivateEndpointConnectionOperationStatusInner {
-    @JsonIgnore
-    private final ClientLogger logger =
-        new ClientLogger(VideoAnalyzerPrivateEndpointConnectionOperationStatusInner.class);
-
     /*
      * Operation identifier.
      */
@@ -180,11 +175,11 @@ public final class VideoAnalyzerPrivateEndpointConnectionOperationStatusInner {
      */
     public void validate() {
         if (name() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property name in model"
-                            + " VideoAnalyzerPrivateEndpointConnectionOperationStatusInner"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException("Missing required property name in model"
+                + " VideoAnalyzerPrivateEndpointConnectionOperationStatusInner"));
         }
     }
+
+    private static final ClientLogger LOGGER
+        = new ClientLogger(VideoAnalyzerPrivateEndpointConnectionOperationStatusInner.class);
 }

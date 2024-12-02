@@ -62,6 +62,13 @@ public interface LinkedService {
     LinkedServiceEntityStatus provisioningState();
 
     /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
+
+    /**
      * Gets the inner com.azure.resourcemanager.loganalytics.fluent.models.LinkedServiceInner object.
      *
      * @return the inner object.
@@ -72,11 +79,13 @@ public interface LinkedService {
     interface Definition
         extends DefinitionStages.Blank, DefinitionStages.WithParentResource, DefinitionStages.WithCreate {
     }
+
     /** The LinkedService definition stages. */
     interface DefinitionStages {
         /** The first stage of the LinkedService definition. */
         interface Blank extends WithParentResource {
         }
+
         /** The stage of the LinkedService definition allowing to specify parent resource. */
         interface WithParentResource {
             /**
@@ -88,15 +97,13 @@ public interface LinkedService {
              */
             WithCreate withExistingWorkspace(String resourceGroupName, String workspaceName);
         }
+
         /**
          * The stage of the LinkedService definition which contains all the minimum required properties for the resource
          * to be created, but also allows for any other optional properties to be specified.
          */
-        interface WithCreate
-            extends DefinitionStages.WithTags,
-                DefinitionStages.WithResourceId,
-                DefinitionStages.WithWriteAccessResourceId,
-                DefinitionStages.WithProvisioningState {
+        interface WithCreate extends DefinitionStages.WithTags, DefinitionStages.WithResourceId,
+            DefinitionStages.WithWriteAccessResourceId, DefinitionStages.WithProvisioningState {
             /**
              * Executes the create request.
              *
@@ -112,6 +119,7 @@ public interface LinkedService {
              */
             LinkedService create(Context context);
         }
+
         /** The stage of the LinkedService definition allowing to specify tags. */
         interface WithTags {
             /**
@@ -122,6 +130,7 @@ public interface LinkedService {
              */
             WithCreate withTags(Map<String, String> tags);
         }
+
         /** The stage of the LinkedService definition allowing to specify resourceId. */
         interface WithResourceId {
             /**
@@ -134,6 +143,7 @@ public interface LinkedService {
              */
             WithCreate withResourceId(String resourceId);
         }
+
         /** The stage of the LinkedService definition allowing to specify writeAccessResourceId. */
         interface WithWriteAccessResourceId {
             /**
@@ -146,6 +156,7 @@ public interface LinkedService {
              */
             WithCreate withWriteAccessResourceId(String writeAccessResourceId);
         }
+
         /** The stage of the LinkedService definition allowing to specify provisioningState. */
         interface WithProvisioningState {
             /**
@@ -157,6 +168,7 @@ public interface LinkedService {
             WithCreate withProvisioningState(LinkedServiceEntityStatus provisioningState);
         }
     }
+
     /**
      * Begins update for the LinkedService resource.
      *
@@ -165,11 +177,8 @@ public interface LinkedService {
     LinkedService.Update update();
 
     /** The template for LinkedService update. */
-    interface Update
-        extends UpdateStages.WithTags,
-            UpdateStages.WithResourceId,
-            UpdateStages.WithWriteAccessResourceId,
-            UpdateStages.WithProvisioningState {
+    interface Update extends UpdateStages.WithTags, UpdateStages.WithResourceId, UpdateStages.WithWriteAccessResourceId,
+        UpdateStages.WithProvisioningState {
         /**
          * Executes the update request.
          *
@@ -185,6 +194,7 @@ public interface LinkedService {
          */
         LinkedService apply(Context context);
     }
+
     /** The LinkedService update stages. */
     interface UpdateStages {
         /** The stage of the LinkedService update allowing to specify tags. */
@@ -197,6 +207,7 @@ public interface LinkedService {
              */
             Update withTags(Map<String, String> tags);
         }
+
         /** The stage of the LinkedService update allowing to specify resourceId. */
         interface WithResourceId {
             /**
@@ -209,6 +220,7 @@ public interface LinkedService {
              */
             Update withResourceId(String resourceId);
         }
+
         /** The stage of the LinkedService update allowing to specify writeAccessResourceId. */
         interface WithWriteAccessResourceId {
             /**
@@ -221,6 +233,7 @@ public interface LinkedService {
              */
             Update withWriteAccessResourceId(String writeAccessResourceId);
         }
+
         /** The stage of the LinkedService update allowing to specify provisioningState. */
         interface WithProvisioningState {
             /**
@@ -232,6 +245,7 @@ public interface LinkedService {
             Update withProvisioningState(LinkedServiceEntityStatus provisioningState);
         }
     }
+
     /**
      * Refreshes the resource to sync with Azure.
      *

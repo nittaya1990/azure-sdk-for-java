@@ -5,43 +5,50 @@
 package com.azure.resourcemanager.synapse.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.azure.core.util.CoreUtils;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonSerializable;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import java.io.IOException;
 import java.time.OffsetDateTime;
 
-/** Spark pool Config Properties SparkConfig Properties for a Big Data pool powered by Apache Spark. */
+/**
+ * Spark pool Config Properties
+ * 
+ * SparkConfig Properties for a Big Data pool powered by Apache Spark.
+ */
 @Fluent
-public final class SparkConfigProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SparkConfigProperties.class);
-
+public final class SparkConfigProperties implements JsonSerializable<SparkConfigProperties> {
     /*
      * The last update time of the spark config properties file.
      */
-    @JsonProperty(value = "time", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime time;
 
     /*
      * The spark config properties.
      */
-    @JsonProperty(value = "content")
     private String content;
 
     /*
      * The filename of the spark config properties file.
      */
-    @JsonProperty(value = "filename")
     private String filename;
 
     /*
      * The type of the spark config properties file.
      */
-    @JsonProperty(value = "configurationType")
     private ConfigurationType configurationType;
 
     /**
+     * Creates an instance of SparkConfigProperties class.
+     */
+    public SparkConfigProperties() {
+    }
+
+    /**
      * Get the time property: The last update time of the spark config properties file.
-     *
+     * 
      * @return the time value.
      */
     public OffsetDateTime time() {
@@ -50,7 +57,7 @@ public final class SparkConfigProperties {
 
     /**
      * Get the content property: The spark config properties.
-     *
+     * 
      * @return the content value.
      */
     public String content() {
@@ -59,7 +66,7 @@ public final class SparkConfigProperties {
 
     /**
      * Set the content property: The spark config properties.
-     *
+     * 
      * @param content the content value to set.
      * @return the SparkConfigProperties object itself.
      */
@@ -70,7 +77,7 @@ public final class SparkConfigProperties {
 
     /**
      * Get the filename property: The filename of the spark config properties file.
-     *
+     * 
      * @return the filename value.
      */
     public String filename() {
@@ -79,7 +86,7 @@ public final class SparkConfigProperties {
 
     /**
      * Set the filename property: The filename of the spark config properties file.
-     *
+     * 
      * @param filename the filename value to set.
      * @return the SparkConfigProperties object itself.
      */
@@ -90,7 +97,7 @@ public final class SparkConfigProperties {
 
     /**
      * Get the configurationType property: The type of the spark config properties file.
-     *
+     * 
      * @return the configurationType value.
      */
     public ConfigurationType configurationType() {
@@ -99,7 +106,7 @@ public final class SparkConfigProperties {
 
     /**
      * Set the configurationType property: The type of the spark config properties file.
-     *
+     * 
      * @param configurationType the configurationType value to set.
      * @return the SparkConfigProperties object itself.
      */
@@ -110,9 +117,56 @@ public final class SparkConfigProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeStringField("content", this.content);
+        jsonWriter.writeStringField("filename", this.filename);
+        jsonWriter.writeStringField("configurationType",
+            this.configurationType == null ? null : this.configurationType.toString());
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of SparkConfigProperties from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of SparkConfigProperties if the JsonReader was pointing to an instance of it, or null if it
+     * was pointing to JSON null.
+     * @throws IOException If an error occurs while reading the SparkConfigProperties.
+     */
+    public static SparkConfigProperties fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            SparkConfigProperties deserializedSparkConfigProperties = new SparkConfigProperties();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("time".equals(fieldName)) {
+                    deserializedSparkConfigProperties.time = reader
+                        .getNullable(nonNullReader -> CoreUtils.parseBestOffsetDateTime(nonNullReader.getString()));
+                } else if ("content".equals(fieldName)) {
+                    deserializedSparkConfigProperties.content = reader.getString();
+                } else if ("filename".equals(fieldName)) {
+                    deserializedSparkConfigProperties.filename = reader.getString();
+                } else if ("configurationType".equals(fieldName)) {
+                    deserializedSparkConfigProperties.configurationType
+                        = ConfigurationType.fromString(reader.getString());
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedSparkConfigProperties;
+        });
     }
 }

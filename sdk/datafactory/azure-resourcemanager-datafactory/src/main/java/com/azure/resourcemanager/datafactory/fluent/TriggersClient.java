@@ -16,53 +16,40 @@ import com.azure.resourcemanager.datafactory.fluent.models.TriggerResourceInner;
 import com.azure.resourcemanager.datafactory.fluent.models.TriggerSubscriptionOperationStatusInner;
 import com.azure.resourcemanager.datafactory.models.TriggerFilterParameters;
 
-/** An instance of this class provides access to all the operations defined in TriggersClient. */
+/**
+ * An instance of this class provides access to all the operations defined in TriggersClient.
+ */
 public interface TriggersClient {
     /**
      * Lists triggers.
-     *
+     * 
      * @param resourceGroupName The resource group name.
      * @param factoryName The factory name.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of trigger resources.
+     * @return a list of trigger resources as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<TriggerResourceInner> listByFactory(String resourceGroupName, String factoryName);
 
     /**
      * Lists triggers.
-     *
+     * 
      * @param resourceGroupName The resource group name.
      * @param factoryName The factory name.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of trigger resources.
+     * @return a list of trigger resources as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<TriggerResourceInner> listByFactory(String resourceGroupName, String factoryName, Context context);
 
     /**
      * Query triggers.
-     *
-     * @param resourceGroupName The resource group name.
-     * @param factoryName The factory name.
-     * @param filterParameters Parameters to filter the triggers.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a query of triggers.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    TriggerQueryResponseInner queryByFactory(
-        String resourceGroupName, String factoryName, TriggerFilterParameters filterParameters);
-
-    /**
-     * Query triggers.
-     *
+     * 
      * @param resourceGroupName The resource group name.
      * @param factoryName The factory name.
      * @param filterParameters Parameters to filter the triggers.
@@ -70,55 +57,83 @@ public interface TriggersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a query of triggers.
+     * @return a query of triggers along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<TriggerQueryResponseInner> queryByFactoryWithResponse(
-        String resourceGroupName, String factoryName, TriggerFilterParameters filterParameters, Context context);
+    Response<TriggerQueryResponseInner> queryByFactoryWithResponse(String resourceGroupName, String factoryName,
+        TriggerFilterParameters filterParameters, Context context);
 
     /**
-     * Creates or updates a trigger.
-     *
+     * Query triggers.
+     * 
      * @param resourceGroupName The resource group name.
      * @param factoryName The factory name.
-     * @param triggerName The trigger name.
-     * @param trigger Trigger resource definition.
+     * @param filterParameters Parameters to filter the triggers.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return trigger resource type.
+     * @return a query of triggers.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    TriggerResourceInner createOrUpdate(
-        String resourceGroupName, String factoryName, String triggerName, TriggerResourceInner trigger);
+    TriggerQueryResponseInner queryByFactory(String resourceGroupName, String factoryName,
+        TriggerFilterParameters filterParameters);
 
     /**
      * Creates or updates a trigger.
-     *
+     * 
      * @param resourceGroupName The resource group name.
      * @param factoryName The factory name.
      * @param triggerName The trigger name.
      * @param trigger Trigger resource definition.
      * @param ifMatch ETag of the trigger entity. Should only be specified for update, for which it should match
-     *     existing entity or can be * for unconditional update.
+     * existing entity or can be * for unconditional update.
      * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return trigger resource type along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<TriggerResourceInner> createOrUpdateWithResponse(String resourceGroupName, String factoryName,
+        String triggerName, TriggerResourceInner trigger, String ifMatch, Context context);
+
+    /**
+     * Creates or updates a trigger.
+     * 
+     * @param resourceGroupName The resource group name.
+     * @param factoryName The factory name.
+     * @param triggerName The trigger name.
+     * @param trigger Trigger resource definition.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return trigger resource type.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<TriggerResourceInner> createOrUpdateWithResponse(
-        String resourceGroupName,
-        String factoryName,
-        String triggerName,
-        TriggerResourceInner trigger,
-        String ifMatch,
-        Context context);
+    TriggerResourceInner createOrUpdate(String resourceGroupName, String factoryName, String triggerName,
+        TriggerResourceInner trigger);
 
     /**
      * Gets a trigger.
-     *
+     * 
+     * @param resourceGroupName The resource group name.
+     * @param factoryName The factory name.
+     * @param triggerName The trigger name.
+     * @param ifNoneMatch ETag of the trigger entity. Should only be specified for get. If the ETag matches the existing
+     * entity tag, or if * was provided, then no content will be returned.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a trigger along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<TriggerResourceInner> getWithResponse(String resourceGroupName, String factoryName, String triggerName,
+        String ifNoneMatch, Context context);
+
+    /**
+     * Gets a trigger.
+     * 
      * @param resourceGroupName The resource group name.
      * @param factoryName The factory name.
      * @param triggerName The trigger name.
@@ -131,26 +146,24 @@ public interface TriggersClient {
     TriggerResourceInner get(String resourceGroupName, String factoryName, String triggerName);
 
     /**
-     * Gets a trigger.
-     *
+     * Deletes a trigger.
+     * 
      * @param resourceGroupName The resource group name.
      * @param factoryName The factory name.
      * @param triggerName The trigger name.
-     * @param ifNoneMatch ETag of the trigger entity. Should only be specified for get. If the ETag matches the existing
-     *     entity tag, or if * was provided, then no content will be returned.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a trigger.
+     * @return the {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<TriggerResourceInner> getWithResponse(
-        String resourceGroupName, String factoryName, String triggerName, String ifNoneMatch, Context context);
+    Response<Void> deleteWithResponse(String resourceGroupName, String factoryName, String triggerName,
+        Context context);
 
     /**
      * Deletes a trigger.
-     *
+     * 
      * @param resourceGroupName The resource group name.
      * @param factoryName The factory name.
      * @param triggerName The trigger name.
@@ -162,31 +175,15 @@ public interface TriggersClient {
     void delete(String resourceGroupName, String factoryName, String triggerName);
 
     /**
-     * Deletes a trigger.
-     *
-     * @param resourceGroupName The resource group name.
-     * @param factoryName The factory name.
-     * @param triggerName The trigger name.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<Void> deleteWithResponse(
-        String resourceGroupName, String factoryName, String triggerName, Context context);
-
-    /**
      * Subscribe event trigger to events.
-     *
+     * 
      * @param resourceGroupName The resource group name.
      * @param factoryName The factory name.
      * @param triggerName The trigger name.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return defines the response of a trigger subscription operation.
+     * @return the {@link SyncPoller} for polling of defines the response of a trigger subscription operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<TriggerSubscriptionOperationStatusInner>, TriggerSubscriptionOperationStatusInner>
@@ -194,7 +191,7 @@ public interface TriggersClient {
 
     /**
      * Subscribe event trigger to events.
-     *
+     * 
      * @param resourceGroupName The resource group name.
      * @param factoryName The factory name.
      * @param triggerName The trigger name.
@@ -202,7 +199,7 @@ public interface TriggersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return defines the response of a trigger subscription operation.
+     * @return the {@link SyncPoller} for polling of defines the response of a trigger subscription operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<TriggerSubscriptionOperationStatusInner>, TriggerSubscriptionOperationStatusInner>
@@ -210,7 +207,7 @@ public interface TriggersClient {
 
     /**
      * Subscribe event trigger to events.
-     *
+     * 
      * @param resourceGroupName The resource group name.
      * @param factoryName The factory name.
      * @param triggerName The trigger name.
@@ -220,12 +217,12 @@ public interface TriggersClient {
      * @return defines the response of a trigger subscription operation.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    TriggerSubscriptionOperationStatusInner subscribeToEvents(
-        String resourceGroupName, String factoryName, String triggerName);
+    TriggerSubscriptionOperationStatusInner subscribeToEvents(String resourceGroupName, String factoryName,
+        String triggerName);
 
     /**
      * Subscribe event trigger to events.
-     *
+     * 
      * @param resourceGroupName The resource group name.
      * @param factoryName The factory name.
      * @param triggerName The trigger name.
@@ -236,27 +233,12 @@ public interface TriggersClient {
      * @return defines the response of a trigger subscription operation.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    TriggerSubscriptionOperationStatusInner subscribeToEvents(
-        String resourceGroupName, String factoryName, String triggerName, Context context);
+    TriggerSubscriptionOperationStatusInner subscribeToEvents(String resourceGroupName, String factoryName,
+        String triggerName, Context context);
 
     /**
      * Get a trigger's event subscription status.
-     *
-     * @param resourceGroupName The resource group name.
-     * @param factoryName The factory name.
-     * @param triggerName The trigger name.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a trigger's event subscription status.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    TriggerSubscriptionOperationStatusInner getEventSubscriptionStatus(
-        String resourceGroupName, String factoryName, String triggerName);
-
-    /**
-     * Get a trigger's event subscription status.
-     *
+     * 
      * @param resourceGroupName The resource group name.
      * @param factoryName The factory name.
      * @param triggerName The trigger name.
@@ -264,22 +246,37 @@ public interface TriggersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a trigger's event subscription status along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<TriggerSubscriptionOperationStatusInner> getEventSubscriptionStatusWithResponse(String resourceGroupName,
+        String factoryName, String triggerName, Context context);
+
+    /**
+     * Get a trigger's event subscription status.
+     * 
+     * @param resourceGroupName The resource group name.
+     * @param factoryName The factory name.
+     * @param triggerName The trigger name.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return a trigger's event subscription status.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<TriggerSubscriptionOperationStatusInner> getEventSubscriptionStatusWithResponse(
-        String resourceGroupName, String factoryName, String triggerName, Context context);
+    TriggerSubscriptionOperationStatusInner getEventSubscriptionStatus(String resourceGroupName, String factoryName,
+        String triggerName);
 
     /**
      * Unsubscribe event trigger from events.
-     *
+     * 
      * @param resourceGroupName The resource group name.
      * @param factoryName The factory name.
      * @param triggerName The trigger name.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return defines the response of a trigger subscription operation.
+     * @return the {@link SyncPoller} for polling of defines the response of a trigger subscription operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<TriggerSubscriptionOperationStatusInner>, TriggerSubscriptionOperationStatusInner>
@@ -287,7 +284,7 @@ public interface TriggersClient {
 
     /**
      * Unsubscribe event trigger from events.
-     *
+     * 
      * @param resourceGroupName The resource group name.
      * @param factoryName The factory name.
      * @param triggerName The trigger name.
@@ -295,7 +292,7 @@ public interface TriggersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return defines the response of a trigger subscription operation.
+     * @return the {@link SyncPoller} for polling of defines the response of a trigger subscription operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<TriggerSubscriptionOperationStatusInner>, TriggerSubscriptionOperationStatusInner>
@@ -303,7 +300,7 @@ public interface TriggersClient {
 
     /**
      * Unsubscribe event trigger from events.
-     *
+     * 
      * @param resourceGroupName The resource group name.
      * @param factoryName The factory name.
      * @param triggerName The trigger name.
@@ -313,12 +310,12 @@ public interface TriggersClient {
      * @return defines the response of a trigger subscription operation.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    TriggerSubscriptionOperationStatusInner unsubscribeFromEvents(
-        String resourceGroupName, String factoryName, String triggerName);
+    TriggerSubscriptionOperationStatusInner unsubscribeFromEvents(String resourceGroupName, String factoryName,
+        String triggerName);
 
     /**
      * Unsubscribe event trigger from events.
-     *
+     * 
      * @param resourceGroupName The resource group name.
      * @param factoryName The factory name.
      * @param triggerName The trigger name.
@@ -329,26 +326,26 @@ public interface TriggersClient {
      * @return defines the response of a trigger subscription operation.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    TriggerSubscriptionOperationStatusInner unsubscribeFromEvents(
-        String resourceGroupName, String factoryName, String triggerName, Context context);
+    TriggerSubscriptionOperationStatusInner unsubscribeFromEvents(String resourceGroupName, String factoryName,
+        String triggerName, Context context);
 
     /**
      * Starts a trigger.
-     *
+     * 
      * @param resourceGroupName The resource group name.
      * @param factoryName The factory name.
      * @param triggerName The trigger name.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<Void>, Void> beginStart(String resourceGroupName, String factoryName, String triggerName);
 
     /**
      * Starts a trigger.
-     *
+     * 
      * @param resourceGroupName The resource group name.
      * @param factoryName The factory name.
      * @param triggerName The trigger name.
@@ -356,15 +353,15 @@ public interface TriggersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    SyncPoller<PollResult<Void>, Void> beginStart(
-        String resourceGroupName, String factoryName, String triggerName, Context context);
+    SyncPoller<PollResult<Void>, Void> beginStart(String resourceGroupName, String factoryName, String triggerName,
+        Context context);
 
     /**
      * Starts a trigger.
-     *
+     * 
      * @param resourceGroupName The resource group name.
      * @param factoryName The factory name.
      * @param triggerName The trigger name.
@@ -377,7 +374,7 @@ public interface TriggersClient {
 
     /**
      * Starts a trigger.
-     *
+     * 
      * @param resourceGroupName The resource group name.
      * @param factoryName The factory name.
      * @param triggerName The trigger name.
@@ -391,21 +388,21 @@ public interface TriggersClient {
 
     /**
      * Stops a trigger.
-     *
+     * 
      * @param resourceGroupName The resource group name.
      * @param factoryName The factory name.
      * @param triggerName The trigger name.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<Void>, Void> beginStop(String resourceGroupName, String factoryName, String triggerName);
 
     /**
      * Stops a trigger.
-     *
+     * 
      * @param resourceGroupName The resource group name.
      * @param factoryName The factory name.
      * @param triggerName The trigger name.
@@ -413,15 +410,15 @@ public interface TriggersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    SyncPoller<PollResult<Void>, Void> beginStop(
-        String resourceGroupName, String factoryName, String triggerName, Context context);
+    SyncPoller<PollResult<Void>, Void> beginStop(String resourceGroupName, String factoryName, String triggerName,
+        Context context);
 
     /**
      * Stops a trigger.
-     *
+     * 
      * @param resourceGroupName The resource group name.
      * @param factoryName The factory name.
      * @param triggerName The trigger name.
@@ -434,7 +431,7 @@ public interface TriggersClient {
 
     /**
      * Stops a trigger.
-     *
+     * 
      * @param resourceGroupName The resource group name.
      * @param factoryName The factory name.
      * @param triggerName The trigger name.

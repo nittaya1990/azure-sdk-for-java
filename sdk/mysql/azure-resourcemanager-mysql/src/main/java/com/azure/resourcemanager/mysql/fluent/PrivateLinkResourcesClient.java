@@ -64,9 +64,9 @@ public interface PrivateLinkResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a private link resource for MySQL server.
+     * @return a private link resource for MySQL server along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<PrivateLinkResourceInner> getWithResponse(
-        String resourceGroupName, String serverName, String groupName, Context context);
+    Response<PrivateLinkResourceInner> getWithResponse(String resourceGroupName, String serverName, String groupName,
+        Context context);
 }

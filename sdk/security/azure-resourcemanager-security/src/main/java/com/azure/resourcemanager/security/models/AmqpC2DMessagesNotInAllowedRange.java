@@ -5,41 +5,76 @@
 package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.Duration;
 
-/** Number of cloud to device messages (AMQP protocol) is not in allowed range. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "ruleType")
+/**
+ * Number of cloud to device messages (AMQP protocol) is not in allowed range.
+ */
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    property = "ruleType",
+    defaultImpl = AmqpC2DMessagesNotInAllowedRange.class,
+    visible = true)
 @JsonTypeName("AmqpC2DMessagesNotInAllowedRange")
 @Fluent
 public final class AmqpC2DMessagesNotInAllowedRange extends TimeWindowCustomAlertRule {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AmqpC2DMessagesNotInAllowedRange.class);
+    /*
+     * The type of the custom alert rule.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "ruleType", required = true)
+    private String ruleType = "AmqpC2DMessagesNotInAllowedRange";
 
-    /** {@inheritDoc} */
+    /**
+     * Creates an instance of AmqpC2DMessagesNotInAllowedRange class.
+     */
+    public AmqpC2DMessagesNotInAllowedRange() {
+    }
+
+    /**
+     * Get the ruleType property: The type of the custom alert rule.
+     * 
+     * @return the ruleType value.
+     */
+    @Override
+    public String ruleType() {
+        return this.ruleType;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AmqpC2DMessagesNotInAllowedRange withTimeWindowSize(Duration timeWindowSize) {
         super.withTimeWindowSize(timeWindowSize);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AmqpC2DMessagesNotInAllowedRange withMinThreshold(int minThreshold) {
         super.withMinThreshold(minThreshold);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AmqpC2DMessagesNotInAllowedRange withMaxThreshold(int maxThreshold) {
         super.withMaxThreshold(maxThreshold);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AmqpC2DMessagesNotInAllowedRange withIsEnabled(boolean isEnabled) {
         super.withIsEnabled(isEnabled);
@@ -48,7 +83,7 @@ public final class AmqpC2DMessagesNotInAllowedRange extends TimeWindowCustomAler
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

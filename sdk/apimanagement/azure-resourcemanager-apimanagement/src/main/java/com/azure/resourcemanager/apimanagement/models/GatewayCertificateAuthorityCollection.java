@@ -5,17 +5,13 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.models.GatewayCertificateAuthorityContractInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Paged Gateway certificate authority list representation. */
 @Immutable
 public final class GatewayCertificateAuthorityCollection {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(GatewayCertificateAuthorityCollection.class);
-
     /*
      * Page values.
      */
@@ -27,6 +23,10 @@ public final class GatewayCertificateAuthorityCollection {
      */
     @JsonProperty(value = "nextLink", access = JsonProperty.Access.WRITE_ONLY)
     private String nextLink;
+
+    /** Creates an instance of GatewayCertificateAuthorityCollection class. */
+    public GatewayCertificateAuthorityCollection() {
+    }
 
     /**
      * Get the value property: Page values.

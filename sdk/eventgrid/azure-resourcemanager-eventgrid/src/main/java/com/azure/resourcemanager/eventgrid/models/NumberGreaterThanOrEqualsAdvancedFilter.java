@@ -5,18 +5,28 @@
 package com.azure.resourcemanager.eventgrid.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** NumberGreaterThanOrEquals Advanced Filter. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "operatorType")
+/**
+ * NumberGreaterThanOrEquals Advanced Filter.
+ */
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    property = "operatorType",
+    defaultImpl = NumberGreaterThanOrEqualsAdvancedFilter.class,
+    visible = true)
 @JsonTypeName("NumberGreaterThanOrEquals")
 @Fluent
 public final class NumberGreaterThanOrEqualsAdvancedFilter extends AdvancedFilter {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(NumberGreaterThanOrEqualsAdvancedFilter.class);
+    /*
+     * The operator type used for filtering, e.g., NumberIn, StringContains, BoolEquals and others.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "operatorType", required = true)
+    private AdvancedFilterOperatorType operatorType = AdvancedFilterOperatorType.NUMBER_GREATER_THAN_OR_EQUALS;
 
     /*
      * The filter value.
@@ -25,8 +35,25 @@ public final class NumberGreaterThanOrEqualsAdvancedFilter extends AdvancedFilte
     private Double value;
 
     /**
+     * Creates an instance of NumberGreaterThanOrEqualsAdvancedFilter class.
+     */
+    public NumberGreaterThanOrEqualsAdvancedFilter() {
+    }
+
+    /**
+     * Get the operatorType property: The operator type used for filtering, e.g., NumberIn, StringContains, BoolEquals
+     * and others.
+     * 
+     * @return the operatorType value.
+     */
+    @Override
+    public AdvancedFilterOperatorType operatorType() {
+        return this.operatorType;
+    }
+
+    /**
      * Get the value property: The filter value.
-     *
+     * 
      * @return the value value.
      */
     public Double value() {
@@ -35,7 +62,7 @@ public final class NumberGreaterThanOrEqualsAdvancedFilter extends AdvancedFilte
 
     /**
      * Set the value property: The filter value.
-     *
+     * 
      * @param value the value value to set.
      * @return the NumberGreaterThanOrEqualsAdvancedFilter object itself.
      */
@@ -44,7 +71,9 @@ public final class NumberGreaterThanOrEqualsAdvancedFilter extends AdvancedFilte
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public NumberGreaterThanOrEqualsAdvancedFilter withKey(String key) {
         super.withKey(key);
@@ -53,7 +82,7 @@ public final class NumberGreaterThanOrEqualsAdvancedFilter extends AdvancedFilte
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

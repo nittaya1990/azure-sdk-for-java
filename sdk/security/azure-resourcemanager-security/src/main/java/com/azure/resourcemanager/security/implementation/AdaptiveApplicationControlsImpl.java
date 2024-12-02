@@ -14,20 +14,30 @@ import com.azure.resourcemanager.security.fluent.models.AdaptiveApplicationContr
 import com.azure.resourcemanager.security.models.AdaptiveApplicationControlGroup;
 import com.azure.resourcemanager.security.models.AdaptiveApplicationControlGroups;
 import com.azure.resourcemanager.security.models.AdaptiveApplicationControls;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class AdaptiveApplicationControlsImpl implements AdaptiveApplicationControls {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AdaptiveApplicationControlsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(AdaptiveApplicationControlsImpl.class);
 
     private final AdaptiveApplicationControlsClient innerClient;
 
     private final com.azure.resourcemanager.security.SecurityManager serviceManager;
 
-    public AdaptiveApplicationControlsImpl(
-        AdaptiveApplicationControlsClient innerClient,
+    public AdaptiveApplicationControlsImpl(AdaptiveApplicationControlsClient innerClient,
         com.azure.resourcemanager.security.SecurityManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
+    }
+
+    public Response<AdaptiveApplicationControlGroups> listWithResponse(Boolean includePathRecommendations,
+        Boolean summary, Context context) {
+        Response<AdaptiveApplicationControlGroupsInner> inner
+            = this.serviceClient().listWithResponse(includePathRecommendations, summary, context);
+        if (inner != null) {
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
+                new AdaptiveApplicationControlGroupsImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
     }
 
     public AdaptiveApplicationControlGroups list() {
@@ -39,16 +49,13 @@ public final class AdaptiveApplicationControlsImpl implements AdaptiveApplicatio
         }
     }
 
-    public Response<AdaptiveApplicationControlGroups> listWithResponse(
-        Boolean includePathRecommendations, Boolean summary, Context context) {
-        Response<AdaptiveApplicationControlGroupsInner> inner =
-            this.serviceClient().listWithResponse(includePathRecommendations, summary, context);
+    public Response<AdaptiveApplicationControlGroup> getWithResponse(String ascLocation, String groupName,
+        Context context) {
+        Response<AdaptiveApplicationControlGroupInner> inner
+            = this.serviceClient().getWithResponse(ascLocation, groupName, context);
         if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
-                new AdaptiveApplicationControlGroupsImpl(inner.getValue(), this.manager()));
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
+                new AdaptiveApplicationControlGroupImpl(inner.getValue(), this.manager()));
         } else {
             return null;
         }
@@ -63,111 +70,68 @@ public final class AdaptiveApplicationControlsImpl implements AdaptiveApplicatio
         }
     }
 
-    public Response<AdaptiveApplicationControlGroup> getWithResponse(
-        String ascLocation, String groupName, Context context) {
-        Response<AdaptiveApplicationControlGroupInner> inner =
-            this.serviceClient().getWithResponse(ascLocation, groupName, context);
-        if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
-                new AdaptiveApplicationControlGroupImpl(inner.getValue(), this.manager()));
-        } else {
-            return null;
-        }
+    public Response<Void> deleteByResourceGroupWithResponse(String ascLocation, String groupName, Context context) {
+        return this.serviceClient().deleteWithResponse(ascLocation, groupName, context);
     }
 
     public void deleteByResourceGroup(String ascLocation, String groupName) {
         this.serviceClient().delete(ascLocation, groupName);
     }
 
-    public Response<Void> deleteWithResponse(String ascLocation, String groupName, Context context) {
-        return this.serviceClient().deleteWithResponse(ascLocation, groupName, context);
-    }
-
     public AdaptiveApplicationControlGroup getById(String id) {
-        String ascLocation = Utils.getValueFromIdByName(id, "locations");
+        String ascLocation = ResourceManagerUtils.getValueFromIdByName(id, "locations");
         if (ascLocation == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'locations'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'locations'.", id)));
         }
-        String groupName = Utils.getValueFromIdByName(id, "applicationWhitelistings");
+        String groupName = ResourceManagerUtils.getValueFromIdByName(id, "applicationWhitelistings");
         if (groupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format(
-                                "The resource ID '%s' is not valid. Missing path segment 'applicationWhitelistings'.",
-                                id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(String
+                .format("The resource ID '%s' is not valid. Missing path segment 'applicationWhitelistings'.", id)));
         }
         return this.getWithResponse(ascLocation, groupName, Context.NONE).getValue();
     }
 
     public Response<AdaptiveApplicationControlGroup> getByIdWithResponse(String id, Context context) {
-        String ascLocation = Utils.getValueFromIdByName(id, "locations");
+        String ascLocation = ResourceManagerUtils.getValueFromIdByName(id, "locations");
         if (ascLocation == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'locations'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'locations'.", id)));
         }
-        String groupName = Utils.getValueFromIdByName(id, "applicationWhitelistings");
+        String groupName = ResourceManagerUtils.getValueFromIdByName(id, "applicationWhitelistings");
         if (groupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format(
-                                "The resource ID '%s' is not valid. Missing path segment 'applicationWhitelistings'.",
-                                id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(String
+                .format("The resource ID '%s' is not valid. Missing path segment 'applicationWhitelistings'.", id)));
         }
         return this.getWithResponse(ascLocation, groupName, context);
     }
 
     public void deleteById(String id) {
-        String ascLocation = Utils.getValueFromIdByName(id, "locations");
+        String ascLocation = ResourceManagerUtils.getValueFromIdByName(id, "locations");
         if (ascLocation == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'locations'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'locations'.", id)));
         }
-        String groupName = Utils.getValueFromIdByName(id, "applicationWhitelistings");
+        String groupName = ResourceManagerUtils.getValueFromIdByName(id, "applicationWhitelistings");
         if (groupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format(
-                                "The resource ID '%s' is not valid. Missing path segment 'applicationWhitelistings'.",
-                                id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(String
+                .format("The resource ID '%s' is not valid. Missing path segment 'applicationWhitelistings'.", id)));
         }
-        this.deleteWithResponse(ascLocation, groupName, Context.NONE).getValue();
+        this.deleteByResourceGroupWithResponse(ascLocation, groupName, Context.NONE);
     }
 
     public Response<Void> deleteByIdWithResponse(String id, Context context) {
-        String ascLocation = Utils.getValueFromIdByName(id, "locations");
+        String ascLocation = ResourceManagerUtils.getValueFromIdByName(id, "locations");
         if (ascLocation == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'locations'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'locations'.", id)));
         }
-        String groupName = Utils.getValueFromIdByName(id, "applicationWhitelistings");
+        String groupName = ResourceManagerUtils.getValueFromIdByName(id, "applicationWhitelistings");
         if (groupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format(
-                                "The resource ID '%s' is not valid. Missing path segment 'applicationWhitelistings'.",
-                                id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(String
+                .format("The resource ID '%s' is not valid. Missing path segment 'applicationWhitelistings'.", id)));
         }
-        return this.deleteWithResponse(ascLocation, groupName, context);
+        return this.deleteByResourceGroupWithResponse(ascLocation, groupName, context);
     }
 
     private AdaptiveApplicationControlsClient serviceClient() {

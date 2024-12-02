@@ -5,17 +5,16 @@
 package com.azure.resourcemanager.recoveryservicesbackup.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.resourcemanager.recoveryservicesbackup.models.AcquireStorageAccountLock;
 import com.azure.resourcemanager.recoveryservicesbackup.models.FabricName;
 import com.azure.resourcemanager.recoveryservicesbackup.models.ProtectionStatus;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** BackupStatus response. */
+/**
+ * BackupStatus response.
+ */
 @Fluent
 public final class BackupStatusResponseInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(BackupStatusResponseInner.class);
-
     /*
      * Specifies whether the container is registered or not
      */
@@ -35,15 +34,13 @@ public final class BackupStatusResponseInner {
     private FabricName fabricName;
 
     /*
-     * Specifies the product specific container name. E.g.
-     * iaasvmcontainer;iaasvmcontainer;csname;vmname.
+     * Specifies the product specific container name. E.g. iaasvmcontainer;iaasvmcontainer;csname;vmname.
      */
     @JsonProperty(value = "containerName")
     private String containerName;
 
     /*
-     * Specifies the product specific ds name. E.g.
-     * vm;iaasvmcontainer;csname;vmname.
+     * Specifies the product specific ds name. E.g. vm;iaasvmcontainer;csname;vmname.
      */
     @JsonProperty(value = "protectedItemName")
     private String protectedItemName;
@@ -72,9 +69,27 @@ public final class BackupStatusResponseInner {
     @JsonProperty(value = "registrationStatus")
     private String registrationStatus;
 
+    /*
+     * Number of protected items
+     */
+    @JsonProperty(value = "protectedItemsCount")
+    private Integer protectedItemsCount;
+
+    /*
+     * Specifies whether the storage account lock has been acquired or not
+     */
+    @JsonProperty(value = "acquireStorageAccountLock")
+    private AcquireStorageAccountLock acquireStorageAccountLock;
+
+    /**
+     * Creates an instance of BackupStatusResponseInner class.
+     */
+    public BackupStatusResponseInner() {
+    }
+
     /**
      * Get the protectionStatus property: Specifies whether the container is registered or not.
-     *
+     * 
      * @return the protectionStatus value.
      */
     public ProtectionStatus protectionStatus() {
@@ -83,7 +98,7 @@ public final class BackupStatusResponseInner {
 
     /**
      * Set the protectionStatus property: Specifies whether the container is registered or not.
-     *
+     * 
      * @param protectionStatus the protectionStatus value to set.
      * @return the BackupStatusResponseInner object itself.
      */
@@ -94,7 +109,7 @@ public final class BackupStatusResponseInner {
 
     /**
      * Get the vaultId property: Specifies the arm resource id of the vault.
-     *
+     * 
      * @return the vaultId value.
      */
     public String vaultId() {
@@ -103,7 +118,7 @@ public final class BackupStatusResponseInner {
 
     /**
      * Set the vaultId property: Specifies the arm resource id of the vault.
-     *
+     * 
      * @param vaultId the vaultId value to set.
      * @return the BackupStatusResponseInner object itself.
      */
@@ -114,7 +129,7 @@ public final class BackupStatusResponseInner {
 
     /**
      * Get the fabricName property: Specifies the fabric name - Azure or AD.
-     *
+     * 
      * @return the fabricName value.
      */
     public FabricName fabricName() {
@@ -123,7 +138,7 @@ public final class BackupStatusResponseInner {
 
     /**
      * Set the fabricName property: Specifies the fabric name - Azure or AD.
-     *
+     * 
      * @param fabricName the fabricName value to set.
      * @return the BackupStatusResponseInner object itself.
      */
@@ -135,7 +150,7 @@ public final class BackupStatusResponseInner {
     /**
      * Get the containerName property: Specifies the product specific container name. E.g.
      * iaasvmcontainer;iaasvmcontainer;csname;vmname.
-     *
+     * 
      * @return the containerName value.
      */
     public String containerName() {
@@ -145,7 +160,7 @@ public final class BackupStatusResponseInner {
     /**
      * Set the containerName property: Specifies the product specific container name. E.g.
      * iaasvmcontainer;iaasvmcontainer;csname;vmname.
-     *
+     * 
      * @param containerName the containerName value to set.
      * @return the BackupStatusResponseInner object itself.
      */
@@ -157,7 +172,7 @@ public final class BackupStatusResponseInner {
     /**
      * Get the protectedItemName property: Specifies the product specific ds name. E.g.
      * vm;iaasvmcontainer;csname;vmname.
-     *
+     * 
      * @return the protectedItemName value.
      */
     public String protectedItemName() {
@@ -167,7 +182,7 @@ public final class BackupStatusResponseInner {
     /**
      * Set the protectedItemName property: Specifies the product specific ds name. E.g.
      * vm;iaasvmcontainer;csname;vmname.
-     *
+     * 
      * @param protectedItemName the protectedItemName value to set.
      * @return the BackupStatusResponseInner object itself.
      */
@@ -178,7 +193,7 @@ public final class BackupStatusResponseInner {
 
     /**
      * Get the errorCode property: ErrorCode in case of intent failed.
-     *
+     * 
      * @return the errorCode value.
      */
     public String errorCode() {
@@ -187,7 +202,7 @@ public final class BackupStatusResponseInner {
 
     /**
      * Set the errorCode property: ErrorCode in case of intent failed.
-     *
+     * 
      * @param errorCode the errorCode value to set.
      * @return the BackupStatusResponseInner object itself.
      */
@@ -198,7 +213,7 @@ public final class BackupStatusResponseInner {
 
     /**
      * Get the errorMessage property: ErrorMessage in case of intent failed.
-     *
+     * 
      * @return the errorMessage value.
      */
     public String errorMessage() {
@@ -207,7 +222,7 @@ public final class BackupStatusResponseInner {
 
     /**
      * Set the errorMessage property: ErrorMessage in case of intent failed.
-     *
+     * 
      * @param errorMessage the errorMessage value to set.
      * @return the BackupStatusResponseInner object itself.
      */
@@ -218,7 +233,7 @@ public final class BackupStatusResponseInner {
 
     /**
      * Get the policyName property: Specifies the policy name which is used for protection.
-     *
+     * 
      * @return the policyName value.
      */
     public String policyName() {
@@ -227,7 +242,7 @@ public final class BackupStatusResponseInner {
 
     /**
      * Set the policyName property: Specifies the policy name which is used for protection.
-     *
+     * 
      * @param policyName the policyName value to set.
      * @return the BackupStatusResponseInner object itself.
      */
@@ -238,7 +253,7 @@ public final class BackupStatusResponseInner {
 
     /**
      * Get the registrationStatus property: Container registration status.
-     *
+     * 
      * @return the registrationStatus value.
      */
     public String registrationStatus() {
@@ -247,7 +262,7 @@ public final class BackupStatusResponseInner {
 
     /**
      * Set the registrationStatus property: Container registration status.
-     *
+     * 
      * @param registrationStatus the registrationStatus value to set.
      * @return the BackupStatusResponseInner object itself.
      */
@@ -257,8 +272,49 @@ public final class BackupStatusResponseInner {
     }
 
     /**
+     * Get the protectedItemsCount property: Number of protected items.
+     * 
+     * @return the protectedItemsCount value.
+     */
+    public Integer protectedItemsCount() {
+        return this.protectedItemsCount;
+    }
+
+    /**
+     * Set the protectedItemsCount property: Number of protected items.
+     * 
+     * @param protectedItemsCount the protectedItemsCount value to set.
+     * @return the BackupStatusResponseInner object itself.
+     */
+    public BackupStatusResponseInner withProtectedItemsCount(Integer protectedItemsCount) {
+        this.protectedItemsCount = protectedItemsCount;
+        return this;
+    }
+
+    /**
+     * Get the acquireStorageAccountLock property: Specifies whether the storage account lock has been acquired or not.
+     * 
+     * @return the acquireStorageAccountLock value.
+     */
+    public AcquireStorageAccountLock acquireStorageAccountLock() {
+        return this.acquireStorageAccountLock;
+    }
+
+    /**
+     * Set the acquireStorageAccountLock property: Specifies whether the storage account lock has been acquired or not.
+     * 
+     * @param acquireStorageAccountLock the acquireStorageAccountLock value to set.
+     * @return the BackupStatusResponseInner object itself.
+     */
+    public BackupStatusResponseInner
+        withAcquireStorageAccountLock(AcquireStorageAccountLock acquireStorageAccountLock) {
+        this.acquireStorageAccountLock = acquireStorageAccountLock;
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

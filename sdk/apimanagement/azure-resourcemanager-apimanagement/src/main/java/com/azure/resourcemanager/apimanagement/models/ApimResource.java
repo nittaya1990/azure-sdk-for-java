@@ -6,8 +6,6 @@ package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
@@ -15,14 +13,16 @@ import java.util.Map;
 /** The Resource definition. */
 @Fluent
 public class ApimResource extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApimResource.class);
-
     /*
      * Resource tags.
      */
     @JsonProperty(value = "tags")
     @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
     private Map<String, String> tags;
+
+    /** Creates an instance of ApimResource class. */
+    public ApimResource() {
+    }
 
     /**
      * Get the tags property: Resource tags.

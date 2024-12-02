@@ -5,80 +5,112 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
 import com.azure.resourcemanager.datafactory.fluent.models.TeradataTableDatasetTypeProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/** The Teradata database dataset. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@JsonTypeName("TeradataTable")
+/**
+ * The Teradata database dataset.
+ */
 @Fluent
 public final class TeradataTableDataset extends Dataset {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TeradataTableDataset.class);
+    /*
+     * Type of dataset.
+     */
+    private String type = "TeradataTable";
 
     /*
      * Teradata dataset properties.
      */
-    @JsonProperty(value = "typeProperties")
     private TeradataTableDatasetTypeProperties innerTypeProperties;
 
     /**
+     * Creates an instance of TeradataTableDataset class.
+     */
+    public TeradataTableDataset() {
+    }
+
+    /**
+     * Get the type property: Type of dataset.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
      * Get the innerTypeProperties property: Teradata dataset properties.
-     *
+     * 
      * @return the innerTypeProperties value.
      */
     private TeradataTableDatasetTypeProperties innerTypeProperties() {
         return this.innerTypeProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public TeradataTableDataset withDescription(String description) {
         super.withDescription(description);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public TeradataTableDataset withStructure(Object structure) {
         super.withStructure(structure);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public TeradataTableDataset withSchema(Object schema) {
         super.withSchema(schema);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public TeradataTableDataset withLinkedServiceName(LinkedServiceReference linkedServiceName) {
         super.withLinkedServiceName(linkedServiceName);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public TeradataTableDataset withParameters(Map<String, ParameterSpecification> parameters) {
         super.withParameters(parameters);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public TeradataTableDataset withAnnotations(List<Object> annotations) {
         super.withAnnotations(annotations);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public TeradataTableDataset withFolder(DatasetFolder folder) {
         super.withFolder(folder);
@@ -87,7 +119,7 @@ public final class TeradataTableDataset extends Dataset {
 
     /**
      * Get the database property: The database name of Teradata. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the database value.
      */
     public Object database() {
@@ -96,7 +128,7 @@ public final class TeradataTableDataset extends Dataset {
 
     /**
      * Set the database property: The database name of Teradata. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param database the database value to set.
      * @return the TeradataTableDataset object itself.
      */
@@ -110,7 +142,7 @@ public final class TeradataTableDataset extends Dataset {
 
     /**
      * Get the table property: The table name of Teradata. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the table value.
      */
     public Object table() {
@@ -119,7 +151,7 @@ public final class TeradataTableDataset extends Dataset {
 
     /**
      * Set the table property: The table name of Teradata. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param table the table value to set.
      * @return the TeradataTableDataset object itself.
      */
@@ -133,7 +165,7 @@ public final class TeradataTableDataset extends Dataset {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
@@ -142,5 +174,81 @@ public final class TeradataTableDataset extends Dataset {
         if (innerTypeProperties() != null) {
             innerTypeProperties().validate();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeJsonField("linkedServiceName", linkedServiceName());
+        jsonWriter.writeStringField("description", description());
+        jsonWriter.writeUntypedField("structure", structure());
+        jsonWriter.writeUntypedField("schema", schema());
+        jsonWriter.writeMapField("parameters", parameters(), (writer, element) -> writer.writeJson(element));
+        jsonWriter.writeArrayField("annotations", annotations(), (writer, element) -> writer.writeUntyped(element));
+        jsonWriter.writeJsonField("folder", folder());
+        jsonWriter.writeStringField("type", this.type);
+        jsonWriter.writeJsonField("typeProperties", this.innerTypeProperties);
+        if (additionalProperties() != null) {
+            for (Map.Entry<String, Object> additionalProperty : additionalProperties().entrySet()) {
+                jsonWriter.writeUntypedField(additionalProperty.getKey(), additionalProperty.getValue());
+            }
+        }
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of TeradataTableDataset from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of TeradataTableDataset if the JsonReader was pointing to an instance of it, or null if it
+     * was pointing to JSON null.
+     * @throws IllegalStateException If the deserialized JSON object was missing any required properties.
+     * @throws IOException If an error occurs while reading the TeradataTableDataset.
+     */
+    public static TeradataTableDataset fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            TeradataTableDataset deserializedTeradataTableDataset = new TeradataTableDataset();
+            Map<String, Object> additionalProperties = null;
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("linkedServiceName".equals(fieldName)) {
+                    deserializedTeradataTableDataset.withLinkedServiceName(LinkedServiceReference.fromJson(reader));
+                } else if ("description".equals(fieldName)) {
+                    deserializedTeradataTableDataset.withDescription(reader.getString());
+                } else if ("structure".equals(fieldName)) {
+                    deserializedTeradataTableDataset.withStructure(reader.readUntyped());
+                } else if ("schema".equals(fieldName)) {
+                    deserializedTeradataTableDataset.withSchema(reader.readUntyped());
+                } else if ("parameters".equals(fieldName)) {
+                    Map<String, ParameterSpecification> parameters
+                        = reader.readMap(reader1 -> ParameterSpecification.fromJson(reader1));
+                    deserializedTeradataTableDataset.withParameters(parameters);
+                } else if ("annotations".equals(fieldName)) {
+                    List<Object> annotations = reader.readArray(reader1 -> reader1.readUntyped());
+                    deserializedTeradataTableDataset.withAnnotations(annotations);
+                } else if ("folder".equals(fieldName)) {
+                    deserializedTeradataTableDataset.withFolder(DatasetFolder.fromJson(reader));
+                } else if ("type".equals(fieldName)) {
+                    deserializedTeradataTableDataset.type = reader.getString();
+                } else if ("typeProperties".equals(fieldName)) {
+                    deserializedTeradataTableDataset.innerTypeProperties
+                        = TeradataTableDatasetTypeProperties.fromJson(reader);
+                } else {
+                    if (additionalProperties == null) {
+                        additionalProperties = new LinkedHashMap<>();
+                    }
+
+                    additionalProperties.put(fieldName, reader.readUntyped());
+                }
+            }
+            deserializedTeradataTableDataset.withAdditionalProperties(additionalProperties);
+
+            return deserializedTeradataTableDataset;
+        });
     }
 }

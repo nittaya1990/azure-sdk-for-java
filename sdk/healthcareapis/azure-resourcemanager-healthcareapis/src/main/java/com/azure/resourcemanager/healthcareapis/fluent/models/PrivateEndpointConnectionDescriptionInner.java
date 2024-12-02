@@ -4,53 +4,61 @@
 
 package com.azure.resourcemanager.healthcareapis.fluent.models;
 
-import com.azure.core.annotation.Immutable;
+import com.azure.core.annotation.Fluent;
 import com.azure.core.management.SystemData;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.healthcareapis.models.PrivateEndpoint;
 import com.azure.resourcemanager.healthcareapis.models.PrivateEndpointConnection;
 import com.azure.resourcemanager.healthcareapis.models.PrivateLinkServiceConnectionState;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The Private Endpoint Connection resource. */
-@Immutable
+/**
+ * The Private Endpoint Connection resource.
+ */
+@Fluent
 public final class PrivateEndpointConnectionDescriptionInner extends PrivateEndpointConnection {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PrivateEndpointConnectionDescriptionInner.class);
-
     /*
-     * System metadata for this resource.
+     * Metadata pertaining to creation and last modification of the resource.
      */
     @JsonProperty(value = "systemData", access = JsonProperty.Access.WRITE_ONLY)
     private SystemData systemData;
 
     /**
-     * Get the systemData property: System metadata for this resource.
-     *
+     * Creates an instance of PrivateEndpointConnectionDescriptionInner class.
+     */
+    public PrivateEndpointConnectionDescriptionInner() {
+    }
+
+    /**
+     * Get the systemData property: Metadata pertaining to creation and last modification of the resource.
+     * 
      * @return the systemData value.
      */
     public SystemData systemData() {
         return this.systemData;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PrivateEndpointConnectionDescriptionInner withPrivateEndpoint(PrivateEndpoint privateEndpoint) {
         super.withPrivateEndpoint(privateEndpoint);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public PrivateEndpointConnectionDescriptionInner withPrivateLinkServiceConnectionState(
-        PrivateLinkServiceConnectionState privateLinkServiceConnectionState) {
+    public PrivateEndpointConnectionDescriptionInner
+        withPrivateLinkServiceConnectionState(PrivateLinkServiceConnectionState privateLinkServiceConnectionState) {
         super.withPrivateLinkServiceConnectionState(privateLinkServiceConnectionState);
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

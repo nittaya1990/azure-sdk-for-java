@@ -21,16 +21,16 @@ public final class GatewayHostnameConfigurationsGetResponse
      * @param value the deserialized value of the HTTP response.
      * @param headers the deserialized headers of the HTTP response.
      */
-    public GatewayHostnameConfigurationsGetResponse(
-        HttpRequest request,
-        int statusCode,
-        HttpHeaders rawHeaders,
-        GatewayHostnameConfigurationContractInner value,
-        GatewayHostnameConfigurationsGetHeaders headers) {
+    public GatewayHostnameConfigurationsGetResponse(HttpRequest request, int statusCode, HttpHeaders rawHeaders,
+        GatewayHostnameConfigurationContractInner value, GatewayHostnameConfigurationsGetHeaders headers) {
         super(request, statusCode, rawHeaders, value, headers);
     }
 
-    /** @return the deserialized response body. */
+    /**
+     * Gets the deserialized response body.
+     *
+     * @return the deserialized response body.
+     */
     @Override
     public GatewayHostnameConfigurationContractInner getValue() {
         return super.getValue();

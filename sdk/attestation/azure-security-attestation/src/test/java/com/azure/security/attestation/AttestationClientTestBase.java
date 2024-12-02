@@ -3,69 +3,143 @@
 package com.azure.security.attestation;
 
 import com.azure.core.http.HttpClient;
-import com.azure.core.test.TestBase;
+import com.azure.core.test.TestMode;
+import com.azure.core.test.TestProxyTestBase;
+import com.azure.core.test.models.CustomMatcher;
+import com.azure.core.test.utils.MockTokenCredential;
 import com.azure.core.util.Configuration;
 import com.azure.core.util.logging.ClientLogger;
-import com.azure.identity.EnvironmentCredentialBuilder;
-import com.azure.security.attestation.models.AttestationSigner;
+import com.azure.core.util.serializer.JacksonAdapter;
+import com.azure.core.util.serializer.SerializerAdapter;
 import com.azure.security.attestation.models.AttestationTokenValidationOptions;
 import com.azure.security.attestation.models.AttestationType;
-import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jose.JWSSigner;
-import com.nimbusds.jose.crypto.RSASSASigner;
-import com.nimbusds.jose.crypto.RSASSAVerifier;
-import com.nimbusds.jwt.JWTClaimsSet;
-import com.nimbusds.jwt.SignedJWT;
+import com.nimbusds.jose.util.X509CertUtils;
+import io.opentelemetry.api.GlobalOpenTelemetry;
+import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator;
+import io.opentelemetry.context.propagation.ContextPropagators;
+import io.opentelemetry.exporter.logging.LoggingSpanExporter;
+import io.opentelemetry.sdk.OpenTelemetrySdk;
+import io.opentelemetry.sdk.trace.SdkTracerProvider;
+import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
+import org.bouncycastle.asn1.x509.BasicConstraints;
+import org.bouncycastle.asn1.x509.Extension;
+import org.bouncycastle.x509.X509V3CertificateGenerator;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.parallel.Isolated;
 import org.junit.jupiter.params.provider.Arguments;
-import reactor.core.publisher.Mono;
 
-import java.io.ByteArrayInputStream;
+import javax.security.auth.x500.X500Principal;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
 import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.interfaces.RSAPublicKey;
+import java.security.Security;
+import java.security.SignatureException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
-import java.text.ParseException;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Base64;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Random;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-//import io.github.cdimascio.dotenv.Dotenv;
 
 /**
  * Specialization of the TestBase class for the attestation tests.
- *
- * Provides convenience methods for retrieving attestation client builders, verifying attestation tokens,
- * and accessing test environments.
+ * <p>
+ * Provides convenience methods for retrieving attestation client builders, verifying attestation tokens, and accessing
+ * test environments.
  */
-public class AttestationClientTestBase extends TestBase {
+@Isolated
+public class AttestationClientTestBase extends TestProxyTestBase {
+    protected static final SerializerAdapter ADAPTER = JacksonAdapter.createDefaultSerializerAdapter();
+    protected static final String DISPLAY_NAME_WITH_ARGUMENTS = "{displayName} with [{arguments}]";
+    protected static final ClientLogger LOGGER = new ClientLogger(AttestationClientTestBase.class);
+    protected Tracer tracer;
 
-    final ClientLogger logger = new ClientLogger(AttestationClientTestBase.class);
+    @Override
+    protected void beforeTest() {
+        super.beforeTest();
+
+        GlobalOpenTelemetry.resetForTest();
+        tracer = configureLoggingExporter(testContextManager.getTestName());
+
+        if (interceptorManager.isPlaybackMode()) {
+            interceptorManager.addMatchers(Collections
+                .singletonList(new CustomMatcher().setHeadersKeyOnlyMatch(Collections.singletonList("Authorization"))));
+        }
+    }
+
+    private static final TestMode TEST_MODE = getTestModeLocal();
+
+    static TestMode getTestModeLocal() {
+        final String azureTestMode = Configuration.getGlobalConfiguration().get("AZURE_TEST_MODE");
+
+        if (azureTestMode != null) {
+            try {
+                return TestMode.valueOf(azureTestMode.toUpperCase(Locale.US));
+            } catch (IllegalArgumentException e) {
+                LOGGER.error("Could not parse '{}' into TestEnum. Using 'Playback' mode.", azureTestMode);
+                return TestMode.PLAYBACK;
+            }
+        }
+
+        LOGGER.info("Environment variable '{}' has not been set yet. Using 'Playback' mode.", "AZURE_TEST_MODE");
+        return TestMode.PLAYBACK;
+    }
 
     enum ClientTypes {
-        SHARED,
-        ISOLATED,
-        AAD,
+        SHARED, ISOLATED, AAD,
     }
 
     @BeforeAll
     public static void beforeAll() {
-        TestBase.setupClass();
-//        Dotenv.configure().ignoreIfMissing().systemProperties().load();
+        TestProxyTestBase.setupClass();
+        //        Dotenv.configure().ignoreIfMissing().systemProperties().load();
+    }
+
+    @Override
+    public void afterTest() {
+        GlobalOpenTelemetry.resetForTest();
+    }
+
+    @SuppressWarnings({ "deprecation", "resource" })
+    public static Tracer configureLoggingExporter(String testName) {
+        SdkTracerProvider tracerProvider = SdkTracerProvider.builder()
+            .addSpanProcessor(SimpleSpanProcessor.create(new LoggingSpanExporter()))
+            .build();
+
+        return OpenTelemetrySdk.builder()
+            .setTracerProvider(tracerProvider)
+            .setPropagators(ContextPropagators.create(W3CTraceContextPropagator.getInstance()))
+            .buildAndRegisterGlobal()
+            .getTracer(testName);
     }
 
     /**
      * Determine the Attestation instance type based on the client URI provided.
+     *
      * @param clientUri - URI for the attestation client.
      * @return the ClientTypes corresponding to the specified client URI.
      */
-    ClientTypes classifyClient(String clientUri) {
+    static ClientTypes classifyClient(String clientUri) {
         assertNotNull(clientUri);
         String regionShortName = getLocationShortName();
         String sharedUri = "https://shared" + regionShortName + "." + regionShortName + ".attest.azure.net";
@@ -80,33 +154,8 @@ public class AttestationClientTestBase extends TestBase {
     }
 
     /**
-     * Convert a base64 encoded string into a byte stream.
-     * @param base64 - Base64 encoded string to be decoded
-     * @return stream of bytes encoded in the base64 encoded string.
-     */
-    InputStream base64ToStream(String base64) {
-        byte[] decoded = Base64.getDecoder().decode(base64);
-        return new ByteArrayInputStream(decoded);
-    }
-
-    /**
-     * Retrieve an authenticated attestationAdministrationClientBuilder for the specified HTTP
-     * client and client URI.
-     * @param httpClient - HTTP client ot be used for the attestation client.
-     * @param clientUri - Client base URI to access the service.
-     * @return Returns an attestation client builder corresponding to the httpClient and clientUri.
-     */
-    AttestationClientBuilder getAdministrationBuilder(HttpClient httpClient, String clientUri) {
-        AttestationClientBuilder builder = getAttestationBuilder(httpClient, clientUri);
-        if (!interceptorManager.isPlaybackMode()) {
-            builder.credential(new EnvironmentCredentialBuilder().httpClient(httpClient).build());
-        }
-        return builder;
-    }
-
-
-    /**
      * Retrieve an authenticated attestationClientBuilder for the specified HTTP client and client URI
+     *
      * @param httpClient - HTTP client ot be used for the attestation client.
      * @param clientUri - Client base URI to access the service.
      * @return Returns an attestation client builder corresponding to the httpClient and clientUri.
@@ -114,256 +163,248 @@ public class AttestationClientTestBase extends TestBase {
     AttestationClientBuilder getAuthenticatedAttestationBuilder(HttpClient httpClient, String clientUri) {
         AttestationClientBuilder builder = getAttestationBuilder(httpClient, clientUri);
         if (!interceptorManager.isPlaybackMode()) {
-            builder.credential(new EnvironmentCredentialBuilder().httpClient(httpClient).build());
+            builder.credential(TestUtil.getIdentityTestCredential(interceptorManager, httpClient));
+        } else {
+            builder.credential(new MockTokenCredential());
         }
+
         return builder;
     }
 
     /**
      * Retrieve an attestationClientBuilder for the specified HTTP client and client URI
+     *
      * @param httpClient - HTTP client ot be used for the attestation client.
      * @param clientUri - Client base URI to access the service.
      * @return Returns an attestation client builder corresponding to the httpClient and clientUri.
      */
     AttestationClientBuilder getAttestationBuilder(HttpClient httpClient, String clientUri) {
-        AttestationClientBuilder builder = new AttestationClientBuilder()
-            .endpoint(clientUri)
-            .httpClient(httpClient == null ? interceptorManager.getPlaybackClient() : httpClient)
-//            .httpLogOptions(new HttpLogOptions().setLogLevel(HttpLogDetailLevel.BODY_AND_HEADERS))
-            .addPolicy(interceptorManager.getRecordPolicy());
+        AttestationClientBuilder builder = new AttestationClientBuilder().endpoint(clientUri);
 
-        // In playback mode, we want to disable expiration times, since the tokens in the recordings
-        // will almost certainly expire.
         if (interceptorManager.isPlaybackMode()) {
-            builder.tokenValidationOptions(new AttestationTokenValidationOptions()
-                .setValidateExpiresOn(false)
-                .setValidateNotBefore(false)
-            );
+            // In playback mode, we want to disable expiration times, since the tokens in the recordings
+            // will almost certainly expire.
+            builder.httpClient(interceptorManager.getPlaybackClient())
+                .tokenValidationOptions(
+                    new AttestationTokenValidationOptions().setValidateExpiresOn(false).setValidateNotBefore(false));
+        } else if (interceptorManager.isRecordMode()) {
+            builder.addPolicy(interceptorManager.getRecordPolicy());
         }
+
+        if (!interceptorManager.isPlaybackMode()) {
+            builder.httpClient(httpClient);
+        }
+
         return builder;
     }
 
     /**
-     * Verifies an MAA attestation token and returns the set of attestation claims embedded in the token.
-     * @param httpClient - the HTTP client which was used to retrieve the token (used to retrieve the signing certificates for the attestation instance)
-     * @param clientUri - the base URI used to access the attestation instance (used to retrieve the signing certificates for the attestation instance)
-     * @param attestationToken - Json Web Token issued by the Attestation Service.
-     * @return a JWTClaimSet containing the claims associated with the attestation token.
+     * Retrieve an attestationClientBuilder for the specified HTTP client and client URI
+     *
+     * @param httpClient - HTTP client ot be used for the attestation client.
+     * @param clientUri - Client base URI to access the service.
+     * @return Returns an attestation client builder corresponding to the httpClient and clientUri.
      */
-    Mono<JWTClaimsSet> verifyAttestationToken(HttpClient httpClient, String clientUri, String attestationToken) {
-        final SignedJWT token;
-        try {
-            token = SignedJWT.parse(attestationToken);
-        } catch (ParseException e) {
-            return Mono.error(logger.logThrowableAsError(e));
+    AttestationAdministrationClientBuilder getAttestationAdministrationBuilder(HttpClient httpClient,
+        String clientUri) {
+        AttestationAdministrationClientBuilder builder
+            = new AttestationAdministrationClientBuilder().endpoint(clientUri);
+
+        if (interceptorManager.isPlaybackMode()) {
+            // In playback mode, we want to disable expiration times, since the tokens in the recordings
+            // will almost certainly expire.
+            builder.httpClient(interceptorManager.getPlaybackClient());
+        } else if (interceptorManager.isRecordMode()) {
+            builder.addPolicy(interceptorManager.getRecordPolicy());
         }
 
-        SignedJWT finalToken = token;
-        return getSigningCertificateByKeyId(token.getHeader().getKeyID(), httpClient, clientUri)
-            .handle((signer, sink) -> {
-                final PublicKey key = signer.getCertificates().get(0).getPublicKey();
-                final RSAPublicKey rsaKey = (RSAPublicKey) key;
+        if (!interceptorManager.isPlaybackMode()) {
+            // Add a 10-second slack time to account for clock drift between the client and server.
+            builder
+                .tokenValidationOptions(
+                    new AttestationTokenValidationOptions().setValidationSlack(Duration.ofSeconds(10)))
+                .credential(TestUtil.getIdentityTestCredential(interceptorManager, httpClient));
+        } else {
+            builder
+                .tokenValidationOptions(
+                    new AttestationTokenValidationOptions().setValidateExpiresOn(false).setValidateNotBefore(false))
+                .credential(new MockTokenCredential());
+        }
 
-                final RSASSAVerifier verifier = new RSASSAVerifier(rsaKey);
-                try {
-                    assertTrue(finalToken.verify(verifier));
-                } catch (JOSEException e) {
-                    sink.error(logger.logThrowableAsError(e));
-                    return;
-                }
-
-                final JWTClaimsSet claims;
-                try {
-                    claims = finalToken.getJWTClaimsSet();
-                } catch (ParseException e) {
-                    sink.error(logger.logThrowableAsError(e));
-                    return;
-                }
-
-                assertNotNull(claims);
-                sink.next(claims);
-            });
+        return builder;
     }
 
     /**
-     * Create a JWS Signer from the specified PKCS8 encoded signing key.
-     * @param signingKeyBase64 Base64 encoded PKCS8 encoded RSA Private key.
-     * @return JWSSigner created over the specified signing key.
+     * Retrieve the signing certificate used for the isolated attestation instance.
+     *
+     * @return Returns a base64 encoded X.509 certificate used to sign policy documents.
      */
-    JWSSigner getJwsSigner(String signingKeyBase64) {
-        byte[] signingKey = Base64.getDecoder().decode(signingKeyBase64);
+    static String getIsolatedSigningCertificateBase64() {
+        return TEST_MODE == TestMode.PLAYBACK
+            ? readResource("ISOLATED_SIGNING_CERTIFICATE") // Use a pre-canned certificate captured at provisioning time.
+            : Configuration.getGlobalConfiguration().get("ISOLATED_SIGNING_CERTIFICATE");
+    }
+
+    protected static X509Certificate getIsolatedSigningCertificate() {
+        String base64Certificate = getIsolatedSigningCertificateBase64();
+        return X509CertUtils.parse(Base64.getDecoder().decode(base64Certificate));
+    }
+
+    /**
+     * Retrieve the signing key used for the isolated attestation instance.
+     *
+     * @return Returns a base64 encoded RSA Key used to sign policy documents.
+     */
+    static String getIsolatedSigningKeyBase64() {
+        return TEST_MODE == TestMode.PLAYBACK
+            ? readResource("ISOLATED_SIGNING_KEY") // Use a pre-canned certificate captured at provisioning time.
+            : Configuration.getGlobalConfiguration().get("ISOLATED_SIGNING_KEY");
+    }
+
+    static PrivateKey privateKeyFromBase64(String base64) {
+        byte[] signingKey = Base64.getDecoder().decode(base64);
         PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(signingKey);
         KeyFactory keyFactory;
         try {
             keyFactory = KeyFactory.getInstance("RSA");
         } catch (NoSuchAlgorithmException e) {
-            throw logger.logThrowableAsError(new RuntimeException(e));
+            throw LOGGER.logThrowableAsError(new RuntimeException(e));
         }
 
         PrivateKey privateKey;
         try {
             privateKey = keyFactory.generatePrivate(keySpec);
         } catch (InvalidKeySpecException e) {
-            throw logger.logExceptionAsError(new RuntimeException(e));
+            throw LOGGER.logExceptionAsError(new RuntimeException(e));
         }
-
-        return new RSASSASigner(privateKey);
+        return privateKey;
     }
 
-    /**
-     * Find the signing certificate associated with the specified SignedJWT token.
-     *
-     * @param client - Http Client used to retrieve signing certificates.
-     * @param clientUri - Base URI for the attestation client.
-     * @return X509Certificate which will have been used to sign the token.
-     */
-    Mono<AttestationSigner> getSigningCertificateByKeyId(String keyId, HttpClient client, String clientUri) {
-        AttestationClientBuilder builder = getAttestationBuilder(client, clientUri);
-        return builder.buildAsyncClient().listAttestationSigners()
-            .handle((signers, sink) -> {
-                boolean foundKey = false;
-
-                for (AttestationSigner signer : signers) {
-                    if (keyId.equals(signer.getKeyId())) {
-                        foundKey = true;
-                        sink.next(signer);
-                    }
-                }
-                if (!foundKey) {
-                    sink.error(logger.logThrowableAsError(new RuntimeException(String.format(
-                        "Key %s not found in JSON Web Key Set", keyId))));
-                }
-            });
+    protected static PrivateKey getIsolatedSigningKey() {
+        return privateKeyFromBase64(getIsolatedSigningKeyBase64());
     }
 
-    /**
-     * Retrieve the signing certificate used for the isolated attestation instance.
-     * @return Returns a base64 encoded X.509 certificate used to sign policy documents.
-     */
-    String getIsolatedSigningCertificate() {
-        String signingCertificate = Configuration.getGlobalConfiguration().get("isolatedSigningCertificate");
-        if (signingCertificate == null) {
-            // Use a pre-canned signing certificate captured at provisioning time.
-            signingCertificate = "MIIC+DCCAeCgAwIBAgIITwYg6gewUZswDQYJKoZIhvcNAQELBQAwMzExMC8GA1UEAxMoQXR0ZXN0YXRpb25Jc"
-                + "29sYXRlZE1hbmFnZW1lbnRDZXJ0aWZpY2F0ZTAeFw0yMTAxMTkyMDEyNTZaFw0yMjAxMTkyMDEyNTZaMDMxMTAvBgNVBAMTK"
-                + "EF0dGVzdGF0aW9uSXNvbGF0ZWRNYW5hZ2VtZW50Q2VydGlmaWNhdGUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBA"
-                + "QDZlz+tRMz5knbLWYY+CJmgzJ4WIoKAkVs6fwm2JZt3ig8NKWDR9XC0Byixj4cCNOanvqSy2eLLhm30jNdc0o3ObLJVro+4W"
-                + "sI2p19DuV5PrpyCiZHDPb5DmxtMnsXpYV1ePIxveLgNcTe4lu/pRGxaCcDxSWLG1DL4BsMXzLE2GQaCVLzPHI0NJVvd/DDXz"
-                + "bHK7tX45F8kRaXhnSd3fOaS4spw57r9oZfL1fzM03DVptnEmBrpsxP8Kw7aLv5ZYLhX/rK9H7MrM4NA6g/g3dw4w/rf8025h"
-                + "JaAUJ+T68oARiXXBqDWCIkPXhkmukcmmP6Sl8mnNAqRG55iRY4AqzLRAgMBAAGjEDAOMAwGA1UdEwQFMAMBAf8wDQYJKoZIh"
-                + "vcNAQELBQADggEBAJzbrs1pGiT6wwApfqT8jAM5OD9ylh8U9MCJOnMbigFAdp96N+TX568NUGPIssFB2oNNqI/Ai2hovPhdC"
-                + "gDuPY2ngj2t9qyBhpqnQ0JWJ/Hpl4fZfbma9O9V18z9nLDmbOvbDNm11n1txZlwd+/h8Fh4CpXePhTWK2LIMYZ6WNBRRsanl"
-                + "kF83yGFWMCShNqUiMGd9sWkRaaeJY9KtXxecQB3a/+SHKV2OESfA7inT3MXpwzCWAogrOk4GxzyWNPpsU7gHgErsiw+lKF8B"
-                + "KrCArm0UjKvqhKeDni2zhWTYSQS2NLWnQwNvkxVdgdCl1lqtPeJ/qYPR8ZA+ksm36c7hBQ=";
+    private static String readResource(String resourceName) {
+        try (InputStream resource = AttestationClientTestBase.class.getClassLoader().getResourceAsStream(resourceName);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(resource, StandardCharsets.UTF_8))) {
+            // Only read the first line as that will contain the entire Base64 encoded content. It's possible that an
+            // IDE or commandline process could have added a newline character to the end of the file.
+            return reader.readLine();
+        } catch (IOException e) {
+            throw LOGGER.logThrowableAsError(new RuntimeException(e));
         }
-        return signingCertificate;
-    }
-
-    /**
-     * Retrieve the signing key used for the isolated attestation instance.
-     * @return Returns a base64 encoded RSA Key used to sign policy documents.
-     */
-    String getIsolatedSigningKey() {
-        String signingKey = Configuration.getGlobalConfiguration().get("isolatedSigningKey");
-        if (signingKey == null) {
-            // Use a pre-canned signing key captured at provisioning time.
-            signingKey = "MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDZlz+tRMz5knbLWYY+CJmgzJ4WIoKAkVs6fwm2"
-                + "JZt3ig8NKWDR9XC0Byixj4cCNOanvqSy2eLLhm30jNdc0o3ObLJVro+4WsI2p19DuV5PrpyCiZHDPb5DmxtMnsXpYV1ePIx"
-                + "veLgNcTe4lu/pRGxaCcDxSWLG1DL4BsMXzLE2GQaCVLzPHI0NJVvd/DDXzbHK7tX45F8kRaXhnSd3fOaS4spw57r9oZfL1f"
-                + "zM03DVptnEmBrpsxP8Kw7aLv5ZYLhX/rK9H7MrM4NA6g/g3dw4w/rf8025hJaAUJ+T68oARiXXBqDWCIkPXhkmukcmmP6Sl"
-                + "8mnNAqRG55iRY4AqzLRAgMBAAECggEAU0dTJMLPXLnU47Fo8rch7WxDGR+uKPz5GKNkmSU9onvhlN0AZHt23kBbL9JKDusm"
-                + "WI9bw+QmrFTQIqgBCVLA2X+6pZaBBUMfUAGxMV9yHDctSbzTYBFyj7d+tE2UW+Va8eVkrolakDKD7A9A1VvNyIwxH2hB+O1"
-                + "gcJNN+f7q2FP4zpmJjEsMm9IL9sZ+6aiQSSsFQEih92yZEtHJ6Ohe8mdvSkmi3Ki0TSeqDfh4CksRnd6Bv/6oBAV48WaRa3"
-                + "yQ7tnsBrhXrCRzXRbiCcJP+C/Eqe3gkXvWuzq+cgicX95qh05VPnf5Pa6w5N4wEgwmoorloYfDStYcthtKidUefQKBgQD3h"
-                + "WXciacPcydjAfH+0WyoszqBup/B5OBw/ZNlv531EzongB8V7+3pCs1/gF4+H3qvIRkL7JWt4HVtZEBp4D3tpWQHoYpE6wxA"
-                + "0oeGM/DXbCQttCpR3eHZXYa9hbuQZuFjkclXjDBIk/q+U178+GRiB7zZb7JGNCBwlpCkTh+WywKBgQDhC2GnDCAGjwjDHa5"
-                + "Nf4qLWyISN34KoEF9hgAYIvNYzAwwp8J/xxxQ7j8hf5XJPnld1UprVrhrYL0aGSc0kNWri1pZx2PDge42XK9boRARvuuK5U"
-                + "aV3VNk7xb7vHzjoNDJWzmLlEaVPLFQPHVWHobTMwQWbzKZmopTA+QuV68NUwKBgQCbMmU/9n9tTIKxrZKSd7VtwZM5rE5nQ"
-                + "J8JubUl4xOjir637bmQA7RknoVjIJX21b4S+Om/dEQVlduLD4Tj3dp2m3Ew57TOqaIxMtAO8ZpdOE0m6wRt+HWX2PCW/Lcy"
-                + "P4+q4sofvqK3nzFlDNlOPGCUps1eeI6LPjvo3D8tBl8AKQKBgQCHhv8sRtUSnhk8yCcsbN7Wxe9i4SB67cADBCwSXRoII/pDY"
-                + "wRzR0n6Q0Cpv9hI9eLJa6YBtpwhroSzruo5ce/7+1RSNQ4Ts6/t9St2Fy1CQqQ/ZYx4vG14n7RLrlvYCgUy/klNkeJgBckS9R"
-                + "YE4yV3E4YmrJjggH1FOVa1wgCeGQKBgQCbCKeM4EahWIyTBiZsTQ/l5hwhjPCrxncbyA2EZWNg3Ri6nuMIQzoBrCoX9L8t7e0"
-                + "CKWAN0oM2Cn1VIJhsiE75dzN3vvGBcNZ9y+BwbwxDIAhrztyKKJS0h9YmAUVr+w5WsUPyMUPQ0/1wdTdxvKqQpriddrvyKRSJ"
-                + "M9fb29+cwQ==";
-        }
-        return signingKey;
     }
 
     /**
      * Retrieves a certificate which can be used to sign attestation policies.
+     *
      * @return Returns a base64 encoded X.509 certificate which can be used to sign attestation policies.
      */
-    String getPolicySigningCertificate0() {
-        String certificate = Configuration.getGlobalConfiguration().get("policySigningCertificate0");
-        if (certificate == null) {
-            certificate = "MIIC1jCCAb6gAwIBAgIIAxfcH6Co5DowDQYJKoZIhvcNAQELBQAwIjEgMB4GA1UEAxMXQXR0ZXN0YXRpb25DZXJ"
-                + "0aWZpY2F0ZTAwHhcNMjEwMTE5MjAxMjU2WhcNMjIwMTE5MjAxMjU2WjAiMSAwHgYDVQQDExdBdHRlc3RhdGlvbkNlcnRpZmlj"
-                + "YXRlMDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAOOpb5GvUCuOYiB4ZazIePtSazdXGDyjtFlr4ulo1VY1Ai91X"
-                + "IcWIPELCV1OfQiIoJlj096u3cirP1GvCKgb4FTNHHi7omDaQvYRmuZZ6KXrqNi5Iu/jKjGgjwYt+FYV/9eqYCWdyS0RjMbKw7"
-                + "sZUvBxTDeTqQunwbjPZ1y4JbxXx6xwcZJHfwD6g7aHslsblHh4zM1mhiuoIMpNUeeThLwQTD6oGSmIt+hqRbfvd3Ljr/v7W3m"
-                + "SKvw5X9L85PNHaDIUd4vHSDiytZUoXyhtbC8RKGzxgZCz6gFwM5JF6QhYE/A84HFH7JZ3FKk1UJBoTjcv63BshT7Pt3fYMZqV"
-                + "SzkCAwEAAaMQMA4wDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEAC+YKGp6foV94lYQB/yNQ53Bk+YeR4dgAkR99U"
-                + "t1VvvXKyWnka/X8QRjKoaPULDZH4+9ZXg6lSfhuEGTSPUzO294mlNbF6n6cuuuawe3OeuZUO53b4xYXPRv898FBRxdD+FCW/f"
-                + "A5HLBrGItfk31+aNUFryCd5RrJfJU8Rurm+7uGPtS16Ft0P7xSnL0C7nfHNVuEKFV0ZbzgzXlzkKQT4d3fYpvOxzYoXImxzwz"
-                + "W/jzZjN3aKbOlmY2LyW8J5BKKgA3C4FRWwCTmgqYp2vQhsw1HgCeBjmBN5/imnk2lsgjrvvSdlkXOnNf5atibuguYzdakz99b"
-                + "wwWWsd5HddtcyA==";
+    static String getPolicySigningCertificate0Base64() {
+        return TEST_MODE == TestMode.PLAYBACK
+            ? readResource("POLICY_SIGNING_CERTIFICATE0") // Use a pre-canned certificate captured at provisioning time.
+            : Configuration.getGlobalConfiguration().get("POLICY_SIGNING_CERTIFICATE0");
+    }
+
+    static String getPolicySigningKey0Base64() {
+        return TEST_MODE == TestMode.PLAYBACK
+            ? readResource("POLICY_SIGNING_KEY0") // Use a pre-canned certificate captured at provisioning time.
+            : Configuration.getGlobalConfiguration().get("POLICY_SIGNING_KEY0");
+    }
+
+    protected static X509Certificate getPolicySigningCertificate0() {
+        return X509CertUtils.parse(Base64.getDecoder().decode(getPolicySigningCertificate0Base64()));
+    }
+
+    protected static PrivateKey getPolicySigningKey0() {
+        return privateKeyFromBase64(getPolicySigningKey0Base64());
+    }
+
+    protected static KeyPair createKeyPair(String algorithm) throws NoSuchAlgorithmException {
+
+        KeyPairGenerator keyGen;
+        if ("EC".equals(algorithm)) {
+            keyGen = KeyPairGenerator.getInstance(algorithm, Security.getProvider("SunEC"));
+        } else {
+            keyGen = KeyPairGenerator.getInstance(algorithm);
         }
-        return certificate;
+        if ("RSA".equals(algorithm)) {
+            keyGen.initialize(2048); // Generate a reasonably strong key.
+        }
+        return keyGen.generateKeyPair();
+    }
+
+    @SuppressWarnings("deprecation")
+    protected static X509Certificate createSelfSignedCertificate(String subjectName, KeyPair certificateKey)
+        throws CertificateException, NoSuchAlgorithmException, SignatureException, InvalidKeyException {
+        final X509V3CertificateGenerator generator = new X509V3CertificateGenerator();
+        generator.setIssuerDN(new X500Principal("CN=" + subjectName));
+        generator.setSubjectDN(new X500Principal("CN=" + subjectName));
+        generator.setPublicKey(certificateKey.getPublic());
+        if (certificateKey.getPublic().getAlgorithm().equals("EC")) {
+            generator.setSignatureAlgorithm("SHA256WITHECDSA");
+        } else {
+            generator.setSignatureAlgorithm("SHA256WITHRSA");
+        }
+        generator.setSerialNumber(BigInteger.valueOf(Math.abs(new Random().nextInt())));
+        // Valid from now to 1 day from now.
+        generator.setNotBefore(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
+        generator.setNotAfter(
+            Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().plus(1, ChronoUnit.DAYS)));
+
+        generator.addExtension(Extension.basicConstraints, false, new BasicConstraints(false));
+        return generator.generate(certificateKey.getPrivate());
+
     }
 
     /**
      * Returns the location in which the tests are running.
+     *
      * @return returns the location in which the tests are running.
      */
     private static String getLocationShortName() {
-        String shortName = Configuration.getGlobalConfiguration().get("locationShortName");
-        if (shortName == null) {
-            shortName = "wus";
-        }
-        return shortName;
+        return TEST_MODE == TestMode.PLAYBACK
+            ? "wus"
+            : Configuration.getGlobalConfiguration().get("LOCATION_SHORT_NAME");
     }
 
     /**
      * Returns the url associated with the isolated MAA instance.
+     *
      * @return the url associated with the isolated MAA instance.
      */
     private static String getIsolatedUrl() {
-        String url = Configuration.getGlobalConfiguration().get("ATTESTATION_ISOLATED_URL");
-        if (url == null) {
-            url = "https://attestation_isolated_url";
-        }
-        return url;
+        return TEST_MODE == TestMode.PLAYBACK
+            ? "https://attestation_isolated_url"
+            : Configuration.getGlobalConfiguration().get("ATTESTATION_ISOLATED_URL");
     }
 
     /**
      * Returns the url associated with the AAD MAA instance.
+     *
      * @return the url associated with the AAD MAA instance.
      */
     private static String getAadUrl() {
-        String url = Configuration.getGlobalConfiguration().get("ATTESTATION_AAD_URL");
-        if (url == null) {
-            url = "https://attestation_aad_url";
-        }
-        return url;
+        return TEST_MODE == TestMode.PLAYBACK
+            ? "https://attestation_aad_url"
+            : Configuration.getGlobalConfiguration().get("ATTESTATION_AAD_URL");
     }
 
     /**
      * Returns the set of clients to be used to test the attestation service.
+     *
      * @return a stream of Argument objects associated with each of the regions on which to run the attestation test.
      */
     static Stream<Arguments> getAttestationClients() {
-        // when this issues is closed, the newer version of junit will have better support for
-        // cartesian product of arguments - https://github.com/junit-team/junit5/issues/1427
-
         final String regionShortName = getLocationShortName();
         return getHttpClients().flatMap(httpClient -> Stream.of(
             Arguments.of(httpClient, "https://shared" + regionShortName + "." + regionShortName + ".attest.azure.net"),
-            Arguments.of(httpClient, getIsolatedUrl()),
-            Arguments.of(httpClient, getAadUrl())));
+            Arguments.of(httpClient, getIsolatedUrl()), Arguments.of(httpClient, getAadUrl())));
     }
 
     /**
      * Returns the set of clients and attestation types used for attestation policy APIs.
+     *
      * @return a stream of Argument objects associated with each of the regions on which to run the attestation test.
      */
     static Stream<Arguments> getPolicyClients() {
@@ -372,5 +413,4 @@ public class AttestationClientTestBase extends TestBase {
             Arguments.of(clientParams.get()[0], clientParams.get()[1], AttestationType.TPM),
             Arguments.of(clientParams.get()[0], clientParams.get()[1], AttestationType.SGX_ENCLAVE)));
     }
-
 }

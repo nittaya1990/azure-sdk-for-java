@@ -6,31 +6,31 @@ package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** API Schema create or update contract Properties. */
 @Fluent
 public final class SchemaContractProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SchemaContractProperties.class);
-
     /*
-     * Must be a valid a media type used in a Content-Type header as defined in
-     * the RFC 2616. Media type of the schema document (e.g. application/json,
-     * application/xml). </br> - `Swagger` Schema use
-     * `application/vnd.ms-azure-apim.swagger.definitions+json` </br> - `WSDL`
-     * Schema use `application/vnd.ms-azure-apim.xsd+xml` </br> - `OpenApi`
-     * Schema use `application/vnd.oai.openapi.components+json` </br> - `WADL
-     * Schema` use `application/vnd.ms-azure-apim.wadl.grammars+xml`.
+     * Must be a valid a media type used in a Content-Type header as defined in the RFC 2616. Media type of the schema
+     * document (e.g. application/json, application/xml). </br> - `Swagger` Schema use
+     * `application/vnd.ms-azure-apim.swagger.definitions+json` </br> - `WSDL` Schema use
+     * `application/vnd.ms-azure-apim.xsd+xml` </br> - `OpenApi` Schema use
+     * `application/vnd.oai.openapi.components+json` </br> - `WADL Schema` use
+     * `application/vnd.ms-azure-apim.wadl.grammars+xml`.
      */
     @JsonProperty(value = "contentType", required = true)
     private String contentType;
 
     /*
-     * Create or update Properties of the Schema Document.
+     * Create or update Properties of the API Schema Document.
      */
-    @JsonProperty(value = "document")
-    private SchemaDocumentProperties innerDocument;
+    @JsonProperty(value = "document", required = true)
+    private SchemaDocumentProperties innerDocument = new SchemaDocumentProperties();
+
+    /** Creates an instance of SchemaContractProperties class. */
+    public SchemaContractProperties() {
+    }
 
     /**
      * Get the contentType property: Must be a valid a media type used in a Content-Type header as defined in the RFC
@@ -63,7 +63,7 @@ public final class SchemaContractProperties {
     }
 
     /**
-     * Get the innerDocument property: Create or update Properties of the Schema Document.
+     * Get the innerDocument property: Create or update Properties of the API Schema Document.
      *
      * @return the innerDocument value.
      */
@@ -97,7 +97,7 @@ public final class SchemaContractProperties {
     }
 
     /**
-     * Get the definitions property: Types definitions. Used for Swagger/OpenAPI schemas only, null otherwise.
+     * Get the definitions property: Types definitions. Used for Swagger/OpenAPI v1 schemas only, null otherwise.
      *
      * @return the definitions value.
      */
@@ -106,7 +106,7 @@ public final class SchemaContractProperties {
     }
 
     /**
-     * Set the definitions property: Types definitions. Used for Swagger/OpenAPI schemas only, null otherwise.
+     * Set the definitions property: Types definitions. Used for Swagger/OpenAPI v1 schemas only, null otherwise.
      *
      * @param definitions the definitions value to set.
      * @return the SchemaContractProperties object itself.
@@ -120,19 +120,45 @@ public final class SchemaContractProperties {
     }
 
     /**
+     * Get the components property: Types definitions. Used for Swagger/OpenAPI v2/v3 schemas only, null otherwise.
+     *
+     * @return the components value.
+     */
+    public Object components() {
+        return this.innerDocument() == null ? null : this.innerDocument().components();
+    }
+
+    /**
+     * Set the components property: Types definitions. Used for Swagger/OpenAPI v2/v3 schemas only, null otherwise.
+     *
+     * @param components the components value to set.
+     * @return the SchemaContractProperties object itself.
+     */
+    public SchemaContractProperties withComponents(Object components) {
+        if (this.innerDocument() == null) {
+            this.innerDocument = new SchemaDocumentProperties();
+        }
+        this.innerDocument().withComponents(components);
+        return this;
+    }
+
+    /**
      * Validates the instance.
      *
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (contentType() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property contentType in model SchemaContractProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property contentType in model SchemaContractProperties"));
         }
-        if (innerDocument() != null) {
+        if (innerDocument() == null) {
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property innerDocument in model SchemaContractProperties"));
+        } else {
             innerDocument().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(SchemaContractProperties.class);
 }

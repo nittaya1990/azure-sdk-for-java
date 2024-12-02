@@ -3,7 +3,10 @@
 
 package com.azure.core.http;
 
+import com.azure.core.implementation.ImplUtils;
 import com.azure.core.util.Configuration;
+import com.azure.core.util.ConfigurationProperty;
+import com.azure.core.util.ConfigurationPropertyBuilder;
 import com.azure.core.util.CoreUtils;
 import com.azure.core.util.logging.ClientLogger;
 
@@ -16,15 +19,25 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 /**
- * This represents proxy configuration to be used in http clients..
+ * <p>Represents the proxy configuration to be used in HTTP clients.</p>
+ *
+ * <p>This class encapsulates the proxy settings, including the proxy type, address, and optional credentials. It
+ * provides methods to set and get these properties.</p>
+ *
+ * <p>This class is useful when you want to configure a proxy for an HTTP client. For example, you can use it to
+ * create a proxy with specific credentials, or to specify hosts that should bypass the proxy.</p>
+ *
+ * <p>Note: This class provides a {@link Type} enum to represent the proxy type, which can be HTTP, SOCKS4, or SOCKS5.</p>
+ *
+ * @see Type
+ * @see InetSocketAddress
  */
 public class ProxyOptions {
     private static final ClientLogger LOGGER = new ClientLogger(ProxyOptions.class);
-
-    private static final String INVALID_CONFIGURATION_MESSAGE = "'configuration' cannot be 'Configuration.NONE'.";
-    private static final String INVALID_AZURE_PROXY_URL = "Configuration {} is an invalid URL and is being ignored.";
+    private static final String INVALID_AZURE_PROXY_URL = "URL is invalid and is being ignored.";
 
     /*
      * This indicates whether system proxy configurations (HTTPS_PROXY, HTTP_PROXY) are allowed to be used.
@@ -46,6 +59,42 @@ public class ProxyOptions {
 
     private static final String HTTP = "http";
     private static final int DEFAULT_HTTP_PORT = 80;
+
+    /*
+     * The 'http.nonProxyHosts' system property is expected to be delimited by '|', but don't split escaped '|'s.
+     */
+    private static final Pattern HTTP_NON_PROXY_HOSTS_SPLIT = Pattern.compile("(?<!\\\\)\\|");
+
+    /*
+     * The 'NO_PROXY' environment variable is expected to be delimited by ',', but don't split escaped ','s.
+     */
+    private static final Pattern NO_PROXY_SPLIT = Pattern.compile("(?<!\\\\),");
+
+    private static final Pattern UNESCAPED_PERIOD = Pattern.compile("(?<!\\\\)\\.");
+    private static final Pattern ANY = Pattern.compile("\\*");
+
+    private static final ConfigurationProperty<String> NON_PROXY_PROPERTY
+        = ConfigurationPropertyBuilder.ofString(ConfigurationProperties.HTTP_PROXY_NON_PROXY_HOSTS)
+            .shared(true)
+            .logValue(true)
+            .build();
+    private static final ConfigurationProperty<String> HOST_PROPERTY
+        = ConfigurationPropertyBuilder.ofString(ConfigurationProperties.HTTP_PROXY_HOST)
+            .shared(true)
+            .logValue(true)
+            .build();
+    private static final ConfigurationProperty<Integer> PORT_PROPERTY
+        = ConfigurationPropertyBuilder.ofInteger(ConfigurationProperties.HTTP_PROXY_PORT)
+            .shared(true)
+            .defaultValue(DEFAULT_HTTPS_PORT)
+            .build();
+    private static final ConfigurationProperty<String> USER_PROPERTY
+        = ConfigurationPropertyBuilder.ofString(ConfigurationProperties.HTTP_PROXY_USER)
+            .shared(true)
+            .logValue(true)
+            .build();
+    private static final ConfigurationProperty<String> PASSWORD_PROPERTY
+        = ConfigurationPropertyBuilder.ofString(ConfigurationProperties.HTTP_PROXY_PASSWORD).shared(true).build();
 
     private final InetSocketAddress address;
     private final Type type;
@@ -92,6 +141,8 @@ public class ProxyOptions {
     }
 
     /**
+     * Gets the address of the proxy.
+     *
      * @return the address of the proxy.
      */
     public InetSocketAddress getAddress() {
@@ -99,6 +150,8 @@ public class ProxyOptions {
     }
 
     /**
+     * Gets the type of the proxy.
+     *
      * @return the type of the proxy.
      */
     public Type getType() {
@@ -106,13 +159,17 @@ public class ProxyOptions {
     }
 
     /**
-     * @return the proxy user name.
+     * Gets the proxy username.
+     *
+     * @return the proxy username.
      */
     public String getUsername() {
         return this.username;
     }
 
     /**
+     * Gets the proxy password.
+     *
      * @return the proxy password.
      */
     public String getPassword() {
@@ -120,6 +177,8 @@ public class ProxyOptions {
     }
 
     /**
+     * Gets the host that bypass the proxy.
+     *
      * @return the hosts that bypass the proxy.
      */
     public String getNonProxyHosts() {
@@ -127,7 +186,7 @@ public class ProxyOptions {
     }
 
     /**
-     * Attempts to load a proxy from the environment.
+     * Attempts to load a proxy from the configuration.
      * <p>
      * If a proxy is found and loaded the proxy address is DNS resolved.
      * <p>
@@ -146,11 +205,9 @@ public class ProxyOptions {
      * {@code null} will be returned if no proxy was found in the environment.
      *
      * @param configuration The {@link Configuration} that is used to load proxy configurations from the environment. If
-     * {@code null} is passed then {@link Configuration#getGlobalConfiguration()} will be used. If {@link
-     * Configuration#NONE} is passed {@link IllegalArgumentException} will be thrown.
+     * {@code null} is passed then {@link Configuration#getGlobalConfiguration()} will be used.
      * @return A {@link ProxyOptions} reflecting a proxy loaded from the environment, if no proxy is found {@code null}
      * will be returned.
-     * @throws IllegalArgumentException If {@code configuration} is {@link Configuration#NONE}.
      */
     public static ProxyOptions fromConfiguration(Configuration configuration) {
         return fromConfiguration(configuration, false);
@@ -182,27 +239,25 @@ public class ProxyOptions {
      * @param createUnresolved Flag determining whether the returned {@link ProxyOptions} is unresolved.
      * @return A {@link ProxyOptions} reflecting a proxy loaded from the environment, if no proxy is found {@code null}
      * will be returned.
-     * @throws IllegalArgumentException If {@code configuration} is {@link Configuration#NONE}.
      */
     public static ProxyOptions fromConfiguration(Configuration configuration, boolean createUnresolved) {
-        if (configuration == Configuration.NONE) {
-            throw LOGGER.logExceptionAsWarning(new IllegalArgumentException(INVALID_CONFIGURATION_MESSAGE));
-        }
-
-        Configuration proxyConfiguration = (configuration == null)
-            ? Configuration.getGlobalConfiguration()
-            : configuration;
+        Configuration proxyConfiguration
+            = (configuration == null) ? Configuration.getGlobalConfiguration() : configuration;
 
         return attemptToLoadProxy(proxyConfiguration, createUnresolved);
     }
 
     private static ProxyOptions attemptToLoadProxy(Configuration configuration, boolean createUnresolved) {
-        ProxyOptions proxyOptions;
+        if (configuration == Configuration.NONE) {
+            return null;
+        }
 
+        ProxyOptions proxyOptions = null;
+        // System proxy configuration is only possible through system properties.
         // Only use system proxies when the prerequisite property is 'true'.
         if (Boolean.parseBoolean(configuration.get(JAVA_SYSTEM_PROXY_PREREQUISITE))) {
-            proxyOptions = attemptToLoadSystemProxy(configuration, createUnresolved,
-                Configuration.PROPERTY_HTTPS_PROXY);
+            proxyOptions
+                = attemptToLoadSystemProxy(configuration, createUnresolved, Configuration.PROPERTY_HTTPS_PROXY);
             if (proxyOptions != null) {
                 LOGGER.verbose("Using proxy created from HTTPS_PROXY environment variable.");
                 return proxyOptions;
@@ -213,6 +268,11 @@ public class ProxyOptions {
                 LOGGER.verbose("Using proxy created from HTTP_PROXY environment variable.");
                 return proxyOptions;
             }
+        }
+
+        proxyOptions = attemptToLoadAzureSdkProxy(configuration, createUnresolved);
+        if (proxyOptions != null) {
+            return proxyOptions;
         }
 
         proxyOptions = attemptToLoadJavaProxy(configuration, createUnresolved, HTTPS);
@@ -240,7 +300,9 @@ public class ProxyOptions {
         }
 
         try {
-            URL proxyUrl = new URL(proxyConfiguration);
+            // TODO (alzimmer): UrlBuilder needs to add support for userinfo
+            // https://www.rfc-editor.org/rfc/rfc3986#section-3.2.1
+            URL proxyUrl = ImplUtils.createUrl(proxyConfiguration);
             int port = (proxyUrl.getPort() == -1) ? proxyUrl.getDefaultPort() : proxyUrl.getPort();
 
             InetSocketAddress socketAddress = (createUnresolved)
@@ -252,6 +314,8 @@ public class ProxyOptions {
             String nonProxyHostsString = configuration.get(Configuration.PROPERTY_NO_PROXY);
             if (!CoreUtils.isNullOrEmpty(nonProxyHostsString)) {
                 proxyOptions.nonProxyHosts = sanitizeNoProxy(nonProxyHostsString);
+
+                LOGGER.atVerbose().addKeyValue("regex", proxyOptions.nonProxyHosts).log("Using non-proxy hosts");
             }
 
             String userInfo = proxyUrl.getUserInfo();
@@ -261,8 +325,7 @@ public class ProxyOptions {
                     try {
                         proxyOptions.setCredentials(
                             URLDecoder.decode(usernamePassword[0], StandardCharsets.UTF_8.toString()),
-                            URLDecoder.decode(usernamePassword[1], StandardCharsets.UTF_8.toString())
-                        );
+                            URLDecoder.decode(usernamePassword[1], StandardCharsets.UTF_8.toString()));
                     } catch (UnsupportedEncodingException e) {
                         return null;
                     }
@@ -271,7 +334,7 @@ public class ProxyOptions {
 
             return proxyOptions;
         } catch (MalformedURLException ex) {
-            LOGGER.warning(INVALID_AZURE_PROXY_URL, proxyProperty);
+            LOGGER.atWarning().addKeyValue("url", proxyProperty).log(INVALID_AZURE_PROXY_URL);
             return null;
         }
     }
@@ -279,59 +342,8 @@ public class ProxyOptions {
     /*
      * Helper function that sanitizes 'NO_PROXY' into a Pattern safe string.
      */
-    private static String sanitizeNoProxy(String noProxyString) {
-        /*
-         * The 'NO_PROXY' environment variable is expected to be delimited by ','.
-         */
-        String[] nonProxyHosts = noProxyString.split(",");
-
-        // Do an in-place replacement with the sanitized value.
-        for (int i = 0; i < nonProxyHosts.length; i++) {
-            /*
-             * 'NO_PROXY' doesn't have a strongly standardized format, for now we are going to support values beginning
-             * and ending with '*' or '.' to exclude an entire domain and will quote the value between the prefix and
-             * suffix. In the future this may need to be updated to support more complex scenarios required by
-             * 'NO_PROXY' users such as wild cards within the domain exclusion.
-             */
-            String prefixWildcard = "";
-            String suffixWildcard = "";
-            String body = nonProxyHosts[i];
-
-            /*
-             * First check if the non-proxy host begins with a qualified quantifier and extract it from being quoted,
-             * then check if it is a non-qualified quantifier and qualifier and extract it from being quoted.
-             */
-            if (body.startsWith(".*")) {
-                prefixWildcard = ".*";
-                body = body.substring(2);
-            } else if (body.startsWith("*") || body.startsWith(".")) {
-                prefixWildcard = ".*";
-                body = body.substring(1);
-            }
-
-            /*
-             * First check if the non-proxy host ends with a qualified quantifier and extract it from being quoted,
-             * then check if it is a non-qualified quantifier and qualifier and extract it from being quoted.
-             */
-            if (body.endsWith(".*")) {
-                suffixWildcard = ".*";
-                body = body.substring(0, body.length() - 2);
-            } else if (body.endsWith("*") || body.endsWith(".")) {
-                suffixWildcard = ".*";
-                body = body.substring(0, body.length() - 1);
-            }
-
-            /*
-             * Replace the non-proxy host with the sanitized value.
-             *
-             * The body of the non-proxy host is quoted to handle scenarios such a '127.0.0.1' or '*.azure.com' where
-             * without quoting the '.' in the string would be treated as the match any character instead of the literal
-             * '.' character.
-             */
-            nonProxyHosts[i] = prefixWildcard + Pattern.quote(body) + suffixWildcard;
-        }
-
-        return String.join("|", nonProxyHosts);
+    static String sanitizeNoProxy(String noProxyString) {
+        return sanitizeNonProxyHosts(NO_PROXY_SPLIT.split(noProxyString));
     }
 
     private static ProxyOptions attemptToLoadJavaProxy(Configuration configuration, boolean createUnresolved,
@@ -350,19 +362,41 @@ public class ProxyOptions {
             port = HTTPS.equals(type) ? DEFAULT_HTTPS_PORT : DEFAULT_HTTP_PORT;
         }
 
-        InetSocketAddress socketAddress = (createUnresolved)
-            ? InetSocketAddress.createUnresolved(host, port)
-            : new InetSocketAddress(host, port);
+        String nonProxyHostsString = configuration.get(JAVA_NON_PROXY_HOSTS);
+        String username = configuration.get(type + "." + JAVA_PROXY_USER);
+        String password = configuration.get(type + "." + JAVA_PROXY_PASSWORD);
+
+        return createOptions(host, port, nonProxyHostsString, username, password, createUnresolved);
+    }
+
+    private static ProxyOptions attemptToLoadAzureSdkProxy(Configuration configuration, boolean createUnresolved) {
+        String host = configuration.get(HOST_PROPERTY);
+
+        // No proxy configuration setup.
+        if (CoreUtils.isNullOrEmpty(host)) {
+            return null;
+        }
+
+        int port = configuration.get(PORT_PROPERTY);
+        String nonProxyHostsString = configuration.get(NON_PROXY_PROPERTY);
+        String username = configuration.get(USER_PROPERTY);
+        String password = configuration.get(PASSWORD_PROPERTY);
+
+        return createOptions(host, port, nonProxyHostsString, username, password, createUnresolved);
+    }
+
+    private static ProxyOptions createOptions(String host, int port, String nonProxyHostsString, String username,
+        String password, boolean createUnresolved) {
+        InetSocketAddress socketAddress
+            = (createUnresolved) ? InetSocketAddress.createUnresolved(host, port) : new InetSocketAddress(host, port);
 
         ProxyOptions proxyOptions = new ProxyOptions(ProxyOptions.Type.HTTP, socketAddress);
 
-        String nonProxyHostsString = configuration.get(JAVA_NON_PROXY_HOSTS);
         if (!CoreUtils.isNullOrEmpty(nonProxyHostsString)) {
-            proxyOptions.setNonProxyHosts(nonProxyHostsString);
-        }
+            proxyOptions.nonProxyHosts = sanitizeJavaHttpNonProxyHosts(nonProxyHostsString);
 
-        String username = configuration.get(type + "." + JAVA_PROXY_USER);
-        String password = configuration.get(type + "." + JAVA_PROXY_PASSWORD);
+            LOGGER.atVerbose().addKeyValue("regex", proxyOptions.nonProxyHosts).log("Using non-proxy host regex");
+        }
 
         if (username != null && password != null) {
             proxyOptions.setCredentials(username, password);
@@ -374,43 +408,96 @@ public class ProxyOptions {
     /*
      * Helper function that sanitizes 'http.nonProxyHosts' into a Pattern safe string.
      */
-    private static String sanitizeJavaHttpNonProxyHosts(String nonProxyHostsString) {
-        /*
-         * The 'http.nonProxyHosts' system property is expected to be delimited by '|'.
-         */
-        String[] nonProxyHosts = nonProxyHostsString.split("\\|");
+    static String sanitizeJavaHttpNonProxyHosts(String nonProxyHostsString) {
+        return sanitizeNonProxyHosts(HTTP_NON_PROXY_HOSTS_SPLIT.split(nonProxyHostsString));
+    }
 
-        // Do an in-place replacement with the sanitized value.
+    private static String sanitizeNonProxyHosts(String[] nonProxyHosts) {
+        StringBuilder sanitizedBuilder = new StringBuilder();
+
         for (int i = 0; i < nonProxyHosts.length; i++) {
-            /*
-             * 'http.nonProxyHosts' values are allowed to begin and end with '*' but this is an invalid value for a
-             * pattern, so we need to qualify the quantifier with the match all '.' character.
-             */
+            if (i > 0) {
+                sanitizedBuilder.append("|");
+            }
+
             String prefixWildcard = "";
             String suffixWildcard = "";
-            String body = nonProxyHosts[i];
+            String sanitizedNonProxyHost = nonProxyHosts[i];
 
-            if (body.startsWith("*")) {
-                prefixWildcard = ".*";
-                body = body.substring(1);
-            }
-
-            if (body.endsWith("*")) {
-                suffixWildcard = ".*";
-                body = body.substring(0, body.length() - 1);
+            /*
+             * If the non-proxy host begins with either '.', '*', '.*', or any of the previous with a trailing '?'
+             * substring the non-proxy host and set the wildcard prefix.
+             */
+            if (sanitizedNonProxyHost.startsWith(".")) {
+                prefixWildcard = ".*?";
+                sanitizedNonProxyHost = sanitizedNonProxyHost.substring(1);
+            } else if (sanitizedNonProxyHost.startsWith(".?")) {
+                prefixWildcard = ".*?";
+                sanitizedNonProxyHost = sanitizedNonProxyHost.substring(2);
+            } else if (sanitizedNonProxyHost.startsWith("*?")) {
+                prefixWildcard = ".*?";
+                sanitizedNonProxyHost = sanitizedNonProxyHost.substring(2);
+            } else if (sanitizedNonProxyHost.startsWith("*")) {
+                prefixWildcard = ".*?";
+                sanitizedNonProxyHost = sanitizedNonProxyHost.substring(1);
+            } else if (sanitizedNonProxyHost.startsWith(".*?")) {
+                prefixWildcard = ".*?";
+                sanitizedNonProxyHost = sanitizedNonProxyHost.substring(3);
+            } else if (sanitizedNonProxyHost.startsWith(".*")) {
+                prefixWildcard = ".*?";
+                sanitizedNonProxyHost = sanitizedNonProxyHost.substring(2);
             }
 
             /*
-             * Replace the non-proxy host with the sanitized value.
-             *
-             * The body of the non-proxy host is quoted to handle scenarios such a '127.0.0.1' or '*.azure.com' where
-             * without quoting the '.' in the string would be treated as the match any character instead of the literal
-             * '.' character.
+             * Same with the ending of the non-proxy host, if it has a suffix wildcard trim the non-proxy host and
+             * retain the suffix wildcard.
              */
-            nonProxyHosts[i] = prefixWildcard + Pattern.quote(body) + suffixWildcard;
+            if (sanitizedNonProxyHost.endsWith(".")) {
+                suffixWildcard = ".*?";
+                sanitizedNonProxyHost = sanitizedNonProxyHost.substring(0, sanitizedNonProxyHost.length() - 2);
+            } else if (sanitizedNonProxyHost.endsWith(".?")) {
+                suffixWildcard = ".*?";
+                sanitizedNonProxyHost = sanitizedNonProxyHost.substring(0, sanitizedNonProxyHost.length() - 3);
+            } else if (sanitizedNonProxyHost.endsWith("*?")) {
+                suffixWildcard = ".*?";
+                sanitizedNonProxyHost = sanitizedNonProxyHost.substring(0, sanitizedNonProxyHost.length() - 3);
+            } else if (sanitizedNonProxyHost.endsWith("*")) {
+                suffixWildcard = ".*?";
+                sanitizedNonProxyHost = sanitizedNonProxyHost.substring(0, sanitizedNonProxyHost.length() - 2);
+            } else if (sanitizedNonProxyHost.endsWith(".*?")) {
+                suffixWildcard = ".*?";
+                sanitizedNonProxyHost = sanitizedNonProxyHost.substring(0, sanitizedNonProxyHost.length() - 4);
+            } else if (sanitizedNonProxyHost.endsWith(".*")) {
+                suffixWildcard = ".*?";
+                sanitizedNonProxyHost = sanitizedNonProxyHost.substring(0, sanitizedNonProxyHost.length() - 3);
+            }
+
+            try {
+                // Sanitize the non-proxy host before any appending to prevent errant characters being added to the
+                // final response if the non-proxy host isn't a valid Pattern.
+                String attemptToSanitizeAsRegex = sanitizedNonProxyHost;
+                attemptToSanitizeAsRegex = UNESCAPED_PERIOD.matcher(attemptToSanitizeAsRegex).replaceAll("\\\\.");
+                attemptToSanitizeAsRegex = ANY.matcher(attemptToSanitizeAsRegex).replaceAll("\\.*?");
+                sanitizedNonProxyHost = Pattern.compile(attemptToSanitizeAsRegex).pattern();
+            } catch (PatternSyntaxException ex) {
+                /*
+                 * Replace the non-proxy host with the sanitized value.
+                 *
+                 * The body of the non-proxy host is quoted to handle scenarios such a '127.0.0.1' or '*.azure.com'
+                 * where without quoting the '.' in the string would be treated as the match any character instead of
+                 * the literal '.' character.
+                 */
+                sanitizedNonProxyHost = Pattern.quote(sanitizedNonProxyHost);
+            }
+
+            sanitizedBuilder.append("(")
+                .append(prefixWildcard)
+                .append(sanitizedNonProxyHost)
+                .append(suffixWildcard)
+                .append(")");
         }
 
-        return String.join("|", nonProxyHosts);
+        return sanitizedBuilder.toString();
     }
 
     /**
@@ -446,5 +533,45 @@ public class ProxyOptions {
         public Proxy.Type toProxyType() {
             return proxyType;
         }
+    }
+
+    /**
+     * Lists available configuration property names for HTTP {@link ProxyOptions}.
+     */
+    private static class ConfigurationProperties {
+        /**
+         * Represents a list of hosts that should be reached directly, bypassing the proxy.
+         * This is a list of patterns separated by '|'. The patterns may start or end with a '*' for wildcards.
+         * Any host matching one of these patterns will be reached through a direct connection instead of through a proxy.
+         * <p>
+         * Default value is {@code null}
+         */
+        public static final String HTTP_PROXY_NON_PROXY_HOSTS = "http.proxy.non-proxy-hosts";
+
+        /**
+         * The HTTP host name of the proxy server.
+         * <p>
+         * Default value is {@code null}.
+         */
+        public static final String HTTP_PROXY_HOST = "http.proxy.hostname";
+
+        /**
+         * The port number of the proxy server.
+         * <p>
+         * Default value is {@code 443}.
+         */
+        public static final String HTTP_PROXY_PORT = "http.proxy.port";
+
+        /**
+         * The HTTP proxy server user.
+         * Default value is {@code null}.
+         */
+        public static final String HTTP_PROXY_USER = "http.proxy.username";
+
+        /**
+         * The HTTP proxy server password.
+         * Default value is {@code null}.
+         */
+        public static final String HTTP_PROXY_PASSWORD = "http.proxy.password";
     }
 }

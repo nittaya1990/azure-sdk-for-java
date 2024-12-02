@@ -20,16 +20,16 @@ public final class TagsCreateOrUpdateResponse extends ResponseBase<TagsCreateOrU
      * @param value the deserialized value of the HTTP response.
      * @param headers the deserialized headers of the HTTP response.
      */
-    public TagsCreateOrUpdateResponse(
-        HttpRequest request,
-        int statusCode,
-        HttpHeaders rawHeaders,
-        TagContractInner value,
-        TagsCreateOrUpdateHeaders headers) {
+    public TagsCreateOrUpdateResponse(HttpRequest request, int statusCode, HttpHeaders rawHeaders,
+        TagContractInner value, TagsCreateOrUpdateHeaders headers) {
         super(request, statusCode, rawHeaders, value, headers);
     }
 
-    /** @return the deserialized response body. */
+    /**
+     * Gets the deserialized response body.
+     *
+     * @return the deserialized response body.
+     */
     @Override
     public TagContractInner getValue() {
         return super.getValue();

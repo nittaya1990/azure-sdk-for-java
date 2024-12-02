@@ -5,26 +5,31 @@
 package com.azure.analytics.purview.scanning;
 
 import com.azure.analytics.purview.scanning.implementation.DataSourcesImpl;
+import com.azure.core.annotation.Generated;
 import com.azure.core.annotation.ReturnType;
 import com.azure.core.annotation.ServiceClient;
 import com.azure.core.annotation.ServiceMethod;
+import com.azure.core.exception.ClientAuthenticationException;
 import com.azure.core.exception.HttpResponseException;
+import com.azure.core.exception.ResourceModifiedException;
+import com.azure.core.exception.ResourceNotFoundException;
 import com.azure.core.http.rest.PagedIterable;
 import com.azure.core.http.rest.RequestOptions;
 import com.azure.core.http.rest.Response;
 import com.azure.core.util.BinaryData;
-import com.azure.core.util.Context;
 
 /** Initializes a new instance of the synchronous PurviewScanningClient type. */
 @ServiceClient(builder = PurviewScanningClientBuilder.class)
 public final class DataSourcesClient {
+    @Generated
     private final DataSourcesImpl serviceClient;
 
     /**
-     * Initializes an instance of DataSources client.
+     * Initializes an instance of DataSourcesClient class.
      *
      * @param serviceClient the service client implementation.
      */
+    @Generated
     DataSourcesClient(DataSourcesImpl serviceClient) {
         this.serviceClient = serviceClient;
     }
@@ -32,68 +37,70 @@ public final class DataSourcesClient {
     /**
      * Creates or Updates a data source.
      *
-     * <p><strong>Query Parameters</strong>
+     * <p><strong>Header Parameters</strong>
      *
      * <table border="1">
-     *     <caption>Query Parameters</caption>
+     *     <caption>Header Parameters</caption>
      *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
-     *     <tr><td>apiVersion</td><td>String</td><td>Yes</td><td>Api Version</td></tr>
+     *     <tr><td>Content-Type</td><td>String</td><td>No</td><td>The content type. Allowed values: "application/json".</td></tr>
      * </table>
+     *
+     * You can add these to a request with {@link RequestOptions#addHeader}
      *
      * <p><strong>Request Body Schema</strong>
      *
      * <pre>{@code
      * {
-     *     id: String
-     *     name: String
-     *     scans: [
-     *         {
-     *             id: String
-     *             name: String
-     *             scanResults: [
-     *                 {
-     *                     parentId: String
-     *                     id: String
-     *                     resourceId: String
-     *                     status: String
-     *                     assetsDiscovered: Long
-     *                     assetsClassified: Long
-     *                     diagnostics: {
-     *                         notifications: [
-     *                             {
-     *                                 message: String
-     *                                 code: Integer
+     *     id: String (Optional)
+     *     name: String (Optional)
+     *     scans (Optional): [
+     *          (Optional){
+     *             id: String (Optional)
+     *             name: String (Optional)
+     *             scanResults (Optional): [
+     *                  (Optional){
+     *                     parentId: String (Optional)
+     *                     id: String (Optional)
+     *                     resourceId: String (Optional)
+     *                     status: String (Optional)
+     *                     assetsDiscovered: Long (Optional)
+     *                     assetsClassified: Long (Optional)
+     *                     diagnostics (Optional): {
+     *                         notifications (Optional): [
+     *                              (Optional){
+     *                                 message: String (Optional)
+     *                                 code: Integer (Optional)
      *                             }
      *                         ]
-     *                         exceptionCountMap: {
-     *                             String: int
+     *                         exceptionCountMap (Optional): {
+     *                             String: int (Optional)
      *                         }
      *                     }
-     *                     startTime: String
-     *                     queuedTime: String
-     *                     pipelineStartTime: String
-     *                     endTime: String
-     *                     scanRulesetVersion: Integer
-     *                     scanRulesetType: String(Custom/System)
-     *                     scanLevelType: String(Full/Incremental)
-     *                     errorMessage: String
-     *                     error: {
-     *                         code: String
-     *                         message: String
-     *                         target: String
-     *                         details: [
-     *                             {
-     *                                 code: String
-     *                                 message: String
-     *                                 target: String
-     *                                 details: [
+     *                     startTime: OffsetDateTime (Optional)
+     *                     queuedTime: OffsetDateTime (Optional)
+     *                     pipelineStartTime: OffsetDateTime (Optional)
+     *                     endTime: OffsetDateTime (Optional)
+     *                     scanRulesetVersion: Integer (Optional)
+     *                     scanRulesetType: String(Custom/System) (Optional)
+     *                     scanLevelType: String(Full/Incremental) (Optional)
+     *                     errorMessage: String (Optional)
+     *                     error (Optional): {
+     *                         code: String (Optional)
+     *                         message: String (Optional)
+     *                         target: String (Optional)
+     *                         details (Optional): [
+     *                              (Optional){
+     *                                 code: String (Optional)
+     *                                 message: String (Optional)
+     *                                 target: String (Optional)
+     *                                 details (Optional): [
      *                                     (recursive schema, see above)
      *                                 ]
      *                             }
      *                         ]
      *                     }
-     *                     runType: String
-     *                     dataSourceType: String(None/AzureSubscription/AzureResourceGroup/AzureSynapseWorkspace/AzureSynapse/AdlsGen1/AdlsGen2/AmazonAccount/AmazonS3/AmazonSql/AzureCosmosDb/AzureDataExplorer/AzureFileService/AzureSqlDatabase/AmazonPostgreSql/AzurePostgreSql/SqlServerDatabase/AzureSqlDatabaseManagedInstance/AzureSqlDataWarehouse/AzureMySql/AzureStorage/Teradata/Oracle/SapS4Hana/SapEcc/PowerBI)
+     *                     runType: String (Optional)
+     *                     dataSourceType: String(None/AzureSubscription/AzureResourceGroup/AzureSynapseWorkspace/AzureSynapse/AdlsGen1/AdlsGen2/AmazonAccount/AmazonS3/AmazonSql/AzureCosmosDb/AzureDataExplorer/AzureFileService/AzureSqlDatabase/AmazonPostgreSql/AzurePostgreSql/SqlServerDatabase/AzureSqlDatabaseManagedInstance/AzureSqlDataWarehouse/AzureMySql/AzureStorage/Teradata/Oracle/SapS4Hana/SapEcc/PowerBI) (Optional)
      *                 }
      *             ]
      *         }
@@ -105,56 +112,56 @@ public final class DataSourcesClient {
      *
      * <pre>{@code
      * {
-     *     id: String
-     *     name: String
-     *     scans: [
-     *         {
-     *             id: String
-     *             name: String
-     *             scanResults: [
-     *                 {
-     *                     parentId: String
-     *                     id: String
-     *                     resourceId: String
-     *                     status: String
-     *                     assetsDiscovered: Long
-     *                     assetsClassified: Long
-     *                     diagnostics: {
-     *                         notifications: [
-     *                             {
-     *                                 message: String
-     *                                 code: Integer
+     *     id: String (Optional)
+     *     name: String (Optional)
+     *     scans (Optional): [
+     *          (Optional){
+     *             id: String (Optional)
+     *             name: String (Optional)
+     *             scanResults (Optional): [
+     *                  (Optional){
+     *                     parentId: String (Optional)
+     *                     id: String (Optional)
+     *                     resourceId: String (Optional)
+     *                     status: String (Optional)
+     *                     assetsDiscovered: Long (Optional)
+     *                     assetsClassified: Long (Optional)
+     *                     diagnostics (Optional): {
+     *                         notifications (Optional): [
+     *                              (Optional){
+     *                                 message: String (Optional)
+     *                                 code: Integer (Optional)
      *                             }
      *                         ]
-     *                         exceptionCountMap: {
-     *                             String: int
+     *                         exceptionCountMap (Optional): {
+     *                             String: int (Optional)
      *                         }
      *                     }
-     *                     startTime: String
-     *                     queuedTime: String
-     *                     pipelineStartTime: String
-     *                     endTime: String
-     *                     scanRulesetVersion: Integer
-     *                     scanRulesetType: String(Custom/System)
-     *                     scanLevelType: String(Full/Incremental)
-     *                     errorMessage: String
-     *                     error: {
-     *                         code: String
-     *                         message: String
-     *                         target: String
-     *                         details: [
-     *                             {
-     *                                 code: String
-     *                                 message: String
-     *                                 target: String
-     *                                 details: [
+     *                     startTime: OffsetDateTime (Optional)
+     *                     queuedTime: OffsetDateTime (Optional)
+     *                     pipelineStartTime: OffsetDateTime (Optional)
+     *                     endTime: OffsetDateTime (Optional)
+     *                     scanRulesetVersion: Integer (Optional)
+     *                     scanRulesetType: String(Custom/System) (Optional)
+     *                     scanLevelType: String(Full/Incremental) (Optional)
+     *                     errorMessage: String (Optional)
+     *                     error (Optional): {
+     *                         code: String (Optional)
+     *                         message: String (Optional)
+     *                         target: String (Optional)
+     *                         details (Optional): [
+     *                              (Optional){
+     *                                 code: String (Optional)
+     *                                 message: String (Optional)
+     *                                 target: String (Optional)
+     *                                 details (Optional): [
      *                                     (recursive schema, see above)
      *                                 ]
      *                             }
      *                         ]
      *                     }
-     *                     runType: String
-     *                     dataSourceType: String(None/AzureSubscription/AzureResourceGroup/AzureSynapseWorkspace/AzureSynapse/AdlsGen1/AdlsGen2/AmazonAccount/AmazonS3/AmazonSql/AzureCosmosDb/AzureDataExplorer/AzureFileService/AzureSqlDatabase/AmazonPostgreSql/AzurePostgreSql/SqlServerDatabase/AzureSqlDatabaseManagedInstance/AzureSqlDataWarehouse/AzureMySql/AzureStorage/Teradata/Oracle/SapS4Hana/SapEcc/PowerBI)
+     *                     runType: String (Optional)
+     *                     dataSourceType: String(None/AzureSubscription/AzureResourceGroup/AzureSynapseWorkspace/AzureSynapse/AdlsGen1/AdlsGen2/AmazonAccount/AmazonS3/AmazonSql/AzureCosmosDb/AzureDataExplorer/AzureFileService/AzureSqlDatabase/AmazonPostgreSql/AzurePostgreSql/SqlServerDatabase/AzureSqlDatabaseManagedInstance/AzureSqlDataWarehouse/AzureMySql/AzureStorage/Teradata/Oracle/SapS4Hana/SapEcc/PowerBI) (Optional)
      *                 }
      *             ]
      *         }
@@ -164,82 +171,75 @@ public final class DataSourcesClient {
      *
      * @param dataSourceName The dataSourceName parameter.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @param context The context to associate with this operation.
-     * @throws HttpResponseException thrown if status code is 400 or above, if throwOnError in requestOptions is not
-     *     false.
-     * @return the response.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @throws ClientAuthenticationException thrown if the request is rejected by server on status code 401.
+     * @throws ResourceNotFoundException thrown if the request is rejected by server on status code 404.
+     * @throws ResourceModifiedException thrown if the request is rejected by server on status code 409.
+     * @return the response body along with {@link Response}.
      */
+    @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<BinaryData> upsertWithResponse(
-            String dataSourceName, RequestOptions requestOptions, Context context) {
-        return this.serviceClient.upsertWithResponse(dataSourceName, requestOptions, context);
+    public Response<BinaryData> createOrUpdateWithResponse(String dataSourceName, RequestOptions requestOptions) {
+        return this.serviceClient.createOrUpdateWithResponse(dataSourceName, requestOptions);
     }
 
     /**
      * Get a data source.
      *
-     * <p><strong>Query Parameters</strong>
-     *
-     * <table border="1">
-     *     <caption>Query Parameters</caption>
-     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
-     *     <tr><td>apiVersion</td><td>String</td><td>Yes</td><td>Api Version</td></tr>
-     * </table>
-     *
      * <p><strong>Response Body Schema</strong>
      *
      * <pre>{@code
      * {
-     *     id: String
-     *     name: String
-     *     scans: [
-     *         {
-     *             id: String
-     *             name: String
-     *             scanResults: [
-     *                 {
-     *                     parentId: String
-     *                     id: String
-     *                     resourceId: String
-     *                     status: String
-     *                     assetsDiscovered: Long
-     *                     assetsClassified: Long
-     *                     diagnostics: {
-     *                         notifications: [
-     *                             {
-     *                                 message: String
-     *                                 code: Integer
+     *     id: String (Optional)
+     *     name: String (Optional)
+     *     scans (Optional): [
+     *          (Optional){
+     *             id: String (Optional)
+     *             name: String (Optional)
+     *             scanResults (Optional): [
+     *                  (Optional){
+     *                     parentId: String (Optional)
+     *                     id: String (Optional)
+     *                     resourceId: String (Optional)
+     *                     status: String (Optional)
+     *                     assetsDiscovered: Long (Optional)
+     *                     assetsClassified: Long (Optional)
+     *                     diagnostics (Optional): {
+     *                         notifications (Optional): [
+     *                              (Optional){
+     *                                 message: String (Optional)
+     *                                 code: Integer (Optional)
      *                             }
      *                         ]
-     *                         exceptionCountMap: {
-     *                             String: int
+     *                         exceptionCountMap (Optional): {
+     *                             String: int (Optional)
      *                         }
      *                     }
-     *                     startTime: String
-     *                     queuedTime: String
-     *                     pipelineStartTime: String
-     *                     endTime: String
-     *                     scanRulesetVersion: Integer
-     *                     scanRulesetType: String(Custom/System)
-     *                     scanLevelType: String(Full/Incremental)
-     *                     errorMessage: String
-     *                     error: {
-     *                         code: String
-     *                         message: String
-     *                         target: String
-     *                         details: [
-     *                             {
-     *                                 code: String
-     *                                 message: String
-     *                                 target: String
-     *                                 details: [
+     *                     startTime: OffsetDateTime (Optional)
+     *                     queuedTime: OffsetDateTime (Optional)
+     *                     pipelineStartTime: OffsetDateTime (Optional)
+     *                     endTime: OffsetDateTime (Optional)
+     *                     scanRulesetVersion: Integer (Optional)
+     *                     scanRulesetType: String(Custom/System) (Optional)
+     *                     scanLevelType: String(Full/Incremental) (Optional)
+     *                     errorMessage: String (Optional)
+     *                     error (Optional): {
+     *                         code: String (Optional)
+     *                         message: String (Optional)
+     *                         target: String (Optional)
+     *                         details (Optional): [
+     *                              (Optional){
+     *                                 code: String (Optional)
+     *                                 message: String (Optional)
+     *                                 target: String (Optional)
+     *                                 details (Optional): [
      *                                     (recursive schema, see above)
      *                                 ]
      *                             }
      *                         ]
      *                     }
-     *                     runType: String
-     *                     dataSourceType: String(None/AzureSubscription/AzureResourceGroup/AzureSynapseWorkspace/AzureSynapse/AdlsGen1/AdlsGen2/AmazonAccount/AmazonS3/AmazonSql/AzureCosmosDb/AzureDataExplorer/AzureFileService/AzureSqlDatabase/AmazonPostgreSql/AzurePostgreSql/SqlServerDatabase/AzureSqlDatabaseManagedInstance/AzureSqlDataWarehouse/AzureMySql/AzureStorage/Teradata/Oracle/SapS4Hana/SapEcc/PowerBI)
+     *                     runType: String (Optional)
+     *                     dataSourceType: String(None/AzureSubscription/AzureResourceGroup/AzureSynapseWorkspace/AzureSynapse/AdlsGen1/AdlsGen2/AmazonAccount/AmazonS3/AmazonSql/AzureCosmosDb/AzureDataExplorer/AzureFileService/AzureSqlDatabase/AmazonPostgreSql/AzurePostgreSql/SqlServerDatabase/AzureSqlDatabaseManagedInstance/AzureSqlDataWarehouse/AzureMySql/AzureStorage/Teradata/Oracle/SapS4Hana/SapEcc/PowerBI) (Optional)
      *                 }
      *             ]
      *         }
@@ -249,81 +249,75 @@ public final class DataSourcesClient {
      *
      * @param dataSourceName The dataSourceName parameter.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @param context The context to associate with this operation.
-     * @throws HttpResponseException thrown if status code is 400 or above, if throwOnError in requestOptions is not
-     *     false.
-     * @return a data source.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @throws ClientAuthenticationException thrown if the request is rejected by server on status code 401.
+     * @throws ResourceNotFoundException thrown if the request is rejected by server on status code 404.
+     * @throws ResourceModifiedException thrown if the request is rejected by server on status code 409.
+     * @return a data source along with {@link Response}.
      */
+    @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<BinaryData> getWithResponse(String dataSourceName, RequestOptions requestOptions, Context context) {
-        return this.serviceClient.getWithResponse(dataSourceName, requestOptions, context);
+    public Response<BinaryData> getWithResponse(String dataSourceName, RequestOptions requestOptions) {
+        return this.serviceClient.getWithResponse(dataSourceName, requestOptions);
     }
 
     /**
      * Deletes a data source.
      *
-     * <p><strong>Query Parameters</strong>
-     *
-     * <table border="1">
-     *     <caption>Query Parameters</caption>
-     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
-     *     <tr><td>apiVersion</td><td>String</td><td>Yes</td><td>Api Version</td></tr>
-     * </table>
-     *
      * <p><strong>Response Body Schema</strong>
      *
      * <pre>{@code
      * {
-     *     id: String
-     *     name: String
-     *     scans: [
-     *         {
-     *             id: String
-     *             name: String
-     *             scanResults: [
-     *                 {
-     *                     parentId: String
-     *                     id: String
-     *                     resourceId: String
-     *                     status: String
-     *                     assetsDiscovered: Long
-     *                     assetsClassified: Long
-     *                     diagnostics: {
-     *                         notifications: [
-     *                             {
-     *                                 message: String
-     *                                 code: Integer
+     *     id: String (Optional)
+     *     name: String (Optional)
+     *     scans (Optional): [
+     *          (Optional){
+     *             id: String (Optional)
+     *             name: String (Optional)
+     *             scanResults (Optional): [
+     *                  (Optional){
+     *                     parentId: String (Optional)
+     *                     id: String (Optional)
+     *                     resourceId: String (Optional)
+     *                     status: String (Optional)
+     *                     assetsDiscovered: Long (Optional)
+     *                     assetsClassified: Long (Optional)
+     *                     diagnostics (Optional): {
+     *                         notifications (Optional): [
+     *                              (Optional){
+     *                                 message: String (Optional)
+     *                                 code: Integer (Optional)
      *                             }
      *                         ]
-     *                         exceptionCountMap: {
-     *                             String: int
+     *                         exceptionCountMap (Optional): {
+     *                             String: int (Optional)
      *                         }
      *                     }
-     *                     startTime: String
-     *                     queuedTime: String
-     *                     pipelineStartTime: String
-     *                     endTime: String
-     *                     scanRulesetVersion: Integer
-     *                     scanRulesetType: String(Custom/System)
-     *                     scanLevelType: String(Full/Incremental)
-     *                     errorMessage: String
-     *                     error: {
-     *                         code: String
-     *                         message: String
-     *                         target: String
-     *                         details: [
-     *                             {
-     *                                 code: String
-     *                                 message: String
-     *                                 target: String
-     *                                 details: [
+     *                     startTime: OffsetDateTime (Optional)
+     *                     queuedTime: OffsetDateTime (Optional)
+     *                     pipelineStartTime: OffsetDateTime (Optional)
+     *                     endTime: OffsetDateTime (Optional)
+     *                     scanRulesetVersion: Integer (Optional)
+     *                     scanRulesetType: String(Custom/System) (Optional)
+     *                     scanLevelType: String(Full/Incremental) (Optional)
+     *                     errorMessage: String (Optional)
+     *                     error (Optional): {
+     *                         code: String (Optional)
+     *                         message: String (Optional)
+     *                         target: String (Optional)
+     *                         details (Optional): [
+     *                              (Optional){
+     *                                 code: String (Optional)
+     *                                 message: String (Optional)
+     *                                 target: String (Optional)
+     *                                 details (Optional): [
      *                                     (recursive schema, see above)
      *                                 ]
      *                             }
      *                         ]
      *                     }
-     *                     runType: String
-     *                     dataSourceType: String(None/AzureSubscription/AzureResourceGroup/AzureSynapseWorkspace/AzureSynapse/AdlsGen1/AdlsGen2/AmazonAccount/AmazonS3/AmazonSql/AzureCosmosDb/AzureDataExplorer/AzureFileService/AzureSqlDatabase/AmazonPostgreSql/AzurePostgreSql/SqlServerDatabase/AzureSqlDatabaseManagedInstance/AzureSqlDataWarehouse/AzureMySql/AzureStorage/Teradata/Oracle/SapS4Hana/SapEcc/PowerBI)
+     *                     runType: String (Optional)
+     *                     dataSourceType: String(None/AzureSubscription/AzureResourceGroup/AzureSynapseWorkspace/AzureSynapse/AdlsGen1/AdlsGen2/AmazonAccount/AmazonS3/AmazonSql/AzureCosmosDb/AzureDataExplorer/AzureFileService/AzureSqlDatabase/AmazonPostgreSql/AzurePostgreSql/SqlServerDatabase/AzureSqlDatabaseManagedInstance/AzureSqlDataWarehouse/AzureMySql/AzureStorage/Teradata/Oracle/SapS4Hana/SapEcc/PowerBI) (Optional)
      *                 }
      *             ]
      *         }
@@ -333,103 +327,92 @@ public final class DataSourcesClient {
      *
      * @param dataSourceName The dataSourceName parameter.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @param context The context to associate with this operation.
-     * @throws HttpResponseException thrown if status code is 400 or above, if throwOnError in requestOptions is not
-     *     false.
-     * @return the response.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @throws ClientAuthenticationException thrown if the request is rejected by server on status code 401.
+     * @throws ResourceNotFoundException thrown if the request is rejected by server on status code 404.
+     * @throws ResourceModifiedException thrown if the request is rejected by server on status code 409.
+     * @return the response body along with {@link Response}.
      */
+    @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<BinaryData> deleteWithResponse(
-            String dataSourceName, RequestOptions requestOptions, Context context) {
-        return this.serviceClient.deleteWithResponse(dataSourceName, requestOptions, context);
+    public Response<BinaryData> deleteWithResponse(String dataSourceName, RequestOptions requestOptions) {
+        return this.serviceClient.deleteWithResponse(dataSourceName, requestOptions);
     }
 
     /**
      * List data sources in Data catalog.
      *
-     * <p><strong>Query Parameters</strong>
-     *
-     * <table border="1">
-     *     <caption>Query Parameters</caption>
-     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
-     *     <tr><td>apiVersion</td><td>String</td><td>Yes</td><td>Api Version</td></tr>
-     * </table>
-     *
      * <p><strong>Response Body Schema</strong>
      *
      * <pre>{@code
      * {
-     *     value: [
-     *         {
-     *             id: String
-     *             name: String
-     *             scans: [
-     *                 {
-     *                     id: String
-     *                     name: String
-     *                     scanResults: [
-     *                         {
-     *                             parentId: String
-     *                             id: String
-     *                             resourceId: String
-     *                             status: String
-     *                             assetsDiscovered: Long
-     *                             assetsClassified: Long
-     *                             diagnostics: {
-     *                                 notifications: [
-     *                                     {
-     *                                         message: String
-     *                                         code: Integer
-     *                                     }
-     *                                 ]
-     *                                 exceptionCountMap: {
-     *                                     String: int
-     *                                 }
+     *     id: String (Optional)
+     *     name: String (Optional)
+     *     scans (Optional): [
+     *          (Optional){
+     *             id: String (Optional)
+     *             name: String (Optional)
+     *             scanResults (Optional): [
+     *                  (Optional){
+     *                     parentId: String (Optional)
+     *                     id: String (Optional)
+     *                     resourceId: String (Optional)
+     *                     status: String (Optional)
+     *                     assetsDiscovered: Long (Optional)
+     *                     assetsClassified: Long (Optional)
+     *                     diagnostics (Optional): {
+     *                         notifications (Optional): [
+     *                              (Optional){
+     *                                 message: String (Optional)
+     *                                 code: Integer (Optional)
      *                             }
-     *                             startTime: String
-     *                             queuedTime: String
-     *                             pipelineStartTime: String
-     *                             endTime: String
-     *                             scanRulesetVersion: Integer
-     *                             scanRulesetType: String(Custom/System)
-     *                             scanLevelType: String(Full/Incremental)
-     *                             errorMessage: String
-     *                             error: {
-     *                                 code: String
-     *                                 message: String
-     *                                 target: String
-     *                                 details: [
-     *                                     {
-     *                                         code: String
-     *                                         message: String
-     *                                         target: String
-     *                                         details: [
-     *                                             (recursive schema, see above)
-     *                                         ]
-     *                                     }
-     *                                 ]
-     *                             }
-     *                             runType: String
-     *                             dataSourceType: String(None/AzureSubscription/AzureResourceGroup/AzureSynapseWorkspace/AzureSynapse/AdlsGen1/AdlsGen2/AmazonAccount/AmazonS3/AmazonSql/AzureCosmosDb/AzureDataExplorer/AzureFileService/AzureSqlDatabase/AmazonPostgreSql/AzurePostgreSql/SqlServerDatabase/AzureSqlDatabaseManagedInstance/AzureSqlDataWarehouse/AzureMySql/AzureStorage/Teradata/Oracle/SapS4Hana/SapEcc/PowerBI)
+     *                         ]
+     *                         exceptionCountMap (Optional): {
+     *                             String: int (Optional)
      *                         }
-     *                     ]
+     *                     }
+     *                     startTime: OffsetDateTime (Optional)
+     *                     queuedTime: OffsetDateTime (Optional)
+     *                     pipelineStartTime: OffsetDateTime (Optional)
+     *                     endTime: OffsetDateTime (Optional)
+     *                     scanRulesetVersion: Integer (Optional)
+     *                     scanRulesetType: String(Custom/System) (Optional)
+     *                     scanLevelType: String(Full/Incremental) (Optional)
+     *                     errorMessage: String (Optional)
+     *                     error (Optional): {
+     *                         code: String (Optional)
+     *                         message: String (Optional)
+     *                         target: String (Optional)
+     *                         details (Optional): [
+     *                              (Optional){
+     *                                 code: String (Optional)
+     *                                 message: String (Optional)
+     *                                 target: String (Optional)
+     *                                 details (Optional): [
+     *                                     (recursive schema, see above)
+     *                                 ]
+     *                             }
+     *                         ]
+     *                     }
+     *                     runType: String (Optional)
+     *                     dataSourceType: String(None/AzureSubscription/AzureResourceGroup/AzureSynapseWorkspace/AzureSynapse/AdlsGen1/AdlsGen2/AmazonAccount/AmazonS3/AmazonSql/AzureCosmosDb/AzureDataExplorer/AzureFileService/AzureSqlDatabase/AmazonPostgreSql/AzurePostgreSql/SqlServerDatabase/AzureSqlDatabaseManagedInstance/AzureSqlDataWarehouse/AzureMySql/AzureStorage/Teradata/Oracle/SapS4Hana/SapEcc/PowerBI) (Optional)
      *                 }
      *             ]
      *         }
      *     ]
-     *     nextLink: String
-     *     count: Long
      * }
      * }</pre>
      *
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @param context The context to associate with this operation.
-     * @throws HttpResponseException thrown if status code is 400 or above, if throwOnError in requestOptions is not
-     *     false.
-     * @return the response.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @throws ClientAuthenticationException thrown if the request is rejected by server on status code 401.
+     * @throws ResourceNotFoundException thrown if the request is rejected by server on status code 404.
+     * @throws ResourceModifiedException thrown if the request is rejected by server on status code 409.
+     * @return the paginated response with {@link PagedIterable}.
      */
+    @Generated
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<BinaryData> listAll(RequestOptions requestOptions, Context context) {
-        return this.serviceClient.listAll(requestOptions, context);
+    public PagedIterable<BinaryData> listAll(RequestOptions requestOptions) {
+        return this.serviceClient.listAll(requestOptions);
     }
 }

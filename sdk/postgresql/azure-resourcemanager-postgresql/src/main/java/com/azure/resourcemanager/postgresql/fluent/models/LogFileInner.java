@@ -5,7 +5,6 @@
 package com.azure.resourcemanager.postgresql.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.management.ProxyResource;
 import com.azure.core.util.logging.ClientLogger;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -13,40 +12,25 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
 /** Represents a log file. */
-@JsonFlatten
 @Fluent
-public class LogFileInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(LogFileInner.class);
+public final class LogFileInner extends ProxyResource {
+    @JsonIgnore
+    private final ClientLogger logger = new ClientLogger(LogFileInner.class);
 
     /*
-     * Size of the log file.
+     * The properties of the log file.
      */
-    @JsonProperty(value = "properties.sizeInKB")
-    private Long sizeInKB;
+    @JsonProperty(value = "properties")
+    private LogFileProperties innerProperties;
 
-    /*
-     * Creation timestamp of the log file.
+    /**
+     * Get the innerProperties property: The properties of the log file.
+     *
+     * @return the innerProperties value.
      */
-    @JsonProperty(value = "properties.createdTime", access = JsonProperty.Access.WRITE_ONLY)
-    private OffsetDateTime createdTime;
-
-    /*
-     * Last modified timestamp of the log file.
-     */
-    @JsonProperty(value = "properties.lastModifiedTime", access = JsonProperty.Access.WRITE_ONLY)
-    private OffsetDateTime lastModifiedTime;
-
-    /*
-     * Type of the log file.
-     */
-    @JsonProperty(value = "properties.type")
-    private String typePropertiesType;
-
-    /*
-     * The url to download the log file from.
-     */
-    @JsonProperty(value = "properties.url")
-    private String url;
+    private LogFileProperties innerProperties() {
+        return this.innerProperties;
+    }
 
     /**
      * Get the sizeInKB property: Size of the log file.
@@ -54,7 +38,7 @@ public class LogFileInner extends ProxyResource {
      * @return the sizeInKB value.
      */
     public Long sizeInKB() {
-        return this.sizeInKB;
+        return this.innerProperties() == null ? null : this.innerProperties().sizeInKB();
     }
 
     /**
@@ -64,7 +48,10 @@ public class LogFileInner extends ProxyResource {
      * @return the LogFileInner object itself.
      */
     public LogFileInner withSizeInKB(Long sizeInKB) {
-        this.sizeInKB = sizeInKB;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new LogFileProperties();
+        }
+        this.innerProperties().withSizeInKB(sizeInKB);
         return this;
     }
 
@@ -74,7 +61,7 @@ public class LogFileInner extends ProxyResource {
      * @return the createdTime value.
      */
     public OffsetDateTime createdTime() {
-        return this.createdTime;
+        return this.innerProperties() == null ? null : this.innerProperties().createdTime();
     }
 
     /**
@@ -83,26 +70,29 @@ public class LogFileInner extends ProxyResource {
      * @return the lastModifiedTime value.
      */
     public OffsetDateTime lastModifiedTime() {
-        return this.lastModifiedTime;
+        return this.innerProperties() == null ? null : this.innerProperties().lastModifiedTime();
     }
 
     /**
-     * Get the typePropertiesType property: Type of the log file.
+     * Get the type property: Type of the log file.
      *
-     * @return the typePropertiesType value.
+     * @return the type value.
      */
     public String typePropertiesType() {
-        return this.typePropertiesType;
+        return this.innerProperties() == null ? null : this.innerProperties().type();
     }
 
     /**
-     * Set the typePropertiesType property: Type of the log file.
+     * Set the type property: Type of the log file.
      *
-     * @param typePropertiesType the typePropertiesType value to set.
+     * @param type the type value to set.
      * @return the LogFileInner object itself.
      */
-    public LogFileInner withTypePropertiesType(String typePropertiesType) {
-        this.typePropertiesType = typePropertiesType;
+    public LogFileInner withTypePropertiesType(String type) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new LogFileProperties();
+        }
+        this.innerProperties().withType(type);
         return this;
     }
 
@@ -112,7 +102,7 @@ public class LogFileInner extends ProxyResource {
      * @return the url value.
      */
     public String url() {
-        return this.url;
+        return this.innerProperties() == null ? null : this.innerProperties().url();
     }
 
     /**
@@ -122,7 +112,10 @@ public class LogFileInner extends ProxyResource {
      * @return the LogFileInner object itself.
      */
     public LogFileInner withUrl(String url) {
-        this.url = url;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new LogFileProperties();
+        }
+        this.innerProperties().withUrl(url);
         return this;
     }
 
@@ -132,5 +125,8 @@ public class LogFileInner extends ProxyResource {
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
+        if (innerProperties() != null) {
+            innerProperties().validate();
+        }
     }
 }

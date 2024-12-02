@@ -6,14 +6,13 @@ package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Data regarding 3rd party partner integration. */
+/**
+ * Data regarding 3rd party partner integration.
+ */
 @Fluent
 public final class SecurityAssessmentPartnerData {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SecurityAssessmentPartnerData.class);
-
     /*
      * Name of the company of the partner
      */
@@ -23,12 +22,18 @@ public final class SecurityAssessmentPartnerData {
     /*
      * secret to authenticate the partner - write only
      */
-    @JsonProperty(value = "secret", required = true)
+    @JsonProperty(value = "secret")
     private String secret;
 
     /**
+     * Creates an instance of SecurityAssessmentPartnerData class.
+     */
+    public SecurityAssessmentPartnerData() {
+    }
+
+    /**
      * Get the partnerName property: Name of the company of the partner.
-     *
+     * 
      * @return the partnerName value.
      */
     public String partnerName() {
@@ -37,7 +42,7 @@ public final class SecurityAssessmentPartnerData {
 
     /**
      * Set the partnerName property: Name of the company of the partner.
-     *
+     * 
      * @param partnerName the partnerName value to set.
      * @return the SecurityAssessmentPartnerData object itself.
      */
@@ -48,7 +53,7 @@ public final class SecurityAssessmentPartnerData {
 
     /**
      * Get the secret property: secret to authenticate the partner - write only.
-     *
+     * 
      * @return the secret value.
      */
     public String secret() {
@@ -57,7 +62,7 @@ public final class SecurityAssessmentPartnerData {
 
     /**
      * Set the secret property: secret to authenticate the partner - write only.
-     *
+     * 
      * @param secret the secret value to set.
      * @return the SecurityAssessmentPartnerData object itself.
      */
@@ -68,21 +73,21 @@ public final class SecurityAssessmentPartnerData {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (partnerName() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property partnerName in model SecurityAssessmentPartnerData"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property partnerName in model SecurityAssessmentPartnerData"));
         }
         if (secret() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property secret in model SecurityAssessmentPartnerData"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property secret in model SecurityAssessmentPartnerData"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(SecurityAssessmentPartnerData.class);
 }

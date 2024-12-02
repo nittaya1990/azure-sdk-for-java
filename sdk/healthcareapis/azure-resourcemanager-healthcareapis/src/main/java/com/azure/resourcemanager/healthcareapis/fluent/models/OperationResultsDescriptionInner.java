@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.healthcareapis.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.healthcareapis.models.OperationResultStatus;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The properties indicating the operation result of an operation on a service. */
+/**
+ * The properties indicating the operation result of an operation on a service.
+ */
 @Fluent
 public final class OperationResultsDescriptionInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OperationResultsDescriptionInner.class);
-
     /*
      * The ID of the operation returned.
      */
@@ -40,14 +38,26 @@ public final class OperationResultsDescriptionInner {
     private String startTime;
 
     /*
+     * The time that the operation finished.
+     */
+    @JsonProperty(value = "endTime", access = JsonProperty.Access.WRITE_ONLY)
+    private String endTime;
+
+    /*
      * Additional properties of the operation result.
      */
     @JsonProperty(value = "properties")
     private Object properties;
 
     /**
+     * Creates an instance of OperationResultsDescriptionInner class.
+     */
+    public OperationResultsDescriptionInner() {
+    }
+
+    /**
      * Get the id property: The ID of the operation returned.
-     *
+     * 
      * @return the id value.
      */
     public String id() {
@@ -56,7 +66,7 @@ public final class OperationResultsDescriptionInner {
 
     /**
      * Get the name property: The name of the operation result.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -65,7 +75,7 @@ public final class OperationResultsDescriptionInner {
 
     /**
      * Get the status property: The status of the operation being performed.
-     *
+     * 
      * @return the status value.
      */
     public OperationResultStatus status() {
@@ -74,7 +84,7 @@ public final class OperationResultsDescriptionInner {
 
     /**
      * Get the startTime property: The time that the operation was started.
-     *
+     * 
      * @return the startTime value.
      */
     public String startTime() {
@@ -82,8 +92,17 @@ public final class OperationResultsDescriptionInner {
     }
 
     /**
+     * Get the endTime property: The time that the operation finished.
+     * 
+     * @return the endTime value.
+     */
+    public String endTime() {
+        return this.endTime;
+    }
+
+    /**
      * Get the properties property: Additional properties of the operation result.
-     *
+     * 
      * @return the properties value.
      */
     public Object properties() {
@@ -92,7 +111,7 @@ public final class OperationResultsDescriptionInner {
 
     /**
      * Set the properties property: Additional properties of the operation result.
-     *
+     * 
      * @param properties the properties value to set.
      * @return the OperationResultsDescriptionInner object itself.
      */
@@ -103,7 +122,7 @@ public final class OperationResultsDescriptionInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

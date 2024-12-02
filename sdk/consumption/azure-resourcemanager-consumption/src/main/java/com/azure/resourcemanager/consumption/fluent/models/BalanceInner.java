@@ -5,277 +5,71 @@
 package com.azure.resourcemanager.consumption.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
 import com.azure.resourcemanager.consumption.models.BalancePropertiesAdjustmentDetailsItem;
 import com.azure.resourcemanager.consumption.models.BalancePropertiesNewPurchasesDetailsItem;
 import com.azure.resourcemanager.consumption.models.BillingFrequency;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
-/** A balance resource. */
-@JsonFlatten
+/**
+ * A balance resource.
+ */
 @Fluent
-public class BalanceInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(BalanceInner.class);
+public final class BalanceInner extends ProxyResource {
+    /*
+     * The properties of the balance.
+     */
+    private BalanceProperties innerProperties;
 
     /*
-     * The ISO currency in which the meter is charged, for example, USD.
+     * The etag for the resource.
      */
-    @JsonProperty(value = "properties.currency", access = JsonProperty.Access.WRITE_ONLY)
-    private String currency;
-
-    /*
-     * The beginning balance for the billing period.
-     */
-    @JsonProperty(value = "properties.beginningBalance", access = JsonProperty.Access.WRITE_ONLY)
-    private BigDecimal beginningBalance;
-
-    /*
-     * The ending balance for the billing period (for open periods this will be
-     * updated daily).
-     */
-    @JsonProperty(value = "properties.endingBalance", access = JsonProperty.Access.WRITE_ONLY)
-    private BigDecimal endingBalance;
-
-    /*
-     * Total new purchase amount.
-     */
-    @JsonProperty(value = "properties.newPurchases", access = JsonProperty.Access.WRITE_ONLY)
-    private BigDecimal newPurchases;
-
-    /*
-     * Total adjustment amount.
-     */
-    @JsonProperty(value = "properties.adjustments", access = JsonProperty.Access.WRITE_ONLY)
-    private BigDecimal adjustments;
-
-    /*
-     * Total Commitment usage.
-     */
-    @JsonProperty(value = "properties.utilized", access = JsonProperty.Access.WRITE_ONLY)
-    private BigDecimal utilized;
-
-    /*
-     * Overage for Azure services.
-     */
-    @JsonProperty(value = "properties.serviceOverage", access = JsonProperty.Access.WRITE_ONLY)
-    private BigDecimal serviceOverage;
-
-    /*
-     * Charges Billed separately.
-     */
-    @JsonProperty(value = "properties.chargesBilledSeparately", access = JsonProperty.Access.WRITE_ONLY)
-    private BigDecimal chargesBilledSeparately;
-
-    /*
-     * serviceOverage + chargesBilledSeparately.
-     */
-    @JsonProperty(value = "properties.totalOverage", access = JsonProperty.Access.WRITE_ONLY)
-    private BigDecimal totalOverage;
-
-    /*
-     * Azure service commitment + total Overage.
-     */
-    @JsonProperty(value = "properties.totalUsage", access = JsonProperty.Access.WRITE_ONLY)
-    private BigDecimal totalUsage;
-
-    /*
-     * Total charges for Azure Marketplace.
-     */
-    @JsonProperty(value = "properties.azureMarketplaceServiceCharges", access = JsonProperty.Access.WRITE_ONLY)
-    private BigDecimal azureMarketplaceServiceCharges;
-
-    /*
-     * The billing frequency.
-     */
-    @JsonProperty(value = "properties.billingFrequency")
-    private BillingFrequency billingFrequency;
-
-    /*
-     * Price is hidden or not.
-     */
-    @JsonProperty(value = "properties.priceHidden", access = JsonProperty.Access.WRITE_ONLY)
-    private Boolean priceHidden;
-
-    /*
-     * List of new purchases.
-     */
-    @JsonProperty(value = "properties.newPurchasesDetails", access = JsonProperty.Access.WRITE_ONLY)
-    private List<BalancePropertiesNewPurchasesDetailsItem> newPurchasesDetails;
-
-    /*
-     * List of Adjustments (Promo credit, SIE credit etc.).
-     */
-    @JsonProperty(value = "properties.adjustmentDetails", access = JsonProperty.Access.WRITE_ONLY)
-    private List<BalancePropertiesAdjustmentDetailsItem> adjustmentDetails;
-
-    /*
-     * Resource etag.
-     */
-    @JsonProperty(value = "etag", access = JsonProperty.Access.WRITE_ONLY)
     private String etag;
 
     /*
      * Resource tags.
      */
-    @JsonProperty(value = "tags", access = JsonProperty.Access.WRITE_ONLY)
     private Map<String, String> tags;
 
-    /**
-     * Get the currency property: The ISO currency in which the meter is charged, for example, USD.
-     *
-     * @return the currency value.
+    /*
+     * The type of the resource.
      */
-    public String currency() {
-        return this.currency;
+    private String type;
+
+    /*
+     * The name of the resource.
+     */
+    private String name;
+
+    /*
+     * Fully qualified resource Id for the resource.
+     */
+    private String id;
+
+    /**
+     * Creates an instance of BalanceInner class.
+     */
+    public BalanceInner() {
     }
 
     /**
-     * Get the beginningBalance property: The beginning balance for the billing period.
-     *
-     * @return the beginningBalance value.
+     * Get the innerProperties property: The properties of the balance.
+     * 
+     * @return the innerProperties value.
      */
-    public BigDecimal beginningBalance() {
-        return this.beginningBalance;
+    private BalanceProperties innerProperties() {
+        return this.innerProperties;
     }
 
     /**
-     * Get the endingBalance property: The ending balance for the billing period (for open periods this will be updated
-     * daily).
-     *
-     * @return the endingBalance value.
-     */
-    public BigDecimal endingBalance() {
-        return this.endingBalance;
-    }
-
-    /**
-     * Get the newPurchases property: Total new purchase amount.
-     *
-     * @return the newPurchases value.
-     */
-    public BigDecimal newPurchases() {
-        return this.newPurchases;
-    }
-
-    /**
-     * Get the adjustments property: Total adjustment amount.
-     *
-     * @return the adjustments value.
-     */
-    public BigDecimal adjustments() {
-        return this.adjustments;
-    }
-
-    /**
-     * Get the utilized property: Total Commitment usage.
-     *
-     * @return the utilized value.
-     */
-    public BigDecimal utilized() {
-        return this.utilized;
-    }
-
-    /**
-     * Get the serviceOverage property: Overage for Azure services.
-     *
-     * @return the serviceOverage value.
-     */
-    public BigDecimal serviceOverage() {
-        return this.serviceOverage;
-    }
-
-    /**
-     * Get the chargesBilledSeparately property: Charges Billed separately.
-     *
-     * @return the chargesBilledSeparately value.
-     */
-    public BigDecimal chargesBilledSeparately() {
-        return this.chargesBilledSeparately;
-    }
-
-    /**
-     * Get the totalOverage property: serviceOverage + chargesBilledSeparately.
-     *
-     * @return the totalOverage value.
-     */
-    public BigDecimal totalOverage() {
-        return this.totalOverage;
-    }
-
-    /**
-     * Get the totalUsage property: Azure service commitment + total Overage.
-     *
-     * @return the totalUsage value.
-     */
-    public BigDecimal totalUsage() {
-        return this.totalUsage;
-    }
-
-    /**
-     * Get the azureMarketplaceServiceCharges property: Total charges for Azure Marketplace.
-     *
-     * @return the azureMarketplaceServiceCharges value.
-     */
-    public BigDecimal azureMarketplaceServiceCharges() {
-        return this.azureMarketplaceServiceCharges;
-    }
-
-    /**
-     * Get the billingFrequency property: The billing frequency.
-     *
-     * @return the billingFrequency value.
-     */
-    public BillingFrequency billingFrequency() {
-        return this.billingFrequency;
-    }
-
-    /**
-     * Set the billingFrequency property: The billing frequency.
-     *
-     * @param billingFrequency the billingFrequency value to set.
-     * @return the BalanceInner object itself.
-     */
-    public BalanceInner withBillingFrequency(BillingFrequency billingFrequency) {
-        this.billingFrequency = billingFrequency;
-        return this;
-    }
-
-    /**
-     * Get the priceHidden property: Price is hidden or not.
-     *
-     * @return the priceHidden value.
-     */
-    public Boolean priceHidden() {
-        return this.priceHidden;
-    }
-
-    /**
-     * Get the newPurchasesDetails property: List of new purchases.
-     *
-     * @return the newPurchasesDetails value.
-     */
-    public List<BalancePropertiesNewPurchasesDetailsItem> newPurchasesDetails() {
-        return this.newPurchasesDetails;
-    }
-
-    /**
-     * Get the adjustmentDetails property: List of Adjustments (Promo credit, SIE credit etc.).
-     *
-     * @return the adjustmentDetails value.
-     */
-    public List<BalancePropertiesAdjustmentDetailsItem> adjustmentDetails() {
-        return this.adjustmentDetails;
-    }
-
-    /**
-     * Get the etag property: Resource etag.
-     *
+     * Get the etag property: The etag for the resource.
+     * 
      * @return the etag value.
      */
     public String etag() {
@@ -284,7 +78,7 @@ public class BalanceInner extends ProxyResource {
 
     /**
      * Get the tags property: Resource tags.
-     *
+     * 
      * @return the tags value.
      */
     public Map<String, String> tags() {
@@ -292,16 +86,241 @@ public class BalanceInner extends ProxyResource {
     }
 
     /**
+     * Get the type property: The type of the resource.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
+     * Get the name property: The name of the resource.
+     * 
+     * @return the name value.
+     */
+    @Override
+    public String name() {
+        return this.name;
+    }
+
+    /**
+     * Get the id property: Fully qualified resource Id for the resource.
+     * 
+     * @return the id value.
+     */
+    @Override
+    public String id() {
+        return this.id;
+    }
+
+    /**
+     * Get the currency property: The ISO currency in which the meter is charged, for example, USD.
+     * 
+     * @return the currency value.
+     */
+    public String currency() {
+        return this.innerProperties() == null ? null : this.innerProperties().currency();
+    }
+
+    /**
+     * Get the beginningBalance property: The beginning balance for the billing period.
+     * 
+     * @return the beginningBalance value.
+     */
+    public BigDecimal beginningBalance() {
+        return this.innerProperties() == null ? null : this.innerProperties().beginningBalance();
+    }
+
+    /**
+     * Get the endingBalance property: The ending balance for the billing period (for open periods this will be updated
+     * daily).
+     * 
+     * @return the endingBalance value.
+     */
+    public BigDecimal endingBalance() {
+        return this.innerProperties() == null ? null : this.innerProperties().endingBalance();
+    }
+
+    /**
+     * Get the newPurchases property: Total new purchase amount.
+     * 
+     * @return the newPurchases value.
+     */
+    public BigDecimal newPurchases() {
+        return this.innerProperties() == null ? null : this.innerProperties().newPurchases();
+    }
+
+    /**
+     * Get the adjustments property: Total adjustment amount.
+     * 
+     * @return the adjustments value.
+     */
+    public BigDecimal adjustments() {
+        return this.innerProperties() == null ? null : this.innerProperties().adjustments();
+    }
+
+    /**
+     * Get the utilized property: Total Commitment usage.
+     * 
+     * @return the utilized value.
+     */
+    public BigDecimal utilized() {
+        return this.innerProperties() == null ? null : this.innerProperties().utilized();
+    }
+
+    /**
+     * Get the serviceOverage property: Overage for Azure services.
+     * 
+     * @return the serviceOverage value.
+     */
+    public BigDecimal serviceOverage() {
+        return this.innerProperties() == null ? null : this.innerProperties().serviceOverage();
+    }
+
+    /**
+     * Get the chargesBilledSeparately property: Charges Billed separately.
+     * 
+     * @return the chargesBilledSeparately value.
+     */
+    public BigDecimal chargesBilledSeparately() {
+        return this.innerProperties() == null ? null : this.innerProperties().chargesBilledSeparately();
+    }
+
+    /**
+     * Get the totalOverage property: serviceOverage + chargesBilledSeparately.
+     * 
+     * @return the totalOverage value.
+     */
+    public BigDecimal totalOverage() {
+        return this.innerProperties() == null ? null : this.innerProperties().totalOverage();
+    }
+
+    /**
+     * Get the totalUsage property: Azure service commitment + total Overage.
+     * 
+     * @return the totalUsage value.
+     */
+    public BigDecimal totalUsage() {
+        return this.innerProperties() == null ? null : this.innerProperties().totalUsage();
+    }
+
+    /**
+     * Get the azureMarketplaceServiceCharges property: Total charges for Azure Marketplace.
+     * 
+     * @return the azureMarketplaceServiceCharges value.
+     */
+    public BigDecimal azureMarketplaceServiceCharges() {
+        return this.innerProperties() == null ? null : this.innerProperties().azureMarketplaceServiceCharges();
+    }
+
+    /**
+     * Get the billingFrequency property: The billing frequency.
+     * 
+     * @return the billingFrequency value.
+     */
+    public BillingFrequency billingFrequency() {
+        return this.innerProperties() == null ? null : this.innerProperties().billingFrequency();
+    }
+
+    /**
+     * Set the billingFrequency property: The billing frequency.
+     * 
+     * @param billingFrequency the billingFrequency value to set.
+     * @return the BalanceInner object itself.
+     */
+    public BalanceInner withBillingFrequency(BillingFrequency billingFrequency) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new BalanceProperties();
+        }
+        this.innerProperties().withBillingFrequency(billingFrequency);
+        return this;
+    }
+
+    /**
+     * Get the priceHidden property: Price is hidden or not.
+     * 
+     * @return the priceHidden value.
+     */
+    public Boolean priceHidden() {
+        return this.innerProperties() == null ? null : this.innerProperties().priceHidden();
+    }
+
+    /**
+     * Get the newPurchasesDetails property: List of new purchases.
+     * 
+     * @return the newPurchasesDetails value.
+     */
+    public List<BalancePropertiesNewPurchasesDetailsItem> newPurchasesDetails() {
+        return this.innerProperties() == null ? null : this.innerProperties().newPurchasesDetails();
+    }
+
+    /**
+     * Get the adjustmentDetails property: List of Adjustments (Promo credit, SIE credit etc.).
+     * 
+     * @return the adjustmentDetails value.
+     */
+    public List<BalancePropertiesAdjustmentDetailsItem> adjustmentDetails() {
+        return this.innerProperties() == null ? null : this.innerProperties().adjustmentDetails();
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
-        if (newPurchasesDetails() != null) {
-            newPurchasesDetails().forEach(e -> e.validate());
+        if (innerProperties() != null) {
+            innerProperties().validate();
         }
-        if (adjustmentDetails() != null) {
-            adjustmentDetails().forEach(e -> e.validate());
-        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of BalanceInner from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of BalanceInner if the JsonReader was pointing to an instance of it, or null if it was
+     * pointing to JSON null.
+     * @throws IllegalStateException If the deserialized JSON object was missing any required properties.
+     * @throws IOException If an error occurs while reading the BalanceInner.
+     */
+    public static BalanceInner fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            BalanceInner deserializedBalanceInner = new BalanceInner();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("id".equals(fieldName)) {
+                    deserializedBalanceInner.id = reader.getString();
+                } else if ("name".equals(fieldName)) {
+                    deserializedBalanceInner.name = reader.getString();
+                } else if ("type".equals(fieldName)) {
+                    deserializedBalanceInner.type = reader.getString();
+                } else if ("properties".equals(fieldName)) {
+                    deserializedBalanceInner.innerProperties = BalanceProperties.fromJson(reader);
+                } else if ("etag".equals(fieldName)) {
+                    deserializedBalanceInner.etag = reader.getString();
+                } else if ("tags".equals(fieldName)) {
+                    Map<String, String> tags = reader.readMap(reader1 -> reader1.getString());
+                    deserializedBalanceInner.tags = tags;
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedBalanceInner;
+        });
     }
 }

@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Target details for file / folder restore. */
+/**
+ * Target details for file / folder restore.
+ */
 @Fluent
 public final class InstantItemRecoveryTarget {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(InstantItemRecoveryTarget.class);
-
     /*
      * List of client scripts.
      */
@@ -22,8 +20,14 @@ public final class InstantItemRecoveryTarget {
     private List<ClientScriptForConnect> clientScripts;
 
     /**
+     * Creates an instance of InstantItemRecoveryTarget class.
+     */
+    public InstantItemRecoveryTarget() {
+    }
+
+    /**
      * Get the clientScripts property: List of client scripts.
-     *
+     * 
      * @return the clientScripts value.
      */
     public List<ClientScriptForConnect> clientScripts() {
@@ -32,7 +36,7 @@ public final class InstantItemRecoveryTarget {
 
     /**
      * Set the clientScripts property: List of client scripts.
-     *
+     * 
      * @param clientScripts the clientScripts value to set.
      * @return the InstantItemRecoveryTarget object itself.
      */
@@ -43,7 +47,7 @@ public final class InstantItemRecoveryTarget {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

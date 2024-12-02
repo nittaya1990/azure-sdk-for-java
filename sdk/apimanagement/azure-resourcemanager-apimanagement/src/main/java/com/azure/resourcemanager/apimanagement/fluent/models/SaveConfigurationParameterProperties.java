@@ -6,28 +6,27 @@ package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Parameters supplied to the Save Tenant Configuration operation. */
 @Fluent
 public final class SaveConfigurationParameterProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SaveConfigurationParameterProperties.class);
-
     /*
-     * The name of the Git branch in which to commit the current configuration
-     * snapshot.
+     * The name of the Git branch in which to commit the current configuration snapshot.
      */
     @JsonProperty(value = "branch", required = true)
     private String branch;
 
     /*
-     * The value if true, the current configuration database is committed to
-     * the Git repository, even if the Git repository has newer changes that
-     * would be overwritten.
+     * The value if true, the current configuration database is committed to the Git repository, even if the Git
+     * repository has newer changes that would be overwritten.
      */
     @JsonProperty(value = "force")
     private Boolean force;
+
+    /** Creates an instance of SaveConfigurationParameterProperties class. */
+    public SaveConfigurationParameterProperties() {
+    }
 
     /**
      * Get the branch property: The name of the Git branch in which to commit the current configuration snapshot.
@@ -78,10 +77,10 @@ public final class SaveConfigurationParameterProperties {
      */
     public void validate() {
         if (branch() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property branch in model SaveConfigurationParameterProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property branch in model SaveConfigurationParameterProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(SaveConfigurationParameterProperties.class);
 }

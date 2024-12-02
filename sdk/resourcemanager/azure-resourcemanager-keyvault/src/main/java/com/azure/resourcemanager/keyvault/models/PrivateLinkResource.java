@@ -5,84 +5,97 @@
 package com.azure.resourcemanager.keyvault.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.management.Resource;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import com.azure.resourcemanager.keyvault.fluent.models.PrivateLinkResourceProperties;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-/** A private link resource. */
-@JsonFlatten
+/**
+ * A private link resource.
+ */
 @Fluent
-public class PrivateLinkResource extends Resource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PrivateLinkResource.class);
+public final class PrivateLinkResource extends Resource {
+    /*
+     * Resource properties.
+     */
+    private PrivateLinkResourceProperties innerProperties;
 
     /*
-     * Group identifier of private link resource.
+     * Fully qualified resource Id for the resource.
      */
-    @JsonProperty(value = "properties.groupId", access = JsonProperty.Access.WRITE_ONLY)
-    private String groupId;
+    private String id;
 
     /*
-     * Required member names of private link resource.
+     * The name of the resource.
      */
-    @JsonProperty(value = "properties.requiredMembers", access = JsonProperty.Access.WRITE_ONLY)
-    private List<String> requiredMembers;
+    private String name;
 
     /*
-     * Required DNS zone names of the the private link resource.
+     * The type of the resource.
      */
-    @JsonProperty(value = "properties.requiredZoneNames")
-    private List<String> requiredZoneNames;
+    private String type;
 
     /**
-     * Get the groupId property: Group identifier of private link resource.
-     *
-     * @return the groupId value.
+     * Creates an instance of PrivateLinkResource class.
      */
-    public String groupId() {
-        return this.groupId;
+    public PrivateLinkResource() {
     }
 
     /**
-     * Get the requiredMembers property: Required member names of private link resource.
-     *
-     * @return the requiredMembers value.
+     * Get the innerProperties property: Resource properties.
+     * 
+     * @return the innerProperties value.
      */
-    public List<String> requiredMembers() {
-        return this.requiredMembers;
+    private PrivateLinkResourceProperties innerProperties() {
+        return this.innerProperties;
     }
 
     /**
-     * Get the requiredZoneNames property: Required DNS zone names of the the private link resource.
-     *
-     * @return the requiredZoneNames value.
+     * Get the id property: Fully qualified resource Id for the resource.
+     * 
+     * @return the id value.
      */
-    public List<String> requiredZoneNames() {
-        return this.requiredZoneNames;
+    @Override
+    public String id() {
+        return this.id;
     }
 
     /**
-     * Set the requiredZoneNames property: Required DNS zone names of the the private link resource.
-     *
-     * @param requiredZoneNames the requiredZoneNames value to set.
-     * @return the PrivateLinkResource object itself.
+     * Get the name property: The name of the resource.
+     * 
+     * @return the name value.
      */
-    public PrivateLinkResource withRequiredZoneNames(List<String> requiredZoneNames) {
-        this.requiredZoneNames = requiredZoneNames;
-        return this;
+    @Override
+    public String name() {
+        return this.name;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * Get the type property: The type of the resource.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PrivateLinkResource withLocation(String location) {
         super.withLocation(location);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PrivateLinkResource withTags(Map<String, String> tags) {
         super.withTags(tags);
@@ -90,10 +103,104 @@ public class PrivateLinkResource extends Resource {
     }
 
     /**
+     * Get the groupId property: Group identifier of private link resource.
+     * 
+     * @return the groupId value.
+     */
+    public String groupId() {
+        return this.innerProperties() == null ? null : this.innerProperties().groupId();
+    }
+
+    /**
+     * Get the requiredMembers property: Required member names of private link resource.
+     * 
+     * @return the requiredMembers value.
+     */
+    public List<String> requiredMembers() {
+        return this.innerProperties() == null ? null : this.innerProperties().requiredMembers();
+    }
+
+    /**
+     * Get the requiredZoneNames property: Required DNS zone names of the the private link resource.
+     * 
+     * @return the requiredZoneNames value.
+     */
+    public List<String> requiredZoneNames() {
+        return this.innerProperties() == null ? null : this.innerProperties().requiredZoneNames();
+    }
+
+    /**
+     * Set the requiredZoneNames property: Required DNS zone names of the the private link resource.
+     * 
+     * @param requiredZoneNames the requiredZoneNames value to set.
+     * @return the PrivateLinkResource object itself.
+     */
+    public PrivateLinkResource withRequiredZoneNames(List<String> requiredZoneNames) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new PrivateLinkResourceProperties();
+        }
+        this.innerProperties().withRequiredZoneNames(requiredZoneNames);
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
+        if (innerProperties() != null) {
+            innerProperties().validate();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeStringField("location", location());
+        jsonWriter.writeMapField("tags", tags(), (writer, element) -> writer.writeString(element));
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of PrivateLinkResource from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of PrivateLinkResource if the JsonReader was pointing to an instance of it, or null if it was
+     * pointing to JSON null.
+     * @throws IllegalStateException If the deserialized JSON object was missing any required properties.
+     * @throws IOException If an error occurs while reading the PrivateLinkResource.
+     */
+    public static PrivateLinkResource fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            PrivateLinkResource deserializedPrivateLinkResource = new PrivateLinkResource();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("id".equals(fieldName)) {
+                    deserializedPrivateLinkResource.id = reader.getString();
+                } else if ("name".equals(fieldName)) {
+                    deserializedPrivateLinkResource.name = reader.getString();
+                } else if ("type".equals(fieldName)) {
+                    deserializedPrivateLinkResource.type = reader.getString();
+                } else if ("location".equals(fieldName)) {
+                    deserializedPrivateLinkResource.withLocation(reader.getString());
+                } else if ("tags".equals(fieldName)) {
+                    Map<String, String> tags = reader.readMap(reader1 -> reader1.getString());
+                    deserializedPrivateLinkResource.withTags(tags);
+                } else if ("properties".equals(fieldName)) {
+                    deserializedPrivateLinkResource.innerProperties = PrivateLinkResourceProperties.fromJson(reader);
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedPrivateLinkResource;
+        });
     }
 }

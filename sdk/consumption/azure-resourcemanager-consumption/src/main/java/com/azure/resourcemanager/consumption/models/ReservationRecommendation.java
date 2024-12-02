@@ -7,39 +7,69 @@ package com.azure.resourcemanager.consumption.models;
 import com.azure.resourcemanager.consumption.fluent.models.ReservationRecommendationInner;
 import java.util.Map;
 
-/** An immutable client-side representation of ReservationRecommendation. */
+/**
+ * An immutable client-side representation of ReservationRecommendation.
+ */
 public interface ReservationRecommendation {
     /**
-     * Gets the location property: Resource location.
-     *
-     * @return the location value.
+     * Gets the id property: Fully qualified resource Id for the resource.
+     * 
+     * @return the id value.
      */
-    String location();
+    String id();
 
     /**
-     * Gets the sku property: Resource sku.
-     *
-     * @return the sku value.
+     * Gets the name property: The name of the resource.
+     * 
+     * @return the name value.
      */
-    String sku();
+    String name();
 
     /**
-     * Gets the etag property: Resource etag.
-     *
+     * Gets the type property: The type of the resource.
+     * 
+     * @return the type value.
+     */
+    String type();
+
+    /**
+     * Gets the kind property: Specifies the kind of reservation recommendation.
+     * 
+     * @return the kind value.
+     */
+    ReservationRecommendationKind kind();
+
+    /**
+     * Gets the etag property: The etag for the resource.
+     * 
      * @return the etag value.
      */
     String etag();
 
     /**
      * Gets the tags property: Resource tags.
-     *
+     * 
      * @return the tags value.
      */
     Map<String, String> tags();
 
     /**
+     * Gets the location property: Resource location.
+     * 
+     * @return the location value.
+     */
+    String location();
+
+    /**
+     * Gets the sku property: Resource sku.
+     * 
+     * @return the sku value.
+     */
+    String sku();
+
+    /**
      * Gets the inner com.azure.resourcemanager.consumption.fluent.models.ReservationRecommendationInner object.
-     *
+     * 
      * @return the inner object.
      */
     ReservationRecommendationInner innerModel();

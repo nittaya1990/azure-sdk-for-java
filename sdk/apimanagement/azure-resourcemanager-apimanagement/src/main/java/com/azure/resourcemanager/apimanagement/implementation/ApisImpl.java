@@ -17,17 +17,16 @@ import com.azure.resourcemanager.apimanagement.models.Apis;
 import com.azure.resourcemanager.apimanagement.models.ApisGetEntityTagResponse;
 import com.azure.resourcemanager.apimanagement.models.ApisGetResponse;
 import com.azure.resourcemanager.apimanagement.models.TagResourceContract;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class ApisImpl implements Apis {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApisImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(ApisImpl.class);
 
     private final ApisClient innerClient;
 
     private final com.azure.resourcemanager.apimanagement.ApiManagementManager serviceManager;
 
-    public ApisImpl(
-        ApisClient innerClient, com.azure.resourcemanager.apimanagement.ApiManagementManager serviceManager) {
+    public ApisImpl(ApisClient innerClient,
+        com.azure.resourcemanager.apimanagement.ApiManagementManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
     }
@@ -37,29 +36,31 @@ public final class ApisImpl implements Apis {
         return Utils.mapPage(inner, inner1 -> new ApiContractImpl(inner1, this.manager()));
     }
 
-    public PagedIterable<ApiContract> listByService(
-        String resourceGroupName,
-        String serviceName,
-        String filter,
-        Integer top,
-        Integer skip,
-        String tags,
-        Boolean expandApiVersionSet,
-        Context context) {
-        PagedIterable<ApiContractInner> inner =
-            this
-                .serviceClient()
-                .listByService(resourceGroupName, serviceName, filter, top, skip, tags, expandApiVersionSet, context);
+    public PagedIterable<ApiContract> listByService(String resourceGroupName, String serviceName, String filter,
+        Integer top, Integer skip, String tags, Boolean expandApiVersionSet, Context context) {
+        PagedIterable<ApiContractInner> inner = this.serviceClient()
+            .listByService(resourceGroupName, serviceName, filter, top, skip, tags, expandApiVersionSet, context);
         return Utils.mapPage(inner, inner1 -> new ApiContractImpl(inner1, this.manager()));
+    }
+
+    public ApisGetEntityTagResponse getEntityTagWithResponse(String resourceGroupName, String serviceName, String apiId,
+        Context context) {
+        return this.serviceClient().getEntityTagWithResponse(resourceGroupName, serviceName, apiId, context);
     }
 
     public void getEntityTag(String resourceGroupName, String serviceName, String apiId) {
         this.serviceClient().getEntityTag(resourceGroupName, serviceName, apiId);
     }
 
-    public ApisGetEntityTagResponse getEntityTagWithResponse(
-        String resourceGroupName, String serviceName, String apiId, Context context) {
-        return this.serviceClient().getEntityTagWithResponse(resourceGroupName, serviceName, apiId, context);
+    public Response<ApiContract> getWithResponse(String resourceGroupName, String serviceName, String apiId,
+        Context context) {
+        ApisGetResponse inner = this.serviceClient().getWithResponse(resourceGroupName, serviceName, apiId, context);
+        if (inner != null) {
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
+                new ApiContractImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
     }
 
     public ApiContract get(String resourceGroupName, String serviceName, String apiId) {
@@ -71,34 +72,14 @@ public final class ApisImpl implements Apis {
         }
     }
 
-    public Response<ApiContract> getWithResponse(
-        String resourceGroupName, String serviceName, String apiId, Context context) {
-        ApisGetResponse inner = this.serviceClient().getWithResponse(resourceGroupName, serviceName, apiId, context);
-        if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
-                new ApiContractImpl(inner.getValue(), this.manager()));
-        } else {
-            return null;
-        }
+    public Response<Void> deleteWithResponse(String resourceGroupName, String serviceName, String apiId, String ifMatch,
+        Boolean deleteRevisions, Context context) {
+        return this.serviceClient()
+            .deleteWithResponse(resourceGroupName, serviceName, apiId, ifMatch, deleteRevisions, context);
     }
 
     public void delete(String resourceGroupName, String serviceName, String apiId, String ifMatch) {
         this.serviceClient().delete(resourceGroupName, serviceName, apiId, ifMatch);
-    }
-
-    public Response<Void> deleteWithResponse(
-        String resourceGroupName,
-        String serviceName,
-        String apiId,
-        String ifMatch,
-        Boolean deleteRevisions,
-        Context context) {
-        return this
-            .serviceClient()
-            .deleteWithResponse(resourceGroupName, serviceName, apiId, ifMatch, deleteRevisions, context);
     }
 
     public PagedIterable<TagResourceContract> listByTags(String resourceGroupName, String serviceName) {
@@ -106,43 +87,28 @@ public final class ApisImpl implements Apis {
         return Utils.mapPage(inner, inner1 -> new TagResourceContractImpl(inner1, this.manager()));
     }
 
-    public PagedIterable<TagResourceContract> listByTags(
-        String resourceGroupName,
-        String serviceName,
-        String filter,
-        Integer top,
-        Integer skip,
-        Boolean includeNotTaggedApis,
-        Context context) {
-        PagedIterable<TagResourceContractInner> inner =
-            this
-                .serviceClient()
-                .listByTags(resourceGroupName, serviceName, filter, top, skip, includeNotTaggedApis, context);
+    public PagedIterable<TagResourceContract> listByTags(String resourceGroupName, String serviceName, String filter,
+        Integer top, Integer skip, Boolean includeNotTaggedApis, Context context) {
+        PagedIterable<TagResourceContractInner> inner = this.serviceClient()
+            .listByTags(resourceGroupName, serviceName, filter, top, skip, includeNotTaggedApis, context);
         return Utils.mapPage(inner, inner1 -> new TagResourceContractImpl(inner1, this.manager()));
     }
 
     public ApiContract getById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
         String apiId = Utils.getValueFromIdByName(id, "apis");
         if (apiId == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'apis'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'apis'.", id)));
         }
         return this.getWithResponse(resourceGroupName, serviceName, apiId, Context.NONE).getValue();
     }
@@ -150,25 +116,18 @@ public final class ApisImpl implements Apis {
     public Response<ApiContract> getByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
         String apiId = Utils.getValueFromIdByName(id, "apis");
         if (apiId == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'apis'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'apis'.", id)));
         }
         return this.getWithResponse(resourceGroupName, serviceName, apiId, context);
     }
@@ -176,55 +135,40 @@ public final class ApisImpl implements Apis {
     public void deleteById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
         String apiId = Utils.getValueFromIdByName(id, "apis");
         if (apiId == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'apis'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'apis'.", id)));
         }
         String localIfMatch = null;
         Boolean localDeleteRevisions = null;
-        this
-            .deleteWithResponse(resourceGroupName, serviceName, apiId, localIfMatch, localDeleteRevisions, Context.NONE)
-            .getValue();
+        this.deleteWithResponse(resourceGroupName, serviceName, apiId, localIfMatch, localDeleteRevisions,
+            Context.NONE);
     }
 
     public Response<Void> deleteByIdWithResponse(String id, String ifMatch, Boolean deleteRevisions, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
         String apiId = Utils.getValueFromIdByName(id, "apis");
         if (apiId == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'apis'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'apis'.", id)));
         }
         return this.deleteWithResponse(resourceGroupName, serviceName, apiId, ifMatch, deleteRevisions, context);
     }

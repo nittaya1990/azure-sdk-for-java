@@ -5,17 +5,13 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.models.ContentItemContractInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Paged list of content items. */
 @Immutable
 public final class ContentItemCollection {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ContentItemCollection.class);
-
     /*
      * Collection of content items.
      */
@@ -27,6 +23,10 @@ public final class ContentItemCollection {
      */
     @JsonProperty(value = "nextLink", access = JsonProperty.Access.WRITE_ONLY)
     private String nextLink;
+
+    /** Creates an instance of ContentItemCollection class. */
+    public ContentItemCollection() {
+    }
 
     /**
      * Get the value property: Collection of content items.

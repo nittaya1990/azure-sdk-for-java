@@ -5,93 +5,66 @@
 package com.azure.resourcemanager.policyinsights.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.management.ProxyResource;
 import com.azure.core.management.SystemData;
 import com.azure.core.util.logging.ClientLogger;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
 import com.azure.resourcemanager.policyinsights.models.AttestationEvidence;
 import com.azure.resourcemanager.policyinsights.models.ComplianceState;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.IOException;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-/** An attestation resource. */
-@JsonFlatten
+/**
+ * An attestation resource.
+ */
 @Fluent
-public class AttestationInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AttestationInner.class);
+public final class AttestationInner extends ProxyResource {
+    /*
+     * Properties for the attestation.
+     */
+    private AttestationProperties innerProperties = new AttestationProperties();
 
     /*
-     * Azure Resource Manager metadata containing createdBy and modifiedBy
-     * information.
+     * Azure Resource Manager metadata containing createdBy and modifiedBy information.
      */
-    @JsonProperty(value = "systemData", access = JsonProperty.Access.WRITE_ONLY)
     private SystemData systemData;
 
     /*
-     * The resource ID of the policy assignment that the attestation is setting
-     * the state for.
+     * The type of the resource.
      */
-    @JsonProperty(value = "properties.policyAssignmentId", required = true)
-    private String policyAssignmentId;
+    private String type;
 
     /*
-     * The policy definition reference ID from a policy set definition that the
-     * attestation is setting the state for. If the policy assignment assigns a
-     * policy set definition the attestation can choose a definition within the
-     * set definition with this property or omit this and set the state for the
-     * entire set definition.
+     * The name of the resource.
      */
-    @JsonProperty(value = "properties.policyDefinitionReferenceId")
-    private String policyDefinitionReferenceId;
+    private String name;
 
     /*
-     * The compliance state that should be set on the resource.
+     * Fully qualified resource Id for the resource.
      */
-    @JsonProperty(value = "properties.complianceState")
-    private ComplianceState complianceState;
+    private String id;
 
-    /*
-     * The time the compliance state should expire.
+    /**
+     * Creates an instance of AttestationInner class.
      */
-    @JsonProperty(value = "properties.expiresOn")
-    private OffsetDateTime expiresOn;
+    public AttestationInner() {
+    }
 
-    /*
-     * The person responsible for setting the state of the resource. This value
-     * is typically an Azure Active Directory object ID.
+    /**
+     * Get the innerProperties property: Properties for the attestation.
+     * 
+     * @return the innerProperties value.
      */
-    @JsonProperty(value = "properties.owner")
-    private String owner;
-
-    /*
-     * Comments describing why this attestation was created.
-     */
-    @JsonProperty(value = "properties.comments")
-    private String comments;
-
-    /*
-     * The evidence supporting the compliance state set in this attestation.
-     */
-    @JsonProperty(value = "properties.evidence")
-    private List<AttestationEvidence> evidence;
-
-    /*
-     * The status of the attestation.
-     */
-    @JsonProperty(value = "properties.provisioningState", access = JsonProperty.Access.WRITE_ONLY)
-    private String provisioningState;
-
-    /*
-     * The time the compliance state was last changed in this attestation.
-     */
-    @JsonProperty(value = "properties.lastComplianceStateChangeAt", access = JsonProperty.Access.WRITE_ONLY)
-    private OffsetDateTime lastComplianceStateChangeAt;
+    private AttestationProperties innerProperties() {
+        return this.innerProperties;
+    }
 
     /**
      * Get the systemData property: Azure Resource Manager metadata containing createdBy and modifiedBy information.
-     *
+     * 
      * @return the systemData value.
      */
     public SystemData systemData() {
@@ -99,24 +72,57 @@ public class AttestationInner extends ProxyResource {
     }
 
     /**
+     * Get the type property: The type of the resource.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
+     * Get the name property: The name of the resource.
+     * 
+     * @return the name value.
+     */
+    @Override
+    public String name() {
+        return this.name;
+    }
+
+    /**
+     * Get the id property: Fully qualified resource Id for the resource.
+     * 
+     * @return the id value.
+     */
+    @Override
+    public String id() {
+        return this.id;
+    }
+
+    /**
      * Get the policyAssignmentId property: The resource ID of the policy assignment that the attestation is setting the
      * state for.
-     *
+     * 
      * @return the policyAssignmentId value.
      */
     public String policyAssignmentId() {
-        return this.policyAssignmentId;
+        return this.innerProperties() == null ? null : this.innerProperties().policyAssignmentId();
     }
 
     /**
      * Set the policyAssignmentId property: The resource ID of the policy assignment that the attestation is setting the
      * state for.
-     *
+     * 
      * @param policyAssignmentId the policyAssignmentId value to set.
      * @return the AttestationInner object itself.
      */
     public AttestationInner withPolicyAssignmentId(String policyAssignmentId) {
-        this.policyAssignmentId = policyAssignmentId;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AttestationProperties();
+        }
+        this.innerProperties().withPolicyAssignmentId(policyAssignmentId);
         return this;
     }
 
@@ -125,11 +131,11 @@ public class AttestationInner extends ProxyResource {
      * that the attestation is setting the state for. If the policy assignment assigns a policy set definition the
      * attestation can choose a definition within the set definition with this property or omit this and set the state
      * for the entire set definition.
-     *
+     * 
      * @return the policyDefinitionReferenceId value.
      */
     public String policyDefinitionReferenceId() {
-        return this.policyDefinitionReferenceId;
+        return this.innerProperties() == null ? null : this.innerProperties().policyDefinitionReferenceId();
     }
 
     /**
@@ -137,149 +143,258 @@ public class AttestationInner extends ProxyResource {
      * that the attestation is setting the state for. If the policy assignment assigns a policy set definition the
      * attestation can choose a definition within the set definition with this property or omit this and set the state
      * for the entire set definition.
-     *
+     * 
      * @param policyDefinitionReferenceId the policyDefinitionReferenceId value to set.
      * @return the AttestationInner object itself.
      */
     public AttestationInner withPolicyDefinitionReferenceId(String policyDefinitionReferenceId) {
-        this.policyDefinitionReferenceId = policyDefinitionReferenceId;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AttestationProperties();
+        }
+        this.innerProperties().withPolicyDefinitionReferenceId(policyDefinitionReferenceId);
         return this;
     }
 
     /**
      * Get the complianceState property: The compliance state that should be set on the resource.
-     *
+     * 
      * @return the complianceState value.
      */
     public ComplianceState complianceState() {
-        return this.complianceState;
+        return this.innerProperties() == null ? null : this.innerProperties().complianceState();
     }
 
     /**
      * Set the complianceState property: The compliance state that should be set on the resource.
-     *
+     * 
      * @param complianceState the complianceState value to set.
      * @return the AttestationInner object itself.
      */
     public AttestationInner withComplianceState(ComplianceState complianceState) {
-        this.complianceState = complianceState;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AttestationProperties();
+        }
+        this.innerProperties().withComplianceState(complianceState);
         return this;
     }
 
     /**
      * Get the expiresOn property: The time the compliance state should expire.
-     *
+     * 
      * @return the expiresOn value.
      */
     public OffsetDateTime expiresOn() {
-        return this.expiresOn;
+        return this.innerProperties() == null ? null : this.innerProperties().expiresOn();
     }
 
     /**
      * Set the expiresOn property: The time the compliance state should expire.
-     *
+     * 
      * @param expiresOn the expiresOn value to set.
      * @return the AttestationInner object itself.
      */
     public AttestationInner withExpiresOn(OffsetDateTime expiresOn) {
-        this.expiresOn = expiresOn;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AttestationProperties();
+        }
+        this.innerProperties().withExpiresOn(expiresOn);
         return this;
     }
 
     /**
      * Get the owner property: The person responsible for setting the state of the resource. This value is typically an
      * Azure Active Directory object ID.
-     *
+     * 
      * @return the owner value.
      */
     public String owner() {
-        return this.owner;
+        return this.innerProperties() == null ? null : this.innerProperties().owner();
     }
 
     /**
      * Set the owner property: The person responsible for setting the state of the resource. This value is typically an
      * Azure Active Directory object ID.
-     *
+     * 
      * @param owner the owner value to set.
      * @return the AttestationInner object itself.
      */
     public AttestationInner withOwner(String owner) {
-        this.owner = owner;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AttestationProperties();
+        }
+        this.innerProperties().withOwner(owner);
         return this;
     }
 
     /**
      * Get the comments property: Comments describing why this attestation was created.
-     *
+     * 
      * @return the comments value.
      */
     public String comments() {
-        return this.comments;
+        return this.innerProperties() == null ? null : this.innerProperties().comments();
     }
 
     /**
      * Set the comments property: Comments describing why this attestation was created.
-     *
+     * 
      * @param comments the comments value to set.
      * @return the AttestationInner object itself.
      */
     public AttestationInner withComments(String comments) {
-        this.comments = comments;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AttestationProperties();
+        }
+        this.innerProperties().withComments(comments);
         return this;
     }
 
     /**
      * Get the evidence property: The evidence supporting the compliance state set in this attestation.
-     *
+     * 
      * @return the evidence value.
      */
     public List<AttestationEvidence> evidence() {
-        return this.evidence;
+        return this.innerProperties() == null ? null : this.innerProperties().evidence();
     }
 
     /**
      * Set the evidence property: The evidence supporting the compliance state set in this attestation.
-     *
+     * 
      * @param evidence the evidence value to set.
      * @return the AttestationInner object itself.
      */
     public AttestationInner withEvidence(List<AttestationEvidence> evidence) {
-        this.evidence = evidence;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AttestationProperties();
+        }
+        this.innerProperties().withEvidence(evidence);
         return this;
     }
 
     /**
      * Get the provisioningState property: The status of the attestation.
-     *
+     * 
      * @return the provisioningState value.
      */
     public String provisioningState() {
-        return this.provisioningState;
+        return this.innerProperties() == null ? null : this.innerProperties().provisioningState();
     }
 
     /**
      * Get the lastComplianceStateChangeAt property: The time the compliance state was last changed in this attestation.
-     *
+     * 
      * @return the lastComplianceStateChangeAt value.
      */
     public OffsetDateTime lastComplianceStateChangeAt() {
-        return this.lastComplianceStateChangeAt;
+        return this.innerProperties() == null ? null : this.innerProperties().lastComplianceStateChangeAt();
+    }
+
+    /**
+     * Get the assessmentDate property: The time the evidence was assessed.
+     * 
+     * @return the assessmentDate value.
+     */
+    public OffsetDateTime assessmentDate() {
+        return this.innerProperties() == null ? null : this.innerProperties().assessmentDate();
+    }
+
+    /**
+     * Set the assessmentDate property: The time the evidence was assessed.
+     * 
+     * @param assessmentDate the assessmentDate value to set.
+     * @return the AttestationInner object itself.
+     */
+    public AttestationInner withAssessmentDate(OffsetDateTime assessmentDate) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AttestationProperties();
+        }
+        this.innerProperties().withAssessmentDate(assessmentDate);
+        return this;
+    }
+
+    /**
+     * Get the metadata property: Additional metadata for this attestation.
+     * 
+     * @return the metadata value.
+     */
+    public Object metadata() {
+        return this.innerProperties() == null ? null : this.innerProperties().metadata();
+    }
+
+    /**
+     * Set the metadata property: Additional metadata for this attestation.
+     * 
+     * @param metadata the metadata value to set.
+     * @return the AttestationInner object itself.
+     */
+    public AttestationInner withMetadata(Object metadata) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AttestationProperties();
+        }
+        this.innerProperties().withMetadata(metadata);
+        return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
-        if (policyAssignmentId() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property policyAssignmentId in model AttestationInner"));
+        if (innerProperties() == null) {
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property innerProperties in model AttestationInner"));
+        } else {
+            innerProperties().validate();
         }
-        if (evidence() != null) {
-            evidence().forEach(e -> e.validate());
-        }
+    }
+
+    private static final ClientLogger LOGGER = new ClientLogger(AttestationInner.class);
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of AttestationInner from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of AttestationInner if the JsonReader was pointing to an instance of it, or null if it was
+     * pointing to JSON null.
+     * @throws IllegalStateException If the deserialized JSON object was missing any required properties.
+     * @throws IOException If an error occurs while reading the AttestationInner.
+     */
+    public static AttestationInner fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            AttestationInner deserializedAttestationInner = new AttestationInner();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("id".equals(fieldName)) {
+                    deserializedAttestationInner.id = reader.getString();
+                } else if ("name".equals(fieldName)) {
+                    deserializedAttestationInner.name = reader.getString();
+                } else if ("type".equals(fieldName)) {
+                    deserializedAttestationInner.type = reader.getString();
+                } else if ("properties".equals(fieldName)) {
+                    deserializedAttestationInner.innerProperties = AttestationProperties.fromJson(reader);
+                } else if ("systemData".equals(fieldName)) {
+                    deserializedAttestationInner.systemData = SystemData.fromJson(reader);
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedAttestationInner;
+        });
     }
 }

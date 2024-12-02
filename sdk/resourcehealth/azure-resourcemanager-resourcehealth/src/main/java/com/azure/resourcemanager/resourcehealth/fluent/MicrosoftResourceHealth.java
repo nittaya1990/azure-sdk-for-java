@@ -10,8 +10,7 @@ import java.time.Duration;
 /** The interface for MicrosoftResourceHealth class. */
 public interface MicrosoftResourceHealth {
     /**
-     * Gets Subscription credentials which uniquely identify Microsoft Azure subscription. The subscription ID forms
-     * part of the URI for every service call.
+     * Gets The ID of the target subscription.
      *
      * @return the subscriptionId value.
      */
@@ -46,13 +45,6 @@ public interface MicrosoftResourceHealth {
     Duration getDefaultPollInterval();
 
     /**
-     * Gets the EventsOperationsClient object to access its operations.
-     *
-     * @return the EventsOperationsClient object.
-     */
-    EventsOperationsClient getEventsOperations();
-
-    /**
      * Gets the AvailabilityStatusesClient object to access its operations.
      *
      * @return the AvailabilityStatusesClient object.
@@ -65,6 +57,55 @@ public interface MicrosoftResourceHealth {
      * @return the OperationsClient object.
      */
     OperationsClient getOperations();
+
+    /**
+     * Gets the MetadatasClient object to access its operations.
+     *
+     * @return the MetadatasClient object.
+     */
+    MetadatasClient getMetadatas();
+
+    /**
+     * Gets the ImpactedResourcesClient object to access its operations.
+     *
+     * @return the ImpactedResourcesClient object.
+     */
+    ImpactedResourcesClient getImpactedResources();
+
+    /**
+     * Gets the SecurityAdvisoryImpactedResourcesClient object to access its operations.
+     *
+     * @return the SecurityAdvisoryImpactedResourcesClient object.
+     */
+    SecurityAdvisoryImpactedResourcesClient getSecurityAdvisoryImpactedResources();
+
+    /**
+     * Gets the EventsOperationsClient object to access its operations.
+     *
+     * @return the EventsOperationsClient object.
+     */
+    EventsOperationsClient getEventsOperations();
+
+    /**
+     * Gets the EventOperationsClient object to access its operations.
+     *
+     * @return the EventOperationsClient object.
+     */
+    EventOperationsClient getEventOperations();
+
+    /**
+     * Gets the ChildAvailabilityStatusesClient object to access its operations.
+     *
+     * @return the ChildAvailabilityStatusesClient object.
+     */
+    ChildAvailabilityStatusesClient getChildAvailabilityStatuses();
+
+    /**
+     * Gets the ChildResourcesClient object to access its operations.
+     *
+     * @return the ChildResourcesClient object.
+     */
+    ChildResourcesClient getChildResources();
 
     /**
      * Gets the EmergingIssuesClient object to access its operations.

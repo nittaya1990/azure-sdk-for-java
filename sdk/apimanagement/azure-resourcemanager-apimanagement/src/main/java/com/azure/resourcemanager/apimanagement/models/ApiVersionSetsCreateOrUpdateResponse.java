@@ -21,16 +21,16 @@ public final class ApiVersionSetsCreateOrUpdateResponse
      * @param value the deserialized value of the HTTP response.
      * @param headers the deserialized headers of the HTTP response.
      */
-    public ApiVersionSetsCreateOrUpdateResponse(
-        HttpRequest request,
-        int statusCode,
-        HttpHeaders rawHeaders,
-        ApiVersionSetContractInner value,
-        ApiVersionSetsCreateOrUpdateHeaders headers) {
+    public ApiVersionSetsCreateOrUpdateResponse(HttpRequest request, int statusCode, HttpHeaders rawHeaders,
+        ApiVersionSetContractInner value, ApiVersionSetsCreateOrUpdateHeaders headers) {
         super(request, statusCode, rawHeaders, value, headers);
     }
 
-    /** @return the deserialized response body. */
+    /**
+     * Gets the deserialized response body.
+     *
+     * @return the deserialized response body.
+     */
     @Override
     public ApiVersionSetContractInner getValue() {
         return super.getValue();

@@ -31,7 +31,6 @@ import com.azure.core.management.exception.ManagementException;
 import com.azure.core.management.polling.PollResult;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.core.util.polling.PollerFlux;
 import com.azure.core.util.polling.SyncPoller;
 import com.azure.resourcemanager.kusto.fluent.ScriptsClient;
@@ -45,8 +44,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in ScriptsClient. */
 public final class ScriptsClientImpl implements ScriptsClient {
-    private final ClientLogger logger = new ClientLogger(ScriptsClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final ScriptsService service;
 
@@ -69,136 +66,93 @@ public final class ScriptsClientImpl implements ScriptsClient {
      */
     @Host("{$host}")
     @ServiceInterface(name = "KustoManagementClien")
-    private interface ScriptsService {
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Kusto/clusters"
-                + "/{clusterName}/databases/{databaseName}/scripts")
-        @ExpectedResponses({200})
+    public interface ScriptsService {
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Kusto/clusters/{clusterName}/databases/{databaseName}/scripts")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<ScriptListResult>> listByDatabase(
-            @HostParam("$host") String endpoint,
+        Mono<Response<ScriptListResult>> listByDatabase(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("clusterName") String clusterName,
-            @PathParam("databaseName") String databaseName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("clusterName") String clusterName,
+            @PathParam("databaseName") String databaseName, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Kusto/clusters"
-                + "/{clusterName}/databases/{databaseName}/scripts/{scriptName}")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Kusto/clusters/{clusterName}/databases/{databaseName}/scripts/{scriptName}")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<ScriptInner>> get(
-            @HostParam("$host") String endpoint,
+        Mono<Response<ScriptInner>> get(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("clusterName") String clusterName,
-            @PathParam("databaseName") String databaseName,
-            @PathParam("scriptName") String scriptName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("clusterName") String clusterName,
+            @PathParam("databaseName") String databaseName, @PathParam("scriptName") String scriptName,
+            @QueryParam("api-version") String apiVersion, @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Put(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Kusto/clusters"
-                + "/{clusterName}/databases/{databaseName}/scripts/{scriptName}")
-        @ExpectedResponses({200, 201, 202})
+        @Headers({ "Content-Type: application/json" })
+        @Put("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Kusto/clusters/{clusterName}/databases/{databaseName}/scripts/{scriptName}")
+        @ExpectedResponses({ 200, 201, 202 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> createOrUpdate(
-            @HostParam("$host") String endpoint,
+        Mono<Response<Flux<ByteBuffer>>> createOrUpdate(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("clusterName") String clusterName,
-            @PathParam("databaseName") String databaseName,
-            @PathParam("scriptName") String scriptName,
-            @QueryParam("api-version") String apiVersion,
-            @BodyParam("application/json") ScriptInner parameters,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("clusterName") String clusterName,
+            @PathParam("databaseName") String databaseName, @PathParam("scriptName") String scriptName,
+            @QueryParam("api-version") String apiVersion, @BodyParam("application/json") ScriptInner parameters,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Patch(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Kusto/clusters"
-                + "/{clusterName}/databases/{databaseName}/scripts/{scriptName}")
-        @ExpectedResponses({200, 202})
+        @Headers({ "Content-Type: application/json" })
+        @Patch("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Kusto/clusters/{clusterName}/databases/{databaseName}/scripts/{scriptName}")
+        @ExpectedResponses({ 200, 202 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> update(
-            @HostParam("$host") String endpoint,
+        Mono<Response<Flux<ByteBuffer>>> update(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("clusterName") String clusterName,
-            @PathParam("databaseName") String databaseName,
-            @PathParam("scriptName") String scriptName,
-            @QueryParam("api-version") String apiVersion,
-            @BodyParam("application/json") ScriptInner parameters,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("clusterName") String clusterName,
+            @PathParam("databaseName") String databaseName, @PathParam("scriptName") String scriptName,
+            @QueryParam("api-version") String apiVersion, @BodyParam("application/json") ScriptInner parameters,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Delete(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Kusto/clusters"
-                + "/{clusterName}/databases/{databaseName}/scripts/{scriptName}")
-        @ExpectedResponses({200, 202, 204})
+        @Headers({ "Content-Type: application/json" })
+        @Delete("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Kusto/clusters/{clusterName}/databases/{databaseName}/scripts/{scriptName}")
+        @ExpectedResponses({ 200, 202, 204 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> delete(
-            @HostParam("$host") String endpoint,
+        Mono<Response<Flux<ByteBuffer>>> delete(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("clusterName") String clusterName,
-            @PathParam("databaseName") String databaseName,
-            @PathParam("scriptName") String scriptName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("clusterName") String clusterName,
+            @PathParam("databaseName") String databaseName, @PathParam("scriptName") String scriptName,
+            @QueryParam("api-version") String apiVersion, @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Kusto/clusters"
-                + "/{clusterName}/databases/{databaseName}/scriptsCheckNameAvailability")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Post("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Kusto/clusters/{clusterName}/databases/{databaseName}/scriptsCheckNameAvailability")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<CheckNameResultInner>> checkNameAvailability(
-            @HostParam("$host") String endpoint,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("clusterName") String clusterName,
-            @PathParam("databaseName") String databaseName,
-            @QueryParam("api-version") String apiVersion,
+        Mono<Response<CheckNameResultInner>> checkNameAvailability(@HostParam("$host") String endpoint,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("clusterName") String clusterName,
+            @PathParam("databaseName") String databaseName, @QueryParam("api-version") String apiVersion,
             @PathParam("subscriptionId") String subscriptionId,
-            @BodyParam("application/json") ScriptCheckNameRequest scriptName,
-            @HeaderParam("Accept") String accept,
+            @BodyParam("application/json") ScriptCheckNameRequest scriptName, @HeaderParam("Accept") String accept,
             Context context);
     }
 
     /**
      * Returns the list of database scripts for given database.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto database script operation response.
+     * @return the list Kusto database script operation response along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<ScriptInner>> listByDatabaseSinglePageAsync(
-        String resourceGroupName, String clusterName, String databaseName) {
+    private Mono<PagedResponse<ScriptInner>> listByDatabaseSinglePageAsync(String resourceGroupName, String clusterName,
+        String databaseName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -212,51 +166,36 @@ public final class ScriptsClientImpl implements ScriptsClient {
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .listByDatabase(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            clusterName,
-                            databaseName,
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
-            .<PagedResponse<ScriptInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(), res.getStatusCode(), res.getHeaders(), res.getValue().value(), null, null))
+            .withContext(context -> service.listByDatabase(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                resourceGroupName, clusterName, databaseName, this.client.getApiVersion(), accept, context))
+            .<PagedResponse<ScriptInner>>map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(),
+                res.getHeaders(), res.getValue().value(), null, null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Returns the list of database scripts for given database.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto database script operation response.
+     * @return the list Kusto database script operation response along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<ScriptInner>> listByDatabaseSinglePageAsync(
-        String resourceGroupName, String clusterName, String databaseName, Context context) {
+    private Mono<PagedResponse<ScriptInner>> listByDatabaseSinglePageAsync(String resourceGroupName, String clusterName,
+        String databaseName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -271,53 +210,44 @@ public final class ScriptsClientImpl implements ScriptsClient {
         final String accept = "application/json";
         context = this.client.mergeContext(context);
         return service
-            .listByDatabase(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                clusterName,
-                databaseName,
-                this.client.getApiVersion(),
-                accept,
-                context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(), res.getStatusCode(), res.getHeaders(), res.getValue().value(), null, null));
+            .listByDatabase(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName, clusterName,
+                databaseName, this.client.getApiVersion(), accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), null, null));
     }
 
     /**
      * Returns the list of database scripts for given database.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto database script operation response.
+     * @return the list Kusto database script operation response as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<ScriptInner> listByDatabaseAsync(
-        String resourceGroupName, String clusterName, String databaseName) {
+    private PagedFlux<ScriptInner> listByDatabaseAsync(String resourceGroupName, String clusterName,
+        String databaseName) {
         return new PagedFlux<>(() -> listByDatabaseSinglePageAsync(resourceGroupName, clusterName, databaseName));
     }
 
     /**
      * Returns the list of database scripts for given database.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto database script operation response.
+     * @return the list Kusto database script operation response as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<ScriptInner> listByDatabaseAsync(
-        String resourceGroupName, String clusterName, String databaseName, Context context) {
+    private PagedFlux<ScriptInner> listByDatabaseAsync(String resourceGroupName, String clusterName,
+        String databaseName, Context context) {
         return new PagedFlux<>(
             () -> listByDatabaseSinglePageAsync(resourceGroupName, clusterName, databaseName, context));
     }
@@ -325,64 +255,60 @@ public final class ScriptsClientImpl implements ScriptsClient {
     /**
      * Returns the list of database scripts for given database.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto database script operation response.
+     * @return the list Kusto database script operation response as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<ScriptInner> listByDatabase(
-        String resourceGroupName, String clusterName, String databaseName) {
+    public PagedIterable<ScriptInner> listByDatabase(String resourceGroupName, String clusterName,
+        String databaseName) {
         return new PagedIterable<>(listByDatabaseAsync(resourceGroupName, clusterName, databaseName));
     }
 
     /**
      * Returns the list of database scripts for given database.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto database script operation response.
+     * @return the list Kusto database script operation response as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<ScriptInner> listByDatabase(
-        String resourceGroupName, String clusterName, String databaseName, Context context) {
+    public PagedIterable<ScriptInner> listByDatabase(String resourceGroupName, String clusterName, String databaseName,
+        Context context) {
         return new PagedIterable<>(listByDatabaseAsync(resourceGroupName, clusterName, databaseName, context));
     }
 
     /**
      * Gets a Kusto cluster database script.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param scriptName The name of the Kusto database script.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Kusto cluster database script.
+     * @return a Kusto cluster database script along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<ScriptInner>> getWithResponseAsync(
-        String resourceGroupName, String clusterName, String databaseName, String scriptName) {
+    private Mono<Response<ScriptInner>> getWithResponseAsync(String resourceGroupName, String clusterName,
+        String databaseName, String scriptName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -399,26 +325,15 @@ public final class ScriptsClientImpl implements ScriptsClient {
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .get(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            clusterName,
-                            databaseName,
-                            scriptName,
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
+            .withContext(context -> service.get(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                resourceGroupName, clusterName, databaseName, scriptName, this.client.getApiVersion(), accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Gets a Kusto cluster database script.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param scriptName The name of the Kusto database script.
@@ -426,22 +341,18 @@ public final class ScriptsClientImpl implements ScriptsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Kusto cluster database script.
+     * @return a Kusto cluster database script along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<ScriptInner>> getWithResponseAsync(
-        String resourceGroupName, String clusterName, String databaseName, String scriptName, Context context) {
+    private Mono<Response<ScriptInner>> getWithResponseAsync(String resourceGroupName, String clusterName,
+        String databaseName, String scriptName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -458,49 +369,52 @@ public final class ScriptsClientImpl implements ScriptsClient {
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .get(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                clusterName,
-                databaseName,
-                scriptName,
-                this.client.getApiVersion(),
-                accept,
-                context);
+        return service.get(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName, clusterName,
+            databaseName, scriptName, this.client.getApiVersion(), accept, context);
     }
 
     /**
      * Gets a Kusto cluster database script.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param scriptName The name of the Kusto database script.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Kusto cluster database script.
+     * @return a Kusto cluster database script on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<ScriptInner> getAsync(
-        String resourceGroupName, String clusterName, String databaseName, String scriptName) {
+    private Mono<ScriptInner> getAsync(String resourceGroupName, String clusterName, String databaseName,
+        String scriptName) {
         return getWithResponseAsync(resourceGroupName, clusterName, databaseName, scriptName)
-            .flatMap(
-                (Response<ScriptInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Gets a Kusto cluster database script.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param clusterName The name of the Kusto cluster.
+     * @param databaseName The name of the database in the Kusto cluster.
+     * @param scriptName The name of the Kusto database script.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a Kusto cluster database script along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<ScriptInner> getWithResponse(String resourceGroupName, String clusterName, String databaseName,
+        String scriptName, Context context) {
+        return getWithResponseAsync(resourceGroupName, clusterName, databaseName, scriptName, context).block();
+    }
+
+    /**
+     * Gets a Kusto cluster database script.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param scriptName The name of the Kusto database script.
@@ -511,32 +425,13 @@ public final class ScriptsClientImpl implements ScriptsClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public ScriptInner get(String resourceGroupName, String clusterName, String databaseName, String scriptName) {
-        return getAsync(resourceGroupName, clusterName, databaseName, scriptName).block();
-    }
-
-    /**
-     * Gets a Kusto cluster database script.
-     *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
-     * @param clusterName The name of the Kusto cluster.
-     * @param databaseName The name of the database in the Kusto cluster.
-     * @param scriptName The name of the Kusto database script.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Kusto cluster database script.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<ScriptInner> getWithResponse(
-        String resourceGroupName, String clusterName, String databaseName, String scriptName, Context context) {
-        return getWithResponseAsync(resourceGroupName, clusterName, databaseName, scriptName, context).block();
+        return getWithResponse(resourceGroupName, clusterName, databaseName, scriptName, Context.NONE).getValue();
     }
 
     /**
      * Creates a Kusto database script.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param scriptName The name of the Kusto database script.
@@ -544,22 +439,19 @@ public final class ScriptsClientImpl implements ScriptsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a database script.
+     * @return class representing a database script along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(
-        String resourceGroupName, String clusterName, String databaseName, String scriptName, ScriptInner parameters) {
+    private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(String resourceGroupName,
+        String clusterName, String databaseName, String scriptName, ScriptInner parameters) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -581,27 +473,16 @@ public final class ScriptsClientImpl implements ScriptsClient {
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .createOrUpdate(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            clusterName,
-                            databaseName,
-                            scriptName,
-                            this.client.getApiVersion(),
-                            parameters,
-                            accept,
-                            context))
+            .withContext(context -> service.createOrUpdate(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                resourceGroupName, clusterName, databaseName, scriptName, this.client.getApiVersion(), parameters,
+                accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Creates a Kusto database script.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param scriptName The name of the Kusto database script.
@@ -610,27 +491,19 @@ public final class ScriptsClientImpl implements ScriptsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a database script.
+     * @return class representing a database script along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(
-        String resourceGroupName,
-        String clusterName,
-        String databaseName,
-        String scriptName,
-        ScriptInner parameters,
-        Context context) {
+    private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(String resourceGroupName,
+        String clusterName, String databaseName, String scriptName, ScriptInner parameters, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -652,24 +525,14 @@ public final class ScriptsClientImpl implements ScriptsClient {
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .createOrUpdate(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                clusterName,
-                databaseName,
-                scriptName,
-                this.client.getApiVersion(),
-                parameters,
-                accept,
-                context);
+        return service.createOrUpdate(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+            clusterName, databaseName, scriptName, this.client.getApiVersion(), parameters, accept, context);
     }
 
     /**
      * Creates a Kusto database script.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param scriptName The name of the Kusto database script.
@@ -677,23 +540,21 @@ public final class ScriptsClientImpl implements ScriptsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a database script.
+     * @return the {@link PollerFlux} for polling of class representing a database script.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private PollerFlux<PollResult<ScriptInner>, ScriptInner> beginCreateOrUpdateAsync(
-        String resourceGroupName, String clusterName, String databaseName, String scriptName, ScriptInner parameters) {
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            createOrUpdateWithResponseAsync(resourceGroupName, clusterName, databaseName, scriptName, parameters);
-        return this
-            .client
-            .<ScriptInner, ScriptInner>getLroResult(
-                mono, this.client.getHttpPipeline(), ScriptInner.class, ScriptInner.class, Context.NONE);
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<ScriptInner>, ScriptInner> beginCreateOrUpdateAsync(String resourceGroupName,
+        String clusterName, String databaseName, String scriptName, ScriptInner parameters) {
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = createOrUpdateWithResponseAsync(resourceGroupName, clusterName, databaseName, scriptName, parameters);
+        return this.client.<ScriptInner, ScriptInner>getLroResult(mono, this.client.getHttpPipeline(),
+            ScriptInner.class, ScriptInner.class, this.client.getContext());
     }
 
     /**
      * Creates a Kusto database script.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param scriptName The name of the Kusto database script.
@@ -702,30 +563,64 @@ public final class ScriptsClientImpl implements ScriptsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a database script.
+     * @return the {@link PollerFlux} for polling of class representing a database script.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private PollerFlux<PollResult<ScriptInner>, ScriptInner> beginCreateOrUpdateAsync(
-        String resourceGroupName,
-        String clusterName,
-        String databaseName,
-        String scriptName,
-        ScriptInner parameters,
-        Context context) {
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<ScriptInner>, ScriptInner> beginCreateOrUpdateAsync(String resourceGroupName,
+        String clusterName, String databaseName, String scriptName, ScriptInner parameters, Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            createOrUpdateWithResponseAsync(
-                resourceGroupName, clusterName, databaseName, scriptName, parameters, context);
+        Mono<Response<Flux<ByteBuffer>>> mono = createOrUpdateWithResponseAsync(resourceGroupName, clusterName,
+            databaseName, scriptName, parameters, context);
+        return this.client.<ScriptInner, ScriptInner>getLroResult(mono, this.client.getHttpPipeline(),
+            ScriptInner.class, ScriptInner.class, context);
+    }
+
+    /**
+     * Creates a Kusto database script.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param clusterName The name of the Kusto cluster.
+     * @param databaseName The name of the database in the Kusto cluster.
+     * @param scriptName The name of the Kusto database script.
+     * @param parameters The Kusto Script parameters contains the KQL to run.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of class representing a database script.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<ScriptInner>, ScriptInner> beginCreateOrUpdate(String resourceGroupName,
+        String clusterName, String databaseName, String scriptName, ScriptInner parameters) {
+        return this.beginCreateOrUpdateAsync(resourceGroupName, clusterName, databaseName, scriptName, parameters)
+            .getSyncPoller();
+    }
+
+    /**
+     * Creates a Kusto database script.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param clusterName The name of the Kusto cluster.
+     * @param databaseName The name of the database in the Kusto cluster.
+     * @param scriptName The name of the Kusto database script.
+     * @param parameters The Kusto Script parameters contains the KQL to run.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of class representing a database script.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<ScriptInner>, ScriptInner> beginCreateOrUpdate(String resourceGroupName,
+        String clusterName, String databaseName, String scriptName, ScriptInner parameters, Context context) {
         return this
-            .client
-            .<ScriptInner, ScriptInner>getLroResult(
-                mono, this.client.getHttpPipeline(), ScriptInner.class, ScriptInner.class, context);
+            .beginCreateOrUpdateAsync(resourceGroupName, clusterName, databaseName, scriptName, parameters, context)
+            .getSyncPoller();
     }
 
     /**
      * Creates a Kusto database script.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param scriptName The name of the Kusto database script.
@@ -733,19 +628,19 @@ public final class ScriptsClientImpl implements ScriptsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a database script.
+     * @return class representing a database script on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public SyncPoller<PollResult<ScriptInner>, ScriptInner> beginCreateOrUpdate(
-        String resourceGroupName, String clusterName, String databaseName, String scriptName, ScriptInner parameters) {
-        return beginCreateOrUpdateAsync(resourceGroupName, clusterName, databaseName, scriptName, parameters)
-            .getSyncPoller();
+    private Mono<ScriptInner> createOrUpdateAsync(String resourceGroupName, String clusterName, String databaseName,
+        String scriptName, ScriptInner parameters) {
+        return beginCreateOrUpdateAsync(resourceGroupName, clusterName, databaseName, scriptName, parameters).last()
+            .flatMap(this.client::getLroFinalResultOrError);
     }
 
     /**
      * Creates a Kusto database script.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param scriptName The name of the Kusto database script.
@@ -754,63 +649,11 @@ public final class ScriptsClientImpl implements ScriptsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a database script.
+     * @return class representing a database script on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public SyncPoller<PollResult<ScriptInner>, ScriptInner> beginCreateOrUpdate(
-        String resourceGroupName,
-        String clusterName,
-        String databaseName,
-        String scriptName,
-        ScriptInner parameters,
-        Context context) {
-        return beginCreateOrUpdateAsync(resourceGroupName, clusterName, databaseName, scriptName, parameters, context)
-            .getSyncPoller();
-    }
-
-    /**
-     * Creates a Kusto database script.
-     *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
-     * @param clusterName The name of the Kusto cluster.
-     * @param databaseName The name of the database in the Kusto cluster.
-     * @param scriptName The name of the Kusto database script.
-     * @param parameters The Kusto Script parameters contains the KQL to run.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a database script.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<ScriptInner> createOrUpdateAsync(
-        String resourceGroupName, String clusterName, String databaseName, String scriptName, ScriptInner parameters) {
-        return beginCreateOrUpdateAsync(resourceGroupName, clusterName, databaseName, scriptName, parameters)
-            .last()
-            .flatMap(this.client::getLroFinalResultOrError);
-    }
-
-    /**
-     * Creates a Kusto database script.
-     *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
-     * @param clusterName The name of the Kusto cluster.
-     * @param databaseName The name of the database in the Kusto cluster.
-     * @param scriptName The name of the Kusto database script.
-     * @param parameters The Kusto Script parameters contains the KQL to run.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a database script.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<ScriptInner> createOrUpdateAsync(
-        String resourceGroupName,
-        String clusterName,
-        String databaseName,
-        String scriptName,
-        ScriptInner parameters,
-        Context context) {
+    private Mono<ScriptInner> createOrUpdateAsync(String resourceGroupName, String clusterName, String databaseName,
+        String scriptName, ScriptInner parameters, Context context) {
         return beginCreateOrUpdateAsync(resourceGroupName, clusterName, databaseName, scriptName, parameters, context)
             .last()
             .flatMap(this.client::getLroFinalResultOrError);
@@ -819,7 +662,7 @@ public final class ScriptsClientImpl implements ScriptsClient {
     /**
      * Creates a Kusto database script.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param scriptName The name of the Kusto database script.
@@ -830,15 +673,15 @@ public final class ScriptsClientImpl implements ScriptsClient {
      * @return class representing a database script.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public ScriptInner createOrUpdate(
-        String resourceGroupName, String clusterName, String databaseName, String scriptName, ScriptInner parameters) {
+    public ScriptInner createOrUpdate(String resourceGroupName, String clusterName, String databaseName,
+        String scriptName, ScriptInner parameters) {
         return createOrUpdateAsync(resourceGroupName, clusterName, databaseName, scriptName, parameters).block();
     }
 
     /**
      * Creates a Kusto database script.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param scriptName The name of the Kusto database script.
@@ -850,13 +693,8 @@ public final class ScriptsClientImpl implements ScriptsClient {
      * @return class representing a database script.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public ScriptInner createOrUpdate(
-        String resourceGroupName,
-        String clusterName,
-        String databaseName,
-        String scriptName,
-        ScriptInner parameters,
-        Context context) {
+    public ScriptInner createOrUpdate(String resourceGroupName, String clusterName, String databaseName,
+        String scriptName, ScriptInner parameters, Context context) {
         return createOrUpdateAsync(resourceGroupName, clusterName, databaseName, scriptName, parameters, context)
             .block();
     }
@@ -864,7 +702,7 @@ public final class ScriptsClientImpl implements ScriptsClient {
     /**
      * Updates a database script.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param scriptName The name of the Kusto database script.
@@ -872,22 +710,19 @@ public final class ScriptsClientImpl implements ScriptsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a database script.
+     * @return class representing a database script along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> updateWithResponseAsync(
-        String resourceGroupName, String clusterName, String databaseName, String scriptName, ScriptInner parameters) {
+    private Mono<Response<Flux<ByteBuffer>>> updateWithResponseAsync(String resourceGroupName, String clusterName,
+        String databaseName, String scriptName, ScriptInner parameters) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -910,26 +745,15 @@ public final class ScriptsClientImpl implements ScriptsClient {
         final String accept = "application/json";
         return FluxUtil
             .withContext(
-                context ->
-                    service
-                        .update(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            clusterName,
-                            databaseName,
-                            scriptName,
-                            this.client.getApiVersion(),
-                            parameters,
-                            accept,
-                            context))
+                context -> service.update(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+                    clusterName, databaseName, scriptName, this.client.getApiVersion(), parameters, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Updates a database script.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param scriptName The name of the Kusto database script.
@@ -938,27 +762,19 @@ public final class ScriptsClientImpl implements ScriptsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a database script.
+     * @return class representing a database script along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> updateWithResponseAsync(
-        String resourceGroupName,
-        String clusterName,
-        String databaseName,
-        String scriptName,
-        ScriptInner parameters,
-        Context context) {
+    private Mono<Response<Flux<ByteBuffer>>> updateWithResponseAsync(String resourceGroupName, String clusterName,
+        String databaseName, String scriptName, ScriptInner parameters, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -980,24 +796,14 @@ public final class ScriptsClientImpl implements ScriptsClient {
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .update(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                clusterName,
-                databaseName,
-                scriptName,
-                this.client.getApiVersion(),
-                parameters,
-                accept,
-                context);
+        return service.update(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+            clusterName, databaseName, scriptName, this.client.getApiVersion(), parameters, accept, context);
     }
 
     /**
      * Updates a database script.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param scriptName The name of the Kusto database script.
@@ -1005,23 +811,21 @@ public final class ScriptsClientImpl implements ScriptsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a database script.
+     * @return the {@link PollerFlux} for polling of class representing a database script.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private PollerFlux<PollResult<ScriptInner>, ScriptInner> beginUpdateAsync(
-        String resourceGroupName, String clusterName, String databaseName, String scriptName, ScriptInner parameters) {
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            updateWithResponseAsync(resourceGroupName, clusterName, databaseName, scriptName, parameters);
-        return this
-            .client
-            .<ScriptInner, ScriptInner>getLroResult(
-                mono, this.client.getHttpPipeline(), ScriptInner.class, ScriptInner.class, Context.NONE);
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<ScriptInner>, ScriptInner> beginUpdateAsync(String resourceGroupName,
+        String clusterName, String databaseName, String scriptName, ScriptInner parameters) {
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = updateWithResponseAsync(resourceGroupName, clusterName, databaseName, scriptName, parameters);
+        return this.client.<ScriptInner, ScriptInner>getLroResult(mono, this.client.getHttpPipeline(),
+            ScriptInner.class, ScriptInner.class, this.client.getContext());
     }
 
     /**
      * Updates a database script.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param scriptName The name of the Kusto database script.
@@ -1030,29 +834,22 @@ public final class ScriptsClientImpl implements ScriptsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a database script.
+     * @return the {@link PollerFlux} for polling of class representing a database script.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private PollerFlux<PollResult<ScriptInner>, ScriptInner> beginUpdateAsync(
-        String resourceGroupName,
-        String clusterName,
-        String databaseName,
-        String scriptName,
-        ScriptInner parameters,
-        Context context) {
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<ScriptInner>, ScriptInner> beginUpdateAsync(String resourceGroupName,
+        String clusterName, String databaseName, String scriptName, ScriptInner parameters, Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            updateWithResponseAsync(resourceGroupName, clusterName, databaseName, scriptName, parameters, context);
-        return this
-            .client
-            .<ScriptInner, ScriptInner>getLroResult(
-                mono, this.client.getHttpPipeline(), ScriptInner.class, ScriptInner.class, context);
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = updateWithResponseAsync(resourceGroupName, clusterName, databaseName, scriptName, parameters, context);
+        return this.client.<ScriptInner, ScriptInner>getLroResult(mono, this.client.getHttpPipeline(),
+            ScriptInner.class, ScriptInner.class, context);
     }
 
     /**
      * Updates a database script.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param scriptName The name of the Kusto database script.
@@ -1060,65 +857,19 @@ public final class ScriptsClientImpl implements ScriptsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a database script.
+     * @return the {@link SyncPoller} for polling of class representing a database script.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public SyncPoller<PollResult<ScriptInner>, ScriptInner> beginUpdate(
-        String resourceGroupName, String clusterName, String databaseName, String scriptName, ScriptInner parameters) {
-        return beginUpdateAsync(resourceGroupName, clusterName, databaseName, scriptName, parameters).getSyncPoller();
-    }
-
-    /**
-     * Updates a database script.
-     *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
-     * @param clusterName The name of the Kusto cluster.
-     * @param databaseName The name of the database in the Kusto cluster.
-     * @param scriptName The name of the Kusto database script.
-     * @param parameters The Kusto Script parameters contains to the KQL to run.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a database script.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public SyncPoller<PollResult<ScriptInner>, ScriptInner> beginUpdate(
-        String resourceGroupName,
-        String clusterName,
-        String databaseName,
-        String scriptName,
-        ScriptInner parameters,
-        Context context) {
-        return beginUpdateAsync(resourceGroupName, clusterName, databaseName, scriptName, parameters, context)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<ScriptInner>, ScriptInner> beginUpdate(String resourceGroupName, String clusterName,
+        String databaseName, String scriptName, ScriptInner parameters) {
+        return this.beginUpdateAsync(resourceGroupName, clusterName, databaseName, scriptName, parameters)
             .getSyncPoller();
     }
 
     /**
      * Updates a database script.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
-     * @param clusterName The name of the Kusto cluster.
-     * @param databaseName The name of the database in the Kusto cluster.
-     * @param scriptName The name of the Kusto database script.
-     * @param parameters The Kusto Script parameters contains to the KQL to run.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a database script.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<ScriptInner> updateAsync(
-        String resourceGroupName, String clusterName, String databaseName, String scriptName, ScriptInner parameters) {
-        return beginUpdateAsync(resourceGroupName, clusterName, databaseName, scriptName, parameters)
-            .last()
-            .flatMap(this.client::getLroFinalResultOrError);
-    }
-
-    /**
-     * Updates a database script.
-     *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param scriptName The name of the Kusto database script.
@@ -1127,25 +878,60 @@ public final class ScriptsClientImpl implements ScriptsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a database script.
+     * @return the {@link SyncPoller} for polling of class representing a database script.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<ScriptInner>, ScriptInner> beginUpdate(String resourceGroupName, String clusterName,
+        String databaseName, String scriptName, ScriptInner parameters, Context context) {
+        return this.beginUpdateAsync(resourceGroupName, clusterName, databaseName, scriptName, parameters, context)
+            .getSyncPoller();
+    }
+
+    /**
+     * Updates a database script.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param clusterName The name of the Kusto cluster.
+     * @param databaseName The name of the database in the Kusto cluster.
+     * @param scriptName The name of the Kusto database script.
+     * @param parameters The Kusto Script parameters contains to the KQL to run.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return class representing a database script on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<ScriptInner> updateAsync(
-        String resourceGroupName,
-        String clusterName,
-        String databaseName,
-        String scriptName,
-        ScriptInner parameters,
-        Context context) {
-        return beginUpdateAsync(resourceGroupName, clusterName, databaseName, scriptName, parameters, context)
-            .last()
+    private Mono<ScriptInner> updateAsync(String resourceGroupName, String clusterName, String databaseName,
+        String scriptName, ScriptInner parameters) {
+        return beginUpdateAsync(resourceGroupName, clusterName, databaseName, scriptName, parameters).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
     /**
      * Updates a database script.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param clusterName The name of the Kusto cluster.
+     * @param databaseName The name of the database in the Kusto cluster.
+     * @param scriptName The name of the Kusto database script.
+     * @param parameters The Kusto Script parameters contains to the KQL to run.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return class representing a database script on successful completion of {@link Mono}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    private Mono<ScriptInner> updateAsync(String resourceGroupName, String clusterName, String databaseName,
+        String scriptName, ScriptInner parameters, Context context) {
+        return beginUpdateAsync(resourceGroupName, clusterName, databaseName, scriptName, parameters, context).last()
+            .flatMap(this.client::getLroFinalResultOrError);
+    }
+
+    /**
+     * Updates a database script.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param scriptName The name of the Kusto database script.
@@ -1156,15 +942,15 @@ public final class ScriptsClientImpl implements ScriptsClient {
      * @return class representing a database script.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public ScriptInner update(
-        String resourceGroupName, String clusterName, String databaseName, String scriptName, ScriptInner parameters) {
+    public ScriptInner update(String resourceGroupName, String clusterName, String databaseName, String scriptName,
+        ScriptInner parameters) {
         return updateAsync(resourceGroupName, clusterName, databaseName, scriptName, parameters).block();
     }
 
     /**
      * Updates a database script.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param scriptName The name of the Kusto database script.
@@ -1176,42 +962,33 @@ public final class ScriptsClientImpl implements ScriptsClient {
      * @return class representing a database script.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public ScriptInner update(
-        String resourceGroupName,
-        String clusterName,
-        String databaseName,
-        String scriptName,
-        ScriptInner parameters,
-        Context context) {
+    public ScriptInner update(String resourceGroupName, String clusterName, String databaseName, String scriptName,
+        ScriptInner parameters, Context context) {
         return updateAsync(resourceGroupName, clusterName, databaseName, scriptName, parameters, context).block();
     }
 
     /**
-     * Deletes a Kusto principalAssignment.
+     * Deletes a Kusto database script.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param scriptName The name of the Kusto database script.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(
-        String resourceGroupName, String clusterName, String databaseName, String scriptName) {
+    private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(String resourceGroupName, String clusterName,
+        String databaseName, String scriptName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1228,26 +1005,15 @@ public final class ScriptsClientImpl implements ScriptsClient {
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .delete(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            clusterName,
-                            databaseName,
-                            scriptName,
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
+            .withContext(context -> service.delete(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                resourceGroupName, clusterName, databaseName, scriptName, this.client.getApiVersion(), accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
-     * Deletes a Kusto principalAssignment.
+     * Deletes a Kusto database script.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param scriptName The name of the Kusto database script.
@@ -1255,22 +1021,18 @@ public final class ScriptsClientImpl implements ScriptsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(
-        String resourceGroupName, String clusterName, String databaseName, String scriptName, Context context) {
+    private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(String resourceGroupName, String clusterName,
+        String databaseName, String scriptName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1287,45 +1049,35 @@ public final class ScriptsClientImpl implements ScriptsClient {
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .delete(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                clusterName,
-                databaseName,
-                scriptName,
-                this.client.getApiVersion(),
-                accept,
-                context);
+        return service.delete(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+            clusterName, databaseName, scriptName, this.client.getApiVersion(), accept, context);
     }
 
     /**
-     * Deletes a Kusto principalAssignment.
+     * Deletes a Kusto database script.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param scriptName The name of the Kusto database script.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private PollerFlux<PollResult<Void>, Void> beginDeleteAsync(
-        String resourceGroupName, String clusterName, String databaseName, String scriptName) {
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            deleteWithResponseAsync(resourceGroupName, clusterName, databaseName, scriptName);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, Context.NONE);
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<Void>, Void> beginDeleteAsync(String resourceGroupName, String clusterName,
+        String databaseName, String scriptName) {
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = deleteWithResponseAsync(resourceGroupName, clusterName, databaseName, scriptName);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            this.client.getContext());
     }
 
     /**
-     * Deletes a Kusto principalAssignment.
+     * Deletes a Kusto database script.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param scriptName The name of the Kusto database script.
@@ -1333,80 +1085,40 @@ public final class ScriptsClientImpl implements ScriptsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private PollerFlux<PollResult<Void>, Void> beginDeleteAsync(
-        String resourceGroupName, String clusterName, String databaseName, String scriptName, Context context) {
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<Void>, Void> beginDeleteAsync(String resourceGroupName, String clusterName,
+        String databaseName, String scriptName, Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            deleteWithResponseAsync(resourceGroupName, clusterName, databaseName, scriptName, context);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, context);
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = deleteWithResponseAsync(resourceGroupName, clusterName, databaseName, scriptName, context);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            context);
     }
 
     /**
-     * Deletes a Kusto principalAssignment.
+     * Deletes a Kusto database script.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param scriptName The name of the Kusto database script.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public SyncPoller<PollResult<Void>, Void> beginDelete(
-        String resourceGroupName, String clusterName, String databaseName, String scriptName) {
-        return beginDeleteAsync(resourceGroupName, clusterName, databaseName, scriptName).getSyncPoller();
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<Void>, Void> beginDelete(String resourceGroupName, String clusterName,
+        String databaseName, String scriptName) {
+        return this.beginDeleteAsync(resourceGroupName, clusterName, databaseName, scriptName).getSyncPoller();
     }
 
     /**
-     * Deletes a Kusto principalAssignment.
+     * Deletes a Kusto database script.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
-     * @param clusterName The name of the Kusto cluster.
-     * @param databaseName The name of the database in the Kusto cluster.
-     * @param scriptName The name of the Kusto database script.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public SyncPoller<PollResult<Void>, Void> beginDelete(
-        String resourceGroupName, String clusterName, String databaseName, String scriptName, Context context) {
-        return beginDeleteAsync(resourceGroupName, clusterName, databaseName, scriptName, context).getSyncPoller();
-    }
-
-    /**
-     * Deletes a Kusto principalAssignment.
-     *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
-     * @param clusterName The name of the Kusto cluster.
-     * @param databaseName The name of the database in the Kusto cluster.
-     * @param scriptName The name of the Kusto database script.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> deleteAsync(
-        String resourceGroupName, String clusterName, String databaseName, String scriptName) {
-        return beginDeleteAsync(resourceGroupName, clusterName, databaseName, scriptName)
-            .last()
-            .flatMap(this.client::getLroFinalResultOrError);
-    }
-
-    /**
-     * Deletes a Kusto principalAssignment.
-     *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param scriptName The name of the Kusto database script.
@@ -1414,20 +1126,57 @@ public final class ScriptsClientImpl implements ScriptsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<Void>, Void> beginDelete(String resourceGroupName, String clusterName,
+        String databaseName, String scriptName, Context context) {
+        return this.beginDeleteAsync(resourceGroupName, clusterName, databaseName, scriptName, context).getSyncPoller();
+    }
+
+    /**
+     * Deletes a Kusto database script.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param clusterName The name of the Kusto cluster.
+     * @param databaseName The name of the database in the Kusto cluster.
+     * @param scriptName The name of the Kusto database script.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> deleteAsync(
-        String resourceGroupName, String clusterName, String databaseName, String scriptName, Context context) {
-        return beginDeleteAsync(resourceGroupName, clusterName, databaseName, scriptName, context)
-            .last()
+    private Mono<Void> deleteAsync(String resourceGroupName, String clusterName, String databaseName,
+        String scriptName) {
+        return beginDeleteAsync(resourceGroupName, clusterName, databaseName, scriptName).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
     /**
-     * Deletes a Kusto principalAssignment.
+     * Deletes a Kusto database script.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param clusterName The name of the Kusto cluster.
+     * @param databaseName The name of the database in the Kusto cluster.
+     * @param scriptName The name of the Kusto database script.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return A {@link Mono} that completes when a successful response is received.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    private Mono<Void> deleteAsync(String resourceGroupName, String clusterName, String databaseName, String scriptName,
+        Context context) {
+        return beginDeleteAsync(resourceGroupName, clusterName, databaseName, scriptName, context).last()
+            .flatMap(this.client::getLroFinalResultOrError);
+    }
+
+    /**
+     * Deletes a Kusto database script.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param scriptName The name of the Kusto database script.
@@ -1441,9 +1190,9 @@ public final class ScriptsClientImpl implements ScriptsClient {
     }
 
     /**
-     * Deletes a Kusto principalAssignment.
+     * Deletes a Kusto database script.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param scriptName The name of the Kusto database script.
@@ -1453,31 +1202,30 @@ public final class ScriptsClientImpl implements ScriptsClient {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public void delete(
-        String resourceGroupName, String clusterName, String databaseName, String scriptName, Context context) {
+    public void delete(String resourceGroupName, String clusterName, String databaseName, String scriptName,
+        Context context) {
         deleteAsync(resourceGroupName, clusterName, databaseName, scriptName, context).block();
     }
 
     /**
      * Checks that the script name is valid and is not already in use.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param scriptName The name of the script.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the result returned from a check name availability request.
+     * @return the result returned from a check name availability request along with {@link Response} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<CheckNameResultInner>> checkNameAvailabilityWithResponseAsync(
-        String resourceGroupName, String clusterName, String databaseName, ScriptCheckNameRequest scriptName) {
+    private Mono<Response<CheckNameResultInner>> checkNameAvailabilityWithResponseAsync(String resourceGroupName,
+        String clusterName, String databaseName, ScriptCheckNameRequest scriptName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1490,10 +1238,8 @@ public final class ScriptsClientImpl implements ScriptsClient {
             return Mono.error(new IllegalArgumentException("Parameter databaseName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (scriptName == null) {
             return Mono.error(new IllegalArgumentException("Parameter scriptName is required and cannot be null."));
@@ -1502,26 +1248,16 @@ public final class ScriptsClientImpl implements ScriptsClient {
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .checkNameAvailability(
-                            this.client.getEndpoint(),
-                            resourceGroupName,
-                            clusterName,
-                            databaseName,
-                            this.client.getApiVersion(),
-                            this.client.getSubscriptionId(),
-                            scriptName,
-                            accept,
-                            context))
+            .withContext(context -> service.checkNameAvailability(this.client.getEndpoint(), resourceGroupName,
+                clusterName, databaseName, this.client.getApiVersion(), this.client.getSubscriptionId(), scriptName,
+                accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Checks that the script name is valid and is not already in use.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param scriptName The name of the script.
@@ -1529,20 +1265,15 @@ public final class ScriptsClientImpl implements ScriptsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the result returned from a check name availability request.
+     * @return the result returned from a check name availability request along with {@link Response} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<CheckNameResultInner>> checkNameAvailabilityWithResponseAsync(
-        String resourceGroupName,
-        String clusterName,
-        String databaseName,
-        ScriptCheckNameRequest scriptName,
-        Context context) {
+    private Mono<Response<CheckNameResultInner>> checkNameAvailabilityWithResponseAsync(String resourceGroupName,
+        String clusterName, String databaseName, ScriptCheckNameRequest scriptName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1555,10 +1286,8 @@ public final class ScriptsClientImpl implements ScriptsClient {
             return Mono.error(new IllegalArgumentException("Parameter databaseName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (scriptName == null) {
             return Mono.error(new IllegalArgumentException("Parameter scriptName is required and cannot be null."));
@@ -1567,67 +1296,33 @@ public final class ScriptsClientImpl implements ScriptsClient {
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .checkNameAvailability(
-                this.client.getEndpoint(),
-                resourceGroupName,
-                clusterName,
-                databaseName,
-                this.client.getApiVersion(),
-                this.client.getSubscriptionId(),
-                scriptName,
-                accept,
-                context);
+        return service.checkNameAvailability(this.client.getEndpoint(), resourceGroupName, clusterName, databaseName,
+            this.client.getApiVersion(), this.client.getSubscriptionId(), scriptName, accept, context);
     }
 
     /**
      * Checks that the script name is valid and is not already in use.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param scriptName The name of the script.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the result returned from a check name availability request.
+     * @return the result returned from a check name availability request on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<CheckNameResultInner> checkNameAvailabilityAsync(
-        String resourceGroupName, String clusterName, String databaseName, ScriptCheckNameRequest scriptName) {
+    private Mono<CheckNameResultInner> checkNameAvailabilityAsync(String resourceGroupName, String clusterName,
+        String databaseName, ScriptCheckNameRequest scriptName) {
         return checkNameAvailabilityWithResponseAsync(resourceGroupName, clusterName, databaseName, scriptName)
-            .flatMap(
-                (Response<CheckNameResultInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Checks that the script name is valid and is not already in use.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
-     * @param clusterName The name of the Kusto cluster.
-     * @param databaseName The name of the database in the Kusto cluster.
-     * @param scriptName The name of the script.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the result returned from a check name availability request.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public CheckNameResultInner checkNameAvailability(
-        String resourceGroupName, String clusterName, String databaseName, ScriptCheckNameRequest scriptName) {
-        return checkNameAvailabilityAsync(resourceGroupName, clusterName, databaseName, scriptName).block();
-    }
-
-    /**
-     * Checks that the script name is valid and is not already in use.
-     *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param scriptName The name of the script.
@@ -1635,16 +1330,31 @@ public final class ScriptsClientImpl implements ScriptsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the result returned from a check name availability request along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<CheckNameResultInner> checkNameAvailabilityWithResponse(String resourceGroupName,
+        String clusterName, String databaseName, ScriptCheckNameRequest scriptName, Context context) {
+        return checkNameAvailabilityWithResponseAsync(resourceGroupName, clusterName, databaseName, scriptName, context)
+            .block();
+    }
+
+    /**
+     * Checks that the script name is valid and is not already in use.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param clusterName The name of the Kusto cluster.
+     * @param databaseName The name of the database in the Kusto cluster.
+     * @param scriptName The name of the script.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return the result returned from a check name availability request.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<CheckNameResultInner> checkNameAvailabilityWithResponse(
-        String resourceGroupName,
-        String clusterName,
-        String databaseName,
-        ScriptCheckNameRequest scriptName,
-        Context context) {
-        return checkNameAvailabilityWithResponseAsync(resourceGroupName, clusterName, databaseName, scriptName, context)
-            .block();
+    public CheckNameResultInner checkNameAvailability(String resourceGroupName, String clusterName, String databaseName,
+        ScriptCheckNameRequest scriptName) {
+        return checkNameAvailabilityWithResponse(resourceGroupName, clusterName, databaseName, scriptName, Context.NONE)
+            .getValue();
     }
 }

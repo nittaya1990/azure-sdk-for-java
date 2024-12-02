@@ -5,10 +5,8 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.models.UserEntityBaseParameters;
 import com.azure.resourcemanager.apimanagement.models.UserState;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -16,8 +14,6 @@ import java.util.List;
 /** User profile. */
 @Fluent
 public final class UserContractProperties extends UserEntityBaseParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(UserContractProperties.class);
-
     /*
      * First name.
      */
@@ -37,8 +33,8 @@ public final class UserContractProperties extends UserEntityBaseParameters {
     private String email;
 
     /*
-     * Date of user registration. The date conforms to the following format:
-     * `yyyy-MM-ddTHH:mm:ssZ` as specified by the ISO 8601 standard.
+     * Date of user registration. The date conforms to the following format: `yyyy-MM-ddTHH:mm:ssZ` as specified by the
+     * ISO 8601 standard.
      *
      */
     @JsonProperty(value = "registrationDate")
@@ -49,6 +45,10 @@ public final class UserContractProperties extends UserEntityBaseParameters {
      */
     @JsonProperty(value = "groups", access = JsonProperty.Access.WRITE_ONLY)
     private List<GroupContractProperties> groups;
+
+    /** Creates an instance of UserContractProperties class. */
+    public UserContractProperties() {
+    }
 
     /**
      * Get the firstName property: First name.

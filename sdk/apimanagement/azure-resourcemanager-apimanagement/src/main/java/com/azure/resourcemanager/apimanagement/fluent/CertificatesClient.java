@@ -21,12 +21,12 @@ public interface CertificatesClient {
     /**
      * Lists a collection of all certificates in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Certificates list representation.
+     * @return paged Certificates list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<CertificateContractInner> listByService(String resourceGroupName, String serviceName);
@@ -34,7 +34,7 @@ public interface CertificatesClient {
     /**
      * Lists a collection of all certificates in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -50,22 +50,33 @@ public interface CertificatesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Certificates list representation.
+     * @return paged Certificates list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<CertificateContractInner> listByService(
-        String resourceGroupName,
-        String serviceName,
-        String filter,
-        Integer top,
-        Integer skip,
-        Boolean isKeyVaultRefreshFailed,
-        Context context);
+    PagedIterable<CertificateContractInner> listByService(String resourceGroupName, String serviceName, String filter,
+        Integer top, Integer skip, Boolean isKeyVaultRefreshFailed, Context context);
 
     /**
      * Gets the entity state (Etag) version of the certificate specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
+     *     instance.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the entity state (Etag) version of the certificate specified by its identifier.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    CertificatesGetEntityTagResponse getEntityTagWithResponse(String resourceGroupName, String serviceName,
+        String certificateId, Context context);
+
+    /**
+     * Gets the entity state (Etag) version of the certificate specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
      *     instance.
@@ -77,9 +88,9 @@ public interface CertificatesClient {
     void getEntityTag(String resourceGroupName, String serviceName, String certificateId);
 
     /**
-     * Gets the entity state (Etag) version of the certificate specified by its identifier.
+     * Gets the details of the certificate specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
      *     instance.
@@ -87,16 +98,16 @@ public interface CertificatesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the certificate specified by its identifier.
+     * @return the details of the certificate specified by its identifier.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    CertificatesGetEntityTagResponse getEntityTagWithResponse(
-        String resourceGroupName, String serviceName, String certificateId, Context context);
+    CertificatesGetResponse getWithResponse(String resourceGroupName, String serviceName, String certificateId,
+        Context context);
 
     /**
      * Gets the details of the certificate specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
      *     instance.
@@ -109,46 +120,9 @@ public interface CertificatesClient {
     CertificateContractInner get(String resourceGroupName, String serviceName, String certificateId);
 
     /**
-     * Gets the details of the certificate specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
-     *     instance.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the certificate specified by its identifier.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    CertificatesGetResponse getWithResponse(
-        String resourceGroupName, String serviceName, String certificateId, Context context);
-
-    /**
      * Creates or updates the certificate being used for authentication with the backend.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
-     *     instance.
-     * @param parameters Create or Update parameters.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return certificate details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    CertificateContractInner createOrUpdate(
-        String resourceGroupName,
-        String serviceName,
-        String certificateId,
-        CertificateCreateOrUpdateParameters parameters);
-
-    /**
-     * Creates or updates the certificate being used for authentication with the backend.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
      *     instance.
@@ -161,18 +135,49 @@ public interface CertificatesClient {
      * @return certificate details.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    CertificatesCreateOrUpdateResponse createOrUpdateWithResponse(
-        String resourceGroupName,
-        String serviceName,
-        String certificateId,
-        CertificateCreateOrUpdateParameters parameters,
-        String ifMatch,
-        Context context);
+    CertificatesCreateOrUpdateResponse createOrUpdateWithResponse(String resourceGroupName, String serviceName,
+        String certificateId, CertificateCreateOrUpdateParameters parameters, String ifMatch, Context context);
+
+    /**
+     * Creates or updates the certificate being used for authentication with the backend.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
+     *     instance.
+     * @param parameters Create or Update parameters.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return certificate details.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    CertificateContractInner createOrUpdate(String resourceGroupName, String serviceName, String certificateId,
+        CertificateCreateOrUpdateParameters parameters);
 
     /**
      * Deletes specific certificate.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
+     *     instance.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<Void> deleteWithResponse(String resourceGroupName, String serviceName, String certificateId,
+        String ifMatch, Context context);
+
+    /**
+     * Deletes specific certificate.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
      *     instance.
@@ -186,28 +191,26 @@ public interface CertificatesClient {
     void delete(String resourceGroupName, String serviceName, String certificateId, String ifMatch);
 
     /**
-     * Deletes specific certificate.
+     * From KeyVault, Refresh the certificate being used for authentication with the backend.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
      *     instance.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return certificate details.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<Void> deleteWithResponse(
-        String resourceGroupName, String serviceName, String certificateId, String ifMatch, Context context);
+    CertificatesRefreshSecretResponse refreshSecretWithResponse(String resourceGroupName, String serviceName,
+        String certificateId, Context context);
 
     /**
      * From KeyVault, Refresh the certificate being used for authentication with the backend.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
      *     instance.
@@ -218,21 +221,4 @@ public interface CertificatesClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     CertificateContractInner refreshSecret(String resourceGroupName, String serviceName, String certificateId);
-
-    /**
-     * From KeyVault, Refresh the certificate being used for authentication with the backend.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
-     *     instance.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return certificate details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    CertificatesRefreshSecretResponse refreshSecretWithResponse(
-        String resourceGroupName, String serviceName, String certificateId, Context context);
 }

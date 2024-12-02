@@ -12,49 +12,68 @@ import com.azure.resourcemanager.compute.fluent.models.VirtualMachineExtensionIm
 import java.util.List;
 import reactor.core.publisher.Mono;
 
-/** An instance of this class provides access to all the operations defined in VirtualMachineExtensionImagesClient. */
+/**
+ * An instance of this class provides access to all the operations defined in VirtualMachineExtensionImagesClient.
+ */
 public interface VirtualMachineExtensionImagesClient {
     /**
      * Gets a virtual machine extension image.
-     *
+     * 
      * @param location The name of a supported Azure region.
      * @param publisherName The publisherName parameter.
      * @param type The type parameter.
      * @param version The version parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a virtual machine extension image.
+     * @return a virtual machine extension image along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Mono<Response<VirtualMachineExtensionImageInner>> getWithResponseAsync(
-        String location, String publisherName, String type, String version);
+    Mono<Response<VirtualMachineExtensionImageInner>> getWithResponseAsync(String location, String publisherName,
+        String type, String version);
 
     /**
      * Gets a virtual machine extension image.
-     *
+     * 
      * @param location The name of a supported Azure region.
      * @param publisherName The publisherName parameter.
      * @param type The type parameter.
      * @param version The version parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a virtual machine extension image.
+     * @return a virtual machine extension image on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Mono<VirtualMachineExtensionImageInner> getAsync(
-        String location, String publisherName, String type, String version);
+    Mono<VirtualMachineExtensionImageInner> getAsync(String location, String publisherName, String type,
+        String version);
 
     /**
      * Gets a virtual machine extension image.
-     *
+     * 
+     * @param location The name of a supported Azure region.
+     * @param publisherName The publisherName parameter.
+     * @param type The type parameter.
+     * @param version The version parameter.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a virtual machine extension image along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<VirtualMachineExtensionImageInner> getWithResponse(String location, String publisherName, String type,
+        String version, Context context);
+
+    /**
+     * Gets a virtual machine extension image.
+     * 
      * @param location The name of a supported Azure region.
      * @param publisherName The publisherName parameter.
      * @param type The type parameter.
      * @param version The version parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return a virtual machine extension image.
      */
@@ -62,56 +81,55 @@ public interface VirtualMachineExtensionImagesClient {
     VirtualMachineExtensionImageInner get(String location, String publisherName, String type, String version);
 
     /**
-     * Gets a virtual machine extension image.
-     *
+     * Gets a list of virtual machine extension image types.
+     * 
      * @param location The name of a supported Azure region.
      * @param publisherName The publisherName parameter.
-     * @param type The type parameter.
-     * @param version The version parameter.
-     * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a virtual machine extension image.
+     * @return a list of virtual machine extension image types along with {@link Response} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<VirtualMachineExtensionImageInner> getWithResponse(
-        String location, String publisherName, String type, String version, Context context);
+    Mono<Response<List<VirtualMachineExtensionImageInner>>> listTypesWithResponseAsync(String location,
+        String publisherName);
 
     /**
      * Gets a list of virtual machine extension image types.
-     *
+     * 
      * @param location The name of a supported Azure region.
      * @param publisherName The publisherName parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of virtual machine extension image types.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Mono<Response<List<VirtualMachineExtensionImageInner>>> listTypesWithResponseAsync(
-        String location, String publisherName);
-
-    /**
-     * Gets a list of virtual machine extension image types.
-     *
-     * @param location The name of a supported Azure region.
-     * @param publisherName The publisherName parameter.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of virtual machine extension image types.
+     * @return a list of virtual machine extension image types on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     Mono<List<VirtualMachineExtensionImageInner>> listTypesAsync(String location, String publisherName);
 
     /**
      * Gets a list of virtual machine extension image types.
-     *
+     * 
+     * @param location The name of a supported Azure region.
+     * @param publisherName The publisherName parameter.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a list of virtual machine extension image types along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<List<VirtualMachineExtensionImageInner>> listTypesWithResponse(String location, String publisherName,
+        Context context);
+
+    /**
+     * Gets a list of virtual machine extension image types.
+     * 
      * @param location The name of a supported Azure region.
      * @param publisherName The publisherName parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return a list of virtual machine extension image types.
      */
@@ -119,23 +137,8 @@ public interface VirtualMachineExtensionImagesClient {
     List<VirtualMachineExtensionImageInner> listTypes(String location, String publisherName);
 
     /**
-     * Gets a list of virtual machine extension image types.
-     *
-     * @param location The name of a supported Azure region.
-     * @param publisherName The publisherName parameter.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of virtual machine extension image types.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<List<VirtualMachineExtensionImageInner>> listTypesWithResponse(
-        String location, String publisherName, Context context);
-
-    /**
      * Gets a list of virtual machine extension image versions.
-     *
+     * 
      * @param location The name of a supported Azure region.
      * @param publisherName The publisherName parameter.
      * @param type The type parameter.
@@ -143,63 +146,32 @@ public interface VirtualMachineExtensionImagesClient {
      * @param top The top parameter.
      * @param orderby The orderby parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of virtual machine extension image versions.
+     * @return a list of virtual machine extension image versions along with {@link Response} on successful completion
+     * of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Mono<Response<List<VirtualMachineExtensionImageInner>>> listVersionsWithResponseAsync(
-        String location, String publisherName, String type, String filter, Integer top, String orderby);
+    Mono<Response<List<VirtualMachineExtensionImageInner>>> listVersionsWithResponseAsync(String location,
+        String publisherName, String type, String filter, Integer top, String orderby);
 
     /**
      * Gets a list of virtual machine extension image versions.
-     *
-     * @param location The name of a supported Azure region.
-     * @param publisherName The publisherName parameter.
-     * @param type The type parameter.
-     * @param filter The filter to apply on the operation.
-     * @param top The top parameter.
-     * @param orderby The orderby parameter.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of virtual machine extension image versions.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Mono<List<VirtualMachineExtensionImageInner>> listVersionsAsync(
-        String location, String publisherName, String type, String filter, Integer top, String orderby);
-
-    /**
-     * Gets a list of virtual machine extension image versions.
-     *
+     * 
      * @param location The name of a supported Azure region.
      * @param publisherName The publisherName parameter.
      * @param type The type parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of virtual machine extension image versions.
+     * @return a list of virtual machine extension image versions on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     Mono<List<VirtualMachineExtensionImageInner>> listVersionsAsync(String location, String publisherName, String type);
 
     /**
      * Gets a list of virtual machine extension image versions.
-     *
-     * @param location The name of a supported Azure region.
-     * @param publisherName The publisherName parameter.
-     * @param type The type parameter.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of virtual machine extension image versions.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    List<VirtualMachineExtensionImageInner> listVersions(String location, String publisherName, String type);
-
-    /**
-     * Gets a list of virtual machine extension image versions.
-     *
+     * 
      * @param location The name of a supported Azure region.
      * @param publisherName The publisherName parameter.
      * @param type The type parameter.
@@ -208,17 +180,25 @@ public interface VirtualMachineExtensionImagesClient {
      * @param orderby The orderby parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a list of virtual machine extension image versions along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<List<VirtualMachineExtensionImageInner>> listVersionsWithResponse(String location, String publisherName,
+        String type, String filter, Integer top, String orderby, Context context);
+
+    /**
+     * Gets a list of virtual machine extension image versions.
+     * 
+     * @param location The name of a supported Azure region.
+     * @param publisherName The publisherName parameter.
+     * @param type The type parameter.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return a list of virtual machine extension image versions.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<List<VirtualMachineExtensionImageInner>> listVersionsWithResponse(
-        String location,
-        String publisherName,
-        String type,
-        String filter,
-        Integer top,
-        String orderby,
-        Context context);
+    List<VirtualMachineExtensionImageInner> listVersions(String location, String publisherName, String type);
 }

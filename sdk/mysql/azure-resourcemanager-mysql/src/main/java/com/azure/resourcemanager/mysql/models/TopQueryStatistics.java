@@ -33,10 +33,10 @@ public interface TopQueryStatistics {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return represents a Query Statistic.
+     * @return represents a Query Statistic along with {@link Response}.
      */
-    Response<QueryStatistic> getWithResponse(
-        String resourceGroupName, String serverName, String queryStatisticId, Context context);
+    Response<QueryStatistic> getWithResponse(String resourceGroupName, String serverName, String queryStatisticId,
+        Context context);
 
     /**
      * Retrieve the Query-Store top queries for specified metric and aggregation.
@@ -49,8 +49,8 @@ public interface TopQueryStatistics {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return a list of query statistics.
      */
-    PagedIterable<QueryStatistic> listByServer(
-        String resourceGroupName, String serverName, TopQueryStatisticsInput parameters);
+    PagedIterable<QueryStatistic> listByServer(String resourceGroupName, String serverName,
+        TopQueryStatisticsInput parameters);
 
     /**
      * Retrieve the Query-Store top queries for specified metric and aggregation.
@@ -64,6 +64,6 @@ public interface TopQueryStatistics {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return a list of query statistics.
      */
-    PagedIterable<QueryStatistic> listByServer(
-        String resourceGroupName, String serverName, TopQueryStatisticsInput parameters, Context context);
+    PagedIterable<QueryStatistic> listByServer(String resourceGroupName, String serverName,
+        TopQueryStatisticsInput parameters, Context context);
 }

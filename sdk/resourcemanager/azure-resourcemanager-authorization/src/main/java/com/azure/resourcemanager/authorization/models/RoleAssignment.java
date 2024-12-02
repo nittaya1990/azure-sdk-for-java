@@ -28,16 +28,29 @@ public interface RoleAssignment
     /** @return the principal ID */
     String principalId();
 
+    /**
+     * Gets the condition.
+     * <p>
+     * This is a preview feature.
+     *
+     * @return the condition
+     */
+    String condition();
+
+    /**
+     * Gets the description.
+     *
+     * @return the description
+     */
+    String description();
+
     /**************************************************************
      * Fluent interfaces to provision an role assignment
      **************************************************************/
 
     /** Container interface for all the definitions that need to be implemented. */
-    interface Definition
-        extends DefinitionStages.Blank,
-            DefinitionStages.WithRole,
-            DefinitionStages.WithScope,
-            DefinitionStages.WithCreate {
+    interface Definition extends DefinitionStages.Blank, DefinitionStages.WithRole, DefinitionStages.WithScope,
+        DefinitionStages.WithCreate {
     }
 
     /** Grouping of all the role assignment definition stages. */
@@ -106,6 +119,7 @@ public interface RoleAssignment
              * @return the next stage in role assignment definition
              */
             WithScope withBuiltInRole(BuiltInRole role);
+
             /**
              * Specifies the ID of the custom role for this assignment.
              *
@@ -151,11 +165,22 @@ public interface RoleAssignment
             WithCreate withSubscriptionScope(String subscriptionId);
         }
 
+        /** The stage of role assignment definition allowing specifying the description. */
+        interface WithDescription {
+            /**
+             * Specifies the description.
+             *
+             * @param description the description.
+             * @return the next stage in role assignment definition
+             */
+            WithCreate withDescription(String description);
+        }
+
         /**
          * An role assignment definition with sufficient inputs to create a new role assignment in the cloud, but
          * exposing additional optional inputs to specify.
          */
-        interface WithCreate extends Creatable<RoleAssignment> {
+        interface WithCreate extends Creatable<RoleAssignment>, WithDescription {
         }
     }
 }

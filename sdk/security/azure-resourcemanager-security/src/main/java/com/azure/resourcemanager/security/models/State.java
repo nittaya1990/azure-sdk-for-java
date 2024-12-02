@@ -8,23 +8,42 @@ import com.azure.core.util.ExpandableStringEnum;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.Collection;
 
-/** Defines values for State. */
+/**
+ * Aggregative state based on the standard's supported controls states.
+ */
 public final class State extends ExpandableStringEnum<State> {
-    /** Static value Passed for State. */
+    /**
+     * Static value Passed for State.
+     */
     public static final State PASSED = fromString("Passed");
 
-    /** Static value Failed for State. */
+    /**
+     * Static value Failed for State.
+     */
     public static final State FAILED = fromString("Failed");
 
-    /** Static value Skipped for State. */
+    /**
+     * Static value Skipped for State.
+     */
     public static final State SKIPPED = fromString("Skipped");
 
-    /** Static value Unsupported for State. */
+    /**
+     * Static value Unsupported for State.
+     */
     public static final State UNSUPPORTED = fromString("Unsupported");
 
     /**
+     * Creates a new instance of State value.
+     * 
+     * @deprecated Use the {@link #fromString(String)} factory method.
+     */
+    @Deprecated
+    public State() {
+    }
+
+    /**
      * Creates or finds a State from its string representation.
-     *
+     * 
      * @param name a name to look for.
      * @return the corresponding State.
      */
@@ -33,7 +52,11 @@ public final class State extends ExpandableStringEnum<State> {
         return fromString(name, State.class);
     }
 
-    /** @return known State values. */
+    /**
+     * Gets known State values.
+     * 
+     * @return known State values.
+     */
     public static Collection<State> values() {
         return values(State.class);
     }

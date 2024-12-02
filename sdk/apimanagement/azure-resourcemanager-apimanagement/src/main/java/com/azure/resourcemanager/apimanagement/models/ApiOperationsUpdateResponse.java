@@ -21,16 +21,16 @@ public final class ApiOperationsUpdateResponse
      * @param value the deserialized value of the HTTP response.
      * @param headers the deserialized headers of the HTTP response.
      */
-    public ApiOperationsUpdateResponse(
-        HttpRequest request,
-        int statusCode,
-        HttpHeaders rawHeaders,
-        OperationContractInner value,
-        ApiOperationsUpdateHeaders headers) {
+    public ApiOperationsUpdateResponse(HttpRequest request, int statusCode, HttpHeaders rawHeaders,
+        OperationContractInner value, ApiOperationsUpdateHeaders headers) {
         super(request, statusCode, rawHeaders, value, headers);
     }
 
-    /** @return the deserialized response body. */
+    /**
+     * Gets the deserialized response body.
+     *
+     * @return the deserialized response body.
+     */
     @Override
     public OperationContractInner getValue() {
         return super.getValue();

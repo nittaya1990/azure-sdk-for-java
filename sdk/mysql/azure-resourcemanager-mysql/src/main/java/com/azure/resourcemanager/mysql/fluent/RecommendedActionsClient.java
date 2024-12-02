@@ -26,8 +26,8 @@ public interface RecommendedActionsClient {
      * @return represents a Recommendation Action.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    RecommendationActionInner get(
-        String resourceGroupName, String serverName, String advisorName, String recommendedActionName);
+    RecommendationActionInner get(String resourceGroupName, String serverName, String advisorName,
+        String recommendedActionName);
 
     /**
      * Retrieve recommended actions from the advisor.
@@ -40,11 +40,11 @@ public interface RecommendedActionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return represents a Recommendation Action.
+     * @return represents a Recommendation Action along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<RecommendationActionInner> getWithResponse(
-        String resourceGroupName, String serverName, String advisorName, String recommendedActionName, Context context);
+    Response<RecommendationActionInner> getWithResponse(String resourceGroupName, String serverName, String advisorName,
+        String recommendedActionName, Context context);
 
     /**
      * Retrieve recommended actions from the advisor.
@@ -58,8 +58,8 @@ public interface RecommendedActionsClient {
      * @return a list of recommendation actions.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<RecommendationActionInner> listByServer(
-        String resourceGroupName, String serverName, String advisorName);
+    PagedIterable<RecommendationActionInner> listByServer(String resourceGroupName, String serverName,
+        String advisorName);
 
     /**
      * Retrieve recommended actions from the advisor.
@@ -75,6 +75,6 @@ public interface RecommendedActionsClient {
      * @return a list of recommendation actions.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<RecommendationActionInner> listByServer(
-        String resourceGroupName, String serverName, String advisorName, String sessionId, Context context);
+    PagedIterable<RecommendationActionInner> listByServer(String resourceGroupName, String serverName,
+        String advisorName, String sessionId, Context context);
 }

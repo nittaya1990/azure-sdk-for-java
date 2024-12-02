@@ -5,18 +5,15 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Common settings field for backup management. */
+/**
+ * Common settings field for backup management.
+ */
 @Fluent
 public final class Settings {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Settings.class);
-
     /*
-     * TimeZone optional input as string. For example: TimeZone = "Pacific
-     * Standard Time".
+     * TimeZone optional input as string. For example: TimeZone = "Pacific Standard Time".
      */
     @JsonProperty(value = "timeZone")
     private String timeZone;
@@ -28,16 +25,21 @@ public final class Settings {
     private Boolean issqlcompression;
 
     /*
-     * Workload compression flag. This has been added so that
-     * 'isSqlCompression'
+     * Workload compression flag. This has been added so that 'isSqlCompression'
      * will be deprecated once clients upgrade to consider this flag.
      */
     @JsonProperty(value = "isCompression")
     private Boolean isCompression;
 
     /**
+     * Creates an instance of Settings class.
+     */
+    public Settings() {
+    }
+
+    /**
      * Get the timeZone property: TimeZone optional input as string. For example: TimeZone = "Pacific Standard Time".
-     *
+     * 
      * @return the timeZone value.
      */
     public String timeZone() {
@@ -46,7 +48,7 @@ public final class Settings {
 
     /**
      * Set the timeZone property: TimeZone optional input as string. For example: TimeZone = "Pacific Standard Time".
-     *
+     * 
      * @param timeZone the timeZone value to set.
      * @return the Settings object itself.
      */
@@ -57,7 +59,7 @@ public final class Settings {
 
     /**
      * Get the issqlcompression property: SQL compression flag.
-     *
+     * 
      * @return the issqlcompression value.
      */
     public Boolean issqlcompression() {
@@ -66,7 +68,7 @@ public final class Settings {
 
     /**
      * Set the issqlcompression property: SQL compression flag.
-     *
+     * 
      * @param issqlcompression the issqlcompression value to set.
      * @return the Settings object itself.
      */
@@ -76,9 +78,9 @@ public final class Settings {
     }
 
     /**
-     * Get the isCompression property: Workload compression flag. This has been added so that 'isSqlCompression' will be
-     * deprecated once clients upgrade to consider this flag.
-     *
+     * Get the isCompression property: Workload compression flag. This has been added so that 'isSqlCompression'
+     * will be deprecated once clients upgrade to consider this flag.
+     * 
      * @return the isCompression value.
      */
     public Boolean isCompression() {
@@ -86,9 +88,9 @@ public final class Settings {
     }
 
     /**
-     * Set the isCompression property: Workload compression flag. This has been added so that 'isSqlCompression' will be
-     * deprecated once clients upgrade to consider this flag.
-     *
+     * Set the isCompression property: Workload compression flag. This has been added so that 'isSqlCompression'
+     * will be deprecated once clients upgrade to consider this flag.
+     * 
      * @param isCompression the isCompression value to set.
      * @return the Settings object itself.
      */
@@ -99,7 +101,7 @@ public final class Settings {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

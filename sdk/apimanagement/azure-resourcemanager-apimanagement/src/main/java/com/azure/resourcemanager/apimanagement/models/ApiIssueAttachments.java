@@ -13,22 +13,22 @@ public interface ApiIssueAttachments {
     /**
      * Lists all attachments for the Issue associated with the specified API.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param issueId Issue identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Issue Attachment list representation.
+     * @return paged Issue Attachment list representation as paginated response with {@link PagedIterable}.
      */
-    PagedIterable<IssueAttachmentContract> listByService(
-        String resourceGroupName, String serviceName, String apiId, String issueId);
+    PagedIterable<IssueAttachmentContract> listByService(String resourceGroupName, String serviceName, String apiId,
+        String issueId);
 
     /**
      * Lists all attachments for the Issue associated with the specified API.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param issueId Issue identifier. Must be unique in the current API Management service instance.
@@ -42,22 +42,32 @@ public interface ApiIssueAttachments {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Issue Attachment list representation.
+     * @return paged Issue Attachment list representation as paginated response with {@link PagedIterable}.
      */
-    PagedIterable<IssueAttachmentContract> listByService(
-        String resourceGroupName,
-        String serviceName,
-        String apiId,
-        String issueId,
-        String filter,
-        Integer top,
-        Integer skip,
-        Context context);
+    PagedIterable<IssueAttachmentContract> listByService(String resourceGroupName, String serviceName, String apiId,
+        String issueId, String filter, Integer top, Integer skip, Context context);
 
     /**
      * Gets the entity state (Etag) version of the issue Attachment for an API specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param apiId API identifier. Must be unique in the current API Management service instance.
+     * @param issueId Issue identifier. Must be unique in the current API Management service instance.
+     * @param attachmentId Attachment identifier within an Issue. Must be unique in the current Issue.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the entity state (Etag) version of the issue Attachment for an API specified by its identifier.
+     */
+    ApiIssueAttachmentsGetEntityTagResponse getEntityTagWithResponse(String resourceGroupName, String serviceName,
+        String apiId, String issueId, String attachmentId, Context context);
+
+    /**
+     * Gets the entity state (Etag) version of the issue Attachment for an API specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param issueId Issue identifier. Must be unique in the current API Management service instance.
@@ -69,47 +79,9 @@ public interface ApiIssueAttachments {
     void getEntityTag(String resourceGroupName, String serviceName, String apiId, String issueId, String attachmentId);
 
     /**
-     * Gets the entity state (Etag) version of the issue Attachment for an API specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param apiId API identifier. Must be unique in the current API Management service instance.
-     * @param issueId Issue identifier. Must be unique in the current API Management service instance.
-     * @param attachmentId Attachment identifier within an Issue. Must be unique in the current Issue.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the issue Attachment for an API specified by its identifier.
-     */
-    ApiIssueAttachmentsGetEntityTagResponse getEntityTagWithResponse(
-        String resourceGroupName,
-        String serviceName,
-        String apiId,
-        String issueId,
-        String attachmentId,
-        Context context);
-
-    /**
      * Gets the details of the issue Attachment for an API specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param apiId API identifier. Must be unique in the current API Management service instance.
-     * @param issueId Issue identifier. Must be unique in the current API Management service instance.
-     * @param attachmentId Attachment identifier within an Issue. Must be unique in the current Issue.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the issue Attachment for an API specified by its identifier.
-     */
-    IssueAttachmentContract get(
-        String resourceGroupName, String serviceName, String apiId, String issueId, String attachmentId);
-
-    /**
-     * Gets the details of the issue Attachment for an API specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param issueId Issue identifier. Must be unique in the current API Management service instance.
@@ -120,18 +92,48 @@ public interface ApiIssueAttachments {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return the details of the issue Attachment for an API specified by its identifier.
      */
-    Response<IssueAttachmentContract> getWithResponse(
-        String resourceGroupName,
-        String serviceName,
-        String apiId,
-        String issueId,
-        String attachmentId,
-        Context context);
+    Response<IssueAttachmentContract> getWithResponse(String resourceGroupName, String serviceName, String apiId,
+        String issueId, String attachmentId, Context context);
+
+    /**
+     * Gets the details of the issue Attachment for an API specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param apiId API identifier. Must be unique in the current API Management service instance.
+     * @param issueId Issue identifier. Must be unique in the current API Management service instance.
+     * @param attachmentId Attachment identifier within an Issue. Must be unique in the current Issue.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the details of the issue Attachment for an API specified by its identifier.
+     */
+    IssueAttachmentContract get(String resourceGroupName, String serviceName, String apiId, String issueId,
+        String attachmentId);
 
     /**
      * Deletes the specified comment from an Issue.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param apiId API identifier. Must be unique in the current API Management service instance.
+     * @param issueId Issue identifier. Must be unique in the current API Management service instance.
+     * @param attachmentId Attachment identifier within an Issue. Must be unique in the current Issue.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    Response<Void> deleteWithResponse(String resourceGroupName, String serviceName, String apiId, String issueId,
+        String attachmentId, String ifMatch, Context context);
+
+    /**
+     * Deletes the specified comment from an Issue.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param issueId Issue identifier. Must be unique in the current API Management service instance.
@@ -142,38 +144,8 @@ public interface ApiIssueAttachments {
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
-    void delete(
-        String resourceGroupName,
-        String serviceName,
-        String apiId,
-        String issueId,
-        String attachmentId,
+    void delete(String resourceGroupName, String serviceName, String apiId, String issueId, String attachmentId,
         String ifMatch);
-
-    /**
-     * Deletes the specified comment from an Issue.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param apiId API identifier. Must be unique in the current API Management service instance.
-     * @param issueId Issue identifier. Must be unique in the current API Management service instance.
-     * @param attachmentId Attachment identifier within an Issue. Must be unique in the current Issue.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    Response<Void> deleteWithResponse(
-        String resourceGroupName,
-        String serviceName,
-        String apiId,
-        String issueId,
-        String attachmentId,
-        String ifMatch,
-        Context context);
 
     /**
      * Gets the details of the issue Attachment for an API specified by its identifier.
@@ -218,7 +190,7 @@ public interface ApiIssueAttachments {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
     Response<Void> deleteByIdWithResponse(String id, String ifMatch, Context context);
 

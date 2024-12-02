@@ -5,337 +5,379 @@
 package com.azure.resourcemanager.consumption.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.annotation.JsonFlatten;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
 import com.azure.resourcemanager.consumption.models.ReservationTransactionResource;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.UUID;
 
-/** Reservation transaction resource. */
-@JsonFlatten
+/**
+ * Reservation transaction resource.
+ */
 @Immutable
 public class ReservationTransactionInner extends ReservationTransactionResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ReservationTransactionInner.class);
+    /*
+     * The properties of a legacy reservation transaction.
+     */
+    private LegacyReservationTransactionProperties innerProperties;
 
     /*
-     * The date of the transaction
+     * Resource tags.
      */
-    @JsonProperty(value = "properties.eventDate", access = JsonProperty.Access.WRITE_ONLY)
-    private OffsetDateTime eventDate;
+    private List<String> tags;
 
     /*
-     * The reservation order ID is the identifier for a reservation purchase.
-     * Each reservation order ID represents a single purchase transaction. A
-     * reservation order contains reservations. The reservation order specifies
-     * the VM size and region for the reservations.
+     * The type of the resource.
      */
-    @JsonProperty(value = "properties.reservationOrderId", access = JsonProperty.Access.WRITE_ONLY)
-    private String reservationOrderId;
+    private String type;
 
     /*
-     * The description of the transaction.
+     * The name of the resource.
      */
-    @JsonProperty(value = "properties.description", access = JsonProperty.Access.WRITE_ONLY)
-    private String description;
+    private String name;
 
     /*
-     * The type of the transaction (Purchase, Cancel, etc.)
+     * Fully qualified resource Id for the resource.
      */
-    @JsonProperty(value = "properties.eventType", access = JsonProperty.Access.WRITE_ONLY)
-    private String eventType;
+    private String id;
 
-    /*
-     * The quantity of the transaction.
+    /**
+     * Creates an instance of ReservationTransactionInner class.
      */
-    @JsonProperty(value = "properties.quantity", access = JsonProperty.Access.WRITE_ONLY)
-    private BigDecimal quantity;
+    public ReservationTransactionInner() {
+    }
 
-    /*
-     * The charge of the transaction.
+    /**
+     * Get the innerProperties property: The properties of a legacy reservation transaction.
+     * 
+     * @return the innerProperties value.
      */
-    @JsonProperty(value = "properties.amount", access = JsonProperty.Access.WRITE_ONLY)
-    private BigDecimal amount;
+    private LegacyReservationTransactionProperties innerProperties() {
+        return this.innerProperties;
+    }
 
-    /*
-     * The ISO currency in which the transaction is charged, for example, USD.
+    /**
+     * Set the innerProperties property: The properties of a legacy reservation transaction.
+     * 
+     * @param innerProperties the innerProperties value to set.
+     * @return the ReservationTransactionInner object itself.
      */
-    @JsonProperty(value = "properties.currency", access = JsonProperty.Access.WRITE_ONLY)
-    private String currency;
+    ReservationTransactionInner withInnerProperties(LegacyReservationTransactionProperties innerProperties) {
+        this.innerProperties = innerProperties;
+        return this;
+    }
 
-    /*
-     * The name of the reservation order.
+    /**
+     * Get the tags property: Resource tags.
+     * 
+     * @return the tags value.
      */
-    @JsonProperty(value = "properties.reservationOrderName", access = JsonProperty.Access.WRITE_ONLY)
-    private String reservationOrderName;
+    @Override
+    public List<String> tags() {
+        return this.tags;
+    }
 
-    /*
-     * The purchasing enrollment.
+    /**
+     * Get the type property: The type of the resource.
+     * 
+     * @return the type value.
      */
-    @JsonProperty(value = "properties.purchasingEnrollment", access = JsonProperty.Access.WRITE_ONLY)
-    private String purchasingEnrollment;
+    @Override
+    public String type() {
+        return this.type;
+    }
 
-    /*
-     * The subscription guid that makes the transaction.
+    /**
+     * Get the name property: The name of the resource.
+     * 
+     * @return the name value.
      */
-    @JsonProperty(value = "properties.purchasingSubscriptionGuid", access = JsonProperty.Access.WRITE_ONLY)
-    private UUID purchasingSubscriptionGuid;
+    @Override
+    public String name() {
+        return this.name;
+    }
 
-    /*
-     * The subscription name that makes the transaction.
+    /**
+     * Get the id property: Fully qualified resource Id for the resource.
+     * 
+     * @return the id value.
      */
-    @JsonProperty(value = "properties.purchasingSubscriptionName", access = JsonProperty.Access.WRITE_ONLY)
-    private String purchasingSubscriptionName;
-
-    /*
-     * This is the ARM Sku name. It can be used to join with the serviceType
-     * field in additional info in usage records.
-     */
-    @JsonProperty(value = "properties.armSkuName", access = JsonProperty.Access.WRITE_ONLY)
-    private String armSkuName;
-
-    /*
-     * This is the term of the transaction.
-     */
-    @JsonProperty(value = "properties.term", access = JsonProperty.Access.WRITE_ONLY)
-    private String term;
-
-    /*
-     * The region of the transaction.
-     */
-    @JsonProperty(value = "properties.region", access = JsonProperty.Access.WRITE_ONLY)
-    private String region;
-
-    /*
-     * The name of the account that makes the transaction.
-     */
-    @JsonProperty(value = "properties.accountName", access = JsonProperty.Access.WRITE_ONLY)
-    private String accountName;
-
-    /*
-     * The email of the account owner that makes the transaction.
-     */
-    @JsonProperty(value = "properties.accountOwnerEmail", access = JsonProperty.Access.WRITE_ONLY)
-    private String accountOwnerEmail;
-
-    /*
-     * The department name.
-     */
-    @JsonProperty(value = "properties.departmentName", access = JsonProperty.Access.WRITE_ONLY)
-    private String departmentName;
-
-    /*
-     * The cost center of this department if it is a department and a cost
-     * center is provided.
-     */
-    @JsonProperty(value = "properties.costCenter", access = JsonProperty.Access.WRITE_ONLY)
-    private String costCenter;
-
-    /*
-     * The current enrollment.
-     */
-    @JsonProperty(value = "properties.currentEnrollment", access = JsonProperty.Access.WRITE_ONLY)
-    private String currentEnrollment;
-
-    /*
-     * The billing frequency, which can be either one-time or recurring.
-     */
-    @JsonProperty(value = "properties.billingFrequency", access = JsonProperty.Access.WRITE_ONLY)
-    private String billingFrequency;
+    @Override
+    public String id() {
+        return this.id;
+    }
 
     /**
      * Get the eventDate property: The date of the transaction.
-     *
+     * 
      * @return the eventDate value.
      */
     public OffsetDateTime eventDate() {
-        return this.eventDate;
+        return this.innerProperties() == null ? null : this.innerProperties().eventDate();
     }
 
     /**
      * Get the reservationOrderId property: The reservation order ID is the identifier for a reservation purchase. Each
      * reservation order ID represents a single purchase transaction. A reservation order contains reservations. The
      * reservation order specifies the VM size and region for the reservations.
-     *
+     * 
      * @return the reservationOrderId value.
      */
     public String reservationOrderId() {
-        return this.reservationOrderId;
+        return this.innerProperties() == null ? null : this.innerProperties().reservationOrderId();
     }
 
     /**
      * Get the description property: The description of the transaction.
-     *
+     * 
      * @return the description value.
      */
     public String description() {
-        return this.description;
+        return this.innerProperties() == null ? null : this.innerProperties().description();
     }
 
     /**
-     * Get the eventType property: The type of the transaction (Purchase, Cancel, etc.).
-     *
+     * Get the eventType property: The type of the transaction (Purchase, Cancel or Refund).
+     * 
      * @return the eventType value.
      */
     public String eventType() {
-        return this.eventType;
+        return this.innerProperties() == null ? null : this.innerProperties().eventType();
     }
 
     /**
      * Get the quantity property: The quantity of the transaction.
-     *
+     * 
      * @return the quantity value.
      */
     public BigDecimal quantity() {
-        return this.quantity;
+        return this.innerProperties() == null ? null : this.innerProperties().quantity();
     }
 
     /**
      * Get the amount property: The charge of the transaction.
-     *
+     * 
      * @return the amount value.
      */
     public BigDecimal amount() {
-        return this.amount;
+        return this.innerProperties() == null ? null : this.innerProperties().amount();
     }
 
     /**
      * Get the currency property: The ISO currency in which the transaction is charged, for example, USD.
-     *
+     * 
      * @return the currency value.
      */
     public String currency() {
-        return this.currency;
+        return this.innerProperties() == null ? null : this.innerProperties().currency();
     }
 
     /**
      * Get the reservationOrderName property: The name of the reservation order.
-     *
+     * 
      * @return the reservationOrderName value.
      */
     public String reservationOrderName() {
-        return this.reservationOrderName;
+        return this.innerProperties() == null ? null : this.innerProperties().reservationOrderName();
     }
 
     /**
      * Get the purchasingEnrollment property: The purchasing enrollment.
-     *
+     * 
      * @return the purchasingEnrollment value.
      */
     public String purchasingEnrollment() {
-        return this.purchasingEnrollment;
+        return this.innerProperties() == null ? null : this.innerProperties().purchasingEnrollment();
     }
 
     /**
      * Get the purchasingSubscriptionGuid property: The subscription guid that makes the transaction.
-     *
+     * 
      * @return the purchasingSubscriptionGuid value.
      */
     public UUID purchasingSubscriptionGuid() {
-        return this.purchasingSubscriptionGuid;
+        return this.innerProperties() == null ? null : this.innerProperties().purchasingSubscriptionGuid();
     }
 
     /**
      * Get the purchasingSubscriptionName property: The subscription name that makes the transaction.
-     *
+     * 
      * @return the purchasingSubscriptionName value.
      */
     public String purchasingSubscriptionName() {
-        return this.purchasingSubscriptionName;
+        return this.innerProperties() == null ? null : this.innerProperties().purchasingSubscriptionName();
     }
 
     /**
      * Get the armSkuName property: This is the ARM Sku name. It can be used to join with the serviceType field in
      * additional info in usage records.
-     *
+     * 
      * @return the armSkuName value.
      */
     public String armSkuName() {
-        return this.armSkuName;
+        return this.innerProperties() == null ? null : this.innerProperties().armSkuName();
     }
 
     /**
      * Get the term property: This is the term of the transaction.
-     *
+     * 
      * @return the term value.
      */
     public String term() {
-        return this.term;
+        return this.innerProperties() == null ? null : this.innerProperties().term();
     }
 
     /**
      * Get the region property: The region of the transaction.
-     *
+     * 
      * @return the region value.
      */
     public String region() {
-        return this.region;
+        return this.innerProperties() == null ? null : this.innerProperties().region();
     }
 
     /**
      * Get the accountName property: The name of the account that makes the transaction.
-     *
+     * 
      * @return the accountName value.
      */
     public String accountName() {
-        return this.accountName;
+        return this.innerProperties() == null ? null : this.innerProperties().accountName();
     }
 
     /**
      * Get the accountOwnerEmail property: The email of the account owner that makes the transaction.
-     *
+     * 
      * @return the accountOwnerEmail value.
      */
     public String accountOwnerEmail() {
-        return this.accountOwnerEmail;
+        return this.innerProperties() == null ? null : this.innerProperties().accountOwnerEmail();
     }
 
     /**
      * Get the departmentName property: The department name.
-     *
+     * 
      * @return the departmentName value.
      */
     public String departmentName() {
-        return this.departmentName;
+        return this.innerProperties() == null ? null : this.innerProperties().departmentName();
     }
 
     /**
      * Get the costCenter property: The cost center of this department if it is a department and a cost center is
      * provided.
-     *
+     * 
      * @return the costCenter value.
      */
     public String costCenter() {
-        return this.costCenter;
+        return this.innerProperties() == null ? null : this.innerProperties().costCenter();
     }
 
     /**
      * Get the currentEnrollment property: The current enrollment.
-     *
+     * 
      * @return the currentEnrollment value.
      */
     public String currentEnrollment() {
-        return this.currentEnrollment;
+        return this.innerProperties() == null ? null : this.innerProperties().currentEnrollment();
     }
 
     /**
      * Get the billingFrequency property: The billing frequency, which can be either one-time or recurring.
-     *
+     * 
      * @return the billingFrequency value.
      */
     public String billingFrequency() {
-        return this.billingFrequency;
+        return this.innerProperties() == null ? null : this.innerProperties().billingFrequency();
+    }
+
+    /**
+     * Get the billingMonth property: The billing month(yyyyMMdd), on which the event initiated.
+     * 
+     * @return the billingMonth value.
+     */
+    public Integer billingMonth() {
+        return this.innerProperties() == null ? null : this.innerProperties().billingMonth();
+    }
+
+    /**
+     * Get the monetaryCommitment property: The monetary commitment amount at the enrollment scope.
+     * 
+     * @return the monetaryCommitment value.
+     */
+    public BigDecimal monetaryCommitment() {
+        return this.innerProperties() == null ? null : this.innerProperties().monetaryCommitment();
+    }
+
+    /**
+     * Get the overage property: The overage amount at the enrollment scope.
+     * 
+     * @return the overage value.
+     */
+    public BigDecimal overage() {
+        return this.innerProperties() == null ? null : this.innerProperties().overage();
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
-        super.validate();
+        if (innerProperties() != null) {
+            innerProperties().validate();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of ReservationTransactionInner from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of ReservationTransactionInner if the JsonReader was pointing to an instance of it, or null
+     * if it was pointing to JSON null.
+     * @throws IllegalStateException If the deserialized JSON object was missing any required properties.
+     * @throws IOException If an error occurs while reading the ReservationTransactionInner.
+     */
+    public static ReservationTransactionInner fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            ReservationTransactionInner deserializedReservationTransactionInner = new ReservationTransactionInner();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("id".equals(fieldName)) {
+                    deserializedReservationTransactionInner.id = reader.getString();
+                } else if ("name".equals(fieldName)) {
+                    deserializedReservationTransactionInner.name = reader.getString();
+                } else if ("type".equals(fieldName)) {
+                    deserializedReservationTransactionInner.type = reader.getString();
+                } else if ("tags".equals(fieldName)) {
+                    List<String> tags = reader.readArray(reader1 -> reader1.getString());
+                    deserializedReservationTransactionInner.tags = tags;
+                } else if ("properties".equals(fieldName)) {
+                    deserializedReservationTransactionInner.innerProperties
+                        = LegacyReservationTransactionProperties.fromJson(reader);
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedReservationTransactionInner;
+        });
     }
 }

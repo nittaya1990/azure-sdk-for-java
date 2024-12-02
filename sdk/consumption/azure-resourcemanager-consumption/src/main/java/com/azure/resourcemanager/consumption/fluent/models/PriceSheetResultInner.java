@@ -5,82 +5,69 @@
 package com.azure.resourcemanager.consumption.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
 import com.azure.resourcemanager.consumption.models.MeterDetails;
 import com.azure.resourcemanager.consumption.models.PriceSheetProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-/** An pricesheet resource. */
-@JsonFlatten
+/**
+ * An pricesheet resource.
+ */
 @Immutable
-public class PriceSheetResultInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PriceSheetResultInner.class);
+public final class PriceSheetResultInner extends ProxyResource {
+    /*
+     * price sheet result. It contains the pricesheet associated with billing period
+     */
+    private PriceSheetModel innerProperties;
 
     /*
-     * Price sheet
+     * The etag for the resource.
      */
-    @JsonProperty(value = "properties.pricesheets", access = JsonProperty.Access.WRITE_ONLY)
-    private List<PriceSheetProperties> pricesheets;
-
-    /*
-     * The link (url) to the next page of results.
-     */
-    @JsonProperty(value = "properties.nextLink", access = JsonProperty.Access.WRITE_ONLY)
-    private String nextLink;
-
-    /*
-     * Pricesheet download details.
-     */
-    @JsonProperty(value = "properties.download", access = JsonProperty.Access.WRITE_ONLY)
-    private MeterDetails download;
-
-    /*
-     * Resource etag.
-     */
-    @JsonProperty(value = "etag", access = JsonProperty.Access.WRITE_ONLY)
     private String etag;
 
     /*
      * Resource tags.
      */
-    @JsonProperty(value = "tags", access = JsonProperty.Access.WRITE_ONLY)
     private Map<String, String> tags;
 
-    /**
-     * Get the pricesheets property: Price sheet.
-     *
-     * @return the pricesheets value.
+    /*
+     * The type of the resource.
      */
-    public List<PriceSheetProperties> pricesheets() {
-        return this.pricesheets;
+    private String type;
+
+    /*
+     * The name of the resource.
+     */
+    private String name;
+
+    /*
+     * Fully qualified resource Id for the resource.
+     */
+    private String id;
+
+    /**
+     * Creates an instance of PriceSheetResultInner class.
+     */
+    public PriceSheetResultInner() {
     }
 
     /**
-     * Get the nextLink property: The link (url) to the next page of results.
-     *
-     * @return the nextLink value.
+     * Get the innerProperties property: price sheet result. It contains the pricesheet associated with billing period.
+     * 
+     * @return the innerProperties value.
      */
-    public String nextLink() {
-        return this.nextLink;
+    private PriceSheetModel innerProperties() {
+        return this.innerProperties;
     }
 
     /**
-     * Get the download property: Pricesheet download details.
-     *
-     * @return the download value.
-     */
-    public MeterDetails download() {
-        return this.download;
-    }
-
-    /**
-     * Get the etag property: Resource etag.
-     *
+     * Get the etag property: The etag for the resource.
+     * 
      * @return the etag value.
      */
     public String etag() {
@@ -89,7 +76,7 @@ public class PriceSheetResultInner extends ProxyResource {
 
     /**
      * Get the tags property: Resource tags.
-     *
+     * 
      * @return the tags value.
      */
     public Map<String, String> tags() {
@@ -97,16 +84,118 @@ public class PriceSheetResultInner extends ProxyResource {
     }
 
     /**
+     * Get the type property: The type of the resource.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
+     * Get the name property: The name of the resource.
+     * 
+     * @return the name value.
+     */
+    @Override
+    public String name() {
+        return this.name;
+    }
+
+    /**
+     * Get the id property: Fully qualified resource Id for the resource.
+     * 
+     * @return the id value.
+     */
+    @Override
+    public String id() {
+        return this.id;
+    }
+
+    /**
+     * Get the pricesheets property: Price sheet.
+     * 
+     * @return the pricesheets value.
+     */
+    public List<PriceSheetProperties> pricesheets() {
+        return this.innerProperties() == null ? null : this.innerProperties().pricesheets();
+    }
+
+    /**
+     * Get the nextLink property: The link (url) to the next page of results.
+     * 
+     * @return the nextLink value.
+     */
+    public String nextLink() {
+        return this.innerProperties() == null ? null : this.innerProperties().nextLink();
+    }
+
+    /**
+     * Get the download property: Pricesheet download details.
+     * 
+     * @return the download value.
+     */
+    public MeterDetails download() {
+        return this.innerProperties() == null ? null : this.innerProperties().download();
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
-        if (pricesheets() != null) {
-            pricesheets().forEach(e -> e.validate());
+        if (innerProperties() != null) {
+            innerProperties().validate();
         }
-        if (download() != null) {
-            download().validate();
-        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of PriceSheetResultInner from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of PriceSheetResultInner if the JsonReader was pointing to an instance of it, or null if it
+     * was pointing to JSON null.
+     * @throws IllegalStateException If the deserialized JSON object was missing any required properties.
+     * @throws IOException If an error occurs while reading the PriceSheetResultInner.
+     */
+    public static PriceSheetResultInner fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            PriceSheetResultInner deserializedPriceSheetResultInner = new PriceSheetResultInner();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("id".equals(fieldName)) {
+                    deserializedPriceSheetResultInner.id = reader.getString();
+                } else if ("name".equals(fieldName)) {
+                    deserializedPriceSheetResultInner.name = reader.getString();
+                } else if ("type".equals(fieldName)) {
+                    deserializedPriceSheetResultInner.type = reader.getString();
+                } else if ("properties".equals(fieldName)) {
+                    deserializedPriceSheetResultInner.innerProperties = PriceSheetModel.fromJson(reader);
+                } else if ("etag".equals(fieldName)) {
+                    deserializedPriceSheetResultInner.etag = reader.getString();
+                } else if ("tags".equals(fieldName)) {
+                    Map<String, String> tags = reader.readMap(reader1 -> reader1.getString());
+                    deserializedPriceSheetResultInner.tags = tags;
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedPriceSheetResultInner;
+        });
     }
 }

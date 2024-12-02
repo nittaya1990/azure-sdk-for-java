@@ -5,17 +5,13 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.models.TagResourceContractInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Paged Tag list representation. */
 @Fluent
 public final class TagResourceCollection {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TagResourceCollection.class);
-
     /*
      * Page values.
      */
@@ -33,6 +29,10 @@ public final class TagResourceCollection {
      */
     @JsonProperty(value = "nextLink")
     private String nextLink;
+
+    /** Creates an instance of TagResourceCollection class. */
+    public TagResourceCollection() {
+    }
 
     /**
      * Get the value property: Page values.

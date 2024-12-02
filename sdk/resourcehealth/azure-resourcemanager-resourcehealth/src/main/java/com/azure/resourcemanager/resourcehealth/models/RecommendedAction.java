@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.resourcehealth.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Lists actions the user can take based on the current availabilityState of the resource. */
 @Fluent
 public final class RecommendedAction {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RecommendedAction.class);
-
     /*
      * Recommended action.
      */
@@ -27,10 +23,20 @@ public final class RecommendedAction {
     private String actionUrl;
 
     /*
-     * Substring of action, it describes which text should host the action url.
+     * the comment for the Action
+     */
+    @JsonProperty(value = "_ActionUrl.Comment")
+    private String actionUrlComment;
+
+    /*
+     * Substring of action, it describes which text should host the action URL.
      */
     @JsonProperty(value = "actionUrlText")
     private String actionUrlText;
+
+    /** Creates an instance of RecommendedAction class. */
+    public RecommendedAction() {
+    }
 
     /**
      * Get the action property: Recommended action.
@@ -73,7 +79,27 @@ public final class RecommendedAction {
     }
 
     /**
-     * Get the actionUrlText property: Substring of action, it describes which text should host the action url.
+     * Get the actionUrlComment property: the comment for the Action.
+     *
+     * @return the actionUrlComment value.
+     */
+    public String actionUrlComment() {
+        return this.actionUrlComment;
+    }
+
+    /**
+     * Set the actionUrlComment property: the comment for the Action.
+     *
+     * @param actionUrlComment the actionUrlComment value to set.
+     * @return the RecommendedAction object itself.
+     */
+    public RecommendedAction withActionUrlComment(String actionUrlComment) {
+        this.actionUrlComment = actionUrlComment;
+        return this;
+    }
+
+    /**
+     * Get the actionUrlText property: Substring of action, it describes which text should host the action URL.
      *
      * @return the actionUrlText value.
      */
@@ -82,7 +108,7 @@ public final class RecommendedAction {
     }
 
     /**
-     * Set the actionUrlText property: Substring of action, it describes which text should host the action url.
+     * Set the actionUrlText property: Substring of action, it describes which text should host the action URL.
      *
      * @param actionUrlText the actionUrlText value to set.
      * @return the RecommendedAction object itself.

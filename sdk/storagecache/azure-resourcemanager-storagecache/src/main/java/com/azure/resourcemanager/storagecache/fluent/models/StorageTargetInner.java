@@ -5,7 +5,6 @@
 package com.azure.resourcemanager.storagecache.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.storagecache.models.BlobNfsTarget;
 import com.azure.resourcemanager.storagecache.models.ClfsTarget;
 import com.azure.resourcemanager.storagecache.models.NamespaceJunction;
@@ -15,15 +14,14 @@ import com.azure.resourcemanager.storagecache.models.ProvisioningStateType;
 import com.azure.resourcemanager.storagecache.models.StorageTargetResource;
 import com.azure.resourcemanager.storagecache.models.StorageTargetType;
 import com.azure.resourcemanager.storagecache.models.UnknownTarget;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Type of the Storage Target. */
+/**
+ * Type of the Storage Target.
+ */
 @Fluent
 public final class StorageTargetInner extends StorageTargetResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(StorageTargetInner.class);
-
     /*
      * StorageTarget properties
      */
@@ -31,8 +29,14 @@ public final class StorageTargetInner extends StorageTargetResource {
     private StorageTargetProperties innerProperties;
 
     /**
+     * Creates an instance of StorageTargetInner class.
+     */
+    public StorageTargetInner() {
+    }
+
+    /**
      * Get the innerProperties property: StorageTarget properties.
-     *
+     * 
      * @return the innerProperties value.
      */
     private StorageTargetProperties innerProperties() {
@@ -40,8 +44,8 @@ public final class StorageTargetInner extends StorageTargetResource {
     }
 
     /**
-     * Get the junctions property: List of Cache namespace junctions to target for namespace associations.
-     *
+     * Get the junctions property: List of cache namespace junctions to target for namespace associations.
+     * 
      * @return the junctions value.
      */
     public List<NamespaceJunction> junctions() {
@@ -49,8 +53,8 @@ public final class StorageTargetInner extends StorageTargetResource {
     }
 
     /**
-     * Set the junctions property: List of Cache namespace junctions to target for namespace associations.
-     *
+     * Set the junctions property: List of cache namespace junctions to target for namespace associations.
+     * 
      * @param junctions the junctions value to set.
      * @return the StorageTargetInner object itself.
      */
@@ -64,7 +68,7 @@ public final class StorageTargetInner extends StorageTargetResource {
 
     /**
      * Get the targetType property: Type of the Storage Target.
-     *
+     * 
      * @return the targetType value.
      */
     public StorageTargetType targetType() {
@@ -73,7 +77,7 @@ public final class StorageTargetInner extends StorageTargetResource {
 
     /**
      * Set the targetType property: Type of the Storage Target.
-     *
+     * 
      * @param targetType the targetType value to set.
      * @return the StorageTargetInner object itself.
      */
@@ -88,7 +92,7 @@ public final class StorageTargetInner extends StorageTargetResource {
     /**
      * Get the provisioningState property: ARM provisioning state, see
      * https://github.com/Azure/azure-resource-manager-rpc/blob/master/v1.0/Addendum.md#provisioningstate-property.
-     *
+     * 
      * @return the provisioningState value.
      */
     public ProvisioningStateType provisioningState() {
@@ -97,7 +101,7 @@ public final class StorageTargetInner extends StorageTargetResource {
 
     /**
      * Get the state property: Storage target operational state.
-     *
+     * 
      * @return the state value.
      */
     public OperationalStateType state() {
@@ -106,7 +110,7 @@ public final class StorageTargetInner extends StorageTargetResource {
 
     /**
      * Set the state property: Storage target operational state.
-     *
+     * 
      * @param state the state value to set.
      * @return the StorageTargetInner object itself.
      */
@@ -120,7 +124,7 @@ public final class StorageTargetInner extends StorageTargetResource {
 
     /**
      * Get the nfs3 property: Properties when targetType is nfs3.
-     *
+     * 
      * @return the nfs3 value.
      */
     public Nfs3Target nfs3() {
@@ -129,7 +133,7 @@ public final class StorageTargetInner extends StorageTargetResource {
 
     /**
      * Set the nfs3 property: Properties when targetType is nfs3.
-     *
+     * 
      * @param nfs3 the nfs3 value to set.
      * @return the StorageTargetInner object itself.
      */
@@ -143,7 +147,7 @@ public final class StorageTargetInner extends StorageTargetResource {
 
     /**
      * Get the clfs property: Properties when targetType is clfs.
-     *
+     * 
      * @return the clfs value.
      */
     public ClfsTarget clfs() {
@@ -152,7 +156,7 @@ public final class StorageTargetInner extends StorageTargetResource {
 
     /**
      * Set the clfs property: Properties when targetType is clfs.
-     *
+     * 
      * @param clfs the clfs value to set.
      * @return the StorageTargetInner object itself.
      */
@@ -166,7 +170,7 @@ public final class StorageTargetInner extends StorageTargetResource {
 
     /**
      * Get the unknown property: Properties when targetType is unknown.
-     *
+     * 
      * @return the unknown value.
      */
     public UnknownTarget unknown() {
@@ -175,7 +179,7 @@ public final class StorageTargetInner extends StorageTargetResource {
 
     /**
      * Set the unknown property: Properties when targetType is unknown.
-     *
+     * 
      * @param unknown the unknown value to set.
      * @return the StorageTargetInner object itself.
      */
@@ -189,7 +193,7 @@ public final class StorageTargetInner extends StorageTargetResource {
 
     /**
      * Get the blobNfs property: Properties when targetType is blobNfs.
-     *
+     * 
      * @return the blobNfs value.
      */
     public BlobNfsTarget blobNfs() {
@@ -198,7 +202,7 @@ public final class StorageTargetInner extends StorageTargetResource {
 
     /**
      * Set the blobNfs property: Properties when targetType is blobNfs.
-     *
+     * 
      * @param blobNfs the blobNfs value to set.
      * @return the StorageTargetInner object itself.
      */
@@ -211,8 +215,17 @@ public final class StorageTargetInner extends StorageTargetResource {
     }
 
     /**
+     * Get the allocationPercentage property: The percentage of cache space allocated for this storage target.
+     * 
+     * @return the allocationPercentage value.
+     */
+    public Integer allocationPercentage() {
+        return this.innerProperties() == null ? null : this.innerProperties().allocationPercentage();
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

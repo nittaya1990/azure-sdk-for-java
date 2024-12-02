@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Network Status in the Location. */
 @Fluent
 public final class NetworkStatusContractByLocationInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(NetworkStatusContractByLocationInner.class);
-
     /*
      * Location of service
      */
@@ -25,6 +21,10 @@ public final class NetworkStatusContractByLocationInner {
      */
     @JsonProperty(value = "networkStatus")
     private NetworkStatusContractInner networkStatus;
+
+    /** Creates an instance of NetworkStatusContractByLocationInner class. */
+    public NetworkStatusContractByLocationInner() {
+    }
 
     /**
      * Get the location property: Location of service.

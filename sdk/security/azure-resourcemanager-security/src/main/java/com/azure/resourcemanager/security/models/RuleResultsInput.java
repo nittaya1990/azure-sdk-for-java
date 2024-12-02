@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Rule results input. */
+/**
+ * Rule results input.
+ */
 @Fluent
 public final class RuleResultsInput {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RuleResultsInput.class);
-
     /*
      * Take results from latest scan.
      */
@@ -29,8 +27,14 @@ public final class RuleResultsInput {
     private List<List<String>> results;
 
     /**
+     * Creates an instance of RuleResultsInput class.
+     */
+    public RuleResultsInput() {
+    }
+
+    /**
      * Get the latestScan property: Take results from latest scan.
-     *
+     * 
      * @return the latestScan value.
      */
     public Boolean latestScan() {
@@ -39,7 +43,7 @@ public final class RuleResultsInput {
 
     /**
      * Set the latestScan property: Take results from latest scan.
-     *
+     * 
      * @param latestScan the latestScan value to set.
      * @return the RuleResultsInput object itself.
      */
@@ -49,9 +53,9 @@ public final class RuleResultsInput {
     }
 
     /**
-     * Get the results property: Expected results to be inserted into the baseline. Leave this field empty it LatestScan
-     * == true.
-     *
+     * Get the results property: Expected results to be inserted into the baseline.
+     * Leave this field empty it LatestScan == true.
+     * 
      * @return the results value.
      */
     public List<List<String>> results() {
@@ -59,9 +63,9 @@ public final class RuleResultsInput {
     }
 
     /**
-     * Set the results property: Expected results to be inserted into the baseline. Leave this field empty it LatestScan
-     * == true.
-     *
+     * Set the results property: Expected results to be inserted into the baseline.
+     * Leave this field empty it LatestScan == true.
+     * 
      * @param results the results value to set.
      * @return the RuleResultsInput object itself.
      */
@@ -72,7 +76,7 @@ public final class RuleResultsInput {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

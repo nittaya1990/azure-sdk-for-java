@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.security.fluent.models.AutoProvisioningSettingInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** List of all the auto provisioning settings response. */
+/**
+ * List of all the auto provisioning settings response.
+ */
 @Fluent
 public final class AutoProvisioningSettingList {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AutoProvisioningSettingList.class);
-
     /*
      * List of all the auto provisioning settings
      */
@@ -29,8 +27,14 @@ public final class AutoProvisioningSettingList {
     private String nextLink;
 
     /**
+     * Creates an instance of AutoProvisioningSettingList class.
+     */
+    public AutoProvisioningSettingList() {
+    }
+
+    /**
      * Get the value property: List of all the auto provisioning settings.
-     *
+     * 
      * @return the value value.
      */
     public List<AutoProvisioningSettingInner> value() {
@@ -39,7 +43,7 @@ public final class AutoProvisioningSettingList {
 
     /**
      * Set the value property: List of all the auto provisioning settings.
-     *
+     * 
      * @param value the value value to set.
      * @return the AutoProvisioningSettingList object itself.
      */
@@ -50,7 +54,7 @@ public final class AutoProvisioningSettingList {
 
     /**
      * Get the nextLink property: The URI to fetch the next page.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -59,7 +63,7 @@ public final class AutoProvisioningSettingList {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

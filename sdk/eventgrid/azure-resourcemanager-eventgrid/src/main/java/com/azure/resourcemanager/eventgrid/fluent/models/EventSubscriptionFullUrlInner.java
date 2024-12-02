@@ -5,25 +5,28 @@
 package com.azure.resourcemanager.eventgrid.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Full endpoint url of an event subscription. */
+/**
+ * Full endpoint URL of an event subscription.
+ */
 @Fluent
 public final class EventSubscriptionFullUrlInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(EventSubscriptionFullUrlInner.class);
-
     /*
-     * The URL that represents the endpoint of the destination of an event
-     * subscription.
+     * The URL that represents the endpoint of the destination of an event subscription.
      */
     @JsonProperty(value = "endpointUrl")
     private String endpointUrl;
 
     /**
+     * Creates an instance of EventSubscriptionFullUrlInner class.
+     */
+    public EventSubscriptionFullUrlInner() {
+    }
+
+    /**
      * Get the endpointUrl property: The URL that represents the endpoint of the destination of an event subscription.
-     *
+     * 
      * @return the endpointUrl value.
      */
     public String endpointUrl() {
@@ -32,7 +35,7 @@ public final class EventSubscriptionFullUrlInner {
 
     /**
      * Set the endpointUrl property: The URL that represents the endpoint of the destination of an event subscription.
-     *
+     * 
      * @param endpointUrl the endpointUrl value to set.
      * @return the EventSubscriptionFullUrlInner object itself.
      */
@@ -43,7 +46,7 @@ public final class EventSubscriptionFullUrlInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

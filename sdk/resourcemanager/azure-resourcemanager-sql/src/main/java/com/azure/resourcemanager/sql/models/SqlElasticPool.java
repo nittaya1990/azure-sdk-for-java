@@ -22,12 +22,8 @@ import java.util.List;
 
 /** An immutable client-side representation of an Azure SQL Elastic Pool. */
 @Fluent
-public interface SqlElasticPool
-    extends ExternalChildResource<SqlElasticPool, SqlServer>,
-        HasInnerModel<ElasticPoolInner>,
-        HasResourceGroup,
-        Refreshable<SqlElasticPool>,
-        Updatable<SqlElasticPool.Update> {
+public interface SqlElasticPool extends ExternalChildResource<SqlElasticPool, SqlServer>,
+    HasInnerModel<ElasticPoolInner>, HasResourceGroup, Refreshable<SqlElasticPool>, Updatable<SqlElasticPool.Update> {
 
     /** @return name of the SQL Server to which this elastic pool belongs */
     String sqlServerName();
@@ -69,42 +65,6 @@ public interface SqlElasticPool
 
     /** @return a representation of the deferred computation of the information about elastic pool activities */
     PagedFlux<ElasticPoolActivity> listActivitiesAsync();
-
-    /** @return the information about elastic pool database activities */
-    List<ElasticPoolDatabaseActivity> listDatabaseActivities();
-
-    /** @return the information about elastic pool database activities */
-    PagedFlux<ElasticPoolDatabaseActivity> listDatabaseActivitiesAsync();
-
-    /**
-     * Lists the database metrics for this SQL Elastic Pool.
-     *
-     * @param filter an OData filter expression that describes a subset of metrics to return
-     * @return the elastic pool's database metrics
-     */
-    List<SqlDatabaseMetric> listDatabaseMetrics(String filter);
-
-    /**
-     * Asynchronously lists the database metrics for this SQL Elastic Pool.
-     *
-     * @param filter an OData filter expression that describes a subset of metrics to return
-     * @return a representation of the deferred computation of this call
-     */
-    PagedFlux<SqlDatabaseMetric> listDatabaseMetricsAsync(String filter);
-
-    /**
-     * Lists the database metric definitions for this SQL Elastic Pool.
-     *
-     * @return the elastic pool's metric definitions
-     */
-    List<SqlDatabaseMetricDefinition> listDatabaseMetricDefinitions();
-
-    /**
-     * Asynchronously lists the database metric definitions for this SQL Elastic Pool.
-     *
-     * @return a representation of the deferred computation of this call
-     */
-    PagedFlux<SqlDatabaseMetricDefinition> listDatabaseMetricDefinitionsAsync();
 
     /**
      * Lists the SQL databases in this SQL Elastic Pool.
@@ -180,12 +140,9 @@ public interface SqlElasticPool
      * @param <ParentT> the stage of the parent definition to return to after attaching this definition
      */
     interface SqlElasticPoolDefinition<ParentT>
-        extends DefinitionStages.Blank<ParentT>,
-            DefinitionStages.WithEdition<ParentT>,
-            DefinitionStages.WithBasicEdition<ParentT>,
-            DefinitionStages.WithStandardEdition<ParentT>,
-            DefinitionStages.WithPremiumEdition<ParentT>,
-            DefinitionStages.WithAttach<ParentT> {
+        extends DefinitionStages.Blank<ParentT>, DefinitionStages.WithEdition<ParentT>,
+        DefinitionStages.WithBasicEdition<ParentT>, DefinitionStages.WithStandardEdition<ParentT>,
+        DefinitionStages.WithPremiumEdition<ParentT>, DefinitionStages.WithAttach<ParentT> {
     }
 
     /** Grouping of all the storage account definition stages. */
@@ -263,8 +220,8 @@ public interface SqlElasticPool
              * @param eDTU maximum eDTU a database in the pool can consume
              * @return The next stage of the definition.
              */
-            SqlElasticPool.DefinitionStages.WithBasicEdition<ParentT> withDatabaseDtuMax(
-                SqlElasticPoolBasicMaxEDTUs eDTU);
+            SqlElasticPool.DefinitionStages.WithBasicEdition<ParentT>
+                withDatabaseDtuMax(SqlElasticPoolBasicMaxEDTUs eDTU);
 
             /**
              * Sets the minimum number of eDTU for each database in the pool are regardless of its activity.
@@ -272,8 +229,8 @@ public interface SqlElasticPool
              * @param eDTU minimum eDTU for all SQL Azure databases
              * @return The next stage of the definition.
              */
-            SqlElasticPool.DefinitionStages.WithBasicEdition<ParentT> withDatabaseDtuMin(
-                SqlElasticPoolBasicMinEDTUs eDTU);
+            SqlElasticPool.DefinitionStages.WithBasicEdition<ParentT>
+                withDatabaseDtuMin(SqlElasticPoolBasicMinEDTUs eDTU);
         }
 
         /**
@@ -288,8 +245,8 @@ public interface SqlElasticPool
              * @param eDTU total shared eDTU for the SQL Azure Database Elastic Pool
              * @return The next stage of the definition.
              */
-            SqlElasticPool.DefinitionStages.WithStandardEdition<ParentT> withReservedDtu(
-                SqlElasticPoolStandardEDTUs eDTU);
+            SqlElasticPool.DefinitionStages.WithStandardEdition<ParentT>
+                withReservedDtu(SqlElasticPoolStandardEDTUs eDTU);
 
             /**
              * Sets the maximum number of eDTU a database in the pool can consume.
@@ -297,8 +254,8 @@ public interface SqlElasticPool
              * @param eDTU maximum eDTU a database in the pool can consume
              * @return The next stage of the definition.
              */
-            SqlElasticPool.DefinitionStages.WithStandardEdition<ParentT> withDatabaseDtuMax(
-                SqlElasticPoolStandardMaxEDTUs eDTU);
+            SqlElasticPool.DefinitionStages.WithStandardEdition<ParentT>
+                withDatabaseDtuMax(SqlElasticPoolStandardMaxEDTUs eDTU);
 
             /**
              * Sets the minimum number of eDTU for each database in the pool are regardless of its activity.
@@ -306,8 +263,8 @@ public interface SqlElasticPool
              * @param eDTU minimum eDTU for all SQL Azure databases
              * @return The next stage of the definition.
              */
-            SqlElasticPool.DefinitionStages.WithStandardEdition<ParentT> withDatabaseDtuMin(
-                SqlElasticPoolStandardMinEDTUs eDTU);
+            SqlElasticPool.DefinitionStages.WithStandardEdition<ParentT>
+                withDatabaseDtuMin(SqlElasticPoolStandardMinEDTUs eDTU);
 
             /**
              * Sets the storage capacity for the SQL Azure Database Elastic Pool.
@@ -315,8 +272,8 @@ public interface SqlElasticPool
              * @param storageCapacity storage capacity for the SQL Azure Database Elastic Pool
              * @return The next stage of the definition.
              */
-            SqlElasticPool.DefinitionStages.WithStandardEdition<ParentT> withStorageCapacity(
-                SqlElasticPoolStandardStorage storageCapacity);
+            SqlElasticPool.DefinitionStages.WithStandardEdition<ParentT>
+                withStorageCapacity(SqlElasticPoolStandardStorage storageCapacity);
         }
 
         /**
@@ -331,8 +288,8 @@ public interface SqlElasticPool
              * @param eDTU total shared eDTU for the SQL Azure Database Elastic Pool
              * @return The next stage of the definition.
              */
-            SqlElasticPool.DefinitionStages.WithPremiumEdition<ParentT> withReservedDtu(
-                SqlElasticPoolPremiumEDTUs eDTU);
+            SqlElasticPool.DefinitionStages.WithPremiumEdition<ParentT>
+                withReservedDtu(SqlElasticPoolPremiumEDTUs eDTU);
 
             /**
              * Sets the maximum number of eDTU a database in the pool can consume.
@@ -340,8 +297,8 @@ public interface SqlElasticPool
              * @param eDTU maximum eDTU a database in the pool can consume
              * @return The next stage of the definition.
              */
-            SqlElasticPool.DefinitionStages.WithPremiumEdition<ParentT> withDatabaseDtuMax(
-                SqlElasticPoolPremiumMaxEDTUs eDTU);
+            SqlElasticPool.DefinitionStages.WithPremiumEdition<ParentT>
+                withDatabaseDtuMax(SqlElasticPoolPremiumMaxEDTUs eDTU);
 
             /**
              * Sets the minimum number of eDTU for each database in the pool are regardless of its activity.
@@ -349,8 +306,8 @@ public interface SqlElasticPool
              * @param eDTU minimum eDTU for all SQL Azure databases
              * @return The next stage of the definition.
              */
-            SqlElasticPool.DefinitionStages.WithPremiumEdition<ParentT> withDatabaseDtuMin(
-                SqlElasticPoolPremiumMinEDTUs eDTU);
+            SqlElasticPool.DefinitionStages.WithPremiumEdition<ParentT>
+                withDatabaseDtuMin(SqlElasticPoolPremiumMinEDTUs eDTU);
 
             /**
              * Sets the storage capacity for the SQL Azure Database Elastic Pool.
@@ -358,8 +315,8 @@ public interface SqlElasticPool
              * @param storageCapacity storage capacity for the SQL Azure Database Elastic Pool
              * @return The next stage of the definition.
              */
-            SqlElasticPool.DefinitionStages.WithPremiumEdition<ParentT> withStorageCapacity(
-                SqlElasticPoolPremiumSorage storageCapacity);
+            SqlElasticPool.DefinitionStages.WithPremiumEdition<ParentT>
+                withStorageCapacity(SqlElasticPoolPremiumSorage storageCapacity);
         }
 
         /**
@@ -415,23 +372,15 @@ public interface SqlElasticPool
          *
          * @param <ParentT> the stage of the parent definition to return to after attaching this definition
          */
-        interface WithAttach<ParentT>
-            extends WithDatabaseMinCapacity<ParentT>,
-                WithDatabaseMaxCapacity<ParentT>,
-                WithStorageCapacity<ParentT>,
-                Attachable.InDefinition<ParentT> {
+        interface WithAttach<ParentT> extends WithDatabaseMinCapacity<ParentT>, WithDatabaseMaxCapacity<ParentT>,
+            WithStorageCapacity<ParentT>, Attachable.InDefinition<ParentT> {
         }
     }
 
     /** The template for a SQL Elastic Pool update operation, containing all the settings that can be modified. */
-    interface Update
-        extends UpdateStages.WithReservedDTUAndStorageCapacity,
-            UpdateStages.WithDatabaseMinCapacity,
-            UpdateStages.WithDatabaseMaxCapacity,
-            UpdateStages.WithStorageCapacity,
-            UpdateStages.WithDatabase,
-            Resource.UpdateWithTags<SqlElasticPool.Update>,
-            Appliable<SqlElasticPool> {
+    interface Update extends UpdateStages.WithReservedDTUAndStorageCapacity, UpdateStages.WithDatabaseMinCapacity,
+        UpdateStages.WithDatabaseMaxCapacity, UpdateStages.WithStorageCapacity, UpdateStages.WithDatabase,
+        Resource.UpdateWithTags<SqlElasticPool.Update>, Appliable<SqlElasticPool> {
     }
 
     /** Grouping of all the SQL Elastic Pool update stages. */

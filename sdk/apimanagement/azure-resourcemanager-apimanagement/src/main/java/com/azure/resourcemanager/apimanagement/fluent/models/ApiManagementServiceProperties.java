@@ -11,9 +11,11 @@ import com.azure.resourcemanager.apimanagement.models.ApiManagementServiceBasePr
 import com.azure.resourcemanager.apimanagement.models.ApiVersionConstraint;
 import com.azure.resourcemanager.apimanagement.models.CertificateConfiguration;
 import com.azure.resourcemanager.apimanagement.models.HostnameConfiguration;
+import com.azure.resourcemanager.apimanagement.models.NatGatewayState;
+import com.azure.resourcemanager.apimanagement.models.PublicNetworkAccess;
+import com.azure.resourcemanager.apimanagement.models.RemotePrivateEndpointConnectionWrapper;
 import com.azure.resourcemanager.apimanagement.models.VirtualNetworkConfiguration;
 import com.azure.resourcemanager.apimanagement.models.VirtualNetworkType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.Map;
@@ -21,8 +23,6 @@ import java.util.Map;
 /** Properties of an API Management service resource description. */
 @Fluent
 public final class ApiManagementServiceProperties extends ApiManagementServiceBaseProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApiManagementServiceProperties.class);
-
     /*
      * Publisher email.
      */
@@ -34,6 +34,10 @@ public final class ApiManagementServiceProperties extends ApiManagementServiceBa
      */
     @JsonProperty(value = "publisherName", required = true)
     private String publisherName;
+
+    /** Creates an instance of ApiManagementServiceProperties class. */
+    public ApiManagementServiceProperties() {
+    }
 
     /**
      * Get the publisherEmail property: Publisher email.
@@ -84,16 +88,30 @@ public final class ApiManagementServiceProperties extends ApiManagementServiceBa
 
     /** {@inheritDoc} */
     @Override
-    public ApiManagementServiceProperties withHostnameConfigurations(
-        List<HostnameConfiguration> hostnameConfigurations) {
+    public ApiManagementServiceProperties
+        withHostnameConfigurations(List<HostnameConfiguration> hostnameConfigurations) {
         super.withHostnameConfigurations(hostnameConfigurations);
         return this;
     }
 
     /** {@inheritDoc} */
     @Override
-    public ApiManagementServiceProperties withVirtualNetworkConfiguration(
-        VirtualNetworkConfiguration virtualNetworkConfiguration) {
+    public ApiManagementServiceProperties withPublicIpAddressId(String publicIpAddressId) {
+        super.withPublicIpAddressId(publicIpAddressId);
+        return this;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public ApiManagementServiceProperties withPublicNetworkAccess(PublicNetworkAccess publicNetworkAccess) {
+        super.withPublicNetworkAccess(publicNetworkAccess);
+        return this;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public ApiManagementServiceProperties
+        withVirtualNetworkConfiguration(VirtualNetworkConfiguration virtualNetworkConfiguration) {
         super.withVirtualNetworkConfiguration(virtualNetworkConfiguration);
         return this;
     }
@@ -128,6 +146,13 @@ public final class ApiManagementServiceProperties extends ApiManagementServiceBa
 
     /** {@inheritDoc} */
     @Override
+    public ApiManagementServiceProperties withNatGatewayState(NatGatewayState natGatewayState) {
+        super.withNatGatewayState(natGatewayState);
+        return this;
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public ApiManagementServiceProperties withDisableGateway(Boolean disableGateway) {
         super.withDisableGateway(disableGateway);
         return this;
@@ -154,6 +179,14 @@ public final class ApiManagementServiceProperties extends ApiManagementServiceBa
         return this;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public ApiManagementServiceProperties
+        withPrivateEndpointConnections(List<RemotePrivateEndpointConnectionWrapper> privateEndpointConnections) {
+        super.withPrivateEndpointConnections(privateEndpointConnections);
+        return this;
+    }
+
     /**
      * Validates the instance.
      *
@@ -163,16 +196,14 @@ public final class ApiManagementServiceProperties extends ApiManagementServiceBa
     public void validate() {
         super.validate();
         if (publisherEmail() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property publisherEmail in model ApiManagementServiceProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property publisherEmail in model ApiManagementServiceProperties"));
         }
         if (publisherName() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property publisherName in model ApiManagementServiceProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property publisherName in model ApiManagementServiceProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(ApiManagementServiceProperties.class);
 }

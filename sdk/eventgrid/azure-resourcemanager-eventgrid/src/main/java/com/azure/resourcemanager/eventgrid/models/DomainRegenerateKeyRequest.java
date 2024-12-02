@@ -6,14 +6,13 @@ package com.azure.resourcemanager.eventgrid.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Domain regenerate share access key request. */
+/**
+ * Domain regenerate share access key request.
+ */
 @Fluent
 public final class DomainRegenerateKeyRequest {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DomainRegenerateKeyRequest.class);
-
     /*
      * Key name to regenerate key1 or key2.
      */
@@ -21,8 +20,14 @@ public final class DomainRegenerateKeyRequest {
     private String keyName;
 
     /**
+     * Creates an instance of DomainRegenerateKeyRequest class.
+     */
+    public DomainRegenerateKeyRequest() {
+    }
+
+    /**
      * Get the keyName property: Key name to regenerate key1 or key2.
-     *
+     * 
      * @return the keyName value.
      */
     public String keyName() {
@@ -31,7 +36,7 @@ public final class DomainRegenerateKeyRequest {
 
     /**
      * Set the keyName property: Key name to regenerate key1 or key2.
-     *
+     * 
      * @param keyName the keyName value to set.
      * @return the DomainRegenerateKeyRequest object itself.
      */
@@ -42,15 +47,16 @@ public final class DomainRegenerateKeyRequest {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (keyName() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property keyName in model DomainRegenerateKeyRequest"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property keyName in model DomainRegenerateKeyRequest"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(DomainRegenerateKeyRequest.class);
 }

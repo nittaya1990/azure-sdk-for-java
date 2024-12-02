@@ -53,17 +53,16 @@ public interface EventHubConsumerGroupInfo {
     EventHubConsumerGroupInfoInner innerModel();
 
     /** The entirety of the EventHubConsumerGroupInfo definition. */
-    interface Definition
-        extends DefinitionStages.Blank,
-            DefinitionStages.WithParentResource,
-            DefinitionStages.WithProperties,
-            DefinitionStages.WithCreate {
+    interface Definition extends DefinitionStages.Blank, DefinitionStages.WithParentResource,
+        DefinitionStages.WithProperties, DefinitionStages.WithCreate {
     }
+
     /** The EventHubConsumerGroupInfo definition stages. */
     interface DefinitionStages {
         /** The first stage of the EventHubConsumerGroupInfo definition. */
         interface Blank extends WithParentResource {
         }
+
         /** The stage of the EventHubConsumerGroupInfo definition allowing to specify parent resource. */
         interface WithParentResource {
             /**
@@ -74,9 +73,10 @@ public interface EventHubConsumerGroupInfo {
              * @param eventHubEndpointName The name of the Event Hub-compatible endpoint in the IoT hub.
              * @return the next definition stage.
              */
-            WithProperties withExistingEventHubEndpoint(
-                String resourceGroupName, String resourceName, String eventHubEndpointName);
+            WithProperties withExistingEventHubEndpoint(String resourceGroupName, String resourceName,
+                String eventHubEndpointName);
         }
+
         /** The stage of the EventHubConsumerGroupInfo definition allowing to specify properties. */
         interface WithProperties {
             /**
@@ -87,6 +87,7 @@ public interface EventHubConsumerGroupInfo {
              */
             WithCreate withProperties(EventHubConsumerGroupName properties);
         }
+
         /**
          * The stage of the EventHubConsumerGroupInfo definition which contains all the minimum required properties for
          * the resource to be created, but also allows for any other optional properties to be specified.
@@ -108,6 +109,7 @@ public interface EventHubConsumerGroupInfo {
             EventHubConsumerGroupInfo create(Context context);
         }
     }
+
     /**
      * Refreshes the resource to sync with Azure.
      *

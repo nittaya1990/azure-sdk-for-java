@@ -5,19 +5,17 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Contract to validate if backup can be enabled on the given resource in a given vault and given configuration. It will
- * validate followings 1. Vault capacity 2. VM is already protected 3. Any VM related configuration passed in
- * properties.
+ * Contract to validate if backup can be enabled on the given resource in a given vault and given configuration.
+ * It will validate followings
+ * 1. Vault capacity
+ * 2. VM is already protected
+ * 3. Any VM related configuration passed in properties.
  */
 @Fluent
 public final class PreValidateEnableBackupRequest {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PreValidateEnableBackupRequest.class);
-
     /*
      * ProtectedItem Type- VM, SqlDataBase, AzureFileShare etc
      */
@@ -43,8 +41,14 @@ public final class PreValidateEnableBackupRequest {
     private String properties;
 
     /**
+     * Creates an instance of PreValidateEnableBackupRequest class.
+     */
+    public PreValidateEnableBackupRequest() {
+    }
+
+    /**
      * Get the resourceType property: ProtectedItem Type- VM, SqlDataBase, AzureFileShare etc.
-     *
+     * 
      * @return the resourceType value.
      */
     public DataSourceType resourceType() {
@@ -53,7 +57,7 @@ public final class PreValidateEnableBackupRequest {
 
     /**
      * Set the resourceType property: ProtectedItem Type- VM, SqlDataBase, AzureFileShare etc.
-     *
+     * 
      * @param resourceType the resourceType value to set.
      * @return the PreValidateEnableBackupRequest object itself.
      */
@@ -64,7 +68,7 @@ public final class PreValidateEnableBackupRequest {
 
     /**
      * Get the resourceId property: ARM Virtual Machine Id.
-     *
+     * 
      * @return the resourceId value.
      */
     public String resourceId() {
@@ -73,7 +77,7 @@ public final class PreValidateEnableBackupRequest {
 
     /**
      * Set the resourceId property: ARM Virtual Machine Id.
-     *
+     * 
      * @param resourceId the resourceId value to set.
      * @return the PreValidateEnableBackupRequest object itself.
      */
@@ -84,7 +88,7 @@ public final class PreValidateEnableBackupRequest {
 
     /**
      * Get the vaultId property: ARM id of the Recovery Services Vault.
-     *
+     * 
      * @return the vaultId value.
      */
     public String vaultId() {
@@ -93,7 +97,7 @@ public final class PreValidateEnableBackupRequest {
 
     /**
      * Set the vaultId property: ARM id of the Recovery Services Vault.
-     *
+     * 
      * @param vaultId the vaultId value to set.
      * @return the PreValidateEnableBackupRequest object itself.
      */
@@ -104,7 +108,7 @@ public final class PreValidateEnableBackupRequest {
 
     /**
      * Get the properties property: Configuration of VM if any needs to be validated like OS type etc.
-     *
+     * 
      * @return the properties value.
      */
     public String properties() {
@@ -113,7 +117,7 @@ public final class PreValidateEnableBackupRequest {
 
     /**
      * Set the properties property: Configuration of VM if any needs to be validated like OS type etc.
-     *
+     * 
      * @param properties the properties value to set.
      * @return the PreValidateEnableBackupRequest object itself.
      */
@@ -124,7 +128,7 @@ public final class PreValidateEnableBackupRequest {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

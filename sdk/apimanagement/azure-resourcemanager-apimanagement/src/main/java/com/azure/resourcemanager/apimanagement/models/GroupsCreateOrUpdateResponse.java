@@ -20,16 +20,16 @@ public final class GroupsCreateOrUpdateResponse extends ResponseBase<GroupsCreat
      * @param value the deserialized value of the HTTP response.
      * @param headers the deserialized headers of the HTTP response.
      */
-    public GroupsCreateOrUpdateResponse(
-        HttpRequest request,
-        int statusCode,
-        HttpHeaders rawHeaders,
-        GroupContractInner value,
-        GroupsCreateOrUpdateHeaders headers) {
+    public GroupsCreateOrUpdateResponse(HttpRequest request, int statusCode, HttpHeaders rawHeaders,
+        GroupContractInner value, GroupsCreateOrUpdateHeaders headers) {
         super(request, statusCode, rawHeaders, value, headers);
     }
 
-    /** @return the deserialized response body. */
+    /**
+     * Gets the deserialized response body.
+     *
+     * @return the deserialized response body.
+     */
     @Override
     public GroupContractInner getValue() {
         return super.getValue();

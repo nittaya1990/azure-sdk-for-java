@@ -25,12 +25,12 @@ public interface SubscriptionsClient {
     /**
      * Lists all subscriptions of the API Management service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Subscriptions list representation.
+     * @return paged Subscriptions list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<SubscriptionContractInner> list(String resourceGroupName, String serviceName);
@@ -38,7 +38,7 @@ public interface SubscriptionsClient {
     /**
      * Lists all subscriptions of the API Management service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -56,16 +56,33 @@ public interface SubscriptionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Subscriptions list representation.
+     * @return paged Subscriptions list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<SubscriptionContractInner> list(
-        String resourceGroupName, String serviceName, String filter, Integer top, Integer skip, Context context);
+    PagedIterable<SubscriptionContractInner> list(String resourceGroupName, String serviceName, String filter,
+        Integer top, Integer skip, Context context);
 
     /**
      * Gets the entity state (Etag) version of the apimanagement subscription specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
+     *     API Management.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the entity state (Etag) version of the apimanagement subscription specified by its identifier.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    SubscriptionsGetEntityTagResponse getEntityTagWithResponse(String resourceGroupName, String serviceName, String sid,
+        Context context);
+
+    /**
+     * Gets the entity state (Etag) version of the apimanagement subscription specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
@@ -77,41 +94,9 @@ public interface SubscriptionsClient {
     void getEntityTag(String resourceGroupName, String serviceName, String sid);
 
     /**
-     * Gets the entity state (Etag) version of the apimanagement subscription specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
-     *     API Management.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the apimanagement subscription specified by its identifier.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    SubscriptionsGetEntityTagResponse getEntityTagWithResponse(
-        String resourceGroupName, String serviceName, String sid, Context context);
-
-    /**
      * Gets the specified Subscription entity.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
-     *     API Management.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the specified Subscription entity.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    SubscriptionContractInner get(String resourceGroupName, String serviceName, String sid);
-
-    /**
-     * Gets the specified Subscription entity.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
@@ -125,26 +110,24 @@ public interface SubscriptionsClient {
     SubscriptionsGetResponse getWithResponse(String resourceGroupName, String serviceName, String sid, Context context);
 
     /**
-     * Creates or updates the subscription of specified user to the specified product.
+     * Gets the specified Subscription entity.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
-     * @param parameters Create parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return subscription details.
+     * @return the specified Subscription entity.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    SubscriptionContractInner createOrUpdate(
-        String resourceGroupName, String serviceName, String sid, SubscriptionCreateParameters parameters);
+    SubscriptionContractInner get(String resourceGroupName, String serviceName, String sid);
 
     /**
      * Creates or updates the subscription of specified user to the specified product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
@@ -161,43 +144,31 @@ public interface SubscriptionsClient {
      * @return subscription details.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    SubscriptionsCreateOrUpdateResponse createOrUpdateWithResponse(
-        String resourceGroupName,
-        String serviceName,
-        String sid,
-        SubscriptionCreateParameters parameters,
-        Boolean notify,
-        String ifMatch,
-        AppType appType,
+    SubscriptionsCreateOrUpdateResponse createOrUpdateWithResponse(String resourceGroupName, String serviceName,
+        String sid, SubscriptionCreateParameters parameters, Boolean notify, String ifMatch, AppType appType,
         Context context);
 
     /**
-     * Updates the details of a subscription specified by its identifier.
+     * Creates or updates the subscription of specified user to the specified product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @param parameters Update parameters.
+     * @param parameters Create parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return subscription details.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    SubscriptionContractInner update(
-        String resourceGroupName,
-        String serviceName,
-        String sid,
-        String ifMatch,
-        SubscriptionUpdateParameters parameters);
+    SubscriptionContractInner createOrUpdate(String resourceGroupName, String serviceName, String sid,
+        SubscriptionCreateParameters parameters);
 
     /**
      * Updates the details of a subscription specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
@@ -215,20 +186,51 @@ public interface SubscriptionsClient {
      * @return subscription details.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    SubscriptionsUpdateResponse updateWithResponse(
-        String resourceGroupName,
-        String serviceName,
-        String sid,
-        String ifMatch,
-        SubscriptionUpdateParameters parameters,
-        Boolean notify,
-        AppType appType,
+    SubscriptionsUpdateResponse updateWithResponse(String resourceGroupName, String serviceName, String sid,
+        String ifMatch, SubscriptionUpdateParameters parameters, Boolean notify, AppType appType, Context context);
+
+    /**
+     * Updates the details of a subscription specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
+     *     API Management.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @param parameters Update parameters.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return subscription details.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    SubscriptionContractInner update(String resourceGroupName, String serviceName, String sid, String ifMatch,
+        SubscriptionUpdateParameters parameters);
+
+    /**
+     * Deletes the specified subscription.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
+     *     API Management.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<Void> deleteWithResponse(String resourceGroupName, String serviceName, String sid, String ifMatch,
         Context context);
 
     /**
      * Deletes the specified subscription.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
@@ -242,28 +244,26 @@ public interface SubscriptionsClient {
     void delete(String resourceGroupName, String serviceName, String sid, String ifMatch);
 
     /**
-     * Deletes the specified subscription.
+     * Regenerates primary key of existing subscription of the API Management service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<Void> deleteWithResponse(
-        String resourceGroupName, String serviceName, String sid, String ifMatch, Context context);
+    Response<Void> regeneratePrimaryKeyWithResponse(String resourceGroupName, String serviceName, String sid,
+        Context context);
 
     /**
      * Regenerates primary key of existing subscription of the API Management service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
@@ -275,9 +275,9 @@ public interface SubscriptionsClient {
     void regeneratePrimaryKey(String resourceGroupName, String serviceName, String sid);
 
     /**
-     * Regenerates primary key of existing subscription of the API Management service instance.
+     * Regenerates secondary key of existing subscription of the API Management service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
@@ -285,16 +285,16 @@ public interface SubscriptionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<Void> regeneratePrimaryKeyWithResponse(
-        String resourceGroupName, String serviceName, String sid, Context context);
+    Response<Void> regenerateSecondaryKeyWithResponse(String resourceGroupName, String serviceName, String sid,
+        Context context);
 
     /**
      * Regenerates secondary key of existing subscription of the API Management service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
@@ -306,9 +306,9 @@ public interface SubscriptionsClient {
     void regenerateSecondaryKey(String resourceGroupName, String serviceName, String sid);
 
     /**
-     * Regenerates secondary key of existing subscription of the API Management service instance.
+     * Gets the specified Subscription keys.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
@@ -316,16 +316,16 @@ public interface SubscriptionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the specified Subscription keys.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<Void> regenerateSecondaryKeyWithResponse(
-        String resourceGroupName, String serviceName, String sid, Context context);
+    SubscriptionsListSecretsResponse listSecretsWithResponse(String resourceGroupName, String serviceName, String sid,
+        Context context);
 
     /**
      * Gets the specified Subscription keys.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
@@ -336,21 +336,4 @@ public interface SubscriptionsClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     SubscriptionKeysContractInner listSecrets(String resourceGroupName, String serviceName, String sid);
-
-    /**
-     * Gets the specified Subscription keys.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
-     *     API Management.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the specified Subscription keys.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    SubscriptionsListSecretsResponse listSecretsWithResponse(
-        String resourceGroupName, String serviceName, String sid, Context context);
 }

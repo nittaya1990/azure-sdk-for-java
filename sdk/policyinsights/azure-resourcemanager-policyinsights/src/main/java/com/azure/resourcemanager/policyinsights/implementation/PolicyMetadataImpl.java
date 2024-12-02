@@ -12,8 +12,7 @@ public final class PolicyMetadataImpl implements PolicyMetadata {
 
     private final com.azure.resourcemanager.policyinsights.PolicyInsightsManager serviceManager;
 
-    PolicyMetadataImpl(
-        PolicyMetadataInner innerObject,
+    PolicyMetadataImpl(PolicyMetadataInner innerObject,
         com.azure.resourcemanager.policyinsights.PolicyInsightsManager serviceManager) {
         this.innerObject = innerObject;
         this.serviceManager = serviceManager;
@@ -29,6 +28,14 @@ public final class PolicyMetadataImpl implements PolicyMetadata {
 
     public String name() {
         return this.innerModel().name();
+    }
+
+    public String description() {
+        return this.innerModel().description();
+    }
+
+    public String requirements() {
+        return this.innerModel().requirements();
     }
 
     public String metadataId() {
@@ -53,14 +60,6 @@ public final class PolicyMetadataImpl implements PolicyMetadata {
 
     public Object metadata() {
         return this.innerModel().metadata();
-    }
-
-    public String description() {
-        return this.innerModel().description();
-    }
-
-    public String requirements() {
-        return this.innerModel().requirements();
     }
 
     public PolicyMetadataInner innerModel() {

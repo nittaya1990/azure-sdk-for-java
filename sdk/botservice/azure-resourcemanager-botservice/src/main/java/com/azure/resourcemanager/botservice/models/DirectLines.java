@@ -7,26 +7,13 @@ package com.azure.resourcemanager.botservice.models;
 import com.azure.core.http.rest.Response;
 import com.azure.core.util.Context;
 
-/** Resource collection API of DirectLines. */
+/**
+ * Resource collection API of DirectLines.
+ */
 public interface DirectLines {
     /**
      * Regenerates secret keys and returns them for the DirectLine Channel of a particular BotService resource.
-     *
-     * @param resourceGroupName The name of the Bot resource group in the user subscription.
-     * @param resourceName The name of the Bot resource.
-     * @param channelName The name of the Channel resource for which keys are to be regenerated.
-     * @param parameters The parameters to provide for the created bot.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return bot channel resource definition.
-     */
-    BotChannel regenerateKeys(
-        String resourceGroupName, String resourceName, RegenerateKeysChannelName channelName, SiteInfo parameters);
-
-    /**
-     * Regenerates secret keys and returns them for the DirectLine Channel of a particular BotService resource.
-     *
+     * 
      * @param resourceGroupName The name of the Bot resource group in the user subscription.
      * @param resourceName The name of the Bot resource.
      * @param channelName The name of the Channel resource for which keys are to be regenerated.
@@ -35,12 +22,23 @@ public interface DirectLines {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return bot channel resource definition along with {@link Response}.
+     */
+    Response<BotChannel> regenerateKeysWithResponse(String resourceGroupName, String resourceName,
+        RegenerateKeysChannelName channelName, SiteInfo parameters, Context context);
+
+    /**
+     * Regenerates secret keys and returns them for the DirectLine Channel of a particular BotService resource.
+     * 
+     * @param resourceGroupName The name of the Bot resource group in the user subscription.
+     * @param resourceName The name of the Bot resource.
+     * @param channelName The name of the Channel resource for which keys are to be regenerated.
+     * @param parameters The parameters to provide for the created bot.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return bot channel resource definition.
      */
-    Response<BotChannel> regenerateKeysWithResponse(
-        String resourceGroupName,
-        String resourceName,
-        RegenerateKeysChannelName channelName,
-        SiteInfo parameters,
-        Context context);
+    BotChannel regenerateKeys(String resourceGroupName, String resourceName, RegenerateKeysChannelName channelName,
+        SiteInfo parameters);
 }

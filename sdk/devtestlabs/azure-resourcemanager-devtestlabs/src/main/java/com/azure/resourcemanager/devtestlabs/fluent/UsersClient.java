@@ -24,7 +24,7 @@ public interface UsersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<UserInner> list(String resourceGroupName, String labName);
@@ -42,16 +42,27 @@ public interface UsersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<UserInner> list(
-        String resourceGroupName,
-        String labName,
-        String expand,
-        String filter,
-        Integer top,
-        String orderby,
+    PagedIterable<UserInner> list(String resourceGroupName, String labName, String expand, String filter, Integer top,
+        String orderby, Context context);
+
+    /**
+     * Get user profile.
+     *
+     * @param resourceGroupName The name of the resource group.
+     * @param labName The name of the lab.
+     * @param name The name of the user profile.
+     * @param expand Specify the $expand query. Example: 'properties($select=identity)'.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return user profile along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<UserInner> getWithResponse(String resourceGroupName, String labName, String name, String expand,
         Context context);
 
     /**
@@ -69,23 +80,6 @@ public interface UsersClient {
     UserInner get(String resourceGroupName, String labName, String name);
 
     /**
-     * Get user profile.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param labName The name of the lab.
-     * @param name The name of the user profile.
-     * @param expand Specify the $expand query. Example: 'properties($select=identity)'.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return user profile.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<UserInner> getWithResponse(
-        String resourceGroupName, String labName, String name, String expand, Context context);
-
-    /**
      * Create or replace an existing user profile. This operation can take a while to complete.
      *
      * @param resourceGroupName The name of the resource group.
@@ -95,11 +89,11 @@ public interface UsersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return profile of a lab user.
+     * @return the {@link SyncPoller} for polling of profile of a lab user.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<UserInner>, UserInner> beginCreateOrUpdate(
-        String resourceGroupName, String labName, String name, UserInner user);
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<UserInner>, UserInner> beginCreateOrUpdate(String resourceGroupName, String labName,
+        String name, UserInner user);
 
     /**
      * Create or replace an existing user profile. This operation can take a while to complete.
@@ -112,11 +106,11 @@ public interface UsersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return profile of a lab user.
+     * @return the {@link SyncPoller} for polling of profile of a lab user.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<UserInner>, UserInner> beginCreateOrUpdate(
-        String resourceGroupName, String labName, String name, UserInner user, Context context);
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<UserInner>, UserInner> beginCreateOrUpdate(String resourceGroupName, String labName,
+        String name, UserInner user, Context context);
 
     /**
      * Create or replace an existing user profile. This operation can take a while to complete.
@@ -158,9 +152,9 @@ public interface UsersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<Void>, Void> beginDelete(String resourceGroupName, String labName, String name);
 
     /**
@@ -173,11 +167,11 @@ public interface UsersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<Void>, Void> beginDelete(
-        String resourceGroupName, String labName, String name, Context context);
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<Void>, Void> beginDelete(String resourceGroupName, String labName, String name,
+        Context context);
 
     /**
      * Delete user profile. This operation can take a while to complete.
@@ -213,13 +207,15 @@ public interface UsersClient {
      * @param labName The name of the lab.
      * @param name The name of the user profile.
      * @param user Profile of a lab user.
+     * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return profile of a lab user.
+     * @return profile of a lab user along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    UserInner update(String resourceGroupName, String labName, String name, UserFragment user);
+    Response<UserInner> updateWithResponse(String resourceGroupName, String labName, String name, UserFragment user,
+        Context context);
 
     /**
      * Allows modifying tags of user profiles. All other properties will be ignored.
@@ -228,13 +224,11 @@ public interface UsersClient {
      * @param labName The name of the lab.
      * @param name The name of the user profile.
      * @param user Profile of a lab user.
-     * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return profile of a lab user.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<UserInner> updateWithResponse(
-        String resourceGroupName, String labName, String name, UserFragment user, Context context);
+    UserInner update(String resourceGroupName, String labName, String name, UserFragment user);
 }

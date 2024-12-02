@@ -6,20 +6,20 @@ package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Cache details. */
 @Fluent
 public final class CacheContractInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CacheContractInner.class);
-
     /*
      * Cache properties details.
      */
     @JsonProperty(value = "properties")
     private CacheContractProperties innerProperties;
+
+    /** Creates an instance of CacheContractInner class. */
+    public CacheContractInner() {
+    }
 
     /**
      * Get the innerProperties property: Cache properties details.

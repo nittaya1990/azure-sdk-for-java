@@ -13,10 +13,9 @@ import com.azure.resourcemanager.devtestlabs.fluent.UsersClient;
 import com.azure.resourcemanager.devtestlabs.fluent.models.UserInner;
 import com.azure.resourcemanager.devtestlabs.models.User;
 import com.azure.resourcemanager.devtestlabs.models.Users;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class UsersImpl implements Users {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(UsersImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(UsersImpl.class);
 
     private final UsersClient innerClient;
 
@@ -32,38 +31,29 @@ public final class UsersImpl implements Users {
         return Utils.mapPage(inner, inner1 -> new UserImpl(inner1, this.manager()));
     }
 
-    public PagedIterable<User> list(
-        String resourceGroupName,
-        String labName,
-        String expand,
-        String filter,
-        Integer top,
-        String orderby,
-        Context context) {
-        PagedIterable<UserInner> inner =
-            this.serviceClient().list(resourceGroupName, labName, expand, filter, top, orderby, context);
+    public PagedIterable<User> list(String resourceGroupName, String labName, String expand, String filter, Integer top,
+        String orderby, Context context) {
+        PagedIterable<UserInner> inner
+            = this.serviceClient().list(resourceGroupName, labName, expand, filter, top, orderby, context);
         return Utils.mapPage(inner, inner1 -> new UserImpl(inner1, this.manager()));
+    }
+
+    public Response<User> getWithResponse(String resourceGroupName, String labName, String name, String expand,
+        Context context) {
+        Response<UserInner> inner
+            = this.serviceClient().getWithResponse(resourceGroupName, labName, name, expand, context);
+        if (inner != null) {
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
+                new UserImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
     }
 
     public User get(String resourceGroupName, String labName, String name) {
         UserInner inner = this.serviceClient().get(resourceGroupName, labName, name);
         if (inner != null) {
             return new UserImpl(inner, this.manager());
-        } else {
-            return null;
-        }
-    }
-
-    public Response<User> getWithResponse(
-        String resourceGroupName, String labName, String name, String expand, Context context) {
-        Response<UserInner> inner =
-            this.serviceClient().getWithResponse(resourceGroupName, labName, name, expand, context);
-        if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
-                new UserImpl(inner.getValue(), this.manager()));
         } else {
             return null;
         }
@@ -80,25 +70,18 @@ public final class UsersImpl implements Users {
     public User getById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
         String labName = Utils.getValueFromIdByName(id, "labs");
         if (labName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'labs'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'labs'.", id)));
         }
         String name = Utils.getValueFromIdByName(id, "users");
         if (name == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'users'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'users'.", id)));
         }
         String localExpand = null;
         return this.getWithResponse(resourceGroupName, labName, name, localExpand, Context.NONE).getValue();
@@ -107,25 +90,18 @@ public final class UsersImpl implements Users {
     public Response<User> getByIdWithResponse(String id, String expand, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
         String labName = Utils.getValueFromIdByName(id, "labs");
         if (labName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'labs'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'labs'.", id)));
         }
         String name = Utils.getValueFromIdByName(id, "users");
         if (name == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'users'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'users'.", id)));
         }
         return this.getWithResponse(resourceGroupName, labName, name, expand, context);
     }
@@ -133,25 +109,18 @@ public final class UsersImpl implements Users {
     public void deleteById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
         String labName = Utils.getValueFromIdByName(id, "labs");
         if (labName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'labs'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'labs'.", id)));
         }
         String name = Utils.getValueFromIdByName(id, "users");
         if (name == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'users'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'users'.", id)));
         }
         this.delete(resourceGroupName, labName, name, Context.NONE);
     }
@@ -159,25 +128,18 @@ public final class UsersImpl implements Users {
     public void deleteByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
         String labName = Utils.getValueFromIdByName(id, "labs");
         if (labName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'labs'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'labs'.", id)));
         }
         String name = Utils.getValueFromIdByName(id, "users");
         if (name == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'users'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'users'.", id)));
         }
         this.delete(resourceGroupName, labName, name, context);
     }

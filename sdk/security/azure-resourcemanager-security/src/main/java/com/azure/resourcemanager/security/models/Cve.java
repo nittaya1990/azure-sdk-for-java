@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** CVE details. */
+/**
+ * CVE details.
+ */
 @Immutable
 public final class Cve {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Cve.class);
-
     /*
      * CVE title
      */
@@ -27,8 +25,14 @@ public final class Cve {
     private String link;
 
     /**
+     * Creates an instance of Cve class.
+     */
+    public Cve() {
+    }
+
+    /**
      * Get the title property: CVE title.
-     *
+     * 
      * @return the title value.
      */
     public String title() {
@@ -37,7 +41,7 @@ public final class Cve {
 
     /**
      * Get the link property: Link url.
-     *
+     * 
      * @return the link value.
      */
     public String link() {
@@ -46,7 +50,7 @@ public final class Cve {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

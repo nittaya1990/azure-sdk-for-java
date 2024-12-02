@@ -8,7 +8,6 @@ import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.models.IdentityProviderBaseParameters;
 import com.azure.resourcemanager.apimanagement.models.IdentityProviderType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
@@ -18,25 +17,24 @@ import java.util.List;
  */
 @Fluent
 public final class IdentityProviderContractProperties extends IdentityProviderBaseParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(IdentityProviderContractProperties.class);
-
     /*
-     * Client Id of the Application in the external Identity Provider. It is
-     * App ID for Facebook login, Client ID for Google login, App ID for
-     * Microsoft.
+     * Client Id of the Application in the external Identity Provider. It is App ID for Facebook login, Client ID for
+     * Google login, App ID for Microsoft.
      */
     @JsonProperty(value = "clientId", required = true)
     private String clientId;
 
     /*
-     * Client secret of the Application in external Identity Provider, used to
-     * authenticate login request. For example, it is App Secret for Facebook
-     * login, API Key for Google login, Public Key for Microsoft. This property
-     * will not be filled on 'GET' operations! Use '/listSecrets' POST request
-     * to get the value.
+     * Client secret of the Application in external Identity Provider, used to authenticate login request. For example,
+     * it is App Secret for Facebook login, API Key for Google login, Public Key for Microsoft. This property will not
+     * be filled on 'GET' operations! Use '/listSecrets' POST request to get the value.
      */
     @JsonProperty(value = "clientSecret")
     private String clientSecret;
+
+    /** Creates an instance of IdentityProviderContractProperties class. */
+    public IdentityProviderContractProperties() {
+    }
 
     /**
      * Get the clientId property: Client Id of the Application in the external Identity Provider. It is App ID for
@@ -142,6 +140,13 @@ public final class IdentityProviderContractProperties extends IdentityProviderBa
         return this;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public IdentityProviderContractProperties withClientLibrary(String clientLibrary) {
+        super.withClientLibrary(clientLibrary);
+        return this;
+    }
+
     /**
      * Validates the instance.
      *
@@ -151,10 +156,10 @@ public final class IdentityProviderContractProperties extends IdentityProviderBa
     public void validate() {
         super.validate();
         if (clientId() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property clientId in model IdentityProviderContractProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property clientId in model IdentityProviderContractProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(IdentityProviderContractProperties.class);
 }

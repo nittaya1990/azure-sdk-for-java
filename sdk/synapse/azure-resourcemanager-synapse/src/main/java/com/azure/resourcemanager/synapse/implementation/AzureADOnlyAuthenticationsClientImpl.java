@@ -28,7 +28,6 @@ import com.azure.core.management.exception.ManagementException;
 import com.azure.core.management.polling.PollResult;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.core.util.polling.PollerFlux;
 import com.azure.core.util.polling.SyncPoller;
 import com.azure.resourcemanager.synapse.fluent.AzureADOnlyAuthenticationsClient;
@@ -39,26 +38,28 @@ import java.nio.ByteBuffer;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-/** An instance of this class provides access to all the operations defined in AzureADOnlyAuthenticationsClient. */
+/**
+ * An instance of this class provides access to all the operations defined in AzureADOnlyAuthenticationsClient.
+ */
 public final class AzureADOnlyAuthenticationsClientImpl implements AzureADOnlyAuthenticationsClient {
-    private final ClientLogger logger = new ClientLogger(AzureADOnlyAuthenticationsClientImpl.class);
-
-    /** The proxy service used to perform REST calls. */
+    /**
+     * The proxy service used to perform REST calls.
+     */
     private final AzureADOnlyAuthenticationsService service;
 
-    /** The service client containing this operation class. */
+    /**
+     * The service client containing this operation class.
+     */
     private final SynapseManagementClientImpl client;
 
     /**
      * Initializes an instance of AzureADOnlyAuthenticationsClientImpl.
-     *
+     * 
      * @param client the instance of the service client containing this operation class.
      */
     AzureADOnlyAuthenticationsClientImpl(SynapseManagementClientImpl client) {
-        this.service =
-            RestProxy
-                .create(
-                    AzureADOnlyAuthenticationsService.class, client.getHttpPipeline(), client.getSerializerAdapter());
+        this.service = RestProxy.create(AzureADOnlyAuthenticationsService.class, client.getHttpPipeline(),
+            client.getSerializerAdapter());
         this.client = client;
     }
 
@@ -68,91 +69,70 @@ public final class AzureADOnlyAuthenticationsClientImpl implements AzureADOnlyAu
      */
     @Host("{$host}")
     @ServiceInterface(name = "SynapseManagementCli")
-    private interface AzureADOnlyAuthenticationsService {
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
-                + "/{workspaceName}/azureADOnlyAuthentications/{azureADOnlyAuthenticationName}")
-        @ExpectedResponses({200})
+    public interface AzureADOnlyAuthenticationsService {
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces/{workspaceName}/azureADOnlyAuthentications/{azureADOnlyAuthenticationName}")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<AzureADOnlyAuthenticationInner>> get(
-            @HostParam("$host") String endpoint,
-            @QueryParam("api-version") String apiVersion,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("workspaceName") String workspaceName,
+        Mono<Response<AzureADOnlyAuthenticationInner>> get(@HostParam("$host") String endpoint,
+            @QueryParam("api-version") String apiVersion, @PathParam("subscriptionId") String subscriptionId,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("workspaceName") String workspaceName,
             @PathParam("azureADOnlyAuthenticationName") AzureADOnlyAuthenticationName azureADOnlyAuthenticationName,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Put(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
-                + "/{workspaceName}/azureADOnlyAuthentications/{azureADOnlyAuthenticationName}")
-        @ExpectedResponses({200, 201, 202})
+        @Headers({ "Content-Type: application/json" })
+        @Put("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces/{workspaceName}/azureADOnlyAuthentications/{azureADOnlyAuthenticationName}")
+        @ExpectedResponses({ 200, 201, 202 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> create(
-            @HostParam("$host") String endpoint,
-            @QueryParam("api-version") String apiVersion,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("workspaceName") String workspaceName,
+        Mono<Response<Flux<ByteBuffer>>> create(@HostParam("$host") String endpoint,
+            @QueryParam("api-version") String apiVersion, @PathParam("subscriptionId") String subscriptionId,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("workspaceName") String workspaceName,
             @PathParam("azureADOnlyAuthenticationName") AzureADOnlyAuthenticationName azureADOnlyAuthenticationName,
             @BodyParam("application/json") AzureADOnlyAuthenticationInner azureADOnlyAuthenticationInfo,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
-                + "/{workspaceName}/azureADOnlyAuthentications")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces/{workspaceName}/azureADOnlyAuthentications")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<AzureADOnlyAuthenticationListResult>> list(
-            @HostParam("$host") String endpoint,
-            @QueryParam("api-version") String apiVersion,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("workspaceName") String workspaceName,
-            @HeaderParam("Accept") String accept,
-            Context context);
+        Mono<Response<AzureADOnlyAuthenticationListResult>> list(@HostParam("$host") String endpoint,
+            @QueryParam("api-version") String apiVersion, @PathParam("subscriptionId") String subscriptionId,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("workspaceName") String workspaceName,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
+        @Headers({ "Content-Type: application/json" })
         @Get("{nextLink}")
-        @ExpectedResponses({200})
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<AzureADOnlyAuthenticationListResult>> listNext(
-            @PathParam(value = "nextLink", encoded = true) String nextLink,
-            @HostParam("$host") String endpoint,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam(value = "nextLink", encoded = true) String nextLink, @HostParam("$host") String endpoint,
+            @HeaderParam("Accept") String accept, Context context);
     }
 
     /**
+     * Get Azure Active Directory only authentication property
+     * 
      * Gets a Azure Active Directory only authentication property.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param azureADOnlyAuthenticationName name of the property.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Azure Active Directory only authentication property.
+     * @return a Azure Active Directory only authentication property along with {@link Response} on successful
+     * completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<AzureADOnlyAuthenticationInner>> getWithResponseAsync(
-        String resourceGroupName, String workspaceName, AzureADOnlyAuthenticationName azureADOnlyAuthenticationName) {
+    private Mono<Response<AzureADOnlyAuthenticationInner>> getWithResponseAsync(String resourceGroupName,
+        String workspaceName, AzureADOnlyAuthenticationName azureADOnlyAuthenticationName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -162,32 +142,22 @@ public final class AzureADOnlyAuthenticationsClientImpl implements AzureADOnlyAu
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
         }
         if (azureADOnlyAuthenticationName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter azureADOnlyAuthenticationName is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter azureADOnlyAuthenticationName is required and cannot be null."));
         }
         final String apiVersion = "2021-06-01";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .get(
-                            this.client.getEndpoint(),
-                            apiVersion,
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            workspaceName,
-                            azureADOnlyAuthenticationName,
-                            accept,
-                            context))
+            .withContext(context -> service.get(this.client.getEndpoint(), apiVersion, this.client.getSubscriptionId(),
+                resourceGroupName, workspaceName, azureADOnlyAuthenticationName, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
+     * Get Azure Active Directory only authentication property
+     * 
      * Gets a Azure Active Directory only authentication property.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param azureADOnlyAuthenticationName name of the property.
@@ -195,25 +165,19 @@ public final class AzureADOnlyAuthenticationsClientImpl implements AzureADOnlyAu
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Azure Active Directory only authentication property.
+     * @return a Azure Active Directory only authentication property along with {@link Response} on successful
+     * completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<AzureADOnlyAuthenticationInner>> getWithResponseAsync(
-        String resourceGroupName,
-        String workspaceName,
-        AzureADOnlyAuthenticationName azureADOnlyAuthenticationName,
-        Context context) {
+    private Mono<Response<AzureADOnlyAuthenticationInner>> getWithResponseAsync(String resourceGroupName,
+        String workspaceName, AzureADOnlyAuthenticationName azureADOnlyAuthenticationName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -223,71 +187,41 @@ public final class AzureADOnlyAuthenticationsClientImpl implements AzureADOnlyAu
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
         }
         if (azureADOnlyAuthenticationName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter azureADOnlyAuthenticationName is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter azureADOnlyAuthenticationName is required and cannot be null."));
         }
         final String apiVersion = "2021-06-01";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .get(
-                this.client.getEndpoint(),
-                apiVersion,
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                workspaceName,
-                azureADOnlyAuthenticationName,
-                accept,
-                context);
+        return service.get(this.client.getEndpoint(), apiVersion, this.client.getSubscriptionId(), resourceGroupName,
+            workspaceName, azureADOnlyAuthenticationName, accept, context);
     }
 
     /**
+     * Get Azure Active Directory only authentication property
+     * 
      * Gets a Azure Active Directory only authentication property.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param azureADOnlyAuthenticationName name of the property.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Azure Active Directory only authentication property.
+     * @return a Azure Active Directory only authentication property on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<AzureADOnlyAuthenticationInner> getAsync(
-        String resourceGroupName, String workspaceName, AzureADOnlyAuthenticationName azureADOnlyAuthenticationName) {
+    private Mono<AzureADOnlyAuthenticationInner> getAsync(String resourceGroupName, String workspaceName,
+        AzureADOnlyAuthenticationName azureADOnlyAuthenticationName) {
         return getWithResponseAsync(resourceGroupName, workspaceName, azureADOnlyAuthenticationName)
-            .flatMap(
-                (Response<AzureADOnlyAuthenticationInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
+     * Get Azure Active Directory only authentication property
+     * 
      * Gets a Azure Active Directory only authentication property.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param azureADOnlyAuthenticationName name of the property.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Azure Active Directory only authentication property.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public AzureADOnlyAuthenticationInner get(
-        String resourceGroupName, String workspaceName, AzureADOnlyAuthenticationName azureADOnlyAuthenticationName) {
-        return getAsync(resourceGroupName, workspaceName, azureADOnlyAuthenticationName).block();
-    }
-
-    /**
-     * Gets a Azure Active Directory only authentication property.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param azureADOnlyAuthenticationName name of the property.
@@ -295,20 +229,39 @@ public final class AzureADOnlyAuthenticationsClientImpl implements AzureADOnlyAu
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Azure Active Directory only authentication property.
+     * @return a Azure Active Directory only authentication property along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<AzureADOnlyAuthenticationInner> getWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        AzureADOnlyAuthenticationName azureADOnlyAuthenticationName,
-        Context context) {
+    public Response<AzureADOnlyAuthenticationInner> getWithResponse(String resourceGroupName, String workspaceName,
+        AzureADOnlyAuthenticationName azureADOnlyAuthenticationName, Context context) {
         return getWithResponseAsync(resourceGroupName, workspaceName, azureADOnlyAuthenticationName, context).block();
     }
 
     /**
+     * Get Azure Active Directory only authentication property
+     * 
+     * Gets a Azure Active Directory only authentication property.
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param azureADOnlyAuthenticationName name of the property.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a Azure Active Directory only authentication property.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public AzureADOnlyAuthenticationInner get(String resourceGroupName, String workspaceName,
+        AzureADOnlyAuthenticationName azureADOnlyAuthenticationName) {
+        return getWithResponse(resourceGroupName, workspaceName, azureADOnlyAuthenticationName, Context.NONE)
+            .getValue();
+    }
+
+    /**
+     * Create or Update Azure Active Directory only authentication property
+     * 
      * Create or Update a Azure Active Directory only authentication property for the workspaces.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param azureADOnlyAuthenticationName name of the property.
@@ -316,25 +269,20 @@ public final class AzureADOnlyAuthenticationsClientImpl implements AzureADOnlyAu
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return azure Active Directory Only Authentication Info.
+     * @return azure Active Directory Only Authentication Info along with {@link Response} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> createWithResponseAsync(
-        String resourceGroupName,
-        String workspaceName,
+    private Mono<Response<Flux<ByteBuffer>>> createWithResponseAsync(String resourceGroupName, String workspaceName,
         AzureADOnlyAuthenticationName azureADOnlyAuthenticationName,
         AzureADOnlyAuthenticationInner azureADOnlyAuthenticationInfo) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -344,41 +292,29 @@ public final class AzureADOnlyAuthenticationsClientImpl implements AzureADOnlyAu
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
         }
         if (azureADOnlyAuthenticationName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter azureADOnlyAuthenticationName is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter azureADOnlyAuthenticationName is required and cannot be null."));
         }
         if (azureADOnlyAuthenticationInfo == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter azureADOnlyAuthenticationInfo is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter azureADOnlyAuthenticationInfo is required and cannot be null."));
         } else {
             azureADOnlyAuthenticationInfo.validate();
         }
         final String apiVersion = "2021-06-01";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .create(
-                            this.client.getEndpoint(),
-                            apiVersion,
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            workspaceName,
-                            azureADOnlyAuthenticationName,
-                            azureADOnlyAuthenticationInfo,
-                            accept,
-                            context))
+            .withContext(context -> service.create(this.client.getEndpoint(), apiVersion,
+                this.client.getSubscriptionId(), resourceGroupName, workspaceName, azureADOnlyAuthenticationName,
+                azureADOnlyAuthenticationInfo, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
+     * Create or Update Azure Active Directory only authentication property
+     * 
      * Create or Update a Azure Active Directory only authentication property for the workspaces.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param azureADOnlyAuthenticationName name of the property.
@@ -387,26 +323,20 @@ public final class AzureADOnlyAuthenticationsClientImpl implements AzureADOnlyAu
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return azure Active Directory Only Authentication Info.
+     * @return azure Active Directory Only Authentication Info along with {@link Response} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> createWithResponseAsync(
-        String resourceGroupName,
-        String workspaceName,
+    private Mono<Response<Flux<ByteBuffer>>> createWithResponseAsync(String resourceGroupName, String workspaceName,
         AzureADOnlyAuthenticationName azureADOnlyAuthenticationName,
-        AzureADOnlyAuthenticationInner azureADOnlyAuthenticationInfo,
-        Context context) {
+        AzureADOnlyAuthenticationInner azureADOnlyAuthenticationInfo, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -416,38 +346,27 @@ public final class AzureADOnlyAuthenticationsClientImpl implements AzureADOnlyAu
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
         }
         if (azureADOnlyAuthenticationName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter azureADOnlyAuthenticationName is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter azureADOnlyAuthenticationName is required and cannot be null."));
         }
         if (azureADOnlyAuthenticationInfo == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter azureADOnlyAuthenticationInfo is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter azureADOnlyAuthenticationInfo is required and cannot be null."));
         } else {
             azureADOnlyAuthenticationInfo.validate();
         }
         final String apiVersion = "2021-06-01";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .create(
-                this.client.getEndpoint(),
-                apiVersion,
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                workspaceName,
-                azureADOnlyAuthenticationName,
-                azureADOnlyAuthenticationInfo,
-                accept,
-                context);
+        return service.create(this.client.getEndpoint(), apiVersion, this.client.getSubscriptionId(), resourceGroupName,
+            workspaceName, azureADOnlyAuthenticationName, azureADOnlyAuthenticationInfo, accept, context);
     }
 
     /**
+     * Create or Update Azure Active Directory only authentication property
+     * 
      * Create or Update a Azure Active Directory only authentication property for the workspaces.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param azureADOnlyAuthenticationName name of the property.
@@ -455,30 +374,24 @@ public final class AzureADOnlyAuthenticationsClientImpl implements AzureADOnlyAu
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return azure Active Directory Only Authentication Info.
+     * @return the {@link PollerFlux} for polling of azure Active Directory Only Authentication Info.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<AzureADOnlyAuthenticationInner>, AzureADOnlyAuthenticationInner> beginCreateAsync(
-        String resourceGroupName,
-        String workspaceName,
-        AzureADOnlyAuthenticationName azureADOnlyAuthenticationName,
+        String resourceGroupName, String workspaceName, AzureADOnlyAuthenticationName azureADOnlyAuthenticationName,
         AzureADOnlyAuthenticationInner azureADOnlyAuthenticationInfo) {
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            createWithResponseAsync(
-                resourceGroupName, workspaceName, azureADOnlyAuthenticationName, azureADOnlyAuthenticationInfo);
-        return this
-            .client
-            .<AzureADOnlyAuthenticationInner, AzureADOnlyAuthenticationInner>getLroResult(
-                mono,
-                this.client.getHttpPipeline(),
-                AzureADOnlyAuthenticationInner.class,
-                AzureADOnlyAuthenticationInner.class,
-                Context.NONE);
+        Mono<Response<Flux<ByteBuffer>>> mono = createWithResponseAsync(resourceGroupName, workspaceName,
+            azureADOnlyAuthenticationName, azureADOnlyAuthenticationInfo);
+        return this.client.<AzureADOnlyAuthenticationInner, AzureADOnlyAuthenticationInner>getLroResult(mono,
+            this.client.getHttpPipeline(), AzureADOnlyAuthenticationInner.class, AzureADOnlyAuthenticationInner.class,
+            this.client.getContext());
     }
 
     /**
+     * Create or Update Azure Active Directory only authentication property
+     * 
      * Create or Update a Azure Active Directory only authentication property for the workspaces.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param azureADOnlyAuthenticationName name of the property.
@@ -487,59 +400,49 @@ public final class AzureADOnlyAuthenticationsClientImpl implements AzureADOnlyAu
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return azure Active Directory Only Authentication Info.
+     * @return the {@link PollerFlux} for polling of azure Active Directory Only Authentication Info.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<AzureADOnlyAuthenticationInner>, AzureADOnlyAuthenticationInner> beginCreateAsync(
-        String resourceGroupName,
-        String workspaceName,
-        AzureADOnlyAuthenticationName azureADOnlyAuthenticationName,
-        AzureADOnlyAuthenticationInner azureADOnlyAuthenticationInfo,
-        Context context) {
+        String resourceGroupName, String workspaceName, AzureADOnlyAuthenticationName azureADOnlyAuthenticationName,
+        AzureADOnlyAuthenticationInner azureADOnlyAuthenticationInfo, Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            createWithResponseAsync(
-                resourceGroupName,
-                workspaceName,
-                azureADOnlyAuthenticationName,
-                azureADOnlyAuthenticationInfo,
-                context);
+        Mono<Response<Flux<ByteBuffer>>> mono = createWithResponseAsync(resourceGroupName, workspaceName,
+            azureADOnlyAuthenticationName, azureADOnlyAuthenticationInfo, context);
+        return this.client.<AzureADOnlyAuthenticationInner, AzureADOnlyAuthenticationInner>getLroResult(mono,
+            this.client.getHttpPipeline(), AzureADOnlyAuthenticationInner.class, AzureADOnlyAuthenticationInner.class,
+            context);
+    }
+
+    /**
+     * Create or Update Azure Active Directory only authentication property
+     * 
+     * Create or Update a Azure Active Directory only authentication property for the workspaces.
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param azureADOnlyAuthenticationName name of the property.
+     * @param azureADOnlyAuthenticationInfo Azure Active Directory Property.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of azure Active Directory Only Authentication Info.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<AzureADOnlyAuthenticationInner>, AzureADOnlyAuthenticationInner> beginCreate(
+        String resourceGroupName, String workspaceName, AzureADOnlyAuthenticationName azureADOnlyAuthenticationName,
+        AzureADOnlyAuthenticationInner azureADOnlyAuthenticationInfo) {
         return this
-            .client
-            .<AzureADOnlyAuthenticationInner, AzureADOnlyAuthenticationInner>getLroResult(
-                mono,
-                this.client.getHttpPipeline(),
-                AzureADOnlyAuthenticationInner.class,
-                AzureADOnlyAuthenticationInner.class,
-                context);
-    }
-
-    /**
-     * Create or Update a Azure Active Directory only authentication property for the workspaces.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param azureADOnlyAuthenticationName name of the property.
-     * @param azureADOnlyAuthenticationInfo Azure Active Directory Property.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return azure Active Directory Only Authentication Info.
-     */
-    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<AzureADOnlyAuthenticationInner>, AzureADOnlyAuthenticationInner> beginCreate(
-        String resourceGroupName,
-        String workspaceName,
-        AzureADOnlyAuthenticationName azureADOnlyAuthenticationName,
-        AzureADOnlyAuthenticationInner azureADOnlyAuthenticationInfo) {
-        return beginCreateAsync(
-                resourceGroupName, workspaceName, azureADOnlyAuthenticationName, azureADOnlyAuthenticationInfo)
+            .beginCreateAsync(resourceGroupName, workspaceName, azureADOnlyAuthenticationName,
+                azureADOnlyAuthenticationInfo)
             .getSyncPoller();
     }
 
     /**
+     * Create or Update Azure Active Directory only authentication property
+     * 
      * Create or Update a Azure Active Directory only authentication property for the workspaces.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param azureADOnlyAuthenticationName name of the property.
@@ -548,23 +451,68 @@ public final class AzureADOnlyAuthenticationsClientImpl implements AzureADOnlyAu
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return azure Active Directory Only Authentication Info.
+     * @return the {@link SyncPoller} for polling of azure Active Directory Only Authentication Info.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<AzureADOnlyAuthenticationInner>, AzureADOnlyAuthenticationInner> beginCreate(
-        String resourceGroupName,
-        String workspaceName,
-        AzureADOnlyAuthenticationName azureADOnlyAuthenticationName,
-        AzureADOnlyAuthenticationInner azureADOnlyAuthenticationInfo,
-        Context context) {
-        return beginCreateAsync(
-                resourceGroupName, workspaceName, azureADOnlyAuthenticationName, azureADOnlyAuthenticationInfo, context)
+        String resourceGroupName, String workspaceName, AzureADOnlyAuthenticationName azureADOnlyAuthenticationName,
+        AzureADOnlyAuthenticationInner azureADOnlyAuthenticationInfo, Context context) {
+        return this
+            .beginCreateAsync(resourceGroupName, workspaceName, azureADOnlyAuthenticationName,
+                azureADOnlyAuthenticationInfo, context)
             .getSyncPoller();
     }
 
     /**
+     * Create or Update Azure Active Directory only authentication property
+     * 
      * Create or Update a Azure Active Directory only authentication property for the workspaces.
-     *
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param azureADOnlyAuthenticationName name of the property.
+     * @param azureADOnlyAuthenticationInfo Azure Active Directory Property.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return azure Active Directory Only Authentication Info on successful completion of {@link Mono}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    private Mono<AzureADOnlyAuthenticationInner> createAsync(String resourceGroupName, String workspaceName,
+        AzureADOnlyAuthenticationName azureADOnlyAuthenticationName,
+        AzureADOnlyAuthenticationInner azureADOnlyAuthenticationInfo) {
+        return beginCreateAsync(resourceGroupName, workspaceName, azureADOnlyAuthenticationName,
+            azureADOnlyAuthenticationInfo).last().flatMap(this.client::getLroFinalResultOrError);
+    }
+
+    /**
+     * Create or Update Azure Active Directory only authentication property
+     * 
+     * Create or Update a Azure Active Directory only authentication property for the workspaces.
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param azureADOnlyAuthenticationName name of the property.
+     * @param azureADOnlyAuthenticationInfo Azure Active Directory Property.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return azure Active Directory Only Authentication Info on successful completion of {@link Mono}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    private Mono<AzureADOnlyAuthenticationInner> createAsync(String resourceGroupName, String workspaceName,
+        AzureADOnlyAuthenticationName azureADOnlyAuthenticationName,
+        AzureADOnlyAuthenticationInner azureADOnlyAuthenticationInfo, Context context) {
+        return beginCreateAsync(resourceGroupName, workspaceName, azureADOnlyAuthenticationName,
+            azureADOnlyAuthenticationInfo, context).last().flatMap(this.client::getLroFinalResultOrError);
+    }
+
+    /**
+     * Create or Update Azure Active Directory only authentication property
+     * 
+     * Create or Update a Azure Active Directory only authentication property for the workspaces.
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param azureADOnlyAuthenticationName name of the property.
@@ -575,20 +523,18 @@ public final class AzureADOnlyAuthenticationsClientImpl implements AzureADOnlyAu
      * @return azure Active Directory Only Authentication Info.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<AzureADOnlyAuthenticationInner> createAsync(
-        String resourceGroupName,
-        String workspaceName,
+    public AzureADOnlyAuthenticationInner create(String resourceGroupName, String workspaceName,
         AzureADOnlyAuthenticationName azureADOnlyAuthenticationName,
         AzureADOnlyAuthenticationInner azureADOnlyAuthenticationInfo) {
-        return beginCreateAsync(
-                resourceGroupName, workspaceName, azureADOnlyAuthenticationName, azureADOnlyAuthenticationInfo)
-            .last()
-            .flatMap(this.client::getLroFinalResultOrError);
+        return createAsync(resourceGroupName, workspaceName, azureADOnlyAuthenticationName,
+            azureADOnlyAuthenticationInfo).block();
     }
 
     /**
+     * Create or Update Azure Active Directory only authentication property
+     * 
      * Create or Update a Azure Active Directory only authentication property for the workspaces.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param azureADOnlyAuthenticationName name of the property.
@@ -600,90 +546,36 @@ public final class AzureADOnlyAuthenticationsClientImpl implements AzureADOnlyAu
      * @return azure Active Directory Only Authentication Info.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<AzureADOnlyAuthenticationInner> createAsync(
-        String resourceGroupName,
-        String workspaceName,
+    public AzureADOnlyAuthenticationInner create(String resourceGroupName, String workspaceName,
         AzureADOnlyAuthenticationName azureADOnlyAuthenticationName,
-        AzureADOnlyAuthenticationInner azureADOnlyAuthenticationInfo,
-        Context context) {
-        return beginCreateAsync(
-                resourceGroupName, workspaceName, azureADOnlyAuthenticationName, azureADOnlyAuthenticationInfo, context)
-            .last()
-            .flatMap(this.client::getLroFinalResultOrError);
+        AzureADOnlyAuthenticationInner azureADOnlyAuthenticationInfo, Context context) {
+        return createAsync(resourceGroupName, workspaceName, azureADOnlyAuthenticationName,
+            azureADOnlyAuthenticationInfo, context).block();
     }
 
     /**
-     * Create or Update a Azure Active Directory only authentication property for the workspaces.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param azureADOnlyAuthenticationName name of the property.
-     * @param azureADOnlyAuthenticationInfo Azure Active Directory Property.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return azure Active Directory Only Authentication Info.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public AzureADOnlyAuthenticationInner create(
-        String resourceGroupName,
-        String workspaceName,
-        AzureADOnlyAuthenticationName azureADOnlyAuthenticationName,
-        AzureADOnlyAuthenticationInner azureADOnlyAuthenticationInfo) {
-        return createAsync(
-                resourceGroupName, workspaceName, azureADOnlyAuthenticationName, azureADOnlyAuthenticationInfo)
-            .block();
-    }
-
-    /**
-     * Create or Update a Azure Active Directory only authentication property for the workspaces.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param azureADOnlyAuthenticationName name of the property.
-     * @param azureADOnlyAuthenticationInfo Azure Active Directory Property.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return azure Active Directory Only Authentication Info.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public AzureADOnlyAuthenticationInner create(
-        String resourceGroupName,
-        String workspaceName,
-        AzureADOnlyAuthenticationName azureADOnlyAuthenticationName,
-        AzureADOnlyAuthenticationInner azureADOnlyAuthenticationInfo,
-        Context context) {
-        return createAsync(
-                resourceGroupName, workspaceName, azureADOnlyAuthenticationName, azureADOnlyAuthenticationInfo, context)
-            .block();
-    }
-
-    /**
+     * Gets a list of Azure Active Directory only authentication property
+     * 
      * Gets a list of Azure Active Directory only authentication property for a workspace.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Azure Active Directory only authentication property for a workspace.
+     * @return a list of Azure Active Directory only authentication property for a workspace along with
+     * {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<AzureADOnlyAuthenticationInner>> listSinglePageAsync(
-        String resourceGroupName, String workspaceName) {
+    private Mono<PagedResponse<AzureADOnlyAuthenticationInner>> listSinglePageAsync(String resourceGroupName,
+        String workspaceName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -695,54 +587,37 @@ public final class AzureADOnlyAuthenticationsClientImpl implements AzureADOnlyAu
         final String apiVersion = "2021-06-01";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .list(
-                            this.client.getEndpoint(),
-                            apiVersion,
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            workspaceName,
-                            accept,
-                            context))
-            .<PagedResponse<AzureADOnlyAuthenticationInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null))
+            .withContext(context -> service.list(this.client.getEndpoint(), apiVersion, this.client.getSubscriptionId(),
+                resourceGroupName, workspaceName, accept, context))
+            .<PagedResponse<AzureADOnlyAuthenticationInner>>map(res -> new PagedResponseBase<>(res.getRequest(),
+                res.getStatusCode(), res.getHeaders(), res.getValue().value(), res.getValue().nextLink(), null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
+     * Gets a list of Azure Active Directory only authentication property
+     * 
      * Gets a list of Azure Active Directory only authentication property for a workspace.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Azure Active Directory only authentication property for a workspace.
+     * @return a list of Azure Active Directory only authentication property for a workspace along with
+     * {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<AzureADOnlyAuthenticationInner>> listSinglePageAsync(
-        String resourceGroupName, String workspaceName, Context context) {
+    private Mono<PagedResponse<AzureADOnlyAuthenticationInner>> listSinglePageAsync(String resourceGroupName,
+        String workspaceName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -755,69 +630,64 @@ public final class AzureADOnlyAuthenticationsClientImpl implements AzureADOnlyAu
         final String accept = "application/json";
         context = this.client.mergeContext(context);
         return service
-            .list(
-                this.client.getEndpoint(),
-                apiVersion,
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                workspaceName,
-                accept,
-                context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null));
+            .list(this.client.getEndpoint(), apiVersion, this.client.getSubscriptionId(), resourceGroupName,
+                workspaceName, accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), res.getValue().nextLink(), null));
     }
 
     /**
+     * Gets a list of Azure Active Directory only authentication property
+     * 
      * Gets a list of Azure Active Directory only authentication property for a workspace.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Azure Active Directory only authentication property for a workspace.
+     * @return a list of Azure Active Directory only authentication property for a workspace as paginated response with
+     * {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<AzureADOnlyAuthenticationInner> listAsync(String resourceGroupName, String workspaceName) {
-        return new PagedFlux<>(
-            () -> listSinglePageAsync(resourceGroupName, workspaceName), nextLink -> listNextSinglePageAsync(nextLink));
+        return new PagedFlux<>(() -> listSinglePageAsync(resourceGroupName, workspaceName),
+            nextLink -> listNextSinglePageAsync(nextLink));
     }
 
     /**
+     * Gets a list of Azure Active Directory only authentication property
+     * 
      * Gets a list of Azure Active Directory only authentication property for a workspace.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Azure Active Directory only authentication property for a workspace.
+     * @return a list of Azure Active Directory only authentication property for a workspace as paginated response with
+     * {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<AzureADOnlyAuthenticationInner> listAsync(
-        String resourceGroupName, String workspaceName, Context context) {
-        return new PagedFlux<>(
-            () -> listSinglePageAsync(resourceGroupName, workspaceName, context),
+    private PagedFlux<AzureADOnlyAuthenticationInner> listAsync(String resourceGroupName, String workspaceName,
+        Context context) {
+        return new PagedFlux<>(() -> listSinglePageAsync(resourceGroupName, workspaceName, context),
             nextLink -> listNextSinglePageAsync(nextLink, context));
     }
 
     /**
+     * Gets a list of Azure Active Directory only authentication property
+     * 
      * Gets a list of Azure Active Directory only authentication property for a workspace.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Azure Active Directory only authentication property for a workspace.
+     * @return a list of Azure Active Directory only authentication property for a workspace as paginated response with
+     * {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<AzureADOnlyAuthenticationInner> list(String resourceGroupName, String workspaceName) {
@@ -825,30 +695,34 @@ public final class AzureADOnlyAuthenticationsClientImpl implements AzureADOnlyAu
     }
 
     /**
+     * Gets a list of Azure Active Directory only authentication property
+     * 
      * Gets a list of Azure Active Directory only authentication property for a workspace.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Azure Active Directory only authentication property for a workspace.
+     * @return a list of Azure Active Directory only authentication property for a workspace as paginated response with
+     * {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<AzureADOnlyAuthenticationInner> list(
-        String resourceGroupName, String workspaceName, Context context) {
+    public PagedIterable<AzureADOnlyAuthenticationInner> list(String resourceGroupName, String workspaceName,
+        Context context) {
         return new PagedIterable<>(listAsync(resourceGroupName, workspaceName, context));
     }
 
     /**
      * Get the next page of items.
-     *
-     * @param nextLink The nextLink parameter.
+     * 
+     * @param nextLink The URL to get the next list of items.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of active directory only authentications.
+     * @return a list of active directory only authentications along with {@link PagedResponse} on successful completion
+     * of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<AzureADOnlyAuthenticationInner>> listNextSinglePageAsync(String nextLink) {
@@ -856,60 +730,41 @@ public final class AzureADOnlyAuthenticationsClientImpl implements AzureADOnlyAu
             return Mono.error(new IllegalArgumentException("Parameter nextLink is required and cannot be null."));
         }
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         final String accept = "application/json";
-        return FluxUtil
-            .withContext(context -> service.listNext(nextLink, this.client.getEndpoint(), accept, context))
-            .<PagedResponse<AzureADOnlyAuthenticationInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null))
+        return FluxUtil.withContext(context -> service.listNext(nextLink, this.client.getEndpoint(), accept, context))
+            .<PagedResponse<AzureADOnlyAuthenticationInner>>map(res -> new PagedResponseBase<>(res.getRequest(),
+                res.getStatusCode(), res.getHeaders(), res.getValue().value(), res.getValue().nextLink(), null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Get the next page of items.
-     *
-     * @param nextLink The nextLink parameter.
+     * 
+     * @param nextLink The URL to get the next list of items.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of active directory only authentications.
+     * @return a list of active directory only authentications along with {@link PagedResponse} on successful completion
+     * of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<AzureADOnlyAuthenticationInner>> listNextSinglePageAsync(
-        String nextLink, Context context) {
+    private Mono<PagedResponse<AzureADOnlyAuthenticationInner>> listNextSinglePageAsync(String nextLink,
+        Context context) {
         if (nextLink == null) {
             return Mono.error(new IllegalArgumentException("Parameter nextLink is required and cannot be null."));
         }
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .listNext(nextLink, this.client.getEndpoint(), accept, context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null));
+        return service.listNext(nextLink, this.client.getEndpoint(), accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), res.getValue().nextLink(), null));
     }
 }

@@ -5,18 +5,29 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.List;
 
-/** Azure SQL workload-specific backup policy. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "backupManagementType")
+/**
+ * Azure SQL workload-specific backup policy.
+ */
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    property = "backupManagementType",
+    defaultImpl = AzureSqlProtectionPolicy.class,
+    visible = true)
 @JsonTypeName("AzureSql")
 @Fluent
 public final class AzureSqlProtectionPolicy extends ProtectionPolicy {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureSqlProtectionPolicy.class);
+    /*
+     * This property will be used as the discriminator for deciding the specific types in the polymorphic chain of types.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "backupManagementType", required = true)
+    private String backupManagementType = "AzureSql";
 
     /*
      * Retention policy details.
@@ -25,8 +36,25 @@ public final class AzureSqlProtectionPolicy extends ProtectionPolicy {
     private RetentionPolicy retentionPolicy;
 
     /**
+     * Creates an instance of AzureSqlProtectionPolicy class.
+     */
+    public AzureSqlProtectionPolicy() {
+    }
+
+    /**
+     * Get the backupManagementType property: This property will be used as the discriminator for deciding the specific
+     * types in the polymorphic chain of types.
+     * 
+     * @return the backupManagementType value.
+     */
+    @Override
+    public String backupManagementType() {
+        return this.backupManagementType;
+    }
+
+    /**
      * Get the retentionPolicy property: Retention policy details.
-     *
+     * 
      * @return the retentionPolicy value.
      */
     public RetentionPolicy retentionPolicy() {
@@ -35,7 +63,7 @@ public final class AzureSqlProtectionPolicy extends ProtectionPolicy {
 
     /**
      * Set the retentionPolicy property: Retention policy details.
-     *
+     * 
      * @param retentionPolicy the retentionPolicy value to set.
      * @return the AzureSqlProtectionPolicy object itself.
      */
@@ -44,7 +72,9 @@ public final class AzureSqlProtectionPolicy extends ProtectionPolicy {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureSqlProtectionPolicy withProtectedItemsCount(Integer protectedItemsCount) {
         super.withProtectedItemsCount(protectedItemsCount);
@@ -52,8 +82,17 @@ public final class AzureSqlProtectionPolicy extends ProtectionPolicy {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AzureSqlProtectionPolicy withResourceGuardOperationRequests(List<String> resourceGuardOperationRequests) {
+        super.withResourceGuardOperationRequests(resourceGuardOperationRequests);
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

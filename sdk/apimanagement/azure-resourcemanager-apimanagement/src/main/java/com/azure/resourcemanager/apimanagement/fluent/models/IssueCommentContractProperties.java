@@ -6,15 +6,12 @@ package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
 /** Issue Comment contract Properties. */
 @Fluent
 public final class IssueCommentContractProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(IssueCommentContractProperties.class);
-
     /*
      * Comment text.
      */
@@ -32,6 +29,10 @@ public final class IssueCommentContractProperties {
      */
     @JsonProperty(value = "userId", required = true)
     private String userId;
+
+    /** Creates an instance of IssueCommentContractProperties class. */
+    public IssueCommentContractProperties() {
+    }
 
     /**
      * Get the text property: Comment text.
@@ -100,16 +101,14 @@ public final class IssueCommentContractProperties {
      */
     public void validate() {
         if (text() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property text in model IssueCommentContractProperties"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property text in model IssueCommentContractProperties"));
         }
         if (userId() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property userId in model IssueCommentContractProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property userId in model IssueCommentContractProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(IssueCommentContractProperties.class);
 }

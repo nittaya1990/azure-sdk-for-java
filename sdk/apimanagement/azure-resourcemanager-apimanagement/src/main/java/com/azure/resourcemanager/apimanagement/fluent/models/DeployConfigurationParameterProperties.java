@@ -6,27 +6,26 @@ package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Parameters supplied to the Deploy Configuration operation. */
 @Fluent
 public final class DeployConfigurationParameterProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DeployConfigurationParameterProperties.class);
-
     /*
-     * The name of the Git branch from which the configuration is to be
-     * deployed to the configuration database.
+     * The name of the Git branch from which the configuration is to be deployed to the configuration database.
      */
     @JsonProperty(value = "branch", required = true)
     private String branch;
 
     /*
-     * The value enforcing deleting subscriptions to products that are deleted
-     * in this update.
+     * The value enforcing deleting subscriptions to products that are deleted in this update.
      */
     @JsonProperty(value = "force")
     private Boolean force;
+
+    /** Creates an instance of DeployConfigurationParameterProperties class. */
+    public DeployConfigurationParameterProperties() {
+    }
 
     /**
      * Get the branch property: The name of the Git branch from which the configuration is to be deployed to the
@@ -77,10 +76,10 @@ public final class DeployConfigurationParameterProperties {
      */
     public void validate() {
         if (branch() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property branch in model DeployConfigurationParameterProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property branch in model DeployConfigurationParameterProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(DeployConfigurationParameterProperties.class);
 }

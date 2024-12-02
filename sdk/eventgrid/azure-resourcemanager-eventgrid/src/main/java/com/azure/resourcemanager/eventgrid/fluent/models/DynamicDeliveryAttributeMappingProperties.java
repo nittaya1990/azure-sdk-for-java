@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.eventgrid.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Properties of dynamic delivery attribute mapping. */
+/**
+ * Properties of dynamic delivery attribute mapping.
+ */
 @Fluent
 public final class DynamicDeliveryAttributeMappingProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DynamicDeliveryAttributeMappingProperties.class);
-
     /*
      * JSON path in the event which contains attribute value.
      */
@@ -21,8 +19,14 @@ public final class DynamicDeliveryAttributeMappingProperties {
     private String sourceField;
 
     /**
+     * Creates an instance of DynamicDeliveryAttributeMappingProperties class.
+     */
+    public DynamicDeliveryAttributeMappingProperties() {
+    }
+
+    /**
      * Get the sourceField property: JSON path in the event which contains attribute value.
-     *
+     * 
      * @return the sourceField value.
      */
     public String sourceField() {
@@ -31,7 +35,7 @@ public final class DynamicDeliveryAttributeMappingProperties {
 
     /**
      * Set the sourceField property: JSON path in the event which contains attribute value.
-     *
+     * 
      * @param sourceField the sourceField value to set.
      * @return the DynamicDeliveryAttributeMappingProperties object itself.
      */
@@ -42,7 +46,7 @@ public final class DynamicDeliveryAttributeMappingProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

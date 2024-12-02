@@ -7,15 +7,14 @@ package com.azure.resourcemanager.security.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.security.fluent.models.AutomationInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** List of security automations response. */
+/**
+ * List of security automations response.
+ */
 @Fluent
 public final class AutomationList {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AutomationList.class);
-
     /*
      * The list of security automations under the given scope.
      */
@@ -29,8 +28,14 @@ public final class AutomationList {
     private String nextLink;
 
     /**
+     * Creates an instance of AutomationList class.
+     */
+    public AutomationList() {
+    }
+
+    /**
      * Get the value property: The list of security automations under the given scope.
-     *
+     * 
      * @return the value value.
      */
     public List<AutomationInner> value() {
@@ -39,7 +44,7 @@ public final class AutomationList {
 
     /**
      * Set the value property: The list of security automations under the given scope.
-     *
+     * 
      * @param value the value value to set.
      * @return the AutomationList object itself.
      */
@@ -50,7 +55,7 @@ public final class AutomationList {
 
     /**
      * Get the nextLink property: The URI to fetch the next page.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -59,16 +64,17 @@ public final class AutomationList {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property value in model AutomationList"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property value in model AutomationList"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(AutomationList.class);
 }

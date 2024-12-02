@@ -6,8 +6,8 @@ package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -16,11 +16,20 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * details, refer to &lt;a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_create.html"&gt;Creating an
  * IAM User in Your AWS Account (write only)&lt;/a&gt;.
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "authenticationType")
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    property = "authenticationType",
+    defaultImpl = AwsCredsAuthenticationDetailsProperties.class,
+    visible = true)
 @JsonTypeName("awsCreds")
 @Fluent
 public final class AwsCredsAuthenticationDetailsProperties extends AuthenticationDetailsProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AwsCredsAuthenticationDetailsProperties.class);
+    /*
+     * Connect to your cloud account, for AWS use either account credentials or role-based authentication. For GCP use account organization credentials.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "authenticationType", required = true)
+    private AuthenticationType authenticationType = AuthenticationType.AWS_CREDS;
 
     /*
      * The ID of the cloud account
@@ -41,8 +50,25 @@ public final class AwsCredsAuthenticationDetailsProperties extends Authenticatio
     private String awsSecretAccessKey;
 
     /**
+     * Creates an instance of AwsCredsAuthenticationDetailsProperties class.
+     */
+    public AwsCredsAuthenticationDetailsProperties() {
+    }
+
+    /**
+     * Get the authenticationType property: Connect to your cloud account, for AWS use either account credentials or
+     * role-based authentication. For GCP use account organization credentials.
+     * 
+     * @return the authenticationType value.
+     */
+    @Override
+    public AuthenticationType authenticationType() {
+        return this.authenticationType;
+    }
+
+    /**
      * Get the accountId property: The ID of the cloud account.
-     *
+     * 
      * @return the accountId value.
      */
     public String accountId() {
@@ -51,7 +77,7 @@ public final class AwsCredsAuthenticationDetailsProperties extends Authenticatio
 
     /**
      * Get the awsAccessKeyId property: Public key element of the AWS credential object (write only).
-     *
+     * 
      * @return the awsAccessKeyId value.
      */
     public String awsAccessKeyId() {
@@ -60,7 +86,7 @@ public final class AwsCredsAuthenticationDetailsProperties extends Authenticatio
 
     /**
      * Set the awsAccessKeyId property: Public key element of the AWS credential object (write only).
-     *
+     * 
      * @param awsAccessKeyId the awsAccessKeyId value to set.
      * @return the AwsCredsAuthenticationDetailsProperties object itself.
      */
@@ -71,7 +97,7 @@ public final class AwsCredsAuthenticationDetailsProperties extends Authenticatio
 
     /**
      * Get the awsSecretAccessKey property: Secret key element of the AWS credential object (write only).
-     *
+     * 
      * @return the awsSecretAccessKey value.
      */
     public String awsSecretAccessKey() {
@@ -80,7 +106,7 @@ public final class AwsCredsAuthenticationDetailsProperties extends Authenticatio
 
     /**
      * Set the awsSecretAccessKey property: Secret key element of the AWS credential object (write only).
-     *
+     * 
      * @param awsSecretAccessKey the awsSecretAccessKey value to set.
      * @return the AwsCredsAuthenticationDetailsProperties object itself.
      */
@@ -91,24 +117,23 @@ public final class AwsCredsAuthenticationDetailsProperties extends Authenticatio
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
         super.validate();
         if (awsAccessKeyId() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property awsAccessKeyId in model AwsCredsAuthenticationDetailsProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property awsAccessKeyId in model AwsCredsAuthenticationDetailsProperties"));
         }
         if (awsSecretAccessKey() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property awsSecretAccessKey in model"
-                            + " AwsCredsAuthenticationDetailsProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property awsSecretAccessKey in model AwsCredsAuthenticationDetailsProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(AwsCredsAuthenticationDetailsProperties.class);
 }

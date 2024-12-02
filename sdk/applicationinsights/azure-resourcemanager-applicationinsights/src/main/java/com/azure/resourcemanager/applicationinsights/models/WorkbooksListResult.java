@@ -5,17 +5,13 @@
 package com.azure.resourcemanager.applicationinsights.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.applicationinsights.fluent.models.WorkbookInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Workbook list result. */
 @Fluent
 public final class WorkbooksListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(WorkbooksListResult.class);
-
     /*
      * An array of workbooks.
      */
@@ -27,6 +23,10 @@ public final class WorkbooksListResult {
      */
     @JsonProperty(value = "nextLink")
     private String nextLink;
+
+    /** Creates an instance of WorkbooksListResult class. */
+    public WorkbooksListResult() {
+    }
 
     /**
      * Get the value property: An array of workbooks.

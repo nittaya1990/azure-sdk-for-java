@@ -24,7 +24,40 @@ Details about the terms used here are described in [Key concepts](#key-concepts)
 - A [Java Development Kit (JDK)][jdk_link], version 8 or later.
 - [Azure Subscription][azure_subscription]
 
-### Include the Package
+### Include the package
+
+#### Include the BOM file
+
+Please include the azure-sdk-bom to your project to take dependency on the General Availability (GA) version of the library. In the following snippet, replace the {bom_version_to_target} placeholder with the version number.
+To learn more about the BOM, see the [AZURE SDK BOM README](https://github.com/Azure/azure-sdk-for-java/blob/main/sdk/boms/azure-sdk-bom/README.md).
+
+```xml
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-sdk-bom</artifactId>
+            <version>{bom_version_to_target}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+```
+and then include the direct dependency in the dependencies section without the version tag as shown below.
+
+```xml
+<dependencies>
+  <dependency>
+    <groupId>com.azure</groupId>
+    <artifactId>azure-messaging-webpubsub</artifactId>
+  </dependency>
+</dependencies>
+```
+
+#### Include direct dependency
+If you want to take dependency on a particular version of the library that is not present in the BOM,
+add the direct dependency to your project as follows.
 
 [//]: # ({x-version-update-start;com.azure:azure-messaging-webpubsub;current})
 
@@ -32,7 +65,7 @@ Details about the terms used here are described in [Key concepts](#key-concepts)
 <dependency>
     <groupId>com.azure</groupId>
     <artifactId>azure-messaging-webpubsub</artifactId>
-    <version>1.0.0-beta.6</version>
+    <version>1.3.0</version>
 </dependency>
 ```
 
@@ -40,8 +73,7 @@ Details about the terms used here are described in [Key concepts](#key-concepts)
 
 ### Create a `WebPubSubServiceClient` using connection string
 
-<!-- embedme ./src/samples/java/com/azure/messaging/webpubsub/ReadmeSamples.java#L21-L24 -->
-```java
+```java readme-sample-createClientWithConnectionString
 WebPubSubServiceClient webPubSubServiceClient = new WebPubSubServiceClientBuilder()
     .connectionString("{connection-string}")
     .hub("chat")
@@ -50,8 +82,7 @@ WebPubSubServiceClient webPubSubServiceClient = new WebPubSubServiceClientBuilde
 
 ### Create a `WebPubSubServiceClient` using access key
 
-<!-- embedme ./src/samples/java/com/azure/messaging/webpubsub/ReadmeSamples.java#L31-L35 -->
-```java
+```java readme-sample-createClientWithKey
 WebPubSubServiceClient webPubSubServiceClient = new WebPubSubServiceClientBuilder()
     .credential(new AzureKeyCredential("{access-key}"))
     .endpoint("<Insert endpoint from Azure Portal>")
@@ -83,35 +114,52 @@ When the client is connected, it can send messages to the upstream application, 
 
 ## Examples
 
-* [Broadcast message to entire hub](#broadcast-all "Broadcast message to entire hub")
-* [Broadcast message to a group](#broadcast-group "Broadcast message to a group")
-* [Send message to a connection](#send-to-connection "Send message to a connection")
-* [Send message to a user](#send-to-user "Send message to a user")
+* [Broadcast message to entire hub](#broadcast-message-to-entire-hub)
+* [Send message to entire hub with filters](#broadcast-message-to-entire-hub-with-filter)
+* [Broadcast message to a group](#broadcast-message-to-a-group)
+* [Send message to a connection](#send-message-to-a-connection)
+* [Send message to a user](#send-message-to-a-user)
 
 ### Broadcast message to entire hub
 
-<!-- embedme ./src/samples/java/com/azure/messaging/webpubsub/ReadmeSamples.java#L47-L47 -->
-```java
+```java readme-sample-broadcastToAll
 webPubSubServiceClient.sendToAll("Hello world!", WebPubSubContentType.TEXT_PLAIN);
+```
+
+### Broadcast message to entire hub with filter
+
+```java readme-sample-broadcastToAll-filter
+// send a text message to the entire hub with a filter on userId
+BinaryData message = BinaryData.fromString("Hello World - Broadcast test!");
+webPubSubServiceClient.sendToAllWithResponse(
+    message,
+    WebPubSubContentType.TEXT_PLAIN,
+    message.getLength(),
+    new RequestOptions().addQueryParam("filter", "userId ne 'user1'"));
+
+// send a text message to the entire hub with another filter on group
+webPubSubServiceClient.sendToAllWithResponse(
+    message,
+    WebPubSubContentType.TEXT_PLAIN,
+    message.getLength(),
+    new RequestOptions().addQueryParam("filter", "'GroupA' in groups and not('GroupB' in groups)"));
 ```
 
 ### Broadcast message to a group
 
-<!-- embedme ./src/samples/java/com/azure/messaging/webpubsub/ReadmeSamples.java#L59-L59 -->
-```java
+```java readme-sample-broadcastToGroup
 webPubSubServiceClient.sendToGroup("java", "Hello Java!", WebPubSubContentType.TEXT_PLAIN);
 ```
 
 ### Send message to a connection
 
-<!-- embedme ./src/samples/java/com/azure/messaging/webpubsub/ReadmeSamples.java#L71-L71 -->
-```java
+```java readme-sample-sendToConnection
 webPubSubServiceClient.sendToConnection("myconnectionid", "Hello connection!", WebPubSubContentType.TEXT_PLAIN);
 ```
 
 ### Send message to a user
-<!-- embedme ./src/samples/java/com/azure/messaging/webpubsub/ReadmeSamples.java#L83-L83 -->
-```java
+
+```java readme-sample-sendToUser
 webPubSubServiceClient.sendToUser("Andy", "Hello Andy!", WebPubSubContentType.TEXT_PLAIN);
 ```
 
@@ -125,7 +173,7 @@ be found here: [log levels][log_levels].
 ### Default HTTP Client
 All client libraries by default use the Netty HTTP client. Adding the above dependency will automatically configure
 the client library to use the Netty HTTP client. Configuring or changing the HTTP client is detailed in the
-[HTTP clients wiki](https://github.com/Azure/azure-sdk-for-java/wiki/HTTP-clients).
+[HTTP clients wiki](https://learn.microsoft.com/azure/developer/java/sdk/http-client-pipeline#http-clients).
 
 ### Default SSL library
 All client libraries, by default, use the Tomcat-native Boring SSL library to enable native-level performance for SSL

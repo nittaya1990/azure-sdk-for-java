@@ -24,31 +24,33 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.synapse.fluent.IntegrationRuntimeNodesClient;
 import com.azure.resourcemanager.synapse.fluent.models.SelfHostedIntegrationRuntimeNodeInner;
 import com.azure.resourcemanager.synapse.models.UpdateIntegrationRuntimeNodeRequest;
 import reactor.core.publisher.Mono;
 
-/** An instance of this class provides access to all the operations defined in IntegrationRuntimeNodesClient. */
+/**
+ * An instance of this class provides access to all the operations defined in IntegrationRuntimeNodesClient.
+ */
 public final class IntegrationRuntimeNodesClientImpl implements IntegrationRuntimeNodesClient {
-    private final ClientLogger logger = new ClientLogger(IntegrationRuntimeNodesClientImpl.class);
-
-    /** The proxy service used to perform REST calls. */
+    /**
+     * The proxy service used to perform REST calls.
+     */
     private final IntegrationRuntimeNodesService service;
 
-    /** The service client containing this operation class. */
+    /**
+     * The service client containing this operation class.
+     */
     private final SynapseManagementClientImpl client;
 
     /**
      * Initializes an instance of IntegrationRuntimeNodesClientImpl.
-     *
+     * 
      * @param client the instance of the service client containing this operation class.
      */
     IntegrationRuntimeNodesClientImpl(SynapseManagementClientImpl client) {
-        this.service =
-            RestProxy
-                .create(IntegrationRuntimeNodesService.class, client.getHttpPipeline(), client.getSerializerAdapter());
+        this.service = RestProxy.create(IntegrationRuntimeNodesService.class, client.getHttpPipeline(),
+            client.getSerializerAdapter());
         this.client = client;
     }
 
@@ -58,63 +60,44 @@ public final class IntegrationRuntimeNodesClientImpl implements IntegrationRunti
      */
     @Host("{$host}")
     @ServiceInterface(name = "SynapseManagementCli")
-    private interface IntegrationRuntimeNodesService {
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
-                + "/{workspaceName}/integrationRuntimes/{integrationRuntimeName}/nodes/{nodeName}")
-        @ExpectedResponses({200})
+    public interface IntegrationRuntimeNodesService {
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces/{workspaceName}/integrationRuntimes/{integrationRuntimeName}/nodes/{nodeName}")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<SelfHostedIntegrationRuntimeNodeInner>> get(
-            @HostParam("$host") String endpoint,
-            @QueryParam("api-version") String apiVersion,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("workspaceName") String workspaceName,
-            @PathParam("integrationRuntimeName") String integrationRuntimeName,
-            @PathParam("nodeName") String nodeName,
-            @HeaderParam("Accept") String accept,
-            Context context);
+        Mono<Response<SelfHostedIntegrationRuntimeNodeInner>> get(@HostParam("$host") String endpoint,
+            @QueryParam("api-version") String apiVersion, @PathParam("subscriptionId") String subscriptionId,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("workspaceName") String workspaceName,
+            @PathParam("integrationRuntimeName") String integrationRuntimeName, @PathParam("nodeName") String nodeName,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Patch(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
-                + "/{workspaceName}/integrationRuntimes/{integrationRuntimeName}/nodes/{nodeName}")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Patch("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces/{workspaceName}/integrationRuntimes/{integrationRuntimeName}/nodes/{nodeName}")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<SelfHostedIntegrationRuntimeNodeInner>> update(
-            @HostParam("$host") String endpoint,
-            @QueryParam("api-version") String apiVersion,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("workspaceName") String workspaceName,
-            @PathParam("integrationRuntimeName") String integrationRuntimeName,
-            @PathParam("nodeName") String nodeName,
+        Mono<Response<SelfHostedIntegrationRuntimeNodeInner>> update(@HostParam("$host") String endpoint,
+            @QueryParam("api-version") String apiVersion, @PathParam("subscriptionId") String subscriptionId,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("workspaceName") String workspaceName,
+            @PathParam("integrationRuntimeName") String integrationRuntimeName, @PathParam("nodeName") String nodeName,
             @BodyParam("application/json") UpdateIntegrationRuntimeNodeRequest updateIntegrationRuntimeNodeRequest,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Delete(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
-                + "/{workspaceName}/integrationRuntimes/{integrationRuntimeName}/nodes/{nodeName}")
-        @ExpectedResponses({200, 204})
+        @Headers({ "Content-Type: application/json" })
+        @Delete("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces/{workspaceName}/integrationRuntimes/{integrationRuntimeName}/nodes/{nodeName}")
+        @ExpectedResponses({ 200, 204 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Void>> delete(
-            @HostParam("$host") String endpoint,
-            @QueryParam("api-version") String apiVersion,
+        Mono<Response<Void>> delete(@HostParam("$host") String endpoint, @QueryParam("api-version") String apiVersion,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("workspaceName") String workspaceName,
-            @PathParam("integrationRuntimeName") String integrationRuntimeName,
-            @PathParam("nodeName") String nodeName,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("workspaceName") String workspaceName,
+            @PathParam("integrationRuntimeName") String integrationRuntimeName, @PathParam("nodeName") String nodeName,
+            @HeaderParam("Accept") String accept, Context context);
     }
 
     /**
+     * Get integration runtime node
+     * 
      * Get an integration runtime node.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param integrationRuntimeName Integration runtime name.
@@ -122,22 +105,18 @@ public final class IntegrationRuntimeNodesClientImpl implements IntegrationRunti
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an integration runtime node.
+     * @return an integration runtime node along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<SelfHostedIntegrationRuntimeNodeInner>> getWithResponseAsync(
-        String resourceGroupName, String workspaceName, String integrationRuntimeName, String nodeName) {
+    private Mono<Response<SelfHostedIntegrationRuntimeNodeInner>> getWithResponseAsync(String resourceGroupName,
+        String workspaceName, String integrationRuntimeName, String nodeName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -147,9 +126,8 @@ public final class IntegrationRuntimeNodesClientImpl implements IntegrationRunti
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
         }
         if (integrationRuntimeName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException("Parameter integrationRuntimeName is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter integrationRuntimeName is required and cannot be null."));
         }
         if (nodeName == null) {
             return Mono.error(new IllegalArgumentException("Parameter nodeName is required and cannot be null."));
@@ -157,25 +135,16 @@ public final class IntegrationRuntimeNodesClientImpl implements IntegrationRunti
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .get(
-                            this.client.getEndpoint(),
-                            apiVersion,
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            workspaceName,
-                            integrationRuntimeName,
-                            nodeName,
-                            accept,
-                            context))
+            .withContext(context -> service.get(this.client.getEndpoint(), apiVersion, this.client.getSubscriptionId(),
+                resourceGroupName, workspaceName, integrationRuntimeName, nodeName, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
+     * Get integration runtime node
+     * 
      * Get an integration runtime node.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param integrationRuntimeName Integration runtime name.
@@ -184,26 +153,18 @@ public final class IntegrationRuntimeNodesClientImpl implements IntegrationRunti
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an integration runtime node.
+     * @return an integration runtime node along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<SelfHostedIntegrationRuntimeNodeInner>> getWithResponseAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String integrationRuntimeName,
-        String nodeName,
-        Context context) {
+    private Mono<Response<SelfHostedIntegrationRuntimeNodeInner>> getWithResponseAsync(String resourceGroupName,
+        String workspaceName, String integrationRuntimeName, String nodeName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -213,9 +174,8 @@ public final class IntegrationRuntimeNodesClientImpl implements IntegrationRunti
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
         }
         if (integrationRuntimeName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException("Parameter integrationRuntimeName is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter integrationRuntimeName is required and cannot be null."));
         }
         if (nodeName == null) {
             return Mono.error(new IllegalArgumentException("Parameter nodeName is required and cannot be null."));
@@ -223,22 +183,15 @@ public final class IntegrationRuntimeNodesClientImpl implements IntegrationRunti
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .get(
-                this.client.getEndpoint(),
-                apiVersion,
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                workspaceName,
-                integrationRuntimeName,
-                nodeName,
-                accept,
-                context);
+        return service.get(this.client.getEndpoint(), apiVersion, this.client.getSubscriptionId(), resourceGroupName,
+            workspaceName, integrationRuntimeName, nodeName, accept, context);
     }
 
     /**
+     * Get integration runtime node
+     * 
      * Get an integration runtime node.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param integrationRuntimeName Integration runtime name.
@@ -246,43 +199,20 @@ public final class IntegrationRuntimeNodesClientImpl implements IntegrationRunti
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an integration runtime node.
+     * @return an integration runtime node on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<SelfHostedIntegrationRuntimeNodeInner> getAsync(
-        String resourceGroupName, String workspaceName, String integrationRuntimeName, String nodeName) {
+    private Mono<SelfHostedIntegrationRuntimeNodeInner> getAsync(String resourceGroupName, String workspaceName,
+        String integrationRuntimeName, String nodeName) {
         return getWithResponseAsync(resourceGroupName, workspaceName, integrationRuntimeName, nodeName)
-            .flatMap(
-                (Response<SelfHostedIntegrationRuntimeNodeInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
+     * Get integration runtime node
+     * 
      * Get an integration runtime node.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param integrationRuntimeName Integration runtime name.
-     * @param nodeName Integration runtime node name.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an integration runtime node.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public SelfHostedIntegrationRuntimeNodeInner get(
-        String resourceGroupName, String workspaceName, String integrationRuntimeName, String nodeName) {
-        return getAsync(resourceGroupName, workspaceName, integrationRuntimeName, nodeName).block();
-    }
-
-    /**
-     * Get an integration runtime node.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param integrationRuntimeName Integration runtime name.
@@ -291,22 +221,41 @@ public final class IntegrationRuntimeNodesClientImpl implements IntegrationRunti
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an integration runtime node.
+     * @return an integration runtime node along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<SelfHostedIntegrationRuntimeNodeInner> getWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String integrationRuntimeName,
-        String nodeName,
-        Context context) {
+    public Response<SelfHostedIntegrationRuntimeNodeInner> getWithResponse(String resourceGroupName,
+        String workspaceName, String integrationRuntimeName, String nodeName, Context context) {
         return getWithResponseAsync(resourceGroupName, workspaceName, integrationRuntimeName, nodeName, context)
             .block();
     }
 
     /**
+     * Get integration runtime node
+     * 
+     * Get an integration runtime node.
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param integrationRuntimeName Integration runtime name.
+     * @param nodeName Integration runtime node name.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return an integration runtime node.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public SelfHostedIntegrationRuntimeNodeInner get(String resourceGroupName, String workspaceName,
+        String integrationRuntimeName, String nodeName) {
+        return getWithResponse(resourceGroupName, workspaceName, integrationRuntimeName, nodeName, Context.NONE)
+            .getValue();
+    }
+
+    /**
+     * Create integration runtime node
+     * 
      * Create an integration runtime node.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param integrationRuntimeName Integration runtime name.
@@ -315,26 +264,20 @@ public final class IntegrationRuntimeNodesClientImpl implements IntegrationRunti
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return properties of Self-hosted integration runtime node.
+     * @return properties of Self-hosted integration runtime node along with {@link Response} on successful completion
+     * of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<SelfHostedIntegrationRuntimeNodeInner>> updateWithResponseAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String integrationRuntimeName,
-        String nodeName,
+    private Mono<Response<SelfHostedIntegrationRuntimeNodeInner>> updateWithResponseAsync(String resourceGroupName,
+        String workspaceName, String integrationRuntimeName, String nodeName,
         UpdateIntegrationRuntimeNodeRequest updateIntegrationRuntimeNodeRequest) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -344,44 +287,32 @@ public final class IntegrationRuntimeNodesClientImpl implements IntegrationRunti
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
         }
         if (integrationRuntimeName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException("Parameter integrationRuntimeName is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter integrationRuntimeName is required and cannot be null."));
         }
         if (nodeName == null) {
             return Mono.error(new IllegalArgumentException("Parameter nodeName is required and cannot be null."));
         }
         if (updateIntegrationRuntimeNodeRequest == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter updateIntegrationRuntimeNodeRequest is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter updateIntegrationRuntimeNodeRequest is required and cannot be null."));
         } else {
             updateIntegrationRuntimeNodeRequest.validate();
         }
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .update(
-                            this.client.getEndpoint(),
-                            apiVersion,
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            workspaceName,
-                            integrationRuntimeName,
-                            nodeName,
-                            updateIntegrationRuntimeNodeRequest,
-                            accept,
-                            context))
+            .withContext(context -> service.update(this.client.getEndpoint(), apiVersion,
+                this.client.getSubscriptionId(), resourceGroupName, workspaceName, integrationRuntimeName, nodeName,
+                updateIntegrationRuntimeNodeRequest, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
+     * Create integration runtime node
+     * 
      * Create an integration runtime node.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param integrationRuntimeName Integration runtime name.
@@ -391,27 +322,20 @@ public final class IntegrationRuntimeNodesClientImpl implements IntegrationRunti
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return properties of Self-hosted integration runtime node.
+     * @return properties of Self-hosted integration runtime node along with {@link Response} on successful completion
+     * of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<SelfHostedIntegrationRuntimeNodeInner>> updateWithResponseAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String integrationRuntimeName,
-        String nodeName,
-        UpdateIntegrationRuntimeNodeRequest updateIntegrationRuntimeNodeRequest,
-        Context context) {
+    private Mono<Response<SelfHostedIntegrationRuntimeNodeInner>> updateWithResponseAsync(String resourceGroupName,
+        String workspaceName, String integrationRuntimeName, String nodeName,
+        UpdateIntegrationRuntimeNodeRequest updateIntegrationRuntimeNodeRequest, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -421,41 +345,30 @@ public final class IntegrationRuntimeNodesClientImpl implements IntegrationRunti
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
         }
         if (integrationRuntimeName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException("Parameter integrationRuntimeName is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter integrationRuntimeName is required and cannot be null."));
         }
         if (nodeName == null) {
             return Mono.error(new IllegalArgumentException("Parameter nodeName is required and cannot be null."));
         }
         if (updateIntegrationRuntimeNodeRequest == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter updateIntegrationRuntimeNodeRequest is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter updateIntegrationRuntimeNodeRequest is required and cannot be null."));
         } else {
             updateIntegrationRuntimeNodeRequest.validate();
         }
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .update(
-                this.client.getEndpoint(),
-                apiVersion,
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                workspaceName,
-                integrationRuntimeName,
-                nodeName,
-                updateIntegrationRuntimeNodeRequest,
-                accept,
-                context);
+        return service.update(this.client.getEndpoint(), apiVersion, this.client.getSubscriptionId(), resourceGroupName,
+            workspaceName, integrationRuntimeName, nodeName, updateIntegrationRuntimeNodeRequest, accept, context);
     }
 
     /**
+     * Create integration runtime node
+     * 
      * Create an integration runtime node.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param integrationRuntimeName Integration runtime name.
@@ -464,55 +377,21 @@ public final class IntegrationRuntimeNodesClientImpl implements IntegrationRunti
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return properties of Self-hosted integration runtime node.
+     * @return properties of Self-hosted integration runtime node on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<SelfHostedIntegrationRuntimeNodeInner> updateAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String integrationRuntimeName,
-        String nodeName,
+    private Mono<SelfHostedIntegrationRuntimeNodeInner> updateAsync(String resourceGroupName, String workspaceName,
+        String integrationRuntimeName, String nodeName,
         UpdateIntegrationRuntimeNodeRequest updateIntegrationRuntimeNodeRequest) {
-        return updateWithResponseAsync(
-                resourceGroupName, workspaceName, integrationRuntimeName, nodeName, updateIntegrationRuntimeNodeRequest)
-            .flatMap(
-                (Response<SelfHostedIntegrationRuntimeNodeInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+        return updateWithResponseAsync(resourceGroupName, workspaceName, integrationRuntimeName, nodeName,
+            updateIntegrationRuntimeNodeRequest).flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
+     * Create integration runtime node
+     * 
      * Create an integration runtime node.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param integrationRuntimeName Integration runtime name.
-     * @param nodeName Integration runtime node name.
-     * @param updateIntegrationRuntimeNodeRequest The parameters for updating an integration runtime node.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return properties of Self-hosted integration runtime node.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public SelfHostedIntegrationRuntimeNodeInner update(
-        String resourceGroupName,
-        String workspaceName,
-        String integrationRuntimeName,
-        String nodeName,
-        UpdateIntegrationRuntimeNodeRequest updateIntegrationRuntimeNodeRequest) {
-        return updateAsync(
-                resourceGroupName, workspaceName, integrationRuntimeName, nodeName, updateIntegrationRuntimeNodeRequest)
-            .block();
-    }
-
-    /**
-     * Create an integration runtime node.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param integrationRuntimeName Integration runtime name.
@@ -522,29 +401,44 @@ public final class IntegrationRuntimeNodesClientImpl implements IntegrationRunti
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return properties of Self-hosted integration runtime node.
+     * @return properties of Self-hosted integration runtime node along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<SelfHostedIntegrationRuntimeNodeInner> updateWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String integrationRuntimeName,
-        String nodeName,
-        UpdateIntegrationRuntimeNodeRequest updateIntegrationRuntimeNodeRequest,
-        Context context) {
-        return updateWithResponseAsync(
-                resourceGroupName,
-                workspaceName,
-                integrationRuntimeName,
-                nodeName,
-                updateIntegrationRuntimeNodeRequest,
-                context)
-            .block();
+    public Response<SelfHostedIntegrationRuntimeNodeInner> updateWithResponse(String resourceGroupName,
+        String workspaceName, String integrationRuntimeName, String nodeName,
+        UpdateIntegrationRuntimeNodeRequest updateIntegrationRuntimeNodeRequest, Context context) {
+        return updateWithResponseAsync(resourceGroupName, workspaceName, integrationRuntimeName, nodeName,
+            updateIntegrationRuntimeNodeRequest, context).block();
     }
 
     /**
+     * Create integration runtime node
+     * 
+     * Create an integration runtime node.
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param integrationRuntimeName Integration runtime name.
+     * @param nodeName Integration runtime node name.
+     * @param updateIntegrationRuntimeNodeRequest The parameters for updating an integration runtime node.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return properties of Self-hosted integration runtime node.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public SelfHostedIntegrationRuntimeNodeInner update(String resourceGroupName, String workspaceName,
+        String integrationRuntimeName, String nodeName,
+        UpdateIntegrationRuntimeNodeRequest updateIntegrationRuntimeNodeRequest) {
+        return updateWithResponse(resourceGroupName, workspaceName, integrationRuntimeName, nodeName,
+            updateIntegrationRuntimeNodeRequest, Context.NONE).getValue();
+    }
+
+    /**
+     * Delete integration runtime node
+     * 
      * Delete an integration runtime node.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param integrationRuntimeName Integration runtime name.
@@ -552,22 +446,18 @@ public final class IntegrationRuntimeNodesClientImpl implements IntegrationRunti
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Void>> deleteWithResponseAsync(
-        String resourceGroupName, String workspaceName, String integrationRuntimeName, String nodeName) {
+    private Mono<Response<Void>> deleteWithResponseAsync(String resourceGroupName, String workspaceName,
+        String integrationRuntimeName, String nodeName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -577,9 +467,8 @@ public final class IntegrationRuntimeNodesClientImpl implements IntegrationRunti
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
         }
         if (integrationRuntimeName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException("Parameter integrationRuntimeName is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter integrationRuntimeName is required and cannot be null."));
         }
         if (nodeName == null) {
             return Mono.error(new IllegalArgumentException("Parameter nodeName is required and cannot be null."));
@@ -588,24 +477,16 @@ public final class IntegrationRuntimeNodesClientImpl implements IntegrationRunti
         final String accept = "application/json";
         return FluxUtil
             .withContext(
-                context ->
-                    service
-                        .delete(
-                            this.client.getEndpoint(),
-                            apiVersion,
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            workspaceName,
-                            integrationRuntimeName,
-                            nodeName,
-                            accept,
-                            context))
+                context -> service.delete(this.client.getEndpoint(), apiVersion, this.client.getSubscriptionId(),
+                    resourceGroupName, workspaceName, integrationRuntimeName, nodeName, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
+     * Delete integration runtime node
+     * 
      * Delete an integration runtime node.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param integrationRuntimeName Integration runtime name.
@@ -614,26 +495,18 @@ public final class IntegrationRuntimeNodesClientImpl implements IntegrationRunti
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Void>> deleteWithResponseAsync(
-        String resourceGroupName,
-        String workspaceName,
-        String integrationRuntimeName,
-        String nodeName,
-        Context context) {
+    private Mono<Response<Void>> deleteWithResponseAsync(String resourceGroupName, String workspaceName,
+        String integrationRuntimeName, String nodeName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -643,9 +516,8 @@ public final class IntegrationRuntimeNodesClientImpl implements IntegrationRunti
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
         }
         if (integrationRuntimeName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException("Parameter integrationRuntimeName is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter integrationRuntimeName is required and cannot be null."));
         }
         if (nodeName == null) {
             return Mono.error(new IllegalArgumentException("Parameter nodeName is required and cannot be null."));
@@ -653,22 +525,15 @@ public final class IntegrationRuntimeNodesClientImpl implements IntegrationRunti
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .delete(
-                this.client.getEndpoint(),
-                apiVersion,
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                workspaceName,
-                integrationRuntimeName,
-                nodeName,
-                accept,
-                context);
+        return service.delete(this.client.getEndpoint(), apiVersion, this.client.getSubscriptionId(), resourceGroupName,
+            workspaceName, integrationRuntimeName, nodeName, accept, context);
     }
 
     /**
+     * Delete integration runtime node
+     * 
      * Delete an integration runtime node.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param integrationRuntimeName Integration runtime name.
@@ -676,18 +541,42 @@ public final class IntegrationRuntimeNodesClientImpl implements IntegrationRunti
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> deleteAsync(
-        String resourceGroupName, String workspaceName, String integrationRuntimeName, String nodeName) {
+    private Mono<Void> deleteAsync(String resourceGroupName, String workspaceName, String integrationRuntimeName,
+        String nodeName) {
         return deleteWithResponseAsync(resourceGroupName, workspaceName, integrationRuntimeName, nodeName)
-            .flatMap((Response<Void> res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
     }
 
     /**
+     * Delete integration runtime node
+     * 
      * Delete an integration runtime node.
-     *
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param integrationRuntimeName Integration runtime name.
+     * @param nodeName Integration runtime node name.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<Void> deleteWithResponse(String resourceGroupName, String workspaceName,
+        String integrationRuntimeName, String nodeName, Context context) {
+        return deleteWithResponseAsync(resourceGroupName, workspaceName, integrationRuntimeName, nodeName, context)
+            .block();
+    }
+
+    /**
+     * Delete integration runtime node
+     * 
+     * Delete an integration runtime node.
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param integrationRuntimeName Integration runtime name.
@@ -698,30 +587,6 @@ public final class IntegrationRuntimeNodesClientImpl implements IntegrationRunti
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public void delete(String resourceGroupName, String workspaceName, String integrationRuntimeName, String nodeName) {
-        deleteAsync(resourceGroupName, workspaceName, integrationRuntimeName, nodeName).block();
-    }
-
-    /**
-     * Delete an integration runtime node.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param integrationRuntimeName Integration runtime name.
-     * @param nodeName Integration runtime node name.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> deleteWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String integrationRuntimeName,
-        String nodeName,
-        Context context) {
-        return deleteWithResponseAsync(resourceGroupName, workspaceName, integrationRuntimeName, nodeName, context)
-            .block();
+        deleteWithResponse(resourceGroupName, workspaceName, integrationRuntimeName, nodeName, Context.NONE);
     }
 }

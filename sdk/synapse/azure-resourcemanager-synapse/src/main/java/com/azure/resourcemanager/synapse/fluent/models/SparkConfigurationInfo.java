@@ -5,59 +5,69 @@
 package com.azure.resourcemanager.synapse.fluent.models;
 
 import com.azure.core.annotation.Fluent;
+import com.azure.core.util.CoreUtils;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonSerializable;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import java.io.IOException;
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
-/** Information about a SparkConfiguration created at the workspace level. SparkConfiguration Artifact information. */
+/**
+ * Information about a SparkConfiguration created at the workspace level.
+ * 
+ * SparkConfiguration Artifact information.
+ */
 @Fluent
-public final class SparkConfigurationInfo {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SparkConfigurationInfo.class);
-
+public final class SparkConfigurationInfo implements JsonSerializable<SparkConfigurationInfo> {
     /*
      * Description about the SparkConfiguration.
      */
-    @JsonProperty(value = "description")
     private String description;
 
     /*
      * SparkConfiguration configs.
      */
-    @JsonProperty(value = "configs", required = true)
-    @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
     private Map<String, String> configs;
 
     /*
      * Annotations for SparkConfiguration.
      */
-    @JsonProperty(value = "annotations")
     private List<String> annotations;
 
     /*
      * additional Notes.
      */
-    @JsonProperty(value = "notes")
     private String notes;
 
     /*
      * The identity that created the resource.
      */
-    @JsonProperty(value = "createdBy")
     private String createdBy;
 
     /*
      * The timestamp of resource creation.
      */
-    @JsonProperty(value = "created")
     private OffsetDateTime created;
+
+    /*
+     * SparkConfiguration merge configs.
+     */
+    private Map<String, String> configMergeRule;
+
+    /**
+     * Creates an instance of SparkConfigurationInfo class.
+     */
+    public SparkConfigurationInfo() {
+    }
 
     /**
      * Get the description property: Description about the SparkConfiguration.
-     *
+     * 
      * @return the description value.
      */
     public String description() {
@@ -66,7 +76,7 @@ public final class SparkConfigurationInfo {
 
     /**
      * Set the description property: Description about the SparkConfiguration.
-     *
+     * 
      * @param description the description value to set.
      * @return the SparkConfigurationInfo object itself.
      */
@@ -77,7 +87,7 @@ public final class SparkConfigurationInfo {
 
     /**
      * Get the configs property: SparkConfiguration configs.
-     *
+     * 
      * @return the configs value.
      */
     public Map<String, String> configs() {
@@ -86,7 +96,7 @@ public final class SparkConfigurationInfo {
 
     /**
      * Set the configs property: SparkConfiguration configs.
-     *
+     * 
      * @param configs the configs value to set.
      * @return the SparkConfigurationInfo object itself.
      */
@@ -97,7 +107,7 @@ public final class SparkConfigurationInfo {
 
     /**
      * Get the annotations property: Annotations for SparkConfiguration.
-     *
+     * 
      * @return the annotations value.
      */
     public List<String> annotations() {
@@ -106,7 +116,7 @@ public final class SparkConfigurationInfo {
 
     /**
      * Set the annotations property: Annotations for SparkConfiguration.
-     *
+     * 
      * @param annotations the annotations value to set.
      * @return the SparkConfigurationInfo object itself.
      */
@@ -117,7 +127,7 @@ public final class SparkConfigurationInfo {
 
     /**
      * Get the notes property: additional Notes.
-     *
+     * 
      * @return the notes value.
      */
     public String notes() {
@@ -126,7 +136,7 @@ public final class SparkConfigurationInfo {
 
     /**
      * Set the notes property: additional Notes.
-     *
+     * 
      * @param notes the notes value to set.
      * @return the SparkConfigurationInfo object itself.
      */
@@ -137,7 +147,7 @@ public final class SparkConfigurationInfo {
 
     /**
      * Get the createdBy property: The identity that created the resource.
-     *
+     * 
      * @return the createdBy value.
      */
     public String createdBy() {
@@ -146,7 +156,7 @@ public final class SparkConfigurationInfo {
 
     /**
      * Set the createdBy property: The identity that created the resource.
-     *
+     * 
      * @param createdBy the createdBy value to set.
      * @return the SparkConfigurationInfo object itself.
      */
@@ -157,7 +167,7 @@ public final class SparkConfigurationInfo {
 
     /**
      * Get the created property: The timestamp of resource creation.
-     *
+     * 
      * @return the created value.
      */
     public OffsetDateTime created() {
@@ -166,7 +176,7 @@ public final class SparkConfigurationInfo {
 
     /**
      * Set the created property: The timestamp of resource creation.
-     *
+     * 
      * @param created the created value to set.
      * @return the SparkConfigurationInfo object itself.
      */
@@ -176,15 +186,97 @@ public final class SparkConfigurationInfo {
     }
 
     /**
+     * Get the configMergeRule property: SparkConfiguration merge configs.
+     * 
+     * @return the configMergeRule value.
+     */
+    public Map<String, String> configMergeRule() {
+        return this.configMergeRule;
+    }
+
+    /**
+     * Set the configMergeRule property: SparkConfiguration merge configs.
+     * 
+     * @param configMergeRule the configMergeRule value to set.
+     * @return the SparkConfigurationInfo object itself.
+     */
+    public SparkConfigurationInfo withConfigMergeRule(Map<String, String> configMergeRule) {
+        this.configMergeRule = configMergeRule;
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (configs() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property configs in model SparkConfigurationInfo"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property configs in model SparkConfigurationInfo"));
         }
+    }
+
+    private static final ClientLogger LOGGER = new ClientLogger(SparkConfigurationInfo.class);
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeMapField("configs", this.configs, (writer, element) -> writer.writeString(element));
+        jsonWriter.writeStringField("description", this.description);
+        jsonWriter.writeArrayField("annotations", this.annotations, (writer, element) -> writer.writeString(element));
+        jsonWriter.writeStringField("notes", this.notes);
+        jsonWriter.writeStringField("createdBy", this.createdBy);
+        jsonWriter.writeStringField("created",
+            this.created == null ? null : DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(this.created));
+        jsonWriter.writeMapField("configMergeRule", this.configMergeRule,
+            (writer, element) -> writer.writeString(element));
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of SparkConfigurationInfo from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of SparkConfigurationInfo if the JsonReader was pointing to an instance of it, or null if it
+     * was pointing to JSON null.
+     * @throws IllegalStateException If the deserialized JSON object was missing any required properties.
+     * @throws IOException If an error occurs while reading the SparkConfigurationInfo.
+     */
+    public static SparkConfigurationInfo fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            SparkConfigurationInfo deserializedSparkConfigurationInfo = new SparkConfigurationInfo();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("configs".equals(fieldName)) {
+                    Map<String, String> configs = reader.readMap(reader1 -> reader1.getString());
+                    deserializedSparkConfigurationInfo.configs = configs;
+                } else if ("description".equals(fieldName)) {
+                    deserializedSparkConfigurationInfo.description = reader.getString();
+                } else if ("annotations".equals(fieldName)) {
+                    List<String> annotations = reader.readArray(reader1 -> reader1.getString());
+                    deserializedSparkConfigurationInfo.annotations = annotations;
+                } else if ("notes".equals(fieldName)) {
+                    deserializedSparkConfigurationInfo.notes = reader.getString();
+                } else if ("createdBy".equals(fieldName)) {
+                    deserializedSparkConfigurationInfo.createdBy = reader.getString();
+                } else if ("created".equals(fieldName)) {
+                    deserializedSparkConfigurationInfo.created = reader
+                        .getNullable(nonNullReader -> CoreUtils.parseBestOffsetDateTime(nonNullReader.getString()));
+                } else if ("configMergeRule".equals(fieldName)) {
+                    Map<String, String> configMergeRule = reader.readMap(reader1 -> reader1.getString());
+                    deserializedSparkConfigurationInfo.configMergeRule = configMergeRule;
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedSparkConfigurationInfo;
+        });
     }
 }

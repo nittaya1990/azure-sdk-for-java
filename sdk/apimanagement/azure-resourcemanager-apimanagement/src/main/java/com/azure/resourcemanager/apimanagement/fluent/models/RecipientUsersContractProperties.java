@@ -5,20 +5,20 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Recipient User Contract Properties. */
 @Fluent
 public final class RecipientUsersContractProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RecipientUsersContractProperties.class);
-
     /*
      * API Management UserId subscribed to notification.
      */
     @JsonProperty(value = "userId")
     private String userId;
+
+    /** Creates an instance of RecipientUsersContractProperties class. */
+    public RecipientUsersContractProperties() {
+    }
 
     /**
      * Get the userId property: API Management UserId subscribed to notification.

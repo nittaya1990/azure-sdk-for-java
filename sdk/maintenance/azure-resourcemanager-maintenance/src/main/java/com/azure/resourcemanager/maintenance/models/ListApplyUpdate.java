@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.maintenance.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.maintenance.fluent.models.ApplyUpdateInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Response for ApplyUpdate list. */
+/**
+ * Response for ApplyUpdate list.
+ */
 @Fluent
 public final class ListApplyUpdate {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ListApplyUpdate.class);
-
     /*
      * The list of apply updates
      */
@@ -23,8 +21,14 @@ public final class ListApplyUpdate {
     private List<ApplyUpdateInner> value;
 
     /**
+     * Creates an instance of ListApplyUpdate class.
+     */
+    public ListApplyUpdate() {
+    }
+
+    /**
      * Get the value property: The list of apply updates.
-     *
+     * 
      * @return the value value.
      */
     public List<ApplyUpdateInner> value() {
@@ -33,7 +37,7 @@ public final class ListApplyUpdate {
 
     /**
      * Set the value property: The list of apply updates.
-     *
+     * 
      * @param value the value value to set.
      * @return the ListApplyUpdate object itself.
      */
@@ -44,7 +48,7 @@ public final class ListApplyUpdate {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

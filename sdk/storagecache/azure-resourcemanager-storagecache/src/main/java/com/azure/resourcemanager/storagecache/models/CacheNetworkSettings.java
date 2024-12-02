@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.storagecache.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Cache network settings. */
+/**
+ * Cache network settings.
+ */
 @Fluent
 public final class CacheNetworkSettings {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CacheNetworkSettings.class);
-
     /*
      * The IPv4 maximum transmission unit configured for the subnet.
      */
@@ -22,14 +20,13 @@ public final class CacheNetworkSettings {
     private Integer mtu;
 
     /*
-     * Array of additional IP addresses used by this Cache.
+     * Array of additional IP addresses used by this cache.
      */
     @JsonProperty(value = "utilityAddresses", access = JsonProperty.Access.WRITE_ONLY)
     private List<String> utilityAddresses;
 
     /*
-     * DNS servers for the cache to use.  It will be set from the network
-     * configuration if no value is provided.
+     * DNS servers for the cache to use.  It will be set from the network configuration if no value is provided.
      */
     @JsonProperty(value = "dnsServers")
     private List<String> dnsServers;
@@ -41,15 +38,20 @@ public final class CacheNetworkSettings {
     private String dnsSearchDomain;
 
     /*
-     * NTP server IP Address or FQDN for the cache to use. The default is
-     * time.windows.com.
+     * NTP server IP Address or FQDN for the cache to use. The default is time.windows.com.
      */
     @JsonProperty(value = "ntpServer")
     private String ntpServer;
 
     /**
+     * Creates an instance of CacheNetworkSettings class.
+     */
+    public CacheNetworkSettings() {
+    }
+
+    /**
      * Get the mtu property: The IPv4 maximum transmission unit configured for the subnet.
-     *
+     * 
      * @return the mtu value.
      */
     public Integer mtu() {
@@ -58,7 +60,7 @@ public final class CacheNetworkSettings {
 
     /**
      * Set the mtu property: The IPv4 maximum transmission unit configured for the subnet.
-     *
+     * 
      * @param mtu the mtu value to set.
      * @return the CacheNetworkSettings object itself.
      */
@@ -68,8 +70,8 @@ public final class CacheNetworkSettings {
     }
 
     /**
-     * Get the utilityAddresses property: Array of additional IP addresses used by this Cache.
-     *
+     * Get the utilityAddresses property: Array of additional IP addresses used by this cache.
+     * 
      * @return the utilityAddresses value.
      */
     public List<String> utilityAddresses() {
@@ -79,7 +81,7 @@ public final class CacheNetworkSettings {
     /**
      * Get the dnsServers property: DNS servers for the cache to use. It will be set from the network configuration if
      * no value is provided.
-     *
+     * 
      * @return the dnsServers value.
      */
     public List<String> dnsServers() {
@@ -89,7 +91,7 @@ public final class CacheNetworkSettings {
     /**
      * Set the dnsServers property: DNS servers for the cache to use. It will be set from the network configuration if
      * no value is provided.
-     *
+     * 
      * @param dnsServers the dnsServers value to set.
      * @return the CacheNetworkSettings object itself.
      */
@@ -100,7 +102,7 @@ public final class CacheNetworkSettings {
 
     /**
      * Get the dnsSearchDomain property: DNS search domain.
-     *
+     * 
      * @return the dnsSearchDomain value.
      */
     public String dnsSearchDomain() {
@@ -109,7 +111,7 @@ public final class CacheNetworkSettings {
 
     /**
      * Set the dnsSearchDomain property: DNS search domain.
-     *
+     * 
      * @param dnsSearchDomain the dnsSearchDomain value to set.
      * @return the CacheNetworkSettings object itself.
      */
@@ -120,7 +122,7 @@ public final class CacheNetworkSettings {
 
     /**
      * Get the ntpServer property: NTP server IP Address or FQDN for the cache to use. The default is time.windows.com.
-     *
+     * 
      * @return the ntpServer value.
      */
     public String ntpServer() {
@@ -129,7 +131,7 @@ public final class CacheNetworkSettings {
 
     /**
      * Set the ntpServer property: NTP server IP Address or FQDN for the cache to use. The default is time.windows.com.
-     *
+     * 
      * @param ntpServer the ntpServer value to set.
      * @return the CacheNetworkSettings object itself.
      */
@@ -140,7 +142,7 @@ public final class CacheNetworkSettings {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

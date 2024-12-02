@@ -5,17 +5,16 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.Map;
 
-/** Azure VM workload-specific additional information for job. */
+/**
+ * Azure VM workload-specific additional information for job.
+ */
 @Fluent
 public final class AzureWorkloadJobExtendedInfo {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureWorkloadJobExtendedInfo.class);
-
     /*
      * List of tasks for this job
      */
@@ -26,6 +25,7 @@ public final class AzureWorkloadJobExtendedInfo {
      * Job properties.
      */
     @JsonProperty(value = "propertyBag")
+    @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
     private Map<String, String> propertyBag;
 
     /*
@@ -35,8 +35,14 @@ public final class AzureWorkloadJobExtendedInfo {
     private String dynamicErrorMessage;
 
     /**
+     * Creates an instance of AzureWorkloadJobExtendedInfo class.
+     */
+    public AzureWorkloadJobExtendedInfo() {
+    }
+
+    /**
      * Get the tasksList property: List of tasks for this job.
-     *
+     * 
      * @return the tasksList value.
      */
     public List<AzureWorkloadJobTaskDetails> tasksList() {
@@ -45,7 +51,7 @@ public final class AzureWorkloadJobExtendedInfo {
 
     /**
      * Set the tasksList property: List of tasks for this job.
-     *
+     * 
      * @param tasksList the tasksList value to set.
      * @return the AzureWorkloadJobExtendedInfo object itself.
      */
@@ -56,7 +62,7 @@ public final class AzureWorkloadJobExtendedInfo {
 
     /**
      * Get the propertyBag property: Job properties.
-     *
+     * 
      * @return the propertyBag value.
      */
     public Map<String, String> propertyBag() {
@@ -65,7 +71,7 @@ public final class AzureWorkloadJobExtendedInfo {
 
     /**
      * Set the propertyBag property: Job properties.
-     *
+     * 
      * @param propertyBag the propertyBag value to set.
      * @return the AzureWorkloadJobExtendedInfo object itself.
      */
@@ -76,7 +82,7 @@ public final class AzureWorkloadJobExtendedInfo {
 
     /**
      * Get the dynamicErrorMessage property: Non localized error message on job execution.
-     *
+     * 
      * @return the dynamicErrorMessage value.
      */
     public String dynamicErrorMessage() {
@@ -85,7 +91,7 @@ public final class AzureWorkloadJobExtendedInfo {
 
     /**
      * Set the dynamicErrorMessage property: Non localized error message on job execution.
-     *
+     * 
      * @param dynamicErrorMessage the dynamicErrorMessage value to set.
      * @return the AzureWorkloadJobExtendedInfo object itself.
      */
@@ -96,7 +102,7 @@ public final class AzureWorkloadJobExtendedInfo {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

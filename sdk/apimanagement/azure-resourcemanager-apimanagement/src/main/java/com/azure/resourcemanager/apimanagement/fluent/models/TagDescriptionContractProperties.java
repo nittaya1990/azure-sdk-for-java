@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** TagDescription contract Properties. */
 @Fluent
 public final class TagDescriptionContractProperties extends TagDescriptionBaseProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TagDescriptionContractProperties.class);
-
     /*
      * Identifier of the tag in the form of /tags/{tagId}
      */
@@ -25,6 +21,10 @@ public final class TagDescriptionContractProperties extends TagDescriptionBasePr
      */
     @JsonProperty(value = "displayName")
     private String displayName;
+
+    /** Creates an instance of TagDescriptionContractProperties class. */
+    public TagDescriptionContractProperties() {
+    }
 
     /**
      * Get the tagId property: Identifier of the tag in the form of /tags/{tagId}.

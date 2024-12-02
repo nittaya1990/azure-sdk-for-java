@@ -18,7 +18,7 @@ public interface LivePipelines {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of LivePipeline items.
+     * @return a collection of LivePipeline items as paginated response with {@link PagedIterable}.
      */
     PagedIterable<LivePipeline> list(String resourceGroupName, String accountName);
 
@@ -34,10 +34,10 @@ public interface LivePipelines {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of LivePipeline items.
+     * @return a collection of LivePipeline items as paginated response with {@link PagedIterable}.
      */
-    PagedIterable<LivePipeline> list(
-        String resourceGroupName, String accountName, String filter, Integer top, Context context);
+    PagedIterable<LivePipeline> list(String resourceGroupName, String accountName, String filter, Integer top,
+        Context context);
 
     /**
      * Retrieves a specific live pipeline by name. If a live pipeline with that name has been previously created, the
@@ -66,10 +66,10 @@ public interface LivePipelines {
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return live pipeline represents a unique instance of a live topology, used for real-time ingestion, archiving
-     *     and publishing of content for a unique RTSP camera.
+     *     and publishing of content for a unique RTSP camera along with {@link Response}.
      */
-    Response<LivePipeline> getWithResponse(
-        String resourceGroupName, String accountName, String livePipelineName, Context context);
+    Response<LivePipeline> getWithResponse(String resourceGroupName, String accountName, String livePipelineName,
+        Context context);
 
     /**
      * Deletes a live pipeline with the given name.
@@ -93,10 +93,10 @@ public interface LivePipelines {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
-    Response<Void> deleteWithResponse(
-        String resourceGroupName, String accountName, String livePipelineName, Context context);
+    Response<Void> deleteWithResponse(String resourceGroupName, String accountName, String livePipelineName,
+        Context context);
 
     /**
      * Activates a live pipeline with the given name.
@@ -157,7 +157,7 @@ public interface LivePipelines {
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return live pipeline represents a unique instance of a live topology, used for real-time ingestion, archiving
-     *     and publishing of content for a unique RTSP camera.
+     *     and publishing of content for a unique RTSP camera along with {@link Response}.
      */
     LivePipeline getById(String id);
 
@@ -171,7 +171,7 @@ public interface LivePipelines {
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return live pipeline represents a unique instance of a live topology, used for real-time ingestion, archiving
-     *     and publishing of content for a unique RTSP camera.
+     *     and publishing of content for a unique RTSP camera along with {@link Response}.
      */
     Response<LivePipeline> getByIdWithResponse(String id, Context context);
 
@@ -193,7 +193,7 @@ public interface LivePipelines {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
     Response<Void> deleteByIdWithResponse(String id, Context context);
 

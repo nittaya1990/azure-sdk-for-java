@@ -12,21 +12,21 @@ public interface Operations {
     /**
      * Lists a collection of operations associated with tags.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Tag list representation.
+     * @return paged Tag list representation as paginated response with {@link PagedIterable}.
      */
     PagedIterable<TagResourceContract> listByTags(String resourceGroupName, String serviceName, String apiId);
 
     /**
      * Lists a collection of operations associated with tags.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -45,15 +45,8 @@ public interface Operations {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Tag list representation.
+     * @return paged Tag list representation as paginated response with {@link PagedIterable}.
      */
-    PagedIterable<TagResourceContract> listByTags(
-        String resourceGroupName,
-        String serviceName,
-        String apiId,
-        String filter,
-        Integer top,
-        Integer skip,
-        Boolean includeNotTaggedOperations,
-        Context context);
+    PagedIterable<TagResourceContract> listByTags(String resourceGroupName, String serviceName, String apiId,
+        String filter, Integer top, Integer skip, Boolean includeNotTaggedOperations, Context context);
 }

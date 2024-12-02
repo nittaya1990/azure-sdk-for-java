@@ -27,10 +27,10 @@ else
     throughput=$ctl_throughput
 fi
 
-if [ -z "$ctl_read_write_query_pct" ]; then
-    read_write_query_pct="90,9,1"
+if [ -z "$ctl_read_write_query_readmany_pct" ]; then
+    read_write_query_readmany_pct="90,8,1,1"
 else
-    read_write_query_pct=$ctl_read_write_query_pct
+    read_write_query_readmany_pct=$ctl_read_write_query_readmany_pct
 fi
 
 if [ -z "$ctl_number_of_operations" ]; then
@@ -61,6 +61,18 @@ if [ -z "$ctl_number_of_precreated_documents" ]; then
     number_of_precreated_documents=10000
 else
     number_of_precreated_documents=$ctl_number_of_precreated_documents
+fi
+
+if [ -z "$ctl_client_telemetry_enabled" ]; then
+    client_telemetry_enabled=true
+else
+    client_telemetry_enabled=$ctl_client_telemetry_enabled
+fi
+
+if [ -z "$ctl_client_telemetry_endpoint" ]; then
+    client_telemetry_endpoint=https://juno-test.documents-dev.windows-int.net/api/clienttelemetry/trace
+else
+    client_telemetry_endpoint=$ctl_client_telemetry_endpoint
 fi
 
 connection_mode=Direct
@@ -95,9 +107,9 @@ additional_benchmark_options="-documentDataFieldSize 10 -documentDataFieldCount 
 additional_benchmark_options="$additional_benchmark_options -maxConnectionPoolSize $gateway_connection_poolsize"
 
 if [ -z "$ctl_graphite_endpoint" ]; then
-    java -Xmx8g -Xms8g $jvm_opt -Dcosmos.directModeProtocol=$protocol -Dazure.cosmos.directModeProtocol=$protocol -DCOSMOS.ENVIRONMENT_NAME=$ctl_env -DCOSMOS.CLIENT_TELEMETRY_ENDPOINT=$ctl_client_telemetry_endpoint -jar "$jar_file" -serviceEndpoint "$service_endpoint" -masterKey "$master_key" -databaseId "$db_name" -collectionId "$col_name" -readWriteQueryPct "$read_write_query_pct" -diagnosticsThresholdDuration "$diagnostics_threshold_duration" -numberOfCollectionForCtl "$number_Of_collection" -throughput $throughput -consistencyLevel $consistency_level -concurrency $concurrency -numberOfOperations $number_of_operations -operation $operation -connectionMode $connection_mode -maxRunningTimeDuration $max_running_time_duration -numberOfPreCreatedDocuments $number_of_precreated_documents -preferredRegionsList "$ctl_preferred_regions" $additional_benchmark_options 2>&1 | tee -a "$log_filename"
+    java -Xmx8g -Xms8g $jvm_opt -Dcosmos.directModeProtocol=$protocol -Dazure.cosmos.directModeProtocol=$protocol -DCOSMOS.ENVIRONMENT_NAME=$ctl_env -jar "$jar_file" -clientTelemetryEnabled="$client_telemetry_enabled" -clientTelemetryEndpoint="$client_telemetry_endpoint" -serviceEndpoint "$service_endpoint" -masterKey "$master_key" -databaseId "$db_name" -collectionId "$col_name" -readWriteQueryReadManyPct "$read_write_query_readmany_pct" -diagnosticsThresholdDuration "$diagnostics_threshold_duration" -numberOfCollectionForCtl "$number_Of_collection" -throughput $throughput -consistencyLevel $consistency_level -concurrency $concurrency -numberOfOperations $number_of_operations -operation $operation -connectionMode $connection_mode -maxRunningTimeDuration $max_running_time_duration -numberOfPreCreatedDocuments $number_of_precreated_documents -preferredRegionsList "$ctl_preferred_regions" $additional_benchmark_options 2>&1 | tee -a "$log_filename"
 else
-    java -Xmx8g -Xms8g $jvm_opt -Dcosmos.directModeProtocol=$protocol -Dazure.cosmos.directModeProtocol=$protocol -DCOSMOS.ENVIRONMENT_NAME=$ctl_env -DCOSMOS.CLIENT_TELEMETRY_ENDPOINT=$ctl_client_telemetry_endpoint -jar "$jar_file" -serviceEndpoint "$service_endpoint" -masterKey "$master_key" -databaseId "$db_name" -collectionId "$col_name" -readWriteQueryPct "$read_write_query_pct" -diagnosticsThresholdDuration "$diagnostics_threshold_duration" -numberOfCollectionForCtl "$number_Of_collection" -throughput $throughput -consistencyLevel $consistency_level -concurrency $concurrency -numberOfOperations $number_of_operations -operation $operation -connectionMode $connection_mode -maxRunningTimeDuration $max_running_time_duration -graphiteEndpoint $ctl_graphite_endpoint -numberOfPreCreatedDocuments $number_of_precreated_documents -preferredRegionsList "$ctl_preferred_regions" $ctl_accountNameInGraphiteReporter $additional_benchmark_options 2>&1 | tee -a "$log_filename"
+    java -Xmx8g -Xms8g $jvm_opt -Dcosmos.directModeProtocol=$protocol -Dazure.cosmos.directModeProtocol=$protocol -DCOSMOS.ENVIRONMENT_NAME=$ctl_env -jar "$jar_file" -clientTelemetryEnabled="$client_telemetry_enabled" -clientTelemetryEndpoint="$client_telemetry_endpoint" -serviceEndpoint "$service_endpoint" -masterKey "$master_key" -databaseId "$db_name" -collectionId "$col_name" -readWriteQueryReadManyPct "$read_write_query_readmany_pct" -diagnosticsThresholdDuration "$diagnostics_threshold_duration" -numberOfCollectionForCtl "$number_Of_collection" -throughput $throughput -consistencyLevel $consistency_level -concurrency $concurrency -numberOfOperations $number_of_operations -operation $operation -connectionMode $connection_mode -maxRunningTimeDuration $max_running_time_duration -graphiteEndpoint $ctl_graphite_endpoint -numberOfPreCreatedDocuments $number_of_precreated_documents -preferredRegionsList "$ctl_preferred_regions" $ctl_accountNameInGraphiteReporter $additional_benchmark_options 2>&1 | tee -a "$log_filename"
 fi
 
 end=$(date +%s)

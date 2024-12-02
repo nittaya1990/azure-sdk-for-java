@@ -12,26 +12,24 @@ import com.azure.resourcemanager.videoanalyzer.fluent.OperationResultsClient;
 import com.azure.resourcemanager.videoanalyzer.fluent.models.PrivateEndpointConnectionInner;
 import com.azure.resourcemanager.videoanalyzer.models.OperationResults;
 import com.azure.resourcemanager.videoanalyzer.models.PrivateEndpointConnection;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class OperationResultsImpl implements OperationResults {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OperationResultsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(OperationResultsImpl.class);
 
     private final OperationResultsClient innerClient;
 
     private final com.azure.resourcemanager.videoanalyzer.VideoAnalyzerManager serviceManager;
 
-    public OperationResultsImpl(
-        OperationResultsClient innerClient,
+    public OperationResultsImpl(OperationResultsClient innerClient,
         com.azure.resourcemanager.videoanalyzer.VideoAnalyzerManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
     }
 
-    public PrivateEndpointConnection get(
-        String resourceGroupName, String accountName, String name, String operationId) {
-        PrivateEndpointConnectionInner inner =
-            this.serviceClient().get(resourceGroupName, accountName, name, operationId);
+    public PrivateEndpointConnection get(String resourceGroupName, String accountName, String name,
+        String operationId) {
+        PrivateEndpointConnectionInner inner
+            = this.serviceClient().get(resourceGroupName, accountName, name, operationId);
         if (inner != null) {
             return new PrivateEndpointConnectionImpl(inner, this.manager());
         } else {
@@ -39,15 +37,12 @@ public final class OperationResultsImpl implements OperationResults {
         }
     }
 
-    public Response<PrivateEndpointConnection> getWithResponse(
-        String resourceGroupName, String accountName, String name, String operationId, Context context) {
-        Response<PrivateEndpointConnectionInner> inner =
-            this.serviceClient().getWithResponse(resourceGroupName, accountName, name, operationId, context);
+    public Response<PrivateEndpointConnection> getWithResponse(String resourceGroupName, String accountName,
+        String name, String operationId, Context context) {
+        Response<PrivateEndpointConnectionInner> inner
+            = this.serviceClient().getWithResponse(resourceGroupName, accountName, name, operationId, context);
         if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
                 new PrivateEndpointConnectionImpl(inner.getValue(), this.manager()));
         } else {
             return null;

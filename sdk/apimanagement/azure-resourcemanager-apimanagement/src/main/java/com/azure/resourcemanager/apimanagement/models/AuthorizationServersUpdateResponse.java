@@ -21,16 +21,16 @@ public final class AuthorizationServersUpdateResponse
      * @param value the deserialized value of the HTTP response.
      * @param headers the deserialized headers of the HTTP response.
      */
-    public AuthorizationServersUpdateResponse(
-        HttpRequest request,
-        int statusCode,
-        HttpHeaders rawHeaders,
-        AuthorizationServerContractInner value,
-        AuthorizationServersUpdateHeaders headers) {
+    public AuthorizationServersUpdateResponse(HttpRequest request, int statusCode, HttpHeaders rawHeaders,
+        AuthorizationServerContractInner value, AuthorizationServersUpdateHeaders headers) {
         super(request, statusCode, rawHeaders, value, headers);
     }
 
-    /** @return the deserialized response body. */
+    /**
+     * Gets the deserialized response body.
+     *
+     * @return the deserialized response body.
+     */
     @Override
     public AuthorizationServerContractInner getValue() {
         return super.getValue();

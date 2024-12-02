@@ -5,28 +5,40 @@
 package com.azure.resourcemanager.containerservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonSerializable;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import java.io.IOException;
 
-/** Desired managed outbound IPs for the cluster load balancer. */
+/**
+ * Desired managed outbound IPs for the cluster load balancer.
+ */
 @Fluent
-public final class ManagedClusterLoadBalancerProfileManagedOutboundIPs {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(ManagedClusterLoadBalancerProfileManagedOutboundIPs.class);
-
+public final class ManagedClusterLoadBalancerProfileManagedOutboundIPs
+    implements JsonSerializable<ManagedClusterLoadBalancerProfileManagedOutboundIPs> {
     /*
-     * The desired number of outbound IPs created/managed by Azure for the
-     * cluster load balancer. Allowed values must be in the range of 1 to 100
-     * (inclusive). The default value is 1.
+     * The desired number of IPv4 outbound IPs created/managed by Azure for the cluster load balancer. Allowed values
+     * must be in the range of 1 to 100 (inclusive). The default value is 1.
      */
-    @JsonProperty(value = "count")
     private Integer count;
 
+    /*
+     * The desired number of IPv6 outbound IPs created/managed by Azure for the cluster load balancer. Allowed values
+     * must be in the range of 1 to 100 (inclusive). The default value is 0 for single-stack and 1 for dual-stack.
+     */
+    private Integer countIPv6;
+
     /**
-     * Get the count property: The desired number of outbound IPs created/managed by Azure for the cluster load
+     * Creates an instance of ManagedClusterLoadBalancerProfileManagedOutboundIPs class.
+     */
+    public ManagedClusterLoadBalancerProfileManagedOutboundIPs() {
+    }
+
+    /**
+     * Get the count property: The desired number of IPv4 outbound IPs created/managed by Azure for the cluster load
      * balancer. Allowed values must be in the range of 1 to 100 (inclusive). The default value is 1.
-     *
+     * 
      * @return the count value.
      */
     public Integer count() {
@@ -34,9 +46,9 @@ public final class ManagedClusterLoadBalancerProfileManagedOutboundIPs {
     }
 
     /**
-     * Set the count property: The desired number of outbound IPs created/managed by Azure for the cluster load
+     * Set the count property: The desired number of IPv4 outbound IPs created/managed by Azure for the cluster load
      * balancer. Allowed values must be in the range of 1 to 100 (inclusive). The default value is 1.
-     *
+     * 
      * @param count the count value to set.
      * @return the ManagedClusterLoadBalancerProfileManagedOutboundIPs object itself.
      */
@@ -46,10 +58,77 @@ public final class ManagedClusterLoadBalancerProfileManagedOutboundIPs {
     }
 
     /**
+     * Get the countIPv6 property: The desired number of IPv6 outbound IPs created/managed by Azure for the cluster load
+     * balancer. Allowed values must be in the range of 1 to 100 (inclusive). The default value is 0 for single-stack
+     * and 1 for dual-stack.
+     * 
+     * @return the countIPv6 value.
+     */
+    public Integer countIPv6() {
+        return this.countIPv6;
+    }
+
+    /**
+     * Set the countIPv6 property: The desired number of IPv6 outbound IPs created/managed by Azure for the cluster load
+     * balancer. Allowed values must be in the range of 1 to 100 (inclusive). The default value is 0 for single-stack
+     * and 1 for dual-stack.
+     * 
+     * @param countIPv6 the countIPv6 value to set.
+     * @return the ManagedClusterLoadBalancerProfileManagedOutboundIPs object itself.
+     */
+    public ManagedClusterLoadBalancerProfileManagedOutboundIPs withCountIPv6(Integer countIPv6) {
+        this.countIPv6 = countIPv6;
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeNumberField("count", this.count);
+        jsonWriter.writeNumberField("countIPv6", this.countIPv6);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of ManagedClusterLoadBalancerProfileManagedOutboundIPs from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of ManagedClusterLoadBalancerProfileManagedOutboundIPs if the JsonReader was pointing to an
+     * instance of it, or null if it was pointing to JSON null.
+     * @throws IOException If an error occurs while reading the ManagedClusterLoadBalancerProfileManagedOutboundIPs.
+     */
+    public static ManagedClusterLoadBalancerProfileManagedOutboundIPs fromJson(JsonReader jsonReader)
+        throws IOException {
+        return jsonReader.readObject(reader -> {
+            ManagedClusterLoadBalancerProfileManagedOutboundIPs deserializedManagedClusterLoadBalancerProfileManagedOutboundIPs
+                = new ManagedClusterLoadBalancerProfileManagedOutboundIPs();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("count".equals(fieldName)) {
+                    deserializedManagedClusterLoadBalancerProfileManagedOutboundIPs.count
+                        = reader.getNullable(JsonReader::getInt);
+                } else if ("countIPv6".equals(fieldName)) {
+                    deserializedManagedClusterLoadBalancerProfileManagedOutboundIPs.countIPv6
+                        = reader.getNullable(JsonReader::getInt);
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedManagedClusterLoadBalancerProfileManagedOutboundIPs;
+        });
     }
 }

@@ -39,6 +39,10 @@ public final class ScriptImpl implements Script, Script.Definition, Script.Updat
         return this.innerModel().scriptUrlSasToken();
     }
 
+    public String scriptContent() {
+        return this.innerModel().scriptContent();
+    }
+
     public String forceUpdateTag() {
         return this.innerModel().forceUpdateTag();
     }
@@ -49,6 +53,10 @@ public final class ScriptImpl implements Script, Script.Definition, Script.Updat
 
     public ProvisioningState provisioningState() {
         return this.innerModel().provisioningState();
+    }
+
+    public String resourceGroupName() {
+        return resourceGroupName;
     }
 
     public ScriptInner innerModel() {
@@ -75,21 +83,16 @@ public final class ScriptImpl implements Script, Script.Definition, Script.Updat
     }
 
     public Script create() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getScripts()
-                .createOrUpdate(
-                    resourceGroupName, clusterName, databaseName, scriptName, this.innerModel(), Context.NONE);
+        this.innerObject = serviceManager.serviceClient()
+            .getScripts()
+            .createOrUpdate(resourceGroupName, clusterName, databaseName, scriptName, this.innerModel(), Context.NONE);
         return this;
     }
 
     public Script create(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getScripts()
-                .createOrUpdate(resourceGroupName, clusterName, databaseName, scriptName, this.innerModel(), context);
+        this.innerObject = serviceManager.serviceClient()
+            .getScripts()
+            .createOrUpdate(resourceGroupName, clusterName, databaseName, scriptName, this.innerModel(), context);
         return this;
     }
 
@@ -104,20 +107,16 @@ public final class ScriptImpl implements Script, Script.Definition, Script.Updat
     }
 
     public Script apply() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getScripts()
-                .update(resourceGroupName, clusterName, databaseName, scriptName, this.innerModel(), Context.NONE);
+        this.innerObject = serviceManager.serviceClient()
+            .getScripts()
+            .update(resourceGroupName, clusterName, databaseName, scriptName, this.innerModel(), Context.NONE);
         return this;
     }
 
     public Script apply(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getScripts()
-                .update(resourceGroupName, clusterName, databaseName, scriptName, this.innerModel(), context);
+        this.innerObject = serviceManager.serviceClient()
+            .getScripts()
+            .update(resourceGroupName, clusterName, databaseName, scriptName, this.innerModel(), context);
         return this;
     }
 
@@ -131,22 +130,18 @@ public final class ScriptImpl implements Script, Script.Definition, Script.Updat
     }
 
     public Script refresh() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getScripts()
-                .getWithResponse(resourceGroupName, clusterName, databaseName, scriptName, Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getScripts()
+            .getWithResponse(resourceGroupName, clusterName, databaseName, scriptName, Context.NONE)
+            .getValue();
         return this;
     }
 
     public Script refresh(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getScripts()
-                .getWithResponse(resourceGroupName, clusterName, databaseName, scriptName, context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getScripts()
+            .getWithResponse(resourceGroupName, clusterName, databaseName, scriptName, context)
+            .getValue();
         return this;
     }
 
@@ -157,6 +152,11 @@ public final class ScriptImpl implements Script, Script.Definition, Script.Updat
 
     public ScriptImpl withScriptUrlSasToken(String scriptUrlSasToken) {
         this.innerModel().withScriptUrlSasToken(scriptUrlSasToken);
+        return this;
+    }
+
+    public ScriptImpl withScriptContent(String scriptContent) {
+        this.innerModel().withScriptContent(scriptContent);
         return this;
     }
 

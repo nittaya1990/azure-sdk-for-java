@@ -5,63 +5,51 @@
 package com.azure.resourcemanager.streamanalytics.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.management.SubResource;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import com.azure.resourcemanager.streamanalytics.fluent.models.SubscriptionQuotaProperties;
+import java.io.IOException;
 
-/** Describes the current quota for the subscription. */
-@JsonFlatten
+/**
+ * Describes the current quota for the subscription.
+ */
 @Fluent
-public class SubscriptionQuota extends SubResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SubscriptionQuota.class);
-
+public final class SubscriptionQuota extends SubResource {
     /*
-     * The max permitted usage of this resource.
+     * Describes the properties of the quota.
      */
-    @JsonProperty(value = "properties.maxCount", access = JsonProperty.Access.WRITE_ONLY)
-    private Integer maxCount;
-
-    /*
-     * The current usage of this resource.
-     */
-    @JsonProperty(value = "properties.currentCount", access = JsonProperty.Access.WRITE_ONLY)
-    private Integer currentCount;
+    private SubscriptionQuotaProperties innerProperties;
 
     /*
      * Resource name
      */
-    @JsonProperty(value = "name")
     private String name;
 
     /*
      * Resource type
      */
-    @JsonProperty(value = "type", access = JsonProperty.Access.WRITE_ONLY)
     private String type;
 
     /**
-     * Get the maxCount property: The max permitted usage of this resource.
-     *
-     * @return the maxCount value.
+     * Creates an instance of SubscriptionQuota class.
      */
-    public Integer maxCount() {
-        return this.maxCount;
+    public SubscriptionQuota() {
     }
 
     /**
-     * Get the currentCount property: The current usage of this resource.
-     *
-     * @return the currentCount value.
+     * Get the innerProperties property: Describes the properties of the quota.
+     * 
+     * @return the innerProperties value.
      */
-    public Integer currentCount() {
-        return this.currentCount;
+    private SubscriptionQuotaProperties innerProperties() {
+        return this.innerProperties;
     }
 
     /**
      * Get the name property: Resource name.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -70,7 +58,7 @@ public class SubscriptionQuota extends SubResource {
 
     /**
      * Set the name property: Resource name.
-     *
+     * 
      * @param name the name value to set.
      * @return the SubscriptionQuota object itself.
      */
@@ -81,14 +69,16 @@ public class SubscriptionQuota extends SubResource {
 
     /**
      * Get the type property: Resource type.
-     *
+     * 
      * @return the type value.
      */
     public String type() {
         return this.type;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SubscriptionQuota withId(String id) {
         super.withId(id);
@@ -96,10 +86,74 @@ public class SubscriptionQuota extends SubResource {
     }
 
     /**
+     * Get the maxCount property: The max permitted usage of this resource.
+     * 
+     * @return the maxCount value.
+     */
+    public Integer maxCount() {
+        return this.innerProperties() == null ? null : this.innerProperties().maxCount();
+    }
+
+    /**
+     * Get the currentCount property: The current usage of this resource.
+     * 
+     * @return the currentCount value.
+     */
+    public Integer currentCount() {
+        return this.innerProperties() == null ? null : this.innerProperties().currentCount();
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
+        if (innerProperties() != null) {
+            innerProperties().validate();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeStringField("id", id());
+        jsonWriter.writeStringField("name", this.name);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of SubscriptionQuota from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of SubscriptionQuota if the JsonReader was pointing to an instance of it, or null if it was
+     * pointing to JSON null.
+     * @throws IOException If an error occurs while reading the SubscriptionQuota.
+     */
+    public static SubscriptionQuota fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            SubscriptionQuota deserializedSubscriptionQuota = new SubscriptionQuota();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("id".equals(fieldName)) {
+                    deserializedSubscriptionQuota.withId(reader.getString());
+                } else if ("properties".equals(fieldName)) {
+                    deserializedSubscriptionQuota.innerProperties = SubscriptionQuotaProperties.fromJson(reader);
+                } else if ("name".equals(fieldName)) {
+                    deserializedSubscriptionQuota.name = reader.getString();
+                } else if ("type".equals(fieldName)) {
+                    deserializedSubscriptionQuota.type = reader.getString();
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedSubscriptionQuota;
+        });
     }
 }

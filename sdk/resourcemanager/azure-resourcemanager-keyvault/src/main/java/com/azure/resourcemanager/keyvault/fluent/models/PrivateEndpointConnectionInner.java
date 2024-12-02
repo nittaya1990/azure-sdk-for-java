@@ -5,50 +5,64 @@
 package com.azure.resourcemanager.keyvault.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.management.Resource;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
 import com.azure.resourcemanager.keyvault.models.PrivateEndpoint;
 import com.azure.resourcemanager.keyvault.models.PrivateEndpointConnectionProvisioningState;
 import com.azure.resourcemanager.keyvault.models.PrivateLinkServiceConnectionState;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.IOException;
 import java.util.Map;
 
-/** Private endpoint connection resource. */
-@JsonFlatten
+/**
+ * Private endpoint connection resource.
+ */
 @Fluent
-public class PrivateEndpointConnectionInner extends Resource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PrivateEndpointConnectionInner.class);
+public final class PrivateEndpointConnectionInner extends Resource {
+    /*
+     * Resource properties.
+     */
+    private PrivateEndpointConnectionProperties innerProperties;
 
     /*
-     * Modified whenever there is a change in the state of private endpoint
-     * connection.
+     * Modified whenever there is a change in the state of private endpoint connection.
      */
-    @JsonProperty(value = "etag")
     private String etag;
 
     /*
-     * Properties of the private endpoint object.
+     * Fully qualified resource Id for the resource.
      */
-    @JsonProperty(value = "properties.privateEndpoint")
-    private PrivateEndpoint privateEndpoint;
+    private String id;
 
     /*
-     * Approval state of the private link connection.
+     * The name of the resource.
      */
-    @JsonProperty(value = "properties.privateLinkServiceConnectionState")
-    private PrivateLinkServiceConnectionState privateLinkServiceConnectionState;
+    private String name;
 
     /*
-     * Provisioning state of the private endpoint connection.
+     * The type of the resource.
      */
-    @JsonProperty(value = "properties.provisioningState", access = JsonProperty.Access.WRITE_ONLY)
-    private PrivateEndpointConnectionProvisioningState provisioningState;
+    private String type;
+
+    /**
+     * Creates an instance of PrivateEndpointConnectionInner class.
+     */
+    public PrivateEndpointConnectionInner() {
+    }
+
+    /**
+     * Get the innerProperties property: Resource properties.
+     * 
+     * @return the innerProperties value.
+     */
+    private PrivateEndpointConnectionProperties innerProperties() {
+        return this.innerProperties;
+    }
 
     /**
      * Get the etag property: Modified whenever there is a change in the state of private endpoint connection.
-     *
+     * 
      * @return the etag value.
      */
     public String etag() {
@@ -57,7 +71,7 @@ public class PrivateEndpointConnectionInner extends Resource {
 
     /**
      * Set the etag property: Modified whenever there is a change in the state of private endpoint connection.
-     *
+     * 
      * @param etag the etag value to set.
      * @return the PrivateEndpointConnectionInner object itself.
      */
@@ -67,63 +81,47 @@ public class PrivateEndpointConnectionInner extends Resource {
     }
 
     /**
-     * Get the privateEndpoint property: Properties of the private endpoint object.
-     *
-     * @return the privateEndpoint value.
+     * Get the id property: Fully qualified resource Id for the resource.
+     * 
+     * @return the id value.
      */
-    public PrivateEndpoint privateEndpoint() {
-        return this.privateEndpoint;
+    @Override
+    public String id() {
+        return this.id;
     }
 
     /**
-     * Set the privateEndpoint property: Properties of the private endpoint object.
-     *
-     * @param privateEndpoint the privateEndpoint value to set.
-     * @return the PrivateEndpointConnectionInner object itself.
+     * Get the name property: The name of the resource.
+     * 
+     * @return the name value.
      */
-    public PrivateEndpointConnectionInner withPrivateEndpoint(PrivateEndpoint privateEndpoint) {
-        this.privateEndpoint = privateEndpoint;
-        return this;
+    @Override
+    public String name() {
+        return this.name;
     }
 
     /**
-     * Get the privateLinkServiceConnectionState property: Approval state of the private link connection.
-     *
-     * @return the privateLinkServiceConnectionState value.
+     * Get the type property: The type of the resource.
+     * 
+     * @return the type value.
      */
-    public PrivateLinkServiceConnectionState privateLinkServiceConnectionState() {
-        return this.privateLinkServiceConnectionState;
+    @Override
+    public String type() {
+        return this.type;
     }
 
     /**
-     * Set the privateLinkServiceConnectionState property: Approval state of the private link connection.
-     *
-     * @param privateLinkServiceConnectionState the privateLinkServiceConnectionState value to set.
-     * @return the PrivateEndpointConnectionInner object itself.
+     * {@inheritDoc}
      */
-    public PrivateEndpointConnectionInner withPrivateLinkServiceConnectionState(
-        PrivateLinkServiceConnectionState privateLinkServiceConnectionState) {
-        this.privateLinkServiceConnectionState = privateLinkServiceConnectionState;
-        return this;
-    }
-
-    /**
-     * Get the provisioningState property: Provisioning state of the private endpoint connection.
-     *
-     * @return the provisioningState value.
-     */
-    public PrivateEndpointConnectionProvisioningState provisioningState() {
-        return this.provisioningState;
-    }
-
-    /** {@inheritDoc} */
     @Override
     public PrivateEndpointConnectionInner withLocation(String location) {
         super.withLocation(location);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PrivateEndpointConnectionInner withTags(Map<String, String> tags) {
         super.withTags(tags);
@@ -131,16 +129,139 @@ public class PrivateEndpointConnectionInner extends Resource {
     }
 
     /**
+     * Get the privateEndpoint property: Properties of the private endpoint object.
+     * 
+     * @return the privateEndpoint value.
+     */
+    public PrivateEndpoint privateEndpoint() {
+        return this.innerProperties() == null ? null : this.innerProperties().privateEndpoint();
+    }
+
+    /**
+     * Set the privateEndpoint property: Properties of the private endpoint object.
+     * 
+     * @param privateEndpoint the privateEndpoint value to set.
+     * @return the PrivateEndpointConnectionInner object itself.
+     */
+    public PrivateEndpointConnectionInner withPrivateEndpoint(PrivateEndpoint privateEndpoint) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new PrivateEndpointConnectionProperties();
+        }
+        this.innerProperties().withPrivateEndpoint(privateEndpoint);
+        return this;
+    }
+
+    /**
+     * Get the privateLinkServiceConnectionState property: Approval state of the private link connection.
+     * 
+     * @return the privateLinkServiceConnectionState value.
+     */
+    public PrivateLinkServiceConnectionState privateLinkServiceConnectionState() {
+        return this.innerProperties() == null ? null : this.innerProperties().privateLinkServiceConnectionState();
+    }
+
+    /**
+     * Set the privateLinkServiceConnectionState property: Approval state of the private link connection.
+     * 
+     * @param privateLinkServiceConnectionState the privateLinkServiceConnectionState value to set.
+     * @return the PrivateEndpointConnectionInner object itself.
+     */
+    public PrivateEndpointConnectionInner
+        withPrivateLinkServiceConnectionState(PrivateLinkServiceConnectionState privateLinkServiceConnectionState) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new PrivateEndpointConnectionProperties();
+        }
+        this.innerProperties().withPrivateLinkServiceConnectionState(privateLinkServiceConnectionState);
+        return this;
+    }
+
+    /**
+     * Get the provisioningState property: Provisioning state of the private endpoint connection.
+     * 
+     * @return the provisioningState value.
+     */
+    public PrivateEndpointConnectionProvisioningState provisioningState() {
+        return this.innerProperties() == null ? null : this.innerProperties().provisioningState();
+    }
+
+    /**
+     * Set the provisioningState property: Provisioning state of the private endpoint connection.
+     * 
+     * @param provisioningState the provisioningState value to set.
+     * @return the PrivateEndpointConnectionInner object itself.
+     */
+    public PrivateEndpointConnectionInner
+        withProvisioningState(PrivateEndpointConnectionProvisioningState provisioningState) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new PrivateEndpointConnectionProperties();
+        }
+        this.innerProperties().withProvisioningState(provisioningState);
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
-        if (privateEndpoint() != null) {
-            privateEndpoint().validate();
+        if (innerProperties() != null) {
+            innerProperties().validate();
         }
-        if (privateLinkServiceConnectionState() != null) {
-            privateLinkServiceConnectionState().validate();
-        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeStringField("location", location());
+        jsonWriter.writeMapField("tags", tags(), (writer, element) -> writer.writeString(element));
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        jsonWriter.writeStringField("etag", this.etag);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of PrivateEndpointConnectionInner from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of PrivateEndpointConnectionInner if the JsonReader was pointing to an instance of it, or
+     * null if it was pointing to JSON null.
+     * @throws IllegalStateException If the deserialized JSON object was missing any required properties.
+     * @throws IOException If an error occurs while reading the PrivateEndpointConnectionInner.
+     */
+    public static PrivateEndpointConnectionInner fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            PrivateEndpointConnectionInner deserializedPrivateEndpointConnectionInner
+                = new PrivateEndpointConnectionInner();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("id".equals(fieldName)) {
+                    deserializedPrivateEndpointConnectionInner.id = reader.getString();
+                } else if ("name".equals(fieldName)) {
+                    deserializedPrivateEndpointConnectionInner.name = reader.getString();
+                } else if ("type".equals(fieldName)) {
+                    deserializedPrivateEndpointConnectionInner.type = reader.getString();
+                } else if ("location".equals(fieldName)) {
+                    deserializedPrivateEndpointConnectionInner.withLocation(reader.getString());
+                } else if ("tags".equals(fieldName)) {
+                    Map<String, String> tags = reader.readMap(reader1 -> reader1.getString());
+                    deserializedPrivateEndpointConnectionInner.withTags(tags);
+                } else if ("properties".equals(fieldName)) {
+                    deserializedPrivateEndpointConnectionInner.innerProperties
+                        = PrivateEndpointConnectionProperties.fromJson(reader);
+                } else if ("etag".equals(fieldName)) {
+                    deserializedPrivateEndpointConnectionInner.etag = reader.getString();
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedPrivateEndpointConnectionInner;
+        });
     }
 }

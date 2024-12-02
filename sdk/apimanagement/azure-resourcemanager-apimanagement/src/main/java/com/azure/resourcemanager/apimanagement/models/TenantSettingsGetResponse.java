@@ -21,16 +21,16 @@ public final class TenantSettingsGetResponse
      * @param value the deserialized value of the HTTP response.
      * @param headers the deserialized headers of the HTTP response.
      */
-    public TenantSettingsGetResponse(
-        HttpRequest request,
-        int statusCode,
-        HttpHeaders rawHeaders,
-        TenantSettingsContractInner value,
-        TenantSettingsGetHeaders headers) {
+    public TenantSettingsGetResponse(HttpRequest request, int statusCode, HttpHeaders rawHeaders,
+        TenantSettingsContractInner value, TenantSettingsGetHeaders headers) {
         super(request, statusCode, rawHeaders, value, headers);
     }
 
-    /** @return the deserialized response body. */
+    /**
+     * Gets the deserialized response body.
+     *
+     * @return the deserialized response body.
+     */
     @Override
     public TenantSettingsContractInner getValue() {
         return super.getValue();

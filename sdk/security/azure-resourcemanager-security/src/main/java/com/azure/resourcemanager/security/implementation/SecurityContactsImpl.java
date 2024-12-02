@@ -12,33 +12,43 @@ import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.security.fluent.SecurityContactsClient;
 import com.azure.resourcemanager.security.fluent.models.SecurityContactInner;
 import com.azure.resourcemanager.security.models.SecurityContact;
+import com.azure.resourcemanager.security.models.SecurityContactName;
 import com.azure.resourcemanager.security.models.SecurityContacts;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class SecurityContactsImpl implements SecurityContacts {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SecurityContactsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(SecurityContactsImpl.class);
 
     private final SecurityContactsClient innerClient;
 
     private final com.azure.resourcemanager.security.SecurityManager serviceManager;
 
-    public SecurityContactsImpl(
-        SecurityContactsClient innerClient, com.azure.resourcemanager.security.SecurityManager serviceManager) {
+    public SecurityContactsImpl(SecurityContactsClient innerClient,
+        com.azure.resourcemanager.security.SecurityManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
     }
 
     public PagedIterable<SecurityContact> list() {
         PagedIterable<SecurityContactInner> inner = this.serviceClient().list();
-        return Utils.mapPage(inner, inner1 -> new SecurityContactImpl(inner1, this.manager()));
+        return ResourceManagerUtils.mapPage(inner, inner1 -> new SecurityContactImpl(inner1, this.manager()));
     }
 
     public PagedIterable<SecurityContact> list(Context context) {
         PagedIterable<SecurityContactInner> inner = this.serviceClient().list(context);
-        return Utils.mapPage(inner, inner1 -> new SecurityContactImpl(inner1, this.manager()));
+        return ResourceManagerUtils.mapPage(inner, inner1 -> new SecurityContactImpl(inner1, this.manager()));
     }
 
-    public SecurityContact get(String securityContactName) {
+    public Response<SecurityContact> getWithResponse(SecurityContactName securityContactName, Context context) {
+        Response<SecurityContactInner> inner = this.serviceClient().getWithResponse(securityContactName, context);
+        if (inner != null) {
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
+                new SecurityContactImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
+    }
+
+    public SecurityContact get(SecurityContactName securityContactName) {
         SecurityContactInner inner = this.serviceClient().get(securityContactName);
         if (inner != null) {
             return new SecurityContactImpl(inner, this.manager());
@@ -47,76 +57,51 @@ public final class SecurityContactsImpl implements SecurityContacts {
         }
     }
 
-    public Response<SecurityContact> getWithResponse(String securityContactName, Context context) {
-        Response<SecurityContactInner> inner = this.serviceClient().getWithResponse(securityContactName, context);
-        if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
-                new SecurityContactImpl(inner.getValue(), this.manager()));
-        } else {
-            return null;
-        }
-    }
-
-    public void delete(String securityContactName) {
-        this.serviceClient().delete(securityContactName);
-    }
-
-    public Response<Void> deleteWithResponse(String securityContactName, Context context) {
+    public Response<Void> deleteWithResponse(SecurityContactName securityContactName, Context context) {
         return this.serviceClient().deleteWithResponse(securityContactName, context);
     }
 
+    public void delete(SecurityContactName securityContactName) {
+        this.serviceClient().delete(securityContactName);
+    }
+
     public SecurityContact getById(String id) {
-        String securityContactName = Utils.getValueFromIdByName(id, "securityContacts");
-        if (securityContactName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format(
-                                "The resource ID '%s' is not valid. Missing path segment 'securityContacts'.", id)));
+        String securityContactNameLocal = ResourceManagerUtils.getValueFromIdByName(id, "securityContacts");
+        if (securityContactNameLocal == null) {
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'securityContacts'.", id)));
         }
+        SecurityContactName securityContactName = SecurityContactName.fromString(securityContactNameLocal);
         return this.getWithResponse(securityContactName, Context.NONE).getValue();
     }
 
     public Response<SecurityContact> getByIdWithResponse(String id, Context context) {
-        String securityContactName = Utils.getValueFromIdByName(id, "securityContacts");
-        if (securityContactName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format(
-                                "The resource ID '%s' is not valid. Missing path segment 'securityContacts'.", id)));
+        String securityContactNameLocal = ResourceManagerUtils.getValueFromIdByName(id, "securityContacts");
+        if (securityContactNameLocal == null) {
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'securityContacts'.", id)));
         }
+        SecurityContactName securityContactName = SecurityContactName.fromString(securityContactNameLocal);
         return this.getWithResponse(securityContactName, context);
     }
 
     public void deleteById(String id) {
-        String securityContactName = Utils.getValueFromIdByName(id, "securityContacts");
-        if (securityContactName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format(
-                                "The resource ID '%s' is not valid. Missing path segment 'securityContacts'.", id)));
+        String securityContactNameLocal = ResourceManagerUtils.getValueFromIdByName(id, "securityContacts");
+        if (securityContactNameLocal == null) {
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'securityContacts'.", id)));
         }
-        this.deleteWithResponse(securityContactName, Context.NONE).getValue();
+        SecurityContactName securityContactName = SecurityContactName.fromString(securityContactNameLocal);
+        this.deleteWithResponse(securityContactName, Context.NONE);
     }
 
     public Response<Void> deleteByIdWithResponse(String id, Context context) {
-        String securityContactName = Utils.getValueFromIdByName(id, "securityContacts");
-        if (securityContactName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format(
-                                "The resource ID '%s' is not valid. Missing path segment 'securityContacts'.", id)));
+        String securityContactNameLocal = ResourceManagerUtils.getValueFromIdByName(id, "securityContacts");
+        if (securityContactNameLocal == null) {
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'securityContacts'.", id)));
         }
+        SecurityContactName securityContactName = SecurityContactName.fromString(securityContactNameLocal);
         return this.deleteWithResponse(securityContactName, context);
     }
 
@@ -128,7 +113,7 @@ public final class SecurityContactsImpl implements SecurityContacts {
         return this.serviceManager;
     }
 
-    public SecurityContactImpl define(String name) {
+    public SecurityContactImpl define(SecurityContactName name) {
         return new SecurityContactImpl(name, this.manager());
     }
 }

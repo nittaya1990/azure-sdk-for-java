@@ -13,14 +13,18 @@ public final class OperationImpl implements Operation {
 
     private final com.azure.resourcemanager.streamanalytics.StreamAnalyticsManager serviceManager;
 
-    OperationImpl(
-        OperationInner innerObject, com.azure.resourcemanager.streamanalytics.StreamAnalyticsManager serviceManager) {
+    OperationImpl(OperationInner innerObject,
+        com.azure.resourcemanager.streamanalytics.StreamAnalyticsManager serviceManager) {
         this.innerObject = innerObject;
         this.serviceManager = serviceManager;
     }
 
     public String name() {
         return this.innerModel().name();
+    }
+
+    public Boolean isDataAction() {
+        return this.innerModel().isDataAction();
     }
 
     public OperationDisplay display() {

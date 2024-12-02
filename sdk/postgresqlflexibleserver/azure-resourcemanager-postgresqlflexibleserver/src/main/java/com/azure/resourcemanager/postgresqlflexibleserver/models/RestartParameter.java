@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.postgresqlflexibleserver.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Represents server restart parameters. */
+/**
+ * Represents server restart parameters.
+ */
 @Fluent
 public final class RestartParameter {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RestartParameter.class);
-
     /*
      * Indicates whether to restart the server with failover.
      */
@@ -27,8 +25,14 @@ public final class RestartParameter {
     private FailoverMode failoverMode;
 
     /**
+     * Creates an instance of RestartParameter class.
+     */
+    public RestartParameter() {
+    }
+
+    /**
      * Get the restartWithFailover property: Indicates whether to restart the server with failover.
-     *
+     * 
      * @return the restartWithFailover value.
      */
     public Boolean restartWithFailover() {
@@ -37,7 +41,7 @@ public final class RestartParameter {
 
     /**
      * Set the restartWithFailover property: Indicates whether to restart the server with failover.
-     *
+     * 
      * @param restartWithFailover the restartWithFailover value to set.
      * @return the RestartParameter object itself.
      */
@@ -48,7 +52,7 @@ public final class RestartParameter {
 
     /**
      * Get the failoverMode property: Failover mode.
-     *
+     * 
      * @return the failoverMode value.
      */
     public FailoverMode failoverMode() {
@@ -57,7 +61,7 @@ public final class RestartParameter {
 
     /**
      * Set the failoverMode property: Failover mode.
-     *
+     * 
      * @param failoverMode the failoverMode value to set.
      * @return the RestartParameter object itself.
      */
@@ -68,7 +72,7 @@ public final class RestartParameter {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

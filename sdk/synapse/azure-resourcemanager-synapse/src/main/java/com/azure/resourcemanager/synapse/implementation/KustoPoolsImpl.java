@@ -27,29 +27,40 @@ import com.azure.resourcemanager.synapse.models.KustoPools;
 import com.azure.resourcemanager.synapse.models.LanguageExtension;
 import com.azure.resourcemanager.synapse.models.LanguageExtensionsList;
 import com.azure.resourcemanager.synapse.models.SkuDescription;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class KustoPoolsImpl implements KustoPools {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(KustoPoolsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(KustoPoolsImpl.class);
 
     private final KustoPoolsClient innerClient;
 
     private final com.azure.resourcemanager.synapse.SynapseManager serviceManager;
 
-    public KustoPoolsImpl(
-        KustoPoolsClient innerClient, com.azure.resourcemanager.synapse.SynapseManager serviceManager) {
+    public KustoPoolsImpl(KustoPoolsClient innerClient,
+        com.azure.resourcemanager.synapse.SynapseManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
     }
 
     public PagedIterable<SkuDescription> list() {
         PagedIterable<SkuDescriptionInner> inner = this.serviceClient().list();
-        return Utils.mapPage(inner, inner1 -> new SkuDescriptionImpl(inner1, this.manager()));
+        return ResourceManagerUtils.mapPage(inner, inner1 -> new SkuDescriptionImpl(inner1, this.manager()));
     }
 
     public PagedIterable<SkuDescription> list(Context context) {
         PagedIterable<SkuDescriptionInner> inner = this.serviceClient().list(context);
-        return Utils.mapPage(inner, inner1 -> new SkuDescriptionImpl(inner1, this.manager()));
+        return ResourceManagerUtils.mapPage(inner, inner1 -> new SkuDescriptionImpl(inner1, this.manager()));
+    }
+
+    public Response<CheckNameResult> checkNameAvailabilityWithResponse(String location,
+        KustoPoolCheckNameRequest kustoPoolName, Context context) {
+        Response<CheckNameResultInner> inner
+            = this.serviceClient().checkNameAvailabilityWithResponse(location, kustoPoolName, context);
+        if (inner != null) {
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
+                new CheckNameResultImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
     }
 
     public CheckNameResult checkNameAvailability(String location, KustoPoolCheckNameRequest kustoPoolName) {
@@ -61,16 +72,13 @@ public final class KustoPoolsImpl implements KustoPools {
         }
     }
 
-    public Response<CheckNameResult> checkNameAvailabilityWithResponse(
-        String location, KustoPoolCheckNameRequest kustoPoolName, Context context) {
-        Response<CheckNameResultInner> inner =
-            this.serviceClient().checkNameAvailabilityWithResponse(location, kustoPoolName, context);
+    public Response<KustoPoolListResult> listByWorkspaceWithResponse(String resourceGroupName, String workspaceName,
+        Context context) {
+        Response<KustoPoolListResultInner> inner
+            = this.serviceClient().listByWorkspaceWithResponse(resourceGroupName, workspaceName, context);
         if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
-                new CheckNameResultImpl(inner.getValue(), this.manager()));
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
+                new KustoPoolListResultImpl(inner.getValue(), this.manager()));
         } else {
             return null;
         }
@@ -85,16 +93,13 @@ public final class KustoPoolsImpl implements KustoPools {
         }
     }
 
-    public Response<KustoPoolListResult> listByWorkspaceWithResponse(
-        String resourceGroupName, String workspaceName, Context context) {
-        Response<KustoPoolListResultInner> inner =
-            this.serviceClient().listByWorkspaceWithResponse(resourceGroupName, workspaceName, context);
+    public Response<KustoPool> getWithResponse(String workspaceName, String kustoPoolName, String resourceGroupName,
+        Context context) {
+        Response<KustoPoolInner> inner
+            = this.serviceClient().getWithResponse(workspaceName, kustoPoolName, resourceGroupName, context);
         if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
-                new KustoPoolListResultImpl(inner.getValue(), this.manager()));
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
+                new KustoPoolImpl(inner.getValue(), this.manager()));
         } else {
             return null;
         }
@@ -104,21 +109,6 @@ public final class KustoPoolsImpl implements KustoPools {
         KustoPoolInner inner = this.serviceClient().get(workspaceName, kustoPoolName, resourceGroupName);
         if (inner != null) {
             return new KustoPoolImpl(inner, this.manager());
-        } else {
-            return null;
-        }
-    }
-
-    public Response<KustoPool> getWithResponse(
-        String workspaceName, String kustoPoolName, String resourceGroupName, Context context) {
-        Response<KustoPoolInner> inner =
-            this.serviceClient().getWithResponse(workspaceName, kustoPoolName, resourceGroupName, context);
-        if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
-                new KustoPoolImpl(inner.getValue(), this.manager()));
         } else {
             return null;
         }
@@ -148,213 +138,160 @@ public final class KustoPoolsImpl implements KustoPools {
         this.serviceClient().start(workspaceName, kustoPoolName, resourceGroupName, context);
     }
 
-    public PagedIterable<AzureResourceSku> listSkusByResource(
-        String workspaceName, String kustoPoolName, String resourceGroupName) {
-        PagedIterable<AzureResourceSkuInner> inner =
-            this.serviceClient().listSkusByResource(workspaceName, kustoPoolName, resourceGroupName);
-        return Utils.mapPage(inner, inner1 -> new AzureResourceSkuImpl(inner1, this.manager()));
+    public PagedIterable<AzureResourceSku> listSkusByResource(String workspaceName, String kustoPoolName,
+        String resourceGroupName) {
+        PagedIterable<AzureResourceSkuInner> inner
+            = this.serviceClient().listSkusByResource(workspaceName, kustoPoolName, resourceGroupName);
+        return ResourceManagerUtils.mapPage(inner, inner1 -> new AzureResourceSkuImpl(inner1, this.manager()));
     }
 
-    public PagedIterable<AzureResourceSku> listSkusByResource(
-        String workspaceName, String kustoPoolName, String resourceGroupName, Context context) {
-        PagedIterable<AzureResourceSkuInner> inner =
-            this.serviceClient().listSkusByResource(workspaceName, kustoPoolName, resourceGroupName, context);
-        return Utils.mapPage(inner, inner1 -> new AzureResourceSkuImpl(inner1, this.manager()));
+    public PagedIterable<AzureResourceSku> listSkusByResource(String workspaceName, String kustoPoolName,
+        String resourceGroupName, Context context) {
+        PagedIterable<AzureResourceSkuInner> inner
+            = this.serviceClient().listSkusByResource(workspaceName, kustoPoolName, resourceGroupName, context);
+        return ResourceManagerUtils.mapPage(inner, inner1 -> new AzureResourceSkuImpl(inner1, this.manager()));
     }
 
-    public PagedIterable<LanguageExtension> listLanguageExtensions(
-        String workspaceName, String kustoPoolName, String resourceGroupName) {
-        PagedIterable<LanguageExtensionInner> inner =
-            this.serviceClient().listLanguageExtensions(workspaceName, kustoPoolName, resourceGroupName);
-        return Utils.mapPage(inner, inner1 -> new LanguageExtensionImpl(inner1, this.manager()));
+    public PagedIterable<LanguageExtension> listLanguageExtensions(String workspaceName, String kustoPoolName,
+        String resourceGroupName) {
+        PagedIterable<LanguageExtensionInner> inner
+            = this.serviceClient().listLanguageExtensions(workspaceName, kustoPoolName, resourceGroupName);
+        return ResourceManagerUtils.mapPage(inner, inner1 -> new LanguageExtensionImpl(inner1, this.manager()));
     }
 
-    public PagedIterable<LanguageExtension> listLanguageExtensions(
-        String workspaceName, String kustoPoolName, String resourceGroupName, Context context) {
-        PagedIterable<LanguageExtensionInner> inner =
-            this.serviceClient().listLanguageExtensions(workspaceName, kustoPoolName, resourceGroupName, context);
-        return Utils.mapPage(inner, inner1 -> new LanguageExtensionImpl(inner1, this.manager()));
+    public PagedIterable<LanguageExtension> listLanguageExtensions(String workspaceName, String kustoPoolName,
+        String resourceGroupName, Context context) {
+        PagedIterable<LanguageExtensionInner> inner
+            = this.serviceClient().listLanguageExtensions(workspaceName, kustoPoolName, resourceGroupName, context);
+        return ResourceManagerUtils.mapPage(inner, inner1 -> new LanguageExtensionImpl(inner1, this.manager()));
     }
 
-    public void addLanguageExtensions(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
+    public void addLanguageExtensions(String workspaceName, String kustoPoolName, String resourceGroupName,
         LanguageExtensionsList languageExtensionsToAdd) {
-        this
-            .serviceClient()
+        this.serviceClient()
             .addLanguageExtensions(workspaceName, kustoPoolName, resourceGroupName, languageExtensionsToAdd);
     }
 
-    public void addLanguageExtensions(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        LanguageExtensionsList languageExtensionsToAdd,
-        Context context) {
-        this
-            .serviceClient()
+    public void addLanguageExtensions(String workspaceName, String kustoPoolName, String resourceGroupName,
+        LanguageExtensionsList languageExtensionsToAdd, Context context) {
+        this.serviceClient()
             .addLanguageExtensions(workspaceName, kustoPoolName, resourceGroupName, languageExtensionsToAdd, context);
     }
 
-    public void removeLanguageExtensions(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
+    public void removeLanguageExtensions(String workspaceName, String kustoPoolName, String resourceGroupName,
         LanguageExtensionsList languageExtensionsToRemove) {
-        this
-            .serviceClient()
+        this.serviceClient()
             .removeLanguageExtensions(workspaceName, kustoPoolName, resourceGroupName, languageExtensionsToRemove);
     }
 
-    public void removeLanguageExtensions(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        LanguageExtensionsList languageExtensionsToRemove,
-        Context context) {
-        this
-            .serviceClient()
-            .removeLanguageExtensions(
-                workspaceName, kustoPoolName, resourceGroupName, languageExtensionsToRemove, context);
+    public void removeLanguageExtensions(String workspaceName, String kustoPoolName, String resourceGroupName,
+        LanguageExtensionsList languageExtensionsToRemove, Context context) {
+        this.serviceClient()
+            .removeLanguageExtensions(workspaceName, kustoPoolName, resourceGroupName, languageExtensionsToRemove,
+                context);
     }
 
-    public PagedIterable<FollowerDatabaseDefinition> listFollowerDatabases(
-        String workspaceName, String kustoPoolName, String resourceGroupName) {
-        PagedIterable<FollowerDatabaseDefinitionInner> inner =
-            this.serviceClient().listFollowerDatabases(workspaceName, kustoPoolName, resourceGroupName);
-        return Utils.mapPage(inner, inner1 -> new FollowerDatabaseDefinitionImpl(inner1, this.manager()));
+    public PagedIterable<FollowerDatabaseDefinition> listFollowerDatabases(String workspaceName, String kustoPoolName,
+        String resourceGroupName) {
+        PagedIterable<FollowerDatabaseDefinitionInner> inner
+            = this.serviceClient().listFollowerDatabases(workspaceName, kustoPoolName, resourceGroupName);
+        return ResourceManagerUtils.mapPage(inner,
+            inner1 -> new FollowerDatabaseDefinitionImpl(inner1, this.manager()));
     }
 
-    public PagedIterable<FollowerDatabaseDefinition> listFollowerDatabases(
-        String workspaceName, String kustoPoolName, String resourceGroupName, Context context) {
-        PagedIterable<FollowerDatabaseDefinitionInner> inner =
-            this.serviceClient().listFollowerDatabases(workspaceName, kustoPoolName, resourceGroupName, context);
-        return Utils.mapPage(inner, inner1 -> new FollowerDatabaseDefinitionImpl(inner1, this.manager()));
+    public PagedIterable<FollowerDatabaseDefinition> listFollowerDatabases(String workspaceName, String kustoPoolName,
+        String resourceGroupName, Context context) {
+        PagedIterable<FollowerDatabaseDefinitionInner> inner
+            = this.serviceClient().listFollowerDatabases(workspaceName, kustoPoolName, resourceGroupName, context);
+        return ResourceManagerUtils.mapPage(inner,
+            inner1 -> new FollowerDatabaseDefinitionImpl(inner1, this.manager()));
     }
 
-    public void detachFollowerDatabases(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
+    public void detachFollowerDatabases(String workspaceName, String kustoPoolName, String resourceGroupName,
         FollowerDatabaseDefinitionInner followerDatabaseToRemove) {
-        this
-            .serviceClient()
+        this.serviceClient()
             .detachFollowerDatabases(workspaceName, kustoPoolName, resourceGroupName, followerDatabaseToRemove);
     }
 
-    public void detachFollowerDatabases(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        FollowerDatabaseDefinitionInner followerDatabaseToRemove,
-        Context context) {
-        this
-            .serviceClient()
-            .detachFollowerDatabases(
-                workspaceName, kustoPoolName, resourceGroupName, followerDatabaseToRemove, context);
+    public void detachFollowerDatabases(String workspaceName, String kustoPoolName, String resourceGroupName,
+        FollowerDatabaseDefinitionInner followerDatabaseToRemove, Context context) {
+        this.serviceClient()
+            .detachFollowerDatabases(workspaceName, kustoPoolName, resourceGroupName, followerDatabaseToRemove,
+                context);
     }
 
     public KustoPool getById(String id) {
-        String workspaceName = Utils.getValueFromIdByName(id, "workspaces");
+        String workspaceName = ResourceManagerUtils.getValueFromIdByName(id, "workspaces");
         if (workspaceName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'workspaces'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'workspaces'.", id)));
         }
-        String kustoPoolName = Utils.getValueFromIdByName(id, "kustoPools");
+        String kustoPoolName = ResourceManagerUtils.getValueFromIdByName(id, "kustoPools");
         if (kustoPoolName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'kustoPools'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'kustoPools'.", id)));
         }
-        String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
+        String resourceGroupName = ResourceManagerUtils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
         return this.getWithResponse(workspaceName, kustoPoolName, resourceGroupName, Context.NONE).getValue();
     }
 
     public Response<KustoPool> getByIdWithResponse(String id, Context context) {
-        String workspaceName = Utils.getValueFromIdByName(id, "workspaces");
+        String workspaceName = ResourceManagerUtils.getValueFromIdByName(id, "workspaces");
         if (workspaceName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'workspaces'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'workspaces'.", id)));
         }
-        String kustoPoolName = Utils.getValueFromIdByName(id, "kustoPools");
+        String kustoPoolName = ResourceManagerUtils.getValueFromIdByName(id, "kustoPools");
         if (kustoPoolName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'kustoPools'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'kustoPools'.", id)));
         }
-        String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
+        String resourceGroupName = ResourceManagerUtils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
         return this.getWithResponse(workspaceName, kustoPoolName, resourceGroupName, context);
     }
 
     public void deleteById(String id) {
-        String workspaceName = Utils.getValueFromIdByName(id, "workspaces");
+        String workspaceName = ResourceManagerUtils.getValueFromIdByName(id, "workspaces");
         if (workspaceName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'workspaces'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'workspaces'.", id)));
         }
-        String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
+        String resourceGroupName = ResourceManagerUtils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
-        String kustoPoolName = Utils.getValueFromIdByName(id, "kustoPools");
+        String kustoPoolName = ResourceManagerUtils.getValueFromIdByName(id, "kustoPools");
         if (kustoPoolName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'kustoPools'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'kustoPools'.", id)));
         }
         this.delete(workspaceName, resourceGroupName, kustoPoolName, Context.NONE);
     }
 
     public void deleteByIdWithResponse(String id, Context context) {
-        String workspaceName = Utils.getValueFromIdByName(id, "workspaces");
+        String workspaceName = ResourceManagerUtils.getValueFromIdByName(id, "workspaces");
         if (workspaceName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'workspaces'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'workspaces'.", id)));
         }
-        String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
+        String resourceGroupName = ResourceManagerUtils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
-        String kustoPoolName = Utils.getValueFromIdByName(id, "kustoPools");
+        String kustoPoolName = ResourceManagerUtils.getValueFromIdByName(id, "kustoPools");
         if (kustoPoolName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'kustoPools'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'kustoPools'.", id)));
         }
         this.delete(workspaceName, resourceGroupName, kustoPoolName, context);
     }

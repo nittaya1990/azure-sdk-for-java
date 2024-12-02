@@ -8,20 +8,37 @@ import com.azure.core.util.ExpandableStringEnum;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.Collection;
 
-/** Defines values for ManagedRuleSetActionType. */
+/**
+ * Defines the action to take when a managed rule set score threshold is met.
+ */
 public final class ManagedRuleSetActionType extends ExpandableStringEnum<ManagedRuleSetActionType> {
-    /** Static value Block for ManagedRuleSetActionType. */
+    /**
+     * Static value Block for ManagedRuleSetActionType.
+     */
     public static final ManagedRuleSetActionType BLOCK = fromString("Block");
 
-    /** Static value Log for ManagedRuleSetActionType. */
+    /**
+     * Static value Log for ManagedRuleSetActionType.
+     */
     public static final ManagedRuleSetActionType LOG = fromString("Log");
 
-    /** Static value Redirect for ManagedRuleSetActionType. */
+    /**
+     * Static value Redirect for ManagedRuleSetActionType.
+     */
     public static final ManagedRuleSetActionType REDIRECT = fromString("Redirect");
 
     /**
+     * Creates a new instance of ManagedRuleSetActionType value.
+     * 
+     * @deprecated Use the {@link #fromString(String)} factory method.
+     */
+    @Deprecated
+    public ManagedRuleSetActionType() {
+    }
+
+    /**
      * Creates or finds a ManagedRuleSetActionType from its string representation.
-     *
+     * 
      * @param name a name to look for.
      * @return the corresponding ManagedRuleSetActionType.
      */
@@ -30,7 +47,11 @@ public final class ManagedRuleSetActionType extends ExpandableStringEnum<Managed
         return fromString(name, ManagedRuleSetActionType.class);
     }
 
-    /** @return known ManagedRuleSetActionType values. */
+    /**
+     * Gets known ManagedRuleSetActionType values.
+     * 
+     * @return known ManagedRuleSetActionType values.
+     */
     public static Collection<ManagedRuleSetActionType> values() {
         return values(ManagedRuleSetActionType.class);
     }

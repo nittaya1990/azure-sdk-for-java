@@ -38,11 +38,11 @@ public interface WaitStatisticsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return represents a Wait Statistic.
+     * @return represents a Wait Statistic along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<WaitStatisticInner> getWithResponse(
-        String resourceGroupName, String serverName, String waitStatisticsId, Context context);
+    Response<WaitStatisticInner> getWithResponse(String resourceGroupName, String serverName, String waitStatisticsId,
+        Context context);
 
     /**
      * Retrieve wait statistics for specified aggregation window.
@@ -56,8 +56,8 @@ public interface WaitStatisticsClient {
      * @return a list of wait statistics.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<WaitStatisticInner> listByServer(
-        String resourceGroupName, String serverName, WaitStatisticsInput parameters);
+    PagedIterable<WaitStatisticInner> listByServer(String resourceGroupName, String serverName,
+        WaitStatisticsInput parameters);
 
     /**
      * Retrieve wait statistics for specified aggregation window.
@@ -72,6 +72,6 @@ public interface WaitStatisticsClient {
      * @return a list of wait statistics.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<WaitStatisticInner> listByServer(
-        String resourceGroupName, String serverName, WaitStatisticsInput parameters, Context context);
+    PagedIterable<WaitStatisticInner> listByServer(String resourceGroupName, String serverName,
+        WaitStatisticsInput parameters, Context context);
 }

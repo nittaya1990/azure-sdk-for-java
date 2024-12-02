@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The benchmark references. */
+/**
+ * The benchmark references.
+ */
 @Fluent
 public final class BenchmarkReference {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(BenchmarkReference.class);
-
     /*
      * The benchmark name.
      */
@@ -27,8 +25,14 @@ public final class BenchmarkReference {
     private String reference;
 
     /**
+     * Creates an instance of BenchmarkReference class.
+     */
+    public BenchmarkReference() {
+    }
+
+    /**
      * Get the benchmark property: The benchmark name.
-     *
+     * 
      * @return the benchmark value.
      */
     public String benchmark() {
@@ -37,7 +41,7 @@ public final class BenchmarkReference {
 
     /**
      * Set the benchmark property: The benchmark name.
-     *
+     * 
      * @param benchmark the benchmark value to set.
      * @return the BenchmarkReference object itself.
      */
@@ -48,7 +52,7 @@ public final class BenchmarkReference {
 
     /**
      * Get the reference property: The benchmark reference.
-     *
+     * 
      * @return the reference value.
      */
     public String reference() {
@@ -57,7 +61,7 @@ public final class BenchmarkReference {
 
     /**
      * Set the reference property: The benchmark reference.
-     *
+     * 
      * @param reference the reference value to set.
      * @return the BenchmarkReference object itself.
      */
@@ -68,7 +72,7 @@ public final class BenchmarkReference {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

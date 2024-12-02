@@ -6,14 +6,11 @@ package com.azure.resourcemanager.iothub.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Input for testing route. */
 @Fluent
 public final class TestRouteInput {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TestRouteInput.class);
-
     /*
      * Routing message
      */
@@ -31,6 +28,10 @@ public final class TestRouteInput {
      */
     @JsonProperty(value = "twin")
     private RoutingTwin twin;
+
+    /** Creates an instance of TestRouteInput class. */
+    public TestRouteInput() {
+    }
 
     /**
      * Get the message property: Routing message.
@@ -102,9 +103,8 @@ public final class TestRouteInput {
             message().validate();
         }
         if (route() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property route in model TestRouteInput"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property route in model TestRouteInput"));
         } else {
             route().validate();
         }
@@ -112,4 +112,6 @@ public final class TestRouteInput {
             twin().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(TestRouteInput.class);
 }

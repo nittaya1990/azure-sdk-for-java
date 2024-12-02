@@ -11,17 +11,16 @@ import com.azure.resourcemanager.resourcegraph.fluent.OperationsClient;
 import com.azure.resourcemanager.resourcegraph.fluent.models.OperationInner;
 import com.azure.resourcemanager.resourcegraph.models.Operation;
 import com.azure.resourcemanager.resourcegraph.models.Operations;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class OperationsImpl implements Operations {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OperationsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(OperationsImpl.class);
 
     private final OperationsClient innerClient;
 
     private final com.azure.resourcemanager.resourcegraph.ResourceGraphManager serviceManager;
 
-    public OperationsImpl(
-        OperationsClient innerClient, com.azure.resourcemanager.resourcegraph.ResourceGraphManager serviceManager) {
+    public OperationsImpl(OperationsClient innerClient,
+        com.azure.resourcemanager.resourcegraph.ResourceGraphManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
     }

@@ -12,19 +12,7 @@ public interface UserConfirmationPasswords {
     /**
      * Sends confirmation.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param userId User identifier. Must be unique in the current API Management service instance.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     */
-    void send(String resourceGroupName, String serviceName, String userId);
-
-    /**
-     * Sends confirmation.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param appType Determines the type of application which send the create user request. Default is legacy publisher
@@ -33,8 +21,20 @@ public interface UserConfirmationPasswords {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
-    Response<Void> sendWithResponse(
-        String resourceGroupName, String serviceName, String userId, AppType appType, Context context);
+    Response<Void> sendWithResponse(String resourceGroupName, String serviceName, String userId, AppType appType,
+        Context context);
+
+    /**
+     * Sends confirmation.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param userId User identifier. Must be unique in the current API Management service instance.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     */
+    void send(String resourceGroupName, String serviceName, String userId);
 }

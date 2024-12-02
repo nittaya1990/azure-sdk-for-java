@@ -6,20 +6,20 @@ package com.azure.resourcemanager.applicationinsights.models;
 
 import com.azure.core.annotation.Immutable;
 import com.azure.core.management.exception.ManagementError;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Error response. */
 @Immutable
 public final class ErrorDefinition extends ManagementError {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ErrorDefinition.class);
-
     /*
      * Internal error details.
      */
     @JsonProperty(value = "innererror", access = JsonProperty.Access.WRITE_ONLY)
     private Object innererror;
+
+    /** Creates an instance of ErrorDefinition class. */
+    public ErrorDefinition() {
+    }
 
     /**
      * Get the innererror property: Internal error details.

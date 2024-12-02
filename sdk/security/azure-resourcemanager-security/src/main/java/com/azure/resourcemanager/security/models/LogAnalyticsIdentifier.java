@@ -5,18 +5,24 @@
 package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** Represents a Log Analytics workspace scope identifier. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+/**
+ * Represents a Log Analytics workspace scope identifier.
+ */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = LogAnalyticsIdentifier.class, visible = true)
 @JsonTypeName("LogAnalytics")
 @Immutable
 public final class LogAnalyticsIdentifier extends ResourceIdentifier {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(LogAnalyticsIdentifier.class);
+    /*
+     * There can be multiple identifiers of different type per alert, this field specify the identifier type.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private ResourceIdentifierType type = ResourceIdentifierType.LOG_ANALYTICS;
 
     /*
      * The LogAnalytics workspace id that stores this alert.
@@ -25,29 +31,43 @@ public final class LogAnalyticsIdentifier extends ResourceIdentifier {
     private String workspaceId;
 
     /*
-     * The azure subscription id for the LogAnalytics workspace storing this
-     * alert.
+     * The azure subscription id for the LogAnalytics workspace storing this alert.
      */
     @JsonProperty(value = "workspaceSubscriptionId", access = JsonProperty.Access.WRITE_ONLY)
     private String workspaceSubscriptionId;
 
     /*
-     * The azure resource group for the LogAnalytics workspace storing this
-     * alert
+     * The azure resource group for the LogAnalytics workspace storing this alert
      */
     @JsonProperty(value = "workspaceResourceGroup", access = JsonProperty.Access.WRITE_ONLY)
     private String workspaceResourceGroup;
 
     /*
-     * (optional) The LogAnalytics agent id reporting the event that this alert
-     * is based on.
+     * (optional) The LogAnalytics agent id reporting the event that this alert is based on.
      */
     @JsonProperty(value = "agentId", access = JsonProperty.Access.WRITE_ONLY)
     private String agentId;
 
     /**
+     * Creates an instance of LogAnalyticsIdentifier class.
+     */
+    public LogAnalyticsIdentifier() {
+    }
+
+    /**
+     * Get the type property: There can be multiple identifiers of different type per alert, this field specify the
+     * identifier type.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public ResourceIdentifierType type() {
+        return this.type;
+    }
+
+    /**
      * Get the workspaceId property: The LogAnalytics workspace id that stores this alert.
-     *
+     * 
      * @return the workspaceId value.
      */
     public String workspaceId() {
@@ -57,7 +77,7 @@ public final class LogAnalyticsIdentifier extends ResourceIdentifier {
     /**
      * Get the workspaceSubscriptionId property: The azure subscription id for the LogAnalytics workspace storing this
      * alert.
-     *
+     * 
      * @return the workspaceSubscriptionId value.
      */
     public String workspaceSubscriptionId() {
@@ -67,7 +87,7 @@ public final class LogAnalyticsIdentifier extends ResourceIdentifier {
     /**
      * Get the workspaceResourceGroup property: The azure resource group for the LogAnalytics workspace storing this
      * alert.
-     *
+     * 
      * @return the workspaceResourceGroup value.
      */
     public String workspaceResourceGroup() {
@@ -76,7 +96,7 @@ public final class LogAnalyticsIdentifier extends ResourceIdentifier {
 
     /**
      * Get the agentId property: (optional) The LogAnalytics agent id reporting the event that this alert is based on.
-     *
+     * 
      * @return the agentId value.
      */
     public String agentId() {
@@ -85,7 +105,7 @@ public final class LogAnalyticsIdentifier extends ResourceIdentifier {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

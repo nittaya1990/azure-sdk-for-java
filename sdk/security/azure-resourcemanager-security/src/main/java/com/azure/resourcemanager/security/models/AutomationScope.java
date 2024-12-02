@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** A single automation scope. */
+/**
+ * A single automation scope.
+ */
 @Fluent
 public final class AutomationScope {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AutomationScope.class);
-
     /*
      * The resources scope description.
      */
@@ -21,16 +19,20 @@ public final class AutomationScope {
     private String description;
 
     /*
-     * The resources scope path. Can be the subscription on which the
-     * automation is defined on or a resource group under that subscription
-     * (fully qualified Azure resource IDs).
+     * The resources scope path. Can be the subscription on which the automation is defined on or a resource group under that subscription (fully qualified Azure resource IDs).
      */
     @JsonProperty(value = "scopePath")
     private String scopePath;
 
     /**
+     * Creates an instance of AutomationScope class.
+     */
+    public AutomationScope() {
+    }
+
+    /**
      * Get the description property: The resources scope description.
-     *
+     * 
      * @return the description value.
      */
     public String description() {
@@ -39,7 +41,7 @@ public final class AutomationScope {
 
     /**
      * Set the description property: The resources scope description.
-     *
+     * 
      * @param description the description value to set.
      * @return the AutomationScope object itself.
      */
@@ -51,7 +53,7 @@ public final class AutomationScope {
     /**
      * Get the scopePath property: The resources scope path. Can be the subscription on which the automation is defined
      * on or a resource group under that subscription (fully qualified Azure resource IDs).
-     *
+     * 
      * @return the scopePath value.
      */
     public String scopePath() {
@@ -61,7 +63,7 @@ public final class AutomationScope {
     /**
      * Set the scopePath property: The resources scope path. Can be the subscription on which the automation is defined
      * on or a resource group under that subscription (fully qualified Azure resource IDs).
-     *
+     * 
      * @param scopePath the scopePath value to set.
      * @return the AutomationScope object itself.
      */
@@ -72,7 +74,7 @@ public final class AutomationScope {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

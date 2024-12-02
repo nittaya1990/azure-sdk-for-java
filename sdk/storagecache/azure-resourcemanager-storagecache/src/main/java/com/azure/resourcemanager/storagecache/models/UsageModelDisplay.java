@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.storagecache.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Localized information describing this usage model. */
+/**
+ * Localized information describing this usage model.
+ */
 @Fluent
 public final class UsageModelDisplay {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(UsageModelDisplay.class);
-
     /*
      * String to display for this usage model.
      */
@@ -21,8 +19,14 @@ public final class UsageModelDisplay {
     private String description;
 
     /**
+     * Creates an instance of UsageModelDisplay class.
+     */
+    public UsageModelDisplay() {
+    }
+
+    /**
      * Get the description property: String to display for this usage model.
-     *
+     * 
      * @return the description value.
      */
     public String description() {
@@ -31,7 +35,7 @@ public final class UsageModelDisplay {
 
     /**
      * Set the description property: String to display for this usage model.
-     *
+     * 
      * @param description the description value to set.
      * @return the UsageModelDisplay object itself.
      */
@@ -42,7 +46,7 @@ public final class UsageModelDisplay {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

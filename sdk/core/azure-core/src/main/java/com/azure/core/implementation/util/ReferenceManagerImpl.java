@@ -3,16 +3,16 @@
 
 package com.azure.core.implementation.util;
 
+import com.azure.core.implementation.ReflectiveInvoker;
+import com.azure.core.implementation.ReflectionUtils;
 import com.azure.core.util.ReferenceManager;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.core.util.logging.LogLevel;
 
-import java.lang.ref.PhantomReference;
 import java.lang.ref.ReferenceQueue;
 import java.util.Objects;
+import java.util.concurrent.ThreadFactory;
 
-// This is the base implementation of ReferenceManager, there is another Java 9 specific implementation in
-// /src/main/java9 for multi-release JARs.
 /**
  * Implementation of {@link ReferenceManager}.
  */
@@ -26,6 +26,26 @@ public final class ReferenceManagerImpl implements ReferenceManager {
     // Base name for ResourceManager threads.
     private static final String BASE_THREAD_NAME = "azure-sdk-referencemanager";
 
+    private static final Object CLEANER;
+    private static final ReflectiveInvoker CLEANER_REGISTER;
+
+    static {
+        Object cleaner = null;
+        ReflectiveInvoker cleanerRegister = null;
+        try {
+            Class<?> cleanerClass = Class.forName("java.lang.ref.Cleaner");
+            cleaner = cleanerClass.getDeclaredMethod("create", ThreadFactory.class)
+                .invoke(null, (ThreadFactory) r -> new Thread(r, BASE_THREAD_NAME));
+            cleanerRegister = ReflectionUtils.getMethodInvoker(cleanerClass,
+                cleanerClass.getDeclaredMethod("register", Object.class, Runnable.class), false);
+        } catch (Exception ex) {
+            LOGGER.log(LogLevel.VERBOSE, () -> "Unable to use java.lang.ref.Cleaner to manage references.", ex);
+        }
+
+        CLEANER = cleaner;
+        CLEANER_REGISTER = cleanerRegister;
+    }
+
     private final CleanableReference<?> cleanableReferenceList;
     private final ReferenceQueue<Object> queue;
 
@@ -33,35 +53,55 @@ public final class ReferenceManagerImpl implements ReferenceManager {
      * Creates a new instance of {@link ReferenceManagerImpl}.
      */
     public ReferenceManagerImpl() {
-        this.queue = new ReferenceQueue<>();
-        this.cleanableReferenceList = new CleanableReference<>();
+        if (CLEANER == null) {
+            this.queue = new ReferenceQueue<>();
+            this.cleanableReferenceList = new CleanableReference<>();
 
-        Thread thread = new Thread(this::clearReferenceQueue, BASE_THREAD_NAME);
+            Thread thread = new Thread(this::clearReferenceQueue, BASE_THREAD_NAME);
 
-        // Register this instance of ReferenceManager as the head of the cleaning queue. Doing so will allow the
-        // ReferenceManager to clean itself up when no longer in use, for now it simply shuts down the backing thread.
-        new CleanableReference<>(this, () -> {
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                LOGGER.log(LogLevel.WARNING, () -> "Failed to shutdown ReferenceManager thread.", e);
-            }
-        }, this);
+            // Register this instance of ReferenceManager as the head of the cleaning queue. Doing so will allow the
+            // ReferenceManager to clean itself up when no longer in use, for now it simply shuts down the backing
+            // thread.
+            new CleanableReference<>(this, () -> {
+                try {
+                    thread.join();
+                } catch (InterruptedException e) {
+                    LOGGER.log(LogLevel.WARNING, () -> "Failed to shutdown ReferenceManager thread.", e);
+                }
+            }, this);
 
-        // If multiple instances of ReferenceManager needs to be supported each Thread should have a unique name with a
-        // consistent base name.
-        // Thread thread = new Thread(Thread.currentThread().getThreadGroup(), this,
-        //     BASE_THREAD_NAME + "-" + RESOURCE_MANAGER_THREAD_NUMBER.getAndIncrement());
+            // If multiple instances of ReferenceManager needs to be supported each Thread should have a unique name
+            // with a consistent base name.
+            // Thread thread = new Thread(Thread.currentThread().getThreadGroup(), this,
+            // BASE_THREAD_NAME + "-" + RESOURCE_MANAGER_THREAD_NUMBER.getAndIncrement());
 
-        // Make the ReferenceManager Thread a daemon, this will prevent it from halting a JVM shutdown.
-        thread.setDaemon(true);
-        thread.start();
+            // Make the ReferenceManager Thread a daemon, this will prevent it from halting a JVM shutdown.
+            thread.setDaemon(true);
+            thread.start();
+        } else {
+            this.queue = null;
+            this.cleanableReferenceList = null;
+        }
     }
 
     @Override
     public void register(Object object, Runnable cleanupAction) {
-        new CleanableReference<>(Objects.requireNonNull(object, "'object' cannot be null."),
-            Objects.requireNonNull(cleanupAction, "'cleanupAction' cannot be null."), this);
+        Objects.requireNonNull(object, "'object' cannot be null.");
+        Objects.requireNonNull(cleanupAction, "'cleanupAction' cannot be null.");
+
+        if (CLEANER == null) {
+            new CleanableReference<>(object, cleanupAction, this);
+        } else {
+            try {
+                CLEANER_REGISTER.invokeWithArguments(CLEANER, object, cleanupAction);
+            } catch (Exception exception) {
+                if (exception instanceof RuntimeException) {
+                    throw LOGGER.logExceptionAsError((RuntimeException) exception);
+                } else {
+                    throw LOGGER.logExceptionAsError(new RuntimeException(exception));
+                }
+            }
+        }
     }
 
     /*
@@ -87,85 +127,22 @@ public final class ReferenceManagerImpl implements ReferenceManager {
                 if (reference != null) {
                     reference.clean();
                 }
-            } catch (Throwable ex) {
+            } catch (Exception ex) {
                 // Cleaning action threw an exception.
                 LOGGER.log(LogLevel.INFORMATIONAL, () -> "Cleaning a reference threw an exception.", ex);
             }
         }
     }
 
-    static int getJavaImplementationMajorVersion() {
-        return 8;
+    static boolean isCleanerUsed() {
+        return CLEANER != null;
     }
 
-    /*
-     * This class manages maintaining a reference to an object that will trigger a cleanup action once it is phantom
-     * reachable.
-     */
-    private static final class CleanableReference<T> extends PhantomReference<T> {
-        // The cleanup action to run once the reference is phantom reachable.
-        private final Runnable cleanupAction;
+    ReferenceQueue<Object> getQueue() {
+        return this.queue;
+    }
 
-        // The list of cleanable references.
-        private final CleanableReference<?> cleanupList;
-
-        CleanableReference<?> previous = this;
-        CleanableReference<?> next = this;
-
-        CleanableReference() {
-            super(null, null);
-            this.cleanupAction = null;
-            this.cleanupList = this;
-        }
-
-        CleanableReference(T referent, Runnable cleanupAction, ReferenceManagerImpl manager) {
-            super(referent, manager.queue);
-            this.cleanupAction = cleanupAction;
-            this.cleanupList = manager.cleanableReferenceList;
-            insert();
-        }
-
-        public void clean() {
-            if (remove()) {
-                super.clear();
-                cleanupAction.run();
-            }
-        }
-
-        @Override
-        public void clear() {
-            if (remove()) {
-                super.clear();
-            }
-        }
-
-        boolean hasRemaining() {
-            synchronized (cleanupList) {
-                return cleanupList != cleanupList.next;
-            }
-        }
-
-        private void insert() {
-            synchronized (cleanupList) {
-                previous = cleanupList;
-                next = cleanupList.next;
-                next.previous = this;
-                cleanupList.next = this;
-            }
-        }
-
-        private boolean remove() {
-            synchronized (cleanupList) {
-                if (next != this) {
-                    next.previous = previous;
-                    previous.next = next;
-                    previous = this;
-                    next = this;
-                    return true;
-                }
-
-                return false;
-            }
-        }
+    CleanableReference<?> getCleanableReferenceList() {
+        return cleanableReferenceList;
     }
 }

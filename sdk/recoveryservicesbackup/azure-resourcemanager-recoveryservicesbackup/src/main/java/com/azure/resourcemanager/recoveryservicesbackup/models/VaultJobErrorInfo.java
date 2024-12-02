@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Vault Job specific error information. */
+/**
+ * Vault Job specific error information.
+ */
 @Fluent
 public final class VaultJobErrorInfo {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(VaultJobErrorInfo.class);
-
     /*
      * Error code.
      */
@@ -34,8 +32,14 @@ public final class VaultJobErrorInfo {
     private List<String> recommendations;
 
     /**
+     * Creates an instance of VaultJobErrorInfo class.
+     */
+    public VaultJobErrorInfo() {
+    }
+
+    /**
      * Get the errorCode property: Error code.
-     *
+     * 
      * @return the errorCode value.
      */
     public Integer errorCode() {
@@ -44,7 +48,7 @@ public final class VaultJobErrorInfo {
 
     /**
      * Set the errorCode property: Error code.
-     *
+     * 
      * @param errorCode the errorCode value to set.
      * @return the VaultJobErrorInfo object itself.
      */
@@ -55,7 +59,7 @@ public final class VaultJobErrorInfo {
 
     /**
      * Get the errorString property: Localized error string.
-     *
+     * 
      * @return the errorString value.
      */
     public String errorString() {
@@ -64,7 +68,7 @@ public final class VaultJobErrorInfo {
 
     /**
      * Set the errorString property: Localized error string.
-     *
+     * 
      * @param errorString the errorString value to set.
      * @return the VaultJobErrorInfo object itself.
      */
@@ -75,7 +79,7 @@ public final class VaultJobErrorInfo {
 
     /**
      * Get the recommendations property: List of localized recommendations for above error code.
-     *
+     * 
      * @return the recommendations value.
      */
     public List<String> recommendations() {
@@ -84,7 +88,7 @@ public final class VaultJobErrorInfo {
 
     /**
      * Set the recommendations property: List of localized recommendations for above error code.
-     *
+     * 
      * @param recommendations the recommendations value to set.
      * @return the VaultJobErrorInfo object itself.
      */
@@ -95,7 +99,7 @@ public final class VaultJobErrorInfo {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

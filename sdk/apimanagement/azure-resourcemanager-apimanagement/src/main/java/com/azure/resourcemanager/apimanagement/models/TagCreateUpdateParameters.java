@@ -5,21 +5,21 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.models.TagContractProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Parameters supplied to Create/Update Tag operations. */
 @Fluent
 public final class TagCreateUpdateParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TagCreateUpdateParameters.class);
-
     /*
      * Properties supplied to Create Tag operation.
      */
     @JsonProperty(value = "properties")
     private TagContractProperties innerProperties;
+
+    /** Creates an instance of TagCreateUpdateParameters class. */
+    public TagCreateUpdateParameters() {
+    }
 
     /**
      * Get the innerProperties property: Properties supplied to Create Tag operation.

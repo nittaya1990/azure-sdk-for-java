@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.mysqlflexibleserver.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Delegated subnet usage data. */
+/**
+ * Delegated subnet usage data.
+ */
 @Immutable
 public final class DelegatedSubnetUsage {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DelegatedSubnetUsage.class);
-
     /*
      * name of the subnet
      */
@@ -27,8 +25,14 @@ public final class DelegatedSubnetUsage {
     private Long usage;
 
     /**
+     * Creates an instance of DelegatedSubnetUsage class.
+     */
+    public DelegatedSubnetUsage() {
+    }
+
+    /**
      * Get the subnetName property: name of the subnet.
-     *
+     * 
      * @return the subnetName value.
      */
     public String subnetName() {
@@ -37,7 +41,7 @@ public final class DelegatedSubnetUsage {
 
     /**
      * Get the usage property: Number of used delegated subnets.
-     *
+     * 
      * @return the usage value.
      */
     public Long usage() {
@@ -46,7 +50,7 @@ public final class DelegatedSubnetUsage {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

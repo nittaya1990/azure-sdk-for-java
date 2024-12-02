@@ -9,24 +9,26 @@ import com.azure.core.http.rest.Response;
 import com.azure.core.util.Context;
 import com.azure.resourcemanager.synapse.fluent.models.DatabaseInner;
 
-/** Resource collection API of KustoPoolDatabases. */
+/**
+ * Resource collection API of KustoPoolDatabases.
+ */
 public interface KustoPoolDatabases {
     /**
      * Returns the list of databases of the given Kusto pool.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto databases operation response.
+     * @return the list Kusto databases operation response as paginated response with {@link PagedIterable}.
      */
     PagedIterable<Database> listByKustoPool(String resourceGroupName, String workspaceName, String kustoPoolName);
 
     /**
      * Returns the list of databases of the given Kusto pool.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -34,14 +36,30 @@ public interface KustoPoolDatabases {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto databases operation response.
+     * @return the list Kusto databases operation response as paginated response with {@link PagedIterable}.
      */
-    PagedIterable<Database> listByKustoPool(
-        String resourceGroupName, String workspaceName, String kustoPoolName, Context context);
+    PagedIterable<Database> listByKustoPool(String resourceGroupName, String workspaceName, String kustoPoolName,
+        Context context);
 
     /**
      * Returns a database.
-     *
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param databaseName The name of the database in the Kusto pool.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return class representing a Kusto database along with {@link Response}.
+     */
+    Response<Database> getWithResponse(String resourceGroupName, String workspaceName, String kustoPoolName,
+        String databaseName, Context context);
+
+    /**
+     * Returns a database.
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -54,24 +72,8 @@ public interface KustoPoolDatabases {
     Database get(String resourceGroupName, String workspaceName, String kustoPoolName, String databaseName);
 
     /**
-     * Returns a database.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param databaseName The name of the database in the Kusto pool.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto database.
-     */
-    Response<Database> getWithResponse(
-        String resourceGroupName, String workspaceName, String kustoPoolName, String databaseName, Context context);
-
-    /**
      * Creates or updates a database.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -82,16 +84,12 @@ public interface KustoPoolDatabases {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return class representing a Kusto database.
      */
-    Database createOrUpdate(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
+    Database createOrUpdate(String resourceGroupName, String workspaceName, String kustoPoolName, String databaseName,
         DatabaseInner parameters);
 
     /**
      * Creates or updates a database.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -103,17 +101,12 @@ public interface KustoPoolDatabases {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return class representing a Kusto database.
      */
-    Database createOrUpdate(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        DatabaseInner parameters,
-        Context context);
+    Database createOrUpdate(String resourceGroupName, String workspaceName, String kustoPoolName, String databaseName,
+        DatabaseInner parameters, Context context);
 
     /**
      * Updates a database.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -124,16 +117,12 @@ public interface KustoPoolDatabases {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return class representing a Kusto database.
      */
-    Database update(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
+    Database update(String resourceGroupName, String workspaceName, String kustoPoolName, String databaseName,
         DatabaseInner parameters);
 
     /**
      * Updates a database.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -145,17 +134,12 @@ public interface KustoPoolDatabases {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return class representing a Kusto database.
      */
-    Database update(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        DatabaseInner parameters,
-        Context context);
+    Database update(String resourceGroupName, String workspaceName, String kustoPoolName, String databaseName,
+        DatabaseInner parameters, Context context);
 
     /**
      * Deletes the database with the given name.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -168,7 +152,7 @@ public interface KustoPoolDatabases {
 
     /**
      * Deletes the database with the given name.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
@@ -178,6 +162,6 @@ public interface KustoPoolDatabases {
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
-    void delete(
-        String resourceGroupName, String workspaceName, String kustoPoolName, String databaseName, Context context);
+    void delete(String resourceGroupName, String workspaceName, String kustoPoolName, String databaseName,
+        Context context);
 }

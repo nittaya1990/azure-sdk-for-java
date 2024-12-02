@@ -5,24 +5,24 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.models.ApiVersionSetUpdateParametersProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Parameters to update or create an Api Version Set Contract. */
+/** Parameters to update or create an API Version Set Contract. */
 @Fluent
 public final class ApiVersionSetUpdateParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApiVersionSetUpdateParameters.class);
-
     /*
-     * Parameters to update or create an Api Version Set Contract.
+     * Parameters to update or create an API Version Set Contract.
      */
     @JsonProperty(value = "properties")
     private ApiVersionSetUpdateParametersProperties innerProperties;
 
+    /** Creates an instance of ApiVersionSetUpdateParameters class. */
+    public ApiVersionSetUpdateParameters() {
+    }
+
     /**
-     * Get the innerProperties property: Parameters to update or create an Api Version Set Contract.
+     * Get the innerProperties property: Parameters to update or create an API Version Set Contract.
      *
      * @return the innerProperties value.
      */

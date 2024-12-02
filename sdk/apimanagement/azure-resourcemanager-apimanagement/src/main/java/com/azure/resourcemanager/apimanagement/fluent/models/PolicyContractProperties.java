@@ -7,14 +7,11 @@ package com.azure.resourcemanager.apimanagement.fluent.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.models.PolicyContentFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Policy contract Properties. */
 @Fluent
 public final class PolicyContractProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PolicyContractProperties.class);
-
     /*
      * Contents of the Policy as defined by the format.
      */
@@ -26,6 +23,10 @@ public final class PolicyContractProperties {
      */
     @JsonProperty(value = "format")
     private PolicyContentFormat format;
+
+    /** Creates an instance of PolicyContractProperties class. */
+    public PolicyContractProperties() {
+    }
 
     /**
      * Get the value property: Contents of the Policy as defined by the format.
@@ -74,9 +75,10 @@ public final class PolicyContractProperties {
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property value in model PolicyContractProperties"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property value in model PolicyContractProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(PolicyContractProperties.class);
 }

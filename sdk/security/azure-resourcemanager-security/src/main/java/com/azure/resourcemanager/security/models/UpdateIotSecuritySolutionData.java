@@ -5,73 +5,40 @@
 package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.azure.resourcemanager.security.fluent.models.UpdateIoTSecuritySolutionProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.Map;
 
-/** The UpdateIotSecuritySolutionData model. */
-@JsonFlatten
+/**
+ * The UpdateIotSecuritySolutionData model.
+ */
 @Fluent
-public class UpdateIotSecuritySolutionData extends TagsResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(UpdateIotSecuritySolutionData.class);
-
+public final class UpdateIotSecuritySolutionData extends TagsResource {
     /*
-     * Properties of the IoT Security solution's user defined resources.
+     * Security Solution data
      */
-    @JsonProperty(value = "properties.userDefinedResources")
-    private UserDefinedResourcesProperties userDefinedResources;
-
-    /*
-     * List of the configuration status for each recommendation type.
-     */
-    @JsonProperty(value = "properties.recommendationsConfiguration")
-    private List<RecommendationConfigurationProperties> recommendationsConfiguration;
+    @JsonProperty(value = "properties")
+    private UpdateIoTSecuritySolutionProperties innerProperties;
 
     /**
-     * Get the userDefinedResources property: Properties of the IoT Security solution's user defined resources.
-     *
-     * @return the userDefinedResources value.
+     * Creates an instance of UpdateIotSecuritySolutionData class.
      */
-    public UserDefinedResourcesProperties userDefinedResources() {
-        return this.userDefinedResources;
+    public UpdateIotSecuritySolutionData() {
     }
 
     /**
-     * Set the userDefinedResources property: Properties of the IoT Security solution's user defined resources.
-     *
-     * @param userDefinedResources the userDefinedResources value to set.
-     * @return the UpdateIotSecuritySolutionData object itself.
+     * Get the innerProperties property: Security Solution data.
+     * 
+     * @return the innerProperties value.
      */
-    public UpdateIotSecuritySolutionData withUserDefinedResources(UserDefinedResourcesProperties userDefinedResources) {
-        this.userDefinedResources = userDefinedResources;
-        return this;
+    private UpdateIoTSecuritySolutionProperties innerProperties() {
+        return this.innerProperties;
     }
 
     /**
-     * Get the recommendationsConfiguration property: List of the configuration status for each recommendation type.
-     *
-     * @return the recommendationsConfiguration value.
+     * {@inheritDoc}
      */
-    public List<RecommendationConfigurationProperties> recommendationsConfiguration() {
-        return this.recommendationsConfiguration;
-    }
-
-    /**
-     * Set the recommendationsConfiguration property: List of the configuration status for each recommendation type.
-     *
-     * @param recommendationsConfiguration the recommendationsConfiguration value to set.
-     * @return the UpdateIotSecuritySolutionData object itself.
-     */
-    public UpdateIotSecuritySolutionData withRecommendationsConfiguration(
-        List<RecommendationConfigurationProperties> recommendationsConfiguration) {
-        this.recommendationsConfiguration = recommendationsConfiguration;
-        return this;
-    }
-
-    /** {@inheritDoc} */
     @Override
     public UpdateIotSecuritySolutionData withTags(Map<String, String> tags) {
         super.withTags(tags);
@@ -79,18 +46,62 @@ public class UpdateIotSecuritySolutionData extends TagsResource {
     }
 
     /**
+     * Get the userDefinedResources property: Properties of the IoT Security solution's user defined resources.
+     * 
+     * @return the userDefinedResources value.
+     */
+    public UserDefinedResourcesProperties userDefinedResources() {
+        return this.innerProperties() == null ? null : this.innerProperties().userDefinedResources();
+    }
+
+    /**
+     * Set the userDefinedResources property: Properties of the IoT Security solution's user defined resources.
+     * 
+     * @param userDefinedResources the userDefinedResources value to set.
+     * @return the UpdateIotSecuritySolutionData object itself.
+     */
+    public UpdateIotSecuritySolutionData withUserDefinedResources(UserDefinedResourcesProperties userDefinedResources) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new UpdateIoTSecuritySolutionProperties();
+        }
+        this.innerProperties().withUserDefinedResources(userDefinedResources);
+        return this;
+    }
+
+    /**
+     * Get the recommendationsConfiguration property: List of the configuration status for each recommendation type.
+     * 
+     * @return the recommendationsConfiguration value.
+     */
+    public List<RecommendationConfigurationProperties> recommendationsConfiguration() {
+        return this.innerProperties() == null ? null : this.innerProperties().recommendationsConfiguration();
+    }
+
+    /**
+     * Set the recommendationsConfiguration property: List of the configuration status for each recommendation type.
+     * 
+     * @param recommendationsConfiguration the recommendationsConfiguration value to set.
+     * @return the UpdateIotSecuritySolutionData object itself.
+     */
+    public UpdateIotSecuritySolutionData
+        withRecommendationsConfiguration(List<RecommendationConfigurationProperties> recommendationsConfiguration) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new UpdateIoTSecuritySolutionProperties();
+        }
+        this.innerProperties().withRecommendationsConfiguration(recommendationsConfiguration);
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
         super.validate();
-        if (userDefinedResources() != null) {
-            userDefinedResources().validate();
-        }
-        if (recommendationsConfiguration() != null) {
-            recommendationsConfiguration().forEach(e -> e.validate());
+        if (innerProperties() != null) {
+            innerProperties().validate();
         }
     }
 }

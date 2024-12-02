@@ -15,17 +15,16 @@ import com.azure.resourcemanager.videoanalyzer.fluent.models.VideoEntityInner;
 import com.azure.resourcemanager.videoanalyzer.models.VideoContentToken;
 import com.azure.resourcemanager.videoanalyzer.models.VideoEntity;
 import com.azure.resourcemanager.videoanalyzer.models.Videos;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class VideosImpl implements Videos {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(VideosImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(VideosImpl.class);
 
     private final VideosClient innerClient;
 
     private final com.azure.resourcemanager.videoanalyzer.VideoAnalyzerManager serviceManager;
 
-    public VideosImpl(
-        VideosClient innerClient, com.azure.resourcemanager.videoanalyzer.VideoAnalyzerManager serviceManager) {
+    public VideosImpl(VideosClient innerClient,
+        com.azure.resourcemanager.videoanalyzer.VideoAnalyzerManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
     }
@@ -49,15 +48,12 @@ public final class VideosImpl implements Videos {
         }
     }
 
-    public Response<VideoEntity> getWithResponse(
-        String resourceGroupName, String accountName, String videoName, Context context) {
-        Response<VideoEntityInner> inner =
-            this.serviceClient().getWithResponse(resourceGroupName, accountName, videoName, context);
+    public Response<VideoEntity> getWithResponse(String resourceGroupName, String accountName, String videoName,
+        Context context) {
+        Response<VideoEntityInner> inner
+            = this.serviceClient().getWithResponse(resourceGroupName, accountName, videoName, context);
         if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
                 new VideoEntityImpl(inner.getValue(), this.manager()));
         } else {
             return null;
@@ -68,8 +64,8 @@ public final class VideosImpl implements Videos {
         this.serviceClient().delete(resourceGroupName, accountName, videoName);
     }
 
-    public Response<Void> deleteWithResponse(
-        String resourceGroupName, String accountName, String videoName, Context context) {
+    public Response<Void> deleteWithResponse(String resourceGroupName, String accountName, String videoName,
+        Context context) {
         return this.serviceClient().deleteWithResponse(resourceGroupName, accountName, videoName, context);
     }
 
@@ -82,15 +78,12 @@ public final class VideosImpl implements Videos {
         }
     }
 
-    public Response<VideoContentToken> listContentTokenWithResponse(
-        String resourceGroupName, String accountName, String videoName, Context context) {
-        Response<VideoContentTokenInner> inner =
-            this.serviceClient().listContentTokenWithResponse(resourceGroupName, accountName, videoName, context);
+    public Response<VideoContentToken> listContentTokenWithResponse(String resourceGroupName, String accountName,
+        String videoName, Context context) {
+        Response<VideoContentTokenInner> inner
+            = this.serviceClient().listContentTokenWithResponse(resourceGroupName, accountName, videoName, context);
         if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
                 new VideoContentTokenImpl(inner.getValue(), this.manager()));
         } else {
             return null;
@@ -100,26 +93,18 @@ public final class VideosImpl implements Videos {
     public VideoEntity getById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
         String accountName = Utils.getValueFromIdByName(id, "videoAnalyzers");
         if (accountName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'videoAnalyzers'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'videoAnalyzers'.", id)));
         }
         String videoName = Utils.getValueFromIdByName(id, "videos");
         if (videoName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'videos'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'videos'.", id)));
         }
         return this.getWithResponse(resourceGroupName, accountName, videoName, Context.NONE).getValue();
     }
@@ -127,26 +112,18 @@ public final class VideosImpl implements Videos {
     public Response<VideoEntity> getByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
         String accountName = Utils.getValueFromIdByName(id, "videoAnalyzers");
         if (accountName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'videoAnalyzers'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'videoAnalyzers'.", id)));
         }
         String videoName = Utils.getValueFromIdByName(id, "videos");
         if (videoName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'videos'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'videos'.", id)));
         }
         return this.getWithResponse(resourceGroupName, accountName, videoName, context);
     }
@@ -154,53 +131,37 @@ public final class VideosImpl implements Videos {
     public void deleteById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
         String accountName = Utils.getValueFromIdByName(id, "videoAnalyzers");
         if (accountName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'videoAnalyzers'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'videoAnalyzers'.", id)));
         }
         String videoName = Utils.getValueFromIdByName(id, "videos");
         if (videoName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'videos'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'videos'.", id)));
         }
-        this.deleteWithResponse(resourceGroupName, accountName, videoName, Context.NONE).getValue();
+        this.deleteWithResponse(resourceGroupName, accountName, videoName, Context.NONE);
     }
 
     public Response<Void> deleteByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
         String accountName = Utils.getValueFromIdByName(id, "videoAnalyzers");
         if (accountName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'videoAnalyzers'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'videoAnalyzers'.", id)));
         }
         String videoName = Utils.getValueFromIdByName(id, "videos");
         if (videoName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'videos'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'videos'.", id)));
         }
         return this.deleteWithResponse(resourceGroupName, accountName, videoName, context);
     }

@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The MoveRPAcrossTiersRequest model. */
+/**
+ * The MoveRPAcrossTiersRequest model.
+ */
 @Fluent
 public final class MoveRPAcrossTiersRequest {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(MoveRPAcrossTiersRequest.class);
-
     /*
      * Gets the class type.
      */
@@ -33,8 +31,14 @@ public final class MoveRPAcrossTiersRequest {
     private RecoveryPointTierType targetTierType;
 
     /**
+     * Creates an instance of MoveRPAcrossTiersRequest class.
+     */
+    public MoveRPAcrossTiersRequest() {
+    }
+
+    /**
      * Get the objectType property: Gets the class type.
-     *
+     * 
      * @return the objectType value.
      */
     public String objectType() {
@@ -43,7 +47,7 @@ public final class MoveRPAcrossTiersRequest {
 
     /**
      * Set the objectType property: Gets the class type.
-     *
+     * 
      * @param objectType the objectType value to set.
      * @return the MoveRPAcrossTiersRequest object itself.
      */
@@ -54,7 +58,7 @@ public final class MoveRPAcrossTiersRequest {
 
     /**
      * Get the sourceTierType property: Source tier from where RP needs to be moved.
-     *
+     * 
      * @return the sourceTierType value.
      */
     public RecoveryPointTierType sourceTierType() {
@@ -63,7 +67,7 @@ public final class MoveRPAcrossTiersRequest {
 
     /**
      * Set the sourceTierType property: Source tier from where RP needs to be moved.
-     *
+     * 
      * @param sourceTierType the sourceTierType value to set.
      * @return the MoveRPAcrossTiersRequest object itself.
      */
@@ -74,7 +78,7 @@ public final class MoveRPAcrossTiersRequest {
 
     /**
      * Get the targetTierType property: Target tier where RP needs to be moved.
-     *
+     * 
      * @return the targetTierType value.
      */
     public RecoveryPointTierType targetTierType() {
@@ -83,7 +87,7 @@ public final class MoveRPAcrossTiersRequest {
 
     /**
      * Set the targetTierType property: Target tier where RP needs to be moved.
-     *
+     * 
      * @param targetTierType the targetTierType value to set.
      * @return the MoveRPAcrossTiersRequest object itself.
      */
@@ -94,7 +98,7 @@ public final class MoveRPAcrossTiersRequest {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

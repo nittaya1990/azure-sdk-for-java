@@ -3,12 +3,13 @@
 
 package com.azure.security.keyvault.jca;
 
-import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.security.Provider;
 
 /**
  * The Azure Key Vault TrustManagerFactory provider.
+ *
+ * @see Provider
  */
 public final class KeyVaultTrustManagerFactoryProvider extends Provider {
 
@@ -45,17 +46,9 @@ public final class KeyVaultTrustManagerFactoryProvider extends Provider {
      */
     @SuppressWarnings("removal")
     private void initialize() {
-        AccessController.doPrivileged((PrivilegedAction<Object>) () -> {
-            putService(
-                new Provider.Service(
-                    this,
-                    "TrustManagerFactory",
-                    "PKIX",
-                    KeyVaultTrustManagerFactory.class.getName(),
-                    null,
-                    null
-                )
-            );
+        java.security.AccessController.doPrivileged((PrivilegedAction<Object>) () -> {
+            putService(new Provider.Service(this, "TrustManagerFactory", "PKIX",
+                KeyVaultTrustManagerFactory.class.getName(), null, null));
             return null;
         });
     }

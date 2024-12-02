@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Tenant access information update parameters of the API Management service. */
 @Fluent
 public final class AccessInformationCreateParameterProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AccessInformationCreateParameterProperties.class);
-
     /*
      * Principal (User) Identifier.
      */
@@ -21,15 +17,15 @@ public final class AccessInformationCreateParameterProperties {
     private String principalId;
 
     /*
-     * Primary access key. This property will not be filled on 'GET'
-     * operations! Use '/listSecrets' POST request to get the value.
+     * Primary access key. This property will not be filled on 'GET' operations! Use '/listSecrets' POST request to get
+     * the value.
      */
     @JsonProperty(value = "primaryKey")
     private String primaryKey;
 
     /*
-     * Secondary access key. This property will not be filled on 'GET'
-     * operations! Use '/listSecrets' POST request to get the value.
+     * Secondary access key. This property will not be filled on 'GET' operations! Use '/listSecrets' POST request to
+     * get the value.
      */
     @JsonProperty(value = "secondaryKey")
     private String secondaryKey;
@@ -39,6 +35,10 @@ public final class AccessInformationCreateParameterProperties {
      */
     @JsonProperty(value = "enabled")
     private Boolean enabled;
+
+    /** Creates an instance of AccessInformationCreateParameterProperties class. */
+    public AccessInformationCreateParameterProperties() {
+    }
 
     /**
      * Get the principalId property: Principal (User) Identifier.

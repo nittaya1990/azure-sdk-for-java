@@ -24,7 +24,7 @@ public interface LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of LivePipeline items.
+     * @return a collection of LivePipeline items as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<LivePipelineInner> list(String resourceGroupName, String accountName);
@@ -41,11 +41,11 @@ public interface LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of LivePipeline items.
+     * @return a collection of LivePipeline items as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<LivePipelineInner> list(
-        String resourceGroupName, String accountName, String filter, Integer top, Context context);
+    PagedIterable<LivePipelineInner> list(String resourceGroupName, String accountName, String filter, Integer top,
+        Context context);
 
     /**
      * Retrieves a specific live pipeline by name. If a live pipeline with that name has been previously created, the
@@ -75,11 +75,11 @@ public interface LivePipelinesClient {
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return live pipeline represents a unique instance of a live topology, used for real-time ingestion, archiving
-     *     and publishing of content for a unique RTSP camera.
+     *     and publishing of content for a unique RTSP camera along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<LivePipelineInner> getWithResponse(
-        String resourceGroupName, String accountName, String livePipelineName, Context context);
+    Response<LivePipelineInner> getWithResponse(String resourceGroupName, String accountName, String livePipelineName,
+        Context context);
 
     /**
      * Creates a new live pipeline or updates an existing one, with the given name.
@@ -95,8 +95,8 @@ public interface LivePipelinesClient {
      *     and publishing of content for a unique RTSP camera.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    LivePipelineInner createOrUpdate(
-        String resourceGroupName, String accountName, String livePipelineName, LivePipelineInner parameters);
+    LivePipelineInner createOrUpdate(String resourceGroupName, String accountName, String livePipelineName,
+        LivePipelineInner parameters);
 
     /**
      * Creates a new live pipeline or updates an existing one, with the given name.
@@ -110,15 +110,11 @@ public interface LivePipelinesClient {
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return live pipeline represents a unique instance of a live topology, used for real-time ingestion, archiving
-     *     and publishing of content for a unique RTSP camera.
+     *     and publishing of content for a unique RTSP camera along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<LivePipelineInner> createOrUpdateWithResponse(
-        String resourceGroupName,
-        String accountName,
-        String livePipelineName,
-        LivePipelineInner parameters,
-        Context context);
+    Response<LivePipelineInner> createOrUpdateWithResponse(String resourceGroupName, String accountName,
+        String livePipelineName, LivePipelineInner parameters, Context context);
 
     /**
      * Deletes a live pipeline with the given name.
@@ -143,54 +139,50 @@ public interface LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<Void> deleteWithResponse(
-        String resourceGroupName, String accountName, String livePipelineName, Context context);
-
-    /**
-     * Updates an existing live pipeline with the given name. Properties that can be updated include: description,
-     * bitrateKbps, and parameter definitions. Only the description can be updated while the live pipeline is active.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param accountName The Azure Video Analyzer account name.
-     * @param livePipelineName Live pipeline unique identifier.
-     * @param parameters The request parameters.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return live pipeline represents a unique instance of a live topology, used for real-time ingestion, archiving
-     *     and publishing of content for a unique RTSP camera.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    LivePipelineInner update(
-        String resourceGroupName, String accountName, String livePipelineName, LivePipelineUpdate parameters);
-
-    /**
-     * Updates an existing live pipeline with the given name. Properties that can be updated include: description,
-     * bitrateKbps, and parameter definitions. Only the description can be updated while the live pipeline is active.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param accountName The Azure Video Analyzer account name.
-     * @param livePipelineName Live pipeline unique identifier.
-     * @param parameters The request parameters.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return live pipeline represents a unique instance of a live topology, used for real-time ingestion, archiving
-     *     and publishing of content for a unique RTSP camera.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<LivePipelineInner> updateWithResponse(
-        String resourceGroupName,
-        String accountName,
-        String livePipelineName,
-        LivePipelineUpdate parameters,
+    Response<Void> deleteWithResponse(String resourceGroupName, String accountName, String livePipelineName,
         Context context);
 
     /**
+     * Updates an existing live pipeline with the given name. Properties that can be updated include: description,
+     * bitrateKbps, and parameter definitions. Only the description can be updated while the live pipeline is active.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param accountName The Azure Video Analyzer account name.
+     * @param livePipelineName Live pipeline unique identifier.
+     * @param parameters The request parameters.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return live pipeline represents a unique instance of a live topology, used for real-time ingestion, archiving
+     *     and publishing of content for a unique RTSP camera.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    LivePipelineInner update(String resourceGroupName, String accountName, String livePipelineName,
+        LivePipelineUpdate parameters);
+
+    /**
+     * Updates an existing live pipeline with the given name. Properties that can be updated include: description,
+     * bitrateKbps, and parameter definitions. Only the description can be updated while the live pipeline is active.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param accountName The Azure Video Analyzer account name.
+     * @param livePipelineName Live pipeline unique identifier.
+     * @param parameters The request parameters.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return live pipeline represents a unique instance of a live topology, used for real-time ingestion, archiving
+     *     and publishing of content for a unique RTSP camera along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<LivePipelineInner> updateWithResponse(String resourceGroupName, String accountName,
+        String livePipelineName, LivePipelineUpdate parameters, Context context);
+
+    /**
      * Activates a live pipeline with the given name.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -199,11 +191,11 @@ public interface LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    SyncPoller<PollResult<Void>, Void> beginActivate(
-        String resourceGroupName, String accountName, String livePipelineName);
+    SyncPoller<PollResult<Void>, Void> beginActivate(String resourceGroupName, String accountName,
+        String livePipelineName);
 
     /**
      * Activates a live pipeline with the given name.
@@ -215,11 +207,11 @@ public interface LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    SyncPoller<PollResult<Void>, Void> beginActivate(
-        String resourceGroupName, String accountName, String livePipelineName, Context context);
+    SyncPoller<PollResult<Void>, Void> beginActivate(String resourceGroupName, String accountName,
+        String livePipelineName, Context context);
 
     /**
      * Activates a live pipeline with the given name.
@@ -257,11 +249,11 @@ public interface LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    SyncPoller<PollResult<Void>, Void> beginDeactivate(
-        String resourceGroupName, String accountName, String livePipelineName);
+    SyncPoller<PollResult<Void>, Void> beginDeactivate(String resourceGroupName, String accountName,
+        String livePipelineName);
 
     /**
      * Deactivates a live pipeline with the given name.
@@ -273,11 +265,11 @@ public interface LivePipelinesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    SyncPoller<PollResult<Void>, Void> beginDeactivate(
-        String resourceGroupName, String accountName, String livePipelineName, Context context);
+    SyncPoller<PollResult<Void>, Void> beginDeactivate(String resourceGroupName, String accountName,
+        String livePipelineName, Context context);
 
     /**
      * Deactivates a live pipeline with the given name.

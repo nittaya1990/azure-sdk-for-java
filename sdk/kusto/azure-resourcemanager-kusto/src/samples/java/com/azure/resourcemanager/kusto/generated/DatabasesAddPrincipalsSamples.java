@@ -4,7 +4,6 @@
 
 package com.azure.resourcemanager.kusto.generated;
 
-import com.azure.core.util.Context;
 import com.azure.resourcemanager.kusto.fluent.models.DatabasePrincipalInner;
 import com.azure.resourcemanager.kusto.models.DatabasePrincipalListRequest;
 import com.azure.resourcemanager.kusto.models.DatabasePrincipalRole;
@@ -14,7 +13,7 @@ import java.util.Arrays;
 /** Samples for Databases AddPrincipals. */
 public final class DatabasesAddPrincipalsSamples {
     /*
-     * x-ms-original-file: specification/azure-kusto/resource-manager/Microsoft.Kusto/stable/2021-08-27/examples/KustoDatabaseAddPrincipals.json
+     * x-ms-original-file: specification/azure-kusto/resource-manager/Microsoft.Kusto/stable/2023-08-15/examples/KustoDatabaseAddPrincipals.json
      */
     /**
      * Sample code: KustoDatabaseAddPrincipals.
@@ -26,7 +25,7 @@ public final class DatabasesAddPrincipalsSamples {
             .databases()
             .addPrincipalsWithResponse(
                 "kustorptest",
-                "kustoclusterrptest4",
+                "kustoCluster",
                 "KustoDatabase8",
                 new DatabasePrincipalListRequest()
                     .withValue(
@@ -53,6 +52,6 @@ public final class DatabasesAddPrincipalsSamples {
                                     .withFqn("aadapp=some_guid_app_id")
                                     .withEmail("")
                                     .withAppId("some_guid_app_id"))),
-                Context.NONE);
+                com.azure.core.util.Context.NONE);
     }
 }

@@ -21,16 +21,16 @@ public final class ApiIssueAttachmentsCreateOrUpdateResponse
      * @param value the deserialized value of the HTTP response.
      * @param headers the deserialized headers of the HTTP response.
      */
-    public ApiIssueAttachmentsCreateOrUpdateResponse(
-        HttpRequest request,
-        int statusCode,
-        HttpHeaders rawHeaders,
-        IssueAttachmentContractInner value,
-        ApiIssueAttachmentsCreateOrUpdateHeaders headers) {
+    public ApiIssueAttachmentsCreateOrUpdateResponse(HttpRequest request, int statusCode, HttpHeaders rawHeaders,
+        IssueAttachmentContractInner value, ApiIssueAttachmentsCreateOrUpdateHeaders headers) {
         super(request, statusCode, rawHeaders, value, headers);
     }
 
-    /** @return the deserialized response body. */
+    /**
+     * Gets the deserialized response body.
+     *
+     * @return the deserialized response body.
+     */
     @Override
     public IssueAttachmentContractInner getValue() {
         return super.getValue();

@@ -5,17 +5,13 @@
 package com.azure.resourcemanager.resourcehealth.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.resourcehealth.fluent.models.EmergingIssuesGetResultInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** The list of emerging issues. */
 @Fluent
 public final class EmergingIssueListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(EmergingIssueListResult.class);
-
     /*
      * The list of emerging issues.
      */
@@ -27,6 +23,10 @@ public final class EmergingIssueListResult {
      */
     @JsonProperty(value = "nextLink")
     private String nextLink;
+
+    /** Creates an instance of EmergingIssueListResult class. */
+    public EmergingIssueListResult() {
+    }
 
     /**
      * Get the value property: The list of emerging issues.

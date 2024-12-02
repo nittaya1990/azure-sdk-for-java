@@ -5,17 +5,13 @@
 package com.azure.resourcemanager.applicationinsights.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.applicationinsights.models.FavoriteType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Properties that define a favorite that is associated to an Application Insights component. */
 @Fluent
 public final class ApplicationInsightsComponentFavoriteInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApplicationInsightsComponentFavoriteInner.class);
-
     /*
      * The user-defined name of the favorite.
      */
@@ -23,16 +19,15 @@ public final class ApplicationInsightsComponentFavoriteInner {
     private String name;
 
     /*
-     * Configuration of this particular favorite, which are driven by the Azure
-     * portal UX. Configuration data is a string containing valid JSON
+     * Configuration of this particular favorite, which are driven by the Azure portal UX. Configuration data is a
+     * string containing valid JSON
      */
     @JsonProperty(value = "Config")
     private String config;
 
     /*
-     * This instance's version of the data model. This can change as new
-     * features are added that can be marked favorite. Current examples include
-     * MetricsExplorer (ME) and Search.
+     * This instance's version of the data model. This can change as new features are added that can be marked
+     * favorite. Current examples include MetricsExplorer (ME) and Search.
      */
     @JsonProperty(value = "Version")
     private String version;
@@ -44,9 +39,8 @@ public final class ApplicationInsightsComponentFavoriteInner {
     private String favoriteId;
 
     /*
-     * Enum indicating if this favorite definition is owned by a specific user
-     * or is shared between all users with access to the Application Insights
-     * component.
+     * Enum indicating if this favorite definition is owned by a specific user or is shared between all users with
+     * access to the Application Insights component.
      */
     @JsonProperty(value = "FavoriteType")
     private FavoriteType favoriteType;
@@ -58,15 +52,13 @@ public final class ApplicationInsightsComponentFavoriteInner {
     private String sourceType;
 
     /*
-     * Date and time in UTC of the last modification that was made to this
-     * favorite definition.
+     * Date and time in UTC of the last modification that was made to this favorite definition.
      */
     @JsonProperty(value = "TimeModified", access = JsonProperty.Access.WRITE_ONLY)
     private String timeModified;
 
     /*
-     * A list of 0 or more tags that are associated with this favorite
-     * definition
+     * A list of 0 or more tags that are associated with this favorite definition
      */
     @JsonProperty(value = "Tags")
     private List<String> tags;
@@ -88,6 +80,10 @@ public final class ApplicationInsightsComponentFavoriteInner {
      */
     @JsonProperty(value = "UserId", access = JsonProperty.Access.WRITE_ONLY)
     private String userId;
+
+    /** Creates an instance of ApplicationInsightsComponentFavoriteInner class. */
+    public ApplicationInsightsComponentFavoriteInner() {
+    }
 
     /**
      * Get the name property: The user-defined name of the favorite.

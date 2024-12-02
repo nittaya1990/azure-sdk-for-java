@@ -53,6 +53,13 @@ public interface AccessInformationContract {
     Boolean enabled();
 
     /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
+
+    /**
      * Gets the inner com.azure.resourcemanager.apimanagement.fluent.models.AccessInformationContractInner object.
      *
      * @return the inner object.
@@ -63,32 +70,31 @@ public interface AccessInformationContract {
     interface Definition
         extends DefinitionStages.Blank, DefinitionStages.WithParentResource, DefinitionStages.WithCreate {
     }
+
     /** The AccessInformationContract definition stages. */
     interface DefinitionStages {
         /** The first stage of the AccessInformationContract definition. */
         interface Blank extends WithParentResource {
         }
+
         /** The stage of the AccessInformationContract definition allowing to specify parent resource. */
         interface WithParentResource {
             /**
              * Specifies resourceGroupName, serviceName.
              *
-             * @param resourceGroupName The name of the resource group.
+             * @param resourceGroupName The name of the resource group. The name is case insensitive.
              * @param serviceName The name of the API Management service.
              * @return the next definition stage.
              */
             WithCreate withExistingService(String resourceGroupName, String serviceName);
         }
+
         /**
          * The stage of the AccessInformationContract definition which contains all the minimum required properties for
          * the resource to be created, but also allows for any other optional properties to be specified.
          */
-        interface WithCreate
-            extends DefinitionStages.WithPrincipalId,
-                DefinitionStages.WithPrimaryKey,
-                DefinitionStages.WithSecondaryKey,
-                DefinitionStages.WithEnabled,
-                DefinitionStages.WithIfMatch {
+        interface WithCreate extends DefinitionStages.WithPrincipalId, DefinitionStages.WithPrimaryKey,
+            DefinitionStages.WithSecondaryKey, DefinitionStages.WithEnabled, DefinitionStages.WithIfMatch {
             /**
              * Executes the create request.
              *
@@ -104,6 +110,7 @@ public interface AccessInformationContract {
              */
             AccessInformationContract create(Context context);
         }
+
         /** The stage of the AccessInformationContract definition allowing to specify principalId. */
         interface WithPrincipalId {
             /**
@@ -114,6 +121,7 @@ public interface AccessInformationContract {
              */
             WithCreate withPrincipalId(String principalId);
         }
+
         /** The stage of the AccessInformationContract definition allowing to specify primaryKey. */
         interface WithPrimaryKey {
             /**
@@ -126,6 +134,7 @@ public interface AccessInformationContract {
              */
             WithCreate withPrimaryKey(String primaryKey);
         }
+
         /** The stage of the AccessInformationContract definition allowing to specify secondaryKey. */
         interface WithSecondaryKey {
             /**
@@ -138,6 +147,7 @@ public interface AccessInformationContract {
              */
             WithCreate withSecondaryKey(String secondaryKey);
         }
+
         /** The stage of the AccessInformationContract definition allowing to specify enabled. */
         interface WithEnabled {
             /**
@@ -148,6 +158,7 @@ public interface AccessInformationContract {
              */
             WithCreate withEnabled(Boolean enabled);
         }
+
         /** The stage of the AccessInformationContract definition allowing to specify ifMatch. */
         interface WithIfMatch {
             /**
@@ -161,6 +172,7 @@ public interface AccessInformationContract {
             WithCreate withIfMatch(String ifMatch);
         }
     }
+
     /**
      * Begins update for the AccessInformationContract resource.
      *
@@ -185,6 +197,7 @@ public interface AccessInformationContract {
          */
         AccessInformationContract apply(Context context);
     }
+
     /** The AccessInformationContract update stages. */
     interface UpdateStages {
         /** The stage of the AccessInformationContract update allowing to specify enabled. */
@@ -197,6 +210,7 @@ public interface AccessInformationContract {
              */
             Update withEnabled(Boolean enabled);
         }
+
         /** The stage of the AccessInformationContract update allowing to specify ifMatch. */
         interface WithIfMatch {
             /**
@@ -210,6 +224,7 @@ public interface AccessInformationContract {
             Update withIfMatch(String ifMatch);
         }
     }
+
     /**
      * Refreshes the resource to sync with Azure.
      *
@@ -228,21 +243,32 @@ public interface AccessInformationContract {
     /**
      * Regenerate primary access key.
      *
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    Response<Void> regeneratePrimaryKeyWithResponse(Context context);
+
+    /**
+     * Regenerate primary access key.
+     *
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     void regeneratePrimaryKey();
 
     /**
-     * Regenerate primary access key.
+     * Regenerate secondary access key.
      *
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
-    Response<Void> regeneratePrimaryKeyWithResponse(Context context);
+    Response<Void> regenerateSecondaryKeyWithResponse(Context context);
 
     /**
      * Regenerate secondary access key.
@@ -251,26 +277,6 @@ public interface AccessInformationContract {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     void regenerateSecondaryKey();
-
-    /**
-     * Regenerate secondary access key.
-     *
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    Response<Void> regenerateSecondaryKeyWithResponse(Context context);
-
-    /**
-     * Get tenant access information details.
-     *
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return tenant access information details.
-     */
-    AccessInformationSecretsContract listSecrets();
 
     /**
      * Get tenant access information details.
@@ -282,4 +288,13 @@ public interface AccessInformationContract {
      * @return tenant access information details.
      */
     Response<AccessInformationSecretsContract> listSecretsWithResponse(Context context);
+
+    /**
+     * Get tenant access information details.
+     *
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return tenant access information details.
+     */
+    AccessInformationSecretsContract listSecrets();
 }

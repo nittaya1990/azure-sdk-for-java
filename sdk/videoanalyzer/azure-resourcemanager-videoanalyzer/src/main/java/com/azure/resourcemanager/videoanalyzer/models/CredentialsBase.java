@@ -5,8 +5,6 @@
 package com.azure.resourcemanager.videoanalyzer.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -21,12 +19,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonSubTypes({
     @JsonSubTypes.Type(
         name = "#Microsoft.VideoAnalyzer.UsernamePasswordCredentials",
-        value = UsernamePasswordCredentials.class)
-})
+        value = UsernamePasswordCredentials.class) })
 @Immutable
 public class CredentialsBase {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CredentialsBase.class);
-
     /**
      * Validates the instance.
      *

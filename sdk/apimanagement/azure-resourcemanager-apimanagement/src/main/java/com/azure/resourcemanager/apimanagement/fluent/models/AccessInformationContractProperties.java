@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Tenant access information contract of the API Management service. */
 @Fluent
 public final class AccessInformationContractProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AccessInformationContractProperties.class);
-
     /*
      * Access Information type ('access' or 'gitAccess')
      */
@@ -31,6 +27,10 @@ public final class AccessInformationContractProperties {
      */
     @JsonProperty(value = "enabled")
     private Boolean enabled;
+
+    /** Creates an instance of AccessInformationContractProperties class. */
+    public AccessInformationContractProperties() {
+    }
 
     /**
      * Get the id property: Access Information type ('access' or 'gitAccess').

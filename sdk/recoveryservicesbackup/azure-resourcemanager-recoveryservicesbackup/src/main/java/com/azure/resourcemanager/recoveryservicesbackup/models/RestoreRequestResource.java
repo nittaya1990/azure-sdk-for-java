@@ -6,16 +6,14 @@ package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.Resource;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
-/** Base class for restore request. Workload-specific restore requests are derived from this class. */
+/**
+ * Base class for restore request. Workload-specific restore requests are derived from this class.
+ */
 @Fluent
 public final class RestoreRequestResource extends Resource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RestoreRequestResource.class);
-
     /*
      * RestoreRequestResource properties
      */
@@ -29,8 +27,14 @@ public final class RestoreRequestResource extends Resource {
     private String etag;
 
     /**
+     * Creates an instance of RestoreRequestResource class.
+     */
+    public RestoreRequestResource() {
+    }
+
+    /**
      * Get the properties property: RestoreRequestResource properties.
-     *
+     * 
      * @return the properties value.
      */
     public RestoreRequest properties() {
@@ -39,7 +43,7 @@ public final class RestoreRequestResource extends Resource {
 
     /**
      * Set the properties property: RestoreRequestResource properties.
-     *
+     * 
      * @param properties the properties value to set.
      * @return the RestoreRequestResource object itself.
      */
@@ -50,7 +54,7 @@ public final class RestoreRequestResource extends Resource {
 
     /**
      * Get the etag property: Optional ETag.
-     *
+     * 
      * @return the etag value.
      */
     public String etag() {
@@ -59,7 +63,7 @@ public final class RestoreRequestResource extends Resource {
 
     /**
      * Set the etag property: Optional ETag.
-     *
+     * 
      * @param etag the etag value to set.
      * @return the RestoreRequestResource object itself.
      */
@@ -68,14 +72,18 @@ public final class RestoreRequestResource extends Resource {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RestoreRequestResource withLocation(String location) {
         super.withLocation(location);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RestoreRequestResource withTags(Map<String, String> tags) {
         super.withTags(tags);
@@ -84,7 +92,7 @@ public final class RestoreRequestResource extends Resource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

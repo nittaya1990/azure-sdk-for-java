@@ -4,19 +4,20 @@
 
 package com.azure.resourcemanager.postgresqlflexibleserver.generated;
 
-import com.azure.core.util.Context;
-
-/** Samples for Configurations Get. */
+/**
+ * Samples for Configurations Get.
+ */
 public final class ConfigurationsGetSamples {
     /*
-     * x-ms-original-file: specification/postgresql/resource-manager/Microsoft.DBforPostgreSQL/stable/2021-06-01/examples/ConfigurationGet.json
+     * x-ms-original-file: specification/postgresql/resource-manager/Microsoft.DBforPostgreSQL/preview/2023-12-01-preview/examples/ConfigurationGet.json
      */
     /**
      * Sample code: ConfigurationGet.
-     *
+     * 
      * @param manager Entry point to PostgreSqlManager.
      */
     public static void configurationGet(com.azure.resourcemanager.postgresqlflexibleserver.PostgreSqlManager manager) {
-        manager.configurations().getWithResponse("testrg", "testserver", "array_nulls", Context.NONE);
+        manager.configurations()
+            .getWithResponse("testrg", "testserver", "array_nulls", com.azure.core.util.Context.NONE);
     }
 }

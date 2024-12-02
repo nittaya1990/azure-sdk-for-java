@@ -4,6 +4,7 @@
 package com.azure.cosmos.implementation.feedranges;
 
 import com.azure.cosmos.BridgeInternal;
+import com.azure.cosmos.CosmosItemSerializer;
 import com.azure.cosmos.implementation.Constants;
 import com.azure.cosmos.implementation.DocumentCollection;
 import com.azure.cosmos.implementation.HttpConstants;
@@ -15,13 +16,13 @@ import com.azure.cosmos.implementation.Utils;
 import com.azure.cosmos.implementation.apachecommons.collections.list.UnmodifiableList;
 import com.azure.cosmos.implementation.routing.PartitionKeyInternal;
 import com.azure.cosmos.implementation.routing.Range;
+import com.azure.cosmos.models.PartitionKeyDefinition;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.azure.cosmos.BridgeInternal.setProperty;
 import static com.azure.cosmos.implementation.guava25.base.Preconditions.checkNotNull;
 
 public final class FeedRangePartitionKeyImpl extends FeedRangeInternal {
@@ -71,14 +72,24 @@ public final class FeedRangePartitionKeyImpl extends FeedRangeInternal {
                     throw new IllegalStateException("Collection cannot be null");
                 }
 
-                final String effectivePartitionKey =
-                    this.partitionKey.getEffectivePartitionKeyString(
-                    this.partitionKey,
-                    collection.getPartitionKey());
-
-                Range<String> range = Range.getPointRange(effectivePartitionKey);
+                Range<String> range = getEffectiveRange(collection.getPartitionKey());
                 return Mono.just(range);
             });
+    }
+
+    public Range<String> getEffectiveRange(
+        PartitionKeyDefinition pkDefinition) {
+
+        checkNotNull(
+            pkDefinition,
+            "Argument 'pkDefinition' must not be null");
+
+        final String effectivePartitionKey =
+            this.partitionKey.getEffectivePartitionKeyString(
+                this.partitionKey,
+                pkDefinition);
+
+        return Range.getPointRange(effectivePartitionKey);
     }
 
     @Override
@@ -156,7 +167,7 @@ public final class FeedRangePartitionKeyImpl extends FeedRangeInternal {
             .getNormalizedEffectiveRange(routingMapProvider, metadataDiagnosticsCtx, collectionResolutionMono)
             .map(effectiveRange -> {
                 request.setEffectiveRange(effectiveRange);
-
+                request.setHasFeedRangeFilteringBeenApplied(true);
                 return request;
             });
     }
@@ -181,8 +192,10 @@ public final class FeedRangePartitionKeyImpl extends FeedRangeInternal {
         }
 
         if (this.partitionKey != null) {
-            setProperty(serializable, Constants.Properties.FEED_RANGE_PARTITION_KEY,
-                this.partitionKey);
+            serializable.set(
+                Constants.Properties.FEED_RANGE_PARTITION_KEY,
+                this.partitionKey,
+                CosmosItemSerializer.DEFAULT_SERIALIZER);
         }
     }
 }

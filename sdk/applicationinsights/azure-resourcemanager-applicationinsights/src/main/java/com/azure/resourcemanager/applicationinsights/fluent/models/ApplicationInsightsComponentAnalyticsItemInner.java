@@ -5,19 +5,14 @@
 package com.azure.resourcemanager.applicationinsights.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.applicationinsights.models.ApplicationInsightsComponentAnalyticsItemProperties;
 import com.azure.resourcemanager.applicationinsights.models.ItemScope;
 import com.azure.resourcemanager.applicationinsights.models.ItemType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Properties that define an Analytics item that is associated to an Application Insights component. */
 @Fluent
 public final class ApplicationInsightsComponentAnalyticsItemInner {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(ApplicationInsightsComponentAnalyticsItemInner.class);
-
     /*
      * Internally assigned unique id of the item definition.
      */
@@ -37,16 +32,14 @@ public final class ApplicationInsightsComponentAnalyticsItemInner {
     private String content;
 
     /*
-     * This instance's version of the data model. This can change as new
-     * features are added.
+     * This instance's version of the data model. This can change as new features are added.
      */
     @JsonProperty(value = "Version", access = JsonProperty.Access.WRITE_ONLY)
     private String version;
 
     /*
-     * Enum indicating if this item definition is owned by a specific user or
-     * is shared between all users with access to the Application Insights
-     * component.
+     * Enum indicating if this item definition is owned by a specific user or is shared between all users with access
+     * to the Application Insights component.
      */
     @JsonProperty(value = "Scope")
     private ItemScope scope;
@@ -64,18 +57,21 @@ public final class ApplicationInsightsComponentAnalyticsItemInner {
     private String timeCreated;
 
     /*
-     * Date and time in UTC of the last modification that was made to this
-     * item.
+     * Date and time in UTC of the last modification that was made to this item.
      */
     @JsonProperty(value = "TimeModified", access = JsonProperty.Access.WRITE_ONLY)
     private String timeModified;
 
     /*
-     * A set of properties that can be defined in the context of a specific
-     * item type. Each type may have its own properties.
+     * A set of properties that can be defined in the context of a specific item type. Each type may have its own
+     * properties.
      */
     @JsonProperty(value = "Properties")
     private ApplicationInsightsComponentAnalyticsItemProperties properties;
+
+    /** Creates an instance of ApplicationInsightsComponentAnalyticsItemInner class. */
+    public ApplicationInsightsComponentAnalyticsItemInner() {
+    }
 
     /**
      * Get the id property: Internally assigned unique id of the item definition.
@@ -223,8 +219,8 @@ public final class ApplicationInsightsComponentAnalyticsItemInner {
      * @param properties the properties value to set.
      * @return the ApplicationInsightsComponentAnalyticsItemInner object itself.
      */
-    public ApplicationInsightsComponentAnalyticsItemInner withProperties(
-        ApplicationInsightsComponentAnalyticsItemProperties properties) {
+    public ApplicationInsightsComponentAnalyticsItemInner
+        withProperties(ApplicationInsightsComponentAnalyticsItemProperties properties) {
         this.properties = properties;
         return this;
     }

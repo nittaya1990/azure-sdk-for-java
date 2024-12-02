@@ -5,55 +5,91 @@
 package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.resourcemanager.security.fluent.models.AlertSyncSettingProperties;
 import com.azure.resourcemanager.security.fluent.models.SettingInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** Represents an alert sync setting. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "kind")
+/**
+ * Represents an alert sync setting.
+ */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind", defaultImpl = AlertSyncSettings.class, visible = true)
 @JsonTypeName("AlertSyncSettings")
-@JsonFlatten
 @Fluent
-public class AlertSyncSettings extends SettingInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AlertSyncSettings.class);
+public final class AlertSyncSettings extends SettingInner {
+    /*
+     * the kind of the settings string
+     */
+    @JsonTypeId
+    @JsonProperty(value = "kind", required = true)
+    private SettingKind kind = SettingKind.ALERT_SYNC_SETTINGS;
 
     /*
-     * Is the alert sync setting enabled
+     * Alert sync setting data
      */
-    @JsonProperty(value = "properties.enabled")
-    private Boolean enabled;
+    @JsonProperty(value = "properties")
+    private AlertSyncSettingProperties innerProperties;
+
+    /**
+     * Creates an instance of AlertSyncSettings class.
+     */
+    public AlertSyncSettings() {
+    }
+
+    /**
+     * Get the kind property: the kind of the settings string.
+     * 
+     * @return the kind value.
+     */
+    @Override
+    public SettingKind kind() {
+        return this.kind;
+    }
+
+    /**
+     * Get the innerProperties property: Alert sync setting data.
+     * 
+     * @return the innerProperties value.
+     */
+    private AlertSyncSettingProperties innerProperties() {
+        return this.innerProperties;
+    }
 
     /**
      * Get the enabled property: Is the alert sync setting enabled.
-     *
+     * 
      * @return the enabled value.
      */
     public Boolean enabled() {
-        return this.enabled;
+        return this.innerProperties() == null ? null : this.innerProperties().enabled();
     }
 
     /**
      * Set the enabled property: Is the alert sync setting enabled.
-     *
+     * 
      * @param enabled the enabled value to set.
      * @return the AlertSyncSettings object itself.
      */
     public AlertSyncSettings withEnabled(Boolean enabled) {
-        this.enabled = enabled;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AlertSyncSettingProperties();
+        }
+        this.innerProperties().withEnabled(enabled);
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
         super.validate();
+        if (innerProperties() != null) {
+            innerProperties().validate();
+        }
     }
 }

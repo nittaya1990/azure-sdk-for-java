@@ -8,13 +8,22 @@ import com.azure.core.util.ExpandableStringEnum;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.Collection;
 
-/** Defines values for EventStatusValues. */
+/** Current status of event. */
 public final class EventStatusValues extends ExpandableStringEnum<EventStatusValues> {
     /** Static value Active for EventStatusValues. */
     public static final EventStatusValues ACTIVE = fromString("Active");
 
     /** Static value Resolved for EventStatusValues. */
     public static final EventStatusValues RESOLVED = fromString("Resolved");
+
+    /**
+     * Creates a new instance of EventStatusValues value.
+     *
+     * @deprecated Use the {@link #fromString(String)} factory method.
+     */
+    @Deprecated
+    public EventStatusValues() {
+    }
 
     /**
      * Creates or finds a EventStatusValues from its string representation.
@@ -27,7 +36,11 @@ public final class EventStatusValues extends ExpandableStringEnum<EventStatusVal
         return fromString(name, EventStatusValues.class);
     }
 
-    /** @return known EventStatusValues values. */
+    /**
+     * Gets known EventStatusValues values.
+     *
+     * @return known EventStatusValues values.
+     */
     public static Collection<EventStatusValues> values() {
         return values(EventStatusValues.class);
     }

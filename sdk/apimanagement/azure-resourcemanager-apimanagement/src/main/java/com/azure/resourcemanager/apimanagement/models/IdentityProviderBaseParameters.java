@@ -5,16 +5,12 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Identity Provider Base Parameter Properties. */
 @Fluent
 public class IdentityProviderBaseParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(IdentityProviderBaseParameters.class);
-
     /*
      * Identity Provider Type identifier.
      */
@@ -62,6 +58,16 @@ public class IdentityProviderBaseParameters {
      */
     @JsonProperty(value = "passwordResetPolicyName")
     private String passwordResetPolicyName;
+
+    /*
+     * The client library to be used in the developer portal. Only applies to AAD and AAD B2C Identity Provider.
+     */
+    @JsonProperty(value = "clientLibrary")
+    private String clientLibrary;
+
+    /** Creates an instance of IdentityProviderBaseParameters class. */
+    public IdentityProviderBaseParameters() {
+    }
 
     /**
      * Get the type property: Identity Provider Type identifier.
@@ -222,6 +228,28 @@ public class IdentityProviderBaseParameters {
      */
     public IdentityProviderBaseParameters withPasswordResetPolicyName(String passwordResetPolicyName) {
         this.passwordResetPolicyName = passwordResetPolicyName;
+        return this;
+    }
+
+    /**
+     * Get the clientLibrary property: The client library to be used in the developer portal. Only applies to AAD and
+     * AAD B2C Identity Provider.
+     *
+     * @return the clientLibrary value.
+     */
+    public String clientLibrary() {
+        return this.clientLibrary;
+    }
+
+    /**
+     * Set the clientLibrary property: The client library to be used in the developer portal. Only applies to AAD and
+     * AAD B2C Identity Provider.
+     *
+     * @param clientLibrary the clientLibrary value to set.
+     * @return the IdentityProviderBaseParameters object itself.
+     */
+    public IdentityProviderBaseParameters withClientLibrary(String clientLibrary) {
+        this.clientLibrary = clientLibrary;
         return this;
     }
 

@@ -5,17 +5,13 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.models.ApiVersionSetEntityBase;
 import com.azure.resourcemanager.apimanagement.models.VersioningScheme;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Properties used to create or update an API Version Set. */
 @Fluent
 public final class ApiVersionSetUpdateParametersProperties extends ApiVersionSetEntityBase {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApiVersionSetUpdateParametersProperties.class);
-
     /*
      * Name of API Version Set
      */
@@ -23,11 +19,14 @@ public final class ApiVersionSetUpdateParametersProperties extends ApiVersionSet
     private String displayName;
 
     /*
-     * An value that determines where the API Version identifier will be
-     * located in a HTTP request.
+     * An value that determines where the API Version identifier will be located in a HTTP request.
      */
     @JsonProperty(value = "versioningScheme")
     private VersioningScheme versioningScheme;
+
+    /** Creates an instance of ApiVersionSetUpdateParametersProperties class. */
+    public ApiVersionSetUpdateParametersProperties() {
+    }
 
     /**
      * Get the displayName property: Name of API Version Set.

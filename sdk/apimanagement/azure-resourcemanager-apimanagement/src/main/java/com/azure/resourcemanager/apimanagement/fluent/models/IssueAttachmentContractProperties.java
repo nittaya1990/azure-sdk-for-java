@@ -6,14 +6,11 @@ package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Issue Attachment contract Properties. */
 @Fluent
 public final class IssueAttachmentContractProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(IssueAttachmentContractProperties.class);
-
     /*
      * Filename by which the binary data will be saved.
      */
@@ -21,8 +18,8 @@ public final class IssueAttachmentContractProperties {
     private String title;
 
     /*
-     * Either 'link' if content is provided via an HTTP link or the MIME type
-     * of the Base64-encoded binary data provided in the 'content' property.
+     * Either 'link' if content is provided via an HTTP link or the MIME type of the Base64-encoded binary data
+     * provided in the 'content' property.
      */
     @JsonProperty(value = "contentFormat", required = true)
     private String contentFormat;
@@ -32,6 +29,10 @@ public final class IssueAttachmentContractProperties {
      */
     @JsonProperty(value = "content", required = true)
     private String content;
+
+    /** Creates an instance of IssueAttachmentContractProperties class. */
+    public IssueAttachmentContractProperties() {
+    }
 
     /**
      * Get the title property: Filename by which the binary data will be saved.
@@ -102,22 +103,18 @@ public final class IssueAttachmentContractProperties {
      */
     public void validate() {
         if (title() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property title in model IssueAttachmentContractProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property title in model IssueAttachmentContractProperties"));
         }
         if (contentFormat() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property contentFormat in model IssueAttachmentContractProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property contentFormat in model IssueAttachmentContractProperties"));
         }
         if (content() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property content in model IssueAttachmentContractProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property content in model IssueAttachmentContractProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(IssueAttachmentContractProperties.class);
 }

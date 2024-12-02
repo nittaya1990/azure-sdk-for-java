@@ -22,20 +22,19 @@ public class KeyVaultKeyManagerTest {
     private static String certificateName;
 
     @BeforeAll
-    public static void setEnvironmentProperty() throws KeyStoreException, NoSuchAlgorithmException, IOException,
-        CertificateException {
+    public static void setEnvironmentProperty()
+        throws KeyStoreException, NoSuchAlgorithmException, IOException, CertificateException {
         PropertyConvertorUtils.putEnvironmentPropertyToSystemPropertyForKeyVaultJca();
         PropertyConvertorUtils.addKeyVaultJcaProvider();
         KeyStore keyStore = PropertyConvertorUtils.getKeyVaultKeyStore();
         manager = new KeyVaultKeyManager(keyStore, null);
-        certificateName = System.getenv("AZURE_KEYVAULT_CERTIFICATE_NAME");
+        certificateName = PropertyConvertorUtils.getPropertyValue("AZURE_KEYVAULT_CERTIFICATE_NAME");
     }
 
     @Test
     public void testPrivateKey() {
         assertNotNull(manager.getPrivateKey(certificateName));
     }
-
 
     @Test
     public void testGetCertificateChain() {

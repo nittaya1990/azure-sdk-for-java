@@ -15,7 +15,8 @@ public interface Components {
      *
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of all Application Insights components within a subscription.
+     * @return a list of all Application Insights components within a subscription as paginated response with {@link
+     *     PagedIterable}.
      */
     PagedIterable<ApplicationInsightsComponent> list();
 
@@ -26,7 +27,8 @@ public interface Components {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of all Application Insights components within a subscription.
+     * @return a list of all Application Insights components within a subscription as paginated response with {@link
+     *     PagedIterable}.
      */
     PagedIterable<ApplicationInsightsComponent> list(Context context);
 
@@ -37,7 +39,8 @@ public interface Components {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Application Insights components within a resource group.
+     * @return a list of Application Insights components within a resource group as paginated response with {@link
+     *     PagedIterable}.
      */
     PagedIterable<ApplicationInsightsComponent> listByResourceGroup(String resourceGroupName);
 
@@ -49,9 +52,23 @@ public interface Components {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Application Insights components within a resource group.
+     * @return a list of Application Insights components within a resource group as paginated response with {@link
+     *     PagedIterable}.
      */
     PagedIterable<ApplicationInsightsComponent> listByResourceGroup(String resourceGroupName, Context context);
+
+    /**
+     * Deletes an Application Insights component.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param resourceName The name of the Application Insights component resource.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    Response<Void> deleteByResourceGroupWithResponse(String resourceGroupName, String resourceName, Context context);
 
     /**
      * Deletes an Application Insights component.
@@ -65,7 +82,7 @@ public interface Components {
     void deleteByResourceGroup(String resourceGroupName, String resourceName);
 
     /**
-     * Deletes an Application Insights component.
+     * Returns an Application Insights component.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param resourceName The name of the Application Insights component resource.
@@ -73,9 +90,10 @@ public interface Components {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return an Application Insights component definition along with {@link Response}.
      */
-    Response<Void> deleteWithResponse(String resourceGroupName, String resourceName, Context context);
+    Response<ApplicationInsightsComponent> getByResourceGroupWithResponse(String resourceGroupName, String resourceName,
+        Context context);
 
     /**
      * Returns an Application Insights component.
@@ -90,18 +108,27 @@ public interface Components {
     ApplicationInsightsComponent getByResourceGroup(String resourceGroupName, String resourceName);
 
     /**
-     * Returns an Application Insights component.
+     * Purges data in an Application Insights component by a set of user-defined filters.
+     *
+     * <p>In order to manage system resources, purge requests are throttled at 50 requests per hour. You should batch
+     * the execution of purge requests by sending a single command whose predicate includes all user identities that
+     * require purging. Use the in operator to specify multiple identities. You should run the query prior to using for
+     * a purge request to verify that the results are expected. Note: this operation is intended for Classic resources,
+     * for workspace-based Application Insights resource please run purge operation (directly on the
+     * workspace)(https://docs.microsoft.com/en-us/rest/api/loganalytics/workspace-purge/purge) , scoped to specific
+     * resource id.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param resourceName The name of the Application Insights component resource.
+     * @param body Describes the body of a request to purge data in a single table of an Application Insights component.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Application Insights component definition.
+     * @return response containing operationId for a specific purge action along with {@link Response}.
      */
-    Response<ApplicationInsightsComponent> getByResourceGroupWithResponse(
-        String resourceGroupName, String resourceName, Context context);
+    Response<ComponentPurgeResponse> purgeWithResponse(String resourceGroupName, String resourceName,
+        ComponentPurgeBody body, Context context);
 
     /**
      * Purges data in an Application Insights component by a set of user-defined filters.
@@ -109,7 +136,10 @@ public interface Components {
      * <p>In order to manage system resources, purge requests are throttled at 50 requests per hour. You should batch
      * the execution of purge requests by sending a single command whose predicate includes all user identities that
      * require purging. Use the in operator to specify multiple identities. You should run the query prior to using for
-     * a purge request to verify that the results are expected.
+     * a purge request to verify that the results are expected. Note: this operation is intended for Classic resources,
+     * for workspace-based Application Insights resource please run purge operation (directly on the
+     * workspace)(https://docs.microsoft.com/en-us/rest/api/loganalytics/workspace-purge/purge) , scoped to specific
+     * resource id.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param resourceName The name of the Application Insights component resource.
@@ -122,24 +152,19 @@ public interface Components {
     ComponentPurgeResponse purge(String resourceGroupName, String resourceName, ComponentPurgeBody body);
 
     /**
-     * Purges data in an Application Insights component by a set of user-defined filters.
-     *
-     * <p>In order to manage system resources, purge requests are throttled at 50 requests per hour. You should batch
-     * the execution of purge requests by sending a single command whose predicate includes all user identities that
-     * require purging. Use the in operator to specify multiple identities. You should run the query prior to using for
-     * a purge request to verify that the results are expected.
+     * Get status for an ongoing purge operation.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param resourceName The name of the Application Insights component resource.
-     * @param body Describes the body of a request to purge data in a single table of an Application Insights component.
+     * @param purgeId In a purge status request, this is the Id of the operation the status of which is returned.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return response containing operationId for a specific purge action.
+     * @return status for an ongoing purge operation along with {@link Response}.
      */
-    Response<ComponentPurgeResponse> purgeWithResponse(
-        String resourceGroupName, String resourceName, ComponentPurgeBody body, Context context);
+    Response<ComponentPurgeStatusResponse> getPurgeStatusWithResponse(String resourceGroupName, String resourceName,
+        String purgeId, Context context);
 
     /**
      * Get status for an ongoing purge operation.
@@ -155,28 +180,13 @@ public interface Components {
     ComponentPurgeStatusResponse getPurgeStatus(String resourceGroupName, String resourceName, String purgeId);
 
     /**
-     * Get status for an ongoing purge operation.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param resourceName The name of the Application Insights component resource.
-     * @param purgeId In a purge status request, this is the Id of the operation the status of which is returned.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return status for an ongoing purge operation.
-     */
-    Response<ComponentPurgeStatusResponse> getPurgeStatusWithResponse(
-        String resourceGroupName, String resourceName, String purgeId, Context context);
-
-    /**
      * Returns an Application Insights component.
      *
      * @param id the resource ID.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Application Insights component definition.
+     * @return an Application Insights component definition along with {@link Response}.
      */
     ApplicationInsightsComponent getById(String id);
 
@@ -188,7 +198,7 @@ public interface Components {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Application Insights component definition.
+     * @return an Application Insights component definition along with {@link Response}.
      */
     Response<ApplicationInsightsComponent> getByIdWithResponse(String id, Context context);
 
@@ -210,7 +220,7 @@ public interface Components {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
     Response<Void> deleteByIdWithResponse(String id, Context context);
 

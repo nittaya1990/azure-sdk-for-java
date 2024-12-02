@@ -5,226 +5,279 @@
 package com.azure.resourcemanager.streamanalytics.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import com.azure.resourcemanager.streamanalytics.fluent.models.ServiceBusTopicOutputDataSourceProperties;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-/** Describes a Service Bus Topic output data source. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@JsonTypeName("Microsoft.ServiceBus/Topic")
-@JsonFlatten
+/**
+ * Describes a Service Bus Topic output data source.
+ */
 @Fluent
-public class ServiceBusTopicOutputDataSource extends OutputDataSource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ServiceBusTopicOutputDataSource.class);
+public final class ServiceBusTopicOutputDataSource extends OutputDataSource {
+    /*
+     * Indicates the type of data source output will be written to. Required on PUT (CreateOrReplace) requests.
+     */
+    private String type = "Microsoft.ServiceBus/Topic";
 
     /*
-     * The namespace that is associated with the desired Event Hub, Service Bus
-     * Queue, Service Bus Topic, etc. Required on PUT (CreateOrReplace)
-     * requests.
+     * The properties that are associated with a Service Bus Topic output. Required on PUT (CreateOrReplace) requests.
      */
-    @JsonProperty(value = "properties.serviceBusNamespace")
-    private String serviceBusNamespace;
-
-    /*
-     * The shared access policy name for the Event Hub, Service Bus Queue,
-     * Service Bus Topic, etc. Required on PUT (CreateOrReplace) requests.
-     */
-    @JsonProperty(value = "properties.sharedAccessPolicyName")
-    private String sharedAccessPolicyName;
-
-    /*
-     * The shared access policy key for the specified shared access policy.
-     * Required on PUT (CreateOrReplace) requests.
-     */
-    @JsonProperty(value = "properties.sharedAccessPolicyKey")
-    private String sharedAccessPolicyKey;
-
-    /*
-     * Authentication Mode.
-     */
-    @JsonProperty(value = "properties.authenticationMode")
-    private AuthenticationMode authenticationMode;
-
-    /*
-     * The name of the Service Bus Topic. Required on PUT (CreateOrReplace)
-     * requests.
-     */
-    @JsonProperty(value = "properties.topicName")
-    private String topicName;
-
-    /*
-     * A string array of the names of output columns to be attached to Service
-     * Bus messages as custom properties.
-     */
-    @JsonProperty(value = "properties.propertyColumns")
-    private List<String> propertyColumns;
-
-    /*
-     * Dictionary of <string>
-     */
-    @JsonProperty(value = "properties.systemPropertyColumns")
-    private Map<String, String> systemPropertyColumns;
+    private ServiceBusTopicOutputDataSourceProperties innerProperties;
 
     /**
-     * Get the serviceBusNamespace property: The namespace that is associated with the desired Event Hub, Service Bus
-     * Queue, Service Bus Topic, etc. Required on PUT (CreateOrReplace) requests.
-     *
-     * @return the serviceBusNamespace value.
+     * Creates an instance of ServiceBusTopicOutputDataSource class.
      */
-    public String serviceBusNamespace() {
-        return this.serviceBusNamespace;
+    public ServiceBusTopicOutputDataSource() {
     }
 
     /**
-     * Set the serviceBusNamespace property: The namespace that is associated with the desired Event Hub, Service Bus
-     * Queue, Service Bus Topic, etc. Required on PUT (CreateOrReplace) requests.
-     *
-     * @param serviceBusNamespace the serviceBusNamespace value to set.
-     * @return the ServiceBusTopicOutputDataSource object itself.
+     * Get the type property: Indicates the type of data source output will be written to. Required on PUT
+     * (CreateOrReplace) requests.
+     * 
+     * @return the type value.
      */
-    public ServiceBusTopicOutputDataSource withServiceBusNamespace(String serviceBusNamespace) {
-        this.serviceBusNamespace = serviceBusNamespace;
-        return this;
+    @Override
+    public String type() {
+        return this.type;
     }
 
     /**
-     * Get the sharedAccessPolicyName property: The shared access policy name for the Event Hub, Service Bus Queue,
-     * Service Bus Topic, etc. Required on PUT (CreateOrReplace) requests.
-     *
-     * @return the sharedAccessPolicyName value.
+     * Get the innerProperties property: The properties that are associated with a Service Bus Topic output. Required on
+     * PUT (CreateOrReplace) requests.
+     * 
+     * @return the innerProperties value.
      */
-    public String sharedAccessPolicyName() {
-        return this.sharedAccessPolicyName;
-    }
-
-    /**
-     * Set the sharedAccessPolicyName property: The shared access policy name for the Event Hub, Service Bus Queue,
-     * Service Bus Topic, etc. Required on PUT (CreateOrReplace) requests.
-     *
-     * @param sharedAccessPolicyName the sharedAccessPolicyName value to set.
-     * @return the ServiceBusTopicOutputDataSource object itself.
-     */
-    public ServiceBusTopicOutputDataSource withSharedAccessPolicyName(String sharedAccessPolicyName) {
-        this.sharedAccessPolicyName = sharedAccessPolicyName;
-        return this;
-    }
-
-    /**
-     * Get the sharedAccessPolicyKey property: The shared access policy key for the specified shared access policy.
-     * Required on PUT (CreateOrReplace) requests.
-     *
-     * @return the sharedAccessPolicyKey value.
-     */
-    public String sharedAccessPolicyKey() {
-        return this.sharedAccessPolicyKey;
-    }
-
-    /**
-     * Set the sharedAccessPolicyKey property: The shared access policy key for the specified shared access policy.
-     * Required on PUT (CreateOrReplace) requests.
-     *
-     * @param sharedAccessPolicyKey the sharedAccessPolicyKey value to set.
-     * @return the ServiceBusTopicOutputDataSource object itself.
-     */
-    public ServiceBusTopicOutputDataSource withSharedAccessPolicyKey(String sharedAccessPolicyKey) {
-        this.sharedAccessPolicyKey = sharedAccessPolicyKey;
-        return this;
-    }
-
-    /**
-     * Get the authenticationMode property: Authentication Mode.
-     *
-     * @return the authenticationMode value.
-     */
-    public AuthenticationMode authenticationMode() {
-        return this.authenticationMode;
-    }
-
-    /**
-     * Set the authenticationMode property: Authentication Mode.
-     *
-     * @param authenticationMode the authenticationMode value to set.
-     * @return the ServiceBusTopicOutputDataSource object itself.
-     */
-    public ServiceBusTopicOutputDataSource withAuthenticationMode(AuthenticationMode authenticationMode) {
-        this.authenticationMode = authenticationMode;
-        return this;
+    private ServiceBusTopicOutputDataSourceProperties innerProperties() {
+        return this.innerProperties;
     }
 
     /**
      * Get the topicName property: The name of the Service Bus Topic. Required on PUT (CreateOrReplace) requests.
-     *
+     * 
      * @return the topicName value.
      */
     public String topicName() {
-        return this.topicName;
+        return this.innerProperties() == null ? null : this.innerProperties().topicName();
     }
 
     /**
      * Set the topicName property: The name of the Service Bus Topic. Required on PUT (CreateOrReplace) requests.
-     *
+     * 
      * @param topicName the topicName value to set.
      * @return the ServiceBusTopicOutputDataSource object itself.
      */
     public ServiceBusTopicOutputDataSource withTopicName(String topicName) {
-        this.topicName = topicName;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new ServiceBusTopicOutputDataSourceProperties();
+        }
+        this.innerProperties().withTopicName(topicName);
         return this;
     }
 
     /**
      * Get the propertyColumns property: A string array of the names of output columns to be attached to Service Bus
      * messages as custom properties.
-     *
+     * 
      * @return the propertyColumns value.
      */
     public List<String> propertyColumns() {
-        return this.propertyColumns;
+        return this.innerProperties() == null ? null : this.innerProperties().propertyColumns();
     }
 
     /**
      * Set the propertyColumns property: A string array of the names of output columns to be attached to Service Bus
      * messages as custom properties.
-     *
+     * 
      * @param propertyColumns the propertyColumns value to set.
      * @return the ServiceBusTopicOutputDataSource object itself.
      */
     public ServiceBusTopicOutputDataSource withPropertyColumns(List<String> propertyColumns) {
-        this.propertyColumns = propertyColumns;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new ServiceBusTopicOutputDataSourceProperties();
+        }
+        this.innerProperties().withPropertyColumns(propertyColumns);
         return this;
     }
 
     /**
-     * Get the systemPropertyColumns property: Dictionary of &lt;string&gt;.
-     *
+     * Get the systemPropertyColumns property: The system properties associated with the Service Bus Topic Output. The
+     * following system properties are supported: ReplyToSessionId, ContentType, To, Subject, CorrelationId, TimeToLive,
+     * PartitionKey, SessionId, ScheduledEnqueueTime, MessageId, ReplyTo, Label, ScheduledEnqueueTimeUtc.
+     * 
      * @return the systemPropertyColumns value.
      */
     public Map<String, String> systemPropertyColumns() {
-        return this.systemPropertyColumns;
+        return this.innerProperties() == null ? null : this.innerProperties().systemPropertyColumns();
     }
 
     /**
-     * Set the systemPropertyColumns property: Dictionary of &lt;string&gt;.
-     *
+     * Set the systemPropertyColumns property: The system properties associated with the Service Bus Topic Output. The
+     * following system properties are supported: ReplyToSessionId, ContentType, To, Subject, CorrelationId, TimeToLive,
+     * PartitionKey, SessionId, ScheduledEnqueueTime, MessageId, ReplyTo, Label, ScheduledEnqueueTimeUtc.
+     * 
      * @param systemPropertyColumns the systemPropertyColumns value to set.
      * @return the ServiceBusTopicOutputDataSource object itself.
      */
     public ServiceBusTopicOutputDataSource withSystemPropertyColumns(Map<String, String> systemPropertyColumns) {
-        this.systemPropertyColumns = systemPropertyColumns;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new ServiceBusTopicOutputDataSourceProperties();
+        }
+        this.innerProperties().withSystemPropertyColumns(systemPropertyColumns);
+        return this;
+    }
+
+    /**
+     * Get the serviceBusNamespace property: The namespace that is associated with the desired Event Hub, Service Bus
+     * Queue, Service Bus Topic, etc. Required on PUT (CreateOrReplace) requests.
+     * 
+     * @return the serviceBusNamespace value.
+     */
+    public String serviceBusNamespace() {
+        return this.innerProperties() == null ? null : this.innerProperties().serviceBusNamespace();
+    }
+
+    /**
+     * Set the serviceBusNamespace property: The namespace that is associated with the desired Event Hub, Service Bus
+     * Queue, Service Bus Topic, etc. Required on PUT (CreateOrReplace) requests.
+     * 
+     * @param serviceBusNamespace the serviceBusNamespace value to set.
+     * @return the ServiceBusTopicOutputDataSource object itself.
+     */
+    public ServiceBusTopicOutputDataSource withServiceBusNamespace(String serviceBusNamespace) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new ServiceBusTopicOutputDataSourceProperties();
+        }
+        this.innerProperties().withServiceBusNamespace(serviceBusNamespace);
+        return this;
+    }
+
+    /**
+     * Get the sharedAccessPolicyName property: The shared access policy name for the Event Hub, Service Bus Queue,
+     * Service Bus Topic, etc. Required on PUT (CreateOrReplace) requests.
+     * 
+     * @return the sharedAccessPolicyName value.
+     */
+    public String sharedAccessPolicyName() {
+        return this.innerProperties() == null ? null : this.innerProperties().sharedAccessPolicyName();
+    }
+
+    /**
+     * Set the sharedAccessPolicyName property: The shared access policy name for the Event Hub, Service Bus Queue,
+     * Service Bus Topic, etc. Required on PUT (CreateOrReplace) requests.
+     * 
+     * @param sharedAccessPolicyName the sharedAccessPolicyName value to set.
+     * @return the ServiceBusTopicOutputDataSource object itself.
+     */
+    public ServiceBusTopicOutputDataSource withSharedAccessPolicyName(String sharedAccessPolicyName) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new ServiceBusTopicOutputDataSourceProperties();
+        }
+        this.innerProperties().withSharedAccessPolicyName(sharedAccessPolicyName);
+        return this;
+    }
+
+    /**
+     * Get the sharedAccessPolicyKey property: The shared access policy key for the specified shared access policy.
+     * Required on PUT (CreateOrReplace) requests.
+     * 
+     * @return the sharedAccessPolicyKey value.
+     */
+    public String sharedAccessPolicyKey() {
+        return this.innerProperties() == null ? null : this.innerProperties().sharedAccessPolicyKey();
+    }
+
+    /**
+     * Set the sharedAccessPolicyKey property: The shared access policy key for the specified shared access policy.
+     * Required on PUT (CreateOrReplace) requests.
+     * 
+     * @param sharedAccessPolicyKey the sharedAccessPolicyKey value to set.
+     * @return the ServiceBusTopicOutputDataSource object itself.
+     */
+    public ServiceBusTopicOutputDataSource withSharedAccessPolicyKey(String sharedAccessPolicyKey) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new ServiceBusTopicOutputDataSourceProperties();
+        }
+        this.innerProperties().withSharedAccessPolicyKey(sharedAccessPolicyKey);
+        return this;
+    }
+
+    /**
+     * Get the authenticationMode property: Authentication Mode.
+     * 
+     * @return the authenticationMode value.
+     */
+    public AuthenticationMode authenticationMode() {
+        return this.innerProperties() == null ? null : this.innerProperties().authenticationMode();
+    }
+
+    /**
+     * Set the authenticationMode property: Authentication Mode.
+     * 
+     * @param authenticationMode the authenticationMode value to set.
+     * @return the ServiceBusTopicOutputDataSource object itself.
+     */
+    public ServiceBusTopicOutputDataSource withAuthenticationMode(AuthenticationMode authenticationMode) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new ServiceBusTopicOutputDataSourceProperties();
+        }
+        this.innerProperties().withAuthenticationMode(authenticationMode);
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
-        super.validate();
+        if (innerProperties() != null) {
+            innerProperties().validate();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeStringField("type", this.type);
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of ServiceBusTopicOutputDataSource from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of ServiceBusTopicOutputDataSource if the JsonReader was pointing to an instance of it, or
+     * null if it was pointing to JSON null.
+     * @throws IOException If an error occurs while reading the ServiceBusTopicOutputDataSource.
+     */
+    public static ServiceBusTopicOutputDataSource fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            ServiceBusTopicOutputDataSource deserializedServiceBusTopicOutputDataSource
+                = new ServiceBusTopicOutputDataSource();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("type".equals(fieldName)) {
+                    deserializedServiceBusTopicOutputDataSource.type = reader.getString();
+                } else if ("properties".equals(fieldName)) {
+                    deserializedServiceBusTopicOutputDataSource.innerProperties
+                        = ServiceBusTopicOutputDataSourceProperties.fromJson(reader);
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedServiceBusTopicOutputDataSource;
+        });
     }
 }

@@ -7,15 +7,12 @@ package com.azure.resourcemanager.apimanagement.fluent.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.models.KeyType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
 /** Parameters supplied to the Get User Token operation. */
 @Fluent
 public final class UserTokenParameterProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(UserTokenParameterProperties.class);
-
     /*
      * The Key to be used to generate token for user.
      */
@@ -23,13 +20,16 @@ public final class UserTokenParameterProperties {
     private KeyType keyType;
 
     /*
-     * The Expiry time of the Token. Maximum token expiry time is set to 30
-     * days. The date conforms to the following format: `yyyy-MM-ddTHH:mm:ssZ`
-     * as specified by the ISO 8601 standard.
+     * The Expiry time of the Token. Maximum token expiry time is set to 30 days. The date conforms to the following
+     * format: `yyyy-MM-ddTHH:mm:ssZ` as specified by the ISO 8601 standard.
      *
      */
     @JsonProperty(value = "expiry", required = true)
     private OffsetDateTime expiry;
+
+    /** Creates an instance of UserTokenParameterProperties class. */
+    public UserTokenParameterProperties() {
+    }
 
     /**
      * Get the keyType property: The Key to be used to generate token for user.
@@ -80,16 +80,14 @@ public final class UserTokenParameterProperties {
      */
     public void validate() {
         if (keyType() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property keyType in model UserTokenParameterProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property keyType in model UserTokenParameterProperties"));
         }
         if (expiry() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property expiry in model UserTokenParameterProperties"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property expiry in model UserTokenParameterProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(UserTokenParameterProperties.class);
 }

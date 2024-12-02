@@ -6,20 +6,20 @@ package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Sign-In settings for the Developer Portal. */
 @Fluent
 public final class PortalSigninSettingsInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PortalSigninSettingsInner.class);
-
     /*
      * Sign-in settings contract properties.
      */
     @JsonProperty(value = "properties")
     private PortalSigninSettingProperties innerProperties;
+
+    /** Creates an instance of PortalSigninSettingsInner class. */
+    public PortalSigninSettingsInner() {
+    }
 
     /**
      * Get the innerProperties property: Sign-in settings contract properties.

@@ -21,15 +21,12 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.videoanalyzer.fluent.LivePipelineOperationStatusesClient;
 import com.azure.resourcemanager.videoanalyzer.fluent.models.LivePipelineOperationStatusInner;
 import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in LivePipelineOperationStatusesClient. */
 public final class LivePipelineOperationStatusesClientImpl implements LivePipelineOperationStatusesClient {
-    private final ClientLogger logger = new ClientLogger(LivePipelineOperationStatusesClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final LivePipelineOperationStatusesService service;
 
@@ -42,12 +39,8 @@ public final class LivePipelineOperationStatusesClientImpl implements LivePipeli
      * @param client the instance of the service client containing this operation class.
      */
     LivePipelineOperationStatusesClientImpl(VideoAnalyzerManagementClientImpl client) {
-        this.service =
-            RestProxy
-                .create(
-                    LivePipelineOperationStatusesService.class,
-                    client.getHttpPipeline(),
-                    client.getSerializerAdapter());
+        this.service = RestProxy.create(LivePipelineOperationStatusesService.class, client.getHttpPipeline(),
+            client.getSerializerAdapter());
         this.client = client;
     }
 
@@ -58,22 +51,16 @@ public final class LivePipelineOperationStatusesClientImpl implements LivePipeli
     @Host("{$host}")
     @ServiceInterface(name = "VideoAnalyzerManagem")
     private interface LivePipelineOperationStatusesService {
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Media"
-                + "/videoAnalyzers/{accountName}/livePipelines/{livePipelineName}/operationStatuses/{operationId}")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Media"
+            + "/videoAnalyzers/{accountName}/livePipelines/{livePipelineName}/operationStatuses/{operationId}")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<LivePipelineOperationStatusInner>> get(
-            @HostParam("$host") String endpoint,
+        Mono<Response<LivePipelineOperationStatusInner>> get(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("accountName") String accountName,
-            @PathParam("livePipelineName") String livePipelineName,
-            @PathParam("operationId") String operationId,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("accountName") String accountName,
+            @PathParam("livePipelineName") String livePipelineName, @PathParam("operationId") String operationId,
+            @QueryParam("api-version") String apiVersion, @HeaderParam("Accept") String accept, Context context);
     }
 
     /**
@@ -86,22 +73,19 @@ public final class LivePipelineOperationStatusesClientImpl implements LivePipeli
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the operation status of a live pipeline.
+     * @return the operation status of a live pipeline along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<LivePipelineOperationStatusInner>> getWithResponseAsync(
-        String resourceGroupName, String accountName, String livePipelineName, String operationId) {
+    private Mono<Response<LivePipelineOperationStatusInner>> getWithResponseAsync(String resourceGroupName,
+        String accountName, String livePipelineName, String operationId) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -120,18 +104,8 @@ public final class LivePipelineOperationStatusesClientImpl implements LivePipeli
         final String accept = "application/json";
         return FluxUtil
             .withContext(
-                context ->
-                    service
-                        .get(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            accountName,
-                            livePipelineName,
-                            operationId,
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
+                context -> service.get(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+                    accountName, livePipelineName, operationId, this.client.getApiVersion(), accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -146,22 +120,19 @@ public final class LivePipelineOperationStatusesClientImpl implements LivePipeli
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the operation status of a live pipeline.
+     * @return the operation status of a live pipeline along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<LivePipelineOperationStatusInner>> getWithResponseAsync(
-        String resourceGroupName, String accountName, String livePipelineName, String operationId, Context context) {
+    private Mono<Response<LivePipelineOperationStatusInner>> getWithResponseAsync(String resourceGroupName,
+        String accountName, String livePipelineName, String operationId, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -179,17 +150,8 @@ public final class LivePipelineOperationStatusesClientImpl implements LivePipeli
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .get(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                accountName,
-                livePipelineName,
-                operationId,
-                this.client.getApiVersion(),
-                accept,
-                context);
+        return service.get(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName, accountName,
+            livePipelineName, operationId, this.client.getApiVersion(), accept, context);
     }
 
     /**
@@ -202,20 +164,13 @@ public final class LivePipelineOperationStatusesClientImpl implements LivePipeli
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the operation status of a live pipeline.
+     * @return the operation status of a live pipeline on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<LivePipelineOperationStatusInner> getAsync(
-        String resourceGroupName, String accountName, String livePipelineName, String operationId) {
+    private Mono<LivePipelineOperationStatusInner> getAsync(String resourceGroupName, String accountName,
+        String livePipelineName, String operationId) {
         return getWithResponseAsync(resourceGroupName, accountName, livePipelineName, operationId)
-            .flatMap(
-                (Response<LivePipelineOperationStatusInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
@@ -231,8 +186,8 @@ public final class LivePipelineOperationStatusesClientImpl implements LivePipeli
      * @return the operation status of a live pipeline.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public LivePipelineOperationStatusInner get(
-        String resourceGroupName, String accountName, String livePipelineName, String operationId) {
+    public LivePipelineOperationStatusInner get(String resourceGroupName, String accountName, String livePipelineName,
+        String operationId) {
         return getAsync(resourceGroupName, accountName, livePipelineName, operationId).block();
     }
 
@@ -247,11 +202,11 @@ public final class LivePipelineOperationStatusesClientImpl implements LivePipeli
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the operation status of a live pipeline.
+     * @return the operation status of a live pipeline along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<LivePipelineOperationStatusInner> getWithResponse(
-        String resourceGroupName, String accountName, String livePipelineName, String operationId, Context context) {
+    public Response<LivePipelineOperationStatusInner> getWithResponse(String resourceGroupName, String accountName,
+        String livePipelineName, String operationId, Context context) {
         return getWithResponseAsync(resourceGroupName, accountName, livePipelineName, operationId, context).block();
     }
 }

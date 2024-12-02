@@ -1,17 +1,19 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
+
 package com.azure.data.tables;
 
 import com.azure.core.http.HttpClient;
 import com.azure.core.http.policy.ExponentialBackoff;
 import com.azure.core.http.policy.HttpLogDetailLevel;
 import com.azure.core.http.policy.HttpLogOptions;
-import com.azure.core.http.policy.HttpPipelinePolicy;
 import com.azure.core.http.policy.RetryPolicy;
+import com.azure.core.http.rest.PagedIterable;
 import com.azure.core.http.rest.PagedResponse;
 import com.azure.core.http.rest.Response;
-import com.azure.core.test.TestBase;
+import com.azure.core.test.http.AssertingHttpClientBuilder;
 import com.azure.core.test.utils.TestResourceNamer;
+import com.azure.core.util.BinaryData;
 import com.azure.data.tables.models.ListEntitiesOptions;
 import com.azure.data.tables.models.TableAccessPolicies;
 import com.azure.data.tables.models.TableAccessPolicy;
@@ -28,8 +30,11 @@ import com.azure.data.tables.sas.TableSasIpRange;
 import com.azure.data.tables.sas.TableSasPermission;
 import com.azure.data.tables.sas.TableSasProtocol;
 import com.azure.data.tables.sas.TableSasSignatureValues;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.time.Duration;
 import java.time.OffsetDateTime;
@@ -42,6 +47,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -52,64 +58,70 @@ import static org.junit.jupiter.api.Assertions.fail;
 /**
  * Tests {@link TableClient}.
  */
-public class TableClientTest extends TestBase {
-    private static final HttpClient DEFAULT_HTTP_CLIENT = HttpClient.createDefault();
-    private static final boolean IS_COSMOS_TEST = TestUtils.isCosmosTest();
-
-
+@Execution(ExecutionMode.SAME_THREAD)
+public class TableClientTest extends TableClientTestBase {
     private TableClient tableClient;
-    private HttpPipelinePolicy recordPolicy;
-    private HttpClient playbackClient;
 
-    private TableClientBuilder getClientBuilder(String tableName, String connectionString) {
-        final TableClientBuilder builder = new TableClientBuilder()
-            .connectionString(connectionString)
-            .httpLogOptions(new HttpLogOptions().setLogLevel(HttpLogDetailLevel.BODY_AND_HEADERS))
-            .tableName(tableName);
-
-        if (interceptorManager.isPlaybackMode()) {
-            playbackClient = interceptorManager.getPlaybackClient();
-
-            builder.httpClient(playbackClient);
-        } else {
-            builder.httpClient(DEFAULT_HTTP_CLIENT);
-
-            if (!interceptorManager.isLiveMode()) {
-                recordPolicy = interceptorManager.getRecordPolicy();
-
-                builder.addPolicy(recordPolicy);
-            }
-        }
-
-        return builder;
+    protected HttpClient buildAssertingClient(HttpClient httpClient) {
+        return new AssertingHttpClientBuilder(httpClient).skipRequest((ignored1, ignored2) -> false)
+            .assertSync()
+            .build();
     }
 
-    @Override
     protected void beforeTest() {
         final String tableName = testResourceNamer.randomName("tableName", 20);
-        final String connectionString = TestUtils.getConnectionString(interceptorManager.isPlaybackMode());
-        tableClient = getClientBuilder(tableName, connectionString).buildClient();
+        tableClient = getClientBuilder(tableName, false).buildClient();
 
         tableClient.createTable();
     }
 
+    protected void afterTest() {
+        if (tableClient != null) {
+            tableClient.deleteTable();
+        }
+    }
+
     @Test
-    void createTable() {
+    public void createTable() {
         // Arrange
         final String tableName2 = testResourceNamer.randomName("tableName", 20);
-        final String connectionString = TestUtils.getConnectionString(interceptorManager.isPlaybackMode());
-        final TableClient tableClient2 = getClientBuilder(tableName2, connectionString).buildClient();
+        final TableClient tableClient2 = getClientBuilder(tableName2, false).buildClient();
 
         // Act & Assert
         assertNotNull(tableClient2.createTable());
     }
 
+    /**
+     * Tests that a table and entity can be created while having a different tenant ID than the one that will be
+     * provided in the authentication challenge.
+     */
     @Test
-    void createTableWithResponse() {
+    public void createTableWithMultipleTenants() {
+        // This feature works only in Storage endpoints with service version 2020_12_06.
+        Assumptions.assumeTrue(tableClient.getTableEndpoint().contains("core.windows.net")
+            && tableClient.getServiceVersion() == TableServiceVersion.V2020_12_06);
+
         // Arrange
         final String tableName2 = testResourceNamer.randomName("tableName", 20);
-        final String connectionString = TestUtils.getConnectionString(interceptorManager.isPlaybackMode());
-        final TableClient tableClient2 = getClientBuilder(tableName2, connectionString).buildClient();
+        final TableClient tableClient2 = getClientBuilder(tableName2, true).buildClient();
+        // Act & Assert
+        // This request will use the tenant ID extracted from the previous request.
+
+        assertNotNull(tableClient2.createTable());
+
+        final String partitionKeyValue = testResourceNamer.randomName("partitionKey", 20);
+        final String rowKeyValue = testResourceNamer.randomName("rowKey", 20);
+        final TableEntity tableEntity = new TableEntity(partitionKeyValue, rowKeyValue);
+
+        // All other requests will also use the tenant ID obtained from the auth challenge.
+        assertDoesNotThrow(() -> tableClient2.createEntity(tableEntity));
+    }
+
+    @Test
+    public void createTableWithResponse() {
+        // Arrange
+        final String tableName2 = testResourceNamer.randomName("tableName", 20);
+        final TableClient tableClient2 = getClientBuilder(tableName2, false).buildClient();
         final int expectedStatusCode = 204;
 
         // Act & Assert
@@ -117,10 +129,24 @@ public class TableClientTest extends TestBase {
     }
 
     @Test
-    void createEntity() {
+    public void createEntity() {
+        createEntityImpl("partitionKey", "rowKey");
+    }
+
+    @Test
+    public void createEntityWithSingleQuotesInPartitionKey() {
+        createEntityImpl("partition'Key", "rowKey");
+    }
+
+    @Test
+    public void createEntityWithSingleQuotesInRowKey() {
+        createEntityImpl("partitionKey", "row'Key");
+    }
+
+    private void createEntityImpl(String partitionKeyPrefix, String rowKeyPrefix) {
         // Arrange
-        final String partitionKeyValue = testResourceNamer.randomName("partitionKey", 20);
-        final String rowKeyValue = testResourceNamer.randomName("rowKey", 20);
+        final String partitionKeyValue = testResourceNamer.randomName(partitionKeyPrefix, 20);
+        final String rowKeyValue = testResourceNamer.randomName(rowKeyPrefix, 20);
         final TableEntity tableEntity = new TableEntity(partitionKeyValue, rowKeyValue);
 
         // Act & Assert
@@ -128,7 +154,7 @@ public class TableClientTest extends TestBase {
     }
 
     @Test
-    void createEntityWithResponse() {
+    public void createEntityWithResponse() {
         // Arrange
         final String partitionKeyValue = testResourceNamer.randomName("partitionKey", 20);
         final String rowKeyValue = testResourceNamer.randomName("rowKey", 20);
@@ -140,7 +166,7 @@ public class TableClientTest extends TestBase {
     }
 
     @Test
-    void createEntityWithAllSupportedDataTypes() {
+    public void createEntityWithAllSupportedDataTypes() {
         // Arrange
         final String partitionKeyValue = testResourceNamer.randomName("partitionKey", 20);
         final String rowKeyValue = testResourceNamer.randomName("rowKey", 20);
@@ -169,8 +195,8 @@ public class TableClientTest extends TestBase {
         tableClient.createEntity(tableEntity);
 
         // Act & Assert
-        final Response<TableEntity> response =
-            tableClient.getEntityWithResponse(partitionKeyValue, rowKeyValue, null, null, null);
+        final Response<TableEntity> response
+            = tableClient.getEntityWithResponse(partitionKeyValue, rowKeyValue, null, null, null);
 
         final TableEntity entity = response.getValue();
         final Map<String, Object> properties = entity.getProperties();
@@ -185,9 +211,10 @@ public class TableClientTest extends TestBase {
         assertTrue(properties.get("StringTypeProperty") instanceof String);
     }
 
-    // Will not be supporting subclasses of TableEntity for the time being.
+    // Support for subclassing TableEntity was removed for the time being, although having it back is not 100%
+    // discarded. -vicolina
     /*@Test
-    void createEntitySubclass() {
+    public void createEntitySubclass() {
         // Arrange
         String partitionKeyValue = testResourceNamer.randomName("partitionKey", 20);
         String rowKeyValue = testResourceNamer.randomName("rowKey", 20);
@@ -200,7 +227,7 @@ public class TableClientTest extends TestBase {
         long l = 123L;
         String s = "Test";
         SampleEntity.Color color = SampleEntity.Color.GREEN;
-
+    
         SampleEntity tableEntity = new SampleEntity(partitionKeyValue, rowKeyValue);
         tableEntity.setByteField(bytes);
         tableEntity.setBooleanField(b);
@@ -211,15 +238,15 @@ public class TableClientTest extends TestBase {
         tableEntity.setLongField(l);
         tableEntity.setStringField(s);
         tableEntity.setEnumField(color);
-
+    
         tableClient.createEntity(tableEntity);
-
+    
         // Act & Assert
         final Response<TableEntity> response =
             tableClient.getEntityWithResponse(partitionKeyValue, rowKeyValue, null, null, null);
-
+    
         TableEntity entity = response.getValue();
-
+    
         assertArrayEquals((byte[]) entity.getProperties().get("ByteField"), bytes);
         assertEquals(entity.getProperties().get("BooleanField"), b);
         assertTrue(dateTime.isEqual((OffsetDateTime) entity.getProperties().get("DateTimeField")));
@@ -232,13 +259,13 @@ public class TableClientTest extends TestBase {
     }*/
 
     @Test
-    void deleteTable() {
+    public void deleteTable() {
         // Act & Assert
         assertDoesNotThrow(() -> tableClient.deleteTable());
     }
 
     @Test
-    void deleteNonExistingTable() {
+    public void deleteNonExistingTable() {
         // Arrange
         tableClient.deleteTable();
 
@@ -247,7 +274,7 @@ public class TableClientTest extends TestBase {
     }
 
     @Test
-    void deleteTableWithResponse() {
+    public void deleteTableWithResponse() {
         // Arrange
         final int expectedStatusCode = 204;
 
@@ -256,9 +283,10 @@ public class TableClientTest extends TestBase {
     }
 
     @Test
-    void deleteNonExistingTableWithResponse() {
+    public void deleteNonExistingTableWithResponse() {
         // Arrange
         final int expectedStatusCode = 404;
+
         tableClient.deleteTableWithResponse(null, null);
 
         // Act & Assert
@@ -266,14 +294,30 @@ public class TableClientTest extends TestBase {
     }
 
     @Test
-    void deleteEntity() {
+    public void deleteEntity() {
+        deleteEntityImpl("partitionKey", "rowKey");
+    }
+
+    @Test
+    public void deleteEntityWithSingleQuotesInPartitionKey() {
+        deleteEntityImpl("partition'Key", "rowKey");
+    }
+
+    @Test
+    public void deleteEntityWithSingleQuotesInRowKey() {
+        deleteEntityImpl("partitionKey", "row'Key");
+    }
+
+    private void deleteEntityImpl(String partitionKeyPrefix, String rowKeyPrefix) {
         // Arrange
-        final String partitionKeyValue = testResourceNamer.randomName("partitionKey", 20);
-        final String rowKeyValue = testResourceNamer.randomName("rowKey", 20);
+        final String partitionKeyValue = testResourceNamer.randomName(partitionKeyPrefix, 20);
+        final String rowKeyValue = testResourceNamer.randomName(rowKeyPrefix, 20);
         final TableEntity tableEntity = new TableEntity(partitionKeyValue, rowKeyValue);
 
         tableClient.createEntity(tableEntity);
+
         final TableEntity createdEntity = tableClient.getEntity(partitionKeyValue, rowKeyValue);
+
         assertNotNull(createdEntity, "'createdEntity' should not be null.");
         assertNotNull(createdEntity.getETag(), "'eTag' should not be null.");
 
@@ -282,7 +326,7 @@ public class TableClientTest extends TestBase {
     }
 
     @Test
-    void deleteNonExistingEntity() {
+    public void deleteNonExistingEntity() {
         // Arrange
         final String partitionKeyValue = testResourceNamer.randomName("partitionKey", 20);
         final String rowKeyValue = testResourceNamer.randomName("rowKey", 20);
@@ -292,7 +336,7 @@ public class TableClientTest extends TestBase {
     }
 
     @Test
-    void deleteEntityWithResponse() {
+    public void deleteEntityWithResponse() {
         // Arrange
         final String partitionKeyValue = testResourceNamer.randomName("partitionKey", 20);
         final String rowKeyValue = testResourceNamer.randomName("rowKey", 20);
@@ -300,7 +344,9 @@ public class TableClientTest extends TestBase {
         final int expectedStatusCode = 204;
 
         tableClient.createEntity(tableEntity);
+
         final TableEntity createdEntity = tableClient.getEntity(partitionKeyValue, rowKeyValue);
+
         assertNotNull(createdEntity, "'createdEntity' should not be null.");
         assertNotNull(createdEntity.getETag(), "'eTag' should not be null.");
 
@@ -310,7 +356,7 @@ public class TableClientTest extends TestBase {
     }
 
     @Test
-    void deleteNonExistingEntityWithResponse() {
+    public void deleteNonExistingEntityWithResponse() {
         // Arrange
         final String partitionKeyValue = testResourceNamer.randomName("partitionKey", 20);
         final String rowKeyValue = testResourceNamer.randomName("rowKey", 20);
@@ -323,7 +369,7 @@ public class TableClientTest extends TestBase {
     }
 
     @Test
-    void deleteEntityWithResponseMatchETag() {
+    public void deleteEntityWithResponseMatchETag() {
         // Arrange
         final String partitionKeyValue = testResourceNamer.randomName("partitionKey", 20);
         final String rowKeyValue = testResourceNamer.randomName("rowKey", 20);
@@ -331,7 +377,9 @@ public class TableClientTest extends TestBase {
         final int expectedStatusCode = 204;
 
         tableClient.createEntity(tableEntity);
+
         final TableEntity createdEntity = tableClient.getEntity(partitionKeyValue, rowKeyValue);
+
         assertNotNull(createdEntity, "'createdEntity' should not be null.");
         assertNotNull(createdEntity.getETag(), "'eTag' should not be null.");
 
@@ -341,21 +389,33 @@ public class TableClientTest extends TestBase {
     }
 
     @Test
-    void getEntityWithResponse() {
-        getEntityWithResponseImpl(this.tableClient, this.testResourceNamer);
+    public void getEntityWithSingleQuotesInPartitionKey() {
+        getEntityWithResponseImpl(tableClient, testResourceNamer, "partition'Key", "rowKey");
     }
 
-    static void getEntityWithResponseImpl(TableClient tableClient, TestResourceNamer testResourceNamer) {
+    @Test
+    public void getEntityWithSingleQuotesInRowKey() {
+        getEntityWithResponseImpl(tableClient, testResourceNamer, "partitionKey", "row'Key");
+    }
+
+    @Test
+    public void getEntityWithResponse() {
+        getEntityWithResponseImpl(tableClient, testResourceNamer, "partitionKey", "rowKey");
+    }
+
+    static void getEntityWithResponseImpl(TableClient tableClient, TestResourceNamer testResourceNamer,
+        String partitionKeyPrefix, String rowKeyPrefix) {
         // Arrange
-        final String partitionKeyValue = testResourceNamer.randomName("partitionKey", 20);
-        final String rowKeyValue = testResourceNamer.randomName("rowKey", 20);
+        final String partitionKeyValue = testResourceNamer.randomName(partitionKeyPrefix, 20);
+        final String rowKeyValue = testResourceNamer.randomName(rowKeyPrefix, 20);
         final TableEntity tableEntity = new TableEntity(partitionKeyValue, rowKeyValue);
         final int expectedStatusCode = 200;
+
         tableClient.createEntity(tableEntity);
 
         // Act & Assert
-        final Response<TableEntity> response =
-            tableClient.getEntityWithResponse(partitionKeyValue, rowKeyValue, null, null, null);
+        final Response<TableEntity> response
+            = tableClient.getEntityWithResponse(partitionKeyValue, rowKeyValue, null, null, null);
 
         final TableEntity entity = response.getValue();
 
@@ -364,27 +424,28 @@ public class TableClientTest extends TestBase {
         assertNotNull(entity);
         assertEquals(tableEntity.getPartitionKey(), entity.getPartitionKey());
         assertEquals(tableEntity.getRowKey(), entity.getRowKey());
-
         assertNotNull(entity.getTimestamp());
         assertNotNull(entity.getETag());
         assertNotNull(entity.getProperties());
     }
 
     @Test
-    void getEntityWithResponseWithSelect() {
+    public void getEntityWithResponseWithSelect() {
         // Arrange
         final String partitionKeyValue = testResourceNamer.randomName("partitionKey", 20);
         final String rowKeyValue = testResourceNamer.randomName("rowKey", 20);
         final TableEntity tableEntity = new TableEntity(partitionKeyValue, rowKeyValue);
         tableEntity.addProperty("Test", "Value");
         final int expectedStatusCode = 200;
+
         tableClient.createEntity(tableEntity);
+
         List<String> propertyList = new ArrayList<>();
         propertyList.add("Test");
 
         // Act & Assert
-        final Response<TableEntity> response =
-            tableClient.getEntityWithResponse(partitionKeyValue, rowKeyValue, propertyList, null, null);
+        final Response<TableEntity> response
+            = tableClient.getEntityWithResponse(partitionKeyValue, rowKeyValue, propertyList, null, null);
 
         final TableEntity entity = response.getValue();
         assertEquals(expectedStatusCode, response.getStatusCode());
@@ -397,9 +458,22 @@ public class TableClientTest extends TestBase {
         assertEquals(entity.getProperties().get("Test"), "Value");
     }
 
-    // Will not be supporting subclasses of TableEntity for the time being.
+    @Test
+    public void updateEntityWithSingleQuotesInPartitionKey() {
+        updateEntityWithResponseImpl(TableEntityUpdateMode.MERGE, testResourceNamer.randomName("partition'Key", 20),
+            testResourceNamer.randomName("rowKey", 20));
+    }
+
+    @Test
+    public void updateEntityWithSingleQuotesInRowKey() {
+        updateEntityWithResponseImpl(TableEntityUpdateMode.MERGE, testResourceNamer.randomName("partitionKey", 20),
+            testResourceNamer.randomName("row'Key", 20));
+    }
+
+    // Support for subclassing TableEntity was removed for the time being, although having it back is not 100%
+    // discarded. -vicolina
     /*@Test
-    void getEntityWithResponseSubclass() {
+    public void getEntityWithResponseSubclass() {
         // Arrange
         String partitionKeyValue = testResourceNamer.randomName("partitionKey", 20);
         String rowKeyValue = testResourceNamer.randomName("rowKey", 20);
@@ -412,7 +486,7 @@ public class TableClientTest extends TestBase {
         long l = 123L;
         String s = "Test";
         SampleEntity.Color color = SampleEntity.Color.GREEN;
-
+    
         final Map<String, Object> props = new HashMap<>();
         props.put("ByteField", bytes);
         props.put("BooleanField", b);
@@ -423,28 +497,28 @@ public class TableClientTest extends TestBase {
         props.put("LongField", l);
         props.put("StringField", s);
         props.put("EnumField", color);
-
+    
         TableEntity tableEntity = new TableEntity(partitionKeyValue, rowKeyValue);
         tableEntity.setProperties(props);
-
+    
         int expectedStatusCode = 200;
         tableClient.createEntity(tableEntity);
-
+    
         // Act & Assert
         final Response<TableEntity> response =
             tableClient.getEntityWithResponse(partitionKeyValue, rowKeyValue, null, SampleEntity.class, null, null);
-
+    
         SampleEntity entity = response.getValue();
-
+    
         assertEquals(expectedStatusCode, response.getStatusCode());
-
+    
         assertNotNull(entity);
         assertEquals(tableEntity.getPartitionKey(), entity.getPartitionKey());
         assertEquals(tableEntity.getRowKey(), entity.getRowKey());
-
+    
         assertNotNull(entity.getTimestamp());
         assertNotNull(entity.getETag());
-
+    
         assertArrayEquals(bytes, entity.getByteField());
         assertEquals(b, entity.getBooleanField());
         assertTrue(dateTime.isEqual(entity.getDateTimeField()));
@@ -457,32 +531,34 @@ public class TableClientTest extends TestBase {
     }*/
 
     @Test
-    void updateEntityWithResponseReplace() {
-        updateEntityWithResponse(TableEntityUpdateMode.REPLACE);
+    public void updateEntityWithResponseReplace() {
+        updateEntityWithResponseImpl(TableEntityUpdateMode.REPLACE, "partitionKey", "rowKey");
     }
 
     @Test
-    void updateEntityWithResponseMerge() {
-        updateEntityWithResponse(TableEntityUpdateMode.MERGE);
+    public void updateEntityWithResponseMerge() {
+        updateEntityWithResponseImpl(TableEntityUpdateMode.MERGE, "partitionKey", "rowKey");
     }
 
     /**
      * In the case of {@link TableEntityUpdateMode#MERGE}, we expect both properties to exist.
      * In the case of {@link TableEntityUpdateMode#REPLACE}, we only expect {@code newPropertyKey} to exist.
      */
-    void updateEntityWithResponse(TableEntityUpdateMode mode) {
+    void updateEntityWithResponseImpl(TableEntityUpdateMode mode, String partitionKeyPrefix, String rowKeyPrefix) {
         // Arrange
         final boolean expectOldProperty = mode == TableEntityUpdateMode.MERGE;
-        final String partitionKeyValue = testResourceNamer.randomName("APartitionKey", 20);
-        final String rowKeyValue = testResourceNamer.randomName("ARowKey", 20);
+        final String partitionKeyValue = testResourceNamer.randomName(partitionKeyPrefix, 20);
+        final String rowKeyValue = testResourceNamer.randomName(rowKeyPrefix, 20);
         final int expectedStatusCode = 204;
         final String oldPropertyKey = "propertyA";
         final String newPropertyKey = "propertyB";
-        final TableEntity tableEntity = new TableEntity(partitionKeyValue, rowKeyValue)
-            .addProperty(oldPropertyKey, "valueA");
+        final TableEntity tableEntity
+            = new TableEntity(partitionKeyValue, rowKeyValue).addProperty(oldPropertyKey, "valueA");
 
         tableClient.createEntity(tableEntity);
+
         final TableEntity createdEntity = tableClient.getEntity(partitionKeyValue, rowKeyValue);
+
         assertNotNull(createdEntity, "'createdEntity' should not be null.");
         assertNotNull(createdEntity.getETag(), "'eTag' should not be null.");
 
@@ -497,47 +573,63 @@ public class TableClientTest extends TestBase {
         TableEntity entity = tableClient.getEntity(partitionKeyValue, rowKeyValue);
 
         final Map<String, Object> properties = entity.getProperties();
+
         assertTrue(properties.containsKey(newPropertyKey));
         assertEquals(expectOldProperty, properties.containsKey(oldPropertyKey));
     }
 
-    // Will not be supporting subclasses of TableEntity for the time being.
+    // Support for subclassing TableEntity was removed for the time being, although having it back is not 100%
+    // discarded. -vicolina
     /*@Test
-    void updateEntityWithResponseSubclass() {
+    public void updateEntityWithResponseSubclass() {
         // Arrange
         String partitionKeyValue = testResourceNamer.randomName("APartitionKey", 20);
         String rowKeyValue = testResourceNamer.randomName("ARowKey", 20);
         int expectedStatusCode = 204;
-
+    
         SingleFieldEntity tableEntity = new SingleFieldEntity(partitionKeyValue, rowKeyValue);
         tableEntity.setSubclassProperty("InitialValue");
         tableClient.createEntity(tableEntity);
-
+    
         // Act & Assert
         tableEntity.setSubclassProperty("UpdatedValue");
         assertEquals(expectedStatusCode,
             tableClient.updateEntityWithResponse(tableEntity, TableEntityUpdateMode.REPLACE, true, null, null)
                 .getStatusCode()));
-
+    
         TableEntity entity = tableClient.getEntity(partitionKeyValue, rowKeyValue);
-
+    
         final Map<String, Object> properties = entity.getProperties();
         assertTrue(properties.containsKey("SubclassProperty"));
         assertEquals("UpdatedValue", properties.get("SubclassProperty"));
     }*/
 
     @Test
-    void listEntities() {
+    public void listEntities() {
+        listEntitiesImpl("partitionKey", "rowKey");
+    }
+
+    @Test
+    public void listEntitiesWithSingleQuotesInPartitionKey() {
+        listEntitiesImpl("partition'Key", "rowKey");
+    }
+
+    @Test
+    public void listEntitiesWithSingleQuotesInRowKey() {
+        listEntitiesImpl("partitionKey", "row'Key");
+    }
+
+    private void listEntitiesImpl(String partitionKeyPrefix, String rowKeyPrefix) {
         // Arrange
-        final String partitionKeyValue = testResourceNamer.randomName("partitionKey", 20);
-        final String rowKeyValue = testResourceNamer.randomName("rowKey", 20);
-        final String rowKeyValue2 = testResourceNamer.randomName("rowKey", 20);
+        final String partitionKeyValue = testResourceNamer.randomName(partitionKeyPrefix, 20);
+        final String rowKeyValue = testResourceNamer.randomName(rowKeyPrefix, 20);
+        final String rowKeyValue2 = testResourceNamer.randomName(rowKeyPrefix, 20);
+
         tableClient.createEntity(new TableEntity(partitionKeyValue, rowKeyValue));
         tableClient.createEntity(new TableEntity(partitionKeyValue, rowKeyValue2));
 
         // Act & Assert
-        Iterator<PagedResponse<TableEntity>> iterator =
-            tableClient.listEntities().iterableByPage().iterator();
+        Iterator<PagedResponse<TableEntity>> iterator = tableClient.listEntities().iterableByPage().iterator();
 
         assertTrue(iterator.hasNext());
 
@@ -547,12 +639,13 @@ public class TableClientTest extends TestBase {
     }
 
     @Test
-    void listEntitiesWithFilter() {
+    public void listEntitiesWithFilter() {
         // Arrange
         final String partitionKeyValue = testResourceNamer.randomName("partitionKey", 20);
         final String rowKeyValue = testResourceNamer.randomName("rowKey", 20);
         final String rowKeyValue2 = testResourceNamer.randomName("rowKey", 20);
         ListEntitiesOptions options = new ListEntitiesOptions().setFilter("RowKey eq '" + rowKeyValue + "'");
+
         tableClient.createEntity(new TableEntity(partitionKeyValue, rowKeyValue));
         tableClient.createEntity(new TableEntity(partitionKeyValue, rowKeyValue2));
 
@@ -564,22 +657,21 @@ public class TableClientTest extends TestBase {
     }
 
     @Test
-    void listEntitiesWithSelect() {
+    public void listEntitiesWithSelect() {
         // Arrange
         final String partitionKeyValue = testResourceNamer.randomName("partitionKey", 20);
         final String rowKeyValue = testResourceNamer.randomName("rowKey", 20);
-        final TableEntity entity = new TableEntity(partitionKeyValue, rowKeyValue)
-            .addProperty("propertyC", "valueC")
+        final TableEntity entity = new TableEntity(partitionKeyValue, rowKeyValue).addProperty("propertyC", "valueC")
             .addProperty("propertyD", "valueD");
         List<String> propertyList = new ArrayList<>();
         propertyList.add("propertyC");
-        ListEntitiesOptions options = new ListEntitiesOptions()
-            .setSelect(propertyList);
+        ListEntitiesOptions options = new ListEntitiesOptions().setSelect(propertyList);
+
         tableClient.createEntity(entity);
 
         // Act & Assert
-        Iterator<PagedResponse<TableEntity>> iterator =
-            tableClient.listEntities(options, null, null).iterableByPage().iterator();
+        Iterator<PagedResponse<TableEntity>> iterator
+            = tableClient.listEntities(options, null, null).iterableByPage().iterator();
 
         assertTrue(iterator.hasNext());
 
@@ -592,46 +684,48 @@ public class TableClientTest extends TestBase {
     }
 
     @Test
-    void listEntitiesWithTop() {
+    public void listEntitiesWithTop() {
         // Arrange
         final String partitionKeyValue = testResourceNamer.randomName("partitionKey", 20);
         final String rowKeyValue = testResourceNamer.randomName("rowKey", 20);
         final String rowKeyValue2 = testResourceNamer.randomName("rowKey", 20);
         final String rowKeyValue3 = testResourceNamer.randomName("rowKey", 20);
         ListEntitiesOptions options = new ListEntitiesOptions().setTop(2);
+
         tableClient.createEntity(new TableEntity(partitionKeyValue, rowKeyValue));
         tableClient.createEntity(new TableEntity(partitionKeyValue, rowKeyValue2));
         tableClient.createEntity(new TableEntity(partitionKeyValue, rowKeyValue3));
 
         // Act & Assert
-        Iterator<PagedResponse<TableEntity>> iterator =
-            tableClient.listEntities(options, null, null).iterableByPage().iterator();
+        Iterator<PagedResponse<TableEntity>> iterator
+            = tableClient.listEntities(options, null, null).iterableByPage().iterator();
 
         assertTrue(iterator.hasNext());
         assertEquals(2, iterator.next().getValue().size());
     }
 
-    // Will not be supporting subclasses of TableEntity for the time being.
+    // Support for subclassing TableEntity was removed for the time being, although having it back is not 100%
+    // discarded. -vicolina
     /*@Test
-    void listEntitiesSubclass() {
+    public void listEntitiesSubclass() {
         // Arrange
         String partitionKeyValue = testResourceNamer.randomName("partitionKey", 20);
         String rowKeyValue = testResourceNamer.randomName("rowKey", 20);
         String rowKeyValue2 = testResourceNamer.randomName("rowKey", 20);
         tableClient.createEntity(new TableEntity(partitionKeyValue, rowKeyValue));
         tableClient.createEntity(new TableEntity(partitionKeyValue, rowKeyValue2));
-
+    
         // Act & Assert
         Iterator<PagedResponse<TableEntity>> iterator =
             tableClient.listEntities(SampleEntity.class).iterableByPage().iterator();
-
+    
         assertTrue(iterator.hasNext());
-
+    
         List<TableEntity> retrievedEntities = iterator.next().getValue();
-
+    
         TableEntity retrievedEntity = retrievedEntities.get(0);
         TableEntity retrievedEntity2 = retrievedEntities.get(1);
-
+    
         assertEquals(partitionKeyValue, retrievedEntity.getPartitionKey());
         assertEquals(rowKeyValue, retrievedEntity.getRowKey());
         assertEquals(partitionKeyValue, retrievedEntity2.getPartitionKey());
@@ -639,7 +733,7 @@ public class TableClientTest extends TestBase {
     }*/
 
     @Test
-    void submitTransaction() {
+    public void submitTransaction() {
         String partitionKeyValue = testResourceNamer.randomName("partitionKey", 20);
         String rowKeyValue = testResourceNamer.randomName("rowKey", 20);
         String rowKeyValue2 = testResourceNamer.randomName("rowKey", 20);
@@ -647,14 +741,14 @@ public class TableClientTest extends TestBase {
         int expectedOperationStatusCode = 204;
 
         List<TableTransactionAction> transactionalBatch = new ArrayList<>();
-        transactionalBatch.add(new TableTransactionAction(
-            TableTransactionActionType.CREATE, new TableEntity(partitionKeyValue, rowKeyValue)));
-        transactionalBatch.add(new TableTransactionAction(
-            TableTransactionActionType.CREATE, new TableEntity(partitionKeyValue, rowKeyValue2)));
+        transactionalBatch.add(new TableTransactionAction(TableTransactionActionType.CREATE,
+            new TableEntity(partitionKeyValue, rowKeyValue)));
+        transactionalBatch.add(new TableTransactionAction(TableTransactionActionType.CREATE,
+            new TableEntity(partitionKeyValue, rowKeyValue2)));
 
         // Act & Assert
-        final Response<TableTransactionResult> result =
-            tableClient.submitTransactionWithResponse(transactionalBatch, null, null);
+        final Response<TableTransactionResult> result
+            = tableClient.submitTransactionWithResponse(transactionalBatch, null, null);
 
         assertNotNull(result);
         assertEquals(expectedBatchStatusCode, result.getStatusCode());
@@ -664,30 +758,45 @@ public class TableClientTest extends TestBase {
         assertEquals(expectedOperationStatusCode,
             result.getValue().getTransactionActionResponses().get(1).getStatusCode());
 
-        final Response<TableEntity> response =
-            tableClient.getEntityWithResponse(partitionKeyValue, rowKeyValue, null, null, null);
+        final Response<TableEntity> response
+            = tableClient.getEntityWithResponse(partitionKeyValue, rowKeyValue, null, null, null);
 
         final TableEntity entity = response.getValue();
 
         assertNotNull(entity);
         assertEquals(partitionKeyValue, entity.getPartitionKey());
         assertEquals(rowKeyValue, entity.getRowKey());
-
         assertNotNull(entity.getTimestamp());
         assertNotNull(entity.getETag());
         assertNotNull(entity.getProperties());
     }
 
     @Test
-    void submitTransactionAsyncAllActions() {
-        String partitionKeyValue = testResourceNamer.randomName("partitionKey", 20);
-        String rowKeyValueCreate = testResourceNamer.randomName("rowKey", 20);
-        String rowKeyValueUpsertInsert = testResourceNamer.randomName("rowKey", 20);
-        String rowKeyValueUpsertMerge = testResourceNamer.randomName("rowKey", 20);
-        String rowKeyValueUpsertReplace = testResourceNamer.randomName("rowKey", 20);
-        String rowKeyValueUpdateMerge = testResourceNamer.randomName("rowKey", 20);
-        String rowKeyValueUpdateReplace = testResourceNamer.randomName("rowKey", 20);
-        String rowKeyValueDelete = testResourceNamer.randomName("rowKey", 20);
+    public void submitTransactionAllActions() {
+        Runnable func = () -> submitTransactionAllActionsImpl("partitionKey", "rowKey");
+
+        func.run();
+    }
+
+    @Test
+    public void submitTransactionAllActionsForEntitiesWithSingleQuotesInPartitionKey() {
+        submitTransactionAllActionsImpl("partition'Key", "rowKey");
+    }
+
+    @Test
+    public void submitTransactionAllActionsForEntitiesWithSingleQuotesInRowKey() {
+        submitTransactionAllActionsImpl("partitionKey", "row'Key");
+    }
+
+    private void submitTransactionAllActionsImpl(String partitionKeyPrefix, String rowKeyPrefix) {
+        String partitionKeyValue = testResourceNamer.randomName(partitionKeyPrefix, 20);
+        String rowKeyValueCreate = testResourceNamer.randomName(rowKeyPrefix, 20);
+        String rowKeyValueUpsertInsert = testResourceNamer.randomName(rowKeyPrefix, 20);
+        String rowKeyValueUpsertMerge = testResourceNamer.randomName(rowKeyPrefix, 20);
+        String rowKeyValueUpsertReplace = testResourceNamer.randomName(rowKeyPrefix, 20);
+        String rowKeyValueUpdateMerge = testResourceNamer.randomName(rowKeyPrefix, 20);
+        String rowKeyValueUpdateReplace = testResourceNamer.randomName(rowKeyPrefix, 20);
+        String rowKeyValueDelete = testResourceNamer.randomName(rowKeyPrefix, 20);
 
         int expectedBatchStatusCode = 202;
         int expectedOperationStatusCode = 204;
@@ -723,8 +832,8 @@ public class TableClientTest extends TestBase {
             new TableEntity(partitionKeyValue, rowKeyValueDelete)));
 
         // Act & Assert
-        final Response<TableTransactionResult> response =
-            tableClient.submitTransactionWithResponse(transactionalBatch, null, null);
+        final Response<TableTransactionResult> response
+            = tableClient.submitTransactionWithResponse(transactionalBatch, null, null);
 
         assertNotNull(response);
         assertEquals(expectedBatchStatusCode, response.getStatusCode());
@@ -739,7 +848,7 @@ public class TableClientTest extends TestBase {
     }
 
     @Test
-    void submitTransactionAsyncWithFailingAction() {
+    public void submitTransactionWithFailingAction() {
         String partitionKeyValue = testResourceNamer.randomName("partitionKey", 20);
         String rowKeyValue = testResourceNamer.randomName("rowKey", 20);
         String rowKeyValue2 = testResourceNamer.randomName("rowKey", 20);
@@ -768,15 +877,15 @@ public class TableClientTest extends TestBase {
     }
 
     @Test
-    void submitTransactionAsyncWithSameRowKeys() {
+    public void submitTransactionWithSameRowKeys() {
         String partitionKeyValue = testResourceNamer.randomName("partitionKey", 20);
         String rowKeyValue = testResourceNamer.randomName("rowKey", 20);
 
         List<TableTransactionAction> transactionalBatch = new ArrayList<>();
-        transactionalBatch.add(new TableTransactionAction(
-            TableTransactionActionType.CREATE, new TableEntity(partitionKeyValue, rowKeyValue)));
-        transactionalBatch.add(new TableTransactionAction(
-            TableTransactionActionType.CREATE, new TableEntity(partitionKeyValue, rowKeyValue)));
+        transactionalBatch.add(new TableTransactionAction(TableTransactionActionType.CREATE,
+            new TableEntity(partitionKeyValue, rowKeyValue)));
+        transactionalBatch.add(new TableTransactionAction(TableTransactionActionType.CREATE,
+            new TableEntity(partitionKeyValue, rowKeyValue)));
 
         // Act & Assert
         try {
@@ -802,17 +911,17 @@ public class TableClientTest extends TestBase {
     }
 
     @Test
-    void submitTransactionAsyncWithDifferentPartitionKeys() {
+    public void submitTransactionWithDifferentPartitionKeys() {
         String partitionKeyValue = testResourceNamer.randomName("partitionKey", 20);
         String partitionKeyValue2 = testResourceNamer.randomName("partitionKey", 20);
         String rowKeyValue = testResourceNamer.randomName("rowKey", 20);
         String rowKeyValue2 = testResourceNamer.randomName("rowKey", 20);
 
         List<TableTransactionAction> transactionalBatch = new ArrayList<>();
-        transactionalBatch.add(new TableTransactionAction(
-            TableTransactionActionType.CREATE, new TableEntity(partitionKeyValue, rowKeyValue)));
-        transactionalBatch.add(new TableTransactionAction(
-            TableTransactionActionType.CREATE, new TableEntity(partitionKeyValue2, rowKeyValue2)));
+        transactionalBatch.add(new TableTransactionAction(TableTransactionActionType.CREATE,
+            new TableEntity(partitionKeyValue, rowKeyValue)));
+        transactionalBatch.add(new TableTransactionAction(TableTransactionActionType.CREATE,
+            new TableEntity(partitionKeyValue2, rowKeyValue2)));
 
         // Act & Assert
         try {
@@ -842,29 +951,181 @@ public class TableClientTest extends TestBase {
         fail();
     }
 
+    /**
+     * Create an entity with a property for each supported type and verify that getProperty returns the correct type for each.
+     */
+    @Test
+    public void createEntityWithAllSupportedTypes() {
+        // Arrange
+        final String partitionKeyValue = testResourceNamer.randomName("partitionKey", 20);
+        final String rowKeyValue = testResourceNamer.randomName("rowKey", 20);
+        final byte[] bytes = new byte[] { 4, 5, 6 };
+        final boolean b = true;
+        final OffsetDateTime dateTime = OffsetDateTime.of(2020, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
+        final double d = 1.23D;
+        final UUID uuid = UUID.fromString("11111111-2222-3333-4444-555555555555");
+        final int i = 123;
+        final long l = 123L;
+        final String s = "Test";
+
+        final TableEntity tableEntity = new TableEntity(partitionKeyValue, rowKeyValue).addProperty("byteField", bytes)
+            .addProperty("booleanField", b)
+            .addProperty("dateTimeField", dateTime)
+            .addProperty("doubleField", d)
+            .addProperty("uuidField", uuid)
+            .addProperty("intField", i)
+            .addProperty("longField", l)
+            .addProperty("stringField", s);
+
+        // Act
+        tableClient.createEntity(tableEntity);
+
+        // Assert
+        final TableEntity retrievedEntity = tableClient.getEntity(partitionKeyValue, rowKeyValue);
+
+        assertArrayEquals(bytes, (byte[]) retrievedEntity.getProperties().get("byteField"));
+        assertEquals(b, (boolean) retrievedEntity.getProperties().get("booleanField"));
+        assertTrue(dateTime.isEqual((OffsetDateTime) retrievedEntity.getProperties().get("dateTimeField")));
+        assertEquals(d, (double) retrievedEntity.getProperties().get("doubleField"));
+        assertEquals(0, uuid.compareTo((UUID) retrievedEntity.getProperties().get("uuidField")));
+        assertEquals(i, (int) retrievedEntity.getProperties().get("intField"));
+        assertEquals(l, (long) retrievedEntity.getProperties().get("longField"));
+        assertEquals(s, (String) retrievedEntity.getProperties().get("stringField"));
+    }
+
+    /**
+     * Create an entity with a property for each supported type, retrieve the entity using listEntities, and verify that getProperty returns the correct type for each.
+     */
+    @Test
+    public void listEntitiesWithAllSupportedTypes() {
+        // Arrange
+        final String partitionKeyValue = testResourceNamer.randomName("partitionKey", 20);
+        final String rowKeyValue = testResourceNamer.randomName("rowKey", 20);
+        final BinaryData binaryData = BinaryData.fromString("This is string bytes.");
+        final byte[] bytes = new byte[] { 4, 5, 6, 7 };
+        final boolean b = true;
+        final OffsetDateTime dateTime = OffsetDateTime.of(2020, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
+        final double d = 1.23D;
+        final UUID uuid = UUID.fromString("11111111-2222-3333-4444-555555555555");
+        final int i = 123;
+        final long l = 123L;
+        final String s = "Test";
+
+        final TableEntity tableEntity
+            = new TableEntity(partitionKeyValue, rowKeyValue).addProperty("binaryField", binaryData.toBytes())
+                .addProperty("byteField", bytes)
+                .addProperty("booleanField", b)
+                .addProperty("dateTimeField", dateTime)
+                .addProperty("doubleField", d)
+                .addProperty("uuidField", uuid)
+                .addProperty("intField", i)
+                .addProperty("longField", l)
+                .addProperty("stringField", s);
+
+        tableClient.createEntity(tableEntity);
+
+        // Act
+        final Iterator<PagedResponse<TableEntity>> iterator = tableClient.listEntities().iterableByPage().iterator();
+
+        assertTrue(iterator.hasNext());
+
+        final TableEntity retrievedEntity = iterator.next().getValue().get(0);
+
+        // Assert
+        //assertEquals(binaryData, (BinaryData) retrievedEntity.getProperties().get("binaryField"));
+        assertArrayEquals(bytes, (byte[]) retrievedEntity.getProperties().get("byteField"));
+        assertEquals(b, (boolean) retrievedEntity.getProperties().get("booleanField"));
+        assertTrue(dateTime.isEqual((OffsetDateTime) retrievedEntity.getProperties().get("dateTimeField")));
+        assertEquals(d, (double) retrievedEntity.getProperties().get("doubleField"));
+        assertEquals(0, uuid.compareTo((UUID) retrievedEntity.getProperties().get("uuidField")));
+        assertEquals(i, (int) retrievedEntity.getProperties().get("intField"));
+        assertEquals(l, (long) retrievedEntity.getProperties().get("longField"));
+        assertEquals(s, (String) retrievedEntity.getProperties().get("stringField"));
+    }
+
+    /**
+     * Create an entity with all supported types, and verify that both listEntities and getEntity return the correct and same type for each.
+     */
+    @Test
+    public void listAndGetEntitiesWithAllSupportedTypes() {
+        // Arrange
+        final String partitionKeyValue = testResourceNamer.randomName("partitionKey", 20);
+        final String rowKeyValue = testResourceNamer.randomName("rowKey", 20);
+        // final BinaryData binaryData = BinaryData.fromString("This is string bytes.");
+        final byte[] bytes = new byte[] { 4, 5, 6, 7 };
+        final boolean b = true;
+        final OffsetDateTime dateTime = OffsetDateTime.of(2020, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
+        final double d = 1.23D;
+        final UUID uuid = UUID.fromString("11111111-2222-3333-4444-555555555555");
+        final int i = 123;
+        final long l = 123L;
+        final String s = "Test";
+
+        final TableEntity tableEntity = new TableEntity(partitionKeyValue, rowKeyValue)
+            //.addProperty("binaryField", binaryData.toBytes())
+            .addProperty("byteField", bytes)
+            .addProperty("booleanField", b)
+            .addProperty("dateTimeField", dateTime)
+            .addProperty("doubleField", d)
+            .addProperty("uuidField", uuid)
+            .addProperty("intField", i)
+            .addProperty("longField", l)
+            .addProperty("stringField", s);
+
+        tableClient.createEntity(tableEntity);
+
+        // Act
+        final TableEntity retrievedEntity = tableClient.getEntity(partitionKeyValue, rowKeyValue);
+        final Iterator<PagedResponse<TableEntity>> iterator = tableClient.listEntities().iterableByPage().iterator();
+        assertTrue(iterator.hasNext());
+
+        final TableEntity listedEntity = iterator.next().getValue().get(0);
+
+        // Assert
+        //assertEquals(binaryData, (BinaryData) retrievedEntity.getProperties().get("binaryField"));
+        //assertEquals(binaryData, (BinaryData) listedEntity.getProperties().get("binaryField"));
+
+        assertArrayEquals(bytes, (byte[]) retrievedEntity.getProperties().get("byteField"));
+        assertArrayEquals(bytes, (byte[]) listedEntity.getProperties().get("byteField"));
+
+        assertEquals(b, (boolean) retrievedEntity.getProperties().get("booleanField"));
+        assertEquals(b, (boolean) listedEntity.getProperties().get("booleanField"));
+
+        assertTrue(dateTime.isEqual((OffsetDateTime) retrievedEntity.getProperties().get("dateTimeField")));
+        assertTrue(dateTime.isEqual((OffsetDateTime) listedEntity.getProperties().get("dateTimeField")));
+
+        assertEquals(d, (double) retrievedEntity.getProperties().get("doubleField"));
+        assertEquals(d, (double) listedEntity.getProperties().get("doubleField"));
+
+        assertEquals(0, uuid.compareTo((UUID) retrievedEntity.getProperties().get("uuidField")));
+        assertEquals(0, uuid.compareTo((UUID) listedEntity.getProperties().get("uuidField")));
+
+        assertEquals(i, (int) retrievedEntity.getProperties().get("intField"));
+        assertEquals(i, (int) listedEntity.getProperties().get("intField"));
+
+        assertEquals(l, (long) retrievedEntity.getProperties().get("longField"));
+        assertEquals(l, (long) listedEntity.getProperties().get("longField"));
+
+        assertEquals(s, (String) retrievedEntity.getProperties().get("stringField"));
+        assertEquals(s, (String) listedEntity.getProperties().get("stringField"));
+
+    }
+
     @Test
     public void generateSasTokenWithMinimumParameters() {
         final OffsetDateTime expiryTime = OffsetDateTime.of(2021, 12, 12, 0, 0, 0, 0, ZoneOffset.UTC);
         final TableSasPermission permissions = TableSasPermission.parse("r");
         final TableSasProtocol protocol = TableSasProtocol.HTTPS_ONLY;
-
-        final TableSasSignatureValues sasSignatureValues =
-            new TableSasSignatureValues(expiryTime, permissions)
-                .setProtocol(protocol)
+        final TableSasSignatureValues sasSignatureValues
+            = new TableSasSignatureValues(expiryTime, permissions).setProtocol(protocol)
                 .setVersion(TableServiceVersion.V2019_02_02.getVersion());
 
-        final String sas = tableClient.generateSas(sasSignatureValues);
+        TableClient tableClient2
+            = getClientBuilderWithConnectionString(tableClient.getTableName(), false).buildClient();
+        final String sas = tableClient2.generateSas(sasSignatureValues);
 
-        assertTrue(
-            sas.startsWith(
-                "sv=2019-02-02"
-                    + "&se=2021-12-12T00%3A00%3A00Z"
-                    + "&tn=" + tableClient.getTableName()
-                    + "&sp=r"
-                    + "&spr=https"
-                    + "&sig="
-            )
-        );
+        assertTrue(sas.startsWith("sv=2019-02-02" + "&se=2021-12-12T00%3A00%3A00Z" + "&tn=" + tableClient.getTableName()
+            + "&sp=r" + "&spr=https" + "&sig="));
     }
 
     @Test
@@ -872,7 +1133,6 @@ public class TableClientTest extends TestBase {
         final OffsetDateTime expiryTime = OffsetDateTime.of(2021, 12, 12, 0, 0, 0, 0, ZoneOffset.UTC);
         final TableSasPermission permissions = TableSasPermission.parse("raud");
         final TableSasProtocol protocol = TableSasProtocol.HTTPS_HTTP;
-
         final OffsetDateTime startTime = OffsetDateTime.of(2015, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC);
         final TableSasIpRange ipRange = TableSasIpRange.parse("a-b");
         final String startPartitionKey = "startPartitionKey";
@@ -880,9 +1140,8 @@ public class TableClientTest extends TestBase {
         final String endPartitionKey = "endPartitionKey";
         final String endRowKey = "endRowKey";
 
-        final TableSasSignatureValues sasSignatureValues =
-            new TableSasSignatureValues(expiryTime, permissions)
-                .setProtocol(protocol)
+        final TableSasSignatureValues sasSignatureValues
+            = new TableSasSignatureValues(expiryTime, permissions).setProtocol(protocol)
                 .setVersion(TableServiceVersion.V2019_02_02.getVersion())
                 .setStartTime(startTime)
                 .setSasIpRange(ipRange)
@@ -891,42 +1150,32 @@ public class TableClientTest extends TestBase {
                 .setEndPartitionKey(endPartitionKey)
                 .setEndRowKey(endRowKey);
 
-        final String sas = tableClient.generateSas(sasSignatureValues);
+        TableClient tableClient2
+            = getClientBuilderWithConnectionString(tableClient.getTableName(), false).buildClient();
+        final String sas = tableClient2.generateSas(sasSignatureValues);
 
-        assertTrue(
-            sas.startsWith(
-                "sv=2019-02-02"
-                    + "&st=2015-01-01T00%3A00%3A00Z"
-                    + "&se=2021-12-12T00%3A00%3A00Z"
-                    + "&tn=" + tableClient.getTableName()
-                    + "&sp=raud"
-                    + "&spk=startPartitionKey"
-                    + "&srk=startRowKey"
-                    + "&epk=endPartitionKey"
-                    + "&erk=endRowKey"
-                    + "&sip=a-b"
-                    + "&spr=https%2Chttp"
-                    + "&sig="
-            )
-        );
+        assertTrue(sas.startsWith("sv=2019-02-02" + "&st=2015-01-01T00%3A00%3A00Z" + "&se=2021-12-12T00%3A00%3A00Z"
+            + "&tn=" + tableClient.getTableName() + "&sp=raud" + "&spk=startPartitionKey" + "&srk=startRowKey"
+            + "&epk=endPartitionKey" + "&erk=endRowKey" + "&sip=a-b" + "&spr=https%2Chttp" + "&sig="));
     }
 
     @Test
     public void canUseSasTokenToCreateValidTableClient() {
-        // SAS tokens at the table level have not been working with Cosmos endpoints. Will re-enable once this is fixed.
-        // - vicolina
+        // SAS tokens at the table level have not been working with Cosmos endpoints.
+        // TODO: Will re-enable once the above is fixed. -vicolina
         Assumptions.assumeFalse(IS_COSMOS_TEST, "Skipping Cosmos test.");
 
-        final OffsetDateTime expiryTime = OffsetDateTime.of(2021, 12, 12, 0, 0, 0, 0, ZoneOffset.UTC);
+        final OffsetDateTime expiryTime = OffsetDateTime.now().plusDays(1);
         final TableSasPermission permissions = TableSasPermission.parse("a");
         final TableSasProtocol protocol = TableSasProtocol.HTTPS_HTTP;
 
-        final TableSasSignatureValues sasSignatureValues =
-            new TableSasSignatureValues(expiryTime, permissions)
-                .setProtocol(protocol)
+        final TableSasSignatureValues sasSignatureValues
+            = new TableSasSignatureValues(expiryTime, permissions).setProtocol(protocol)
                 .setVersion(TableServiceVersion.V2019_02_02.getVersion());
 
-        final String sas = tableClient.generateSas(sasSignatureValues);
+        TableClient tableClient2
+            = getClientBuilderWithConnectionString(tableClient.getTableName(), false).buildClient();
+        final String sas = tableClient2.generateSas(sasSignatureValues);
 
         final TableClientBuilder tableClientBuilder = new TableClientBuilder()
             .httpLogOptions(new HttpLogOptions().setLogLevel(HttpLogDetailLevel.BODY_AND_HEADERS))
@@ -943,8 +1192,8 @@ public class TableClientTest extends TestBase {
                 tableClientBuilder.addPolicy(recordPolicy);
             }
 
-            tableClientBuilder.addPolicy(new RetryPolicy(new ExponentialBackoff(6, Duration.ofMillis(1500),
-                Duration.ofSeconds(100))));
+            tableClientBuilder.addPolicy(
+                new RetryPolicy(new ExponentialBackoff(6, Duration.ofMillis(1500), Duration.ofSeconds(100))));
         }
 
         // Create a new client authenticated with the SAS token.
@@ -957,6 +1206,8 @@ public class TableClientTest extends TestBase {
         assertEquals(expectedStatusCode, newTableClient.createEntityWithResponse(entity, null, null).getStatusCode());
     }
 
+    // TODO: Figure out why TokenCredential does not work for this test. Maybe the SP does not have the correct role
+    //  assignment? -vcolin7
     @Test
     public void setAndListAccessPolicies() {
         Assumptions.assumeFalse(IS_COSMOS_TEST,
@@ -965,19 +1216,20 @@ public class TableClientTest extends TestBase {
         OffsetDateTime startTime = OffsetDateTime.of(2021, 12, 12, 0, 0, 0, 0, ZoneOffset.UTC);
         OffsetDateTime expiryTime = OffsetDateTime.of(2022, 12, 12, 0, 0, 0, 0, ZoneOffset.UTC);
         String permissions = "r";
-        TableAccessPolicy tableAccessPolicy = new TableAccessPolicy()
-            .setStartsOn(startTime)
-            .setExpiresOn(expiryTime)
-            .setPermissions(permissions);
+        TableAccessPolicy tableAccessPolicy
+            = new TableAccessPolicy().setStartsOn(startTime).setExpiresOn(expiryTime).setPermissions(permissions);
         String id = "testPolicy";
         TableSignedIdentifier tableSignedIdentifier = new TableSignedIdentifier(id).setAccessPolicy(tableAccessPolicy);
         final int expectedStatusCode = 204;
 
+        TableClient tableClient2
+            = getClientBuilderWithConnectionString(tableClient.getTableName(), false).buildClient();
+
         assertEquals(expectedStatusCode,
-            tableClient.setAccessPoliciesWithResponse(Collections.singletonList(tableSignedIdentifier), null, null)
+            tableClient2.setAccessPoliciesWithResponse(Collections.singletonList(tableSignedIdentifier), null, null)
                 .getStatusCode());
 
-        TableAccessPolicies tableAccessPolicies = tableClient.getAccessPolicies();
+        TableAccessPolicies tableAccessPolicies = tableClient2.getAccessPolicies();
 
         assertNotNull(tableAccessPolicies);
         assertNotNull(tableAccessPolicies.getIdentifiers());
@@ -995,6 +1247,8 @@ public class TableClientTest extends TestBase {
         assertEquals(id, signedIdentifier.getId());
     }
 
+    // TODO: Figure out why TokenCredential does not work for this test. Maybe the SP does not have the correct role
+    //  assignment? -vcolin7
     @Test
     public void setAndListMultipleAccessPolicies() {
         Assumptions.assumeFalse(IS_COSMOS_TEST,
@@ -1003,10 +1257,8 @@ public class TableClientTest extends TestBase {
         OffsetDateTime startTime = OffsetDateTime.of(2021, 12, 12, 0, 0, 0, 0, ZoneOffset.UTC);
         OffsetDateTime expiryTime = OffsetDateTime.of(2022, 12, 12, 0, 0, 0, 0, ZoneOffset.UTC);
         String permissions = "r";
-        TableAccessPolicy tableAccessPolicy = new TableAccessPolicy()
-            .setStartsOn(startTime)
-            .setExpiresOn(expiryTime)
-            .setPermissions(permissions);
+        TableAccessPolicy tableAccessPolicy
+            = new TableAccessPolicy().setStartsOn(startTime).setExpiresOn(expiryTime).setPermissions(permissions);
         String id1 = "testPolicy1";
         String id2 = "testPolicy2";
         List<TableSignedIdentifier> tableSignedIdentifiers = new ArrayList<>();
@@ -1014,14 +1266,16 @@ public class TableClientTest extends TestBase {
         tableSignedIdentifiers.add(new TableSignedIdentifier(id2).setAccessPolicy(tableAccessPolicy));
         final int expectedStatusCode = 204;
 
-        assertEquals(expectedStatusCode,
-            tableClient.setAccessPoliciesWithResponse(tableSignedIdentifiers, null, null).getStatusCode());
+        TableClient tableClient2
+            = getClientBuilderWithConnectionString(tableClient.getTableName(), false).buildClient();
 
-        TableAccessPolicies tableAccessPolicies = tableClient.getAccessPolicies();
+        assertEquals(expectedStatusCode,
+            tableClient2.setAccessPoliciesWithResponse(tableSignedIdentifiers, null, null).getStatusCode());
+
+        TableAccessPolicies tableAccessPolicies = tableClient2.getAccessPolicies();
 
         assertNotNull(tableAccessPolicies);
         assertNotNull(tableAccessPolicies.getIdentifiers());
-
         assertEquals(2, tableAccessPolicies.getIdentifiers().size());
         assertEquals(id1, tableAccessPolicies.getIdentifiers().get(0).getId());
         assertEquals(id2, tableAccessPolicies.getIdentifiers().get(1).getId());
@@ -1036,5 +1290,52 @@ public class TableClientTest extends TestBase {
             assertEquals(expiryTime, accessPolicy.getExpiresOn());
             assertEquals(permissions, accessPolicy.getPermissions());
         }
+    }
+
+    @Test
+    public void allowsCreationOfEntityWithEmptyStringPrimaryKey() {
+        Assumptions.assumeFalse(IS_COSMOS_TEST, "Empty row or partition keys are not supported on Cosmos endpoints.");
+
+        Assertions.assertDoesNotThrow(() -> {
+            TableEntity entity = new TableEntity("", "");
+            tableClient.createEntity(entity);
+        });
+    }
+
+    @Test
+    public void allowListEntitiesWithEmptyPrimaryKey() {
+        Assumptions.assumeFalse(IS_COSMOS_TEST, "Empty row or partition keys are not supported on Cosmos endpoints.");
+
+        TableEntity entity = new TableEntity("", "");
+        String entityName = testResourceNamer.randomName("name", 10);
+        entity.addProperty("Name", entityName);
+
+        tableClient.createEntity(entity);
+
+        ListEntitiesOptions options = new ListEntitiesOptions();
+        options.setFilter("PartitionKey eq '' and RowKey eq ''");
+
+        PagedIterable<TableEntity> response = tableClient.listEntities(options, Duration.ofSeconds(10), null);
+        ArrayList<TableEntity> responseArray = new ArrayList<TableEntity>();
+
+        for (TableEntity responseEntity : response) {
+            responseArray.add(responseEntity);
+        }
+
+        assertEquals(1, responseArray.size());
+        assertEquals(entityName, responseArray.get(0).getProperty("Name"));
+    }
+
+    // tests that you can delete a table entity with an empty string partition key and empty string row key
+    @Test
+    public void allowDeleteEntityWithEmptyPrimaryKey() {
+        Assumptions.assumeFalse(IS_COSMOS_TEST, "Empty row or partition keys are not supported on Cosmos endpoints.");
+
+        TableEntity entity = new TableEntity("", "");
+        String entityName = testResourceNamer.randomName("name", 10);
+        entity.addProperty("Name", entityName);
+
+        tableClient.createEntity(entity);
+        tableClient.deleteEntity(entity);
     }
 }

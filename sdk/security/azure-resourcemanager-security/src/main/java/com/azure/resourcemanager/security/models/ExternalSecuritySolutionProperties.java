@@ -5,7 +5,6 @@
 package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -13,11 +12,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.HashMap;
 import java.util.Map;
 
-/** The solution properties (correspond to the solution kind). */
+/**
+ * The solution properties (correspond to the solution kind).
+ */
 @Fluent
 public class ExternalSecuritySolutionProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ExternalSecuritySolutionProperties.class);
-
     /*
      * The deviceVendor property.
      */
@@ -39,11 +38,18 @@ public class ExternalSecuritySolutionProperties {
     /*
      * The solution properties (correspond to the solution kind)
      */
-    @JsonIgnore private Map<String, Object> additionalProperties;
+    @JsonIgnore
+    private Map<String, Object> additionalProperties;
+
+    /**
+     * Creates an instance of ExternalSecuritySolutionProperties class.
+     */
+    public ExternalSecuritySolutionProperties() {
+    }
 
     /**
      * Get the deviceVendor property: The deviceVendor property.
-     *
+     * 
      * @return the deviceVendor value.
      */
     public String deviceVendor() {
@@ -52,7 +58,7 @@ public class ExternalSecuritySolutionProperties {
 
     /**
      * Set the deviceVendor property: The deviceVendor property.
-     *
+     * 
      * @param deviceVendor the deviceVendor value to set.
      * @return the ExternalSecuritySolutionProperties object itself.
      */
@@ -63,7 +69,7 @@ public class ExternalSecuritySolutionProperties {
 
     /**
      * Get the deviceType property: The deviceType property.
-     *
+     * 
      * @return the deviceType value.
      */
     public String deviceType() {
@@ -72,7 +78,7 @@ public class ExternalSecuritySolutionProperties {
 
     /**
      * Set the deviceType property: The deviceType property.
-     *
+     * 
      * @param deviceType the deviceType value to set.
      * @return the ExternalSecuritySolutionProperties object itself.
      */
@@ -83,7 +89,7 @@ public class ExternalSecuritySolutionProperties {
 
     /**
      * Get the workspace property: Represents an OMS workspace to which the solution is connected.
-     *
+     * 
      * @return the workspace value.
      */
     public ConnectedWorkspace workspace() {
@@ -92,7 +98,7 @@ public class ExternalSecuritySolutionProperties {
 
     /**
      * Set the workspace property: Represents an OMS workspace to which the solution is connected.
-     *
+     * 
      * @param workspace the workspace value to set.
      * @return the ExternalSecuritySolutionProperties object itself.
      */
@@ -103,7 +109,7 @@ public class ExternalSecuritySolutionProperties {
 
     /**
      * Get the additionalProperties property: The solution properties (correspond to the solution kind).
-     *
+     * 
      * @return the additionalProperties value.
      */
     @JsonAnyGetter
@@ -113,7 +119,7 @@ public class ExternalSecuritySolutionProperties {
 
     /**
      * Set the additionalProperties property: The solution properties (correspond to the solution kind).
-     *
+     * 
      * @param additionalProperties the additionalProperties value to set.
      * @return the ExternalSecuritySolutionProperties object itself.
      */
@@ -132,7 +138,7 @@ public class ExternalSecuritySolutionProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

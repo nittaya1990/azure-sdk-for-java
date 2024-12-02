@@ -6,17 +6,15 @@ package com.azure.resourcemanager.recoveryservicesbackup.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.Resource;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.recoveryservicesbackup.models.ProtectableContainer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
-/** Protectable Container Class. */
+/**
+ * Protectable Container Class.
+ */
 @Fluent
 public final class ProtectableContainerResourceInner extends Resource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ProtectableContainerResourceInner.class);
-
     /*
      * ProtectableContainerResource properties
      */
@@ -30,8 +28,14 @@ public final class ProtectableContainerResourceInner extends Resource {
     private String etag;
 
     /**
+     * Creates an instance of ProtectableContainerResourceInner class.
+     */
+    public ProtectableContainerResourceInner() {
+    }
+
+    /**
      * Get the properties property: ProtectableContainerResource properties.
-     *
+     * 
      * @return the properties value.
      */
     public ProtectableContainer properties() {
@@ -40,7 +44,7 @@ public final class ProtectableContainerResourceInner extends Resource {
 
     /**
      * Set the properties property: ProtectableContainerResource properties.
-     *
+     * 
      * @param properties the properties value to set.
      * @return the ProtectableContainerResourceInner object itself.
      */
@@ -51,7 +55,7 @@ public final class ProtectableContainerResourceInner extends Resource {
 
     /**
      * Get the etag property: Optional ETag.
-     *
+     * 
      * @return the etag value.
      */
     public String etag() {
@@ -60,7 +64,7 @@ public final class ProtectableContainerResourceInner extends Resource {
 
     /**
      * Set the etag property: Optional ETag.
-     *
+     * 
      * @param etag the etag value to set.
      * @return the ProtectableContainerResourceInner object itself.
      */
@@ -69,14 +73,18 @@ public final class ProtectableContainerResourceInner extends Resource {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ProtectableContainerResourceInner withLocation(String location) {
         super.withLocation(location);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ProtectableContainerResourceInner withTags(Map<String, String> tags) {
         super.withTags(tags);
@@ -85,7 +93,7 @@ public final class ProtectableContainerResourceInner extends Resource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

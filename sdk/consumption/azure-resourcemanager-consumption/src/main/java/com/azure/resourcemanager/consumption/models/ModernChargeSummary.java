@@ -4,203 +4,280 @@
 
 package com.azure.resourcemanager.consumption.models;
 
-import com.azure.core.annotation.Immutable;
-import com.azure.core.annotation.JsonFlatten;
+import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import com.azure.resourcemanager.consumption.fluent.models.ModernChargeSummaryProperties;
+import java.io.IOException;
 
-/** Modern charge summary. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "kind")
-@JsonTypeName("modern")
-@JsonFlatten
-@Immutable
-public class ModernChargeSummary extends ChargeSummary {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ModernChargeSummary.class);
+/**
+ * Modern charge summary.
+ */
+@Fluent
+public final class ModernChargeSummary extends ChargeSummary {
+    /*
+     * Specifies the kind of charge summary.
+     */
+    private ChargeSummaryKind kind = ChargeSummaryKind.MODERN;
 
     /*
-     * The id of the billing period resource that the charge belongs to.
+     * Properties for modern charge summary
      */
-    @JsonProperty(value = "properties.billingPeriodId", access = JsonProperty.Access.WRITE_ONLY)
-    private String billingPeriodId;
+    private ModernChargeSummaryProperties innerProperties = new ModernChargeSummaryProperties();
 
     /*
-     * Usage start date.
+     * The type of the resource.
      */
-    @JsonProperty(value = "properties.usageStart", access = JsonProperty.Access.WRITE_ONLY)
-    private String usageStart;
+    private String type;
 
     /*
-     * Usage end date.
+     * The name of the resource.
      */
-    @JsonProperty(value = "properties.usageEnd", access = JsonProperty.Access.WRITE_ONLY)
-    private String usageEnd;
+    private String name;
 
     /*
-     * Azure Charges.
+     * Fully qualified resource Id for the resource.
      */
-    @JsonProperty(value = "properties.azureCharges", access = JsonProperty.Access.WRITE_ONLY)
-    private Amount azureCharges;
+    private String id;
 
-    /*
-     * Charges Billed separately.
+    /**
+     * Creates an instance of ModernChargeSummary class.
      */
-    @JsonProperty(value = "properties.chargesBilledSeparately", access = JsonProperty.Access.WRITE_ONLY)
-    private Amount chargesBilledSeparately;
+    public ModernChargeSummary() {
+    }
 
-    /*
-     * Marketplace Charges.
+    /**
+     * Get the kind property: Specifies the kind of charge summary.
+     * 
+     * @return the kind value.
      */
-    @JsonProperty(value = "properties.marketplaceCharges", access = JsonProperty.Access.WRITE_ONLY)
-    private Amount marketplaceCharges;
+    @Override
+    public ChargeSummaryKind kind() {
+        return this.kind;
+    }
 
-    /*
-     * Billing Account Id
+    /**
+     * Get the innerProperties property: Properties for modern charge summary.
+     * 
+     * @return the innerProperties value.
      */
-    @JsonProperty(value = "properties.billingAccountId", access = JsonProperty.Access.WRITE_ONLY)
-    private String billingAccountId;
+    private ModernChargeSummaryProperties innerProperties() {
+        return this.innerProperties;
+    }
 
-    /*
-     * Billing Profile Id
+    /**
+     * Get the type property: The type of the resource.
+     * 
+     * @return the type value.
      */
-    @JsonProperty(value = "properties.billingProfileId", access = JsonProperty.Access.WRITE_ONLY)
-    private String billingProfileId;
+    @Override
+    public String type() {
+        return this.type;
+    }
 
-    /*
-     * Invoice Section Id
+    /**
+     * Get the name property: The name of the resource.
+     * 
+     * @return the name value.
      */
-    @JsonProperty(value = "properties.invoiceSectionId", access = JsonProperty.Access.WRITE_ONLY)
-    private String invoiceSectionId;
+    @Override
+    public String name() {
+        return this.name;
+    }
 
-    /*
-     * Customer Id
+    /**
+     * Get the id property: Fully qualified resource Id for the resource.
+     * 
+     * @return the id value.
      */
-    @JsonProperty(value = "properties.customerId", access = JsonProperty.Access.WRITE_ONLY)
-    private String customerId;
+    @Override
+    public String id() {
+        return this.id;
+    }
 
-    /*
-     * Is charge Invoiced
+    /**
+     * {@inheritDoc}
      */
-    @JsonProperty(value = "properties.isInvoiced", access = JsonProperty.Access.WRITE_ONLY)
-    private Boolean isInvoiced;
+    @Override
+    public ModernChargeSummary withEtag(String etag) {
+        super.withEtag(etag);
+        return this;
+    }
 
     /**
      * Get the billingPeriodId property: The id of the billing period resource that the charge belongs to.
-     *
+     * 
      * @return the billingPeriodId value.
      */
     public String billingPeriodId() {
-        return this.billingPeriodId;
+        return this.innerProperties() == null ? null : this.innerProperties().billingPeriodId();
     }
 
     /**
      * Get the usageStart property: Usage start date.
-     *
+     * 
      * @return the usageStart value.
      */
     public String usageStart() {
-        return this.usageStart;
+        return this.innerProperties() == null ? null : this.innerProperties().usageStart();
     }
 
     /**
      * Get the usageEnd property: Usage end date.
-     *
+     * 
      * @return the usageEnd value.
      */
     public String usageEnd() {
-        return this.usageEnd;
+        return this.innerProperties() == null ? null : this.innerProperties().usageEnd();
     }
 
     /**
      * Get the azureCharges property: Azure Charges.
-     *
+     * 
      * @return the azureCharges value.
      */
     public Amount azureCharges() {
-        return this.azureCharges;
+        return this.innerProperties() == null ? null : this.innerProperties().azureCharges();
     }
 
     /**
      * Get the chargesBilledSeparately property: Charges Billed separately.
-     *
+     * 
      * @return the chargesBilledSeparately value.
      */
     public Amount chargesBilledSeparately() {
-        return this.chargesBilledSeparately;
+        return this.innerProperties() == null ? null : this.innerProperties().chargesBilledSeparately();
     }
 
     /**
      * Get the marketplaceCharges property: Marketplace Charges.
-     *
+     * 
      * @return the marketplaceCharges value.
      */
     public Amount marketplaceCharges() {
-        return this.marketplaceCharges;
+        return this.innerProperties() == null ? null : this.innerProperties().marketplaceCharges();
     }
 
     /**
      * Get the billingAccountId property: Billing Account Id.
-     *
+     * 
      * @return the billingAccountId value.
      */
     public String billingAccountId() {
-        return this.billingAccountId;
+        return this.innerProperties() == null ? null : this.innerProperties().billingAccountId();
     }
 
     /**
      * Get the billingProfileId property: Billing Profile Id.
-     *
+     * 
      * @return the billingProfileId value.
      */
     public String billingProfileId() {
-        return this.billingProfileId;
+        return this.innerProperties() == null ? null : this.innerProperties().billingProfileId();
     }
 
     /**
      * Get the invoiceSectionId property: Invoice Section Id.
-     *
+     * 
      * @return the invoiceSectionId value.
      */
     public String invoiceSectionId() {
-        return this.invoiceSectionId;
+        return this.innerProperties() == null ? null : this.innerProperties().invoiceSectionId();
     }
 
     /**
      * Get the customerId property: Customer Id.
-     *
+     * 
      * @return the customerId value.
      */
     public String customerId() {
-        return this.customerId;
+        return this.innerProperties() == null ? null : this.innerProperties().customerId();
     }
 
     /**
      * Get the isInvoiced property: Is charge Invoiced.
-     *
+     * 
      * @return the isInvoiced value.
      */
     public Boolean isInvoiced() {
-        return this.isInvoiced;
+        return this.innerProperties() == null ? null : this.innerProperties().isInvoiced();
+    }
+
+    /**
+     * Get the subscriptionId property: Subscription guid.
+     * 
+     * @return the subscriptionId value.
+     */
+    public String subscriptionId() {
+        return this.innerProperties() == null ? null : this.innerProperties().subscriptionId();
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
-        super.validate();
-        if (azureCharges() != null) {
-            azureCharges().validate();
+        if (innerProperties() == null) {
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property innerProperties in model ModernChargeSummary"));
+        } else {
+            innerProperties().validate();
         }
-        if (chargesBilledSeparately() != null) {
-            chargesBilledSeparately().validate();
-        }
-        if (marketplaceCharges() != null) {
-            marketplaceCharges().validate();
-        }
+    }
+
+    private static final ClientLogger LOGGER = new ClientLogger(ModernChargeSummary.class);
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeStringField("eTag", etag());
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        jsonWriter.writeStringField("kind", this.kind == null ? null : this.kind.toString());
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of ModernChargeSummary from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of ModernChargeSummary if the JsonReader was pointing to an instance of it, or null if it was
+     * pointing to JSON null.
+     * @throws IllegalStateException If the deserialized JSON object was missing any required properties.
+     * @throws IOException If an error occurs while reading the ModernChargeSummary.
+     */
+    public static ModernChargeSummary fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            ModernChargeSummary deserializedModernChargeSummary = new ModernChargeSummary();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("id".equals(fieldName)) {
+                    deserializedModernChargeSummary.id = reader.getString();
+                } else if ("name".equals(fieldName)) {
+                    deserializedModernChargeSummary.name = reader.getString();
+                } else if ("type".equals(fieldName)) {
+                    deserializedModernChargeSummary.type = reader.getString();
+                } else if ("eTag".equals(fieldName)) {
+                    deserializedModernChargeSummary.withEtag(reader.getString());
+                } else if ("properties".equals(fieldName)) {
+                    deserializedModernChargeSummary.innerProperties = ModernChargeSummaryProperties.fromJson(reader);
+                } else if ("kind".equals(fieldName)) {
+                    deserializedModernChargeSummary.kind = ChargeSummaryKind.fromString(reader.getString());
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedModernChargeSummary;
+        });
     }
 }

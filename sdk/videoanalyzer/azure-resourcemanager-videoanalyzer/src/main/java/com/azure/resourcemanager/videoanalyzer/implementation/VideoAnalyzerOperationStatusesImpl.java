@@ -12,17 +12,15 @@ import com.azure.resourcemanager.videoanalyzer.fluent.VideoAnalyzerOperationStat
 import com.azure.resourcemanager.videoanalyzer.fluent.models.VideoAnalyzerOperationStatusInner;
 import com.azure.resourcemanager.videoanalyzer.models.VideoAnalyzerOperationStatus;
 import com.azure.resourcemanager.videoanalyzer.models.VideoAnalyzerOperationStatuses;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class VideoAnalyzerOperationStatusesImpl implements VideoAnalyzerOperationStatuses {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(VideoAnalyzerOperationStatusesImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(VideoAnalyzerOperationStatusesImpl.class);
 
     private final VideoAnalyzerOperationStatusesClient innerClient;
 
     private final com.azure.resourcemanager.videoanalyzer.VideoAnalyzerManager serviceManager;
 
-    public VideoAnalyzerOperationStatusesImpl(
-        VideoAnalyzerOperationStatusesClient innerClient,
+    public VideoAnalyzerOperationStatusesImpl(VideoAnalyzerOperationStatusesClient innerClient,
         com.azure.resourcemanager.videoanalyzer.VideoAnalyzerManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
@@ -37,15 +35,12 @@ public final class VideoAnalyzerOperationStatusesImpl implements VideoAnalyzerOp
         }
     }
 
-    public Response<VideoAnalyzerOperationStatus> getWithResponse(
-        String locationName, String operationId, Context context) {
-        Response<VideoAnalyzerOperationStatusInner> inner =
-            this.serviceClient().getWithResponse(locationName, operationId, context);
+    public Response<VideoAnalyzerOperationStatus> getWithResponse(String locationName, String operationId,
+        Context context) {
+        Response<VideoAnalyzerOperationStatusInner> inner
+            = this.serviceClient().getWithResponse(locationName, operationId, context);
         if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
                 new VideoAnalyzerOperationStatusImpl(inner.getValue(), this.manager()));
         } else {
             return null;

@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The external security solution properties for ATA solutions. */
+/**
+ * The external security solution properties for ATA solutions.
+ */
 @Fluent
 public final class AtaSolutionProperties extends ExternalSecuritySolutionProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AtaSolutionProperties.class);
-
     /*
      * The lastEventReceived property.
      */
@@ -21,8 +19,14 @@ public final class AtaSolutionProperties extends ExternalSecuritySolutionPropert
     private String lastEventReceived;
 
     /**
+     * Creates an instance of AtaSolutionProperties class.
+     */
+    public AtaSolutionProperties() {
+    }
+
+    /**
      * Get the lastEventReceived property: The lastEventReceived property.
-     *
+     * 
      * @return the lastEventReceived value.
      */
     public String lastEventReceived() {
@@ -31,7 +35,7 @@ public final class AtaSolutionProperties extends ExternalSecuritySolutionPropert
 
     /**
      * Set the lastEventReceived property: The lastEventReceived property.
-     *
+     * 
      * @param lastEventReceived the lastEventReceived value to set.
      * @return the AtaSolutionProperties object itself.
      */
@@ -40,21 +44,27 @@ public final class AtaSolutionProperties extends ExternalSecuritySolutionPropert
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AtaSolutionProperties withDeviceVendor(String deviceVendor) {
         super.withDeviceVendor(deviceVendor);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AtaSolutionProperties withDeviceType(String deviceType) {
         super.withDeviceType(deviceType);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AtaSolutionProperties withWorkspace(ConnectedWorkspace workspace) {
         super.withWorkspace(workspace);
@@ -63,7 +73,7 @@ public final class AtaSolutionProperties extends ExternalSecuritySolutionPropert
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

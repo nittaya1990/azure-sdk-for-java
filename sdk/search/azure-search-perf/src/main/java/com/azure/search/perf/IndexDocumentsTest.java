@@ -22,27 +22,30 @@ public class IndexDocumentsTest extends ServiceTest<SearchPerfStressOptions> {
     private static volatile AtomicInteger ID_COUNT = new AtomicInteger();
     private final List<Hotel> hotels;
 
+    /**
+     * Creates the document indexing operations performance test.
+     *
+     * @param options Performance test configuration options.
+     */
     public IndexDocumentsTest(SearchPerfStressOptions options) {
         super(options);
 
-        this.hotels = DocumentGenerator.generateHotels(options.getCount(),
-            DocumentSize.valueOf(options.getDocumentSize()));
+        this.hotels
+            = DocumentGenerator.generateHotels(options.getCount(), DocumentSize.valueOf(options.getDocumentSize()));
     }
 
     @Override
     public void run() {
         int[] idOffset = new int[] { ID_COUNT.getAndAdd(options.getCount()) };
-        searchClient.indexDocuments(new IndexDocumentsBatch<>().addUploadActions(hotels.stream()
-            .peek(hotel -> hotel.hotelId = String.valueOf(idOffset[0]++))
-            .collect(Collectors.toList())));
+        searchClient.indexDocuments(new IndexDocumentsBatch<>().addUploadActions(
+            hotels.stream().peek(hotel -> hotel.hotelId = String.valueOf(idOffset[0]++)).collect(Collectors.toList())));
     }
 
     @Override
     public Mono<Void> runAsync() {
         int[] idOffset = new int[] { ID_COUNT.getAndAdd(options.getCount()) };
-        return searchAsyncClient.indexDocuments(new IndexDocumentsBatch<>().addUploadActions(hotels.stream()
-            .peek(hotel -> hotel.hotelId = String.valueOf(idOffset[0]++))
-            .collect(Collectors.toList())))
+        return searchAsyncClient.indexDocuments(new IndexDocumentsBatch<>().addUploadActions(
+            hotels.stream().peek(hotel -> hotel.hotelId = String.valueOf(idOffset[0]++)).collect(Collectors.toList())))
             .then();
     }
 }

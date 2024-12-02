@@ -11,37 +11,30 @@ import com.azure.resourcemanager.apimanagement.fluent.ApiProductsClient;
 import com.azure.resourcemanager.apimanagement.fluent.models.ProductContractInner;
 import com.azure.resourcemanager.apimanagement.models.ApiProducts;
 import com.azure.resourcemanager.apimanagement.models.ProductContract;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class ApiProductsImpl implements ApiProducts {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApiProductsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(ApiProductsImpl.class);
 
     private final ApiProductsClient innerClient;
 
     private final com.azure.resourcemanager.apimanagement.ApiManagementManager serviceManager;
 
-    public ApiProductsImpl(
-        ApiProductsClient innerClient, com.azure.resourcemanager.apimanagement.ApiManagementManager serviceManager) {
+    public ApiProductsImpl(ApiProductsClient innerClient,
+        com.azure.resourcemanager.apimanagement.ApiManagementManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
     }
 
     public PagedIterable<ProductContract> listByApis(String resourceGroupName, String serviceName, String apiId) {
-        PagedIterable<ProductContractInner> inner =
-            this.serviceClient().listByApis(resourceGroupName, serviceName, apiId);
+        PagedIterable<ProductContractInner> inner
+            = this.serviceClient().listByApis(resourceGroupName, serviceName, apiId);
         return Utils.mapPage(inner, inner1 -> new ProductContractImpl(inner1, this.manager()));
     }
 
-    public PagedIterable<ProductContract> listByApis(
-        String resourceGroupName,
-        String serviceName,
-        String apiId,
-        String filter,
-        Integer top,
-        Integer skip,
-        Context context) {
-        PagedIterable<ProductContractInner> inner =
-            this.serviceClient().listByApis(resourceGroupName, serviceName, apiId, filter, top, skip, context);
+    public PagedIterable<ProductContract> listByApis(String resourceGroupName, String serviceName, String apiId,
+        String filter, Integer top, Integer skip, Context context) {
+        PagedIterable<ProductContractInner> inner
+            = this.serviceClient().listByApis(resourceGroupName, serviceName, apiId, filter, top, skip, context);
         return Utils.mapPage(inner, inner1 -> new ProductContractImpl(inner1, this.manager()));
     }
 

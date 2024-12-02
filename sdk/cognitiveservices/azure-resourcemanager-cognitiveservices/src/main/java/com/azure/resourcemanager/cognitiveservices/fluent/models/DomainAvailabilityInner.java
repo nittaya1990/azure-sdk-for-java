@@ -5,42 +5,51 @@
 package com.azure.resourcemanager.cognitiveservices.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonSerializable;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import java.io.IOException;
 
-/** Domain availability. */
+/**
+ * Domain availability.
+ */
 @Fluent
-public final class DomainAvailabilityInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DomainAvailabilityInner.class);
-
+public final class DomainAvailabilityInner implements JsonSerializable<DomainAvailabilityInner> {
     /*
      * Indicates the given SKU is available or not.
      */
-    @JsonProperty(value = "isSubdomainAvailable")
     private Boolean isSubdomainAvailable;
 
     /*
      * Reason why the SKU is not available.
      */
-    @JsonProperty(value = "reason")
     private String reason;
 
     /*
      * The subdomain name to use.
      */
-    @JsonProperty(value = "subdomainName")
     private String subdomainName;
 
     /*
      * The Type of the resource.
      */
-    @JsonProperty(value = "type")
     private String type;
+
+    /*
+     * The Kind of the resource.
+     */
+    private String kind;
+
+    /**
+     * Creates an instance of DomainAvailabilityInner class.
+     */
+    public DomainAvailabilityInner() {
+    }
 
     /**
      * Get the isSubdomainAvailable property: Indicates the given SKU is available or not.
-     *
+     * 
      * @return the isSubdomainAvailable value.
      */
     public Boolean isSubdomainAvailable() {
@@ -49,7 +58,7 @@ public final class DomainAvailabilityInner {
 
     /**
      * Set the isSubdomainAvailable property: Indicates the given SKU is available or not.
-     *
+     * 
      * @param isSubdomainAvailable the isSubdomainAvailable value to set.
      * @return the DomainAvailabilityInner object itself.
      */
@@ -60,7 +69,7 @@ public final class DomainAvailabilityInner {
 
     /**
      * Get the reason property: Reason why the SKU is not available.
-     *
+     * 
      * @return the reason value.
      */
     public String reason() {
@@ -69,7 +78,7 @@ public final class DomainAvailabilityInner {
 
     /**
      * Set the reason property: Reason why the SKU is not available.
-     *
+     * 
      * @param reason the reason value to set.
      * @return the DomainAvailabilityInner object itself.
      */
@@ -80,7 +89,7 @@ public final class DomainAvailabilityInner {
 
     /**
      * Get the subdomainName property: The subdomain name to use.
-     *
+     * 
      * @return the subdomainName value.
      */
     public String subdomainName() {
@@ -89,7 +98,7 @@ public final class DomainAvailabilityInner {
 
     /**
      * Set the subdomainName property: The subdomain name to use.
-     *
+     * 
      * @param subdomainName the subdomainName value to set.
      * @return the DomainAvailabilityInner object itself.
      */
@@ -100,7 +109,7 @@ public final class DomainAvailabilityInner {
 
     /**
      * Get the type property: The Type of the resource.
-     *
+     * 
      * @return the type value.
      */
     public String type() {
@@ -109,7 +118,7 @@ public final class DomainAvailabilityInner {
 
     /**
      * Set the type property: The Type of the resource.
-     *
+     * 
      * @param type the type value to set.
      * @return the DomainAvailabilityInner object itself.
      */
@@ -119,10 +128,79 @@ public final class DomainAvailabilityInner {
     }
 
     /**
+     * Get the kind property: The Kind of the resource.
+     * 
+     * @return the kind value.
+     */
+    public String kind() {
+        return this.kind;
+    }
+
+    /**
+     * Set the kind property: The Kind of the resource.
+     * 
+     * @param kind the kind value to set.
+     * @return the DomainAvailabilityInner object itself.
+     */
+    public DomainAvailabilityInner withKind(String kind) {
+        this.kind = kind;
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeBooleanField("isSubdomainAvailable", this.isSubdomainAvailable);
+        jsonWriter.writeStringField("reason", this.reason);
+        jsonWriter.writeStringField("subdomainName", this.subdomainName);
+        jsonWriter.writeStringField("type", this.type);
+        jsonWriter.writeStringField("kind", this.kind);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of DomainAvailabilityInner from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of DomainAvailabilityInner if the JsonReader was pointing to an instance of it, or null if it
+     * was pointing to JSON null.
+     * @throws IOException If an error occurs while reading the DomainAvailabilityInner.
+     */
+    public static DomainAvailabilityInner fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            DomainAvailabilityInner deserializedDomainAvailabilityInner = new DomainAvailabilityInner();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("isSubdomainAvailable".equals(fieldName)) {
+                    deserializedDomainAvailabilityInner.isSubdomainAvailable
+                        = reader.getNullable(JsonReader::getBoolean);
+                } else if ("reason".equals(fieldName)) {
+                    deserializedDomainAvailabilityInner.reason = reader.getString();
+                } else if ("subdomainName".equals(fieldName)) {
+                    deserializedDomainAvailabilityInner.subdomainName = reader.getString();
+                } else if ("type".equals(fieldName)) {
+                    deserializedDomainAvailabilityInner.type = reader.getString();
+                } else if ("kind".equals(fieldName)) {
+                    deserializedDomainAvailabilityInner.kind = reader.getString();
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedDomainAvailabilityInner;
+        });
     }
 }

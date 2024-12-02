@@ -8,15 +8,12 @@ import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.models.IssueContractBaseProperties;
 import com.azure.resourcemanager.apimanagement.models.State;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
 /** Issue contract Properties. */
 @Fluent
 public final class IssueContractProperties extends IssueContractBaseProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(IssueContractProperties.class);
-
     /*
      * The issue title.
      */
@@ -34,6 +31,10 @@ public final class IssueContractProperties extends IssueContractBaseProperties {
      */
     @JsonProperty(value = "userId", required = true)
     private String userId;
+
+    /** Creates an instance of IssueContractProperties class. */
+    public IssueContractProperties() {
+    }
 
     /**
      * Get the title property: The issue title.
@@ -125,20 +126,18 @@ public final class IssueContractProperties extends IssueContractBaseProperties {
     public void validate() {
         super.validate();
         if (title() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property title in model IssueContractProperties"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property title in model IssueContractProperties"));
         }
         if (description() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property description in model IssueContractProperties"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property description in model IssueContractProperties"));
         }
         if (userId() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property userId in model IssueContractProperties"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property userId in model IssueContractProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(IssueContractProperties.class);
 }

@@ -9,60 +9,53 @@ import com.azure.core.http.rest.SimpleResponse;
 import com.azure.core.util.Context;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.recoveryservicesbackup.fluent.BackupResourceEncryptionConfigsClient;
-import com.azure.resourcemanager.recoveryservicesbackup.fluent.models.BackupResourceEncryptionConfigResourceInner;
+import com.azure.resourcemanager.recoveryservicesbackup.fluent.models.BackupResourceEncryptionConfigExtendedResourceInner;
+import com.azure.resourcemanager.recoveryservicesbackup.models.BackupResourceEncryptionConfigExtendedResource;
 import com.azure.resourcemanager.recoveryservicesbackup.models.BackupResourceEncryptionConfigResource;
 import com.azure.resourcemanager.recoveryservicesbackup.models.BackupResourceEncryptionConfigs;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class BackupResourceEncryptionConfigsImpl implements BackupResourceEncryptionConfigs {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(BackupResourceEncryptionConfigsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(BackupResourceEncryptionConfigsImpl.class);
 
     private final BackupResourceEncryptionConfigsClient innerClient;
 
     private final com.azure.resourcemanager.recoveryservicesbackup.RecoveryServicesBackupManager serviceManager;
 
-    public BackupResourceEncryptionConfigsImpl(
-        BackupResourceEncryptionConfigsClient innerClient,
+    public BackupResourceEncryptionConfigsImpl(BackupResourceEncryptionConfigsClient innerClient,
         com.azure.resourcemanager.recoveryservicesbackup.RecoveryServicesBackupManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
     }
 
-    public BackupResourceEncryptionConfigResource get(String vaultName, String resourceGroupName) {
-        BackupResourceEncryptionConfigResourceInner inner = this.serviceClient().get(vaultName, resourceGroupName);
+    public Response<BackupResourceEncryptionConfigExtendedResource> getWithResponse(String vaultName,
+        String resourceGroupName, Context context) {
+        Response<BackupResourceEncryptionConfigExtendedResourceInner> inner
+            = this.serviceClient().getWithResponse(vaultName, resourceGroupName, context);
         if (inner != null) {
-            return new BackupResourceEncryptionConfigResourceImpl(inner, this.manager());
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
+                new BackupResourceEncryptionConfigExtendedResourceImpl(inner.getValue(), this.manager()));
         } else {
             return null;
         }
     }
 
-    public Response<BackupResourceEncryptionConfigResource> getWithResponse(
-        String vaultName, String resourceGroupName, Context context) {
-        Response<BackupResourceEncryptionConfigResourceInner> inner =
-            this.serviceClient().getWithResponse(vaultName, resourceGroupName, context);
+    public BackupResourceEncryptionConfigExtendedResource get(String vaultName, String resourceGroupName) {
+        BackupResourceEncryptionConfigExtendedResourceInner inner
+            = this.serviceClient().get(vaultName, resourceGroupName);
         if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
-                new BackupResourceEncryptionConfigResourceImpl(inner.getValue(), this.manager()));
+            return new BackupResourceEncryptionConfigExtendedResourceImpl(inner, this.manager());
         } else {
             return null;
         }
     }
 
-    public void update(
-        String vaultName, String resourceGroupName, BackupResourceEncryptionConfigResourceInner parameters) {
-        this.serviceClient().update(vaultName, resourceGroupName, parameters);
-    }
-
-    public Response<Void> updateWithResponse(
-        String vaultName,
-        String resourceGroupName,
-        BackupResourceEncryptionConfigResourceInner parameters,
-        Context context) {
+    public Response<Void> updateWithResponse(String vaultName, String resourceGroupName,
+        BackupResourceEncryptionConfigResource parameters, Context context) {
         return this.serviceClient().updateWithResponse(vaultName, resourceGroupName, parameters, context);
+    }
+
+    public void update(String vaultName, String resourceGroupName, BackupResourceEncryptionConfigResource parameters) {
+        this.serviceClient().update(vaultName, resourceGroupName, parameters);
     }
 
     private BackupResourceEncryptionConfigsClient serviceClient() {

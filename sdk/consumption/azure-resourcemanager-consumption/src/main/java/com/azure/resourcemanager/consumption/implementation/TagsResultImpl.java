@@ -15,8 +15,8 @@ public final class TagsResultImpl implements TagsResult {
 
     private final com.azure.resourcemanager.consumption.ConsumptionManager serviceManager;
 
-    TagsResultImpl(
-        TagsResultInner innerObject, com.azure.resourcemanager.consumption.ConsumptionManager serviceManager) {
+    TagsResultImpl(TagsResultInner innerObject,
+        com.azure.resourcemanager.consumption.ConsumptionManager serviceManager) {
         this.innerObject = innerObject;
         this.serviceManager = serviceManager;
     }
@@ -31,6 +31,10 @@ public final class TagsResultImpl implements TagsResult {
 
     public String type() {
         return this.innerModel().type();
+    }
+
+    public String etag() {
+        return this.innerModel().etag();
     }
 
     public List<Tag> tags() {
@@ -48,10 +52,6 @@ public final class TagsResultImpl implements TagsResult {
 
     public String previousLink() {
         return this.innerModel().previousLink();
-    }
-
-    public String etag() {
-        return this.innerModel().etag();
     }
 
     public TagsResultInner innerModel() {

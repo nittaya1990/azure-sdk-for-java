@@ -5,16 +5,11 @@
 package com.azure.resourcemanager.applicationinsights.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** An Application Insights component feature capability. */
 @Immutable
 public final class ApplicationInsightsComponentFeatureCapability {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(ApplicationInsightsComponentFeatureCapability.class);
-
     /*
      * The name of the capability.
      */
@@ -50,6 +45,10 @@ public final class ApplicationInsightsComponentFeatureCapability {
      */
     @JsonProperty(value = "MeterRateFrequency", access = JsonProperty.Access.WRITE_ONLY)
     private String meterRateFrequency;
+
+    /** Creates an instance of ApplicationInsightsComponentFeatureCapability class. */
+    public ApplicationInsightsComponentFeatureCapability() {
+    }
 
     /**
      * Get the name property: The name of the capability.

@@ -5,17 +5,13 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.models.ResourceSku;
 import com.azure.resourcemanager.apimanagement.models.ResourceSkuCapacity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Describes an available API Management service SKU. */
 @Immutable
 public final class ResourceSkuResultInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ResourceSkuResultInner.class);
-
     /*
      * The type of resource the SKU applies to.
      */
@@ -33,6 +29,10 @@ public final class ResourceSkuResultInner {
      */
     @JsonProperty(value = "capacity", access = JsonProperty.Access.WRITE_ONLY)
     private ResourceSkuCapacity capacity;
+
+    /** Creates an instance of ResourceSkuResultInner class. */
+    public ResourceSkuResultInner() {
+    }
 
     /**
      * Get the resourceType property: The type of resource the SKU applies to.

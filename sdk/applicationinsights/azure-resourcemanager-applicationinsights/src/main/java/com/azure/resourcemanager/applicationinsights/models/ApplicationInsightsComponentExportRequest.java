@@ -5,20 +5,15 @@
 package com.azure.resourcemanager.applicationinsights.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** An Application Insights component Continuous Export configuration request definition. */
 @Fluent
 public final class ApplicationInsightsComponentExportRequest {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApplicationInsightsComponentExportRequest.class);
-
     /*
-     * The document types to be exported, as comma separated values. Allowed
-     * values include 'Requests', 'Event', 'Exceptions', 'Metrics',
-     * 'PageViews', 'PageViewPerformance', 'Rdd', 'PerformanceCounters',
-     * 'Availability', 'Messages'.
+     * The document types to be exported, as comma separated values. Allowed values include 'Requests', 'Event',
+     * 'Exceptions', 'Metrics', 'PageViews', 'PageViewPerformance', 'Rdd', 'PerformanceCounters', 'Availability',
+     * 'Messages'.
      */
     @JsonProperty(value = "RecordTypes")
     private String recordTypes;
@@ -30,15 +25,13 @@ public final class ApplicationInsightsComponentExportRequest {
     private String destinationType;
 
     /*
-     * The SAS URL for the destination storage container. It must grant write
-     * permission.
+     * The SAS URL for the destination storage container. It must grant write permission.
      */
     @JsonProperty(value = "DestinationAddress")
     private String destinationAddress;
 
     /*
-     * Set to 'true' to create a Continuous Export configuration as enabled,
-     * otherwise set it to 'false'.
+     * Set to 'true' to create a Continuous Export configuration as enabled, otherwise set it to 'false'.
      */
     @JsonProperty(value = "IsEnabled")
     private String isEnabled;
@@ -72,6 +65,10 @@ public final class ApplicationInsightsComponentExportRequest {
      */
     @JsonProperty(value = "DestinationAccountId")
     private String destinationAccountId;
+
+    /** Creates an instance of ApplicationInsightsComponentExportRequest class. */
+    public ApplicationInsightsComponentExportRequest() {
+    }
 
     /**
      * Get the recordTypes property: The document types to be exported, as comma separated values. Allowed values
@@ -216,8 +213,8 @@ public final class ApplicationInsightsComponentExportRequest {
      * @param destinationStorageSubscriptionId the destinationStorageSubscriptionId value to set.
      * @return the ApplicationInsightsComponentExportRequest object itself.
      */
-    public ApplicationInsightsComponentExportRequest withDestinationStorageSubscriptionId(
-        String destinationStorageSubscriptionId) {
+    public ApplicationInsightsComponentExportRequest
+        withDestinationStorageSubscriptionId(String destinationStorageSubscriptionId) {
         this.destinationStorageSubscriptionId = destinationStorageSubscriptionId;
         return this;
     }
@@ -237,8 +234,8 @@ public final class ApplicationInsightsComponentExportRequest {
      * @param destinationStorageLocationId the destinationStorageLocationId value to set.
      * @return the ApplicationInsightsComponentExportRequest object itself.
      */
-    public ApplicationInsightsComponentExportRequest withDestinationStorageLocationId(
-        String destinationStorageLocationId) {
+    public ApplicationInsightsComponentExportRequest
+        withDestinationStorageLocationId(String destinationStorageLocationId) {
         this.destinationStorageLocationId = destinationStorageLocationId;
         return this;
     }

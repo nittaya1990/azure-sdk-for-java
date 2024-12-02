@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 
-/** MAB workload-specific job task details. */
+/**
+ * MAB workload-specific job task details.
+ */
 @Fluent
 public final class MabJobTaskDetails {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(MabJobTaskDetails.class);
-
     /*
      * The task display name.
      */
@@ -47,8 +45,14 @@ public final class MabJobTaskDetails {
     private String status;
 
     /**
+     * Creates an instance of MabJobTaskDetails class.
+     */
+    public MabJobTaskDetails() {
+    }
+
+    /**
      * Get the taskId property: The task display name.
-     *
+     * 
      * @return the taskId value.
      */
     public String taskId() {
@@ -57,7 +61,7 @@ public final class MabJobTaskDetails {
 
     /**
      * Set the taskId property: The task display name.
-     *
+     * 
      * @param taskId the taskId value to set.
      * @return the MabJobTaskDetails object itself.
      */
@@ -68,7 +72,7 @@ public final class MabJobTaskDetails {
 
     /**
      * Get the startTime property: The start time.
-     *
+     * 
      * @return the startTime value.
      */
     public OffsetDateTime startTime() {
@@ -77,7 +81,7 @@ public final class MabJobTaskDetails {
 
     /**
      * Set the startTime property: The start time.
-     *
+     * 
      * @param startTime the startTime value to set.
      * @return the MabJobTaskDetails object itself.
      */
@@ -88,7 +92,7 @@ public final class MabJobTaskDetails {
 
     /**
      * Get the endTime property: The end time.
-     *
+     * 
      * @return the endTime value.
      */
     public OffsetDateTime endTime() {
@@ -97,7 +101,7 @@ public final class MabJobTaskDetails {
 
     /**
      * Set the endTime property: The end time.
-     *
+     * 
      * @param endTime the endTime value to set.
      * @return the MabJobTaskDetails object itself.
      */
@@ -108,7 +112,7 @@ public final class MabJobTaskDetails {
 
     /**
      * Get the duration property: Time elapsed for task.
-     *
+     * 
      * @return the duration value.
      */
     public Duration duration() {
@@ -117,7 +121,7 @@ public final class MabJobTaskDetails {
 
     /**
      * Set the duration property: Time elapsed for task.
-     *
+     * 
      * @param duration the duration value to set.
      * @return the MabJobTaskDetails object itself.
      */
@@ -128,7 +132,7 @@ public final class MabJobTaskDetails {
 
     /**
      * Get the status property: The status.
-     *
+     * 
      * @return the status value.
      */
     public String status() {
@@ -137,7 +141,7 @@ public final class MabJobTaskDetails {
 
     /**
      * Set the status property: The status.
-     *
+     * 
      * @param status the status value to set.
      * @return the MabJobTaskDetails object itself.
      */
@@ -148,7 +152,7 @@ public final class MabJobTaskDetails {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

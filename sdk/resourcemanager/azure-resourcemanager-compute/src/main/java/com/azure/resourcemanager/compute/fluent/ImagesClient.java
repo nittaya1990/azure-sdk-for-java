@@ -22,92 +22,95 @@ import java.nio.ByteBuffer;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-/** An instance of this class provides access to all the operations defined in ImagesClient. */
+/**
+ * An instance of this class provides access to all the operations defined in ImagesClient.
+ */
 public interface ImagesClient
     extends InnerSupportsGet<ImageInner>, InnerSupportsListing<ImageInner>, InnerSupportsDelete<Void> {
     /**
      * Create or update an image.
-     *
+     * 
      * @param resourceGroupName The name of the resource group.
      * @param imageName The name of the image.
      * @param parameters Parameters supplied to the Create Image operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the source user image virtual hard disk.
+     * @return the source user image virtual hard disk along with {@link Response} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(
-        String resourceGroupName, String imageName, ImageInner parameters);
+    Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(String resourceGroupName, String imageName,
+        ImageInner parameters);
 
     /**
      * Create or update an image.
-     *
+     * 
      * @param resourceGroupName The name of the resource group.
      * @param imageName The name of the image.
      * @param parameters Parameters supplied to the Create Image operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the source user image virtual hard disk.
+     * @return the {@link PollerFlux} for polling of the source user image virtual hard disk.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    PollerFlux<PollResult<ImageInner>, ImageInner> beginCreateOrUpdateAsync(
-        String resourceGroupName, String imageName, ImageInner parameters);
+    PollerFlux<PollResult<ImageInner>, ImageInner> beginCreateOrUpdateAsync(String resourceGroupName, String imageName,
+        ImageInner parameters);
 
     /**
      * Create or update an image.
-     *
+     * 
      * @param resourceGroupName The name of the resource group.
      * @param imageName The name of the image.
      * @param parameters Parameters supplied to the Create Image operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the source user image virtual hard disk.
+     * @return the {@link SyncPoller} for polling of the source user image virtual hard disk.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    SyncPoller<PollResult<ImageInner>, ImageInner> beginCreateOrUpdate(
-        String resourceGroupName, String imageName, ImageInner parameters);
+    SyncPoller<PollResult<ImageInner>, ImageInner> beginCreateOrUpdate(String resourceGroupName, String imageName,
+        ImageInner parameters);
 
     /**
      * Create or update an image.
-     *
+     * 
      * @param resourceGroupName The name of the resource group.
      * @param imageName The name of the image.
      * @param parameters Parameters supplied to the Create Image operation.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the source user image virtual hard disk.
+     * @return the {@link SyncPoller} for polling of the source user image virtual hard disk.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    SyncPoller<PollResult<ImageInner>, ImageInner> beginCreateOrUpdate(
-        String resourceGroupName, String imageName, ImageInner parameters, Context context);
+    SyncPoller<PollResult<ImageInner>, ImageInner> beginCreateOrUpdate(String resourceGroupName, String imageName,
+        ImageInner parameters, Context context);
 
     /**
      * Create or update an image.
-     *
+     * 
      * @param resourceGroupName The name of the resource group.
      * @param imageName The name of the image.
      * @param parameters Parameters supplied to the Create Image operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the source user image virtual hard disk.
+     * @return the source user image virtual hard disk on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     Mono<ImageInner> createOrUpdateAsync(String resourceGroupName, String imageName, ImageInner parameters);
 
     /**
      * Create or update an image.
-     *
+     * 
      * @param resourceGroupName The name of the resource group.
      * @param imageName The name of the image.
      * @param parameters Parameters supplied to the Create Image operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return the source user image virtual hard disk.
      */
@@ -116,13 +119,13 @@ public interface ImagesClient
 
     /**
      * Create or update an image.
-     *
+     * 
      * @param resourceGroupName The name of the resource group.
      * @param imageName The name of the image.
      * @param parameters Parameters supplied to the Create Image operation.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return the source user image virtual hard disk.
      */
@@ -131,87 +134,88 @@ public interface ImagesClient
 
     /**
      * Update an image.
-     *
+     * 
      * @param resourceGroupName The name of the resource group.
      * @param imageName The name of the image.
      * @param parameters Parameters supplied to the Update Image operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the source user image virtual hard disk.
+     * @return the source user image virtual hard disk along with {@link Response} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Mono<Response<Flux<ByteBuffer>>> updateWithResponseAsync(
-        String resourceGroupName, String imageName, ImageUpdate parameters);
+    Mono<Response<Flux<ByteBuffer>>> updateWithResponseAsync(String resourceGroupName, String imageName,
+        ImageUpdate parameters);
 
     /**
      * Update an image.
-     *
+     * 
      * @param resourceGroupName The name of the resource group.
      * @param imageName The name of the image.
      * @param parameters Parameters supplied to the Update Image operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the source user image virtual hard disk.
+     * @return the {@link PollerFlux} for polling of the source user image virtual hard disk.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    PollerFlux<PollResult<ImageInner>, ImageInner> beginUpdateAsync(
-        String resourceGroupName, String imageName, ImageUpdate parameters);
+    PollerFlux<PollResult<ImageInner>, ImageInner> beginUpdateAsync(String resourceGroupName, String imageName,
+        ImageUpdate parameters);
 
     /**
      * Update an image.
-     *
+     * 
      * @param resourceGroupName The name of the resource group.
      * @param imageName The name of the image.
      * @param parameters Parameters supplied to the Update Image operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the source user image virtual hard disk.
+     * @return the {@link SyncPoller} for polling of the source user image virtual hard disk.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    SyncPoller<PollResult<ImageInner>, ImageInner> beginUpdate(
-        String resourceGroupName, String imageName, ImageUpdate parameters);
+    SyncPoller<PollResult<ImageInner>, ImageInner> beginUpdate(String resourceGroupName, String imageName,
+        ImageUpdate parameters);
 
     /**
      * Update an image.
-     *
+     * 
      * @param resourceGroupName The name of the resource group.
      * @param imageName The name of the image.
      * @param parameters Parameters supplied to the Update Image operation.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the source user image virtual hard disk.
+     * @return the {@link SyncPoller} for polling of the source user image virtual hard disk.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    SyncPoller<PollResult<ImageInner>, ImageInner> beginUpdate(
-        String resourceGroupName, String imageName, ImageUpdate parameters, Context context);
+    SyncPoller<PollResult<ImageInner>, ImageInner> beginUpdate(String resourceGroupName, String imageName,
+        ImageUpdate parameters, Context context);
 
     /**
      * Update an image.
-     *
+     * 
      * @param resourceGroupName The name of the resource group.
      * @param imageName The name of the image.
      * @param parameters Parameters supplied to the Update Image operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the source user image virtual hard disk.
+     * @return the source user image virtual hard disk on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     Mono<ImageInner> updateAsync(String resourceGroupName, String imageName, ImageUpdate parameters);
 
     /**
      * Update an image.
-     *
+     * 
      * @param resourceGroupName The name of the resource group.
      * @param imageName The name of the image.
      * @param parameters Parameters supplied to the Update Image operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return the source user image virtual hard disk.
      */
@@ -220,13 +224,13 @@ public interface ImagesClient
 
     /**
      * Update an image.
-     *
+     * 
      * @param resourceGroupName The name of the resource group.
      * @param imageName The name of the image.
      * @param parameters Parameters supplied to the Update Image operation.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return the source user image virtual hard disk.
      */
@@ -235,77 +239,77 @@ public interface ImagesClient
 
     /**
      * Deletes an Image.
-     *
+     * 
      * @param resourceGroupName The name of the resource group.
      * @param imageName The name of the image.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(String resourceGroupName, String imageName);
 
     /**
      * Deletes an Image.
-     *
+     * 
      * @param resourceGroupName The name of the resource group.
      * @param imageName The name of the image.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     PollerFlux<PollResult<Void>, Void> beginDeleteAsync(String resourceGroupName, String imageName);
 
     /**
      * Deletes an Image.
-     *
+     * 
      * @param resourceGroupName The name of the resource group.
      * @param imageName The name of the image.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<Void>, Void> beginDelete(String resourceGroupName, String imageName);
 
     /**
      * Deletes an Image.
-     *
+     * 
      * @param resourceGroupName The name of the resource group.
      * @param imageName The name of the image.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<Void>, Void> beginDelete(String resourceGroupName, String imageName, Context context);
 
     /**
      * Deletes an Image.
-     *
+     * 
      * @param resourceGroupName The name of the resource group.
      * @param imageName The name of the image.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     Mono<Void> deleteAsync(String resourceGroupName, String imageName);
 
     /**
      * Deletes an Image.
-     *
+     * 
      * @param resourceGroupName The name of the resource group.
      * @param imageName The name of the image.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
@@ -313,12 +317,12 @@ public interface ImagesClient
 
     /**
      * Deletes an Image.
-     *
+     * 
      * @param resourceGroupName The name of the resource group.
      * @param imageName The name of the image.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
@@ -326,53 +330,55 @@ public interface ImagesClient
 
     /**
      * Gets an image.
-     *
+     * 
      * @param resourceGroupName The name of the resource group.
      * @param imageName The name of the image.
      * @param expand The expand expression to apply on the operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an image.
+     * @return an image along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Mono<Response<ImageInner>> getByResourceGroupWithResponseAsync(
-        String resourceGroupName, String imageName, String expand);
+    Mono<Response<ImageInner>> getByResourceGroupWithResponseAsync(String resourceGroupName, String imageName,
+        String expand);
 
     /**
      * Gets an image.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param imageName The name of the image.
-     * @param expand The expand expression to apply on the operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an image.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Mono<ImageInner> getByResourceGroupAsync(String resourceGroupName, String imageName, String expand);
-
-    /**
-     * Gets an image.
-     *
+     * 
      * @param resourceGroupName The name of the resource group.
      * @param imageName The name of the image.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an image.
+     * @return an image on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     Mono<ImageInner> getByResourceGroupAsync(String resourceGroupName, String imageName);
 
     /**
      * Gets an image.
-     *
+     * 
+     * @param resourceGroupName The name of the resource group.
+     * @param imageName The name of the image.
+     * @param expand The expand expression to apply on the operation.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return an image along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<ImageInner> getByResourceGroupWithResponse(String resourceGroupName, String imageName, String expand,
+        Context context);
+
+    /**
+     * Gets an image.
+     * 
      * @param resourceGroupName The name of the resource group.
      * @param imageName The name of the image.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return an image.
      */
@@ -380,54 +386,41 @@ public interface ImagesClient
     ImageInner getByResourceGroup(String resourceGroupName, String imageName);
 
     /**
-     * Gets an image.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param imageName The name of the image.
-     * @param expand The expand expression to apply on the operation.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an image.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<ImageInner> getByResourceGroupWithResponse(
-        String resourceGroupName, String imageName, String expand, Context context);
-
-    /**
-     * Gets the list of images under a resource group.
-     *
+     * Gets the list of images under a resource group. Use nextLink property in the response to get the next page of
+     * Images. Do this till nextLink is null to fetch all the Images.
+     * 
      * @param resourceGroupName The name of the resource group.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of images under a resource group.
+     * @return the list of images under a resource group as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedFlux<ImageInner> listByResourceGroupAsync(String resourceGroupName);
 
     /**
-     * Gets the list of images under a resource group.
-     *
+     * Gets the list of images under a resource group. Use nextLink property in the response to get the next page of
+     * Images. Do this till nextLink is null to fetch all the Images.
+     * 
      * @param resourceGroupName The name of the resource group.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of images under a resource group.
+     * @return the list of images under a resource group as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<ImageInner> listByResourceGroup(String resourceGroupName);
 
     /**
-     * Gets the list of images under a resource group.
-     *
+     * Gets the list of images under a resource group. Use nextLink property in the response to get the next page of
+     * Images. Do this till nextLink is null to fetch all the Images.
+     * 
      * @param resourceGroupName The name of the resource group.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of images under a resource group.
+     * @return the list of images under a resource group as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<ImageInner> listByResourceGroup(String resourceGroupName, Context context);
@@ -435,10 +428,10 @@ public interface ImagesClient
     /**
      * Gets the list of Images in the subscription. Use nextLink property in the response to get the next page of
      * Images. Do this till nextLink is null to fetch all the Images.
-     *
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * 
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of Images in the subscription.
+     * @return the list of Images in the subscription as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedFlux<ImageInner> listAsync();
@@ -446,10 +439,10 @@ public interface ImagesClient
     /**
      * Gets the list of Images in the subscription. Use nextLink property in the response to get the next page of
      * Images. Do this till nextLink is null to fetch all the Images.
-     *
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * 
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of Images in the subscription.
+     * @return the list of Images in the subscription as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<ImageInner> list();
@@ -457,12 +450,12 @@ public interface ImagesClient
     /**
      * Gets the list of Images in the subscription. Use nextLink property in the response to get the next page of
      * Images. Do this till nextLink is null to fetch all the Images.
-     *
+     * 
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws com.azure.resourcemanager.compute.models.ApiErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of Images in the subscription.
+     * @return the list of Images in the subscription as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<ImageInner> list(Context context);

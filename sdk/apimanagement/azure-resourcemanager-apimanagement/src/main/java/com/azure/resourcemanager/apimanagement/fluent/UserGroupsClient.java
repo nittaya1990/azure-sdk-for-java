@@ -15,13 +15,13 @@ public interface UserGroupsClient {
     /**
      * Lists all user groups.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Group list representation.
+     * @return paged Group list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<GroupContractInner> list(String resourceGroupName, String serviceName, String userId);
@@ -29,7 +29,7 @@ public interface UserGroupsClient {
     /**
      * Lists all user groups.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param filter | Field | Usage | Supported operators | Supported functions
@@ -43,15 +43,9 @@ public interface UserGroupsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Group list representation.
+     * @return paged Group list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<GroupContractInner> list(
-        String resourceGroupName,
-        String serviceName,
-        String userId,
-        String filter,
-        Integer top,
-        Integer skip,
-        Context context);
+    PagedIterable<GroupContractInner> list(String resourceGroupName, String serviceName, String userId, String filter,
+        Integer top, Integer skip, Context context);
 }

@@ -13,20 +13,20 @@ public interface Reports {
     /**
      * Lists report records by API.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter The filter to apply on the operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Report records list representation.
+     * @return paged Report records list representation as paginated response with {@link PagedIterable}.
      */
     PagedIterable<ReportRecordContract> listByApi(String resourceGroupName, String serviceName, String filter);
 
     /**
      * Lists report records by API.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter The filter to apply on the operation.
      * @param top Number of records to return.
@@ -36,21 +36,15 @@ public interface Reports {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Report records list representation.
+     * @return paged Report records list representation as paginated response with {@link PagedIterable}.
      */
-    PagedIterable<ReportRecordContract> listByApi(
-        String resourceGroupName,
-        String serviceName,
-        String filter,
-        Integer top,
-        Integer skip,
-        String orderby,
-        Context context);
+    PagedIterable<ReportRecordContract> listByApi(String resourceGroupName, String serviceName, String filter,
+        Integer top, Integer skip, String orderby, Context context);
 
     /**
      * Lists report records by User.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| timestamp | filter | ge, le
@@ -67,14 +61,14 @@ public interface Reports {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Report records list representation.
+     * @return paged Report records list representation as paginated response with {@link PagedIterable}.
      */
     PagedIterable<ReportRecordContract> listByUser(String resourceGroupName, String serviceName, String filter);
 
     /**
      * Lists report records by User.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| timestamp | filter | ge, le
@@ -95,21 +89,15 @@ public interface Reports {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Report records list representation.
+     * @return paged Report records list representation as paginated response with {@link PagedIterable}.
      */
-    PagedIterable<ReportRecordContract> listByUser(
-        String resourceGroupName,
-        String serviceName,
-        String filter,
-        Integer top,
-        Integer skip,
-        String orderby,
-        Context context);
+    PagedIterable<ReportRecordContract> listByUser(String resourceGroupName, String serviceName, String filter,
+        Integer top, Integer skip, String orderby, Context context);
 
     /**
      * Lists report records by API Operations.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| timestamp | filter | ge, le
@@ -126,14 +114,14 @@ public interface Reports {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Report records list representation.
+     * @return paged Report records list representation as paginated response with {@link PagedIterable}.
      */
     PagedIterable<ReportRecordContract> listByOperation(String resourceGroupName, String serviceName, String filter);
 
     /**
      * Lists report records by API Operations.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| timestamp | filter | ge, le
@@ -154,21 +142,15 @@ public interface Reports {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Report records list representation.
+     * @return paged Report records list representation as paginated response with {@link PagedIterable}.
      */
-    PagedIterable<ReportRecordContract> listByOperation(
-        String resourceGroupName,
-        String serviceName,
-        String filter,
-        Integer top,
-        Integer skip,
-        String orderby,
-        Context context);
+    PagedIterable<ReportRecordContract> listByOperation(String resourceGroupName, String serviceName, String filter,
+        Integer top, Integer skip, String orderby, Context context);
 
     /**
      * Lists report records by Product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| timestamp | filter | ge, le
@@ -184,14 +166,14 @@ public interface Reports {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Report records list representation.
+     * @return paged Report records list representation as paginated response with {@link PagedIterable}.
      */
     PagedIterable<ReportRecordContract> listByProduct(String resourceGroupName, String serviceName, String filter);
 
     /**
      * Lists report records by Product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| timestamp | filter | ge, le
@@ -211,21 +193,15 @@ public interface Reports {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Report records list representation.
+     * @return paged Report records list representation as paginated response with {@link PagedIterable}.
      */
-    PagedIterable<ReportRecordContract> listByProduct(
-        String resourceGroupName,
-        String serviceName,
-        String filter,
-        Integer top,
-        Integer skip,
-        String orderby,
-        Context context);
+    PagedIterable<ReportRecordContract> listByProduct(String resourceGroupName, String serviceName, String filter,
+        Integer top, Integer skip, String orderby, Context context);
 
     /**
      * Lists report records by geography.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| timestamp | filter | ge, le
@@ -241,14 +217,14 @@ public interface Reports {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Report records list representation.
+     * @return paged Report records list representation as paginated response with {@link PagedIterable}.
      */
     PagedIterable<ReportRecordContract> listByGeo(String resourceGroupName, String serviceName, String filter);
 
     /**
      * Lists report records by geography.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| timestamp | filter | ge, le
@@ -267,15 +243,15 @@ public interface Reports {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Report records list representation.
+     * @return paged Report records list representation as paginated response with {@link PagedIterable}.
      */
-    PagedIterable<ReportRecordContract> listByGeo(
-        String resourceGroupName, String serviceName, String filter, Integer top, Integer skip, Context context);
+    PagedIterable<ReportRecordContract> listByGeo(String resourceGroupName, String serviceName, String filter,
+        Integer top, Integer skip, Context context);
 
     /**
      * Lists report records by subscription.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| timestamp | filter | ge, le
@@ -291,14 +267,14 @@ public interface Reports {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Report records list representation.
+     * @return paged Report records list representation as paginated response with {@link PagedIterable}.
      */
     PagedIterable<ReportRecordContract> listBySubscription(String resourceGroupName, String serviceName, String filter);
 
     /**
      * Lists report records by subscription.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| timestamp | filter | ge, le
@@ -318,21 +294,15 @@ public interface Reports {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Report records list representation.
+     * @return paged Report records list representation as paginated response with {@link PagedIterable}.
      */
-    PagedIterable<ReportRecordContract> listBySubscription(
-        String resourceGroupName,
-        String serviceName,
-        String filter,
-        Integer top,
-        Integer skip,
-        String orderby,
-        Context context);
+    PagedIterable<ReportRecordContract> listBySubscription(String resourceGroupName, String serviceName, String filter,
+        Integer top, Integer skip, String orderby, Context context);
 
     /**
      * Lists report records by Time.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| timestamp | filter, select
@@ -351,15 +321,15 @@ public interface Reports {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Report records list representation.
+     * @return paged Report records list representation as paginated response with {@link PagedIterable}.
      */
-    PagedIterable<ReportRecordContract> listByTime(
-        String resourceGroupName, String serviceName, String filter, Duration interval);
+    PagedIterable<ReportRecordContract> listByTime(String resourceGroupName, String serviceName, String filter,
+        Duration interval);
 
     /**
      * Lists report records by Time.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| timestamp | filter, select
@@ -382,22 +352,15 @@ public interface Reports {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Report records list representation.
+     * @return paged Report records list representation as paginated response with {@link PagedIterable}.
      */
-    PagedIterable<ReportRecordContract> listByTime(
-        String resourceGroupName,
-        String serviceName,
-        String filter,
-        Duration interval,
-        Integer top,
-        Integer skip,
-        String orderby,
-        Context context);
+    PagedIterable<ReportRecordContract> listByTime(String resourceGroupName, String serviceName, String filter,
+        Duration interval, Integer top, Integer skip, String orderby, Context context);
 
     /**
      * Lists report records by Request.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| timestamp | filter | ge, le
@@ -407,15 +370,15 @@ public interface Reports {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Report records list representation.
+     * @return paged Report records list representation as paginated response with {@link PagedIterable}.
      */
-    PagedIterable<RequestReportRecordContract> listByRequest(
-        String resourceGroupName, String serviceName, String filter);
+    PagedIterable<RequestReportRecordContract> listByRequest(String resourceGroupName, String serviceName,
+        String filter);
 
     /**
      * Lists report records by Request.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| timestamp | filter | ge, le
@@ -428,8 +391,8 @@ public interface Reports {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Report records list representation.
+     * @return paged Report records list representation as paginated response with {@link PagedIterable}.
      */
-    PagedIterable<RequestReportRecordContract> listByRequest(
-        String resourceGroupName, String serviceName, String filter, Integer top, Integer skip, Context context);
+    PagedIterable<RequestReportRecordContract> listByRequest(String resourceGroupName, String serviceName,
+        String filter, Integer top, Integer skip, Context context);
 }

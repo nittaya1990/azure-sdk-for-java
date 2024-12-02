@@ -2,7 +2,7 @@
 
 Azure Purview data plane administration. It supports data plane operations. It can manage account, collections, keys, resource set rule, metadata policy, metadata roles.
 
-**Please rely heavily on the [service's documentation][product_documentation] and [Protocol method documentation][protocol_method] to use this library**
+**Please rely heavily on the [service's documentation][product_documentation] and [data-plane documentation][protocol_method] to use this library**
 
 [Package (Maven)][package] | [API reference documentation][api_reference_doc] | [Product Documentation][product_documentation]
 
@@ -48,7 +48,7 @@ To use the [DefaultAzureCredential][DefaultAzureCredential] provider shown below
 <dependency>
     <groupId>com.azure</groupId>
     <artifactId>azure-identity</artifactId>
-    <version>1.3.6</version>
+    <version>1.14.2</version>
 </dependency>
 ```
 [//]: # ({x-version-update-end})
@@ -57,25 +57,23 @@ Set the values of the client ID, tenant ID, and client secret of the AAD applica
 
 ##### Example
 
-<!-- embedme ./src/samples/java/com/azure/analytics/purview/administration/ReadmeSamples.java#L10-L13 -->
-```java
-AccountsClient client = new PurviewAccountClientBuilder()
+```java readme-sample-createAccountsClient
+AccountsClient client = new AccountsClientBuilder()
     .endpoint(System.getenv("ACCOUNT_ENDPOINT"))
     .credential(new DefaultAzureCredentialBuilder().build())
-    .buildAccountsClient();
+    .buildClient();
 ```
 
 ## Key concepts
 
 ## Examples
 
-<!-- embedme ./src/samples/java/com/azure/analytics/purview/administration/GetAccount.java#L11-L15 -->
-```java
-AccountsClient client = new PurviewAccountClientBuilder()
+```java readme-sample-getAccountProperties
+AccountsClient client = new AccountsClientBuilder()
     .endpoint(System.getenv("ACCOUNT_ENDPOINT"))
     .credential(new DefaultAzureCredentialBuilder().build())
-    .buildAccountsClient();
-BinaryData response = client.getAccountPropertiesWithResponse(null, null).getValue();
+    .buildClient();
+BinaryData response = client.getAccountPropertiesWithResponse(null).getValue();
 ```
 
 ## Troubleshooting
@@ -103,7 +101,7 @@ This project has adopted the [Microsoft Open Source Code of Conduct][coc]. For m
 [azure_identity]: https://github.com/Azure/azure-sdk-for-java/tree/main/sdk/identity/azure-identity
 [DefaultAzureCredential]: https://github.com/Azure/azure-sdk-for-java/blob/main/sdk/identity/azure-identity/README.md#defaultazurecredential
 [jdk_link]: https://docs.microsoft.com/java/azure/jdk/?view=azure-java-stable
-[package]: https://mvnrepository.com/artifact/com.azure/azure-analytics-purview-administration
+[package]: https://central.sonatype.com/artifact/com.azure/azure-analytics-purview-administration
 [protocol_method]: https://github.com/Azure/azure-sdk-for-java/wiki/Protocol-Methods
 [cla]: https://cla.microsoft.com
 [coc]: https://opensource.microsoft.com/codeofconduct/
@@ -111,6 +109,6 @@ This project has adopted the [Microsoft Open Source Code of Conduct][coc]. For m
 [coc_contact]: mailto:opencode@microsoft.com
 [create_azure_purview_account]: https://docs.microsoft.com/azure/purview/create-catalog-portal
 [azure_purview_permissions]: https://docs.microsoft.com/azure/purview/catalog-permissions
-[logging]: https://github.com/Azure/azure-sdk-for-java/wiki/Logging-with-Azure-SDK
+[logging]: https://github.com/Azure/azure-sdk-for-java/wiki/Logging-in-Azure-SDK
 
 ![Impressions](https://azure-sdk-impressions.azurewebsites.net/api/impressions/azure-sdk-for-java%2Fsdk%2Fpurview%2Fazure-analytics-purview-administration%2FREADME.png)

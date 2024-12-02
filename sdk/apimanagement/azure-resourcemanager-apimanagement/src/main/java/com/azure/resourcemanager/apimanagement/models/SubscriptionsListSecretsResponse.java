@@ -21,16 +21,16 @@ public final class SubscriptionsListSecretsResponse
      * @param value the deserialized value of the HTTP response.
      * @param headers the deserialized headers of the HTTP response.
      */
-    public SubscriptionsListSecretsResponse(
-        HttpRequest request,
-        int statusCode,
-        HttpHeaders rawHeaders,
-        SubscriptionKeysContractInner value,
-        SubscriptionsListSecretsHeaders headers) {
+    public SubscriptionsListSecretsResponse(HttpRequest request, int statusCode, HttpHeaders rawHeaders,
+        SubscriptionKeysContractInner value, SubscriptionsListSecretsHeaders headers) {
         super(request, statusCode, rawHeaders, value, headers);
     }
 
-    /** @return the deserialized response body. */
+    /**
+     * Gets the deserialized response body.
+     *
+     * @return the deserialized response body.
+     */
     @Override
     public SubscriptionKeysContractInner getValue() {
         return super.getValue();

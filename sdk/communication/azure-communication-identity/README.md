@@ -55,7 +55,7 @@ add the direct dependency to your project as follows.
 <dependency>
   <groupId>com.azure</groupId>
   <artifactId>azure-communication-identity</artifactId>
-  <version>1.1.4</version>
+  <version>1.6.0</version>
 </dependency>
 ```
 
@@ -69,8 +69,7 @@ A `DefaultAzureCredential` object must be passed to the `CommunicationIdentityCl
 `AZURE_CLIENT_SECRET`, `AZURE_CLIENT_ID` and `AZURE_TENANT_ID` environment variables
 are needed to create a DefaultAzureCredential object.
 
-<!-- embedme ./src/samples/java/com/azure/communication/identity/ReadmeSamples.java#L55-L61 -->
-```java
+```java readme-sample-createCommunicationIdentityClientWithAAD
 // You can find your endpoint and access key from your resource in the Azure Portal
 String endpoint = "https://<RESOURCE_NAME>.communication.azure.com";
 
@@ -84,8 +83,7 @@ CommunicationIdentityClient communicationIdentityClient = new CommunicationIdent
 Identity uses HMAC authentication with the resource access key.
 The access key can be used to create an AzureKeyCredential and provided to the `CommunicationIdentityClientBuilder` via the credential() function. Endpoint and httpClient must also be set via the endpoint() and httpClient() functions respectively.
 
-<!-- embedme ./src/samples/java/com/azure/communication/identity/ReadmeSamples.java#L21-L28 -->
-```java
+```java readme-sample-createCommunicationIdentityClient
 // You can find your endpoint and access key from your resource in the Azure Portal
 String endpoint = "https://<RESOURCE_NAME>.communication.azure.com";
 AzureKeyCredential keyCredential = new AzureKeyCredential("<access-key>");
@@ -98,8 +96,8 @@ CommunicationIdentityClient communicationIdentityClient = new CommunicationIdent
 
 ### Connection String Authentication
 Alternatively, you can provide the entire connection string using the connectionString() function instead of providing the endpoint and access key.
-<!-- embedme ./src/samples/java/com/azure/communication/identity/ReadmeSamples.java#L39-L44 -->
-```java
+
+```java readme-sample-createCommunicationIdentityClientWithConnectionString
 // You can find your connection string from your resource in the Azure Portal
 String connectionString = "<connection_string>";
 
@@ -118,8 +116,7 @@ CommunicationIdentityClient communicationIdentityClient = new CommunicationIdent
 Use the `createUser` function to create a new user. `user.getId()` gets the
 unique ID of the user that was created.
 
-<!-- embedme ./src/samples/java/com/azure/communication/identity/ReadmeSamples.java#L73-L74 -->
-```java
+```java readme-sample-createNewUser
 CommunicationUserIdentifier user = communicationIdentityClient.createUser();
 System.out.println("User id: " + user.getId());
 ```
@@ -127,11 +124,13 @@ System.out.println("User id: " + user.getId());
 ### Getting a token for an existing user
 Use the `getToken` function to get a token for an existing user. The function
 also takes in a list of `CommunicationTokenScope`. Scope options include:
-- `chat` (Chat)
-- `voip` (Voice over IP)
+- `CHAT` (Use this for full access to Chat APIs)
+- `VOIP` (Use this for full access to Calling APIs)
+- `CHAT_JOIN` (Access to Chat APIs but without the authorization to create, delete or update chat threads)
+- `CHAT_JOIN_LIMITED` (A more limited version of CHAT_JOIN that doesn't allow to add or remove participants)
+- `VOIP_JOIN` (Access to Calling APIs but without the authorization to start new calls)
 
-<!-- embedme ./src/samples/java/com/azure/communication/identity/ReadmeSamples.java#L102-L107 -->
-```java
+```java readme-sample-issueUserToken
  // Define a list of communication token scopes
 List<CommunicationTokenScope> scopes = Arrays.asList(CommunicationTokenScope.CHAT);
 
@@ -140,10 +139,22 @@ System.out.println("User token value: " + userToken.getToken());
 System.out.println("Expires at: " + userToken.getExpiresAt());
 ```
 
+It's also possible to create a Communication Identity access token by customizing the expiration time. The token can be configured to expire in as little as one hour or as long as 24 hours. The default expiration time is 24 hours.
+```java readme-sample-issueTokenWithCustomExpiration
+// Define a list of Communication Identity access token scopes
+List<CommunicationTokenScope> scopes = Arrays.asList(CommunicationTokenScope.CHAT);
+// Set custom validity period of the Communication Identity access token within [1,24]
+// hours range. If not provided, the default value of 24 hours will be used.
+Duration tokenExpiresIn = Duration.ofHours(1);
+AccessToken userToken = communicationIdentityClient.getToken(user, scopes, tokenExpiresIn);
+System.out.println("User token value: " + userToken.getToken());
+System.out.println("Expires at: " + userToken.getExpiresAt());
+```
+
 ### Create a new user and token in a single request
 For convenience, use `createUserAndToken` to create a new user and issue a token with one function call. This translates into a single web request as opposed to creating a user first and then issuing a token.
-<!-- embedme ./src/samples/java/com/azure/communication/identity/ReadmeSamples.java#L85-L90 -->
-```java
+
+```java readme-sample-createNewUserAndToken
 // Define a list of communication token scopes
 List<CommunicationTokenScope> scopes = Arrays.asList(CommunicationTokenScope.CHAT);
 
@@ -152,11 +163,23 @@ System.out.println("User id: " + result.getUser().getId());
 System.out.println("User token value: " + result.getUserToken().getToken());
 ```
 
+Here it's also possible to specify the expiration time for the Communication Identity access token. The token can be configured to expire in as little as one hour or as long as 24 hours. The default expiration time is 24 hours.
+
+```java readme-sample-createNewUserAndTokenWithCustomExpiration
+// Define a list of communication token scopes
+List<CommunicationTokenScope> scopes = Arrays.asList(CommunicationTokenScope.CHAT);
+// Set custom validity period of the Communication Identity access token within [1,24]
+// hours range. If not provided, the default value of 24 hours will be used.
+Duration tokenExpiresIn = Duration.ofHours(1);
+CommunicationUserIdentifierAndToken result = communicationIdentityClient.createUserAndToken(scopes, tokenExpiresIn);
+System.out.println("User id: " + result.getUser().getId());
+System.out.println("User token value: " + result.getUserToken().getToken());
+```
+
 ### Revoking all tokens for an existing user
 Use the `revokeTokens` function to revoke all the issued tokens of a user.
 
-<!-- embedme ./src/samples/java/com/azure/communication/identity/ReadmeSamples.java#L120-L121 -->
-```java
+```java readme-sample-revokeUserToken
 // revoke tokens issued for the specified user
 communicationIdentityClient.revokeTokens(user);
 ```
@@ -164,26 +187,28 @@ communicationIdentityClient.revokeTokens(user);
 ### Deleting a user
 Use the `deleteUser` function to delete a user.
 
-<!-- embedme ./src/samples/java/com/azure/communication/identity/ReadmeSamples.java#L130-L131 -->
-```java
+```java readme-sample-deleteUser
 // delete a previously created user
 communicationIdentityClient.deleteUser(user);
 ```
 
-### Exchanging AAD access token of a Teams User for a Communication Identity access token
-Use the `getTokenForTeamsUser` function to exchanges an AAD access token of a Teams User for a new Communication Identity access token.
+### Exchanging Azure AD access token of a Teams User for a Communication Identity access token
+Use the `getTokenForTeamsUser` function to exchange an Azure AD access token of a Teams User for a new Communication Identity access token.
 
-<!-- embedme ./src/samples/java/com/azure/communication/identity/ReadmeSamples.java#L139-L146 -->
-```java
-// exchanges an AAD access token of a Teams User for a new Communication Identity access token.
-communicationIdentityClient.getTokenForTeamsUser(teamsUserAadToken);
+```java readme-sample-getTokenForTeamsUser
+String clientId = "<Client ID of an Azure AD application>";
+String userObjectId = "<Object ID of an Azure AD user (Teams User)>";
+GetTokenForTeamsUserOptions options = new GetTokenForTeamsUserOptions(teamsUserAadToken, clientId, userObjectId);
+AccessToken accessToken = communicationIdentityClient.getTokenForTeamsUser(options);
+System.out.println("User token value: " + accessToken.getToken());
+System.out.println("Expires at: " + accessToken.getExpiresAt());
 ```
 
 ## Troubleshooting
 
 All user token service operations will throw an exception on failure.
-<!-- embedme ./src/samples/java/com/azure/communication/identity/ReadmeSamples.java#L151-L159 -->
-```java
+
+```java readme-sample-createUserTroubleshooting
 try {
     CommunicationUserIdentifier user = communicationIdentityClient.createUser();
 } catch (RuntimeException ex) {
@@ -209,7 +234,7 @@ This project has adopted the [Microsoft Open Source Code of Conduct][coc]. For m
 [coc_faq]: https://opensource.microsoft.com/codeofconduct/faq/
 [coc_contact]: mailto:opencode@microsoft.com
 [product_docs]: https://docs.microsoft.com/azure/communication-services/
-[package]: https://search.maven.org/artifact/com.azure/azure-communication-identity
+[package]: https://central.sonatype.com/artifact/com.azure/azure-communication-identity
 [api_documentation]: https://aka.ms/java-docs
 [samples]: https://github.com/Azure/azure-sdk-for-java/blob/main/sdk/communication/azure-communication-identity/src/samples/java/com/azure/communication/identity/ReadmeSamples.java
 [source]: https://github.com/Azure/azure-sdk-for-java/tree/main/sdk/communication/azure-communication-identity/src

@@ -13,19 +13,19 @@ public interface Issues {
     /**
      * Lists a collection of issues in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Issue list representation.
+     * @return paged Issue list representation as paginated response with {@link PagedIterable}.
      */
     PagedIterable<IssueContract> listByService(String resourceGroupName, String serviceName);
 
     /**
      * Lists a collection of issues in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -40,28 +40,15 @@ public interface Issues {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Issue list representation.
+     * @return paged Issue list representation as paginated response with {@link PagedIterable}.
      */
-    PagedIterable<IssueContract> listByService(
-        String resourceGroupName, String serviceName, String filter, Integer top, Integer skip, Context context);
+    PagedIterable<IssueContract> listByService(String resourceGroupName, String serviceName, String filter, Integer top,
+        Integer skip, Context context);
 
     /**
      * Gets API Management issue details.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param issueId Issue identifier. Must be unique in the current API Management service instance.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return aPI Management issue details.
-     */
-    IssueContract get(String resourceGroupName, String serviceName, String issueId);
-
-    /**
-     * Gets API Management issue details.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param issueId Issue identifier. Must be unique in the current API Management service instance.
      * @param context The context to associate with this operation.
@@ -70,6 +57,19 @@ public interface Issues {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return aPI Management issue details.
      */
-    Response<IssueContract> getWithResponse(
-        String resourceGroupName, String serviceName, String issueId, Context context);
+    Response<IssueContract> getWithResponse(String resourceGroupName, String serviceName, String issueId,
+        Context context);
+
+    /**
+     * Gets API Management issue details.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param issueId Issue identifier. Must be unique in the current API Management service instance.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return aPI Management issue details.
+     */
+    IssueContract get(String resourceGroupName, String serviceName, String issueId);
 }

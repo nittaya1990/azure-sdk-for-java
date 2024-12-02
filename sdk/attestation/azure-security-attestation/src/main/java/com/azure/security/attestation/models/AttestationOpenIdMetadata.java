@@ -13,7 +13,7 @@ public interface AttestationOpenIdMetadata {
 
     /**
      * Returns the URL of the location which can be used to retrieve the keys which can be used to verify
-     * the signature of tokens returned by the attestatiom service.
+     * the signature of tokens returned by the attestation service.
      *
      * Contains the "jwks_uri" metadata value from the OpenId Metadata.
      * See <a href="https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata">OpenId Provider Metadata</a>
@@ -32,7 +32,6 @@ public interface AttestationOpenIdMetadata {
      * @return String containing the expected issuer for attestation tokens.
      */
     String getIssuer();
-
 
     /**
      * Returns the response types which are supported by the attestation service.

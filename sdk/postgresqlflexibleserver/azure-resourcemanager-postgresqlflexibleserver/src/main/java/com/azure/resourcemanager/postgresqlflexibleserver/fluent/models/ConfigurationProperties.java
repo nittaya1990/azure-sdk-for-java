@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.postgresqlflexibleserver.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.postgresqlflexibleserver.models.ConfigurationDataType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The properties of a configuration. */
+/**
+ * The properties of a configuration.
+ */
 @Fluent
 public final class ConfigurationProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ConfigurationProperties.class);
-
     /*
      * Value of the configuration.
      */
@@ -51,9 +49,45 @@ public final class ConfigurationProperties {
     @JsonProperty(value = "source")
     private String source;
 
+    /*
+     * Configuration dynamic or static.
+     */
+    @JsonProperty(value = "isDynamicConfig", access = JsonProperty.Access.WRITE_ONLY)
+    private Boolean isDynamicConfig;
+
+    /*
+     * Configuration read-only or not.
+     */
+    @JsonProperty(value = "isReadOnly", access = JsonProperty.Access.WRITE_ONLY)
+    private Boolean isReadOnly;
+
+    /*
+     * Configuration is pending restart or not.
+     */
+    @JsonProperty(value = "isConfigPendingRestart", access = JsonProperty.Access.WRITE_ONLY)
+    private Boolean isConfigPendingRestart;
+
+    /*
+     * Configuration unit.
+     */
+    @JsonProperty(value = "unit", access = JsonProperty.Access.WRITE_ONLY)
+    private String unit;
+
+    /*
+     * Configuration documentation link.
+     */
+    @JsonProperty(value = "documentationLink", access = JsonProperty.Access.WRITE_ONLY)
+    private String documentationLink;
+
+    /**
+     * Creates an instance of ConfigurationProperties class.
+     */
+    public ConfigurationProperties() {
+    }
+
     /**
      * Get the value property: Value of the configuration.
-     *
+     * 
      * @return the value value.
      */
     public String value() {
@@ -62,7 +96,7 @@ public final class ConfigurationProperties {
 
     /**
      * Set the value property: Value of the configuration.
-     *
+     * 
      * @param value the value value to set.
      * @return the ConfigurationProperties object itself.
      */
@@ -73,7 +107,7 @@ public final class ConfigurationProperties {
 
     /**
      * Get the description property: Description of the configuration.
-     *
+     * 
      * @return the description value.
      */
     public String description() {
@@ -82,7 +116,7 @@ public final class ConfigurationProperties {
 
     /**
      * Get the defaultValue property: Default value of the configuration.
-     *
+     * 
      * @return the defaultValue value.
      */
     public String defaultValue() {
@@ -91,7 +125,7 @@ public final class ConfigurationProperties {
 
     /**
      * Get the dataType property: Data type of the configuration.
-     *
+     * 
      * @return the dataType value.
      */
     public ConfigurationDataType dataType() {
@@ -100,7 +134,7 @@ public final class ConfigurationProperties {
 
     /**
      * Get the allowedValues property: Allowed values of the configuration.
-     *
+     * 
      * @return the allowedValues value.
      */
     public String allowedValues() {
@@ -109,7 +143,7 @@ public final class ConfigurationProperties {
 
     /**
      * Get the source property: Source of the configuration.
-     *
+     * 
      * @return the source value.
      */
     public String source() {
@@ -118,7 +152,7 @@ public final class ConfigurationProperties {
 
     /**
      * Set the source property: Source of the configuration.
-     *
+     * 
      * @param source the source value to set.
      * @return the ConfigurationProperties object itself.
      */
@@ -128,8 +162,53 @@ public final class ConfigurationProperties {
     }
 
     /**
+     * Get the isDynamicConfig property: Configuration dynamic or static.
+     * 
+     * @return the isDynamicConfig value.
+     */
+    public Boolean isDynamicConfig() {
+        return this.isDynamicConfig;
+    }
+
+    /**
+     * Get the isReadOnly property: Configuration read-only or not.
+     * 
+     * @return the isReadOnly value.
+     */
+    public Boolean isReadOnly() {
+        return this.isReadOnly;
+    }
+
+    /**
+     * Get the isConfigPendingRestart property: Configuration is pending restart or not.
+     * 
+     * @return the isConfigPendingRestart value.
+     */
+    public Boolean isConfigPendingRestart() {
+        return this.isConfigPendingRestart;
+    }
+
+    /**
+     * Get the unit property: Configuration unit.
+     * 
+     * @return the unit value.
+     */
+    public String unit() {
+        return this.unit;
+    }
+
+    /**
+     * Get the documentationLink property: Configuration documentation link.
+     * 
+     * @return the documentationLink value.
+     */
+    public String documentationLink() {
+        return this.documentationLink;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

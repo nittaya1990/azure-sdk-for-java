@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.resourcehealth.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Object of impacted region. */
 @Fluent
 public final class ImpactedRegion {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ImpactedRegion.class);
-
     /*
      * The impacted region id.
      */
@@ -25,6 +21,10 @@ public final class ImpactedRegion {
      */
     @JsonProperty(value = "name")
     private String name;
+
+    /** Creates an instance of ImpactedRegion class. */
+    public ImpactedRegion() {
+    }
 
     /**
      * Get the id property: The impacted region id.

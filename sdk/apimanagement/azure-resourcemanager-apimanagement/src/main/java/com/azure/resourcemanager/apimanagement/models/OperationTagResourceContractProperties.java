@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Operation Entity contract Properties. */
 @Fluent
 public final class OperationTagResourceContractProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OperationTagResourceContractProperties.class);
-
     /*
      * Identifier of the operation in form /operations/{operationId}.
      */
@@ -27,19 +23,19 @@ public final class OperationTagResourceContractProperties {
     private String name;
 
     /*
-     * Api Name.
+     * API Name.
      */
     @JsonProperty(value = "apiName", access = JsonProperty.Access.WRITE_ONLY)
     private String apiName;
 
     /*
-     * Api Revision.
+     * API Revision.
      */
     @JsonProperty(value = "apiRevision", access = JsonProperty.Access.WRITE_ONLY)
     private String apiRevision;
 
     /*
-     * Api Version.
+     * API Version.
      */
     @JsonProperty(value = "apiVersion", access = JsonProperty.Access.WRITE_ONLY)
     private String apiVersion;
@@ -51,19 +47,21 @@ public final class OperationTagResourceContractProperties {
     private String description;
 
     /*
-     * A Valid HTTP Operation Method. Typical Http Methods like GET, PUT, POST
-     * but not limited by only them.
+     * A Valid HTTP Operation Method. Typical Http Methods like GET, PUT, POST but not limited by only them.
      */
     @JsonProperty(value = "method", access = JsonProperty.Access.WRITE_ONLY)
     private String method;
 
     /*
-     * Relative URL template identifying the target resource for this
-     * operation. May include parameters. Example:
+     * Relative URL template identifying the target resource for this operation. May include parameters. Example:
      * /customers/{cid}/orders/{oid}/?date={date}
      */
     @JsonProperty(value = "urlTemplate", access = JsonProperty.Access.WRITE_ONLY)
     private String urlTemplate;
+
+    /** Creates an instance of OperationTagResourceContractProperties class. */
+    public OperationTagResourceContractProperties() {
+    }
 
     /**
      * Get the id property: Identifier of the operation in form /operations/{operationId}.
@@ -95,7 +93,7 @@ public final class OperationTagResourceContractProperties {
     }
 
     /**
-     * Get the apiName property: Api Name.
+     * Get the apiName property: API Name.
      *
      * @return the apiName value.
      */
@@ -104,7 +102,7 @@ public final class OperationTagResourceContractProperties {
     }
 
     /**
-     * Get the apiRevision property: Api Revision.
+     * Get the apiRevision property: API Revision.
      *
      * @return the apiRevision value.
      */
@@ -113,7 +111,7 @@ public final class OperationTagResourceContractProperties {
     }
 
     /**
-     * Get the apiVersion property: Api Version.
+     * Get the apiVersion property: API Version.
      *
      * @return the apiVersion value.
      */

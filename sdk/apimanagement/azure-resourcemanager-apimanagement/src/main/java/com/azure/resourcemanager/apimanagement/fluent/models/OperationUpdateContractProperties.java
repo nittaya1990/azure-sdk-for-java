@@ -5,20 +5,16 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.models.OperationEntityBaseContract;
 import com.azure.resourcemanager.apimanagement.models.ParameterContract;
 import com.azure.resourcemanager.apimanagement.models.RequestContract;
 import com.azure.resourcemanager.apimanagement.models.ResponseContract;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Operation Update Contract Properties. */
 @Fluent
 public final class OperationUpdateContractProperties extends OperationEntityBaseContract {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OperationUpdateContractProperties.class);
-
     /*
      * Operation Name.
      */
@@ -26,19 +22,21 @@ public final class OperationUpdateContractProperties extends OperationEntityBase
     private String displayName;
 
     /*
-     * A Valid HTTP Operation Method. Typical Http Methods like GET, PUT, POST
-     * but not limited by only them.
+     * A Valid HTTP Operation Method. Typical Http Methods like GET, PUT, POST but not limited by only them.
      */
     @JsonProperty(value = "method")
     private String method;
 
     /*
-     * Relative URL template identifying the target resource for this
-     * operation. May include parameters. Example:
+     * Relative URL template identifying the target resource for this operation. May include parameters. Example:
      * /customers/{cid}/orders/{oid}/?date={date}
      */
     @JsonProperty(value = "urlTemplate")
     private String urlTemplate;
+
+    /** Creates an instance of OperationUpdateContractProperties class. */
+    public OperationUpdateContractProperties() {
+    }
 
     /**
      * Get the displayName property: Operation Name.

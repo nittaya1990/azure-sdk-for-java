@@ -16,7 +16,27 @@ import java.util.List;
 /** An instance of this class provides access to all the operations defined in PrivateEndpointConnectionsClient. */
 public interface PrivateEndpointConnectionsClient {
     /**
-     * List private endpoint connection properties.
+     * List private endpoint connections
+     *
+     * <p>List private endpoint connection properties.
+     *
+     * @param resourceGroupName The name of the resource group that contains the IoT hub.
+     * @param resourceName The name of the IoT hub.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.resourcemanager.iothub.models.ErrorDetailsException thrown if the request is rejected by
+     *     server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the list of private endpoint connections for an IotHub along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<List<PrivateEndpointConnectionInner>> listWithResponse(String resourceGroupName, String resourceName,
+        Context context);
+
+    /**
+     * List private endpoint connections
+     *
+     * <p>List private endpoint connection properties.
      *
      * @param resourceGroupName The name of the resource group that contains the IoT hub.
      * @param resourceName The name of the IoT hub.
@@ -30,23 +50,28 @@ public interface PrivateEndpointConnectionsClient {
     List<PrivateEndpointConnectionInner> list(String resourceGroupName, String resourceName);
 
     /**
-     * List private endpoint connection properties.
+     * Get private endpoint connection
+     *
+     * <p>Get private endpoint connection properties.
      *
      * @param resourceGroupName The name of the resource group that contains the IoT hub.
      * @param resourceName The name of the IoT hub.
+     * @param privateEndpointConnectionName The name of the private endpoint connection.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.resourcemanager.iothub.models.ErrorDetailsException thrown if the request is rejected by
      *     server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of private endpoint connections for an IotHub.
+     * @return private endpoint connection properties along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<List<PrivateEndpointConnectionInner>> listWithResponse(
-        String resourceGroupName, String resourceName, Context context);
+    Response<PrivateEndpointConnectionInner> getWithResponse(String resourceGroupName, String resourceName,
+        String privateEndpointConnectionName, Context context);
 
     /**
-     * Get private endpoint connection properties.
+     * Get private endpoint connection
+     *
+     * <p>Get private endpoint connection properties.
      *
      * @param resourceGroupName The name of the resource group that contains the IoT hub.
      * @param resourceName The name of the IoT hub.
@@ -58,28 +83,13 @@ public interface PrivateEndpointConnectionsClient {
      * @return private endpoint connection properties.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    PrivateEndpointConnectionInner get(
-        String resourceGroupName, String resourceName, String privateEndpointConnectionName);
+    PrivateEndpointConnectionInner get(String resourceGroupName, String resourceName,
+        String privateEndpointConnectionName);
 
     /**
-     * Get private endpoint connection properties.
+     * Update private endpoint connection
      *
-     * @param resourceGroupName The name of the resource group that contains the IoT hub.
-     * @param resourceName The name of the IoT hub.
-     * @param privateEndpointConnectionName The name of the private endpoint connection.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.resourcemanager.iothub.models.ErrorDetailsException thrown if the request is rejected by
-     *     server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return private endpoint connection properties.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<PrivateEndpointConnectionInner> getWithResponse(
-        String resourceGroupName, String resourceName, String privateEndpointConnectionName, Context context);
-
-    /**
-     * Update the status of a private endpoint connection with the specified name.
+     * <p>Update the status of a private endpoint connection with the specified name.
      *
      * @param resourceGroupName The name of the resource group that contains the IoT hub.
      * @param resourceName The name of the IoT hub.
@@ -89,17 +99,17 @@ public interface PrivateEndpointConnectionsClient {
      * @throws com.azure.resourcemanager.iothub.models.ErrorDetailsException thrown if the request is rejected by
      *     server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the private endpoint connection of an IotHub.
+     * @return the {@link SyncPoller} for polling of the private endpoint connection of an IotHub.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<PrivateEndpointConnectionInner>, PrivateEndpointConnectionInner> beginUpdate(
-        String resourceGroupName,
-        String resourceName,
-        String privateEndpointConnectionName,
+        String resourceGroupName, String resourceName, String privateEndpointConnectionName,
         PrivateEndpointConnectionInner privateEndpointConnection);
 
     /**
-     * Update the status of a private endpoint connection with the specified name.
+     * Update private endpoint connection
+     *
+     * <p>Update the status of a private endpoint connection with the specified name.
      *
      * @param resourceGroupName The name of the resource group that contains the IoT hub.
      * @param resourceName The name of the IoT hub.
@@ -110,18 +120,17 @@ public interface PrivateEndpointConnectionsClient {
      * @throws com.azure.resourcemanager.iothub.models.ErrorDetailsException thrown if the request is rejected by
      *     server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the private endpoint connection of an IotHub.
+     * @return the {@link SyncPoller} for polling of the private endpoint connection of an IotHub.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<PrivateEndpointConnectionInner>, PrivateEndpointConnectionInner> beginUpdate(
-        String resourceGroupName,
-        String resourceName,
-        String privateEndpointConnectionName,
-        PrivateEndpointConnectionInner privateEndpointConnection,
-        Context context);
+        String resourceGroupName, String resourceName, String privateEndpointConnectionName,
+        PrivateEndpointConnectionInner privateEndpointConnection, Context context);
 
     /**
-     * Update the status of a private endpoint connection with the specified name.
+     * Update private endpoint connection
+     *
+     * <p>Update the status of a private endpoint connection with the specified name.
      *
      * @param resourceGroupName The name of the resource group that contains the IoT hub.
      * @param resourceName The name of the IoT hub.
@@ -134,14 +143,13 @@ public interface PrivateEndpointConnectionsClient {
      * @return the private endpoint connection of an IotHub.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    PrivateEndpointConnectionInner update(
-        String resourceGroupName,
-        String resourceName,
-        String privateEndpointConnectionName,
-        PrivateEndpointConnectionInner privateEndpointConnection);
+    PrivateEndpointConnectionInner update(String resourceGroupName, String resourceName,
+        String privateEndpointConnectionName, PrivateEndpointConnectionInner privateEndpointConnection);
 
     /**
-     * Update the status of a private endpoint connection with the specified name.
+     * Update private endpoint connection
+     *
+     * <p>Update the status of a private endpoint connection with the specified name.
      *
      * @param resourceGroupName The name of the resource group that contains the IoT hub.
      * @param resourceName The name of the IoT hub.
@@ -155,15 +163,14 @@ public interface PrivateEndpointConnectionsClient {
      * @return the private endpoint connection of an IotHub.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    PrivateEndpointConnectionInner update(
-        String resourceGroupName,
-        String resourceName,
-        String privateEndpointConnectionName,
-        PrivateEndpointConnectionInner privateEndpointConnection,
+    PrivateEndpointConnectionInner update(String resourceGroupName, String resourceName,
+        String privateEndpointConnectionName, PrivateEndpointConnectionInner privateEndpointConnection,
         Context context);
 
     /**
-     * Delete private endpoint connection with the specified name.
+     * Delete private endpoint connection
+     *
+     * <p>Delete private endpoint connection with the specified name.
      *
      * @param resourceGroupName The name of the resource group that contains the IoT hub.
      * @param resourceName The name of the IoT hub.
@@ -172,14 +179,16 @@ public interface PrivateEndpointConnectionsClient {
      * @throws com.azure.resourcemanager.iothub.models.ErrorDetailsException thrown if the request is rejected by
      *     server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the private endpoint connection of an IotHub.
+     * @return the {@link SyncPoller} for polling of the private endpoint connection of an IotHub.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<PrivateEndpointConnectionInner>, PrivateEndpointConnectionInner> beginDelete(
-        String resourceGroupName, String resourceName, String privateEndpointConnectionName);
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<PrivateEndpointConnectionInner>, PrivateEndpointConnectionInner>
+        beginDelete(String resourceGroupName, String resourceName, String privateEndpointConnectionName);
 
     /**
-     * Delete private endpoint connection with the specified name.
+     * Delete private endpoint connection
+     *
+     * <p>Delete private endpoint connection with the specified name.
      *
      * @param resourceGroupName The name of the resource group that contains the IoT hub.
      * @param resourceName The name of the IoT hub.
@@ -189,14 +198,16 @@ public interface PrivateEndpointConnectionsClient {
      * @throws com.azure.resourcemanager.iothub.models.ErrorDetailsException thrown if the request is rejected by
      *     server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the private endpoint connection of an IotHub.
+     * @return the {@link SyncPoller} for polling of the private endpoint connection of an IotHub.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<PrivateEndpointConnectionInner>, PrivateEndpointConnectionInner> beginDelete(
         String resourceGroupName, String resourceName, String privateEndpointConnectionName, Context context);
 
     /**
-     * Delete private endpoint connection with the specified name.
+     * Delete private endpoint connection
+     *
+     * <p>Delete private endpoint connection with the specified name.
      *
      * @param resourceGroupName The name of the resource group that contains the IoT hub.
      * @param resourceName The name of the IoT hub.
@@ -208,11 +219,13 @@ public interface PrivateEndpointConnectionsClient {
      * @return the private endpoint connection of an IotHub.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    PrivateEndpointConnectionInner delete(
-        String resourceGroupName, String resourceName, String privateEndpointConnectionName);
+    PrivateEndpointConnectionInner delete(String resourceGroupName, String resourceName,
+        String privateEndpointConnectionName);
 
     /**
-     * Delete private endpoint connection with the specified name.
+     * Delete private endpoint connection
+     *
+     * <p>Delete private endpoint connection with the specified name.
      *
      * @param resourceGroupName The name of the resource group that contains the IoT hub.
      * @param resourceName The name of the IoT hub.
@@ -225,6 +238,6 @@ public interface PrivateEndpointConnectionsClient {
      * @return the private endpoint connection of an IotHub.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    PrivateEndpointConnectionInner delete(
-        String resourceGroupName, String resourceName, String privateEndpointConnectionName, Context context);
+    PrivateEndpointConnectionInner delete(String resourceGroupName, String resourceName,
+        String privateEndpointConnectionName, Context context);
 }

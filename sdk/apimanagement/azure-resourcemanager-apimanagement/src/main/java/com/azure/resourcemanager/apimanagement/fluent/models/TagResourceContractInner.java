@@ -10,14 +10,11 @@ import com.azure.resourcemanager.apimanagement.models.ApiTagResourceContractProp
 import com.azure.resourcemanager.apimanagement.models.OperationTagResourceContractProperties;
 import com.azure.resourcemanager.apimanagement.models.ProductTagResourceContractProperties;
 import com.azure.resourcemanager.apimanagement.models.TagResourceContractProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** TagResource contract properties. */
 @Fluent
 public final class TagResourceContractInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TagResourceContractInner.class);
-
     /*
      * Tag associated with the resource.
      */
@@ -25,7 +22,7 @@ public final class TagResourceContractInner {
     private TagResourceContractProperties tag;
 
     /*
-     * Api associated with the tag.
+     * API associated with the tag.
      */
     @JsonProperty(value = "api")
     private ApiTagResourceContractProperties api;
@@ -41,6 +38,10 @@ public final class TagResourceContractInner {
      */
     @JsonProperty(value = "product")
     private ProductTagResourceContractProperties product;
+
+    /** Creates an instance of TagResourceContractInner class. */
+    public TagResourceContractInner() {
+    }
 
     /**
      * Get the tag property: Tag associated with the resource.
@@ -63,7 +64,7 @@ public final class TagResourceContractInner {
     }
 
     /**
-     * Get the api property: Api associated with the tag.
+     * Get the api property: API associated with the tag.
      *
      * @return the api value.
      */
@@ -72,7 +73,7 @@ public final class TagResourceContractInner {
     }
 
     /**
-     * Set the api property: Api associated with the tag.
+     * Set the api property: API associated with the tag.
      *
      * @param api the api value to set.
      * @return the TagResourceContractInner object itself.
@@ -129,9 +130,8 @@ public final class TagResourceContractInner {
      */
     public void validate() {
         if (tag() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property tag in model TagResourceContractInner"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property tag in model TagResourceContractInner"));
         } else {
             tag().validate();
         }
@@ -145,4 +145,6 @@ public final class TagResourceContractInner {
             product().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(TagResourceContractInner.class);
 }

@@ -6,7 +6,7 @@ Azure Purview Scanning is a fully managed cloud service whose users can scan you
 - Examine your data
 - Extract schemas from your data
 
-**Please rely heavily on the [service's documentation][product_documentation] and our [Low-Level client docs][low_level_client] to use this library**
+**Please rely heavily on the [service's documentation][product_documentation] and our [data-plane client docs][protocol_method] to use this library**
 
 [Source code][source_code] | [Package (Maven)][package] | [API reference documentation][api_reference_doc] | [Product Documentation][product_documentation] | [Samples][samples_readme]
 
@@ -50,7 +50,7 @@ To use the [DefaultAzureCredential][DefaultAzureCredential] provider shown below
 <dependency>
     <groupId>com.azure</groupId>
     <artifactId>azure-identity</artifactId>
-    <version>1.3.6</version>
+    <version>1.14.2</version>
 </dependency>
 ```
 [//]: # ({x-version-update-end})
@@ -58,8 +58,7 @@ To use the [DefaultAzureCredential][DefaultAzureCredential] provider shown below
 Set the values of the client ID, tenant ID, and client secret of the AAD application as environment variables: AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_CLIENT_SECRET.
 
 ##### Example
-<!-- embedme ./src/samples/java/com/azure/analytics/purview/scanning/ReadmeSamples.java#L20-L23 -->
-```java
+```java readme-sample-createSystemScanRulesetsClient
 SystemScanRulesetsClient client = new PurviewScanningClientBuilder()
     .endpoint(System.getenv("SCANNING_ENDPOINT"))
     .credential(new DefaultAzureCredentialBuilder().build())
@@ -99,11 +98,11 @@ This project has adopted the [Microsoft Open Source Code of Conduct][coc]. For m
 [azure_identity]: https://github.com/Azure/azure-sdk-for-java/tree/main/sdk/identity/azure-identity
 [DefaultAzureCredential]: https://github.com/Azure/azure-sdk-for-java/blob/main/sdk/identity/azure-identity/README.md#defaultazurecredential
 [jdk_link]: https://docs.microsoft.com/java/azure/jdk/?view=azure-java-stable
-[package]: https://mvnrepository.com/artifact/com.azure/azure-analytics-purview-scanning
+[package]: https://central.sonatype.com/artifact/com.azure/azure-analytics-purview-scanning
 [samples_readme]: https://github.com/Azure/azure-sdk-for-java/tree/main/sdk/purview/azure-analytics-purview-scanning/src/samples/README.md
-[low_level_client]: https://github.com/Azure/azure-sdk-for-java/wiki/Low-Level-Client
+[protocol_method]: https://github.com/Azure/azure-sdk-for-java/wiki/Protocol-Methods
 [create_azure_purview_account]: https://docs.microsoft.com/azure/purview/
-[logging]: https://github.com/Azure/azure-sdk-for-java/wiki/Logging-with-Azure-SDK
+[logging]: https://github.com/Azure/azure-sdk-for-java/wiki/Logging-in-Azure-SDK
 [cla]: https://cla.opensource.microsoft.com/
 [coc]: https://opensource.microsoft.com/codeofconduct/
 [coc_faq]: https://opensource.microsoft.com/codeofconduct/faq/

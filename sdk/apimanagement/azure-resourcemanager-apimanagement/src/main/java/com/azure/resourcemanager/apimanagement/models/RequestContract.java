@@ -5,16 +5,12 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Operation request details. */
 @Fluent
 public final class RequestContract {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RequestContract.class);
-
     /*
      * Operation request description.
      */
@@ -38,6 +34,10 @@ public final class RequestContract {
      */
     @JsonProperty(value = "representations")
     private List<RepresentationContract> representations;
+
+    /** Creates an instance of RequestContract class. */
+    public RequestContract() {
+    }
 
     /**
      * Get the description property: Operation request description.

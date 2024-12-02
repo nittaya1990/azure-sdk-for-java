@@ -3,22 +3,22 @@
 
 package com.azure.analytics.purview.administration;
 
-import com.azure.core.credential.TokenCredential;
 import com.azure.core.http.HttpClient;
-import com.azure.core.http.HttpPipeline;
-import com.azure.core.http.HttpPipelineBuilder;
-import com.azure.core.http.netty.NettyAsyncHttpClientBuilder;
-import com.azure.core.http.policy.*;
-import com.azure.core.test.TestBase;
+import com.azure.core.test.TestProxyTestBase;
+import com.azure.core.test.models.TestProxySanitizer;
+import com.azure.core.test.models.TestProxySanitizerType;
+import com.azure.core.test.utils.MockTokenCredential;
 import com.azure.core.util.Configuration;
 import com.azure.identity.DefaultAzureCredentialBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 
-public class PurviewAccountClientTestBase extends TestBase {
+public class PurviewAccountClientTestBase extends TestProxyTestBase {
+    private static final String ZERO_UUID = "00000000-0000-0000-0000-000000000000";
+    private static final String[] REMOVE_SANITIZER_ID = { "AZSDK3430", "AZSDK3493" };
+
     protected String getEndpoint() {
         String endpoint = interceptorManager.isPlaybackMode()
             ? "https://localhost:8080"
@@ -27,45 +27,129 @@ public class PurviewAccountClientTestBase extends TestBase {
         return endpoint;
     }
 
-    <T> T clientSetup(Function<HttpPipeline, T> clientBuilder) {
-        TokenCredential credential = null;
-
-        if (!interceptorManager.isPlaybackMode()) {
-            credential = new DefaultAzureCredentialBuilder().build();
+    AccountsClientBuilder purviewAccountClientBuilderSetUp() {
+        AccountsClientBuilder builder = new AccountsClientBuilder();
+        if (interceptorManager.isPlaybackMode()) {
+            builder.httpClient(interceptorManager.getPlaybackClient()).credential(new MockTokenCredential());
+        } else {
+            builder.httpClient(HttpClient.createDefault()).credential(new DefaultAzureCredentialBuilder().build());
         }
 
-        HttpClient httpClient;
-
-        // Closest to API goes first, closest to wire goes last.
-        final List<HttpPipelinePolicy> policies = new ArrayList<>();
-        policies.add(new RequestIdPolicy());
-        policies.add(new AddDatePolicy());
-
-        HttpPolicyProviders.addBeforeRetryPolicies(policies);
-        if (credential != null) {
-            policies.add(new BearerTokenAuthenticationPolicy(credential, PurviewAccountClientBuilder.DEFAULT_SCOPES));
+        if (interceptorManager.isRecordMode()) {
+            builder.addPolicy(interceptorManager.getRecordPolicy());
         }
 
-        policies.add(new RetryPolicy());
+        List<TestProxySanitizer> customSanitizer = new ArrayList<>();
+        if (!interceptorManager.isLiveMode()) {
+            // sanitize response body keys
+            customSanitizer.add(new TestProxySanitizer("$..clientId", null, "00000000-0000-0000-0000-000000000000",
+                TestProxySanitizerType.BODY_KEY));
+            customSanitizer.add(new TestProxySanitizer("$..principalId", null, "00000000-0000-0000-0000-000000000000",
+                TestProxySanitizerType.BODY_KEY));
+            customSanitizer.add(new TestProxySanitizer("$..tenantId", null, "00000000-0000-0000-0000-000000000000",
+                TestProxySanitizerType.BODY_KEY));
+            customSanitizer
+                .add(new TestProxySanitizer("$..createdBy", null, "REDACTED", TestProxySanitizerType.BODY_KEY));
+            customSanitizer
+                .add(new TestProxySanitizer("$..friendlyName", null, "REDACTED", TestProxySanitizerType.BODY_KEY));
+            customSanitizer.add(new TestProxySanitizer("$..managedResourceGroupName", null, "REDACTED",
+                TestProxySanitizerType.BODY_KEY));
+            customSanitizer
+                .add(new TestProxySanitizer("$..lastModifiedBy", null, "REDACTED", TestProxySanitizerType.BODY_KEY));
+            customSanitizer
+                .add(new TestProxySanitizer("$..catalog", null, "REDACTED", TestProxySanitizerType.BODY_KEY));
+            customSanitizer.add(new TestProxySanitizer("$..scan", null, "REDACTED", TestProxySanitizerType.BODY_KEY));
+            customSanitizer
+                .add(new TestProxySanitizer("$..guardian", null, "REDACTED", TestProxySanitizerType.BODY_KEY));
+            customSanitizer
+                .add(new TestProxySanitizer("$..resourceGroup", null, "REDACTED", TestProxySanitizerType.BODY_KEY));
+            customSanitizer
+                .add(new TestProxySanitizer("$..storageAccount", null, "REDACTED", TestProxySanitizerType.BODY_KEY));
+            customSanitizer.add(new TestProxySanitizer("$..id", null, "REDACTED", TestProxySanitizerType.BODY_KEY));
+            customSanitizer.add(new TestProxySanitizer("name", null, "REDACTED", TestProxySanitizerType.BODY_KEY));
+            // sanitize subscription id
+            customSanitizer.add(
+                new TestProxySanitizer("(?<=/subscriptions/)([^/?]+)", ZERO_UUID, TestProxySanitizerType.BODY_REGEX));
 
-        HttpPolicyProviders.addAfterRetryPolicies(policies);
-        policies.add(new HttpLoggingPolicy(new HttpLogOptions().setLogLevel(HttpLogDetailLevel.BODY_AND_HEADERS)));
+            interceptorManager.addSanitizers(customSanitizer);
+            // Remove `id` sanitizer from the list of common sanitizers.
+            interceptorManager.removeSanitizers(REMOVE_SANITIZER_ID);
+        }
+
+        builder.endpoint(getEndpoint());
+        return Objects.requireNonNull(builder);
+    }
+
+    CollectionsClientBuilder purviewCollectionClientBuilderSetUp() {
+        CollectionsClientBuilder builder = new CollectionsClientBuilder();
 
         if (interceptorManager.isPlaybackMode()) {
-            httpClient = interceptorManager.getPlaybackClient();
+            builder.httpClient(interceptorManager.getPlaybackClient()).credential(new MockTokenCredential());
         } else {
-            httpClient = new NettyAsyncHttpClientBuilder().wiretap(true).build();
+            builder.httpClient(HttpClient.createDefault()).credential(new DefaultAzureCredentialBuilder().build());
         }
-        policies.add(interceptorManager.getRecordPolicy());
 
-        HttpPipeline pipeline = new HttpPipelineBuilder()
-            .policies(policies.toArray(new HttpPipelinePolicy[0]))
-            .httpClient(httpClient)
-            .build();
+        if (interceptorManager.isRecordMode()) {
+            builder.addPolicy(interceptorManager.getRecordPolicy());
+        }
 
-        T client;
-        client = clientBuilder.apply(pipeline);
+        builder.endpoint(getEndpoint());
 
-        return Objects.requireNonNull(client);
+        List<TestProxySanitizer> customSanitizer = new ArrayList<>();
+        if (!interceptorManager.isLiveMode()) {
+            // sanitize response body keys
+            customSanitizer
+                .add(new TestProxySanitizer("$..createdBy", null, "REDACTED", TestProxySanitizerType.BODY_KEY));
+            customSanitizer
+                .add(new TestProxySanitizer("$..friendlyName", null, "REDACTED", TestProxySanitizerType.BODY_KEY));
+            customSanitizer
+                .add(new TestProxySanitizer("$..lastModifiedBy", null, "REDACTED", TestProxySanitizerType.BODY_KEY));
+            customSanitizer.add(new TestProxySanitizer("$..name", null, "REDACTED", TestProxySanitizerType.BODY_KEY));
+            interceptorManager.addSanitizers(customSanitizer);
+            // Remove `id` sanitizer from the list of common sanitizers.
+            interceptorManager.removeSanitizers(REMOVE_SANITIZER_ID);
+        }
+
+        return Objects.requireNonNull(builder);
+    }
+
+    MetadataPolicyClientBuilder purviewMetadataClientBuilderSetUp() {
+        MetadataPolicyClientBuilder builder = new MetadataPolicyClientBuilder();
+        if (interceptorManager.isPlaybackMode()) {
+            builder.httpClient(interceptorManager.getPlaybackClient()).credential(new MockTokenCredential());
+        } else {
+            builder.httpClient(HttpClient.createDefault()).credential(new DefaultAzureCredentialBuilder().build());
+        }
+
+        if (interceptorManager.isRecordMode()) {
+            builder.addPolicy(interceptorManager.getRecordPolicy());
+        }
+
+        builder.endpoint(getEndpoint());
+
+        List<TestProxySanitizer> customSanitizer = new ArrayList<>();
+        if (!interceptorManager.isLiveMode()) {
+            // sanitize response body keys
+            customSanitizer.add(new TestProxySanitizer("$..attributeValueIncludedIn", null,
+                "00000000-0000-0000-0000-000000000000", TestProxySanitizerType.BODY_KEY));
+            customSanitizer
+                .add(new TestProxySanitizer("$..referenceName", null, "REDACTED", TestProxySanitizerType.BODY_KEY));
+            customSanitizer.add(
+                new TestProxySanitizer("$..parentCollectionName", null, "REDACTED", TestProxySanitizerType.BODY_KEY));
+            customSanitizer.add(
+                new TestProxySanitizer("$..attributeValueIncludes", null, "REDACTED", TestProxySanitizerType.BODY_KEY));
+            customSanitizer
+                .add(new TestProxySanitizer("$..fromRule", null, "REDACTED", TestProxySanitizerType.BODY_KEY));
+            customSanitizer.add(
+                new TestProxySanitizer("$..attributeValueIncludes", null, "REDACTED", TestProxySanitizerType.BODY_KEY));
+            customSanitizer.add(new TestProxySanitizer("$..name", null, "REDACTED", TestProxySanitizerType.BODY_KEY));
+            customSanitizer.add(
+                new TestProxySanitizer("$...attributeRules..id", null, "REDACTED", TestProxySanitizerType.BODY_KEY));
+            interceptorManager.addSanitizers(customSanitizer);
+            // Remove `id` sanitizer from the list of common sanitizers.
+            interceptorManager.removeSanitizers(REMOVE_SANITIZER_ID);
+        }
+
+        return Objects.requireNonNull(builder);
     }
 }

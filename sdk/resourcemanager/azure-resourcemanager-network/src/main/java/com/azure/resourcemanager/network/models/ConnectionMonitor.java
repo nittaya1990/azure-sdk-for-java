@@ -82,11 +82,8 @@ public interface ConnectionMonitor extends HasInnerModel<ConnectionMonitorResult
     Mono<ConnectionMonitorQueryResult> queryAsync();
 
     /** The entirety of the connection monitor definition. */
-    interface Definition
-        extends DefinitionStages.WithSource,
-            DefinitionStages.WithDestination,
-            DefinitionStages.WithDestinationPort,
-            DefinitionStages.WithCreate {
+    interface Definition extends DefinitionStages.WithSource, DefinitionStages.WithDestination,
+        DefinitionStages.WithDestinationPort, DefinitionStages.WithCreate {
     }
 
     /** Grouping of connection monitor definition stages. */
@@ -196,6 +193,9 @@ public interface ConnectionMonitor extends HasInnerModel<ConnectionMonitorResult
             WithCreate withoutTag(String key);
         }
 
+        /**
+         * The stage of the connection monitor definition allowing creating and updating.
+         */
         interface WithCreate
             extends Creatable<ConnectionMonitor>, WithSourcePort, WithAutoStart, WithMonitoringInterval, WithTags {
         }

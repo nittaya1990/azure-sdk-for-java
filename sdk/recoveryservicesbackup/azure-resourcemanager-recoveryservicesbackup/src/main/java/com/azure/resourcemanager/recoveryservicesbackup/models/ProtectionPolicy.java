@@ -5,19 +5,21 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.util.List;
 
-/** Base class for backup policy. Workload-specific backup policies are derived from this class. */
+/**
+ * Base class for backup policy. Workload-specific backup policies are derived from this class.
+ */
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
-    include = JsonTypeInfo.As.PROPERTY,
     property = "backupManagementType",
-    defaultImpl = ProtectionPolicy.class)
+    defaultImpl = ProtectionPolicy.class,
+    visible = true)
 @JsonTypeName("ProtectionPolicy")
 @JsonSubTypes({
     @JsonSubTypes.Type(name = "AzureWorkload", value = AzureVmWorkloadProtectionPolicy.class),
@@ -25,11 +27,15 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
     @JsonSubTypes.Type(name = "AzureIaasVM", value = AzureIaaSvmProtectionPolicy.class),
     @JsonSubTypes.Type(name = "AzureSql", value = AzureSqlProtectionPolicy.class),
     @JsonSubTypes.Type(name = "GenericProtectionPolicy", value = GenericProtectionPolicy.class),
-    @JsonSubTypes.Type(name = "MAB", value = MabProtectionPolicy.class)
-})
+    @JsonSubTypes.Type(name = "MAB", value = MabProtectionPolicy.class) })
 @Fluent
 public class ProtectionPolicy {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ProtectionPolicy.class);
+    /*
+     * This property will be used as the discriminator for deciding the specific types in the polymorphic chain of types.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "backupManagementType", required = true)
+    private String backupManagementType;
 
     /*
      * Number of items associated with this policy.
@@ -37,9 +43,32 @@ public class ProtectionPolicy {
     @JsonProperty(value = "protectedItemsCount")
     private Integer protectedItemsCount;
 
+    /*
+     * ResourceGuard Operation Requests
+     */
+    @JsonProperty(value = "resourceGuardOperationRequests")
+    private List<String> resourceGuardOperationRequests;
+
+    /**
+     * Creates an instance of ProtectionPolicy class.
+     */
+    public ProtectionPolicy() {
+        this.backupManagementType = "ProtectionPolicy";
+    }
+
+    /**
+     * Get the backupManagementType property: This property will be used as the discriminator for deciding the specific
+     * types in the polymorphic chain of types.
+     * 
+     * @return the backupManagementType value.
+     */
+    public String backupManagementType() {
+        return this.backupManagementType;
+    }
+
     /**
      * Get the protectedItemsCount property: Number of items associated with this policy.
-     *
+     * 
      * @return the protectedItemsCount value.
      */
     public Integer protectedItemsCount() {
@@ -48,7 +77,7 @@ public class ProtectionPolicy {
 
     /**
      * Set the protectedItemsCount property: Number of items associated with this policy.
-     *
+     * 
      * @param protectedItemsCount the protectedItemsCount value to set.
      * @return the ProtectionPolicy object itself.
      */
@@ -58,8 +87,28 @@ public class ProtectionPolicy {
     }
 
     /**
+     * Get the resourceGuardOperationRequests property: ResourceGuard Operation Requests.
+     * 
+     * @return the resourceGuardOperationRequests value.
+     */
+    public List<String> resourceGuardOperationRequests() {
+        return this.resourceGuardOperationRequests;
+    }
+
+    /**
+     * Set the resourceGuardOperationRequests property: ResourceGuard Operation Requests.
+     * 
+     * @param resourceGuardOperationRequests the resourceGuardOperationRequests value to set.
+     * @return the ProtectionPolicy object itself.
+     */
+    public ProtectionPolicy withResourceGuardOperationRequests(List<String> resourceGuardOperationRequests) {
+        this.resourceGuardOperationRequests = resourceGuardOperationRequests;
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

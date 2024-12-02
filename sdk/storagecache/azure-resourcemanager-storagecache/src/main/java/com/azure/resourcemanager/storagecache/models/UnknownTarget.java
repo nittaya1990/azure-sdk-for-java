@@ -5,29 +5,32 @@
 package com.azure.resourcemanager.storagecache.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
-/** Properties pertaining to the UnknownTarget. */
+/**
+ * Properties pertaining to the UnknownTarget.
+ */
 @Fluent
 public final class UnknownTarget {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(UnknownTarget.class);
-
     /*
-     * Dictionary of string->string pairs containing information about the
-     * Storage Target.
+     * Dictionary of string->string pairs containing information about the Storage Target.
      */
     @JsonProperty(value = "attributes")
     @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
     private Map<String, String> attributes;
 
     /**
+     * Creates an instance of UnknownTarget class.
+     */
+    public UnknownTarget() {
+    }
+
+    /**
      * Get the attributes property: Dictionary of string-&gt;string pairs containing information about the Storage
      * Target.
-     *
+     * 
      * @return the attributes value.
      */
     public Map<String, String> attributes() {
@@ -37,7 +40,7 @@ public final class UnknownTarget {
     /**
      * Set the attributes property: Dictionary of string-&gt;string pairs containing information about the Storage
      * Target.
-     *
+     * 
      * @param attributes the attributes value to set.
      * @return the UnknownTarget object itself.
      */
@@ -48,7 +51,7 @@ public final class UnknownTarget {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

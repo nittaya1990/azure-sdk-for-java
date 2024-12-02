@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.healthcareapis.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.healthcareapis.fluent.models.ServicesDescriptionInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** A list of service description objects with a next link. */
+/**
+ * A list of service description objects with a next link.
+ */
 @Fluent
 public final class ServicesDescriptionListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ServicesDescriptionListResult.class);
-
     /*
      * The link used to get the next page of service description objects.
      */
@@ -29,8 +27,14 @@ public final class ServicesDescriptionListResult {
     private List<ServicesDescriptionInner> value;
 
     /**
+     * Creates an instance of ServicesDescriptionListResult class.
+     */
+    public ServicesDescriptionListResult() {
+    }
+
+    /**
      * Get the nextLink property: The link used to get the next page of service description objects.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -39,7 +43,7 @@ public final class ServicesDescriptionListResult {
 
     /**
      * Set the nextLink property: The link used to get the next page of service description objects.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the ServicesDescriptionListResult object itself.
      */
@@ -50,7 +54,7 @@ public final class ServicesDescriptionListResult {
 
     /**
      * Get the value property: A list of service description objects.
-     *
+     * 
      * @return the value value.
      */
     public List<ServicesDescriptionInner> value() {
@@ -59,7 +63,7 @@ public final class ServicesDescriptionListResult {
 
     /**
      * Set the value property: A list of service description objects.
-     *
+     * 
      * @param value the value value to set.
      * @return the ServicesDescriptionListResult object itself.
      */
@@ -70,7 +74,7 @@ public final class ServicesDescriptionListResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

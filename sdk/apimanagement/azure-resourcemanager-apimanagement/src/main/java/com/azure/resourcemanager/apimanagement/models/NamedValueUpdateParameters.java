@@ -5,22 +5,22 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.models.NamedValueUpdateParameterProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** NamedValue update Parameters. */
 @Fluent
 public final class NamedValueUpdateParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(NamedValueUpdateParameters.class);
-
     /*
      * NamedValue entity Update contract properties.
      */
     @JsonProperty(value = "properties")
     private NamedValueUpdateParameterProperties innerProperties;
+
+    /** Creates an instance of NamedValueUpdateParameters class. */
+    public NamedValueUpdateParameters() {
+    }
 
     /**
      * Get the innerProperties property: NamedValue entity Update contract properties.

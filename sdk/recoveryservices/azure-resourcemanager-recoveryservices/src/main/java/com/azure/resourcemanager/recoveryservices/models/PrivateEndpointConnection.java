@@ -4,16 +4,15 @@
 
 package com.azure.resourcemanager.recoveryservices.models;
 
-import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.azure.core.annotation.Fluent;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 
-/** Private Endpoint Connection Response Properties. */
-@Immutable
+/**
+ * Private Endpoint Connection Response Properties.
+ */
+@Fluent
 public final class PrivateEndpointConnection {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PrivateEndpointConnection.class);
-
     /*
      * Gets or sets provisioning state of the private endpoint connection.
      */
@@ -21,8 +20,7 @@ public final class PrivateEndpointConnection {
     private ProvisioningState provisioningState;
 
     /*
-     * The Private Endpoint network resource that is linked to the Private
-     * Endpoint connection.
+     * The Private Endpoint network resource that is linked to the Private Endpoint connection.
      */
     @JsonProperty(value = "privateEndpoint", access = JsonProperty.Access.WRITE_ONLY)
     private PrivateEndpoint privateEndpoint;
@@ -33,9 +31,21 @@ public final class PrivateEndpointConnection {
     @JsonProperty(value = "privateLinkServiceConnectionState", access = JsonProperty.Access.WRITE_ONLY)
     private PrivateLinkServiceConnectionState privateLinkServiceConnectionState;
 
+    /*
+     * Group Ids for the Private Endpoint
+     */
+    @JsonProperty(value = "groupIds")
+    private List<VaultSubResourceType> groupIds;
+
+    /**
+     * Creates an instance of PrivateEndpointConnection class.
+     */
+    public PrivateEndpointConnection() {
+    }
+
     /**
      * Get the provisioningState property: Gets or sets provisioning state of the private endpoint connection.
-     *
+     * 
      * @return the provisioningState value.
      */
     public ProvisioningState provisioningState() {
@@ -45,7 +55,7 @@ public final class PrivateEndpointConnection {
     /**
      * Get the privateEndpoint property: The Private Endpoint network resource that is linked to the Private Endpoint
      * connection.
-     *
+     * 
      * @return the privateEndpoint value.
      */
     public PrivateEndpoint privateEndpoint() {
@@ -54,7 +64,7 @@ public final class PrivateEndpointConnection {
 
     /**
      * Get the privateLinkServiceConnectionState property: Gets or sets private link service connection state.
-     *
+     * 
      * @return the privateLinkServiceConnectionState value.
      */
     public PrivateLinkServiceConnectionState privateLinkServiceConnectionState() {
@@ -62,8 +72,28 @@ public final class PrivateEndpointConnection {
     }
 
     /**
+     * Get the groupIds property: Group Ids for the Private Endpoint.
+     * 
+     * @return the groupIds value.
+     */
+    public List<VaultSubResourceType> groupIds() {
+        return this.groupIds;
+    }
+
+    /**
+     * Set the groupIds property: Group Ids for the Private Endpoint.
+     * 
+     * @param groupIds the groupIds value to set.
+     * @return the PrivateEndpointConnection object itself.
+     */
+    public PrivateEndpointConnection withGroupIds(List<VaultSubResourceType> groupIds) {
+        this.groupIds = groupIds;
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

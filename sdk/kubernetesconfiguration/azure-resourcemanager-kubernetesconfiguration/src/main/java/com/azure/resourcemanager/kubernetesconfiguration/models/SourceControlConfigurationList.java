@@ -5,9 +5,7 @@
 package com.azure.resourcemanager.kubernetesconfiguration.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.kubernetesconfiguration.fluent.models.SourceControlConfigurationInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
@@ -17,8 +15,6 @@ import java.util.List;
  */
 @Immutable
 public final class SourceControlConfigurationList {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SourceControlConfigurationList.class);
-
     /*
      * List of Source Control Configurations within a Kubernetes cluster.
      */
@@ -30,6 +26,10 @@ public final class SourceControlConfigurationList {
      */
     @JsonProperty(value = "nextLink", access = JsonProperty.Access.WRITE_ONLY)
     private String nextLink;
+
+    /** Creates an instance of SourceControlConfigurationList class. */
+    public SourceControlConfigurationList() {
+    }
 
     /**
      * Get the value property: List of Source Control Configurations within a Kubernetes cluster.

@@ -20,10 +20,8 @@ import java.util.List;
 
 /** An immutable client-side representation of an Azure Key Vault. */
 @Fluent
-public interface Vault
-    extends GroupableResource<KeyVaultManager, VaultInner>, Refreshable<Vault>, Updatable<Vault.Update>,
-    SupportsListingPrivateLinkResource,
-    SupportsUpdatingPrivateEndpointConnection {
+public interface Vault extends GroupableResource<KeyVaultManager, VaultInner>, Refreshable<Vault>,
+    Updatable<Vault.Update>, SupportsListingPrivateLinkResource, SupportsUpdatingPrivateEndpointConnection {
 
     /** @return an authenticated Key Vault secret client */
     SecretAsyncClient secretClient();
@@ -61,6 +59,13 @@ public interface Vault
      * @return whether role based access control (RBAC) for authorization of data access is enabled.
      */
     boolean roleBasedAccessControlEnabled();
+
+    /**
+     * Whether the vault can be accessed from public network.
+     *
+     * @return whether the vault can be accessed from public network.
+     */
+    PublicNetworkAccess publicNetworkAccess();
 
     /**
      * @return whether Azure Virtual Machines are permitted to retrieve certificates stored as secrets from the key
@@ -102,11 +107,8 @@ public interface Vault
      **************************************************************/
 
     /** Container interface for all the definitions that need to be implemented. */
-    interface Definition
-        extends DefinitionStages.Blank,
-            DefinitionStages.WithGroup,
-            DefinitionStages.WithAccessPolicy,
-            DefinitionStages.WithCreate {
+    interface Definition extends DefinitionStages.Blank, DefinitionStages.WithGroup, DefinitionStages.WithAccessPolicy,
+        DefinitionStages.WithCreate {
     }
 
     /** Grouping of all the key vault definition stages. */
@@ -166,6 +168,12 @@ public interface Vault
 
         /** A key vault definition allowing the networkAcl to be set. */
         interface WithNetworkRuleSet {
+            /**
+             * Disables public network access for the vault, for private link feature.
+             *
+             * @return the next stage of the definition
+             */
+            WithCreate disablePublicNetworkAccess();
 
             /**
              * Specifies that by default access to key vault should be allowed from all networks.
@@ -298,13 +306,9 @@ public interface Vault
          * A key vault definition with sufficient inputs to create a new storage account in the cloud, but exposing
          * additional optional inputs to specify.
          */
-        interface WithCreate
-            extends Creatable<Vault>,
-                GroupableResource.DefinitionWithTags<WithCreate>,
-                DefinitionStages.WithSku,
-                DefinitionStages.WithNetworkRuleSet,
-                DefinitionStages.WithConfigurations,
-                DefinitionStages.WithAccessPolicy {
+        interface WithCreate extends Creatable<Vault>, GroupableResource.DefinitionWithTags<WithCreate>,
+            DefinitionStages.WithSku, DefinitionStages.WithNetworkRuleSet, DefinitionStages.WithConfigurations,
+            DefinitionStages.WithAccessPolicy {
         }
     }
 
@@ -362,6 +366,19 @@ public interface Vault
 
         /** A key vault update allowing the NetworkRuleSet to be set. */
         interface WithNetworkRuleSet {
+            /**
+             * Enables public network access for the vault.
+             *
+             * @return the next stage of the update
+             */
+            Update enablePublicNetworkAccess();
+
+            /**
+             * Disables public network access for the vault, for private link feature.
+             *
+             * @return the next stage of the update
+             */
+            Update disablePublicNetworkAccess();
 
             /**
              * Specifies that by default access to key vault should be allowed from all networks.
@@ -492,11 +509,7 @@ public interface Vault
     }
 
     /** The template for a key vault update operation, containing all the settings that can be modified. */
-    interface Update
-        extends GroupableResource.UpdateWithTags<Update>,
-            Appliable<Vault>,
-            UpdateStages.WithAccessPolicy,
-            UpdateStages.WithNetworkRuleSet,
-            UpdateStages.WithConfigurations {
+    interface Update extends GroupableResource.UpdateWithTags<Update>, Appliable<Vault>, UpdateStages.WithAccessPolicy,
+        UpdateStages.WithNetworkRuleSet, UpdateStages.WithConfigurations {
     }
 }

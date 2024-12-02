@@ -5,8 +5,6 @@
 package com.azure.resourcemanager.resourcehealth.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -14,8 +12,6 @@ import java.util.List;
 /** Active event type of emerging issue. */
 @Fluent
 public final class StatusActiveEvent {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(StatusActiveEvent.class);
-
     /*
      * The active event title.
      */
@@ -75,6 +71,10 @@ public final class StatusActiveEvent {
      */
     @JsonProperty(value = "impacts")
     private List<EmergingIssueImpact> impacts;
+
+    /** Creates an instance of StatusActiveEvent class. */
+    public StatusActiveEvent() {
+    }
 
     /**
      * Get the title property: The active event title.

@@ -5,20 +5,20 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Describes an available API Management SKU. */
 @Fluent
 public final class ResourceSku {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ResourceSku.class);
-
     /*
      * Name of the Sku.
      */
     @JsonProperty(value = "name")
     private SkuType name;
+
+    /** Creates an instance of ResourceSku class. */
+    public ResourceSku() {
+    }
 
     /**
      * Get the name property: Name of the Sku.

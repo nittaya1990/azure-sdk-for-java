@@ -31,7 +31,6 @@ import com.azure.core.management.exception.ManagementException;
 import com.azure.core.management.polling.PollResult;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.core.util.polling.PollerFlux;
 import com.azure.core.util.polling.SyncPoller;
 import com.azure.resourcemanager.deviceprovisioningservices.fluent.IotDpsResourcesClient;
@@ -56,8 +55,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in IotDpsResourcesClient. */
 public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
-    private final ClientLogger logger = new ClientLogger(IotDpsResourcesClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final IotDpsResourcesService service;
 
@@ -70,8 +67,8 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @param client the instance of the service client containing this operation class.
      */
     IotDpsResourcesClientImpl(IotDpsClientImpl client) {
-        this.service =
-            RestProxy.create(IotDpsResourcesService.class, client.getHttpPipeline(), client.getSerializerAdapter());
+        this.service
+            = RestProxy.create(IotDpsResourcesService.class, client.getHttpPipeline(), client.getSerializerAdapter());
         this.client = client;
     }
 
@@ -82,302 +79,222 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
     @Host("{$host}")
     @ServiceInterface(name = "IotDpsClientIotDpsRe")
     private interface IotDpsResourcesService {
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices"
-                + "/provisioningServices/{provisioningServiceName}")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices"
+            + "/provisioningServices/{provisioningServiceName}")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ErrorDetailsException.class)
-        Mono<Response<ProvisioningServiceDescriptionInner>> getByResourceGroup(
-            @HostParam("$host") String endpoint,
+        Mono<Response<ProvisioningServiceDescriptionInner>> getByResourceGroup(@HostParam("$host") String endpoint,
             @PathParam("resourceGroupName") String resourceGroupName,
             @PathParam("subscriptionId") String subscriptionId,
             @PathParam("provisioningServiceName") String provisioningServiceName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @QueryParam("api-version") String apiVersion, @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Put(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices"
-                + "/provisioningServices/{provisioningServiceName}")
-        @ExpectedResponses({200, 201})
+        @Headers({ "Content-Type: application/json" })
+        @Put("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices"
+            + "/provisioningServices/{provisioningServiceName}")
+        @ExpectedResponses({ 200, 201 })
         @UnexpectedResponseExceptionType(ErrorDetailsException.class)
-        Mono<Response<Flux<ByteBuffer>>> createOrUpdate(
-            @HostParam("$host") String endpoint,
+        Mono<Response<Flux<ByteBuffer>>> createOrUpdate(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
             @PathParam("resourceGroupName") String resourceGroupName,
             @PathParam("provisioningServiceName") String provisioningServiceName,
             @QueryParam("api-version") String apiVersion,
             @BodyParam("application/json") ProvisioningServiceDescriptionInner iotDpsDescription,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Patch(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices"
-                + "/provisioningServices/{provisioningServiceName}")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Patch("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices"
+            + "/provisioningServices/{provisioningServiceName}")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> update(
-            @HostParam("$host") String endpoint,
+        Mono<Response<Flux<ByteBuffer>>> update(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
             @PathParam("resourceGroupName") String resourceGroupName,
             @PathParam("provisioningServiceName") String provisioningServiceName,
             @QueryParam("api-version") String apiVersion,
-            @BodyParam("application/json") TagsResource provisioningServiceTags,
-            @HeaderParam("Accept") String accept,
+            @BodyParam("application/json") TagsResource provisioningServiceTags, @HeaderParam("Accept") String accept,
             Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Delete(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices"
-                + "/provisioningServices/{provisioningServiceName}")
-        @ExpectedResponses({200, 202, 204, 404})
+        @Headers({ "Content-Type: application/json" })
+        @Delete("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices"
+            + "/provisioningServices/{provisioningServiceName}")
+        @ExpectedResponses({ 200, 202, 204, 404 })
         @UnexpectedResponseExceptionType(ErrorDetailsException.class)
-        Mono<Response<Flux<ByteBuffer>>> delete(
-            @HostParam("$host") String endpoint,
+        Mono<Response<Flux<ByteBuffer>>> delete(@HostParam("$host") String endpoint,
             @PathParam("resourceGroupName") String resourceGroupName,
             @PathParam("subscriptionId") String subscriptionId,
             @PathParam("provisioningServiceName") String provisioningServiceName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @QueryParam("api-version") String apiVersion, @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
+        @Headers({ "Content-Type: application/json" })
         @Get("/subscriptions/{subscriptionId}/providers/Microsoft.Devices/provisioningServices")
-        @ExpectedResponses({200})
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ErrorDetailsException.class)
-        Mono<Response<ProvisioningServiceDescriptionListResult>> list(
-            @HostParam("$host") String endpoint,
-            @PathParam("subscriptionId") String subscriptionId,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+        Mono<Response<ProvisioningServiceDescriptionListResult>> list(@HostParam("$host") String endpoint,
+            @PathParam("subscriptionId") String subscriptionId, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices"
-                + "/provisioningServices")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices"
+            + "/provisioningServices")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ErrorDetailsException.class)
         Mono<Response<ProvisioningServiceDescriptionListResult>> listByResourceGroup(
-            @HostParam("$host") String endpoint,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @HostParam("$host") String endpoint, @PathParam("subscriptionId") String subscriptionId,
+            @PathParam("resourceGroupName") String resourceGroupName, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices"
-                + "/provisioningServices/{provisioningServiceName}/operationresults/{operationId}")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices"
+            + "/provisioningServices/{provisioningServiceName}/operationresults/{operationId}")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ErrorDetailsException.class)
-        Mono<Response<AsyncOperationResultInner>> getOperationResult(
-            @HostParam("$host") String endpoint,
-            @PathParam("operationId") String operationId,
-            @PathParam("subscriptionId") String subscriptionId,
+        Mono<Response<AsyncOperationResultInner>> getOperationResult(@HostParam("$host") String endpoint,
+            @PathParam("operationId") String operationId, @PathParam("subscriptionId") String subscriptionId,
             @PathParam("resourceGroupName") String resourceGroupName,
             @PathParam("provisioningServiceName") String provisioningServiceName,
-            @QueryParam("asyncinfo") String asyncinfo,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @QueryParam("asyncinfo") String asyncinfo, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices"
-                + "/provisioningServices/{provisioningServiceName}/skus")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices"
+            + "/provisioningServices/{provisioningServiceName}/skus")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ErrorDetailsException.class)
-        Mono<Response<IotDpsSkuDefinitionListResult>> listValidSkus(
-            @HostParam("$host") String endpoint,
+        Mono<Response<IotDpsSkuDefinitionListResult>> listValidSkus(@HostParam("$host") String endpoint,
             @PathParam("provisioningServiceName") String provisioningServiceName,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
+        @Headers({ "Content-Type: application/json" })
         @Post("/subscriptions/{subscriptionId}/providers/Microsoft.Devices/checkProvisioningServiceNameAvailability")
-        @ExpectedResponses({200})
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ErrorDetailsException.class)
         Mono<Response<NameAvailabilityInfoInner>> checkProvisioningServiceNameAvailability(
-            @HostParam("$host") String endpoint,
-            @PathParam("subscriptionId") String subscriptionId,
-            @QueryParam("api-version") String apiVersion,
-            @BodyParam("application/json") OperationInputs arguments,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @HostParam("$host") String endpoint, @PathParam("subscriptionId") String subscriptionId,
+            @QueryParam("api-version") String apiVersion, @BodyParam("application/json") OperationInputs arguments,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices"
-                + "/provisioningServices/{provisioningServiceName}/listkeys")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Post("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices"
+            + "/provisioningServices/{provisioningServiceName}/listkeys")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ErrorDetailsException.class)
-        Mono<Response<SharedAccessSignatureAuthorizationRuleListResult>> listKeys(
-            @HostParam("$host") String endpoint,
+        Mono<Response<SharedAccessSignatureAuthorizationRuleListResult>> listKeys(@HostParam("$host") String endpoint,
             @PathParam("provisioningServiceName") String provisioningServiceName,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices"
-                + "/provisioningServices/{provisioningServiceName}/keys/{keyName}/listkeys")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Post("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices"
+            + "/provisioningServices/{provisioningServiceName}/keys/{keyName}/listkeys")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ErrorDetailsException.class)
         Mono<Response<SharedAccessSignatureAuthorizationRuleInner>> listKeysForKeyName(
-            @HostParam("$host") String endpoint,
-            @PathParam("provisioningServiceName") String provisioningServiceName,
-            @PathParam("keyName") String keyName,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @HostParam("$host") String endpoint, @PathParam("provisioningServiceName") String provisioningServiceName,
+            @PathParam("keyName") String keyName, @PathParam("subscriptionId") String subscriptionId,
+            @PathParam("resourceGroupName") String resourceGroupName, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices"
-                + "/provisioningServices/{resourceName}/privateLinkResources")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices"
+            + "/provisioningServices/{resourceName}/privateLinkResources")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ErrorDetailsException.class)
-        Mono<Response<PrivateLinkResourcesInner>> listPrivateLinkResources(
-            @HostParam("$host") String endpoint,
-            @QueryParam("api-version") String apiVersion,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("resourceName") String resourceName,
-            @HeaderParam("Accept") String accept,
-            Context context);
+        Mono<Response<PrivateLinkResourcesInner>> listPrivateLinkResources(@HostParam("$host") String endpoint,
+            @QueryParam("api-version") String apiVersion, @PathParam("subscriptionId") String subscriptionId,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("resourceName") String resourceName,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices"
-                + "/provisioningServices/{resourceName}/privateLinkResources/{groupId}")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices"
+            + "/provisioningServices/{resourceName}/privateLinkResources/{groupId}")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ErrorDetailsException.class)
-        Mono<Response<GroupIdInformationInner>> getPrivateLinkResources(
-            @HostParam("$host") String endpoint,
-            @QueryParam("api-version") String apiVersion,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("resourceName") String resourceName,
-            @PathParam("groupId") String groupId,
-            @HeaderParam("Accept") String accept,
-            Context context);
+        Mono<Response<GroupIdInformationInner>> getPrivateLinkResources(@HostParam("$host") String endpoint,
+            @QueryParam("api-version") String apiVersion, @PathParam("subscriptionId") String subscriptionId,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("resourceName") String resourceName,
+            @PathParam("groupId") String groupId, @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices"
-                + "/provisioningServices/{resourceName}/privateEndpointConnections")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices"
+            + "/provisioningServices/{resourceName}/privateEndpointConnections")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ErrorDetailsException.class)
         Mono<Response<List<PrivateEndpointConnectionInner>>> listPrivateEndpointConnections(
-            @HostParam("$host") String endpoint,
-            @QueryParam("api-version") String apiVersion,
+            @HostParam("$host") String endpoint, @QueryParam("api-version") String apiVersion,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("resourceName") String resourceName,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("resourceName") String resourceName,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices"
-                + "/provisioningServices/{resourceName}/privateEndpointConnections/{privateEndpointConnectionName}")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices"
+            + "/provisioningServices/{resourceName}/privateEndpointConnections/{privateEndpointConnectionName}")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ErrorDetailsException.class)
-        Mono<Response<PrivateEndpointConnectionInner>> getPrivateEndpointConnection(
-            @HostParam("$host") String endpoint,
-            @QueryParam("api-version") String apiVersion,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("resourceName") String resourceName,
+        Mono<Response<PrivateEndpointConnectionInner>> getPrivateEndpointConnection(@HostParam("$host") String endpoint,
+            @QueryParam("api-version") String apiVersion, @PathParam("subscriptionId") String subscriptionId,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("resourceName") String resourceName,
             @PathParam("privateEndpointConnectionName") String privateEndpointConnectionName,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Put(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices"
-                + "/provisioningServices/{resourceName}/privateEndpointConnections/{privateEndpointConnectionName}")
-        @ExpectedResponses({200, 201})
+        @Headers({ "Content-Type: application/json" })
+        @Put("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices"
+            + "/provisioningServices/{resourceName}/privateEndpointConnections/{privateEndpointConnectionName}")
+        @ExpectedResponses({ 200, 201 })
         @UnexpectedResponseExceptionType(ErrorDetailsException.class)
-        Mono<Response<Flux<ByteBuffer>>> createOrUpdatePrivateEndpointConnection(
-            @HostParam("$host") String endpoint,
-            @QueryParam("api-version") String apiVersion,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("resourceName") String resourceName,
+        Mono<Response<Flux<ByteBuffer>>> createOrUpdatePrivateEndpointConnection(@HostParam("$host") String endpoint,
+            @QueryParam("api-version") String apiVersion, @PathParam("subscriptionId") String subscriptionId,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("resourceName") String resourceName,
             @PathParam("privateEndpointConnectionName") String privateEndpointConnectionName,
             @BodyParam("application/json") PrivateEndpointConnectionInner privateEndpointConnection,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Delete(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices"
-                + "/provisioningServices/{resourceName}/privateEndpointConnections/{privateEndpointConnectionName}")
-        @ExpectedResponses({200, 202, 204})
+        @Headers({ "Content-Type: application/json" })
+        @Delete("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Devices"
+            + "/provisioningServices/{resourceName}/privateEndpointConnections/{privateEndpointConnectionName}")
+        @ExpectedResponses({ 200, 202, 204 })
         @UnexpectedResponseExceptionType(ErrorDetailsException.class)
-        Mono<Response<Flux<ByteBuffer>>> deletePrivateEndpointConnection(
-            @HostParam("$host") String endpoint,
-            @QueryParam("api-version") String apiVersion,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("resourceName") String resourceName,
+        Mono<Response<Flux<ByteBuffer>>> deletePrivateEndpointConnection(@HostParam("$host") String endpoint,
+            @QueryParam("api-version") String apiVersion, @PathParam("subscriptionId") String subscriptionId,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("resourceName") String resourceName,
             @PathParam("privateEndpointConnectionName") String privateEndpointConnectionName,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
+        @Headers({ "Content-Type: application/json" })
         @Get("{nextLink}")
-        @ExpectedResponses({200})
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ErrorDetailsException.class)
         Mono<Response<ProvisioningServiceDescriptionListResult>> listBySubscriptionNext(
-            @PathParam(value = "nextLink", encoded = true) String nextLink,
-            @HostParam("$host") String endpoint,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam(value = "nextLink", encoded = true) String nextLink, @HostParam("$host") String endpoint,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
+        @Headers({ "Content-Type: application/json" })
         @Get("{nextLink}")
-        @ExpectedResponses({200})
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ErrorDetailsException.class)
         Mono<Response<ProvisioningServiceDescriptionListResult>> listByResourceGroupNext(
-            @PathParam(value = "nextLink", encoded = true) String nextLink,
-            @HostParam("$host") String endpoint,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam(value = "nextLink", encoded = true) String nextLink, @HostParam("$host") String endpoint,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
+        @Headers({ "Content-Type: application/json" })
         @Get("{nextLink}")
-        @ExpectedResponses({200})
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ErrorDetailsException.class)
         Mono<Response<IotDpsSkuDefinitionListResult>> listValidSkusNext(
-            @PathParam(value = "nextLink", encoded = true) String nextLink,
-            @HostParam("$host") String endpoint,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam(value = "nextLink", encoded = true) String nextLink, @HostParam("$host") String endpoint,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
+        @Headers({ "Content-Type: application/json" })
         @Get("{nextLink}")
-        @ExpectedResponses({200})
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ErrorDetailsException.class)
         Mono<Response<SharedAccessSignatureAuthorizationRuleListResult>> listKeysNext(
-            @PathParam(value = "nextLink", encoded = true) String nextLink,
-            @HostParam("$host") String endpoint,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam(value = "nextLink", encoded = true) String nextLink, @HostParam("$host") String endpoint,
+            @HeaderParam("Accept") String accept, Context context);
     }
 
     /**
@@ -388,45 +305,32 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the metadata of the provisioning service without SAS keys.
+     * @return the metadata of the provisioning service without SAS keys along with {@link Response} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<ProvisioningServiceDescriptionInner>> getByResourceGroupWithResponseAsync(
-        String resourceGroupName, String provisioningServiceName) {
+    private Mono<Response<ProvisioningServiceDescriptionInner>>
+        getByResourceGroupWithResponseAsync(String resourceGroupName, String provisioningServiceName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
                 .error(new IllegalArgumentException("Parameter resourceGroupName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (provisioningServiceName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException("Parameter provisioningServiceName is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter provisioningServiceName is required and cannot be null."));
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .getByResourceGroup(
-                            this.client.getEndpoint(),
-                            resourceGroupName,
-                            this.client.getSubscriptionId(),
-                            provisioningServiceName,
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
+            .withContext(context -> service.getByResourceGroup(this.client.getEndpoint(), resourceGroupName,
+                this.client.getSubscriptionId(), provisioningServiceName, this.client.getApiVersion(), accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -439,43 +343,32 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the metadata of the provisioning service without SAS keys.
+     * @return the metadata of the provisioning service without SAS keys along with {@link Response} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<ProvisioningServiceDescriptionInner>> getByResourceGroupWithResponseAsync(
-        String resourceGroupName, String provisioningServiceName, Context context) {
+    private Mono<Response<ProvisioningServiceDescriptionInner>>
+        getByResourceGroupWithResponseAsync(String resourceGroupName, String provisioningServiceName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
                 .error(new IllegalArgumentException("Parameter resourceGroupName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (provisioningServiceName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException("Parameter provisioningServiceName is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter provisioningServiceName is required and cannot be null."));
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .getByResourceGroup(
-                this.client.getEndpoint(),
-                resourceGroupName,
-                this.client.getSubscriptionId(),
-                provisioningServiceName,
-                this.client.getApiVersion(),
-                accept,
-                context);
+        return service.getByResourceGroup(this.client.getEndpoint(), resourceGroupName, this.client.getSubscriptionId(),
+            provisioningServiceName, this.client.getApiVersion(), accept, context);
     }
 
     /**
@@ -486,20 +379,13 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the metadata of the provisioning service without SAS keys.
+     * @return the metadata of the provisioning service without SAS keys on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<ProvisioningServiceDescriptionInner> getByResourceGroupAsync(
-        String resourceGroupName, String provisioningServiceName) {
+    private Mono<ProvisioningServiceDescriptionInner> getByResourceGroupAsync(String resourceGroupName,
+        String provisioningServiceName) {
         return getByResourceGroupWithResponseAsync(resourceGroupName, provisioningServiceName)
-            .flatMap(
-                (Response<ProvisioningServiceDescriptionInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
@@ -513,8 +399,8 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @return the metadata of the provisioning service without SAS keys.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public ProvisioningServiceDescriptionInner getByResourceGroup(
-        String resourceGroupName, String provisioningServiceName) {
+    public ProvisioningServiceDescriptionInner getByResourceGroup(String resourceGroupName,
+        String provisioningServiceName) {
         return getByResourceGroupAsync(resourceGroupName, provisioningServiceName).block();
     }
 
@@ -527,11 +413,11 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the metadata of the provisioning service without SAS keys.
+     * @return the metadata of the provisioning service without SAS keys along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<ProvisioningServiceDescriptionInner> getByResourceGroupWithResponse(
-        String resourceGroupName, String provisioningServiceName, Context context) {
+    public Response<ProvisioningServiceDescriptionInner> getByResourceGroupWithResponse(String resourceGroupName,
+        String provisioningServiceName, Context context) {
         return getByResourceGroupWithResponseAsync(resourceGroupName, provisioningServiceName, context).block();
     }
 
@@ -546,33 +432,27 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the description of the provisioning service.
+     * @return the description of the provisioning service along with {@link Response} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(
-        String resourceGroupName,
-        String provisioningServiceName,
-        ProvisioningServiceDescriptionInner iotDpsDescription) {
+    private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(String resourceGroupName,
+        String provisioningServiceName, ProvisioningServiceDescriptionInner iotDpsDescription) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
                 .error(new IllegalArgumentException("Parameter resourceGroupName is required and cannot be null."));
         }
         if (provisioningServiceName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException("Parameter provisioningServiceName is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter provisioningServiceName is required and cannot be null."));
         }
         if (iotDpsDescription == null) {
             return Mono
@@ -582,18 +462,9 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .createOrUpdate(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            provisioningServiceName,
-                            this.client.getApiVersion(),
-                            iotDpsDescription,
-                            accept,
-                            context))
+            .withContext(context -> service.createOrUpdate(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                resourceGroupName, provisioningServiceName, this.client.getApiVersion(), iotDpsDescription, accept,
+                context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -609,34 +480,27 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the description of the provisioning service.
+     * @return the description of the provisioning service along with {@link Response} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(
-        String resourceGroupName,
-        String provisioningServiceName,
-        ProvisioningServiceDescriptionInner iotDpsDescription,
-        Context context) {
+    private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(String resourceGroupName,
+        String provisioningServiceName, ProvisioningServiceDescriptionInner iotDpsDescription, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
                 .error(new IllegalArgumentException("Parameter resourceGroupName is required and cannot be null."));
         }
         if (provisioningServiceName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException("Parameter provisioningServiceName is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter provisioningServiceName is required and cannot be null."));
         }
         if (iotDpsDescription == null) {
             return Mono
@@ -646,16 +510,8 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .createOrUpdate(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                provisioningServiceName,
-                this.client.getApiVersion(),
-                iotDpsDescription,
-                accept,
-                context);
+        return service.createOrUpdate(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+            provisioningServiceName, this.client.getApiVersion(), iotDpsDescription, accept, context);
     }
 
     /**
@@ -669,24 +525,17 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the description of the provisioning service.
+     * @return the {@link PollerFlux} for polling of the description of the provisioning service.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<ProvisioningServiceDescriptionInner>, ProvisioningServiceDescriptionInner>
-        beginCreateOrUpdateAsync(
-            String resourceGroupName,
-            String provisioningServiceName,
+        beginCreateOrUpdateAsync(String resourceGroupName, String provisioningServiceName,
             ProvisioningServiceDescriptionInner iotDpsDescription) {
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            createOrUpdateWithResponseAsync(resourceGroupName, provisioningServiceName, iotDpsDescription);
-        return this
-            .client
-            .<ProvisioningServiceDescriptionInner, ProvisioningServiceDescriptionInner>getLroResult(
-                mono,
-                this.client.getHttpPipeline(),
-                ProvisioningServiceDescriptionInner.class,
-                ProvisioningServiceDescriptionInner.class,
-                Context.NONE);
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = createOrUpdateWithResponseAsync(resourceGroupName, provisioningServiceName, iotDpsDescription);
+        return this.client.<ProvisioningServiceDescriptionInner, ProvisioningServiceDescriptionInner>getLroResult(mono,
+            this.client.getHttpPipeline(), ProvisioningServiceDescriptionInner.class,
+            ProvisioningServiceDescriptionInner.class, this.client.getContext());
     }
 
     /**
@@ -701,26 +550,18 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the description of the provisioning service.
+     * @return the {@link PollerFlux} for polling of the description of the provisioning service.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<ProvisioningServiceDescriptionInner>, ProvisioningServiceDescriptionInner>
-        beginCreateOrUpdateAsync(
-            String resourceGroupName,
-            String provisioningServiceName,
-            ProvisioningServiceDescriptionInner iotDpsDescription,
-            Context context) {
+        beginCreateOrUpdateAsync(String resourceGroupName, String provisioningServiceName,
+            ProvisioningServiceDescriptionInner iotDpsDescription, Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            createOrUpdateWithResponseAsync(resourceGroupName, provisioningServiceName, iotDpsDescription, context);
-        return this
-            .client
-            .<ProvisioningServiceDescriptionInner, ProvisioningServiceDescriptionInner>getLroResult(
-                mono,
-                this.client.getHttpPipeline(),
-                ProvisioningServiceDescriptionInner.class,
-                ProvisioningServiceDescriptionInner.class,
-                context);
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = createOrUpdateWithResponseAsync(resourceGroupName, provisioningServiceName, iotDpsDescription, context);
+        return this.client.<ProvisioningServiceDescriptionInner, ProvisioningServiceDescriptionInner>getLroResult(mono,
+            this.client.getHttpPipeline(), ProvisioningServiceDescriptionInner.class,
+            ProvisioningServiceDescriptionInner.class, context);
     }
 
     /**
@@ -734,13 +575,11 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the description of the provisioning service.
+     * @return the {@link SyncPoller} for polling of the description of the provisioning service.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<ProvisioningServiceDescriptionInner>, ProvisioningServiceDescriptionInner>
-        beginCreateOrUpdate(
-            String resourceGroupName,
-            String provisioningServiceName,
+        beginCreateOrUpdate(String resourceGroupName, String provisioningServiceName,
             ProvisioningServiceDescriptionInner iotDpsDescription) {
         return beginCreateOrUpdateAsync(resourceGroupName, provisioningServiceName, iotDpsDescription).getSyncPoller();
     }
@@ -757,15 +596,12 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the description of the provisioning service.
+     * @return the {@link SyncPoller} for polling of the description of the provisioning service.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<ProvisioningServiceDescriptionInner>, ProvisioningServiceDescriptionInner>
-        beginCreateOrUpdate(
-            String resourceGroupName,
-            String provisioningServiceName,
-            ProvisioningServiceDescriptionInner iotDpsDescription,
-            Context context) {
+        beginCreateOrUpdate(String resourceGroupName, String provisioningServiceName,
+            ProvisioningServiceDescriptionInner iotDpsDescription, Context context) {
         return beginCreateOrUpdateAsync(resourceGroupName, provisioningServiceName, iotDpsDescription, context)
             .getSyncPoller();
     }
@@ -781,15 +617,12 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the description of the provisioning service.
+     * @return the description of the provisioning service on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<ProvisioningServiceDescriptionInner> createOrUpdateAsync(
-        String resourceGroupName,
-        String provisioningServiceName,
-        ProvisioningServiceDescriptionInner iotDpsDescription) {
-        return beginCreateOrUpdateAsync(resourceGroupName, provisioningServiceName, iotDpsDescription)
-            .last()
+    private Mono<ProvisioningServiceDescriptionInner> createOrUpdateAsync(String resourceGroupName,
+        String provisioningServiceName, ProvisioningServiceDescriptionInner iotDpsDescription) {
+        return beginCreateOrUpdateAsync(resourceGroupName, provisioningServiceName, iotDpsDescription).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
@@ -805,16 +638,12 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the description of the provisioning service.
+     * @return the description of the provisioning service on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<ProvisioningServiceDescriptionInner> createOrUpdateAsync(
-        String resourceGroupName,
-        String provisioningServiceName,
-        ProvisioningServiceDescriptionInner iotDpsDescription,
-        Context context) {
-        return beginCreateOrUpdateAsync(resourceGroupName, provisioningServiceName, iotDpsDescription, context)
-            .last()
+    private Mono<ProvisioningServiceDescriptionInner> createOrUpdateAsync(String resourceGroupName,
+        String provisioningServiceName, ProvisioningServiceDescriptionInner iotDpsDescription, Context context) {
+        return beginCreateOrUpdateAsync(resourceGroupName, provisioningServiceName, iotDpsDescription, context).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
@@ -832,9 +661,7 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @return the description of the provisioning service.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public ProvisioningServiceDescriptionInner createOrUpdate(
-        String resourceGroupName,
-        String provisioningServiceName,
+    public ProvisioningServiceDescriptionInner createOrUpdate(String resourceGroupName, String provisioningServiceName,
         ProvisioningServiceDescriptionInner iotDpsDescription) {
         return createOrUpdateAsync(resourceGroupName, provisioningServiceName, iotDpsDescription).block();
     }
@@ -854,11 +681,8 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @return the description of the provisioning service.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public ProvisioningServiceDescriptionInner createOrUpdate(
-        String resourceGroupName,
-        String provisioningServiceName,
-        ProvisioningServiceDescriptionInner iotDpsDescription,
-        Context context) {
+    public ProvisioningServiceDescriptionInner createOrUpdate(String resourceGroupName, String provisioningServiceName,
+        ProvisioningServiceDescriptionInner iotDpsDescription, Context context) {
         return createOrUpdateAsync(resourceGroupName, provisioningServiceName, iotDpsDescription, context).block();
     }
 
@@ -871,53 +695,39 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the description of the provisioning service.
+     * @return the description of the provisioning service along with {@link Response} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> updateWithResponseAsync(
-        String resourceGroupName, String provisioningServiceName, TagsResource provisioningServiceTags) {
+    private Mono<Response<Flux<ByteBuffer>>> updateWithResponseAsync(String resourceGroupName,
+        String provisioningServiceName, TagsResource provisioningServiceTags) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
                 .error(new IllegalArgumentException("Parameter resourceGroupName is required and cannot be null."));
         }
         if (provisioningServiceName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException("Parameter provisioningServiceName is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter provisioningServiceName is required and cannot be null."));
         }
         if (provisioningServiceTags == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException("Parameter provisioningServiceTags is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter provisioningServiceTags is required and cannot be null."));
         } else {
             provisioningServiceTags.validate();
         }
         final String accept = "application/json";
         return FluxUtil
             .withContext(
-                context ->
-                    service
-                        .update(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            provisioningServiceName,
-                            this.client.getApiVersion(),
-                            provisioningServiceTags,
-                            accept,
-                            context))
+                context -> service.update(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+                    provisioningServiceName, this.client.getApiVersion(), provisioningServiceTags, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -931,54 +741,38 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the description of the provisioning service.
+     * @return the description of the provisioning service along with {@link Response} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> updateWithResponseAsync(
-        String resourceGroupName,
-        String provisioningServiceName,
-        TagsResource provisioningServiceTags,
-        Context context) {
+    private Mono<Response<Flux<ByteBuffer>>> updateWithResponseAsync(String resourceGroupName,
+        String provisioningServiceName, TagsResource provisioningServiceTags, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
                 .error(new IllegalArgumentException("Parameter resourceGroupName is required and cannot be null."));
         }
         if (provisioningServiceName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException("Parameter provisioningServiceName is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter provisioningServiceName is required and cannot be null."));
         }
         if (provisioningServiceTags == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException("Parameter provisioningServiceTags is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter provisioningServiceTags is required and cannot be null."));
         } else {
             provisioningServiceTags.validate();
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .update(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                provisioningServiceName,
-                this.client.getApiVersion(),
-                provisioningServiceTags,
-                accept,
-                context);
+        return service.update(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+            provisioningServiceName, this.client.getApiVersion(), provisioningServiceTags, accept, context);
     }
 
     /**
@@ -990,22 +784,17 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the description of the provisioning service.
+     * @return the {@link PollerFlux} for polling of the description of the provisioning service.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<ProvisioningServiceDescriptionInner>, ProvisioningServiceDescriptionInner>
-        beginUpdateAsync(
-            String resourceGroupName, String provisioningServiceName, TagsResource provisioningServiceTags) {
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            updateWithResponseAsync(resourceGroupName, provisioningServiceName, provisioningServiceTags);
-        return this
-            .client
-            .<ProvisioningServiceDescriptionInner, ProvisioningServiceDescriptionInner>getLroResult(
-                mono,
-                this.client.getHttpPipeline(),
-                ProvisioningServiceDescriptionInner.class,
-                ProvisioningServiceDescriptionInner.class,
-                Context.NONE);
+        beginUpdateAsync(String resourceGroupName, String provisioningServiceName,
+            TagsResource provisioningServiceTags) {
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = updateWithResponseAsync(resourceGroupName, provisioningServiceName, provisioningServiceTags);
+        return this.client.<ProvisioningServiceDescriptionInner, ProvisioningServiceDescriptionInner>getLroResult(mono,
+            this.client.getHttpPipeline(), ProvisioningServiceDescriptionInner.class,
+            ProvisioningServiceDescriptionInner.class, this.client.getContext());
     }
 
     /**
@@ -1018,26 +807,18 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the description of the provisioning service.
+     * @return the {@link PollerFlux} for polling of the description of the provisioning service.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<ProvisioningServiceDescriptionInner>, ProvisioningServiceDescriptionInner>
-        beginUpdateAsync(
-            String resourceGroupName,
-            String provisioningServiceName,
-            TagsResource provisioningServiceTags,
+        beginUpdateAsync(String resourceGroupName, String provisioningServiceName, TagsResource provisioningServiceTags,
             Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            updateWithResponseAsync(resourceGroupName, provisioningServiceName, provisioningServiceTags, context);
-        return this
-            .client
-            .<ProvisioningServiceDescriptionInner, ProvisioningServiceDescriptionInner>getLroResult(
-                mono,
-                this.client.getHttpPipeline(),
-                ProvisioningServiceDescriptionInner.class,
-                ProvisioningServiceDescriptionInner.class,
-                context);
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = updateWithResponseAsync(resourceGroupName, provisioningServiceName, provisioningServiceTags, context);
+        return this.client.<ProvisioningServiceDescriptionInner, ProvisioningServiceDescriptionInner>getLroResult(mono,
+            this.client.getHttpPipeline(), ProvisioningServiceDescriptionInner.class,
+            ProvisioningServiceDescriptionInner.class, context);
     }
 
     /**
@@ -1049,11 +830,11 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the description of the provisioning service.
+     * @return the {@link SyncPoller} for polling of the description of the provisioning service.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public SyncPoller<PollResult<ProvisioningServiceDescriptionInner>, ProvisioningServiceDescriptionInner> beginUpdate(
-        String resourceGroupName, String provisioningServiceName, TagsResource provisioningServiceTags) {
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<ProvisioningServiceDescriptionInner>, ProvisioningServiceDescriptionInner>
+        beginUpdate(String resourceGroupName, String provisioningServiceName, TagsResource provisioningServiceTags) {
         return beginUpdateAsync(resourceGroupName, provisioningServiceName, provisioningServiceTags).getSyncPoller();
     }
 
@@ -1067,13 +848,11 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the description of the provisioning service.
+     * @return the {@link SyncPoller} for polling of the description of the provisioning service.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<ProvisioningServiceDescriptionInner>, ProvisioningServiceDescriptionInner> beginUpdate(
-        String resourceGroupName,
-        String provisioningServiceName,
-        TagsResource provisioningServiceTags,
+        String resourceGroupName, String provisioningServiceName, TagsResource provisioningServiceTags,
         Context context) {
         return beginUpdateAsync(resourceGroupName, provisioningServiceName, provisioningServiceTags, context)
             .getSyncPoller();
@@ -1088,13 +867,12 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the description of the provisioning service.
+     * @return the description of the provisioning service on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<ProvisioningServiceDescriptionInner> updateAsync(
-        String resourceGroupName, String provisioningServiceName, TagsResource provisioningServiceTags) {
-        return beginUpdateAsync(resourceGroupName, provisioningServiceName, provisioningServiceTags)
-            .last()
+    private Mono<ProvisioningServiceDescriptionInner> updateAsync(String resourceGroupName,
+        String provisioningServiceName, TagsResource provisioningServiceTags) {
+        return beginUpdateAsync(resourceGroupName, provisioningServiceName, provisioningServiceTags).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
@@ -1108,16 +886,12 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the description of the provisioning service.
+     * @return the description of the provisioning service on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<ProvisioningServiceDescriptionInner> updateAsync(
-        String resourceGroupName,
-        String provisioningServiceName,
-        TagsResource provisioningServiceTags,
-        Context context) {
-        return beginUpdateAsync(resourceGroupName, provisioningServiceName, provisioningServiceTags, context)
-            .last()
+    private Mono<ProvisioningServiceDescriptionInner> updateAsync(String resourceGroupName,
+        String provisioningServiceName, TagsResource provisioningServiceTags, Context context) {
+        return beginUpdateAsync(resourceGroupName, provisioningServiceName, provisioningServiceTags, context).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
@@ -1133,8 +907,8 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @return the description of the provisioning service.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public ProvisioningServiceDescriptionInner update(
-        String resourceGroupName, String provisioningServiceName, TagsResource provisioningServiceTags) {
+    public ProvisioningServiceDescriptionInner update(String resourceGroupName, String provisioningServiceName,
+        TagsResource provisioningServiceTags) {
         return updateAsync(resourceGroupName, provisioningServiceName, provisioningServiceTags).block();
     }
 
@@ -1151,11 +925,8 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @return the description of the provisioning service.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public ProvisioningServiceDescriptionInner update(
-        String resourceGroupName,
-        String provisioningServiceName,
-        TagsResource provisioningServiceTags,
-        Context context) {
+    public ProvisioningServiceDescriptionInner update(String resourceGroupName, String provisioningServiceName,
+        TagsResource provisioningServiceTags, Context context) {
         return updateAsync(resourceGroupName, provisioningServiceName, provisioningServiceTags, context).block();
     }
 
@@ -1167,45 +938,31 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(
-        String resourceGroupName, String provisioningServiceName) {
+    private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(String resourceGroupName,
+        String provisioningServiceName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
                 .error(new IllegalArgumentException("Parameter resourceGroupName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (provisioningServiceName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException("Parameter provisioningServiceName is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter provisioningServiceName is required and cannot be null."));
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .delete(
-                            this.client.getEndpoint(),
-                            resourceGroupName,
-                            this.client.getSubscriptionId(),
-                            provisioningServiceName,
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
+            .withContext(context -> service.delete(this.client.getEndpoint(), resourceGroupName,
+                this.client.getSubscriptionId(), provisioningServiceName, this.client.getApiVersion(), accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -1218,43 +975,31 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(
-        String resourceGroupName, String provisioningServiceName, Context context) {
+    private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(String resourceGroupName,
+        String provisioningServiceName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
                 .error(new IllegalArgumentException("Parameter resourceGroupName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (provisioningServiceName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException("Parameter provisioningServiceName is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter provisioningServiceName is required and cannot be null."));
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .delete(
-                this.client.getEndpoint(),
-                resourceGroupName,
-                this.client.getSubscriptionId(),
-                provisioningServiceName,
-                this.client.getApiVersion(),
-                accept,
-                context);
+        return service.delete(this.client.getEndpoint(), resourceGroupName, this.client.getSubscriptionId(),
+            provisioningServiceName, this.client.getApiVersion(), accept, context);
     }
 
     /**
@@ -1265,15 +1010,14 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private PollerFlux<PollResult<Void>, Void> beginDeleteAsync(
-        String resourceGroupName, String provisioningServiceName) {
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<Void>, Void> beginDeleteAsync(String resourceGroupName,
+        String provisioningServiceName) {
         Mono<Response<Flux<ByteBuffer>>> mono = deleteWithResponseAsync(resourceGroupName, provisioningServiceName);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, Context.NONE);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            this.client.getContext());
     }
 
     /**
@@ -1285,17 +1029,16 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private PollerFlux<PollResult<Void>, Void> beginDeleteAsync(
-        String resourceGroupName, String provisioningServiceName, Context context) {
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<Void>, Void> beginDeleteAsync(String resourceGroupName,
+        String provisioningServiceName, Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            deleteWithResponseAsync(resourceGroupName, provisioningServiceName, context);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, context);
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = deleteWithResponseAsync(resourceGroupName, provisioningServiceName, context);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            context);
     }
 
     /**
@@ -1306,9 +1049,9 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<Void>, Void> beginDelete(String resourceGroupName, String provisioningServiceName) {
         return beginDeleteAsync(resourceGroupName, provisioningServiceName).getSyncPoller();
     }
@@ -1322,11 +1065,11 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public SyncPoller<PollResult<Void>, Void> beginDelete(
-        String resourceGroupName, String provisioningServiceName, Context context) {
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<Void>, Void> beginDelete(String resourceGroupName, String provisioningServiceName,
+        Context context) {
         return beginDeleteAsync(resourceGroupName, provisioningServiceName, context).getSyncPoller();
     }
 
@@ -1338,12 +1081,11 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> deleteAsync(String resourceGroupName, String provisioningServiceName) {
-        return beginDeleteAsync(resourceGroupName, provisioningServiceName)
-            .last()
+        return beginDeleteAsync(resourceGroupName, provisioningServiceName).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
@@ -1356,12 +1098,11 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> deleteAsync(String resourceGroupName, String provisioningServiceName, Context context) {
-        return beginDeleteAsync(resourceGroupName, provisioningServiceName, context)
-            .last()
+        return beginDeleteAsync(resourceGroupName, provisioningServiceName, context).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
@@ -1399,42 +1140,25 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      *
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of provisioning service descriptions.
+     * @return list of provisioning service descriptions along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ProvisioningServiceDescriptionInner>> listSinglePageAsync() {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .list(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
-            .<PagedResponse<ProvisioningServiceDescriptionInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null))
+            .withContext(context -> service.list(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                this.client.getApiVersion(), accept, context))
+            .<PagedResponse<ProvisioningServiceDescriptionInner>>map(res -> new PagedResponseBase<>(res.getRequest(),
+                res.getStatusCode(), res.getHeaders(), res.getValue().value(), res.getValue().nextLink(), null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -1445,40 +1169,26 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of provisioning service descriptions.
+     * @return list of provisioning service descriptions along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ProvisioningServiceDescriptionInner>> listSinglePageAsync(Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
         return service
-            .list(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                this.client.getApiVersion(),
-                accept,
+            .list(this.client.getEndpoint(), this.client.getSubscriptionId(), this.client.getApiVersion(), accept,
                 context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null));
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), res.getValue().nextLink(), null));
     }
 
     /**
@@ -1486,12 +1196,12 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      *
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of provisioning service descriptions.
+     * @return list of provisioning service descriptions as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<ProvisioningServiceDescriptionInner> listAsync() {
-        return new PagedFlux<>(
-            () -> listSinglePageAsync(), nextLink -> listBySubscriptionNextSinglePageAsync(nextLink));
+        return new PagedFlux<>(() -> listSinglePageAsync(),
+            nextLink -> listBySubscriptionNextSinglePageAsync(nextLink));
     }
 
     /**
@@ -1501,12 +1211,12 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of provisioning service descriptions.
+     * @return list of provisioning service descriptions as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<ProvisioningServiceDescriptionInner> listAsync(Context context) {
-        return new PagedFlux<>(
-            () -> listSinglePageAsync(context), nextLink -> listBySubscriptionNextSinglePageAsync(nextLink, context));
+        return new PagedFlux<>(() -> listSinglePageAsync(context),
+            nextLink -> listBySubscriptionNextSinglePageAsync(nextLink, context));
     }
 
     /**
@@ -1514,7 +1224,7 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      *
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of provisioning service descriptions.
+     * @return list of provisioning service descriptions as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<ProvisioningServiceDescriptionInner> list() {
@@ -1528,7 +1238,7 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of provisioning service descriptions.
+     * @return list of provisioning service descriptions as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<ProvisioningServiceDescriptionInner> list(Context context) {
@@ -1542,22 +1252,19 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of all provisioning services in the given resource group.
+     * @return a list of all provisioning services in the given resource group along with {@link PagedResponse} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<ProvisioningServiceDescriptionInner>> listByResourceGroupSinglePageAsync(
-        String resourceGroupName) {
+    private Mono<PagedResponse<ProvisioningServiceDescriptionInner>>
+        listByResourceGroupSinglePageAsync(String resourceGroupName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1565,25 +1272,10 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .listByResourceGroup(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
-            .<PagedResponse<ProvisioningServiceDescriptionInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null))
+            .withContext(context -> service.listByResourceGroup(this.client.getEndpoint(),
+                this.client.getSubscriptionId(), resourceGroupName, this.client.getApiVersion(), accept, context))
+            .<PagedResponse<ProvisioningServiceDescriptionInner>>map(res -> new PagedResponseBase<>(res.getRequest(),
+                res.getStatusCode(), res.getHeaders(), res.getValue().value(), res.getValue().nextLink(), null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -1595,22 +1287,19 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of all provisioning services in the given resource group.
+     * @return a list of all provisioning services in the given resource group along with {@link PagedResponse} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<ProvisioningServiceDescriptionInner>> listByResourceGroupSinglePageAsync(
-        String resourceGroupName, Context context) {
+    private Mono<PagedResponse<ProvisioningServiceDescriptionInner>>
+        listByResourceGroupSinglePageAsync(String resourceGroupName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1619,22 +1308,10 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
         final String accept = "application/json";
         context = this.client.mergeContext(context);
         return service
-            .listByResourceGroup(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                this.client.getApiVersion(),
-                accept,
-                context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null));
+            .listByResourceGroup(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+                this.client.getApiVersion(), accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), res.getValue().nextLink(), null));
     }
 
     /**
@@ -1644,12 +1321,12 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of all provisioning services in the given resource group.
+     * @return a list of all provisioning services in the given resource group as paginated response with {@link
+     *     PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<ProvisioningServiceDescriptionInner> listByResourceGroupAsync(String resourceGroupName) {
-        return new PagedFlux<>(
-            () -> listByResourceGroupSinglePageAsync(resourceGroupName),
+        return new PagedFlux<>(() -> listByResourceGroupSinglePageAsync(resourceGroupName),
             nextLink -> listByResourceGroupNextSinglePageAsync(nextLink));
     }
 
@@ -1661,13 +1338,13 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of all provisioning services in the given resource group.
+     * @return a list of all provisioning services in the given resource group as paginated response with {@link
+     *     PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<ProvisioningServiceDescriptionInner> listByResourceGroupAsync(
-        String resourceGroupName, Context context) {
-        return new PagedFlux<>(
-            () -> listByResourceGroupSinglePageAsync(resourceGroupName, context),
+    private PagedFlux<ProvisioningServiceDescriptionInner> listByResourceGroupAsync(String resourceGroupName,
+        Context context) {
+        return new PagedFlux<>(() -> listByResourceGroupSinglePageAsync(resourceGroupName, context),
             nextLink -> listByResourceGroupNextSinglePageAsync(nextLink, context));
     }
 
@@ -1678,7 +1355,8 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of all provisioning services in the given resource group.
+     * @return a list of all provisioning services in the given resource group as paginated response with {@link
+     *     PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<ProvisioningServiceDescriptionInner> listByResourceGroup(String resourceGroupName) {
@@ -1693,11 +1371,12 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of all provisioning services in the given resource group.
+     * @return a list of all provisioning services in the given resource group as paginated response with {@link
+     *     PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<ProvisioningServiceDescriptionInner> listByResourceGroup(
-        String resourceGroupName, Context context) {
+    public PagedIterable<ProvisioningServiceDescriptionInner> listByResourceGroup(String resourceGroupName,
+        Context context) {
         return new PagedIterable<>(listByResourceGroupAsync(resourceGroupName, context));
     }
 
@@ -1712,53 +1391,39 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the status of a long running operation, such as create, update or delete a provisioning service.
+     * @return the status of a long running operation, such as create, update or delete a provisioning service along
+     *     with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<AsyncOperationResultInner>> getOperationResultWithResponseAsync(
-        String operationId, String resourceGroupName, String provisioningServiceName, String asyncinfo) {
+    private Mono<Response<AsyncOperationResultInner>> getOperationResultWithResponseAsync(String operationId,
+        String resourceGroupName, String provisioningServiceName, String asyncinfo) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (operationId == null) {
             return Mono.error(new IllegalArgumentException("Parameter operationId is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
                 .error(new IllegalArgumentException("Parameter resourceGroupName is required and cannot be null."));
         }
         if (provisioningServiceName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException("Parameter provisioningServiceName is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter provisioningServiceName is required and cannot be null."));
         }
         if (asyncinfo == null) {
             return Mono.error(new IllegalArgumentException("Parameter asyncinfo is required and cannot be null."));
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .getOperationResult(
-                            this.client.getEndpoint(),
-                            operationId,
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            provisioningServiceName,
-                            asyncinfo,
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
+            .withContext(context -> service.getOperationResult(this.client.getEndpoint(), operationId,
+                this.client.getSubscriptionId(), resourceGroupName, provisioningServiceName, asyncinfo,
+                this.client.getApiVersion(), accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -1774,55 +1439,38 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the status of a long running operation, such as create, update or delete a provisioning service.
+     * @return the status of a long running operation, such as create, update or delete a provisioning service along
+     *     with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<AsyncOperationResultInner>> getOperationResultWithResponseAsync(
-        String operationId,
-        String resourceGroupName,
-        String provisioningServiceName,
-        String asyncinfo,
-        Context context) {
+    private Mono<Response<AsyncOperationResultInner>> getOperationResultWithResponseAsync(String operationId,
+        String resourceGroupName, String provisioningServiceName, String asyncinfo, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (operationId == null) {
             return Mono.error(new IllegalArgumentException("Parameter operationId is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
                 .error(new IllegalArgumentException("Parameter resourceGroupName is required and cannot be null."));
         }
         if (provisioningServiceName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException("Parameter provisioningServiceName is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter provisioningServiceName is required and cannot be null."));
         }
         if (asyncinfo == null) {
             return Mono.error(new IllegalArgumentException("Parameter asyncinfo is required and cannot be null."));
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .getOperationResult(
-                this.client.getEndpoint(),
-                operationId,
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                provisioningServiceName,
-                asyncinfo,
-                this.client.getApiVersion(),
-                accept,
-                context);
+        return service.getOperationResult(this.client.getEndpoint(), operationId, this.client.getSubscriptionId(),
+            resourceGroupName, provisioningServiceName, asyncinfo, this.client.getApiVersion(), accept, context);
     }
 
     /**
@@ -1836,20 +1484,14 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the status of a long running operation, such as create, update or delete a provisioning service.
+     * @return the status of a long running operation, such as create, update or delete a provisioning service on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<AsyncOperationResultInner> getOperationResultAsync(
-        String operationId, String resourceGroupName, String provisioningServiceName, String asyncinfo) {
+    private Mono<AsyncOperationResultInner> getOperationResultAsync(String operationId, String resourceGroupName,
+        String provisioningServiceName, String asyncinfo) {
         return getOperationResultWithResponseAsync(operationId, resourceGroupName, provisioningServiceName, asyncinfo)
-            .flatMap(
-                (Response<AsyncOperationResultInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
@@ -1866,8 +1508,8 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @return the status of a long running operation, such as create, update or delete a provisioning service.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public AsyncOperationResultInner getOperationResult(
-        String operationId, String resourceGroupName, String provisioningServiceName, String asyncinfo) {
+    public AsyncOperationResultInner getOperationResult(String operationId, String resourceGroupName,
+        String provisioningServiceName, String asyncinfo) {
         return getOperationResultAsync(operationId, resourceGroupName, provisioningServiceName, asyncinfo).block();
     }
 
@@ -1883,18 +1525,14 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the status of a long running operation, such as create, update or delete a provisioning service.
+     * @return the status of a long running operation, such as create, update or delete a provisioning service along
+     *     with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<AsyncOperationResultInner> getOperationResultWithResponse(
-        String operationId,
-        String resourceGroupName,
-        String provisioningServiceName,
-        String asyncinfo,
-        Context context) {
-        return getOperationResultWithResponseAsync(
-                operationId, resourceGroupName, provisioningServiceName, asyncinfo, context)
-            .block();
+    public Response<AsyncOperationResultInner> getOperationResultWithResponse(String operationId,
+        String resourceGroupName, String provisioningServiceName, String asyncinfo, Context context) {
+        return getOperationResultWithResponseAsync(operationId, resourceGroupName, provisioningServiceName, asyncinfo,
+            context).block();
     }
 
     /**
@@ -1905,27 +1543,23 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of valid SKUs and tiers for a provisioning service.
+     * @return the list of valid SKUs and tiers for a provisioning service along with {@link PagedResponse} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<IotDpsSkuDefinitionInner>> listValidSkusSinglePageAsync(
-        String provisioningServiceName, String resourceGroupName) {
+    private Mono<PagedResponse<IotDpsSkuDefinitionInner>> listValidSkusSinglePageAsync(String provisioningServiceName,
+        String resourceGroupName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (provisioningServiceName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException("Parameter provisioningServiceName is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter provisioningServiceName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1933,26 +1567,10 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .listValidSkus(
-                            this.client.getEndpoint(),
-                            provisioningServiceName,
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
-            .<PagedResponse<IotDpsSkuDefinitionInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null))
+            .withContext(context -> service.listValidSkus(this.client.getEndpoint(), provisioningServiceName,
+                this.client.getSubscriptionId(), resourceGroupName, this.client.getApiVersion(), accept, context))
+            .<PagedResponse<IotDpsSkuDefinitionInner>>map(res -> new PagedResponseBase<>(res.getRequest(),
+                res.getStatusCode(), res.getHeaders(), res.getValue().value(), res.getValue().nextLink(), null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -1965,27 +1583,23 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of valid SKUs and tiers for a provisioning service.
+     * @return the list of valid SKUs and tiers for a provisioning service along with {@link PagedResponse} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<IotDpsSkuDefinitionInner>> listValidSkusSinglePageAsync(
-        String provisioningServiceName, String resourceGroupName, Context context) {
+    private Mono<PagedResponse<IotDpsSkuDefinitionInner>> listValidSkusSinglePageAsync(String provisioningServiceName,
+        String resourceGroupName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (provisioningServiceName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException("Parameter provisioningServiceName is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter provisioningServiceName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1994,23 +1608,10 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
         final String accept = "application/json";
         context = this.client.mergeContext(context);
         return service
-            .listValidSkus(
-                this.client.getEndpoint(),
-                provisioningServiceName,
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                this.client.getApiVersion(),
-                accept,
-                context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null));
+            .listValidSkus(this.client.getEndpoint(), provisioningServiceName, this.client.getSubscriptionId(),
+                resourceGroupName, this.client.getApiVersion(), accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), res.getValue().nextLink(), null));
     }
 
     /**
@@ -2021,13 +1622,12 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of valid SKUs and tiers for a provisioning service.
+     * @return the list of valid SKUs and tiers for a provisioning service as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<IotDpsSkuDefinitionInner> listValidSkusAsync(
-        String provisioningServiceName, String resourceGroupName) {
-        return new PagedFlux<>(
-            () -> listValidSkusSinglePageAsync(provisioningServiceName, resourceGroupName),
+    private PagedFlux<IotDpsSkuDefinitionInner> listValidSkusAsync(String provisioningServiceName,
+        String resourceGroupName) {
+        return new PagedFlux<>(() -> listValidSkusSinglePageAsync(provisioningServiceName, resourceGroupName),
             nextLink -> listValidSkusNextSinglePageAsync(nextLink));
     }
 
@@ -2040,13 +1640,12 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of valid SKUs and tiers for a provisioning service.
+     * @return the list of valid SKUs and tiers for a provisioning service as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<IotDpsSkuDefinitionInner> listValidSkusAsync(
-        String provisioningServiceName, String resourceGroupName, Context context) {
-        return new PagedFlux<>(
-            () -> listValidSkusSinglePageAsync(provisioningServiceName, resourceGroupName, context),
+    private PagedFlux<IotDpsSkuDefinitionInner> listValidSkusAsync(String provisioningServiceName,
+        String resourceGroupName, Context context) {
+        return new PagedFlux<>(() -> listValidSkusSinglePageAsync(provisioningServiceName, resourceGroupName, context),
             nextLink -> listValidSkusNextSinglePageAsync(nextLink, context));
     }
 
@@ -2058,11 +1657,12 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of valid SKUs and tiers for a provisioning service.
+     * @return the list of valid SKUs and tiers for a provisioning service as paginated response with {@link
+     *     PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<IotDpsSkuDefinitionInner> listValidSkus(
-        String provisioningServiceName, String resourceGroupName) {
+    public PagedIterable<IotDpsSkuDefinitionInner> listValidSkus(String provisioningServiceName,
+        String resourceGroupName) {
         return new PagedIterable<>(listValidSkusAsync(provisioningServiceName, resourceGroupName));
     }
 
@@ -2075,11 +1675,12 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of valid SKUs and tiers for a provisioning service.
+     * @return the list of valid SKUs and tiers for a provisioning service as paginated response with {@link
+     *     PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<IotDpsSkuDefinitionInner> listValidSkus(
-        String provisioningServiceName, String resourceGroupName, Context context) {
+    public PagedIterable<IotDpsSkuDefinitionInner> listValidSkus(String provisioningServiceName,
+        String resourceGroupName, Context context) {
         return new PagedIterable<>(listValidSkusAsync(provisioningServiceName, resourceGroupName, context));
     }
 
@@ -2092,22 +1693,18 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return description of name availability.
+     * @return description of name availability along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<NameAvailabilityInfoInner>> checkProvisioningServiceNameAvailabilityWithResponseAsync(
-        OperationInputs arguments) {
+    private Mono<Response<NameAvailabilityInfoInner>>
+        checkProvisioningServiceNameAvailabilityWithResponseAsync(OperationInputs arguments) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (arguments == null) {
             return Mono.error(new IllegalArgumentException("Parameter arguments is required and cannot be null."));
@@ -2116,16 +1713,8 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .checkProvisioningServiceNameAvailability(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            this.client.getApiVersion(),
-                            arguments,
-                            accept,
-                            context))
+            .withContext(context -> service.checkProvisioningServiceNameAvailability(this.client.getEndpoint(),
+                this.client.getSubscriptionId(), this.client.getApiVersion(), arguments, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -2139,22 +1728,18 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return description of name availability.
+     * @return description of name availability along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<NameAvailabilityInfoInner>> checkProvisioningServiceNameAvailabilityWithResponseAsync(
-        OperationInputs arguments, Context context) {
+    private Mono<Response<NameAvailabilityInfoInner>>
+        checkProvisioningServiceNameAvailabilityWithResponseAsync(OperationInputs arguments, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (arguments == null) {
             return Mono.error(new IllegalArgumentException("Parameter arguments is required and cannot be null."));
@@ -2163,14 +1748,8 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .checkProvisioningServiceNameAvailability(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                this.client.getApiVersion(),
-                arguments,
-                accept,
-                context);
+        return service.checkProvisioningServiceNameAvailability(this.client.getEndpoint(),
+            this.client.getSubscriptionId(), this.client.getApiVersion(), arguments, accept, context);
     }
 
     /**
@@ -2182,19 +1761,12 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return description of name availability.
+     * @return description of name availability on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<NameAvailabilityInfoInner> checkProvisioningServiceNameAvailabilityAsync(OperationInputs arguments) {
         return checkProvisioningServiceNameAvailabilityWithResponseAsync(arguments)
-            .flatMap(
-                (Response<NameAvailabilityInfoInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
@@ -2223,11 +1795,11 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return description of name availability.
+     * @return description of name availability along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<NameAvailabilityInfoInner> checkProvisioningServiceNameAvailabilityWithResponse(
-        OperationInputs arguments, Context context) {
+    public Response<NameAvailabilityInfoInner>
+        checkProvisioningServiceNameAvailabilityWithResponse(OperationInputs arguments, Context context) {
         return checkProvisioningServiceNameAvailabilityWithResponseAsync(arguments, context).block();
     }
 
@@ -2239,27 +1811,22 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of shared access keys.
+     * @return list of shared access keys along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<SharedAccessSignatureAuthorizationRuleInner>> listKeysSinglePageAsync(
-        String provisioningServiceName, String resourceGroupName) {
+    private Mono<PagedResponse<SharedAccessSignatureAuthorizationRuleInner>>
+        listKeysSinglePageAsync(String provisioningServiceName, String resourceGroupName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (provisioningServiceName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException("Parameter provisioningServiceName is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter provisioningServiceName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -2267,26 +1834,11 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .listKeys(
-                            this.client.getEndpoint(),
-                            provisioningServiceName,
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
+            .withContext(context -> service.listKeys(this.client.getEndpoint(), provisioningServiceName,
+                this.client.getSubscriptionId(), resourceGroupName, this.client.getApiVersion(), accept, context))
             .<PagedResponse<SharedAccessSignatureAuthorizationRuleInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null))
+                res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                    res.getValue().value(), res.getValue().nextLink(), null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -2299,27 +1851,22 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of shared access keys.
+     * @return list of shared access keys along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<SharedAccessSignatureAuthorizationRuleInner>> listKeysSinglePageAsync(
-        String provisioningServiceName, String resourceGroupName, Context context) {
+    private Mono<PagedResponse<SharedAccessSignatureAuthorizationRuleInner>>
+        listKeysSinglePageAsync(String provisioningServiceName, String resourceGroupName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (provisioningServiceName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException("Parameter provisioningServiceName is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter provisioningServiceName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -2328,23 +1875,10 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
         final String accept = "application/json";
         context = this.client.mergeContext(context);
         return service
-            .listKeys(
-                this.client.getEndpoint(),
-                provisioningServiceName,
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                this.client.getApiVersion(),
-                accept,
-                context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null));
+            .listKeys(this.client.getEndpoint(), provisioningServiceName, this.client.getSubscriptionId(),
+                resourceGroupName, this.client.getApiVersion(), accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), res.getValue().nextLink(), null));
     }
 
     /**
@@ -2355,13 +1889,12 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of shared access keys.
+     * @return list of shared access keys as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<SharedAccessSignatureAuthorizationRuleInner> listKeysAsync(
-        String provisioningServiceName, String resourceGroupName) {
-        return new PagedFlux<>(
-            () -> listKeysSinglePageAsync(provisioningServiceName, resourceGroupName),
+    private PagedFlux<SharedAccessSignatureAuthorizationRuleInner> listKeysAsync(String provisioningServiceName,
+        String resourceGroupName) {
+        return new PagedFlux<>(() -> listKeysSinglePageAsync(provisioningServiceName, resourceGroupName),
             nextLink -> listKeysNextSinglePageAsync(nextLink));
     }
 
@@ -2374,13 +1907,12 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of shared access keys.
+     * @return list of shared access keys as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<SharedAccessSignatureAuthorizationRuleInner> listKeysAsync(
-        String provisioningServiceName, String resourceGroupName, Context context) {
-        return new PagedFlux<>(
-            () -> listKeysSinglePageAsync(provisioningServiceName, resourceGroupName, context),
+    private PagedFlux<SharedAccessSignatureAuthorizationRuleInner> listKeysAsync(String provisioningServiceName,
+        String resourceGroupName, Context context) {
+        return new PagedFlux<>(() -> listKeysSinglePageAsync(provisioningServiceName, resourceGroupName, context),
             nextLink -> listKeysNextSinglePageAsync(nextLink, context));
     }
 
@@ -2392,11 +1924,11 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of shared access keys.
+     * @return list of shared access keys as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<SharedAccessSignatureAuthorizationRuleInner> listKeys(
-        String provisioningServiceName, String resourceGroupName) {
+    public PagedIterable<SharedAccessSignatureAuthorizationRuleInner> listKeys(String provisioningServiceName,
+        String resourceGroupName) {
         return new PagedIterable<>(listKeysAsync(provisioningServiceName, resourceGroupName));
     }
 
@@ -2409,11 +1941,11 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of shared access keys.
+     * @return list of shared access keys as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<SharedAccessSignatureAuthorizationRuleInner> listKeys(
-        String provisioningServiceName, String resourceGroupName, Context context) {
+    public PagedIterable<SharedAccessSignatureAuthorizationRuleInner> listKeys(String provisioningServiceName,
+        String resourceGroupName, Context context) {
         return new PagedIterable<>(listKeysAsync(provisioningServiceName, resourceGroupName, context));
     }
 
@@ -2426,30 +1958,26 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return description of the shared access key.
+     * @return description of the shared access key along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<SharedAccessSignatureAuthorizationRuleInner>> listKeysForKeyNameWithResponseAsync(
-        String provisioningServiceName, String keyName, String resourceGroupName) {
+    private Mono<Response<SharedAccessSignatureAuthorizationRuleInner>>
+        listKeysForKeyNameWithResponseAsync(String provisioningServiceName, String keyName, String resourceGroupName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (provisioningServiceName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException("Parameter provisioningServiceName is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter provisioningServiceName is required and cannot be null."));
         }
         if (keyName == null) {
             return Mono.error(new IllegalArgumentException("Parameter keyName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -2458,17 +1986,8 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
         final String accept = "application/json";
         return FluxUtil
             .withContext(
-                context ->
-                    service
-                        .listKeysForKeyName(
-                            this.client.getEndpoint(),
-                            provisioningServiceName,
-                            keyName,
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
+                context -> service.listKeysForKeyName(this.client.getEndpoint(), provisioningServiceName, keyName,
+                    this.client.getSubscriptionId(), resourceGroupName, this.client.getApiVersion(), accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -2482,30 +2001,26 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return description of the shared access key.
+     * @return description of the shared access key along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<SharedAccessSignatureAuthorizationRuleInner>> listKeysForKeyNameWithResponseAsync(
         String provisioningServiceName, String keyName, String resourceGroupName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (provisioningServiceName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException("Parameter provisioningServiceName is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter provisioningServiceName is required and cannot be null."));
         }
         if (keyName == null) {
             return Mono.error(new IllegalArgumentException("Parameter keyName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -2513,16 +2028,8 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .listKeysForKeyName(
-                this.client.getEndpoint(),
-                provisioningServiceName,
-                keyName,
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                this.client.getApiVersion(),
-                accept,
-                context);
+        return service.listKeysForKeyName(this.client.getEndpoint(), provisioningServiceName, keyName,
+            this.client.getSubscriptionId(), resourceGroupName, this.client.getApiVersion(), accept, context);
     }
 
     /**
@@ -2534,20 +2041,13 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return description of the shared access key.
+     * @return description of the shared access key on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<SharedAccessSignatureAuthorizationRuleInner> listKeysForKeyNameAsync(
-        String provisioningServiceName, String keyName, String resourceGroupName) {
+    private Mono<SharedAccessSignatureAuthorizationRuleInner> listKeysForKeyNameAsync(String provisioningServiceName,
+        String keyName, String resourceGroupName) {
         return listKeysForKeyNameWithResponseAsync(provisioningServiceName, keyName, resourceGroupName)
-            .flatMap(
-                (Response<SharedAccessSignatureAuthorizationRuleInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
@@ -2562,8 +2062,8 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @return description of the shared access key.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public SharedAccessSignatureAuthorizationRuleInner listKeysForKeyName(
-        String provisioningServiceName, String keyName, String resourceGroupName) {
+    public SharedAccessSignatureAuthorizationRuleInner listKeysForKeyName(String provisioningServiceName,
+        String keyName, String resourceGroupName) {
         return listKeysForKeyNameAsync(provisioningServiceName, keyName, resourceGroupName).block();
     }
 
@@ -2577,7 +2077,7 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return description of the shared access key.
+     * @return description of the shared access key along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<SharedAccessSignatureAuthorizationRuleInner> listKeysForKeyNameWithResponse(
@@ -2594,22 +2094,19 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the available private link resources for a provisioning service.
+     * @return the available private link resources for a provisioning service along with {@link Response} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<PrivateLinkResourcesInner>> listPrivateLinkResourcesWithResponseAsync(
-        String resourceGroupName, String resourceName) {
+    private Mono<Response<PrivateLinkResourcesInner>>
+        listPrivateLinkResourcesWithResponseAsync(String resourceGroupName, String resourceName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -2621,16 +2118,8 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
         final String accept = "application/json";
         return FluxUtil
             .withContext(
-                context ->
-                    service
-                        .listPrivateLinkResources(
-                            this.client.getEndpoint(),
-                            this.client.getApiVersion(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            resourceName,
-                            accept,
-                            context))
+                context -> service.listPrivateLinkResources(this.client.getEndpoint(), this.client.getApiVersion(),
+                    this.client.getSubscriptionId(), resourceGroupName, resourceName, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -2643,22 +2132,19 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the available private link resources for a provisioning service.
+     * @return the available private link resources for a provisioning service along with {@link Response} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<PrivateLinkResourcesInner>> listPrivateLinkResourcesWithResponseAsync(
-        String resourceGroupName, String resourceName, Context context) {
+    private Mono<Response<PrivateLinkResourcesInner>>
+        listPrivateLinkResourcesWithResponseAsync(String resourceGroupName, String resourceName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -2669,15 +2155,8 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .listPrivateLinkResources(
-                this.client.getEndpoint(),
-                this.client.getApiVersion(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                resourceName,
-                accept,
-                context);
+        return service.listPrivateLinkResources(this.client.getEndpoint(), this.client.getApiVersion(),
+            this.client.getSubscriptionId(), resourceGroupName, resourceName, accept, context);
     }
 
     /**
@@ -2688,20 +2167,13 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the available private link resources for a provisioning service.
+     * @return the available private link resources for a provisioning service on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PrivateLinkResourcesInner> listPrivateLinkResourcesAsync(
-        String resourceGroupName, String resourceName) {
+    private Mono<PrivateLinkResourcesInner> listPrivateLinkResourcesAsync(String resourceGroupName,
+        String resourceName) {
         return listPrivateLinkResourcesWithResponseAsync(resourceGroupName, resourceName)
-            .flatMap(
-                (Response<PrivateLinkResourcesInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
@@ -2728,11 +2200,11 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the available private link resources for a provisioning service.
+     * @return the available private link resources for a provisioning service along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<PrivateLinkResourcesInner> listPrivateLinkResourcesWithResponse(
-        String resourceGroupName, String resourceName, Context context) {
+    public Response<PrivateLinkResourcesInner> listPrivateLinkResourcesWithResponse(String resourceGroupName,
+        String resourceName, Context context) {
         return listPrivateLinkResourcesWithResponseAsync(resourceGroupName, resourceName, context).block();
     }
 
@@ -2745,22 +2217,19 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the specified private link resource for the given provisioning service.
+     * @return the specified private link resource for the given provisioning service along with {@link Response} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<GroupIdInformationInner>> getPrivateLinkResourcesWithResponseAsync(
-        String resourceGroupName, String resourceName, String groupId) {
+    private Mono<Response<GroupIdInformationInner>> getPrivateLinkResourcesWithResponseAsync(String resourceGroupName,
+        String resourceName, String groupId) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -2775,17 +2244,8 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
         final String accept = "application/json";
         return FluxUtil
             .withContext(
-                context ->
-                    service
-                        .getPrivateLinkResources(
-                            this.client.getEndpoint(),
-                            this.client.getApiVersion(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            resourceName,
-                            groupId,
-                            accept,
-                            context))
+                context -> service.getPrivateLinkResources(this.client.getEndpoint(), this.client.getApiVersion(),
+                    this.client.getSubscriptionId(), resourceGroupName, resourceName, groupId, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -2799,22 +2259,19 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the specified private link resource for the given provisioning service.
+     * @return the specified private link resource for the given provisioning service along with {@link Response} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<GroupIdInformationInner>> getPrivateLinkResourcesWithResponseAsync(
-        String resourceGroupName, String resourceName, String groupId, Context context) {
+    private Mono<Response<GroupIdInformationInner>> getPrivateLinkResourcesWithResponseAsync(String resourceGroupName,
+        String resourceName, String groupId, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -2828,16 +2285,8 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .getPrivateLinkResources(
-                this.client.getEndpoint(),
-                this.client.getApiVersion(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                resourceName,
-                groupId,
-                accept,
-                context);
+        return service.getPrivateLinkResources(this.client.getEndpoint(), this.client.getApiVersion(),
+            this.client.getSubscriptionId(), resourceGroupName, resourceName, groupId, accept, context);
     }
 
     /**
@@ -2849,20 +2298,14 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the specified private link resource for the given provisioning service.
+     * @return the specified private link resource for the given provisioning service on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<GroupIdInformationInner> getPrivateLinkResourcesAsync(
-        String resourceGroupName, String resourceName, String groupId) {
+    private Mono<GroupIdInformationInner> getPrivateLinkResourcesAsync(String resourceGroupName, String resourceName,
+        String groupId) {
         return getPrivateLinkResourcesWithResponseAsync(resourceGroupName, resourceName, groupId)
-            .flatMap(
-                (Response<GroupIdInformationInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
@@ -2877,8 +2320,8 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @return the specified private link resource for the given provisioning service.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public GroupIdInformationInner getPrivateLinkResources(
-        String resourceGroupName, String resourceName, String groupId) {
+    public GroupIdInformationInner getPrivateLinkResources(String resourceGroupName, String resourceName,
+        String groupId) {
         return getPrivateLinkResourcesAsync(resourceGroupName, resourceName, groupId).block();
     }
 
@@ -2892,11 +2335,11 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the specified private link resource for the given provisioning service.
+     * @return the specified private link resource for the given provisioning service along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<GroupIdInformationInner> getPrivateLinkResourcesWithResponse(
-        String resourceGroupName, String resourceName, String groupId, Context context) {
+    public Response<GroupIdInformationInner> getPrivateLinkResourcesWithResponse(String resourceGroupName,
+        String resourceName, String groupId, Context context) {
         return getPrivateLinkResourcesWithResponseAsync(resourceGroupName, resourceName, groupId, context).block();
     }
 
@@ -2908,22 +2351,19 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of private endpoint connections for a provisioning service.
+     * @return the list of private endpoint connections for a provisioning service along with {@link Response} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<List<PrivateEndpointConnectionInner>>> listPrivateEndpointConnectionsWithResponseAsync(
-        String resourceGroupName, String resourceName) {
+    private Mono<Response<List<PrivateEndpointConnectionInner>>>
+        listPrivateEndpointConnectionsWithResponseAsync(String resourceGroupName, String resourceName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -2934,17 +2374,9 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .listPrivateEndpointConnections(
-                            this.client.getEndpoint(),
-                            this.client.getApiVersion(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            resourceName,
-                            accept,
-                            context))
+            .withContext(context -> service.listPrivateEndpointConnections(this.client.getEndpoint(),
+                this.client.getApiVersion(), this.client.getSubscriptionId(), resourceGroupName, resourceName, accept,
+                context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -2957,22 +2389,19 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of private endpoint connections for a provisioning service.
+     * @return the list of private endpoint connections for a provisioning service along with {@link Response} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<List<PrivateEndpointConnectionInner>>> listPrivateEndpointConnectionsWithResponseAsync(
         String resourceGroupName, String resourceName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -2983,15 +2412,8 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .listPrivateEndpointConnections(
-                this.client.getEndpoint(),
-                this.client.getApiVersion(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                resourceName,
-                accept,
-                context);
+        return service.listPrivateEndpointConnections(this.client.getEndpoint(), this.client.getApiVersion(),
+            this.client.getSubscriptionId(), resourceGroupName, resourceName, accept, context);
     }
 
     /**
@@ -3002,20 +2424,14 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of private endpoint connections for a provisioning service.
+     * @return the list of private endpoint connections for a provisioning service on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<List<PrivateEndpointConnectionInner>> listPrivateEndpointConnectionsAsync(
-        String resourceGroupName, String resourceName) {
+    private Mono<List<PrivateEndpointConnectionInner>> listPrivateEndpointConnectionsAsync(String resourceGroupName,
+        String resourceName) {
         return listPrivateEndpointConnectionsWithResponseAsync(resourceGroupName, resourceName)
-            .flatMap(
-                (Response<List<PrivateEndpointConnectionInner>> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
@@ -3029,8 +2445,8 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @return the list of private endpoint connections for a provisioning service.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public List<PrivateEndpointConnectionInner> listPrivateEndpointConnections(
-        String resourceGroupName, String resourceName) {
+    public List<PrivateEndpointConnectionInner> listPrivateEndpointConnections(String resourceGroupName,
+        String resourceName) {
         return listPrivateEndpointConnectionsAsync(resourceGroupName, resourceName).block();
     }
 
@@ -3043,11 +2459,11 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of private endpoint connections for a provisioning service.
+     * @return the list of private endpoint connections for a provisioning service along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<List<PrivateEndpointConnectionInner>> listPrivateEndpointConnectionsWithResponse(
-        String resourceGroupName, String resourceName, Context context) {
+    public Response<List<PrivateEndpointConnectionInner>>
+        listPrivateEndpointConnectionsWithResponse(String resourceGroupName, String resourceName, Context context) {
         return listPrivateEndpointConnectionsWithResponseAsync(resourceGroupName, resourceName, context).block();
     }
 
@@ -3060,22 +2476,19 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return private endpoint connection properties.
+     * @return private endpoint connection properties along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<PrivateEndpointConnectionInner>> getPrivateEndpointConnectionWithResponseAsync(
         String resourceGroupName, String resourceName, String privateEndpointConnectionName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -3085,25 +2498,14 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
             return Mono.error(new IllegalArgumentException("Parameter resourceName is required and cannot be null."));
         }
         if (privateEndpointConnectionName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter privateEndpointConnectionName is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter privateEndpointConnectionName is required and cannot be null."));
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .getPrivateEndpointConnection(
-                            this.client.getEndpoint(),
-                            this.client.getApiVersion(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            resourceName,
-                            privateEndpointConnectionName,
-                            accept,
-                            context))
+            .withContext(context -> service.getPrivateEndpointConnection(this.client.getEndpoint(),
+                this.client.getApiVersion(), this.client.getSubscriptionId(), resourceGroupName, resourceName,
+                privateEndpointConnectionName, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -3117,22 +2519,19 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return private endpoint connection properties.
+     * @return private endpoint connection properties along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<PrivateEndpointConnectionInner>> getPrivateEndpointConnectionWithResponseAsync(
         String resourceGroupName, String resourceName, String privateEndpointConnectionName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -3142,23 +2541,32 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
             return Mono.error(new IllegalArgumentException("Parameter resourceName is required and cannot be null."));
         }
         if (privateEndpointConnectionName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter privateEndpointConnectionName is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter privateEndpointConnectionName is required and cannot be null."));
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .getPrivateEndpointConnection(
-                this.client.getEndpoint(),
-                this.client.getApiVersion(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                resourceName,
-                privateEndpointConnectionName,
-                accept,
-                context);
+        return service.getPrivateEndpointConnection(this.client.getEndpoint(), this.client.getApiVersion(),
+            this.client.getSubscriptionId(), resourceGroupName, resourceName, privateEndpointConnectionName, accept,
+            context);
+    }
+
+    /**
+     * Get private endpoint connection properties.
+     *
+     * @param resourceGroupName The name of the resource group that contains the provisioning service.
+     * @param resourceName The name of the provisioning service.
+     * @param privateEndpointConnectionName The name of the private endpoint connection.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ErrorDetailsException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return private endpoint connection properties on successful completion of {@link Mono}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    private Mono<PrivateEndpointConnectionInner> getPrivateEndpointConnectionAsync(String resourceGroupName,
+        String resourceName, String privateEndpointConnectionName) {
+        return getPrivateEndpointConnectionWithResponseAsync(resourceGroupName, resourceName,
+            privateEndpointConnectionName).flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
@@ -3173,34 +2581,8 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @return private endpoint connection properties.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PrivateEndpointConnectionInner> getPrivateEndpointConnectionAsync(
-        String resourceGroupName, String resourceName, String privateEndpointConnectionName) {
-        return getPrivateEndpointConnectionWithResponseAsync(
-                resourceGroupName, resourceName, privateEndpointConnectionName)
-            .flatMap(
-                (Response<PrivateEndpointConnectionInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
-    }
-
-    /**
-     * Get private endpoint connection properties.
-     *
-     * @param resourceGroupName The name of the resource group that contains the provisioning service.
-     * @param resourceName The name of the provisioning service.
-     * @param privateEndpointConnectionName The name of the private endpoint connection.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorDetailsException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return private endpoint connection properties.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public PrivateEndpointConnectionInner getPrivateEndpointConnection(
-        String resourceGroupName, String resourceName, String privateEndpointConnectionName) {
+    public PrivateEndpointConnectionInner getPrivateEndpointConnection(String resourceGroupName, String resourceName,
+        String privateEndpointConnectionName) {
         return getPrivateEndpointConnectionAsync(resourceGroupName, resourceName, privateEndpointConnectionName)
             .block();
     }
@@ -3215,14 +2597,13 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return private endpoint connection properties.
+     * @return private endpoint connection properties along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<PrivateEndpointConnectionInner> getPrivateEndpointConnectionWithResponse(
-        String resourceGroupName, String resourceName, String privateEndpointConnectionName, Context context) {
-        return getPrivateEndpointConnectionWithResponseAsync(
-                resourceGroupName, resourceName, privateEndpointConnectionName, context)
-            .block();
+    public Response<PrivateEndpointConnectionInner> getPrivateEndpointConnectionWithResponse(String resourceGroupName,
+        String resourceName, String privateEndpointConnectionName, Context context) {
+        return getPrivateEndpointConnectionWithResponseAsync(resourceGroupName, resourceName,
+            privateEndpointConnectionName, context).block();
     }
 
     /**
@@ -3235,25 +2616,20 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the private endpoint connection of a provisioning service.
+     * @return the private endpoint connection of a provisioning service along with {@link Response} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> createOrUpdatePrivateEndpointConnectionWithResponseAsync(
-        String resourceGroupName,
-        String resourceName,
-        String privateEndpointConnectionName,
+        String resourceGroupName, String resourceName, String privateEndpointConnectionName,
         PrivateEndpointConnectionInner privateEndpointConnection) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -3263,34 +2639,20 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
             return Mono.error(new IllegalArgumentException("Parameter resourceName is required and cannot be null."));
         }
         if (privateEndpointConnectionName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter privateEndpointConnectionName is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter privateEndpointConnectionName is required and cannot be null."));
         }
         if (privateEndpointConnection == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter privateEndpointConnection is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter privateEndpointConnection is required and cannot be null."));
         } else {
             privateEndpointConnection.validate();
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .createOrUpdatePrivateEndpointConnection(
-                            this.client.getEndpoint(),
-                            this.client.getApiVersion(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            resourceName,
-                            privateEndpointConnectionName,
-                            privateEndpointConnection,
-                            accept,
-                            context))
+            .withContext(context -> service.createOrUpdatePrivateEndpointConnection(this.client.getEndpoint(),
+                this.client.getApiVersion(), this.client.getSubscriptionId(), resourceGroupName, resourceName,
+                privateEndpointConnectionName, privateEndpointConnection, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -3305,26 +2667,20 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the private endpoint connection of a provisioning service.
+     * @return the private endpoint connection of a provisioning service along with {@link Response} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> createOrUpdatePrivateEndpointConnectionWithResponseAsync(
-        String resourceGroupName,
-        String resourceName,
-        String privateEndpointConnectionName,
-        PrivateEndpointConnectionInner privateEndpointConnection,
-        Context context) {
+        String resourceGroupName, String resourceName, String privateEndpointConnectionName,
+        PrivateEndpointConnectionInner privateEndpointConnection, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -3334,32 +2690,20 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
             return Mono.error(new IllegalArgumentException("Parameter resourceName is required and cannot be null."));
         }
         if (privateEndpointConnectionName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter privateEndpointConnectionName is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter privateEndpointConnectionName is required and cannot be null."));
         }
         if (privateEndpointConnection == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter privateEndpointConnection is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter privateEndpointConnection is required and cannot be null."));
         } else {
             privateEndpointConnection.validate();
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .createOrUpdatePrivateEndpointConnection(
-                this.client.getEndpoint(),
-                this.client.getApiVersion(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                resourceName,
-                privateEndpointConnectionName,
-                privateEndpointConnection,
-                accept,
-                context);
+        return service.createOrUpdatePrivateEndpointConnection(this.client.getEndpoint(), this.client.getApiVersion(),
+            this.client.getSubscriptionId(), resourceGroupName, resourceName, privateEndpointConnectionName,
+            privateEndpointConnection, accept, context);
     }
 
     /**
@@ -3372,26 +2716,17 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the private endpoint connection of a provisioning service.
+     * @return the {@link PollerFlux} for polling of the private endpoint connection of a provisioning service.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<PrivateEndpointConnectionInner>, PrivateEndpointConnectionInner>
-        beginCreateOrUpdatePrivateEndpointConnectionAsync(
-            String resourceGroupName,
-            String resourceName,
-            String privateEndpointConnectionName,
-            PrivateEndpointConnectionInner privateEndpointConnection) {
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            createOrUpdatePrivateEndpointConnectionWithResponseAsync(
-                resourceGroupName, resourceName, privateEndpointConnectionName, privateEndpointConnection);
-        return this
-            .client
-            .<PrivateEndpointConnectionInner, PrivateEndpointConnectionInner>getLroResult(
-                mono,
-                this.client.getHttpPipeline(),
-                PrivateEndpointConnectionInner.class,
-                PrivateEndpointConnectionInner.class,
-                Context.NONE);
+        beginCreateOrUpdatePrivateEndpointConnectionAsync(String resourceGroupName, String resourceName,
+            String privateEndpointConnectionName, PrivateEndpointConnectionInner privateEndpointConnection) {
+        Mono<Response<Flux<ByteBuffer>>> mono = createOrUpdatePrivateEndpointConnectionWithResponseAsync(
+            resourceGroupName, resourceName, privateEndpointConnectionName, privateEndpointConnection);
+        return this.client.<PrivateEndpointConnectionInner, PrivateEndpointConnectionInner>getLroResult(mono,
+            this.client.getHttpPipeline(), PrivateEndpointConnectionInner.class, PrivateEndpointConnectionInner.class,
+            this.client.getContext());
     }
 
     /**
@@ -3405,28 +2740,19 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the private endpoint connection of a provisioning service.
+     * @return the {@link PollerFlux} for polling of the private endpoint connection of a provisioning service.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<PrivateEndpointConnectionInner>, PrivateEndpointConnectionInner>
-        beginCreateOrUpdatePrivateEndpointConnectionAsync(
-            String resourceGroupName,
-            String resourceName,
-            String privateEndpointConnectionName,
-            PrivateEndpointConnectionInner privateEndpointConnection,
+        beginCreateOrUpdatePrivateEndpointConnectionAsync(String resourceGroupName, String resourceName,
+            String privateEndpointConnectionName, PrivateEndpointConnectionInner privateEndpointConnection,
             Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            createOrUpdatePrivateEndpointConnectionWithResponseAsync(
-                resourceGroupName, resourceName, privateEndpointConnectionName, privateEndpointConnection, context);
-        return this
-            .client
-            .<PrivateEndpointConnectionInner, PrivateEndpointConnectionInner>getLroResult(
-                mono,
-                this.client.getHttpPipeline(),
-                PrivateEndpointConnectionInner.class,
-                PrivateEndpointConnectionInner.class,
-                context);
+        Mono<Response<Flux<ByteBuffer>>> mono = createOrUpdatePrivateEndpointConnectionWithResponseAsync(
+            resourceGroupName, resourceName, privateEndpointConnectionName, privateEndpointConnection, context);
+        return this.client.<PrivateEndpointConnectionInner, PrivateEndpointConnectionInner>getLroResult(mono,
+            this.client.getHttpPipeline(), PrivateEndpointConnectionInner.class, PrivateEndpointConnectionInner.class,
+            context);
     }
 
     /**
@@ -3439,18 +2765,14 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the private endpoint connection of a provisioning service.
+     * @return the {@link SyncPoller} for polling of the private endpoint connection of a provisioning service.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<PrivateEndpointConnectionInner>, PrivateEndpointConnectionInner>
-        beginCreateOrUpdatePrivateEndpointConnection(
-            String resourceGroupName,
-            String resourceName,
-            String privateEndpointConnectionName,
-            PrivateEndpointConnectionInner privateEndpointConnection) {
-        return beginCreateOrUpdatePrivateEndpointConnectionAsync(
-                resourceGroupName, resourceName, privateEndpointConnectionName, privateEndpointConnection)
-            .getSyncPoller();
+        beginCreateOrUpdatePrivateEndpointConnection(String resourceGroupName, String resourceName,
+            String privateEndpointConnectionName, PrivateEndpointConnectionInner privateEndpointConnection) {
+        return beginCreateOrUpdatePrivateEndpointConnectionAsync(resourceGroupName, resourceName,
+            privateEndpointConnectionName, privateEndpointConnection).getSyncPoller();
     }
 
     /**
@@ -3464,19 +2786,58 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the private endpoint connection of a provisioning service.
+     * @return the {@link SyncPoller} for polling of the private endpoint connection of a provisioning service.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<PrivateEndpointConnectionInner>, PrivateEndpointConnectionInner>
-        beginCreateOrUpdatePrivateEndpointConnection(
-            String resourceGroupName,
-            String resourceName,
-            String privateEndpointConnectionName,
-            PrivateEndpointConnectionInner privateEndpointConnection,
+        beginCreateOrUpdatePrivateEndpointConnection(String resourceGroupName, String resourceName,
+            String privateEndpointConnectionName, PrivateEndpointConnectionInner privateEndpointConnection,
             Context context) {
-        return beginCreateOrUpdatePrivateEndpointConnectionAsync(
-                resourceGroupName, resourceName, privateEndpointConnectionName, privateEndpointConnection, context)
-            .getSyncPoller();
+        return beginCreateOrUpdatePrivateEndpointConnectionAsync(resourceGroupName, resourceName,
+            privateEndpointConnectionName, privateEndpointConnection, context).getSyncPoller();
+    }
+
+    /**
+     * Create or update the status of a private endpoint connection with the specified name.
+     *
+     * @param resourceGroupName The name of the resource group that contains the provisioning service.
+     * @param resourceName The name of the provisioning service.
+     * @param privateEndpointConnectionName The name of the private endpoint connection.
+     * @param privateEndpointConnection The private endpoint connection with updated properties.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ErrorDetailsException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the private endpoint connection of a provisioning service on successful completion of {@link Mono}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    private Mono<PrivateEndpointConnectionInner> createOrUpdatePrivateEndpointConnectionAsync(String resourceGroupName,
+        String resourceName, String privateEndpointConnectionName,
+        PrivateEndpointConnectionInner privateEndpointConnection) {
+        return beginCreateOrUpdatePrivateEndpointConnectionAsync(resourceGroupName, resourceName,
+            privateEndpointConnectionName, privateEndpointConnection).last()
+                .flatMap(this.client::getLroFinalResultOrError);
+    }
+
+    /**
+     * Create or update the status of a private endpoint connection with the specified name.
+     *
+     * @param resourceGroupName The name of the resource group that contains the provisioning service.
+     * @param resourceName The name of the provisioning service.
+     * @param privateEndpointConnectionName The name of the private endpoint connection.
+     * @param privateEndpointConnection The private endpoint connection with updated properties.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ErrorDetailsException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the private endpoint connection of a provisioning service on successful completion of {@link Mono}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    private Mono<PrivateEndpointConnectionInner> createOrUpdatePrivateEndpointConnectionAsync(String resourceGroupName,
+        String resourceName, String privateEndpointConnectionName,
+        PrivateEndpointConnectionInner privateEndpointConnection, Context context) {
+        return beginCreateOrUpdatePrivateEndpointConnectionAsync(resourceGroupName, resourceName,
+            privateEndpointConnectionName, privateEndpointConnection, context).last()
+                .flatMap(this.client::getLroFinalResultOrError);
     }
 
     /**
@@ -3492,15 +2853,11 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @return the private endpoint connection of a provisioning service.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PrivateEndpointConnectionInner> createOrUpdatePrivateEndpointConnectionAsync(
-        String resourceGroupName,
-        String resourceName,
-        String privateEndpointConnectionName,
+    public PrivateEndpointConnectionInner createOrUpdatePrivateEndpointConnection(String resourceGroupName,
+        String resourceName, String privateEndpointConnectionName,
         PrivateEndpointConnectionInner privateEndpointConnection) {
-        return beginCreateOrUpdatePrivateEndpointConnectionAsync(
-                resourceGroupName, resourceName, privateEndpointConnectionName, privateEndpointConnection)
-            .last()
-            .flatMap(this.client::getLroFinalResultOrError);
+        return createOrUpdatePrivateEndpointConnectionAsync(resourceGroupName, resourceName,
+            privateEndpointConnectionName, privateEndpointConnection).block();
     }
 
     /**
@@ -3517,64 +2874,11 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @return the private endpoint connection of a provisioning service.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PrivateEndpointConnectionInner> createOrUpdatePrivateEndpointConnectionAsync(
-        String resourceGroupName,
-        String resourceName,
-        String privateEndpointConnectionName,
-        PrivateEndpointConnectionInner privateEndpointConnection,
-        Context context) {
-        return beginCreateOrUpdatePrivateEndpointConnectionAsync(
-                resourceGroupName, resourceName, privateEndpointConnectionName, privateEndpointConnection, context)
-            .last()
-            .flatMap(this.client::getLroFinalResultOrError);
-    }
-
-    /**
-     * Create or update the status of a private endpoint connection with the specified name.
-     *
-     * @param resourceGroupName The name of the resource group that contains the provisioning service.
-     * @param resourceName The name of the provisioning service.
-     * @param privateEndpointConnectionName The name of the private endpoint connection.
-     * @param privateEndpointConnection The private endpoint connection with updated properties.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorDetailsException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the private endpoint connection of a provisioning service.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public PrivateEndpointConnectionInner createOrUpdatePrivateEndpointConnection(
-        String resourceGroupName,
-        String resourceName,
-        String privateEndpointConnectionName,
-        PrivateEndpointConnectionInner privateEndpointConnection) {
-        return createOrUpdatePrivateEndpointConnectionAsync(
-                resourceGroupName, resourceName, privateEndpointConnectionName, privateEndpointConnection)
-            .block();
-    }
-
-    /**
-     * Create or update the status of a private endpoint connection with the specified name.
-     *
-     * @param resourceGroupName The name of the resource group that contains the provisioning service.
-     * @param resourceName The name of the provisioning service.
-     * @param privateEndpointConnectionName The name of the private endpoint connection.
-     * @param privateEndpointConnection The private endpoint connection with updated properties.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ErrorDetailsException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the private endpoint connection of a provisioning service.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public PrivateEndpointConnectionInner createOrUpdatePrivateEndpointConnection(
-        String resourceGroupName,
-        String resourceName,
-        String privateEndpointConnectionName,
-        PrivateEndpointConnectionInner privateEndpointConnection,
-        Context context) {
-        return createOrUpdatePrivateEndpointConnectionAsync(
-                resourceGroupName, resourceName, privateEndpointConnectionName, privateEndpointConnection, context)
-            .block();
+    public PrivateEndpointConnectionInner createOrUpdatePrivateEndpointConnection(String resourceGroupName,
+        String resourceName, String privateEndpointConnectionName,
+        PrivateEndpointConnectionInner privateEndpointConnection, Context context) {
+        return createOrUpdatePrivateEndpointConnectionAsync(resourceGroupName, resourceName,
+            privateEndpointConnectionName, privateEndpointConnection, context).block();
     }
 
     /**
@@ -3586,22 +2890,19 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the private endpoint connection of a provisioning service.
+     * @return the private endpoint connection of a provisioning service along with {@link Response} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> deletePrivateEndpointConnectionWithResponseAsync(
-        String resourceGroupName, String resourceName, String privateEndpointConnectionName) {
+    private Mono<Response<Flux<ByteBuffer>>> deletePrivateEndpointConnectionWithResponseAsync(String resourceGroupName,
+        String resourceName, String privateEndpointConnectionName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -3611,25 +2912,14 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
             return Mono.error(new IllegalArgumentException("Parameter resourceName is required and cannot be null."));
         }
         if (privateEndpointConnectionName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter privateEndpointConnectionName is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter privateEndpointConnectionName is required and cannot be null."));
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .deletePrivateEndpointConnection(
-                            this.client.getEndpoint(),
-                            this.client.getApiVersion(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            resourceName,
-                            privateEndpointConnectionName,
-                            accept,
-                            context))
+            .withContext(context -> service.deletePrivateEndpointConnection(this.client.getEndpoint(),
+                this.client.getApiVersion(), this.client.getSubscriptionId(), resourceGroupName, resourceName,
+                privateEndpointConnectionName, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -3643,22 +2933,19 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the private endpoint connection of a provisioning service.
+     * @return the private endpoint connection of a provisioning service along with {@link Response} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> deletePrivateEndpointConnectionWithResponseAsync(
-        String resourceGroupName, String resourceName, String privateEndpointConnectionName, Context context) {
+    private Mono<Response<Flux<ByteBuffer>>> deletePrivateEndpointConnectionWithResponseAsync(String resourceGroupName,
+        String resourceName, String privateEndpointConnectionName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -3668,23 +2955,14 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
             return Mono.error(new IllegalArgumentException("Parameter resourceName is required and cannot be null."));
         }
         if (privateEndpointConnectionName == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter privateEndpointConnectionName is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter privateEndpointConnectionName is required and cannot be null."));
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .deletePrivateEndpointConnection(
-                this.client.getEndpoint(),
-                this.client.getApiVersion(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                resourceName,
-                privateEndpointConnectionName,
-                accept,
-                context);
+        return service.deletePrivateEndpointConnection(this.client.getEndpoint(), this.client.getApiVersion(),
+            this.client.getSubscriptionId(), resourceGroupName, resourceName, privateEndpointConnectionName, accept,
+            context);
     }
 
     /**
@@ -3696,23 +2974,17 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the private endpoint connection of a provisioning service.
+     * @return the {@link PollerFlux} for polling of the private endpoint connection of a provisioning service.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<PrivateEndpointConnectionInner>, PrivateEndpointConnectionInner>
-        beginDeletePrivateEndpointConnectionAsync(
-            String resourceGroupName, String resourceName, String privateEndpointConnectionName) {
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            deletePrivateEndpointConnectionWithResponseAsync(
-                resourceGroupName, resourceName, privateEndpointConnectionName);
-        return this
-            .client
-            .<PrivateEndpointConnectionInner, PrivateEndpointConnectionInner>getLroResult(
-                mono,
-                this.client.getHttpPipeline(),
-                PrivateEndpointConnectionInner.class,
-                PrivateEndpointConnectionInner.class,
-                Context.NONE);
+        beginDeletePrivateEndpointConnectionAsync(String resourceGroupName, String resourceName,
+            String privateEndpointConnectionName) {
+        Mono<Response<Flux<ByteBuffer>>> mono = deletePrivateEndpointConnectionWithResponseAsync(resourceGroupName,
+            resourceName, privateEndpointConnectionName);
+        return this.client.<PrivateEndpointConnectionInner, PrivateEndpointConnectionInner>getLroResult(mono,
+            this.client.getHttpPipeline(), PrivateEndpointConnectionInner.class, PrivateEndpointConnectionInner.class,
+            this.client.getContext());
     }
 
     /**
@@ -3725,24 +2997,18 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the private endpoint connection of a provisioning service.
+     * @return the {@link PollerFlux} for polling of the private endpoint connection of a provisioning service.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<PrivateEndpointConnectionInner>, PrivateEndpointConnectionInner>
-        beginDeletePrivateEndpointConnectionAsync(
-            String resourceGroupName, String resourceName, String privateEndpointConnectionName, Context context) {
+        beginDeletePrivateEndpointConnectionAsync(String resourceGroupName, String resourceName,
+            String privateEndpointConnectionName, Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            deletePrivateEndpointConnectionWithResponseAsync(
-                resourceGroupName, resourceName, privateEndpointConnectionName, context);
-        return this
-            .client
-            .<PrivateEndpointConnectionInner, PrivateEndpointConnectionInner>getLroResult(
-                mono,
-                this.client.getHttpPipeline(),
-                PrivateEndpointConnectionInner.class,
-                PrivateEndpointConnectionInner.class,
-                context);
+        Mono<Response<Flux<ByteBuffer>>> mono = deletePrivateEndpointConnectionWithResponseAsync(resourceGroupName,
+            resourceName, privateEndpointConnectionName, context);
+        return this.client.<PrivateEndpointConnectionInner, PrivateEndpointConnectionInner>getLroResult(mono,
+            this.client.getHttpPipeline(), PrivateEndpointConnectionInner.class, PrivateEndpointConnectionInner.class,
+            context);
     }
 
     /**
@@ -3754,12 +3020,12 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the private endpoint connection of a provisioning service.
+     * @return the {@link SyncPoller} for polling of the private endpoint connection of a provisioning service.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<PrivateEndpointConnectionInner>, PrivateEndpointConnectionInner>
-        beginDeletePrivateEndpointConnection(
-            String resourceGroupName, String resourceName, String privateEndpointConnectionName) {
+        beginDeletePrivateEndpointConnection(String resourceGroupName, String resourceName,
+            String privateEndpointConnectionName) {
         return beginDeletePrivateEndpointConnectionAsync(resourceGroupName, resourceName, privateEndpointConnectionName)
             .getSyncPoller();
     }
@@ -3774,15 +3040,14 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the private endpoint connection of a provisioning service.
+     * @return the {@link SyncPoller} for polling of the private endpoint connection of a provisioning service.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<PrivateEndpointConnectionInner>, PrivateEndpointConnectionInner>
-        beginDeletePrivateEndpointConnection(
-            String resourceGroupName, String resourceName, String privateEndpointConnectionName, Context context) {
-        return beginDeletePrivateEndpointConnectionAsync(
-                resourceGroupName, resourceName, privateEndpointConnectionName, context)
-            .getSyncPoller();
+        beginDeletePrivateEndpointConnection(String resourceGroupName, String resourceName,
+            String privateEndpointConnectionName, Context context) {
+        return beginDeletePrivateEndpointConnectionAsync(resourceGroupName, resourceName, privateEndpointConnectionName,
+            context).getSyncPoller();
     }
 
     /**
@@ -3794,11 +3059,11 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the private endpoint connection of a provisioning service.
+     * @return the private endpoint connection of a provisioning service on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PrivateEndpointConnectionInner> deletePrivateEndpointConnectionAsync(
-        String resourceGroupName, String resourceName, String privateEndpointConnectionName) {
+    private Mono<PrivateEndpointConnectionInner> deletePrivateEndpointConnectionAsync(String resourceGroupName,
+        String resourceName, String privateEndpointConnectionName) {
         return beginDeletePrivateEndpointConnectionAsync(resourceGroupName, resourceName, privateEndpointConnectionName)
             .last()
             .flatMap(this.client::getLroFinalResultOrError);
@@ -3814,15 +3079,13 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the private endpoint connection of a provisioning service.
+     * @return the private endpoint connection of a provisioning service on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PrivateEndpointConnectionInner> deletePrivateEndpointConnectionAsync(
-        String resourceGroupName, String resourceName, String privateEndpointConnectionName, Context context) {
-        return beginDeletePrivateEndpointConnectionAsync(
-                resourceGroupName, resourceName, privateEndpointConnectionName, context)
-            .last()
-            .flatMap(this.client::getLroFinalResultOrError);
+    private Mono<PrivateEndpointConnectionInner> deletePrivateEndpointConnectionAsync(String resourceGroupName,
+        String resourceName, String privateEndpointConnectionName, Context context) {
+        return beginDeletePrivateEndpointConnectionAsync(resourceGroupName, resourceName, privateEndpointConnectionName,
+            context).last().flatMap(this.client::getLroFinalResultOrError);
     }
 
     /**
@@ -3837,8 +3100,8 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @return the private endpoint connection of a provisioning service.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public PrivateEndpointConnectionInner deletePrivateEndpointConnection(
-        String resourceGroupName, String resourceName, String privateEndpointConnectionName) {
+    public PrivateEndpointConnectionInner deletePrivateEndpointConnection(String resourceGroupName, String resourceName,
+        String privateEndpointConnectionName) {
         return deletePrivateEndpointConnectionAsync(resourceGroupName, resourceName, privateEndpointConnectionName)
             .block();
     }
@@ -3856,11 +3119,10 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @return the private endpoint connection of a provisioning service.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public PrivateEndpointConnectionInner deletePrivateEndpointConnection(
-        String resourceGroupName, String resourceName, String privateEndpointConnectionName, Context context) {
-        return deletePrivateEndpointConnectionAsync(
-                resourceGroupName, resourceName, privateEndpointConnectionName, context)
-            .block();
+    public PrivateEndpointConnectionInner deletePrivateEndpointConnection(String resourceGroupName, String resourceName,
+        String privateEndpointConnectionName, Context context) {
+        return deletePrivateEndpointConnectionAsync(resourceGroupName, resourceName, privateEndpointConnectionName,
+            context).block();
     }
 
     /**
@@ -3870,33 +3132,25 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of provisioning service descriptions.
+     * @return list of provisioning service descriptions along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<ProvisioningServiceDescriptionInner>> listBySubscriptionNextSinglePageAsync(
-        String nextLink) {
+    private Mono<PagedResponse<ProvisioningServiceDescriptionInner>>
+        listBySubscriptionNextSinglePageAsync(String nextLink) {
         if (nextLink == null) {
             return Mono.error(new IllegalArgumentException("Parameter nextLink is required and cannot be null."));
         }
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         final String accept = "application/json";
         return FluxUtil
             .withContext(
                 context -> service.listBySubscriptionNext(nextLink, this.client.getEndpoint(), accept, context))
-            .<PagedResponse<ProvisioningServiceDescriptionInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null))
+            .<PagedResponse<ProvisioningServiceDescriptionInner>>map(res -> new PagedResponseBase<>(res.getRequest(),
+                res.getStatusCode(), res.getHeaders(), res.getValue().value(), res.getValue().nextLink(), null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -3908,33 +3162,24 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of provisioning service descriptions.
+     * @return list of provisioning service descriptions along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<ProvisioningServiceDescriptionInner>> listBySubscriptionNextSinglePageAsync(
-        String nextLink, Context context) {
+    private Mono<PagedResponse<ProvisioningServiceDescriptionInner>>
+        listBySubscriptionNextSinglePageAsync(String nextLink, Context context) {
         if (nextLink == null) {
             return Mono.error(new IllegalArgumentException("Parameter nextLink is required and cannot be null."));
         }
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .listBySubscriptionNext(nextLink, this.client.getEndpoint(), accept, context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null));
+        return service.listBySubscriptionNext(nextLink, this.client.getEndpoint(), accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), res.getValue().nextLink(), null));
     }
 
     /**
@@ -3944,33 +3189,25 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of provisioning service descriptions.
+     * @return list of provisioning service descriptions along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<ProvisioningServiceDescriptionInner>> listByResourceGroupNextSinglePageAsync(
-        String nextLink) {
+    private Mono<PagedResponse<ProvisioningServiceDescriptionInner>>
+        listByResourceGroupNextSinglePageAsync(String nextLink) {
         if (nextLink == null) {
             return Mono.error(new IllegalArgumentException("Parameter nextLink is required and cannot be null."));
         }
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         final String accept = "application/json";
         return FluxUtil
             .withContext(
                 context -> service.listByResourceGroupNext(nextLink, this.client.getEndpoint(), accept, context))
-            .<PagedResponse<ProvisioningServiceDescriptionInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null))
+            .<PagedResponse<ProvisioningServiceDescriptionInner>>map(res -> new PagedResponseBase<>(res.getRequest(),
+                res.getStatusCode(), res.getHeaders(), res.getValue().value(), res.getValue().nextLink(), null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -3982,33 +3219,24 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of provisioning service descriptions.
+     * @return list of provisioning service descriptions along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<ProvisioningServiceDescriptionInner>> listByResourceGroupNextSinglePageAsync(
-        String nextLink, Context context) {
+    private Mono<PagedResponse<ProvisioningServiceDescriptionInner>>
+        listByResourceGroupNextSinglePageAsync(String nextLink, Context context) {
         if (nextLink == null) {
             return Mono.error(new IllegalArgumentException("Parameter nextLink is required and cannot be null."));
         }
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .listByResourceGroupNext(nextLink, this.client.getEndpoint(), accept, context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null));
+        return service.listByResourceGroupNext(nextLink, this.client.getEndpoint(), accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), res.getValue().nextLink(), null));
     }
 
     /**
@@ -4018,7 +3246,7 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of available SKUs.
+     * @return list of available SKUs along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<IotDpsSkuDefinitionInner>> listValidSkusNextSinglePageAsync(String nextLink) {
@@ -4026,23 +3254,14 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
             return Mono.error(new IllegalArgumentException("Parameter nextLink is required and cannot be null."));
         }
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         final String accept = "application/json";
         return FluxUtil
             .withContext(context -> service.listValidSkusNext(nextLink, this.client.getEndpoint(), accept, context))
-            .<PagedResponse<IotDpsSkuDefinitionInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null))
+            .<PagedResponse<IotDpsSkuDefinitionInner>>map(res -> new PagedResponseBase<>(res.getRequest(),
+                res.getStatusCode(), res.getHeaders(), res.getValue().value(), res.getValue().nextLink(), null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -4054,33 +3273,23 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of available SKUs.
+     * @return list of available SKUs along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<IotDpsSkuDefinitionInner>> listValidSkusNextSinglePageAsync(
-        String nextLink, Context context) {
+    private Mono<PagedResponse<IotDpsSkuDefinitionInner>> listValidSkusNextSinglePageAsync(String nextLink,
+        Context context) {
         if (nextLink == null) {
             return Mono.error(new IllegalArgumentException("Parameter nextLink is required and cannot be null."));
         }
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .listValidSkusNext(nextLink, this.client.getEndpoint(), accept, context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null));
+        return service.listValidSkusNext(nextLink, this.client.getEndpoint(), accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), res.getValue().nextLink(), null));
     }
 
     /**
@@ -4090,32 +3299,24 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of shared access keys.
+     * @return list of shared access keys along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<SharedAccessSignatureAuthorizationRuleInner>> listKeysNextSinglePageAsync(
-        String nextLink) {
+    private Mono<PagedResponse<SharedAccessSignatureAuthorizationRuleInner>>
+        listKeysNextSinglePageAsync(String nextLink) {
         if (nextLink == null) {
             return Mono.error(new IllegalArgumentException("Parameter nextLink is required and cannot be null."));
         }
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         final String accept = "application/json";
         return FluxUtil
             .withContext(context -> service.listKeysNext(nextLink, this.client.getEndpoint(), accept, context))
             .<PagedResponse<SharedAccessSignatureAuthorizationRuleInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null))
+                res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                    res.getValue().value(), res.getValue().nextLink(), null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -4127,32 +3328,22 @@ public final class IotDpsResourcesClientImpl implements IotDpsResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ErrorDetailsException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of shared access keys.
+     * @return list of shared access keys along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<SharedAccessSignatureAuthorizationRuleInner>> listKeysNextSinglePageAsync(
-        String nextLink, Context context) {
+    private Mono<PagedResponse<SharedAccessSignatureAuthorizationRuleInner>>
+        listKeysNextSinglePageAsync(String nextLink, Context context) {
         if (nextLink == null) {
             return Mono.error(new IllegalArgumentException("Parameter nextLink is required and cannot be null."));
         }
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .listKeysNext(nextLink, this.client.getEndpoint(), accept, context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null));
+        return service.listKeysNext(nextLink, this.client.getEndpoint(), accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), res.getValue().nextLink(), null));
     }
 }

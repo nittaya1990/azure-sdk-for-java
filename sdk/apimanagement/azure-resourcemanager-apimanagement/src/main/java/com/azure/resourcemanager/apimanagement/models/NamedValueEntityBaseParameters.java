@@ -5,29 +5,27 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** NamedValue Entity Base Parameters set. */
 @Fluent
 public class NamedValueEntityBaseParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(NamedValueEntityBaseParameters.class);
-
     /*
-     * Optional tags that when provided can be used to filter the NamedValue
-     * list.
+     * Optional tags that when provided can be used to filter the NamedValue list.
      */
     @JsonProperty(value = "tags")
     private List<String> tags;
 
     /*
-     * Determines whether the value is a secret and should be encrypted or not.
-     * Default value is false.
+     * Determines whether the value is a secret and should be encrypted or not. Default value is false.
      */
     @JsonProperty(value = "secret")
     private Boolean secret;
+
+    /** Creates an instance of NamedValueEntityBaseParameters class. */
+    public NamedValueEntityBaseParameters() {
+    }
 
     /**
      * Get the tags property: Optional tags that when provided can be used to filter the NamedValue list.

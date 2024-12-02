@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** RP Rehydration Info. */
+/**
+ * RP Rehydration Info.
+ */
 @Fluent
 public final class RecoveryPointRehydrationInfo {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RecoveryPointRehydrationInfo.class);
-
     /*
      * How long the rehydrated RP should be kept
      * Should be ISO8601 Duration format e.g. "P7D"
@@ -28,9 +26,15 @@ public final class RecoveryPointRehydrationInfo {
     private RehydrationPriority rehydrationPriority;
 
     /**
-     * Get the rehydrationRetentionDuration property: How long the rehydrated RP should be kept Should be ISO8601
-     * Duration format e.g. "P7D".
-     *
+     * Creates an instance of RecoveryPointRehydrationInfo class.
+     */
+    public RecoveryPointRehydrationInfo() {
+    }
+
+    /**
+     * Get the rehydrationRetentionDuration property: How long the rehydrated RP should be kept
+     * Should be ISO8601 Duration format e.g. "P7D".
+     * 
      * @return the rehydrationRetentionDuration value.
      */
     public String rehydrationRetentionDuration() {
@@ -38,9 +42,9 @@ public final class RecoveryPointRehydrationInfo {
     }
 
     /**
-     * Set the rehydrationRetentionDuration property: How long the rehydrated RP should be kept Should be ISO8601
-     * Duration format e.g. "P7D".
-     *
+     * Set the rehydrationRetentionDuration property: How long the rehydrated RP should be kept
+     * Should be ISO8601 Duration format e.g. "P7D".
+     * 
      * @param rehydrationRetentionDuration the rehydrationRetentionDuration value to set.
      * @return the RecoveryPointRehydrationInfo object itself.
      */
@@ -51,7 +55,7 @@ public final class RecoveryPointRehydrationInfo {
 
     /**
      * Get the rehydrationPriority property: Rehydration Priority.
-     *
+     * 
      * @return the rehydrationPriority value.
      */
     public RehydrationPriority rehydrationPriority() {
@@ -60,7 +64,7 @@ public final class RecoveryPointRehydrationInfo {
 
     /**
      * Set the rehydrationPriority property: Rehydration Priority.
-     *
+     * 
      * @param rehydrationPriority the rehydrationPriority value to set.
      * @return the RecoveryPointRehydrationInfo object itself.
      */
@@ -71,7 +75,7 @@ public final class RecoveryPointRehydrationInfo {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

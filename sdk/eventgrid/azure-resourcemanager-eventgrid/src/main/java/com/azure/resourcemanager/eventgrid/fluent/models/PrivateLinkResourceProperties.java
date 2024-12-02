@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.eventgrid.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The PrivateLinkResourceProperties model. */
+/**
+ * The PrivateLinkResourceProperties model.
+ */
 @Fluent
 public final class PrivateLinkResourceProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PrivateLinkResourceProperties.class);
-
     /*
      * The groupId property.
      */
@@ -40,8 +38,14 @@ public final class PrivateLinkResourceProperties {
     private List<String> requiredZoneNames;
 
     /**
+     * Creates an instance of PrivateLinkResourceProperties class.
+     */
+    public PrivateLinkResourceProperties() {
+    }
+
+    /**
      * Get the groupId property: The groupId property.
-     *
+     * 
      * @return the groupId value.
      */
     public String groupId() {
@@ -50,7 +54,7 @@ public final class PrivateLinkResourceProperties {
 
     /**
      * Set the groupId property: The groupId property.
-     *
+     * 
      * @param groupId the groupId value to set.
      * @return the PrivateLinkResourceProperties object itself.
      */
@@ -61,7 +65,7 @@ public final class PrivateLinkResourceProperties {
 
     /**
      * Get the displayName property: The displayName property.
-     *
+     * 
      * @return the displayName value.
      */
     public String displayName() {
@@ -70,7 +74,7 @@ public final class PrivateLinkResourceProperties {
 
     /**
      * Set the displayName property: The displayName property.
-     *
+     * 
      * @param displayName the displayName value to set.
      * @return the PrivateLinkResourceProperties object itself.
      */
@@ -81,7 +85,7 @@ public final class PrivateLinkResourceProperties {
 
     /**
      * Get the requiredMembers property: The requiredMembers property.
-     *
+     * 
      * @return the requiredMembers value.
      */
     public List<String> requiredMembers() {
@@ -90,7 +94,7 @@ public final class PrivateLinkResourceProperties {
 
     /**
      * Set the requiredMembers property: The requiredMembers property.
-     *
+     * 
      * @param requiredMembers the requiredMembers value to set.
      * @return the PrivateLinkResourceProperties object itself.
      */
@@ -101,7 +105,7 @@ public final class PrivateLinkResourceProperties {
 
     /**
      * Get the requiredZoneNames property: The requiredZoneNames property.
-     *
+     * 
      * @return the requiredZoneNames value.
      */
     public List<String> requiredZoneNames() {
@@ -110,7 +114,7 @@ public final class PrivateLinkResourceProperties {
 
     /**
      * Set the requiredZoneNames property: The requiredZoneNames property.
-     *
+     * 
      * @param requiredZoneNames the requiredZoneNames value to set.
      * @return the PrivateLinkResourceProperties object itself.
      */
@@ -121,7 +125,7 @@ public final class PrivateLinkResourceProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -5,22 +5,31 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** This class is used to send blob details after exporting jobs. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "objectType")
+/**
+ * This class is used to send blob details after exporting jobs.
+ */
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    property = "objectType",
+    defaultImpl = ExportJobsOperationResultInfo.class,
+    visible = true)
 @JsonTypeName("ExportJobsOperationResultInfo")
 @Fluent
 public final class ExportJobsOperationResultInfo extends OperationResultInfoBase {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ExportJobsOperationResultInfo.class);
+    /*
+     * This property will be used as the discriminator for deciding the specific types in the polymorphic chain of types.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "objectType", required = true)
+    private String objectType = "ExportJobsOperationResultInfo";
 
     /*
-     * URL of the blob into which the serialized string of list of jobs is
-     * exported.
+     * URL of the blob into which the serialized string of list of jobs is exported.
      */
     @JsonProperty(value = "blobUrl")
     private String blobUrl;
@@ -44,8 +53,25 @@ public final class ExportJobsOperationResultInfo extends OperationResultInfoBase
     private String excelFileBlobSasKey;
 
     /**
+     * Creates an instance of ExportJobsOperationResultInfo class.
+     */
+    public ExportJobsOperationResultInfo() {
+    }
+
+    /**
+     * Get the objectType property: This property will be used as the discriminator for deciding the specific types in
+     * the polymorphic chain of types.
+     * 
+     * @return the objectType value.
+     */
+    @Override
+    public String objectType() {
+        return this.objectType;
+    }
+
+    /**
      * Get the blobUrl property: URL of the blob into which the serialized string of list of jobs is exported.
-     *
+     * 
      * @return the blobUrl value.
      */
     public String blobUrl() {
@@ -54,7 +80,7 @@ public final class ExportJobsOperationResultInfo extends OperationResultInfoBase
 
     /**
      * Set the blobUrl property: URL of the blob into which the serialized string of list of jobs is exported.
-     *
+     * 
      * @param blobUrl the blobUrl value to set.
      * @return the ExportJobsOperationResultInfo object itself.
      */
@@ -65,7 +91,7 @@ public final class ExportJobsOperationResultInfo extends OperationResultInfoBase
 
     /**
      * Get the blobSasKey property: SAS key to access the blob. It expires in 15 mins.
-     *
+     * 
      * @return the blobSasKey value.
      */
     public String blobSasKey() {
@@ -74,7 +100,7 @@ public final class ExportJobsOperationResultInfo extends OperationResultInfoBase
 
     /**
      * Set the blobSasKey property: SAS key to access the blob. It expires in 15 mins.
-     *
+     * 
      * @param blobSasKey the blobSasKey value to set.
      * @return the ExportJobsOperationResultInfo object itself.
      */
@@ -85,7 +111,7 @@ public final class ExportJobsOperationResultInfo extends OperationResultInfoBase
 
     /**
      * Get the excelFileBlobUrl property: URL of the blob into which the ExcelFile is uploaded.
-     *
+     * 
      * @return the excelFileBlobUrl value.
      */
     public String excelFileBlobUrl() {
@@ -94,7 +120,7 @@ public final class ExportJobsOperationResultInfo extends OperationResultInfoBase
 
     /**
      * Set the excelFileBlobUrl property: URL of the blob into which the ExcelFile is uploaded.
-     *
+     * 
      * @param excelFileBlobUrl the excelFileBlobUrl value to set.
      * @return the ExportJobsOperationResultInfo object itself.
      */
@@ -105,7 +131,7 @@ public final class ExportJobsOperationResultInfo extends OperationResultInfoBase
 
     /**
      * Get the excelFileBlobSasKey property: SAS key to access the blob. It expires in 15 mins.
-     *
+     * 
      * @return the excelFileBlobSasKey value.
      */
     public String excelFileBlobSasKey() {
@@ -114,7 +140,7 @@ public final class ExportJobsOperationResultInfo extends OperationResultInfoBase
 
     /**
      * Set the excelFileBlobSasKey property: SAS key to access the blob. It expires in 15 mins.
-     *
+     * 
      * @param excelFileBlobSasKey the excelFileBlobSasKey value to set.
      * @return the ExportJobsOperationResultInfo object itself.
      */
@@ -125,7 +151,7 @@ public final class ExportJobsOperationResultInfo extends OperationResultInfoBase
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

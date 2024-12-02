@@ -5,8 +5,6 @@
 package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -15,8 +13,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @Fluent
 public final class ProxyServerProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ProxyServerProperties.class);
-
     /*
      * Proxy server IP
      */
@@ -30,8 +26,14 @@ public final class ProxyServerProperties {
     private String port;
 
     /**
+     * Creates an instance of ProxyServerProperties class.
+     */
+    public ProxyServerProperties() {
+    }
+
+    /**
      * Get the ip property: Proxy server IP.
-     *
+     * 
      * @return the ip value.
      */
     public String ip() {
@@ -40,7 +42,7 @@ public final class ProxyServerProperties {
 
     /**
      * Set the ip property: Proxy server IP.
-     *
+     * 
      * @param ip the ip value to set.
      * @return the ProxyServerProperties object itself.
      */
@@ -51,7 +53,7 @@ public final class ProxyServerProperties {
 
     /**
      * Get the port property: Proxy server port.
-     *
+     * 
      * @return the port value.
      */
     public String port() {
@@ -60,7 +62,7 @@ public final class ProxyServerProperties {
 
     /**
      * Set the port property: Proxy server port.
-     *
+     * 
      * @param port the port value to set.
      * @return the ProxyServerProperties object itself.
      */
@@ -71,7 +73,7 @@ public final class ProxyServerProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

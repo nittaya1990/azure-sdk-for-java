@@ -7,34 +7,36 @@ package com.azure.resourcemanager.storageimportexport.models;
 import com.azure.core.http.rest.PagedIterable;
 import com.azure.core.util.Context;
 
-/** Resource collection API of BitLockerKeys. */
+/**
+ * Resource collection API of BitLockerKeys.
+ */
 public interface BitLockerKeys {
     /**
      * Returns the BitLocker Keys for all drives in the specified job.
-     *
+     * 
      * @param jobName The name of the import/export job.
      * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
-     *     subscription.
+     * subscription.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.resourcemanager.storageimportexport.models.ErrorResponseException thrown if the request is
-     *     rejected by server.
+     * @throws com.azure.resourcemanager.storageimportexport.models.ErrorResponseErrorException thrown if the request is
+     * rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return getBitLockerKeys response.
+     * @return getBitLockerKeys response as paginated response with {@link PagedIterable}.
      */
     PagedIterable<DriveBitLockerKey> list(String jobName, String resourceGroupName);
 
     /**
      * Returns the BitLocker Keys for all drives in the specified job.
-     *
+     * 
      * @param jobName The name of the import/export job.
      * @param resourceGroupName The resource group name uniquely identifies the resource group within the user
-     *     subscription.
+     * subscription.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.resourcemanager.storageimportexport.models.ErrorResponseException thrown if the request is
-     *     rejected by server.
+     * @throws com.azure.resourcemanager.storageimportexport.models.ErrorResponseErrorException thrown if the request is
+     * rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return getBitLockerKeys response.
+     * @return getBitLockerKeys response as paginated response with {@link PagedIterable}.
      */
     PagedIterable<DriveBitLockerKey> list(String jobName, String resourceGroupName, Context context);
 }

@@ -5,22 +5,22 @@
 package com.azure.resourcemanager.applicationinsights.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.applicationinsights.fluent.models.AnnotationInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Annotations list result. */
 @Immutable
 public final class AnnotationsListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AnnotationsListResult.class);
-
     /*
      * An array of annotations.
      */
     @JsonProperty(value = "value", access = JsonProperty.Access.WRITE_ONLY)
     private List<AnnotationInner> value;
+
+    /** Creates an instance of AnnotationsListResult class. */
+    public AnnotationsListResult() {
+    }
 
     /**
      * Get the value property: An array of annotations.

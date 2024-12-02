@@ -8,17 +8,32 @@ import com.azure.core.util.ExpandableStringEnum;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.Collection;
 
-/** Defines values for AdditionalWorkspaceDataType. */
+/**
+ * Data types sent to workspace.
+ */
 public final class AdditionalWorkspaceDataType extends ExpandableStringEnum<AdditionalWorkspaceDataType> {
-    /** Static value Alerts for AdditionalWorkspaceDataType. */
+    /**
+     * Static value Alerts for AdditionalWorkspaceDataType.
+     */
     public static final AdditionalWorkspaceDataType ALERTS = fromString("Alerts");
 
-    /** Static value RawEvents for AdditionalWorkspaceDataType. */
+    /**
+     * Static value RawEvents for AdditionalWorkspaceDataType.
+     */
     public static final AdditionalWorkspaceDataType RAW_EVENTS = fromString("RawEvents");
 
     /**
+     * Creates a new instance of AdditionalWorkspaceDataType value.
+     * 
+     * @deprecated Use the {@link #fromString(String)} factory method.
+     */
+    @Deprecated
+    public AdditionalWorkspaceDataType() {
+    }
+
+    /**
      * Creates or finds a AdditionalWorkspaceDataType from its string representation.
-     *
+     * 
      * @param name a name to look for.
      * @return the corresponding AdditionalWorkspaceDataType.
      */
@@ -27,7 +42,11 @@ public final class AdditionalWorkspaceDataType extends ExpandableStringEnum<Addi
         return fromString(name, AdditionalWorkspaceDataType.class);
     }
 
-    /** @return known AdditionalWorkspaceDataType values. */
+    /**
+     * Gets known AdditionalWorkspaceDataType values.
+     * 
+     * @return known AdditionalWorkspaceDataType values.
+     */
     public static Collection<AdditionalWorkspaceDataType> values() {
         return values(AdditionalWorkspaceDataType.class);
     }

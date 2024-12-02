@@ -5,104 +5,220 @@
 package com.azure.resourcemanager.streamanalytics.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import com.azure.resourcemanager.streamanalytics.fluent.models.BlobReferenceInputDataSourceProperties;
+import java.io.IOException;
 import java.util.List;
 
-/** Describes a blob input data source that contains reference data. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@JsonTypeName("Microsoft.Storage/Blob")
-@JsonFlatten
+/**
+ * Describes a blob input data source that contains reference data.
+ */
 @Fluent
-public class BlobReferenceInputDataSource extends ReferenceInputDataSource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(BlobReferenceInputDataSource.class);
+public final class BlobReferenceInputDataSource extends ReferenceInputDataSource {
+    /*
+     * Indicates the type of input data source containing reference data. Required on PUT (CreateOrReplace) requests.
+     */
+    private String type = "Microsoft.Storage/Blob";
 
     /*
-     * A list of one or more Azure Storage accounts. Required on PUT
+     * The properties that are associated with a blob input containing reference data. Required on PUT (CreateOrReplace)
+     * requests.
+     */
+    private BlobReferenceInputDataSourceProperties innerProperties;
+
+    /**
+     * Creates an instance of BlobReferenceInputDataSource class.
+     */
+    public BlobReferenceInputDataSource() {
+    }
+
+    /**
+     * Get the type property: Indicates the type of input data source containing reference data. Required on PUT
      * (CreateOrReplace) requests.
+     * 
+     * @return the type value.
      */
-    @JsonProperty(value = "properties.storageAccounts")
-    private List<StorageAccount> storageAccounts;
+    @Override
+    public String type() {
+        return this.type;
+    }
 
-    /*
-     * The name of a container within the associated Storage account. This
-     * container contains either the blob(s) to be read from or written to.
+    /**
+     * Get the innerProperties property: The properties that are associated with a blob input containing reference data.
      * Required on PUT (CreateOrReplace) requests.
+     * 
+     * @return the innerProperties value.
      */
-    @JsonProperty(value = "properties.container")
-    private String container;
+    private BlobReferenceInputDataSourceProperties innerProperties() {
+        return this.innerProperties;
+    }
 
-    /*
-     * The blob path pattern. Not a regular expression. It represents a pattern
-     * against which blob names will be matched to determine whether or not
-     * they should be included as input or output to the job. See
-     * https://docs.microsoft.com/en-us/rest/api/streamanalytics/stream-analytics-input
-     * or
-     * https://docs.microsoft.com/en-us/rest/api/streamanalytics/stream-analytics-output
-     * for a more detailed explanation and example.
+    /**
+     * Get the blobName property: The name of the blob input.
+     * 
+     * @return the blobName value.
      */
-    @JsonProperty(value = "properties.pathPattern")
-    private String pathPattern;
+    public String blobName() {
+        return this.innerProperties() == null ? null : this.innerProperties().blobName();
+    }
 
-    /*
-     * The date format. Wherever {date} appears in pathPattern, the value of
-     * this property is used as the date format instead.
+    /**
+     * Set the blobName property: The name of the blob input.
+     * 
+     * @param blobName the blobName value to set.
+     * @return the BlobReferenceInputDataSource object itself.
      */
-    @JsonProperty(value = "properties.dateFormat")
-    private String dateFormat;
+    public BlobReferenceInputDataSource withBlobName(String blobName) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new BlobReferenceInputDataSourceProperties();
+        }
+        this.innerProperties().withBlobName(blobName);
+        return this;
+    }
 
-    /*
-     * The time format. Wherever {time} appears in pathPattern, the value of
-     * this property is used as the time format instead.
+    /**
+     * Get the deltaPathPattern property: The path pattern of the delta snapshot.
+     * 
+     * @return the deltaPathPattern value.
      */
-    @JsonProperty(value = "properties.timeFormat")
-    private String timeFormat;
+    public String deltaPathPattern() {
+        return this.innerProperties() == null ? null : this.innerProperties().deltaPathPattern();
+    }
+
+    /**
+     * Set the deltaPathPattern property: The path pattern of the delta snapshot.
+     * 
+     * @param deltaPathPattern the deltaPathPattern value to set.
+     * @return the BlobReferenceInputDataSource object itself.
+     */
+    public BlobReferenceInputDataSource withDeltaPathPattern(String deltaPathPattern) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new BlobReferenceInputDataSourceProperties();
+        }
+        this.innerProperties().withDeltaPathPattern(deltaPathPattern);
+        return this;
+    }
+
+    /**
+     * Get the sourcePartitionCount property: The partition count of the blob input data source. Range 1 - 256.
+     * 
+     * @return the sourcePartitionCount value.
+     */
+    public Integer sourcePartitionCount() {
+        return this.innerProperties() == null ? null : this.innerProperties().sourcePartitionCount();
+    }
+
+    /**
+     * Set the sourcePartitionCount property: The partition count of the blob input data source. Range 1 - 256.
+     * 
+     * @param sourcePartitionCount the sourcePartitionCount value to set.
+     * @return the BlobReferenceInputDataSource object itself.
+     */
+    public BlobReferenceInputDataSource withSourcePartitionCount(Integer sourcePartitionCount) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new BlobReferenceInputDataSourceProperties();
+        }
+        this.innerProperties().withSourcePartitionCount(sourcePartitionCount);
+        return this;
+    }
+
+    /**
+     * Get the fullSnapshotRefreshRate property: The refresh interval of the blob input data source.
+     * 
+     * @return the fullSnapshotRefreshRate value.
+     */
+    public String fullSnapshotRefreshRate() {
+        return this.innerProperties() == null ? null : this.innerProperties().fullSnapshotRefreshRate();
+    }
+
+    /**
+     * Set the fullSnapshotRefreshRate property: The refresh interval of the blob input data source.
+     * 
+     * @param fullSnapshotRefreshRate the fullSnapshotRefreshRate value to set.
+     * @return the BlobReferenceInputDataSource object itself.
+     */
+    public BlobReferenceInputDataSource withFullSnapshotRefreshRate(String fullSnapshotRefreshRate) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new BlobReferenceInputDataSourceProperties();
+        }
+        this.innerProperties().withFullSnapshotRefreshRate(fullSnapshotRefreshRate);
+        return this;
+    }
+
+    /**
+     * Get the deltaSnapshotRefreshRate property: The interval that the user generates a delta snapshot of this
+     * reference blob input data source.
+     * 
+     * @return the deltaSnapshotRefreshRate value.
+     */
+    public String deltaSnapshotRefreshRate() {
+        return this.innerProperties() == null ? null : this.innerProperties().deltaSnapshotRefreshRate();
+    }
+
+    /**
+     * Set the deltaSnapshotRefreshRate property: The interval that the user generates a delta snapshot of this
+     * reference blob input data source.
+     * 
+     * @param deltaSnapshotRefreshRate the deltaSnapshotRefreshRate value to set.
+     * @return the BlobReferenceInputDataSource object itself.
+     */
+    public BlobReferenceInputDataSource withDeltaSnapshotRefreshRate(String deltaSnapshotRefreshRate) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new BlobReferenceInputDataSourceProperties();
+        }
+        this.innerProperties().withDeltaSnapshotRefreshRate(deltaSnapshotRefreshRate);
+        return this;
+    }
 
     /**
      * Get the storageAccounts property: A list of one or more Azure Storage accounts. Required on PUT (CreateOrReplace)
      * requests.
-     *
+     * 
      * @return the storageAccounts value.
      */
     public List<StorageAccount> storageAccounts() {
-        return this.storageAccounts;
+        return this.innerProperties() == null ? null : this.innerProperties().storageAccounts();
     }
 
     /**
      * Set the storageAccounts property: A list of one or more Azure Storage accounts. Required on PUT (CreateOrReplace)
      * requests.
-     *
+     * 
      * @param storageAccounts the storageAccounts value to set.
      * @return the BlobReferenceInputDataSource object itself.
      */
     public BlobReferenceInputDataSource withStorageAccounts(List<StorageAccount> storageAccounts) {
-        this.storageAccounts = storageAccounts;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new BlobReferenceInputDataSourceProperties();
+        }
+        this.innerProperties().withStorageAccounts(storageAccounts);
         return this;
     }
 
     /**
      * Get the container property: The name of a container within the associated Storage account. This container
      * contains either the blob(s) to be read from or written to. Required on PUT (CreateOrReplace) requests.
-     *
+     * 
      * @return the container value.
      */
     public String container() {
-        return this.container;
+        return this.innerProperties() == null ? null : this.innerProperties().container();
     }
 
     /**
      * Set the container property: The name of a container within the associated Storage account. This container
      * contains either the blob(s) to be read from or written to. Required on PUT (CreateOrReplace) requests.
-     *
+     * 
      * @param container the container value to set.
      * @return the BlobReferenceInputDataSource object itself.
      */
     public BlobReferenceInputDataSource withContainer(String container) {
-        this.container = container;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new BlobReferenceInputDataSourceProperties();
+        }
+        this.innerProperties().withContainer(container);
         return this;
     }
 
@@ -112,11 +228,11 @@ public class BlobReferenceInputDataSource extends ReferenceInputDataSource {
      * job. See https://docs.microsoft.com/en-us/rest/api/streamanalytics/stream-analytics-input or
      * https://docs.microsoft.com/en-us/rest/api/streamanalytics/stream-analytics-output for a more detailed explanation
      * and example.
-     *
+     * 
      * @return the pathPattern value.
      */
     public String pathPattern() {
-        return this.pathPattern;
+        return this.innerProperties() == null ? null : this.innerProperties().pathPattern();
     }
 
     /**
@@ -125,69 +241,140 @@ public class BlobReferenceInputDataSource extends ReferenceInputDataSource {
      * job. See https://docs.microsoft.com/en-us/rest/api/streamanalytics/stream-analytics-input or
      * https://docs.microsoft.com/en-us/rest/api/streamanalytics/stream-analytics-output for a more detailed explanation
      * and example.
-     *
+     * 
      * @param pathPattern the pathPattern value to set.
      * @return the BlobReferenceInputDataSource object itself.
      */
     public BlobReferenceInputDataSource withPathPattern(String pathPattern) {
-        this.pathPattern = pathPattern;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new BlobReferenceInputDataSourceProperties();
+        }
+        this.innerProperties().withPathPattern(pathPattern);
         return this;
     }
 
     /**
      * Get the dateFormat property: The date format. Wherever {date} appears in pathPattern, the value of this property
      * is used as the date format instead.
-     *
+     * 
      * @return the dateFormat value.
      */
     public String dateFormat() {
-        return this.dateFormat;
+        return this.innerProperties() == null ? null : this.innerProperties().dateFormat();
     }
 
     /**
      * Set the dateFormat property: The date format. Wherever {date} appears in pathPattern, the value of this property
      * is used as the date format instead.
-     *
+     * 
      * @param dateFormat the dateFormat value to set.
      * @return the BlobReferenceInputDataSource object itself.
      */
     public BlobReferenceInputDataSource withDateFormat(String dateFormat) {
-        this.dateFormat = dateFormat;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new BlobReferenceInputDataSourceProperties();
+        }
+        this.innerProperties().withDateFormat(dateFormat);
         return this;
     }
 
     /**
      * Get the timeFormat property: The time format. Wherever {time} appears in pathPattern, the value of this property
      * is used as the time format instead.
-     *
+     * 
      * @return the timeFormat value.
      */
     public String timeFormat() {
-        return this.timeFormat;
+        return this.innerProperties() == null ? null : this.innerProperties().timeFormat();
     }
 
     /**
      * Set the timeFormat property: The time format. Wherever {time} appears in pathPattern, the value of this property
      * is used as the time format instead.
-     *
+     * 
      * @param timeFormat the timeFormat value to set.
      * @return the BlobReferenceInputDataSource object itself.
      */
     public BlobReferenceInputDataSource withTimeFormat(String timeFormat) {
-        this.timeFormat = timeFormat;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new BlobReferenceInputDataSourceProperties();
+        }
+        this.innerProperties().withTimeFormat(timeFormat);
+        return this;
+    }
+
+    /**
+     * Get the authenticationMode property: Authentication Mode.
+     * 
+     * @return the authenticationMode value.
+     */
+    public AuthenticationMode authenticationMode() {
+        return this.innerProperties() == null ? null : this.innerProperties().authenticationMode();
+    }
+
+    /**
+     * Set the authenticationMode property: Authentication Mode.
+     * 
+     * @param authenticationMode the authenticationMode value to set.
+     * @return the BlobReferenceInputDataSource object itself.
+     */
+    public BlobReferenceInputDataSource withAuthenticationMode(AuthenticationMode authenticationMode) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new BlobReferenceInputDataSourceProperties();
+        }
+        this.innerProperties().withAuthenticationMode(authenticationMode);
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
-        super.validate();
-        if (storageAccounts() != null) {
-            storageAccounts().forEach(e -> e.validate());
+        if (innerProperties() != null) {
+            innerProperties().validate();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeStringField("type", this.type);
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of BlobReferenceInputDataSource from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of BlobReferenceInputDataSource if the JsonReader was pointing to an instance of it, or null
+     * if it was pointing to JSON null.
+     * @throws IOException If an error occurs while reading the BlobReferenceInputDataSource.
+     */
+    public static BlobReferenceInputDataSource fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            BlobReferenceInputDataSource deserializedBlobReferenceInputDataSource = new BlobReferenceInputDataSource();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("type".equals(fieldName)) {
+                    deserializedBlobReferenceInputDataSource.type = reader.getString();
+                } else if ("properties".equals(fieldName)) {
+                    deserializedBlobReferenceInputDataSource.innerProperties
+                        = BlobReferenceInputDataSourceProperties.fromJson(reader);
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedBlobReferenceInputDataSource;
+        });
     }
 }

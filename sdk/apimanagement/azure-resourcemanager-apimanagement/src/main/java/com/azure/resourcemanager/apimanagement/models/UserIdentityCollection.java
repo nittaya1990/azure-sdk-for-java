@@ -5,17 +5,13 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.models.UserIdentityContractInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** List of Users Identity list representation. */
 @Fluent
 public final class UserIdentityCollection {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(UserIdentityCollection.class);
-
     /*
      * User Identity values.
      */
@@ -33,6 +29,10 @@ public final class UserIdentityCollection {
      */
     @JsonProperty(value = "nextLink")
     private String nextLink;
+
+    /** Creates an instance of UserIdentityCollection class. */
+    public UserIdentityCollection() {
+    }
 
     /**
      * Get the value property: User Identity values.

@@ -5,22 +5,22 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.models.SubscriptionUpdateParameterProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
 /** Subscription update details. */
 @Fluent
 public final class SubscriptionUpdateParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SubscriptionUpdateParameters.class);
-
     /*
      * Subscription Update contract properties.
      */
     @JsonProperty(value = "properties")
     private SubscriptionUpdateParameterProperties innerProperties;
+
+    /** Creates an instance of SubscriptionUpdateParameters class. */
+    public SubscriptionUpdateParameters() {
+    }
 
     /**
      * Get the innerProperties property: Subscription Update contract properties.

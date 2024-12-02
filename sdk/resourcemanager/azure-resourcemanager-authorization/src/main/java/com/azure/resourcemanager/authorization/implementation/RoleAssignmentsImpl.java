@@ -6,14 +6,14 @@ package com.azure.resourcemanager.authorization.implementation;
 import com.azure.core.http.rest.PagedFlux;
 import com.azure.core.http.rest.PagedIterable;
 import com.azure.resourcemanager.authorization.AuthorizationManager;
+import com.azure.resourcemanager.authorization.fluent.RoleAssignmentsClient;
+import com.azure.resourcemanager.authorization.fluent.models.RoleAssignmentInner;
 import com.azure.resourcemanager.authorization.models.RoleAssignment;
 import com.azure.resourcemanager.authorization.models.RoleAssignments;
-import com.azure.resourcemanager.authorization.fluent.models.RoleAssignmentInner;
-import com.azure.resourcemanager.authorization.fluent.RoleAssignmentsClient;
 import com.azure.resourcemanager.authorization.models.ServicePrincipal;
 import com.azure.resourcemanager.resources.fluentcore.arm.collection.implementation.CreatableResourcesImpl;
-import reactor.core.publisher.Mono;
 import com.azure.resourcemanager.resources.fluentcore.utils.PagedConverter;
+import reactor.core.publisher.Mono;
 
 import java.util.Objects;
 
@@ -41,11 +41,9 @@ public class RoleAssignmentsImpl extends CreatableResourcesImpl<RoleAssignment, 
 
     @Override
     public Mono<RoleAssignment> getByIdAsync(String id) {
-        return inner()
-            .getByIdAsync(id)
-            .map(
-                roleAssignmentInner ->
-                    new RoleAssignmentImpl(roleAssignmentInner.name(), roleAssignmentInner, manager()));
+        return inner().getByIdAsync(id)
+            .map(roleAssignmentInner -> new RoleAssignmentImpl(roleAssignmentInner.name(), roleAssignmentInner,
+                manager()));
     }
 
     @Override
@@ -55,7 +53,7 @@ public class RoleAssignmentsImpl extends CreatableResourcesImpl<RoleAssignment, 
 
     @Override
     public PagedFlux<RoleAssignment> listByScopeAsync(String scope) {
-        return PagedConverter.mapPage(inner().listForScopeAsync(scope, null), this::wrapModel);
+        return PagedConverter.mapPage(inner().listForScopeAsync(scope), this::wrapModel);
     }
 
     @Override
@@ -75,8 +73,10 @@ public class RoleAssignmentsImpl extends CreatableResourcesImpl<RoleAssignment, 
 
     @Override
     public PagedFlux<RoleAssignment> listByServicePrincipalAsync(String principalId) {
-        String filterStr = String.format("principalId eq '%s'", Objects.requireNonNull(principalId));
-        return PagedConverter.mapPage(inner().listAsync(filterStr), this::wrapModel);
+        PercentEscaper percentEscaper = new PercentEscaper("-._~" + "/?", false);
+        String filterStr
+            = percentEscaper.escape(String.format("principalId eq '%s'", Objects.requireNonNull(principalId)));
+        return PagedConverter.mapPage(inner().listAsync(filterStr, null), this::wrapModel);
     }
 
     @Override
@@ -86,11 +86,9 @@ public class RoleAssignmentsImpl extends CreatableResourcesImpl<RoleAssignment, 
 
     @Override
     public Mono<RoleAssignment> getByScopeAsync(String scope, String name) {
-        return inner()
-            .getAsync(scope, name)
-            .map(
-                roleAssignmentInner ->
-                    new RoleAssignmentImpl(roleAssignmentInner.name(), roleAssignmentInner, manager()));
+        return inner().getAsync(scope, name)
+            .map(roleAssignmentInner -> new RoleAssignmentImpl(roleAssignmentInner.name(), roleAssignmentInner,
+                manager()));
     }
 
     @Override

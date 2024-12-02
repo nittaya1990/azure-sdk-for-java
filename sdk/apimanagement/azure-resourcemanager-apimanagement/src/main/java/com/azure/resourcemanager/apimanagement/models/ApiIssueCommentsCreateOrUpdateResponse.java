@@ -21,16 +21,16 @@ public final class ApiIssueCommentsCreateOrUpdateResponse
      * @param value the deserialized value of the HTTP response.
      * @param headers the deserialized headers of the HTTP response.
      */
-    public ApiIssueCommentsCreateOrUpdateResponse(
-        HttpRequest request,
-        int statusCode,
-        HttpHeaders rawHeaders,
-        IssueCommentContractInner value,
-        ApiIssueCommentsCreateOrUpdateHeaders headers) {
+    public ApiIssueCommentsCreateOrUpdateResponse(HttpRequest request, int statusCode, HttpHeaders rawHeaders,
+        IssueCommentContractInner value, ApiIssueCommentsCreateOrUpdateHeaders headers) {
         super(request, statusCode, rawHeaders, value, headers);
     }
 
-    /** @return the deserialized response body. */
+    /**
+     * Gets the deserialized response body.
+     *
+     * @return the deserialized response body.
+     */
     @Override
     public IssueCommentContractInner getValue() {
         return super.getValue();

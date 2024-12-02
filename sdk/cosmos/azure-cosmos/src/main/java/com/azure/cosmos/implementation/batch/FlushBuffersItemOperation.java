@@ -3,15 +3,21 @@
 
 package com.azure.cosmos.implementation.batch;
 
-import com.azure.cosmos.models.CosmosItemOperation;
+import com.azure.cosmos.CosmosItemSerializer;
+import com.azure.cosmos.implementation.JsonSerializable;
 import com.azure.cosmos.models.CosmosItemOperationType;
 import com.azure.cosmos.models.PartitionKey;
 
-public class FlushBuffersItemOperation implements CosmosItemOperation {
+public class FlushBuffersItemOperation extends CosmosItemOperationBase {
     private static final String fixedId = "FlushBuffersItemOperation_7fea4e74-bcbb-4d86-aea1-3ef270e574aa";
     private static final FlushBuffersItemOperation singletonInstance = new FlushBuffersItemOperation();
 
     private FlushBuffersItemOperation() {
+    }
+
+    @Override
+    public CosmosItemSerializer getEffectiveItemSerializerForResult() {
+        return CosmosItemSerializer.DEFAULT_SERIALIZER;
     }
 
     @Override
@@ -37,6 +43,11 @@ public class FlushBuffersItemOperation implements CosmosItemOperation {
     @Override
     public <T> T getContext() {
         return null;
+    }
+
+    @Override
+    JsonSerializable getSerializedOperationInternal(CosmosItemSerializer effectiveItemSerializer) {
+        throw new UnsupportedOperationException("Not supported.");
     }
 
     public static FlushBuffersItemOperation singleton() {

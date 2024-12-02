@@ -41,7 +41,7 @@ If it's the first time you try to build the project or you pull new commits from
 1. Execute `git clone https://github.com/Azure/azure-sdk-for-java.git`
 1. Traverse to the root directory
 1. Build the whole product by executing the following command which may take several minutes:
-    * `mvn clean install -Dmaven.javadoc.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true -Djacoco.skip=true -DskipTests -Dparallel-test-playback`
+    * `mvn clean install -Dmaven.javadoc.skip=true -Dcodesnippet.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true -Djacoco.skip=true -DskipTests -Dparallel-test-playback`
 
 After executing the above steps, you can build the spring project only for the developing purpose:
 1. Traverse to spring directory:
@@ -68,6 +68,13 @@ Developing version naming convention is like `0.1.2-beta.1`. Release version nam
 ## Contribute to code
 Contribution is welcome. Please follow
 [this instruction](https://github.com/Azure/azure-sdk-for-java/blob/main/CONTRIBUTING.md) to contribute code.
+
+## Pipeline Support
+- **java - spring - ci**: This pipeline is primarily used for the Continuous Integration (CI). It automatically builds and runs the unit tests for the Spring Cloud Azure libraries to ensure code correctness after each commit.
+- **java - spring - tests**: This pipeline focuses on integration tests for the Spring Cloud Azure libraries, covering Spring Boot versions from 3.0.13 to the latest. It must be triggered manually using the command: `/azp run java - spring - tests`.
+- **java - spring - cosmos - ci**: This pipeline handles Continuous Integration for Spring Data Cosmos. It automatically builds, runs the unit tests, and executes emulator integration tests whenever `azure-spring-data-cosmos` changes.
+- **java - spring - compatibility-tests**: This pipeline automatically runs unit tests to perform a quick compatibility check for Spring Boot versions from 3.1.12 to the latest.
+- **java - spring - tests - weekly**: This pipeline is similar to the 'java - spring - tests' pipeline but runs automatically once a week, with additional testing in both the UsGov and China clouds.
 
 <!-- Links -->
 [maven]: https://maven.apache.org/

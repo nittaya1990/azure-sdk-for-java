@@ -5,21 +5,21 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.models.TagDescriptionBaseProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Parameters supplied to the Create TagDescription operation. */
 @Fluent
 public final class TagDescriptionCreateParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TagDescriptionCreateParameters.class);
-
     /*
      * Properties supplied to Create TagDescription operation.
      */
     @JsonProperty(value = "properties")
     private TagDescriptionBaseProperties innerProperties;
+
+    /** Creates an instance of TagDescriptionCreateParameters class. */
+    public TagDescriptionCreateParameters() {
+    }
 
     /**
      * Get the innerProperties property: Properties supplied to Create TagDescription operation.

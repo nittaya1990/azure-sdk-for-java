@@ -8,26 +8,47 @@ import com.azure.core.util.ExpandableStringEnum;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.Collection;
 
-/** Defines values for SourceSystem. */
+/**
+ * The source type of the machine group.
+ */
 public final class SourceSystem extends ExpandableStringEnum<SourceSystem> {
-    /** Static value Azure_AppLocker for SourceSystem. */
+    /**
+     * Static value Azure_AppLocker for SourceSystem.
+     */
     public static final SourceSystem AZURE_APP_LOCKER = fromString("Azure_AppLocker");
 
-    /** Static value Azure_AuditD for SourceSystem. */
+    /**
+     * Static value Azure_AuditD for SourceSystem.
+     */
     public static final SourceSystem AZURE_AUDITD = fromString("Azure_AuditD");
 
-    /** Static value NonAzure_AppLocker for SourceSystem. */
+    /**
+     * Static value NonAzure_AppLocker for SourceSystem.
+     */
     public static final SourceSystem NON_AZURE_APP_LOCKER = fromString("NonAzure_AppLocker");
 
-    /** Static value NonAzure_AuditD for SourceSystem. */
+    /**
+     * Static value NonAzure_AuditD for SourceSystem.
+     */
     public static final SourceSystem NON_AZURE_AUDITD = fromString("NonAzure_AuditD");
 
-    /** Static value None for SourceSystem. */
+    /**
+     * Static value None for SourceSystem.
+     */
     public static final SourceSystem NONE = fromString("None");
 
     /**
+     * Creates a new instance of SourceSystem value.
+     * 
+     * @deprecated Use the {@link #fromString(String)} factory method.
+     */
+    @Deprecated
+    public SourceSystem() {
+    }
+
+    /**
      * Creates or finds a SourceSystem from its string representation.
-     *
+     * 
      * @param name a name to look for.
      * @return the corresponding SourceSystem.
      */
@@ -36,7 +57,11 @@ public final class SourceSystem extends ExpandableStringEnum<SourceSystem> {
         return fromString(name, SourceSystem.class);
     }
 
-    /** @return known SourceSystem values. */
+    /**
+     * Gets known SourceSystem values.
+     * 
+     * @return known SourceSystem values.
+     */
     public static Collection<SourceSystem> values() {
         return values(SourceSystem.class);
     }

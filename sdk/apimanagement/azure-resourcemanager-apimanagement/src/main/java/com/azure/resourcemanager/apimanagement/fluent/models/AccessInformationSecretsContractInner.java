@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Tenant access information contract of the API Management service. */
 @Fluent
 public final class AccessInformationSecretsContractInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AccessInformationSecretsContractInner.class);
-
     /*
      * Access Information type ('access' or 'gitAccess')
      */
@@ -27,15 +23,15 @@ public final class AccessInformationSecretsContractInner {
     private String principalId;
 
     /*
-     * Primary access key. This property will not be filled on 'GET'
-     * operations! Use '/listSecrets' POST request to get the value.
+     * Primary access key. This property will not be filled on 'GET' operations! Use '/listSecrets' POST request to get
+     * the value.
      */
     @JsonProperty(value = "primaryKey")
     private String primaryKey;
 
     /*
-     * Secondary access key. This property will not be filled on 'GET'
-     * operations! Use '/listSecrets' POST request to get the value.
+     * Secondary access key. This property will not be filled on 'GET' operations! Use '/listSecrets' POST request to
+     * get the value.
      */
     @JsonProperty(value = "secondaryKey")
     private String secondaryKey;
@@ -45,6 +41,10 @@ public final class AccessInformationSecretsContractInner {
      */
     @JsonProperty(value = "enabled")
     private Boolean enabled;
+
+    /** Creates an instance of AccessInformationSecretsContractInner class. */
+    public AccessInformationSecretsContractInner() {
+    }
 
     /**
      * Get the id property: Access Information type ('access' or 'gitAccess').

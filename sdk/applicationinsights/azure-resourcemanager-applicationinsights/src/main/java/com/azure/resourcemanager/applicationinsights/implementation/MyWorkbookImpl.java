@@ -5,11 +5,12 @@
 package com.azure.resourcemanager.applicationinsights.implementation;
 
 import com.azure.core.management.Region;
+import com.azure.core.management.SystemData;
 import com.azure.core.util.Context;
 import com.azure.resourcemanager.applicationinsights.fluent.models.MyWorkbookInner;
 import com.azure.resourcemanager.applicationinsights.models.Kind;
-import com.azure.resourcemanager.applicationinsights.models.ManagedIdentity;
 import com.azure.resourcemanager.applicationinsights.models.MyWorkbook;
+import com.azure.resourcemanager.applicationinsights.models.MyWorkbookManagedIdentity;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,7 @@ public final class MyWorkbookImpl implements MyWorkbook, MyWorkbook.Definition, 
         }
     }
 
-    public ManagedIdentity identity() {
+    public MyWorkbookManagedIdentity identity() {
         return this.innerModel().identity();
     }
 
@@ -59,6 +60,10 @@ public final class MyWorkbookImpl implements MyWorkbook, MyWorkbook.Definition, 
 
     public Kind kind() {
         return this.innerModel().kind();
+    }
+
+    public SystemData systemData() {
+        return this.innerModel().systemData();
     }
 
     public String displayName() {
@@ -110,6 +115,10 @@ public final class MyWorkbookImpl implements MyWorkbook, MyWorkbook.Definition, 
         return this.location();
     }
 
+    public String resourceGroupName() {
+        return resourceGroupName;
+    }
+
     public MyWorkbookInner innerModel() {
         return this.innerObject;
     }
@@ -132,28 +141,24 @@ public final class MyWorkbookImpl implements MyWorkbook, MyWorkbook.Definition, 
     }
 
     public MyWorkbook create() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getMyWorkbooks()
-                .createOrUpdateWithResponse(
-                    resourceGroupName, resourceName, this.innerModel(), createSourceId, Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getMyWorkbooks()
+            .createOrUpdateWithResponse(resourceGroupName, resourceName, this.innerModel(), createSourceId,
+                Context.NONE)
+            .getValue();
         return this;
     }
 
     public MyWorkbook create(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getMyWorkbooks()
-                .createOrUpdateWithResponse(resourceGroupName, resourceName, this.innerModel(), createSourceId, context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getMyWorkbooks()
+            .createOrUpdateWithResponse(resourceGroupName, resourceName, this.innerModel(), createSourceId, context)
+            .getValue();
         return this;
     }
 
-    MyWorkbookImpl(
-        String name, com.azure.resourcemanager.applicationinsights.ApplicationInsightsManager serviceManager) {
+    MyWorkbookImpl(String name,
+        com.azure.resourcemanager.applicationinsights.ApplicationInsightsManager serviceManager) {
         this.innerObject = new MyWorkbookInner();
         this.serviceManager = serviceManager;
         this.resourceName = name;
@@ -166,27 +171,22 @@ public final class MyWorkbookImpl implements MyWorkbook, MyWorkbook.Definition, 
     }
 
     public MyWorkbook apply() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getMyWorkbooks()
-                .updateWithResponse(resourceGroupName, resourceName, this.innerModel(), updateSourceId, Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getMyWorkbooks()
+            .updateWithResponse(resourceGroupName, resourceName, this.innerModel(), updateSourceId, Context.NONE)
+            .getValue();
         return this;
     }
 
     public MyWorkbook apply(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getMyWorkbooks()
-                .updateWithResponse(resourceGroupName, resourceName, this.innerModel(), updateSourceId, context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getMyWorkbooks()
+            .updateWithResponse(resourceGroupName, resourceName, this.innerModel(), updateSourceId, context)
+            .getValue();
         return this;
     }
 
-    MyWorkbookImpl(
-        MyWorkbookInner innerObject,
+    MyWorkbookImpl(MyWorkbookInner innerObject,
         com.azure.resourcemanager.applicationinsights.ApplicationInsightsManager serviceManager) {
         this.innerObject = innerObject;
         this.serviceManager = serviceManager;
@@ -195,22 +195,18 @@ public final class MyWorkbookImpl implements MyWorkbook, MyWorkbook.Definition, 
     }
 
     public MyWorkbook refresh() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getMyWorkbooks()
-                .getByResourceGroupWithResponse(resourceGroupName, resourceName, Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getMyWorkbooks()
+            .getByResourceGroupWithResponse(resourceGroupName, resourceName, Context.NONE)
+            .getValue();
         return this;
     }
 
     public MyWorkbook refresh(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getMyWorkbooks()
-                .getByResourceGroupWithResponse(resourceGroupName, resourceName, context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getMyWorkbooks()
+            .getByResourceGroupWithResponse(resourceGroupName, resourceName, context)
+            .getValue();
         return this;
     }
 
@@ -229,7 +225,7 @@ public final class MyWorkbookImpl implements MyWorkbook, MyWorkbook.Definition, 
         return this;
     }
 
-    public MyWorkbookImpl withIdentity(ManagedIdentity identity) {
+    public MyWorkbookImpl withIdentity(MyWorkbookManagedIdentity identity) {
         this.innerModel().withIdentity(identity);
         return this;
     }
@@ -290,12 +286,16 @@ public final class MyWorkbookImpl implements MyWorkbook, MyWorkbook.Definition, 
     }
 
     public MyWorkbookImpl withSourceIdParameter(String sourceId) {
-        this.createSourceId = sourceId;
-        return this;
+        if (isInCreateMode()) {
+            this.createSourceId = sourceId;
+            return this;
+        } else {
+            this.updateSourceId = sourceId;
+            return this;
+        }
     }
 
-    public MyWorkbookImpl sourceIdParameter(String sourceId) {
-        this.updateSourceId = sourceId;
-        return this;
+    private boolean isInCreateMode() {
+        return this.innerModel().id() == null;
     }
 }

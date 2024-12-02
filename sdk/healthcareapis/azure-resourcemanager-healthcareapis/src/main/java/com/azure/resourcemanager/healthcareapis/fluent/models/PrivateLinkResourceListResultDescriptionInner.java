@@ -5,17 +5,14 @@
 package com.azure.resourcemanager.healthcareapis.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** A list of private link resources. */
+/**
+ * A list of private link resources.
+ */
 @Fluent
 public final class PrivateLinkResourceListResultDescriptionInner {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(PrivateLinkResourceListResultDescriptionInner.class);
-
     /*
      * Array of private link resources
      */
@@ -23,8 +20,14 @@ public final class PrivateLinkResourceListResultDescriptionInner {
     private List<PrivateLinkResourceDescriptionInner> value;
 
     /**
+     * Creates an instance of PrivateLinkResourceListResultDescriptionInner class.
+     */
+    public PrivateLinkResourceListResultDescriptionInner() {
+    }
+
+    /**
      * Get the value property: Array of private link resources.
-     *
+     * 
      * @return the value value.
      */
     public List<PrivateLinkResourceDescriptionInner> value() {
@@ -33,7 +36,7 @@ public final class PrivateLinkResourceListResultDescriptionInner {
 
     /**
      * Set the value property: Array of private link resources.
-     *
+     * 
      * @param value the value value to set.
      * @return the PrivateLinkResourceListResultDescriptionInner object itself.
      */
@@ -44,7 +47,7 @@ public final class PrivateLinkResourceListResultDescriptionInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -24,12 +24,12 @@ public interface NamedValuesClient {
     /**
      * Lists a collection of named values defined within a service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged NamedValue list representation.
+     * @return paged NamedValue list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<NamedValueContractInner> listByService(String resourceGroupName, String serviceName);
@@ -37,7 +37,7 @@ public interface NamedValuesClient {
     /**
      * Lists a collection of named values defined within a service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| tags | filter | ge, le, eq,
@@ -51,22 +51,32 @@ public interface NamedValuesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged NamedValue list representation.
+     * @return paged NamedValue list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<NamedValueContractInner> listByService(
-        String resourceGroupName,
-        String serviceName,
-        String filter,
-        Integer top,
-        Integer skip,
-        Boolean isKeyVaultRefreshFailed,
-        Context context);
+    PagedIterable<NamedValueContractInner> listByService(String resourceGroupName, String serviceName, String filter,
+        Integer top, Integer skip, Boolean isKeyVaultRefreshFailed, Context context);
 
     /**
      * Gets the entity state (Etag) version of the named value specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param namedValueId Identifier of the NamedValue.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the entity state (Etag) version of the named value specified by its identifier.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    NamedValuesGetEntityTagResponse getEntityTagWithResponse(String resourceGroupName, String serviceName,
+        String namedValueId, Context context);
+
+    /**
+     * Gets the entity state (Etag) version of the named value specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -77,25 +87,25 @@ public interface NamedValuesClient {
     void getEntityTag(String resourceGroupName, String serviceName, String namedValueId);
 
     /**
-     * Gets the entity state (Etag) version of the named value specified by its identifier.
+     * Gets the details of the named value specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the named value specified by its identifier.
+     * @return the details of the named value specified by its identifier.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    NamedValuesGetEntityTagResponse getEntityTagWithResponse(
-        String resourceGroupName, String serviceName, String namedValueId, Context context);
+    NamedValuesGetResponse getWithResponse(String resourceGroupName, String serviceName, String namedValueId,
+        Context context);
 
     /**
      * Gets the details of the named value specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -107,106 +117,60 @@ public interface NamedValuesClient {
     NamedValueContractInner get(String resourceGroupName, String serviceName, String namedValueId);
 
     /**
-     * Gets the details of the named value specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param namedValueId Identifier of the NamedValue.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the named value specified by its identifier.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    NamedValuesGetResponse getWithResponse(
-        String resourceGroupName, String serviceName, String namedValueId, Context context);
-
-    /**
      * Creates or updates named value.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param parameters Create parameters.
-     * @param ifMatch ETag of the Entity. Not required when creating an entity, but required when updating an entity.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
+     * @return the {@link SyncPoller} for polling of namedValue details.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<NamedValueContractInner>, NamedValueContractInner> beginCreateOrUpdate(
-        String resourceGroupName,
-        String serviceName,
-        String namedValueId,
-        NamedValueCreateContract parameters,
-        String ifMatch);
-
-    /**
-     * Creates or updates named value.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param namedValueId Identifier of the NamedValue.
-     * @param parameters Create parameters.
-     * @param ifMatch ETag of the Entity. Not required when creating an entity, but required when updating an entity.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<NamedValueContractInner>, NamedValueContractInner> beginCreateOrUpdate(
-        String resourceGroupName,
-        String serviceName,
-        String namedValueId,
-        NamedValueCreateContract parameters,
-        String ifMatch,
-        Context context);
-
-    /**
-     * Creates or updates named value.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param namedValueId Identifier of the NamedValue.
-     * @param parameters Create parameters.
-     * @param ifMatch ETag of the Entity. Not required when creating an entity, but required when updating an entity.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    NamedValueContractInner createOrUpdate(
-        String resourceGroupName,
-        String serviceName,
-        String namedValueId,
-        NamedValueCreateContract parameters,
-        String ifMatch);
-
-    /**
-     * Creates or updates named value.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param namedValueId Identifier of the NamedValue.
-     * @param parameters Create parameters.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    NamedValueContractInner createOrUpdate(
         String resourceGroupName, String serviceName, String namedValueId, NamedValueCreateContract parameters);
 
     /**
      * Creates or updates named value.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param namedValueId Identifier of the NamedValue.
+     * @param parameters Create parameters.
+     * @param ifMatch ETag of the Entity. Not required when creating an entity, but required when updating an entity.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of namedValue details.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<NamedValueContractInner>, NamedValueContractInner> beginCreateOrUpdate(
+        String resourceGroupName, String serviceName, String namedValueId, NamedValueCreateContract parameters,
+        String ifMatch, Context context);
+
+    /**
+     * Creates or updates named value.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param namedValueId Identifier of the NamedValue.
+     * @param parameters Create parameters.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return namedValue details.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    NamedValueContractInner createOrUpdate(String resourceGroupName, String serviceName, String namedValueId,
+        NamedValueCreateContract parameters);
+
+    /**
+     * Creates or updates named value.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param parameters Create parameters.
@@ -218,18 +182,51 @@ public interface NamedValuesClient {
      * @return namedValue details.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    NamedValueContractInner createOrUpdate(
-        String resourceGroupName,
-        String serviceName,
-        String namedValueId,
-        NamedValueCreateContract parameters,
-        String ifMatch,
+    NamedValueContractInner createOrUpdate(String resourceGroupName, String serviceName, String namedValueId,
+        NamedValueCreateContract parameters, String ifMatch, Context context);
+
+    /**
+     * Updates the specific named value.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param namedValueId Identifier of the NamedValue.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @param parameters Update parameters.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of namedValue details.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<NamedValueContractInner>, NamedValueContractInner> beginUpdate(String resourceGroupName,
+        String serviceName, String namedValueId, String ifMatch, NamedValueUpdateParameters parameters);
+
+    /**
+     * Updates the specific named value.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param namedValueId Identifier of the NamedValue.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @param parameters Update parameters.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of namedValue details.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<NamedValueContractInner>, NamedValueContractInner> beginUpdate(String resourceGroupName,
+        String serviceName, String namedValueId, String ifMatch, NamedValueUpdateParameters parameters,
         Context context);
 
     /**
      * Updates the specific named value.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -241,17 +238,13 @@ public interface NamedValuesClient {
      * @return namedValue details.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<NamedValueContractInner>, NamedValueContractInner> beginUpdate(
-        String resourceGroupName,
-        String serviceName,
-        String namedValueId,
-        String ifMatch,
+    NamedValueContractInner update(String resourceGroupName, String serviceName, String namedValueId, String ifMatch,
         NamedValueUpdateParameters parameters);
 
     /**
      * Updates the specific named value.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -264,64 +257,31 @@ public interface NamedValuesClient {
      * @return namedValue details.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<NamedValueContractInner>, NamedValueContractInner> beginUpdate(
-        String resourceGroupName,
-        String serviceName,
-        String namedValueId,
-        String ifMatch,
-        NamedValueUpdateParameters parameters,
-        Context context);
+    NamedValueContractInner update(String resourceGroupName, String serviceName, String namedValueId, String ifMatch,
+        NamedValueUpdateParameters parameters, Context context);
 
     /**
-     * Updates the specific named value.
+     * Deletes specific named value from the API Management service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
      *     request or it should be * for unconditional update.
-     * @param parameters Update parameters.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    NamedValueContractInner update(
-        String resourceGroupName,
-        String serviceName,
-        String namedValueId,
-        String ifMatch,
-        NamedValueUpdateParameters parameters);
-
-    /**
-     * Updates the specific named value.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param namedValueId Identifier of the NamedValue.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @param parameters Update parameters.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
+     * @return the {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    NamedValueContractInner update(
-        String resourceGroupName,
-        String serviceName,
-        String namedValueId,
-        String ifMatch,
-        NamedValueUpdateParameters parameters,
+    Response<Void> deleteWithResponse(String resourceGroupName, String serviceName, String namedValueId, String ifMatch,
         Context context);
 
     /**
      * Deletes specific named value from the API Management service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -334,27 +294,25 @@ public interface NamedValuesClient {
     void delete(String resourceGroupName, String serviceName, String namedValueId, String ifMatch);
 
     /**
-     * Deletes specific named value from the API Management service instance.
+     * Gets the secret of the named value specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the secret of the named value specified by its identifier.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<Void> deleteWithResponse(
-        String resourceGroupName, String serviceName, String namedValueId, String ifMatch, Context context);
+    NamedValuesListValueResponse listValueWithResponse(String resourceGroupName, String serviceName,
+        String namedValueId, Context context);
 
     /**
      * Gets the secret of the named value specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -366,56 +324,40 @@ public interface NamedValuesClient {
     NamedValueSecretContractInner listValue(String resourceGroupName, String serviceName, String namedValueId);
 
     /**
-     * Gets the secret of the named value specified by its identifier.
+     * Refresh the secret of the named value specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param namedValueId Identifier of the NamedValue.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of namedValue details.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<NamedValueContractInner>, NamedValueContractInner>
+        beginRefreshSecret(String resourceGroupName, String serviceName, String namedValueId);
+
+    /**
+     * Refresh the secret of the named value specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the secret of the named value specified by its identifier.
+     * @return the {@link SyncPoller} for polling of namedValue details.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    NamedValuesListValueResponse listValueWithResponse(
-        String resourceGroupName, String serviceName, String namedValueId, Context context);
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<NamedValueContractInner>, NamedValueContractInner>
+        beginRefreshSecret(String resourceGroupName, String serviceName, String namedValueId, Context context);
 
     /**
      * Refresh the secret of the named value specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param namedValueId Identifier of the NamedValue.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<NamedValueContractInner>, NamedValueContractInner> beginRefreshSecret(
-        String resourceGroupName, String serviceName, String namedValueId);
-
-    /**
-     * Refresh the secret of the named value specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param namedValueId Identifier of the NamedValue.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<NamedValueContractInner>, NamedValueContractInner> beginRefreshSecret(
-        String resourceGroupName, String serviceName, String namedValueId, Context context);
-
-    /**
-     * Refresh the secret of the named value specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -429,7 +371,7 @@ public interface NamedValuesClient {
     /**
      * Refresh the secret of the named value specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param context The context to associate with this operation.
@@ -439,6 +381,6 @@ public interface NamedValuesClient {
      * @return namedValue details.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    NamedValueContractInner refreshSecret(
-        String resourceGroupName, String serviceName, String namedValueId, Context context);
+    NamedValueContractInner refreshSecret(String resourceGroupName, String serviceName, String namedValueId,
+        Context context);
 }

@@ -20,16 +20,16 @@ public final class SignUpSettingsGetResponse extends ResponseBase<SignUpSettings
      * @param value the deserialized value of the HTTP response.
      * @param headers the deserialized headers of the HTTP response.
      */
-    public SignUpSettingsGetResponse(
-        HttpRequest request,
-        int statusCode,
-        HttpHeaders rawHeaders,
-        PortalSignupSettingsInner value,
-        SignUpSettingsGetHeaders headers) {
+    public SignUpSettingsGetResponse(HttpRequest request, int statusCode, HttpHeaders rawHeaders,
+        PortalSignupSettingsInner value, SignUpSettingsGetHeaders headers) {
         super(request, statusCode, rawHeaders, value, headers);
     }
 
-    /** @return the deserialized response body. */
+    /**
+     * Gets the deserialized response body.
+     *
+     * @return the deserialized response body.
+     */
     @Override
     public PortalSignupSettingsInner getValue() {
         return super.getValue();

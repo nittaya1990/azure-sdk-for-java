@@ -21,16 +21,16 @@ public final class OpenIdConnectProvidersGetResponse
      * @param value the deserialized value of the HTTP response.
      * @param headers the deserialized headers of the HTTP response.
      */
-    public OpenIdConnectProvidersGetResponse(
-        HttpRequest request,
-        int statusCode,
-        HttpHeaders rawHeaders,
-        OpenidConnectProviderContractInner value,
-        OpenIdConnectProvidersGetHeaders headers) {
+    public OpenIdConnectProvidersGetResponse(HttpRequest request, int statusCode, HttpHeaders rawHeaders,
+        OpenidConnectProviderContractInner value, OpenIdConnectProvidersGetHeaders headers) {
         super(request, statusCode, rawHeaders, value, headers);
     }
 
-    /** @return the deserialized response body. */
+    /**
+     * Gets the deserialized response body.
+     *
+     * @return the deserialized response body.
+     */
     @Override
     public OpenidConnectProviderContractInner getValue() {
         return super.getValue();

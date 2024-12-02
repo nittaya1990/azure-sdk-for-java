@@ -5,22 +5,18 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.models.AuthorizationMethod;
 import com.azure.resourcemanager.apimanagement.models.AuthorizationServerContractBaseProperties;
 import com.azure.resourcemanager.apimanagement.models.BearerTokenSendingMethod;
 import com.azure.resourcemanager.apimanagement.models.ClientAuthenticationMethod;
 import com.azure.resourcemanager.apimanagement.models.GrantType;
 import com.azure.resourcemanager.apimanagement.models.TokenBodyParameterContract;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** External OAuth authorization server Update settings contract. */
 @Fluent
 public final class AuthorizationServerUpdateContractProperties extends AuthorizationServerContractBaseProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AuthorizationServerUpdateContractProperties.class);
-
     /*
      * User-friendly authorization server name.
      */
@@ -28,23 +24,34 @@ public final class AuthorizationServerUpdateContractProperties extends Authoriza
     private String displayName;
 
     /*
-     * Optional reference to a page where client or app registration for this
-     * authorization server is performed. Contains absolute URL to entity being
-     * referenced.
+     * If true, the authorization server may be used in the developer portal test console. True by default if no value
+     * is provided.
+     */
+    @JsonProperty(value = "useInTestConsole")
+    private Boolean useInTestConsole;
+
+    /*
+     * If true, the authorization server will be used in the API documentation in the developer portal. False by
+     * default if no value is provided.
+     */
+    @JsonProperty(value = "useInApiDocumentation")
+    private Boolean useInApiDocumentation;
+
+    /*
+     * Optional reference to a page where client or app registration for this authorization server is performed.
+     * Contains absolute URL to entity being referenced.
      */
     @JsonProperty(value = "clientRegistrationEndpoint")
     private String clientRegistrationEndpoint;
 
     /*
-     * OAuth authorization endpoint. See
-     * http://tools.ietf.org/html/rfc6749#section-3.2.
+     * OAuth authorization endpoint. See http://tools.ietf.org/html/rfc6749#section-3.2.
      */
     @JsonProperty(value = "authorizationEndpoint")
     private String authorizationEndpoint;
 
     /*
-     * Form of an authorization grant, which the client uses to request the
-     * access token.
+     * Form of an authorization grant, which the client uses to request the access token.
      */
     @JsonProperty(value = "grantTypes")
     private List<GrantType> grantTypes;
@@ -56,12 +63,15 @@ public final class AuthorizationServerUpdateContractProperties extends Authoriza
     private String clientId;
 
     /*
-     * Client or app secret registered with this authorization server. This
-     * property will not be filled on 'GET' operations! Use '/listSecrets' POST
-     * request to get the value.
+     * Client or app secret registered with this authorization server. This property will not be filled on 'GET'
+     * operations! Use '/listSecrets' POST request to get the value.
      */
     @JsonProperty(value = "clientSecret")
     private String clientSecret;
+
+    /** Creates an instance of AuthorizationServerUpdateContractProperties class. */
+    public AuthorizationServerUpdateContractProperties() {
+    }
 
     /**
      * Get the displayName property: User-friendly authorization server name.
@@ -84,6 +94,50 @@ public final class AuthorizationServerUpdateContractProperties extends Authoriza
     }
 
     /**
+     * Get the useInTestConsole property: If true, the authorization server may be used in the developer portal test
+     * console. True by default if no value is provided.
+     *
+     * @return the useInTestConsole value.
+     */
+    public Boolean useInTestConsole() {
+        return this.useInTestConsole;
+    }
+
+    /**
+     * Set the useInTestConsole property: If true, the authorization server may be used in the developer portal test
+     * console. True by default if no value is provided.
+     *
+     * @param useInTestConsole the useInTestConsole value to set.
+     * @return the AuthorizationServerUpdateContractProperties object itself.
+     */
+    public AuthorizationServerUpdateContractProperties withUseInTestConsole(Boolean useInTestConsole) {
+        this.useInTestConsole = useInTestConsole;
+        return this;
+    }
+
+    /**
+     * Get the useInApiDocumentation property: If true, the authorization server will be used in the API documentation
+     * in the developer portal. False by default if no value is provided.
+     *
+     * @return the useInApiDocumentation value.
+     */
+    public Boolean useInApiDocumentation() {
+        return this.useInApiDocumentation;
+    }
+
+    /**
+     * Set the useInApiDocumentation property: If true, the authorization server will be used in the API documentation
+     * in the developer portal. False by default if no value is provided.
+     *
+     * @param useInApiDocumentation the useInApiDocumentation value to set.
+     * @return the AuthorizationServerUpdateContractProperties object itself.
+     */
+    public AuthorizationServerUpdateContractProperties withUseInApiDocumentation(Boolean useInApiDocumentation) {
+        this.useInApiDocumentation = useInApiDocumentation;
+        return this;
+    }
+
+    /**
      * Get the clientRegistrationEndpoint property: Optional reference to a page where client or app registration for
      * this authorization server is performed. Contains absolute URL to entity being referenced.
      *
@@ -100,8 +154,8 @@ public final class AuthorizationServerUpdateContractProperties extends Authoriza
      * @param clientRegistrationEndpoint the clientRegistrationEndpoint value to set.
      * @return the AuthorizationServerUpdateContractProperties object itself.
      */
-    public AuthorizationServerUpdateContractProperties withClientRegistrationEndpoint(
-        String clientRegistrationEndpoint) {
+    public AuthorizationServerUpdateContractProperties
+        withClientRegistrationEndpoint(String clientRegistrationEndpoint) {
         this.clientRegistrationEndpoint = clientRegistrationEndpoint;
         return this;
     }
@@ -199,24 +253,24 @@ public final class AuthorizationServerUpdateContractProperties extends Authoriza
 
     /** {@inheritDoc} */
     @Override
-    public AuthorizationServerUpdateContractProperties withAuthorizationMethods(
-        List<AuthorizationMethod> authorizationMethods) {
+    public AuthorizationServerUpdateContractProperties
+        withAuthorizationMethods(List<AuthorizationMethod> authorizationMethods) {
         super.withAuthorizationMethods(authorizationMethods);
         return this;
     }
 
     /** {@inheritDoc} */
     @Override
-    public AuthorizationServerUpdateContractProperties withClientAuthenticationMethod(
-        List<ClientAuthenticationMethod> clientAuthenticationMethod) {
+    public AuthorizationServerUpdateContractProperties
+        withClientAuthenticationMethod(List<ClientAuthenticationMethod> clientAuthenticationMethod) {
         super.withClientAuthenticationMethod(clientAuthenticationMethod);
         return this;
     }
 
     /** {@inheritDoc} */
     @Override
-    public AuthorizationServerUpdateContractProperties withTokenBodyParameters(
-        List<TokenBodyParameterContract> tokenBodyParameters) {
+    public AuthorizationServerUpdateContractProperties
+        withTokenBodyParameters(List<TokenBodyParameterContract> tokenBodyParameters) {
         super.withTokenBodyParameters(tokenBodyParameters);
         return this;
     }
@@ -244,8 +298,8 @@ public final class AuthorizationServerUpdateContractProperties extends Authoriza
 
     /** {@inheritDoc} */
     @Override
-    public AuthorizationServerUpdateContractProperties withBearerTokenSendingMethods(
-        List<BearerTokenSendingMethod> bearerTokenSendingMethods) {
+    public AuthorizationServerUpdateContractProperties
+        withBearerTokenSendingMethods(List<BearerTokenSendingMethod> bearerTokenSendingMethods) {
         super.withBearerTokenSendingMethods(bearerTokenSendingMethods);
         return this;
     }

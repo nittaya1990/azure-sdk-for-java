@@ -8,14 +8,11 @@ import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.kusto.models.PrivateEndpointProperty;
 import com.azure.resourcemanager.kusto.models.PrivateLinkServiceConnectionStateProperty;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Properties of a private endpoint connection. */
 @Fluent
 public final class PrivateEndpointConnectionProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PrivateEndpointConnectionProperties.class);
-
     /*
      * Private endpoint which the connection belongs to.
      */
@@ -39,6 +36,10 @@ public final class PrivateEndpointConnectionProperties {
      */
     @JsonProperty(value = "provisioningState", access = JsonProperty.Access.WRITE_ONLY)
     private String provisioningState;
+
+    /** Creates an instance of PrivateEndpointConnectionProperties class. */
+    public PrivateEndpointConnectionProperties() {
+    }
 
     /**
      * Get the privateEndpoint property: Private endpoint which the connection belongs to.
@@ -98,13 +99,13 @@ public final class PrivateEndpointConnectionProperties {
             privateEndpoint().validate();
         }
         if (privateLinkServiceConnectionState() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property privateLinkServiceConnectionState in model"
-                            + " PrivateEndpointConnectionProperties"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property privateLinkServiceConnectionState in model"
+                    + " PrivateEndpointConnectionProperties"));
         } else {
             privateLinkServiceConnectionState().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(PrivateEndpointConnectionProperties.class);
 }

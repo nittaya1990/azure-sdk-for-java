@@ -4,12 +4,10 @@
 
 package com.azure.resourcemanager.kusto.generated;
 
-import com.azure.core.util.Context;
-
 /** Samples for Clusters ListLanguageExtensions. */
 public final class ClustersListLanguageExtensionsSamples {
     /*
-     * x-ms-original-file: specification/azure-kusto/resource-manager/Microsoft.Kusto/stable/2021-08-27/examples/KustoClusterListLanguageExtensions.json
+     * x-ms-original-file: specification/azure-kusto/resource-manager/Microsoft.Kusto/stable/2023-08-15/examples/KustoClusterListLanguageExtensions.json
      */
     /**
      * Sample code: KustoClusterListLanguageExtensions.
@@ -17,6 +15,6 @@ public final class ClustersListLanguageExtensionsSamples {
      * @param manager Entry point to KustoManager.
      */
     public static void kustoClusterListLanguageExtensions(com.azure.resourcemanager.kusto.KustoManager manager) {
-        manager.clusters().listLanguageExtensions("kustorptest", "kustoclusterrptest4", Context.NONE);
+        manager.clusters().listLanguageExtensions("kustorptest", "kustoCluster", com.azure.core.util.Context.NONE);
     }
 }

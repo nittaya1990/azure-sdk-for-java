@@ -4,31 +4,60 @@
 
 package com.azure.resourcemanager.notificationhubs.models;
 
-import com.azure.resourcemanager.notificationhubs.fluent.models.SharedAccessAuthorizationRuleListResultInner;
+import com.azure.core.annotation.Immutable;
+import com.azure.resourcemanager.notificationhubs.fluent.models.SharedAccessAuthorizationRuleResourceInner;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** An immutable client-side representation of SharedAccessAuthorizationRuleListResult. */
-public interface SharedAccessAuthorizationRuleListResult {
+/**
+ * The response of the List Namespace operation.
+ */
+@Immutable
+public final class SharedAccessAuthorizationRuleListResult {
+    /*
+     * Gets or sets result of the List AuthorizationRules operation.
+     */
+    @JsonProperty(value = "value", access = JsonProperty.Access.WRITE_ONLY)
+    private List<SharedAccessAuthorizationRuleResourceInner> value;
+
+    /*
+     * Gets or sets link to the next set of results.
+     */
+    @JsonProperty(value = "nextLink", access = JsonProperty.Access.WRITE_ONLY)
+    private String nextLink;
+
     /**
-     * Gets the value property: Result of the List AuthorizationRules operation.
-     *
+     * Creates an instance of SharedAccessAuthorizationRuleListResult class.
+     */
+    public SharedAccessAuthorizationRuleListResult() {
+    }
+
+    /**
+     * Get the value property: Gets or sets result of the List AuthorizationRules operation.
+     * 
      * @return the value value.
      */
-    List<SharedAccessAuthorizationRuleResource> value();
+    public List<SharedAccessAuthorizationRuleResourceInner> value() {
+        return this.value;
+    }
 
     /**
-     * Gets the nextLink property: Link to the next set of results. Not empty if Value contains incomplete list of
-     * AuthorizationRules.
-     *
+     * Get the nextLink property: Gets or sets link to the next set of results.
+     * 
      * @return the nextLink value.
      */
-    String nextLink();
+    public String nextLink() {
+        return this.nextLink;
+    }
 
     /**
-     * Gets the inner
-     * com.azure.resourcemanager.notificationhubs.fluent.models.SharedAccessAuthorizationRuleListResultInner object.
-     *
-     * @return the inner object.
+     * Validates the instance.
+     * 
+     * @throws IllegalArgumentException thrown if the instance is not valid.
      */
-    SharedAccessAuthorizationRuleListResultInner innerModel();
+    public void validate() {
+        if (value() != null) {
+            value().forEach(e -> e.validate());
+        }
+    }
 }

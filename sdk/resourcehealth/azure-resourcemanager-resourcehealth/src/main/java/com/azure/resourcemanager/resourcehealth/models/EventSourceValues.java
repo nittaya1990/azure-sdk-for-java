@@ -8,13 +8,22 @@ import com.azure.core.util.ExpandableStringEnum;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.Collection;
 
-/** Defines values for EventSourceValues. */
+/** Source of event. */
 public final class EventSourceValues extends ExpandableStringEnum<EventSourceValues> {
     /** Static value ResourceHealth for EventSourceValues. */
     public static final EventSourceValues RESOURCE_HEALTH = fromString("ResourceHealth");
 
     /** Static value ServiceHealth for EventSourceValues. */
     public static final EventSourceValues SERVICE_HEALTH = fromString("ServiceHealth");
+
+    /**
+     * Creates a new instance of EventSourceValues value.
+     *
+     * @deprecated Use the {@link #fromString(String)} factory method.
+     */
+    @Deprecated
+    public EventSourceValues() {
+    }
 
     /**
      * Creates or finds a EventSourceValues from its string representation.
@@ -27,7 +36,11 @@ public final class EventSourceValues extends ExpandableStringEnum<EventSourceVal
         return fromString(name, EventSourceValues.class);
     }
 
-    /** @return known EventSourceValues values. */
+    /**
+     * Gets known EventSourceValues values.
+     *
+     * @return known EventSourceValues values.
+     */
     public static Collection<EventSourceValues> values() {
         return values(EventSourceValues.class);
     }

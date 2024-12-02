@@ -4,105 +4,51 @@
 
 package com.azure.resourcemanager.frontdoor.fluent.models;
 
-import com.azure.core.annotation.Immutable;
-import com.azure.core.annotation.JsonFlatten;
+import com.azure.core.annotation.Fluent;
 import com.azure.core.management.Resource;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.frontdoor.models.ManagedRuleGroupDefinition;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.Map;
 
-/** Describes the a managed rule set definition. */
-@JsonFlatten
-@Immutable
-public class ManagedRuleSetDefinitionInner extends Resource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ManagedRuleSetDefinitionInner.class);
-
+/**
+ * Describes the a managed rule set definition.
+ */
+@Fluent
+public final class ManagedRuleSetDefinitionInner extends Resource {
     /*
-     * Provisioning state of the managed rule set.
+     * Properties for a managed rule set definition.
      */
-    @JsonProperty(value = "properties.provisioningState", access = JsonProperty.Access.WRITE_ONLY)
-    private String provisioningState;
-
-    /*
-     * Id of the managed rule set.
-     */
-    @JsonProperty(value = "properties.ruleSetId", access = JsonProperty.Access.WRITE_ONLY)
-    private String ruleSetId;
-
-    /*
-     * Type of the managed rule set.
-     */
-    @JsonProperty(value = "properties.ruleSetType", access = JsonProperty.Access.WRITE_ONLY)
-    private String ruleSetType;
-
-    /*
-     * Version of the managed rule set type.
-     */
-    @JsonProperty(value = "properties.ruleSetVersion", access = JsonProperty.Access.WRITE_ONLY)
-    private String ruleSetVersion;
-
-    /*
-     * Rule groups of the managed rule set.
-     */
-    @JsonProperty(value = "properties.ruleGroups", access = JsonProperty.Access.WRITE_ONLY)
-    private List<ManagedRuleGroupDefinition> ruleGroups;
+    @JsonProperty(value = "properties")
+    private ManagedRuleSetDefinitionProperties innerProperties;
 
     /**
-     * Get the provisioningState property: Provisioning state of the managed rule set.
-     *
-     * @return the provisioningState value.
+     * Creates an instance of ManagedRuleSetDefinitionInner class.
      */
-    public String provisioningState() {
-        return this.provisioningState;
+    public ManagedRuleSetDefinitionInner() {
     }
 
     /**
-     * Get the ruleSetId property: Id of the managed rule set.
-     *
-     * @return the ruleSetId value.
+     * Get the innerProperties property: Properties for a managed rule set definition.
+     * 
+     * @return the innerProperties value.
      */
-    public String ruleSetId() {
-        return this.ruleSetId;
+    private ManagedRuleSetDefinitionProperties innerProperties() {
+        return this.innerProperties;
     }
 
     /**
-     * Get the ruleSetType property: Type of the managed rule set.
-     *
-     * @return the ruleSetType value.
+     * {@inheritDoc}
      */
-    public String ruleSetType() {
-        return this.ruleSetType;
-    }
-
-    /**
-     * Get the ruleSetVersion property: Version of the managed rule set type.
-     *
-     * @return the ruleSetVersion value.
-     */
-    public String ruleSetVersion() {
-        return this.ruleSetVersion;
-    }
-
-    /**
-     * Get the ruleGroups property: Rule groups of the managed rule set.
-     *
-     * @return the ruleGroups value.
-     */
-    public List<ManagedRuleGroupDefinition> ruleGroups() {
-        return this.ruleGroups;
-    }
-
-    /** {@inheritDoc} */
     @Override
     public ManagedRuleSetDefinitionInner withLocation(String location) {
         super.withLocation(location);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ManagedRuleSetDefinitionInner withTags(Map<String, String> tags) {
         super.withTags(tags);
@@ -110,13 +56,58 @@ public class ManagedRuleSetDefinitionInner extends Resource {
     }
 
     /**
+     * Get the provisioningState property: Provisioning state of the managed rule set.
+     * 
+     * @return the provisioningState value.
+     */
+    public String provisioningState() {
+        return this.innerProperties() == null ? null : this.innerProperties().provisioningState();
+    }
+
+    /**
+     * Get the ruleSetId property: Id of the managed rule set.
+     * 
+     * @return the ruleSetId value.
+     */
+    public String ruleSetId() {
+        return this.innerProperties() == null ? null : this.innerProperties().ruleSetId();
+    }
+
+    /**
+     * Get the ruleSetType property: Type of the managed rule set.
+     * 
+     * @return the ruleSetType value.
+     */
+    public String ruleSetType() {
+        return this.innerProperties() == null ? null : this.innerProperties().ruleSetType();
+    }
+
+    /**
+     * Get the ruleSetVersion property: Version of the managed rule set type.
+     * 
+     * @return the ruleSetVersion value.
+     */
+    public String ruleSetVersion() {
+        return this.innerProperties() == null ? null : this.innerProperties().ruleSetVersion();
+    }
+
+    /**
+     * Get the ruleGroups property: Rule groups of the managed rule set.
+     * 
+     * @return the ruleGroups value.
+     */
+    public List<ManagedRuleGroupDefinition> ruleGroups() {
+        return this.innerProperties() == null ? null : this.innerProperties().ruleGroups();
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
-        if (ruleGroups() != null) {
-            ruleGroups().forEach(e -> e.validate());
+        if (innerProperties() != null) {
+            innerProperties().validate();
         }
     }
 }

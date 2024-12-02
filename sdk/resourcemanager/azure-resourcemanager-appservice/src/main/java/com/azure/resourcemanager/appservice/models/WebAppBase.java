@@ -204,6 +204,13 @@ public interface WebAppBase extends HasName, GroupableResource<AppServiceManager
     Flux<String> streamAllLogsAsync();
 
     /**
+     * Whether the web app can be accessed from public network.
+     *
+     * @return whether the web app can be accessed from public network.
+     */
+    PublicNetworkAccess publicNetworkAccess();
+
+    /**
      * Verifies the ownership of the domain for a certificate order by verifying a hostname of the domain is bound to
      * this web app.
      *
@@ -351,11 +358,9 @@ public interface WebAppBase extends HasName, GroupableResource<AppServiceManager
      *
      * @param <FluentT> the type of the resource
      */
-    interface Definition<FluentT>
-        extends DefinitionStages.WithWebContainer<FluentT>,
-            DefinitionStages.WithCreate<FluentT>,
-            DefinitionStages.WithSystemAssignedIdentityBasedAccessOrCreate<FluentT>,
-            DefinitionStages.WithUserAssignedManagedServiceIdentityBasedAccessOrCreate<FluentT> {
+    interface Definition<FluentT> extends DefinitionStages.WithWebContainer<FluentT>,
+        DefinitionStages.WithCreate<FluentT>, DefinitionStages.WithSystemAssignedIdentityBasedAccessOrCreate<FluentT>,
+        DefinitionStages.WithUserAssignedManagedServiceIdentityBasedAccessOrCreate<FluentT> {
     }
 
     /** Grouping of all the site definition stages. */
@@ -831,8 +836,8 @@ public interface WebAppBase extends HasName, GroupableResource<AppServiceManager
              * @param role access role to assigned to the web app's local identity
              * @return the next stage of the definition
              */
-            WithSystemAssignedIdentityBasedAccessOrCreate<FluentT> withSystemAssignedIdentityBasedAccessTo(
-                String resourceId, BuiltInRole role);
+            WithSystemAssignedIdentityBasedAccessOrCreate<FluentT>
+                withSystemAssignedIdentityBasedAccessTo(String resourceId, BuiltInRole role);
 
             /**
              * Specifies that web app's system assigned (local) identity should have the given access (described by the
@@ -854,8 +859,8 @@ public interface WebAppBase extends HasName, GroupableResource<AppServiceManager
              * @param roleDefinitionId access role definition to assigned to the web app's local identity
              * @return the next stage of the definition
              */
-            WithSystemAssignedIdentityBasedAccessOrCreate<FluentT> withSystemAssignedIdentityBasedAccessTo(
-                String resourceId, String roleDefinitionId);
+            WithSystemAssignedIdentityBasedAccessOrCreate<FluentT>
+                withSystemAssignedIdentityBasedAccessTo(String resourceId, String roleDefinitionId);
 
             /**
              * Specifies that web app's system assigned (local) identity should have the access (described by the role
@@ -940,6 +945,25 @@ public interface WebAppBase extends HasName, GroupableResource<AppServiceManager
              * @return the next stage of the definition
              */
             WithCreate<FluentT> withAccessRule(IpSecurityRestriction ipSecurityRule);
+
+            /**
+             * Disables public network access for the web app.
+             *
+             * @return the next stage of the definition
+             */
+            WithCreate<FluentT> disablePublicNetworkAccess();
+        }
+
+        /** The stage of web app definition allowing to configure container size. */
+        interface WithContainerSize<FluentT> {
+            /**
+             * Specifies the the amount of memory allocated to each instance of the function app, measured in mebibytes.
+             *
+             * @param containerSize container size, possible values: 128, 192, 256, 320, 384, 448, 512, 576, 640, 704,
+             *                      768, 832, 896, 960, 1024, 1088, 1152, 1216, 1280, 1344, 1408, 1472, 1536, etc
+             * @return the next stage of the definition
+             */
+            WithCreate<FluentT> withContainerSize(int containerSize);
         }
 
         /**
@@ -949,21 +973,12 @@ public interface WebAppBase extends HasName, GroupableResource<AppServiceManager
          * @param <FluentT> the type of the resource
          */
         interface WithCreate<FluentT>
-            extends Creatable<FluentT>,
-                GroupableResource.DefinitionWithTags<WithCreate<FluentT>>,
-                WithClientAffinityEnabled<FluentT>,
-                WithClientCertEnabled<FluentT>,
-                WithScmSiteAlsoStopped<FluentT>,
-                WithSiteConfigs<FluentT>,
-                WithAppSettings<FluentT>,
-                WithConnectionString<FluentT>,
-                WithSourceControl<FluentT>,
-                WithHostNameBinding<FluentT>,
-                WithHostNameSslBinding<FluentT>,
-                WithAuthentication<FluentT>,
-                WithDiagnosticLogging<FluentT>,
-                WithManagedServiceIdentity<FluentT>,
-                WithNetworkAccess<FluentT> {
+            extends Creatable<FluentT>, GroupableResource.DefinitionWithTags<WithCreate<FluentT>>,
+            WithClientAffinityEnabled<FluentT>, WithClientCertEnabled<FluentT>, WithScmSiteAlsoStopped<FluentT>,
+            WithSiteConfigs<FluentT>, WithAppSettings<FluentT>, WithConnectionString<FluentT>,
+            WithSourceControl<FluentT>, WithHostNameBinding<FluentT>, WithHostNameSslBinding<FluentT>,
+            WithAuthentication<FluentT>, WithDiagnosticLogging<FluentT>, WithManagedServiceIdentity<FluentT>,
+            WithNetworkAccess<FluentT>, WithContainerSize<FluentT> {
         }
     }
 
@@ -1569,7 +1584,7 @@ public interface WebAppBase extends HasName, GroupableResource<AppServiceManager
             Update<FluentT> withExistingUserAssignedManagedServiceIdentity(Identity identity);
         }
 
-        /** The stage of storage account update allowing to configure network access. */
+        /** The stage of web app update allowing to configure network access. */
         interface WithNetworkAccess<FluentT> {
             /**
              * Specifies that access to web app should be allowed from all networks.
@@ -1652,6 +1667,32 @@ public interface WebAppBase extends HasName, GroupableResource<AppServiceManager
              * @return the next stage of the update
              */
             Update<FluentT> withoutIpAddressRangeAccess(String ipAddressCidr);
+
+            /**
+             * Enables public network access for the web app, for private link feature.
+             *
+             * @return the next stage of the update
+             */
+            Update<FluentT> enablePublicNetworkAccess();
+
+            /**
+             * Disables public network access for the web app, for private link feature.
+             *
+             * @return the next stage of the update
+             */
+            Update<FluentT> disablePublicNetworkAccess();
+        }
+
+        /** The stage of web app update allowing to configure container size. */
+        interface WithContainerSize<FluentT> {
+            /**
+             * Specifies the the amount of memory allocated to each instance of the function app, measured in mebibytes.
+             *
+             * @param containerSize container size, possible values: 128, 192, 256, 320, 384, 448, 512, 576, 640, 704,
+             *                      768, 832, 896, 960, 1024, 1088, 1152, 1216, 1280, 1344, 1408, 1472, 1536, etc
+             * @return the next stage of the update
+             */
+            Update<FluentT> withContainerSize(int containerSize);
         }
     }
 
@@ -1660,23 +1701,15 @@ public interface WebAppBase extends HasName, GroupableResource<AppServiceManager
      *
      * @param <FluentT> the type of the resource
      */
-    interface Update<FluentT>
-        extends Appliable<FluentT>,
-            GroupableResource.UpdateWithTags<Update<FluentT>>,
-            UpdateStages.WithClientAffinityEnabled<FluentT>,
-            UpdateStages.WithClientCertEnabled<FluentT>,
-            UpdateStages.WithScmSiteAlsoStopped<FluentT>,
-            UpdateStages.WithSiteConfigs<FluentT>,
-            UpdateStages.WithAppSettings<FluentT>,
-            UpdateStages.WithConnectionString<FluentT>,
-            UpdateStages.WithSourceControl<FluentT>,
-            UpdateStages.WithHostNameBinding<FluentT>,
-            UpdateStages.WithHostNameSslBinding<FluentT>,
-            UpdateStages.WithAuthentication<FluentT>,
-            UpdateStages.WithDiagnosticLogging<FluentT>,
-            UpdateStages.WithManagedServiceIdentity<FluentT>,
-            UpdateStages.WithSystemAssignedIdentityBasedAccess<FluentT>,
-            UpdateStages.WithUserAssignedManagedServiceIdentityBasedAccess<FluentT>,
-            UpdateStages.WithNetworkAccess<FluentT> {
+    interface Update<FluentT> extends Appliable<FluentT>, GroupableResource.UpdateWithTags<Update<FluentT>>,
+        UpdateStages.WithClientAffinityEnabled<FluentT>, UpdateStages.WithClientCertEnabled<FluentT>,
+        UpdateStages.WithScmSiteAlsoStopped<FluentT>, UpdateStages.WithSiteConfigs<FluentT>,
+        UpdateStages.WithAppSettings<FluentT>, UpdateStages.WithConnectionString<FluentT>,
+        UpdateStages.WithSourceControl<FluentT>, UpdateStages.WithHostNameBinding<FluentT>,
+        UpdateStages.WithHostNameSslBinding<FluentT>, UpdateStages.WithAuthentication<FluentT>,
+        UpdateStages.WithDiagnosticLogging<FluentT>, UpdateStages.WithManagedServiceIdentity<FluentT>,
+        UpdateStages.WithSystemAssignedIdentityBasedAccess<FluentT>,
+        UpdateStages.WithUserAssignedManagedServiceIdentityBasedAccess<FluentT>,
+        UpdateStages.WithNetworkAccess<FluentT>, UpdateStages.WithContainerSize<FluentT> {
     }
 }

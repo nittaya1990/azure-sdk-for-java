@@ -58,10 +58,10 @@ public interface Databases {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return information about a database.
+     * @return information about a database along with {@link Response}.
      */
-    Response<Database> getWithResponse(
-        String resourceGroupName, String serverName, String databaseName, Context context);
+    Response<Database> getWithResponse(String resourceGroupName, String serverName, String databaseName,
+        Context context);
 
     /**
      * List all the databases in a given server.
@@ -95,7 +95,7 @@ public interface Databases {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return information about a database.
+     * @return information about a database along with {@link Response}.
      */
     Database getById(String id);
 
@@ -107,7 +107,7 @@ public interface Databases {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return information about a database.
+     * @return information about a database along with {@link Response}.
      */
     Response<Database> getByIdWithResponse(String id, Context context);
 

@@ -11,18 +11,16 @@ import com.azure.resourcemanager.changeanalysis.fluent.ResourceChangesClient;
 import com.azure.resourcemanager.changeanalysis.fluent.models.ChangeInner;
 import com.azure.resourcemanager.changeanalysis.models.Change;
 import com.azure.resourcemanager.changeanalysis.models.ResourceChanges;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.OffsetDateTime;
 
 public final class ResourceChangesImpl implements ResourceChanges {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ResourceChangesImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(ResourceChangesImpl.class);
 
     private final ResourceChangesClient innerClient;
 
     private final com.azure.resourcemanager.changeanalysis.AzureChangeAnalysisManager serviceManager;
 
-    public ResourceChangesImpl(
-        ResourceChangesClient innerClient,
+    public ResourceChangesImpl(ResourceChangesClient innerClient,
         com.azure.resourcemanager.changeanalysis.AzureChangeAnalysisManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
@@ -33,10 +31,10 @@ public final class ResourceChangesImpl implements ResourceChanges {
         return Utils.mapPage(inner, inner1 -> new ChangeImpl(inner1, this.manager()));
     }
 
-    public PagedIterable<Change> list(
-        String resourceId, OffsetDateTime startTime, OffsetDateTime endTime, String skipToken, Context context) {
-        PagedIterable<ChangeInner> inner =
-            this.serviceClient().list(resourceId, startTime, endTime, skipToken, context);
+    public PagedIterable<Change> list(String resourceId, OffsetDateTime startTime, OffsetDateTime endTime,
+        String skipToken, Context context) {
+        PagedIterable<ChangeInner> inner
+            = this.serviceClient().list(resourceId, startTime, endTime, skipToken, context);
         return Utils.mapPage(inner, inner1 -> new ChangeImpl(inner1, this.manager()));
     }
 

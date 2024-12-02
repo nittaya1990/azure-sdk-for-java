@@ -4,292 +4,281 @@
 
 package com.azure.resourcemanager.labservices.models;
 
-import com.azure.core.management.Region;
+import com.azure.core.management.SystemData;
 import com.azure.core.util.Context;
 import com.azure.resourcemanager.labservices.fluent.models.UserInner;
 import java.time.Duration;
-import java.util.Map;
+import java.time.OffsetDateTime;
 
-/** An immutable client-side representation of User. */
+/**
+ * An immutable client-side representation of User.
+ */
 public interface User {
     /**
      * Gets the id property: Fully qualified resource Id for the resource.
-     *
+     * 
      * @return the id value.
      */
     String id();
 
     /**
      * Gets the name property: The name of the resource.
-     *
+     * 
      * @return the name value.
      */
     String name();
 
     /**
      * Gets the type property: The type of the resource.
-     *
+     * 
      * @return the type value.
      */
     String type();
 
     /**
-     * Gets the location property: The geo-location where the resource lives.
-     *
-     * @return the location value.
+     * Gets the systemData property: Metadata pertaining to creation and last modification of the user resource.
+     * 
+     * @return the systemData value.
      */
-    String location();
+    SystemData systemData();
 
     /**
-     * Gets the tags property: Resource tags.
-     *
-     * @return the tags value.
+     * Gets the provisioningState property: Current provisioning state of the user resource.
+     * 
+     * @return the provisioningState value.
      */
-    Map<String, String> tags();
+    ProvisioningState provisioningState();
 
     /**
-     * Gets the email property: The user email address, as it was specified during registration.
-     *
+     * Gets the displayName property: Display name of the user, for example user's full name.
+     * 
+     * @return the displayName value.
+     */
+    String displayName();
+
+    /**
+     * Gets the email property: Email address of the user.
+     * 
      * @return the email value.
      */
     String email();
 
     /**
-     * Gets the familyName property: The user family name, as it was specified during registration.
-     *
-     * @return the familyName value.
+     * Gets the registrationState property: State of the user's registration within the lab.
+     * 
+     * @return the registrationState value.
      */
-    String familyName();
+    RegistrationState registrationState();
 
     /**
-     * Gets the givenName property: The user given name, as it was specified during registration.
-     *
-     * @return the givenName value.
+     * Gets the invitationState property: State of the invitation message for the user.
+     * 
+     * @return the invitationState value.
      */
-    String givenName();
+    InvitationState invitationState();
 
     /**
-     * Gets the tenantId property: The user tenant ID, as it was specified during registration.
-     *
-     * @return the tenantId value.
+     * Gets the invitationSent property: Date and time when the invitation message was sent to the user.
+     * 
+     * @return the invitationSent value.
      */
-    String tenantId();
+    OffsetDateTime invitationSent();
 
     /**
-     * Gets the totalUsage property: How long the user has used his VMs in this lab.
-     *
+     * Gets the totalUsage property: How long the user has used their virtual machines in this lab.
+     * 
      * @return the totalUsage value.
      */
     Duration totalUsage();
 
     /**
-     * Gets the provisioningState property: The provisioning status of the resource.
-     *
-     * @return the provisioningState value.
+     * Gets the additionalUsageQuota property: The amount of usage quota time the user gets in addition to the lab usage
+     * quota.
+     * 
+     * @return the additionalUsageQuota value.
      */
-    String provisioningState();
+    Duration additionalUsageQuota();
 
     /**
-     * Gets the uniqueIdentifier property: The unique immutable identifier of a resource (Guid).
-     *
-     * @return the uniqueIdentifier value.
+     * Gets the name of the resource group.
+     * 
+     * @return the name of the resource group.
      */
-    String uniqueIdentifier();
-
-    /**
-     * Gets the latestOperationResult property: The details of the latest operation. ex: status, error.
-     *
-     * @return the latestOperationResult value.
-     */
-    LatestOperationResult latestOperationResult();
-
-    /**
-     * Gets the region of the resource.
-     *
-     * @return the region of the resource.
-     */
-    Region region();
-
-    /**
-     * Gets the name of the resource region.
-     *
-     * @return the name of the resource region.
-     */
-    String regionName();
+    String resourceGroupName();
 
     /**
      * Gets the inner com.azure.resourcemanager.labservices.fluent.models.UserInner object.
-     *
+     * 
      * @return the inner object.
      */
     UserInner innerModel();
 
-    /** The entirety of the User definition. */
-    interface Definition
-        extends DefinitionStages.Blank,
-            DefinitionStages.WithLocation,
-            DefinitionStages.WithParentResource,
-            DefinitionStages.WithCreate {
+    /**
+     * The entirety of the User definition.
+     */
+    interface Definition extends DefinitionStages.Blank, DefinitionStages.WithParentResource,
+        DefinitionStages.WithEmail, DefinitionStages.WithCreate {
     }
-    /** The User definition stages. */
-    interface DefinitionStages {
-        /** The first stage of the User definition. */
-        interface Blank extends WithLocation {
-        }
-        /** The stage of the User definition allowing to specify location. */
-        interface WithLocation {
-            /**
-             * Specifies the region for the resource.
-             *
-             * @param location The geo-location where the resource lives.
-             * @return the next definition stage.
-             */
-            WithParentResource withRegion(Region location);
 
-            /**
-             * Specifies the region for the resource.
-             *
-             * @param location The geo-location where the resource lives.
-             * @return the next definition stage.
-             */
-            WithParentResource withRegion(String location);
+    /**
+     * The User definition stages.
+     */
+    interface DefinitionStages {
+        /**
+         * The first stage of the User definition.
+         */
+        interface Blank extends WithParentResource {
         }
-        /** The stage of the User definition allowing to specify parent resource. */
+
+        /**
+         * The stage of the User definition allowing to specify parent resource.
+         */
         interface WithParentResource {
             /**
-             * Specifies resourceGroupName, labAccountName, labName.
-             *
-             * @param resourceGroupName The name of the resource group.
-             * @param labAccountName The name of the lab Account.
-             * @param labName The name of the lab.
+             * Specifies resourceGroupName, labName.
+             * 
+             * @param resourceGroupName The name of the resource group. The name is case insensitive.
+             * @param labName The name of the lab that uniquely identifies it within containing lab plan. Used in
+             * resource URIs.
              * @return the next definition stage.
              */
-            WithCreate withExistingLab(String resourceGroupName, String labAccountName, String labName);
+            WithEmail withExistingLab(String resourceGroupName, String labName);
         }
+
+        /**
+         * The stage of the User definition allowing to specify email.
+         */
+        interface WithEmail {
+            /**
+             * Specifies the email property: Email address of the user..
+             * 
+             * @param email Email address of the user.
+             * @return the next definition stage.
+             */
+            WithCreate withEmail(String email);
+        }
+
         /**
          * The stage of the User definition which contains all the minimum required properties for the resource to be
          * created, but also allows for any other optional properties to be specified.
          */
-        interface WithCreate
-            extends DefinitionStages.WithTags,
-                DefinitionStages.WithProvisioningState,
-                DefinitionStages.WithUniqueIdentifier {
+        interface WithCreate extends DefinitionStages.WithAdditionalUsageQuota {
             /**
              * Executes the create request.
-             *
+             * 
              * @return the created resource.
              */
             User create();
 
             /**
              * Executes the create request.
-             *
+             * 
              * @param context The context to associate with this operation.
              * @return the created resource.
              */
             User create(Context context);
         }
-        /** The stage of the User definition allowing to specify tags. */
-        interface WithTags {
+
+        /**
+         * The stage of the User definition allowing to specify additionalUsageQuota.
+         */
+        interface WithAdditionalUsageQuota {
             /**
-             * Specifies the tags property: Resource tags..
-             *
-             * @param tags Resource tags.
+             * Specifies the additionalUsageQuota property: The amount of usage quota time the user gets in addition to
+             * the lab usage quota..
+             * 
+             * @param additionalUsageQuota The amount of usage quota time the user gets in addition to the lab usage
+             * quota.
              * @return the next definition stage.
              */
-            WithCreate withTags(Map<String, String> tags);
-        }
-        /** The stage of the User definition allowing to specify provisioningState. */
-        interface WithProvisioningState {
-            /**
-             * Specifies the provisioningState property: The provisioning status of the resource..
-             *
-             * @param provisioningState The provisioning status of the resource.
-             * @return the next definition stage.
-             */
-            WithCreate withProvisioningState(String provisioningState);
-        }
-        /** The stage of the User definition allowing to specify uniqueIdentifier. */
-        interface WithUniqueIdentifier {
-            /**
-             * Specifies the uniqueIdentifier property: The unique immutable identifier of a resource (Guid)..
-             *
-             * @param uniqueIdentifier The unique immutable identifier of a resource (Guid).
-             * @return the next definition stage.
-             */
-            WithCreate withUniqueIdentifier(String uniqueIdentifier);
+            WithCreate withAdditionalUsageQuota(Duration additionalUsageQuota);
         }
     }
+
     /**
      * Begins update for the User resource.
-     *
+     * 
      * @return the stage of resource update.
      */
     User.Update update();
 
-    /** The template for User update. */
-    interface Update
-        extends UpdateStages.WithTags, UpdateStages.WithProvisioningState, UpdateStages.WithUniqueIdentifier {
+    /**
+     * The template for User update.
+     */
+    interface Update extends UpdateStages.WithAdditionalUsageQuota {
         /**
          * Executes the update request.
-         *
+         * 
          * @return the updated resource.
          */
         User apply();
 
         /**
          * Executes the update request.
-         *
+         * 
          * @param context The context to associate with this operation.
          * @return the updated resource.
          */
         User apply(Context context);
     }
-    /** The User update stages. */
+
+    /**
+     * The User update stages.
+     */
     interface UpdateStages {
-        /** The stage of the User update allowing to specify tags. */
-        interface WithTags {
+        /**
+         * The stage of the User update allowing to specify additionalUsageQuota.
+         */
+        interface WithAdditionalUsageQuota {
             /**
-             * Specifies the tags property: Resource tags..
-             *
-             * @param tags Resource tags.
+             * Specifies the additionalUsageQuota property: The amount of usage quota time the user gets in addition to
+             * the lab usage quota..
+             * 
+             * @param additionalUsageQuota The amount of usage quota time the user gets in addition to the lab usage
+             * quota.
              * @return the next definition stage.
              */
-            Update withTags(Map<String, String> tags);
-        }
-        /** The stage of the User update allowing to specify provisioningState. */
-        interface WithProvisioningState {
-            /**
-             * Specifies the provisioningState property: The provisioning status of the resource..
-             *
-             * @param provisioningState The provisioning status of the resource.
-             * @return the next definition stage.
-             */
-            Update withProvisioningState(String provisioningState);
-        }
-        /** The stage of the User update allowing to specify uniqueIdentifier. */
-        interface WithUniqueIdentifier {
-            /**
-             * Specifies the uniqueIdentifier property: The unique immutable identifier of a resource (Guid)..
-             *
-             * @param uniqueIdentifier The unique immutable identifier of a resource (Guid).
-             * @return the next definition stage.
-             */
-            Update withUniqueIdentifier(String uniqueIdentifier);
+            Update withAdditionalUsageQuota(Duration additionalUsageQuota);
         }
     }
+
     /**
      * Refreshes the resource to sync with Azure.
-     *
+     * 
      * @return the refreshed resource.
      */
     User refresh();
 
     /**
      * Refreshes the resource to sync with Azure.
-     *
+     * 
      * @param context The context to associate with this operation.
      * @return the refreshed resource.
      */
     User refresh(Context context);
+
+    /**
+     * Invite a user to a lab.
+     * 
+     * Operation to invite a user to a lab.
+     * 
+     * @param body The request body.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     */
+    void invite(InviteBody body);
+
+    /**
+     * Invite a user to a lab.
+     * 
+     * Operation to invite a user to a lab.
+     * 
+     * @param body The request body.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     */
+    void invite(InviteBody body, Context context);
 }

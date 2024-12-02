@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.postgresqlflexibleserver.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Virtual network subnet usage parameter. */
+/**
+ * Virtual network subnet usage parameter.
+ */
 @Fluent
 public final class VirtualNetworkSubnetUsageParameter {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(VirtualNetworkSubnetUsageParameter.class);
-
     /*
      * Virtual network resource id.
      */
@@ -21,8 +19,14 @@ public final class VirtualNetworkSubnetUsageParameter {
     private String virtualNetworkArmResourceId;
 
     /**
+     * Creates an instance of VirtualNetworkSubnetUsageParameter class.
+     */
+    public VirtualNetworkSubnetUsageParameter() {
+    }
+
+    /**
      * Get the virtualNetworkArmResourceId property: Virtual network resource id.
-     *
+     * 
      * @return the virtualNetworkArmResourceId value.
      */
     public String virtualNetworkArmResourceId() {
@@ -31,7 +35,7 @@ public final class VirtualNetworkSubnetUsageParameter {
 
     /**
      * Set the virtualNetworkArmResourceId property: Virtual network resource id.
-     *
+     * 
      * @param virtualNetworkArmResourceId the virtualNetworkArmResourceId value to set.
      * @return the VirtualNetworkSubnetUsageParameter object itself.
      */
@@ -42,7 +46,7 @@ public final class VirtualNetworkSubnetUsageParameter {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

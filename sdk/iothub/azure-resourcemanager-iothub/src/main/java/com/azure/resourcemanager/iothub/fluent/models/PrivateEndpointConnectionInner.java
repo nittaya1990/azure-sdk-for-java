@@ -8,19 +8,20 @@ import com.azure.core.annotation.Fluent;
 import com.azure.core.management.ProxyResource;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.iothub.models.PrivateEndpointConnectionProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** The private endpoint connection of an IotHub. */
 @Fluent
 public final class PrivateEndpointConnectionInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PrivateEndpointConnectionInner.class);
-
     /*
      * The properties of a private endpoint connection
      */
     @JsonProperty(value = "properties", required = true)
     private PrivateEndpointConnectionProperties properties;
+
+    /** Creates an instance of PrivateEndpointConnectionInner class. */
+    public PrivateEndpointConnectionInner() {
+    }
 
     /**
      * Get the properties property: The properties of a private endpoint connection.
@@ -49,12 +50,12 @@ public final class PrivateEndpointConnectionInner extends ProxyResource {
      */
     public void validate() {
         if (properties() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property properties in model PrivateEndpointConnectionInner"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property properties in model PrivateEndpointConnectionInner"));
         } else {
             properties().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(PrivateEndpointConnectionInner.class);
 }

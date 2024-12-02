@@ -11,15 +11,15 @@ import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobClientBuilder;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobContainerClientBuilder;
+import com.azure.storage.blob.models.BlobHttpHeaders;
 
 import java.nio.file.FileSystems;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
- * WARNING: MODIFYING THIS FILE WILL REQUIRE CORRESPONDING UPDATES TO README.md FILE. LINE NUMBERS ARE USED TO EXTRACT
- * APPROPRIATE CODE SEGMENTS FROM THIS FILE. ADD NEW CODE AT THE BOTTOM TO AVOID CHANGING LINE NUMBERS OF EXISTING CODE
- * SAMPLES.
- *
  * Class containing code snippets that will be injected to README.md.
  */
 public class ReadmeSamples {
@@ -34,6 +34,7 @@ public class ReadmeSamples {
      * Code snippet for creating JobsClient and StorageClient
      */
     public void getClients() {
+        // BEGIN: readme-sample-getClients
         JobsClient jobsClient = new QuantumClientBuilder()
             .credential(new DefaultAzureCredentialBuilder().build())
             .host("{endpoint}")
@@ -49,12 +50,14 @@ public class ReadmeSamples {
             .resourceGroupName("{resourceGroup}")
             .workspaceName("{workspaceName}")
             .buildStorageClient();
+        // END: readme-sample-getClients
     }
 
     /**
      * Code snippet to create a storage container to store data for jobs.
      */
     public void getContainerSasUri() {
+        // BEGIN: readme-sample-getContainerSasUri
         // Get container URI with SAS key
         String containerName = "{storageContainerName}";
 
@@ -71,59 +74,73 @@ public class ReadmeSamples {
         String containerUri = storageClient.sasUri(
             new BlobDetails().setContainerName(containerName)
         ).getSasUri();
+        // END: readme-sample-getContainerSasUri
     }
 
     /**
      * Code snippet to upload data to be used for jobs.
      */
     public void uploadInputData() {
+        // BEGIN: readme-sample-uploadInputData
         // Get input data blob Uri with SAS key
         String blobName = "{blobName}";
         BlobDetails blobDetails = new BlobDetails()
             .setContainerName(containerName)
             .setBlobName(blobName);
+        BlobHttpHeaders blobHttpHeaders = new BlobHttpHeaders()
+            .setContentType("qir.v1");
         String inputDataUri = storageClient.sasUri(blobDetails).getSasUri();
 
         // Upload input data to blob
         BlobClient blobClient = new BlobClientBuilder()
             .endpoint(inputDataUri)
             .buildClient();
-        String problemFilePath = FileSystems.getDefault().getPath("src/samples/resources/problem.json").toString();
-        blobClient.uploadFromFile(problemFilePath);
+        String qirFilePath = FileSystems.getDefault().getPath("src/samples/java/com/azure/quantum/jobs/BellState.bc").toString();
+        blobClient.uploadFromFile(qirFilePath, null, blobHttpHeaders, null, null, null, null);
+        // END: readme-sample-uploadInputData
     }
 
     /**
      * Code snippet to create a job.
      */
     public void createTheJob() {
+        // BEGIN: readme-sample-createTheJob
         String jobId = String.format("job-%s", UUID.randomUUID());
+        Map<String, Object> inputParams = new HashMap<String, Object>();
+        inputParams.put("entryPoint", "ENTRYPOINT__BellState");
+        inputParams.put("arguments", new ArrayList<String>());
+        inputParams.put("targetCapability", "AdaptiveExecution");
         JobDetails createJobDetails = new JobDetails()
             .setContainerUri(containerUri)
             .setId(jobId)
-            .setInputDataFormat("microsoft.qio.v2")
-            .setOutputDataFormat("microsoft.qio-results.v2")
-            .setProviderId("microsoft")
-            .setTarget("microsoft.paralleltempering-parameterfree.cpu")
-            .setName("{jobName}");
+            .setInputDataFormat("qir.v1")
+            .setOutputDataFormat("microsoft.quantum-results.v1")
+            .setProviderId("quantinuum")
+            .setTarget("quantinuum.sim.h1-1e")
+            .setName("{jobName}")
+            .setInputParams(inputParams);
         JobDetails jobDetails = jobsClient.create(jobId, createJobDetails);
+        // END: readme-sample-createTheJob
     }
 
     /**
      * Code snippet to get a job.
      */
     public void getJob() {
+        // BEGIN: readme-sample-getJob
         // Get the job that we've just created based on its jobId
         JobDetails myJob = jobsClient.get(jobId);
+        // END: readme-sample-getJob
     }
 
     /**
      * Code snippet to list all jobs in a workspace.
      */
     public void listJobs() {
+        // BEGIN: readme-sample-listJobs
         PagedIterable<JobDetails> jobs = jobsClient.list();
-        jobs.forEach(job -> {
-            System.out.println(job.getName());
-        });
+        jobs.forEach(job -> System.out.println(job.getName()));
+        // END: readme-sample-listJobs
     }
 
 }

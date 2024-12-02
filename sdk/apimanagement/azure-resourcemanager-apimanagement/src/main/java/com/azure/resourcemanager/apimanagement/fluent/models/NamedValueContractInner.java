@@ -6,22 +6,22 @@ package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.models.KeyVaultContractProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** NamedValue details. */
 @Fluent
 public final class NamedValueContractInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(NamedValueContractInner.class);
-
     /*
      * NamedValue entity contract properties.
      */
     @JsonProperty(value = "properties")
     private NamedValueContractProperties innerProperties;
+
+    /** Creates an instance of NamedValueContractInner class. */
+    public NamedValueContractInner() {
+    }
 
     /**
      * Get the innerProperties property: NamedValue entity contract properties.

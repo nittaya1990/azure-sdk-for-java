@@ -74,6 +74,13 @@ public interface GatewayHostnameConfigurationContract {
     Boolean http2Enabled();
 
     /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
+
+    /**
      * Gets the inner com.azure.resourcemanager.apimanagement.fluent.models.GatewayHostnameConfigurationContractInner
      * object.
      *
@@ -85,17 +92,19 @@ public interface GatewayHostnameConfigurationContract {
     interface Definition
         extends DefinitionStages.Blank, DefinitionStages.WithParentResource, DefinitionStages.WithCreate {
     }
+
     /** The GatewayHostnameConfigurationContract definition stages. */
     interface DefinitionStages {
         /** The first stage of the GatewayHostnameConfigurationContract definition. */
         interface Blank extends WithParentResource {
         }
+
         /** The stage of the GatewayHostnameConfigurationContract definition allowing to specify parent resource. */
         interface WithParentResource {
             /**
              * Specifies resourceGroupName, serviceName, gatewayId.
              *
-             * @param resourceGroupName The name of the resource group.
+             * @param resourceGroupName The name of the resource group. The name is case insensitive.
              * @param serviceName The name of the API Management service.
              * @param gatewayId Gateway entity identifier. Must be unique in the current API Management service
              *     instance. Must not have value 'managed'.
@@ -103,18 +112,14 @@ public interface GatewayHostnameConfigurationContract {
              */
             WithCreate withExistingGateway(String resourceGroupName, String serviceName, String gatewayId);
         }
+
         /**
          * The stage of the GatewayHostnameConfigurationContract definition which contains all the minimum required
          * properties for the resource to be created, but also allows for any other optional properties to be specified.
          */
-        interface WithCreate
-            extends DefinitionStages.WithHostname,
-                DefinitionStages.WithCertificateId,
-                DefinitionStages.WithNegotiateClientCertificate,
-                DefinitionStages.WithTls10Enabled,
-                DefinitionStages.WithTls11Enabled,
-                DefinitionStages.WithHttp2Enabled,
-                DefinitionStages.WithIfMatch {
+        interface WithCreate extends DefinitionStages.WithHostname, DefinitionStages.WithCertificateId,
+            DefinitionStages.WithNegotiateClientCertificate, DefinitionStages.WithTls10Enabled,
+            DefinitionStages.WithTls11Enabled, DefinitionStages.WithHttp2Enabled, DefinitionStages.WithIfMatch {
             /**
              * Executes the create request.
              *
@@ -130,6 +135,7 @@ public interface GatewayHostnameConfigurationContract {
              */
             GatewayHostnameConfigurationContract create(Context context);
         }
+
         /** The stage of the GatewayHostnameConfigurationContract definition allowing to specify hostname. */
         interface WithHostname {
             /**
@@ -140,6 +146,7 @@ public interface GatewayHostnameConfigurationContract {
              */
             WithCreate withHostname(String hostname);
         }
+
         /** The stage of the GatewayHostnameConfigurationContract definition allowing to specify certificateId. */
         interface WithCertificateId {
             /**
@@ -151,6 +158,7 @@ public interface GatewayHostnameConfigurationContract {
              */
             WithCreate withCertificateId(String certificateId);
         }
+
         /**
          * The stage of the GatewayHostnameConfigurationContract definition allowing to specify
          * negotiateClientCertificate.
@@ -165,6 +173,7 @@ public interface GatewayHostnameConfigurationContract {
              */
             WithCreate withNegotiateClientCertificate(Boolean negotiateClientCertificate);
         }
+
         /** The stage of the GatewayHostnameConfigurationContract definition allowing to specify tls10Enabled. */
         interface WithTls10Enabled {
             /**
@@ -175,6 +184,7 @@ public interface GatewayHostnameConfigurationContract {
              */
             WithCreate withTls10Enabled(Boolean tls10Enabled);
         }
+
         /** The stage of the GatewayHostnameConfigurationContract definition allowing to specify tls11Enabled. */
         interface WithTls11Enabled {
             /**
@@ -185,6 +195,7 @@ public interface GatewayHostnameConfigurationContract {
              */
             WithCreate withTls11Enabled(Boolean tls11Enabled);
         }
+
         /** The stage of the GatewayHostnameConfigurationContract definition allowing to specify http2Enabled. */
         interface WithHttp2Enabled {
             /**
@@ -195,6 +206,7 @@ public interface GatewayHostnameConfigurationContract {
              */
             WithCreate withHttp2Enabled(Boolean http2Enabled);
         }
+
         /** The stage of the GatewayHostnameConfigurationContract definition allowing to specify ifMatch. */
         interface WithIfMatch {
             /**
@@ -208,6 +220,7 @@ public interface GatewayHostnameConfigurationContract {
             WithCreate withIfMatch(String ifMatch);
         }
     }
+
     /**
      * Begins update for the GatewayHostnameConfigurationContract resource.
      *
@@ -216,14 +229,9 @@ public interface GatewayHostnameConfigurationContract {
     GatewayHostnameConfigurationContract.Update update();
 
     /** The template for GatewayHostnameConfigurationContract update. */
-    interface Update
-        extends UpdateStages.WithHostname,
-            UpdateStages.WithCertificateId,
-            UpdateStages.WithNegotiateClientCertificate,
-            UpdateStages.WithTls10Enabled,
-            UpdateStages.WithTls11Enabled,
-            UpdateStages.WithHttp2Enabled,
-            UpdateStages.WithIfMatch {
+    interface Update extends UpdateStages.WithHostname, UpdateStages.WithCertificateId,
+        UpdateStages.WithNegotiateClientCertificate, UpdateStages.WithTls10Enabled, UpdateStages.WithTls11Enabled,
+        UpdateStages.WithHttp2Enabled, UpdateStages.WithIfMatch {
         /**
          * Executes the update request.
          *
@@ -239,6 +247,7 @@ public interface GatewayHostnameConfigurationContract {
          */
         GatewayHostnameConfigurationContract apply(Context context);
     }
+
     /** The GatewayHostnameConfigurationContract update stages. */
     interface UpdateStages {
         /** The stage of the GatewayHostnameConfigurationContract update allowing to specify hostname. */
@@ -251,6 +260,7 @@ public interface GatewayHostnameConfigurationContract {
              */
             Update withHostname(String hostname);
         }
+
         /** The stage of the GatewayHostnameConfigurationContract update allowing to specify certificateId. */
         interface WithCertificateId {
             /**
@@ -262,6 +272,7 @@ public interface GatewayHostnameConfigurationContract {
              */
             Update withCertificateId(String certificateId);
         }
+
         /**
          * The stage of the GatewayHostnameConfigurationContract update allowing to specify negotiateClientCertificate.
          */
@@ -275,6 +286,7 @@ public interface GatewayHostnameConfigurationContract {
              */
             Update withNegotiateClientCertificate(Boolean negotiateClientCertificate);
         }
+
         /** The stage of the GatewayHostnameConfigurationContract update allowing to specify tls10Enabled. */
         interface WithTls10Enabled {
             /**
@@ -285,6 +297,7 @@ public interface GatewayHostnameConfigurationContract {
              */
             Update withTls10Enabled(Boolean tls10Enabled);
         }
+
         /** The stage of the GatewayHostnameConfigurationContract update allowing to specify tls11Enabled. */
         interface WithTls11Enabled {
             /**
@@ -295,6 +308,7 @@ public interface GatewayHostnameConfigurationContract {
              */
             Update withTls11Enabled(Boolean tls11Enabled);
         }
+
         /** The stage of the GatewayHostnameConfigurationContract update allowing to specify http2Enabled. */
         interface WithHttp2Enabled {
             /**
@@ -305,6 +319,7 @@ public interface GatewayHostnameConfigurationContract {
              */
             Update withHttp2Enabled(Boolean http2Enabled);
         }
+
         /** The stage of the GatewayHostnameConfigurationContract update allowing to specify ifMatch. */
         interface WithIfMatch {
             /**
@@ -318,6 +333,7 @@ public interface GatewayHostnameConfigurationContract {
             Update withIfMatch(String ifMatch);
         }
     }
+
     /**
      * Refreshes the resource to sync with Azure.
      *

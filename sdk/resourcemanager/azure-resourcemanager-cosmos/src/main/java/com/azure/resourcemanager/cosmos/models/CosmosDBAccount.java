@@ -21,11 +21,8 @@ import java.util.Map;
 
 /** An immutable client-side representation of an Azure Cosmos DB. */
 @Fluent
-public interface CosmosDBAccount
-    extends GroupableResource<CosmosManager, DatabaseAccountGetResultsInner>,
-    Refreshable<CosmosDBAccount>,
-    Updatable<CosmosDBAccount.Update>,
-    SupportsUpdatingPrivateEndpointConnection {
+public interface CosmosDBAccount extends GroupableResource<CosmosManager, DatabaseAccountGetResultsInner>,
+    Refreshable<CosmosDBAccount>, Updatable<CosmosDBAccount.Update>, SupportsUpdatingPrivateEndpointConnection {
 
     /** @return indicates the type of database account */
     DatabaseAccountKind kind();
@@ -35,6 +32,13 @@ public interface CosmosDBAccount
 
     /** @return the offer type for the CosmosDB database account */
     DatabaseAccountOfferType databaseAccountOfferType();
+
+    /**
+     * Whether the CosmosDB account can be accessed from public network.
+     *
+     * @return whether the CosmosDB account can be accessed from public network.
+     */
+    PublicNetworkAccess publicNetworkAccess();
 
     /**
      * @return specifies the set of IP addresses or IP address ranges in CIDR form.
@@ -176,13 +180,8 @@ public interface CosmosDBAccount
     Mono<Void> regenerateKeyAsync(KeyKind keyKind);
 
     /** Grouping of cosmos db definition stages. */
-    interface Definition
-        extends DefinitionStages.Blank,
-            DefinitionStages.WithGroup,
-            DefinitionStages.WithKind,
-            DefinitionStages.WithWriteReplication,
-            DefinitionStages.WithReadReplication,
-            DefinitionStages.WithCreate {
+    interface Definition extends DefinitionStages.Blank, DefinitionStages.WithGroup, DefinitionStages.WithKind,
+        DefinitionStages.WithWriteReplication, DefinitionStages.WithReadReplication, DefinitionStages.WithCreate {
     }
 
     /** Grouping of cosmos db definition stages. */
@@ -394,24 +393,27 @@ public interface CosmosDBAccount
              * @param name the reference name for the private endpoint connection
              * @return the first stage of a private endpoint connection definition
              */
-            PrivateEndpointConnection.DefinitionStages.Blank<WithCreate> defineNewPrivateEndpointConnection(
-                String name);
+            PrivateEndpointConnection.DefinitionStages.Blank<WithCreate>
+                defineNewPrivateEndpointConnection(String name);
         }
+
+        /** The stage of CosmosDB account definition allowing to configure network access settings. */
+        interface WithPublicNetworkAccess {
+            /**
+             * Disables public network access for the CosmosDB account.
+             *
+             * @return the next stage of the definition
+             */
+            WithCreate disablePublicNetworkAccess();
+        }
+
         /**
          * The stage of the definition which contains all the minimum required inputs for the resource to be created,
          * but also allows for any other optional settings to be specified.
          */
-        interface WithCreate
-            extends Creatable<CosmosDBAccount>,
-                WithConsistencyPolicy,
-                WithReadReplication,
-                WithIpRules,
-                WithVirtualNetworkRule,
-                WithMultipleLocations,
-                WithConnector,
-                WithKeyBasedMetadataWriteAccess,
-                WithPrivateEndpointConnection,
-                DefinitionWithTags<WithCreate> {
+        interface WithCreate extends Creatable<CosmosDBAccount>, WithConsistencyPolicy, WithReadReplication,
+            WithIpRules, WithVirtualNetworkRule, WithMultipleLocations, WithConnector, WithKeyBasedMetadataWriteAccess,
+            WithPrivateEndpointConnection, DefinitionWithTags<WithCreate>, WithPublicNetworkAccess {
         }
     }
 
@@ -422,16 +424,10 @@ public interface CosmosDBAccount
     /** Grouping of cosmos db update stages. */
     interface UpdateStages {
         /** Grouping of cosmos db update stages. */
-        interface WithOptionals
-            extends Resource.UpdateWithTags<WithOptionals>,
-                Appliable<CosmosDBAccount>,
-                UpdateStages.WithConsistencyPolicy,
-                UpdateStages.WithVirtualNetworkRule,
-                UpdateStages.WithMultipleLocations,
-                UpdateStages.WithConnector,
-                UpdateStages.WithKeyBasedMetadataWriteAccess,
-                UpdateStages.WithPrivateEndpointConnection,
-                UpdateStages.WithIpRules {
+        interface WithOptionals extends Resource.UpdateWithTags<WithOptionals>, Appliable<CosmosDBAccount>,
+            UpdateStages.WithConsistencyPolicy, UpdateStages.WithVirtualNetworkRule, UpdateStages.WithMultipleLocations,
+            UpdateStages.WithConnector, UpdateStages.WithKeyBasedMetadataWriteAccess,
+            UpdateStages.WithPrivateEndpointConnection, UpdateStages.WithIpRules, UpdateStages.WithPublicNetworkAccess {
         }
 
         /** The stage of the cosmos db definition allowing the definition of a write location. */
@@ -594,8 +590,8 @@ public interface CosmosDBAccount
              * @param name the reference name for the private endpoint connection
              * @return the first stage of a private endpoint connection definition
              */
-            PrivateEndpointConnection.UpdateDefinitionStages.Blank<WithOptionals> defineNewPrivateEndpointConnection(
-                String name);
+            PrivateEndpointConnection.UpdateDefinitionStages.Blank<WithOptionals>
+                defineNewPrivateEndpointConnection(String name);
 
             /**
              * Start the update of an existing private endpoint connection.
@@ -612,6 +608,23 @@ public interface CosmosDBAccount
              * @return the next stage
              */
             WithOptionals withoutPrivateEndpointConnection(String name);
+        }
+
+        /** The stage of CosmosDB account update allowing to configure network access settings. */
+        interface WithPublicNetworkAccess {
+            /**
+             * Enables public network access for the CosmosDB account.
+             *
+             * @return the next stage of the update
+             */
+            Update enablePublicNetworkAccess();
+
+            /**
+             * Disables public network access for the CosmosDB account.
+             *
+             * @return the next stage of the update
+             */
+            Update disablePublicNetworkAccess();
         }
     }
 }

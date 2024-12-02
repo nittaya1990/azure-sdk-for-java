@@ -4,10 +4,12 @@
 
 package com.azure.resourcemanager.streamanalytics.implementation;
 
+import com.azure.core.http.rest.PagedIterable;
 import com.azure.core.management.Region;
 import com.azure.core.util.Context;
 import com.azure.resourcemanager.streamanalytics.fluent.models.ClusterInner;
 import com.azure.resourcemanager.streamanalytics.models.Cluster;
+import com.azure.resourcemanager.streamanalytics.models.ClusterJob;
 import com.azure.resourcemanager.streamanalytics.models.ClusterProperties;
 import com.azure.resourcemanager.streamanalytics.models.ClusterSku;
 import java.util.Collections;
@@ -63,6 +65,10 @@ public final class ClusterImpl implements Cluster, Cluster.Definition, Cluster.U
         return this.location();
     }
 
+    public String resourceGroupName() {
+        return resourceGroupName;
+    }
+
     public ClusterInner innerModel() {
         return this.innerObject;
     }
@@ -87,22 +93,18 @@ public final class ClusterImpl implements Cluster, Cluster.Definition, Cluster.U
     }
 
     public Cluster create() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getClusters()
-                .createOrUpdate(
-                    resourceGroupName, clusterName, this.innerModel(), createIfMatch, createIfNoneMatch, Context.NONE);
+        this.innerObject = serviceManager.serviceClient()
+            .getClusters()
+            .createOrUpdate(resourceGroupName, clusterName, this.innerModel(), createIfMatch, createIfNoneMatch,
+                Context.NONE);
         return this;
     }
 
     public Cluster create(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getClusters()
-                .createOrUpdate(
-                    resourceGroupName, clusterName, this.innerModel(), createIfMatch, createIfNoneMatch, context);
+        this.innerObject = serviceManager.serviceClient()
+            .getClusters()
+            .createOrUpdate(resourceGroupName, clusterName, this.innerModel(), createIfMatch, createIfNoneMatch,
+                context);
         return this;
     }
 
@@ -120,49 +122,49 @@ public final class ClusterImpl implements Cluster, Cluster.Definition, Cluster.U
     }
 
     public Cluster apply() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getClusters()
-                .update(resourceGroupName, clusterName, this.innerModel(), updateIfMatch, Context.NONE);
+        this.innerObject = serviceManager.serviceClient()
+            .getClusters()
+            .update(resourceGroupName, clusterName, this.innerModel(), updateIfMatch, Context.NONE);
         return this;
     }
 
     public Cluster apply(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getClusters()
-                .update(resourceGroupName, clusterName, this.innerModel(), updateIfMatch, context);
+        this.innerObject = serviceManager.serviceClient()
+            .getClusters()
+            .update(resourceGroupName, clusterName, this.innerModel(), updateIfMatch, context);
         return this;
     }
 
-    ClusterImpl(
-        ClusterInner innerObject, com.azure.resourcemanager.streamanalytics.StreamAnalyticsManager serviceManager) {
+    ClusterImpl(ClusterInner innerObject,
+        com.azure.resourcemanager.streamanalytics.StreamAnalyticsManager serviceManager) {
         this.innerObject = innerObject;
         this.serviceManager = serviceManager;
-        this.resourceGroupName = Utils.getValueFromIdByName(innerObject.id(), "resourceGroups");
-        this.clusterName = Utils.getValueFromIdByName(innerObject.id(), "clusters");
+        this.resourceGroupName = ResourceManagerUtils.getValueFromIdByName(innerObject.id(), "resourceGroups");
+        this.clusterName = ResourceManagerUtils.getValueFromIdByName(innerObject.id(), "clusters");
     }
 
     public Cluster refresh() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getClusters()
-                .getByResourceGroupWithResponse(resourceGroupName, clusterName, Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getClusters()
+            .getByResourceGroupWithResponse(resourceGroupName, clusterName, Context.NONE)
+            .getValue();
         return this;
     }
 
     public Cluster refresh(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getClusters()
-                .getByResourceGroupWithResponse(resourceGroupName, clusterName, context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getClusters()
+            .getByResourceGroupWithResponse(resourceGroupName, clusterName, context)
+            .getValue();
         return this;
+    }
+
+    public PagedIterable<ClusterJob> listStreamingJobs() {
+        return serviceManager.clusters().listStreamingJobs(resourceGroupName, clusterName);
+    }
+
+    public PagedIterable<ClusterJob> listStreamingJobs(Context context) {
+        return serviceManager.clusters().listStreamingJobs(resourceGroupName, clusterName, context);
     }
 
     public ClusterImpl withRegion(Region location) {
@@ -191,8 +193,13 @@ public final class ClusterImpl implements Cluster, Cluster.Definition, Cluster.U
     }
 
     public ClusterImpl withIfMatch(String ifMatch) {
-        this.createIfMatch = ifMatch;
-        return this;
+        if (isInCreateMode()) {
+            this.createIfMatch = ifMatch;
+            return this;
+        } else {
+            this.updateIfMatch = ifMatch;
+            return this;
+        }
     }
 
     public ClusterImpl withIfNoneMatch(String ifNoneMatch) {
@@ -200,8 +207,7 @@ public final class ClusterImpl implements Cluster, Cluster.Definition, Cluster.U
         return this;
     }
 
-    public ClusterImpl ifMatch(String ifMatch) {
-        this.updateIfMatch = ifMatch;
-        return this;
+    private boolean isInCreateMode() {
+        return this.innerModel().id() == null;
     }
 }

@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.security.fluent.models.SecureScoreControlDetailsInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** List of security controls. */
+/**
+ * List of security controls.
+ */
 @Immutable
 public final class SecureScoreControlList {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SecureScoreControlList.class);
-
     /*
      * Collection of security controls in this page
      */
@@ -29,8 +27,14 @@ public final class SecureScoreControlList {
     private String nextLink;
 
     /**
+     * Creates an instance of SecureScoreControlList class.
+     */
+    public SecureScoreControlList() {
+    }
+
+    /**
      * Get the value property: Collection of security controls in this page.
-     *
+     * 
      * @return the value value.
      */
     public List<SecureScoreControlDetailsInner> value() {
@@ -39,7 +43,7 @@ public final class SecureScoreControlList {
 
     /**
      * Get the nextLink property: The URI to fetch the next page.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -48,7 +52,7 @@ public final class SecureScoreControlList {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

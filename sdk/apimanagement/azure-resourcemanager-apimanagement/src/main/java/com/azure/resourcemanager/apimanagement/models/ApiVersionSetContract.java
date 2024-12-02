@@ -69,6 +69,13 @@ public interface ApiVersionSetContract {
     String versionHeaderName();
 
     /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
+
+    /**
      * Gets the inner com.azure.resourcemanager.apimanagement.fluent.models.ApiVersionSetContractInner object.
      *
      * @return the inner object.
@@ -79,33 +86,32 @@ public interface ApiVersionSetContract {
     interface Definition
         extends DefinitionStages.Blank, DefinitionStages.WithParentResource, DefinitionStages.WithCreate {
     }
+
     /** The ApiVersionSetContract definition stages. */
     interface DefinitionStages {
         /** The first stage of the ApiVersionSetContract definition. */
         interface Blank extends WithParentResource {
         }
+
         /** The stage of the ApiVersionSetContract definition allowing to specify parent resource. */
         interface WithParentResource {
             /**
              * Specifies resourceGroupName, serviceName.
              *
-             * @param resourceGroupName The name of the resource group.
+             * @param resourceGroupName The name of the resource group. The name is case insensitive.
              * @param serviceName The name of the API Management service.
              * @return the next definition stage.
              */
             WithCreate withExistingService(String resourceGroupName, String serviceName);
         }
+
         /**
          * The stage of the ApiVersionSetContract definition which contains all the minimum required properties for the
          * resource to be created, but also allows for any other optional properties to be specified.
          */
-        interface WithCreate
-            extends DefinitionStages.WithDisplayName,
-                DefinitionStages.WithVersioningScheme,
-                DefinitionStages.WithDescription,
-                DefinitionStages.WithVersionQueryName,
-                DefinitionStages.WithVersionHeaderName,
-                DefinitionStages.WithIfMatch {
+        interface WithCreate extends DefinitionStages.WithDisplayName, DefinitionStages.WithVersioningScheme,
+            DefinitionStages.WithDescription, DefinitionStages.WithVersionQueryName,
+            DefinitionStages.WithVersionHeaderName, DefinitionStages.WithIfMatch {
             /**
              * Executes the create request.
              *
@@ -121,6 +127,7 @@ public interface ApiVersionSetContract {
              */
             ApiVersionSetContract create(Context context);
         }
+
         /** The stage of the ApiVersionSetContract definition allowing to specify displayName. */
         interface WithDisplayName {
             /**
@@ -131,6 +138,7 @@ public interface ApiVersionSetContract {
              */
             WithCreate withDisplayName(String displayName);
         }
+
         /** The stage of the ApiVersionSetContract definition allowing to specify versioningScheme. */
         interface WithVersioningScheme {
             /**
@@ -143,6 +151,7 @@ public interface ApiVersionSetContract {
              */
             WithCreate withVersioningScheme(VersioningScheme versioningScheme);
         }
+
         /** The stage of the ApiVersionSetContract definition allowing to specify description. */
         interface WithDescription {
             /**
@@ -153,6 +162,7 @@ public interface ApiVersionSetContract {
              */
             WithCreate withDescription(String description);
         }
+
         /** The stage of the ApiVersionSetContract definition allowing to specify versionQueryName. */
         interface WithVersionQueryName {
             /**
@@ -165,6 +175,7 @@ public interface ApiVersionSetContract {
              */
             WithCreate withVersionQueryName(String versionQueryName);
         }
+
         /** The stage of the ApiVersionSetContract definition allowing to specify versionHeaderName. */
         interface WithVersionHeaderName {
             /**
@@ -177,6 +188,7 @@ public interface ApiVersionSetContract {
              */
             WithCreate withVersionHeaderName(String versionHeaderName);
         }
+
         /** The stage of the ApiVersionSetContract definition allowing to specify ifMatch. */
         interface WithIfMatch {
             /**
@@ -190,6 +202,7 @@ public interface ApiVersionSetContract {
             WithCreate withIfMatch(String ifMatch);
         }
     }
+
     /**
      * Begins update for the ApiVersionSetContract resource.
      *
@@ -199,12 +212,8 @@ public interface ApiVersionSetContract {
 
     /** The template for ApiVersionSetContract update. */
     interface Update
-        extends UpdateStages.WithDisplayName,
-            UpdateStages.WithVersioningScheme,
-            UpdateStages.WithDescription,
-            UpdateStages.WithVersionQueryName,
-            UpdateStages.WithVersionHeaderName,
-            UpdateStages.WithIfMatch {
+        extends UpdateStages.WithDisplayName, UpdateStages.WithVersioningScheme, UpdateStages.WithDescription,
+        UpdateStages.WithVersionQueryName, UpdateStages.WithVersionHeaderName, UpdateStages.WithIfMatch {
         /**
          * Executes the update request.
          *
@@ -220,6 +229,7 @@ public interface ApiVersionSetContract {
          */
         ApiVersionSetContract apply(Context context);
     }
+
     /** The ApiVersionSetContract update stages. */
     interface UpdateStages {
         /** The stage of the ApiVersionSetContract update allowing to specify displayName. */
@@ -232,6 +242,7 @@ public interface ApiVersionSetContract {
              */
             Update withDisplayName(String displayName);
         }
+
         /** The stage of the ApiVersionSetContract update allowing to specify versioningScheme. */
         interface WithVersioningScheme {
             /**
@@ -244,6 +255,7 @@ public interface ApiVersionSetContract {
              */
             Update withVersioningScheme(VersioningScheme versioningScheme);
         }
+
         /** The stage of the ApiVersionSetContract update allowing to specify description. */
         interface WithDescription {
             /**
@@ -254,6 +266,7 @@ public interface ApiVersionSetContract {
              */
             Update withDescription(String description);
         }
+
         /** The stage of the ApiVersionSetContract update allowing to specify versionQueryName. */
         interface WithVersionQueryName {
             /**
@@ -266,6 +279,7 @@ public interface ApiVersionSetContract {
              */
             Update withVersionQueryName(String versionQueryName);
         }
+
         /** The stage of the ApiVersionSetContract update allowing to specify versionHeaderName. */
         interface WithVersionHeaderName {
             /**
@@ -278,6 +292,7 @@ public interface ApiVersionSetContract {
              */
             Update withVersionHeaderName(String versionHeaderName);
         }
+
         /** The stage of the ApiVersionSetContract update allowing to specify ifMatch. */
         interface WithIfMatch {
             /**
@@ -291,6 +306,7 @@ public interface ApiVersionSetContract {
             Update withIfMatch(String ifMatch);
         }
     }
+
     /**
      * Refreshes the resource to sync with Azure.
      *

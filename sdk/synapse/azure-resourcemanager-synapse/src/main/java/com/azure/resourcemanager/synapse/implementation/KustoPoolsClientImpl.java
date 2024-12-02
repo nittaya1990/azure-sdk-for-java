@@ -31,7 +31,6 @@ import com.azure.core.management.exception.ManagementException;
 import com.azure.core.management.polling.PollResult;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.core.util.polling.PollerFlux;
 import com.azure.core.util.polling.SyncPoller;
 import com.azure.resourcemanager.synapse.fluent.KustoPoolsClient;
@@ -52,24 +51,28 @@ import java.nio.ByteBuffer;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-/** An instance of this class provides access to all the operations defined in KustoPoolsClient. */
+/**
+ * An instance of this class provides access to all the operations defined in KustoPoolsClient.
+ */
 public final class KustoPoolsClientImpl implements KustoPoolsClient {
-    private final ClientLogger logger = new ClientLogger(KustoPoolsClientImpl.class);
-
-    /** The proxy service used to perform REST calls. */
+    /**
+     * The proxy service used to perform REST calls.
+     */
     private final KustoPoolsService service;
 
-    /** The service client containing this operation class. */
+    /**
+     * The service client containing this operation class.
+     */
     private final SynapseManagementClientImpl client;
 
     /**
      * Initializes an instance of KustoPoolsClientImpl.
-     *
+     * 
      * @param client the instance of the service client containing this operation class.
      */
     KustoPoolsClientImpl(SynapseManagementClientImpl client) {
-        this.service =
-            RestProxy.create(KustoPoolsService.class, client.getHttpPipeline(), client.getSerializerAdapter());
+        this.service
+            = RestProxy.create(KustoPoolsService.class, client.getHttpPipeline(), client.getSerializerAdapter());
         this.client = client;
     }
 
@@ -79,324 +82,221 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      */
     @Host("{$host}")
     @ServiceInterface(name = "SynapseManagementCli")
-    private interface KustoPoolsService {
-        @Headers({"Content-Type: application/json"})
+    public interface KustoPoolsService {
+        @Headers({ "Content-Type: application/json" })
         @Get("/subscriptions/{subscriptionId}/providers/Microsoft.Synapse/skus")
-        @ExpectedResponses({200})
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<SkuDescriptionList>> list(
-            @HostParam("$host") String endpoint,
-            @QueryParam("api-version") String apiVersion,
-            @PathParam("subscriptionId") String subscriptionId,
-            @HeaderParam("Accept") String accept,
-            Context context);
+        Mono<Response<SkuDescriptionList>> list(@HostParam("$host") String endpoint,
+            @QueryParam("api-version") String apiVersion, @PathParam("subscriptionId") String subscriptionId,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Post(
-            "/subscriptions/{subscriptionId}/providers/Microsoft.Synapse/locations/{location}"
-                + "/kustoPoolCheckNameAvailability")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Post("/subscriptions/{subscriptionId}/providers/Microsoft.Synapse/locations/{location}/kustoPoolCheckNameAvailability")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<CheckNameResultInner>> checkNameAvailability(
-            @HostParam("$host") String endpoint,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("location") String location,
+        Mono<Response<CheckNameResultInner>> checkNameAvailability(@HostParam("$host") String endpoint,
+            @PathParam("subscriptionId") String subscriptionId, @PathParam("location") String location,
             @QueryParam("api-version") String apiVersion,
             @BodyParam("application/json") KustoPoolCheckNameRequest kustoPoolName,
-            @HeaderParam("Accept") String accept,
+            @HeaderParam("Accept") String accept, Context context);
+
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces/{workspaceName}/kustoPools")
+        @ExpectedResponses({ 200 })
+        @UnexpectedResponseExceptionType(ManagementException.class)
+        Mono<Response<KustoPoolListResultInner>> listByWorkspace(@HostParam("$host") String endpoint,
+            @QueryParam("api-version") String apiVersion, @PathParam("resourceGroupName") String resourceGroupName,
+            @PathParam("subscriptionId") String subscriptionId, @PathParam("workspaceName") String workspaceName,
+            @HeaderParam("Accept") String accept, Context context);
+
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces/{workspaceName}/kustoPools/{kustoPoolName}")
+        @ExpectedResponses({ 200 })
+        @UnexpectedResponseExceptionType(ManagementException.class)
+        Mono<Response<KustoPoolInner>> get(@HostParam("$host") String endpoint,
+            @PathParam("workspaceName") String workspaceName, @PathParam("kustoPoolName") String kustoPoolName,
+            @PathParam("subscriptionId") String subscriptionId,
+            @PathParam("resourceGroupName") String resourceGroupName, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
+
+        @Headers({ "Content-Type: application/json" })
+        @Put("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces/{workspaceName}/kustoPools/{kustoPoolName}")
+        @ExpectedResponses({ 200, 201 })
+        @UnexpectedResponseExceptionType(ManagementException.class)
+        Mono<Response<Flux<ByteBuffer>>> createOrUpdate(@HostParam("$host") String endpoint,
+            @PathParam("workspaceName") String workspaceName, @PathParam("resourceGroupName") String resourceGroupName,
+            @PathParam("kustoPoolName") String kustoPoolName, @HeaderParam("If-Match") String ifMatch,
+            @HeaderParam("If-None-Match") String ifNoneMatch, @PathParam("subscriptionId") String subscriptionId,
+            @QueryParam("api-version") String apiVersion, @BodyParam("application/json") KustoPoolInner parameters,
+            @HeaderParam("Accept") String accept, Context context);
+
+        @Headers({ "Content-Type: application/json" })
+        @Patch("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces/{workspaceName}/kustoPools/{kustoPoolName}")
+        @ExpectedResponses({ 200, 202 })
+        @UnexpectedResponseExceptionType(ManagementException.class)
+        Mono<Response<Flux<ByteBuffer>>> update(@HostParam("$host") String endpoint,
+            @PathParam("workspaceName") String workspaceName, @PathParam("resourceGroupName") String resourceGroupName,
+            @PathParam("kustoPoolName") String kustoPoolName, @HeaderParam("If-Match") String ifMatch,
+            @PathParam("subscriptionId") String subscriptionId, @QueryParam("api-version") String apiVersion,
+            @BodyParam("application/json") KustoPoolUpdate parameters, @HeaderParam("Accept") String accept,
             Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
-                + "/{workspaceName}/kustoPools")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Delete("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces/{workspaceName}/kustoPools/{kustoPoolName}")
+        @ExpectedResponses({ 200, 202, 204 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<KustoPoolListResultInner>> listByWorkspace(
-            @HostParam("$host") String endpoint,
-            @QueryParam("api-version") String apiVersion,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("workspaceName") String workspaceName,
-            @HeaderParam("Accept") String accept,
-            Context context);
+        Mono<Response<Flux<ByteBuffer>>> delete(@HostParam("$host") String endpoint,
+            @PathParam("workspaceName") String workspaceName, @PathParam("resourceGroupName") String resourceGroupName,
+            @PathParam("kustoPoolName") String kustoPoolName, @PathParam("subscriptionId") String subscriptionId,
+            @QueryParam("api-version") String apiVersion, @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
-                + "/{workspaceName}/kustoPools/{kustoPoolName}")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Post("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces/{workspaceName}/kustoPools/{kustoPoolName}/stop")
+        @ExpectedResponses({ 200, 202 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<KustoPoolInner>> get(
-            @HostParam("$host") String endpoint,
-            @PathParam("workspaceName") String workspaceName,
-            @PathParam("kustoPoolName") String kustoPoolName,
+        Mono<Response<Flux<ByteBuffer>>> stop(@HostParam("$host") String endpoint,
+            @PathParam("workspaceName") String workspaceName, @PathParam("kustoPoolName") String kustoPoolName,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Put(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
-                + "/{workspaceName}/kustoPools/{kustoPoolName}")
-        @ExpectedResponses({200, 201})
+        @Headers({ "Content-Type: application/json" })
+        @Post("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces/{workspaceName}/kustoPools/{kustoPoolName}/start")
+        @ExpectedResponses({ 200, 202 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> createOrUpdate(
-            @HostParam("$host") String endpoint,
-            @PathParam("workspaceName") String workspaceName,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("kustoPoolName") String kustoPoolName,
-            @HeaderParam("If-Match") String ifMatch,
-            @HeaderParam("If-None-Match") String ifNoneMatch,
+        Mono<Response<Flux<ByteBuffer>>> start(@HostParam("$host") String endpoint,
+            @PathParam("workspaceName") String workspaceName, @PathParam("kustoPoolName") String kustoPoolName,
             @PathParam("subscriptionId") String subscriptionId,
-            @QueryParam("api-version") String apiVersion,
-            @BodyParam("application/json") KustoPoolInner parameters,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Patch(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
-                + "/{workspaceName}/kustoPools/{kustoPoolName}")
-        @ExpectedResponses({200, 202})
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces/{workspaceName}/kustoPools/{kustoPoolName}/skus")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> update(
-            @HostParam("$host") String endpoint,
-            @PathParam("workspaceName") String workspaceName,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("kustoPoolName") String kustoPoolName,
-            @HeaderParam("If-Match") String ifMatch,
+        Mono<Response<ListResourceSkusResult>> listSkusByResource(@HostParam("$host") String endpoint,
+            @PathParam("workspaceName") String workspaceName, @PathParam("kustoPoolName") String kustoPoolName,
             @PathParam("subscriptionId") String subscriptionId,
-            @QueryParam("api-version") String apiVersion,
-            @BodyParam("application/json") KustoPoolUpdate parameters,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Delete(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
-                + "/{workspaceName}/kustoPools/{kustoPoolName}")
-        @ExpectedResponses({200, 202, 204})
+        @Headers({ "Content-Type: application/json" })
+        @Post("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces/{workspaceName}/kustoPools/{kustoPoolName}/listLanguageExtensions")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> delete(
-            @HostParam("$host") String endpoint,
-            @PathParam("workspaceName") String workspaceName,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("kustoPoolName") String kustoPoolName,
+        Mono<Response<LanguageExtensionsList>> listLanguageExtensions(@HostParam("$host") String endpoint,
+            @PathParam("workspaceName") String workspaceName, @PathParam("kustoPoolName") String kustoPoolName,
             @PathParam("subscriptionId") String subscriptionId,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
-                + "/{workspaceName}/kustoPools/{kustoPoolName}/stop")
-        @ExpectedResponses({200, 202})
+        @Headers({ "Content-Type: application/json" })
+        @Post("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces/{workspaceName}/kustoPools/{kustoPoolName}/addLanguageExtensions")
+        @ExpectedResponses({ 200, 202 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> stop(
-            @HostParam("$host") String endpoint,
-            @PathParam("workspaceName") String workspaceName,
-            @PathParam("kustoPoolName") String kustoPoolName,
+        Mono<Response<Flux<ByteBuffer>>> addLanguageExtensions(@HostParam("$host") String endpoint,
+            @PathParam("workspaceName") String workspaceName, @PathParam("kustoPoolName") String kustoPoolName,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
-
-        @Headers({"Content-Type: application/json"})
-        @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
-                + "/{workspaceName}/kustoPools/{kustoPoolName}/start")
-        @ExpectedResponses({200, 202})
-        @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> start(
-            @HostParam("$host") String endpoint,
-            @PathParam("workspaceName") String workspaceName,
-            @PathParam("kustoPoolName") String kustoPoolName,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
-
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
-                + "/{workspaceName}/kustoPools/{kustoPoolName}/skus")
-        @ExpectedResponses({200})
-        @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<ListResourceSkusResult>> listSkusByResource(
-            @HostParam("$host") String endpoint,
-            @PathParam("workspaceName") String workspaceName,
-            @PathParam("kustoPoolName") String kustoPoolName,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
-
-        @Headers({"Content-Type: application/json"})
-        @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
-                + "/{workspaceName}/kustoPools/{kustoPoolName}/listLanguageExtensions")
-        @ExpectedResponses({200})
-        @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<LanguageExtensionsList>> listLanguageExtensions(
-            @HostParam("$host") String endpoint,
-            @PathParam("workspaceName") String workspaceName,
-            @PathParam("kustoPoolName") String kustoPoolName,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
-
-        @Headers({"Content-Type: application/json"})
-        @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
-                + "/{workspaceName}/kustoPools/{kustoPoolName}/addLanguageExtensions")
-        @ExpectedResponses({200, 202})
-        @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> addLanguageExtensions(
-            @HostParam("$host") String endpoint,
-            @PathParam("workspaceName") String workspaceName,
-            @PathParam("kustoPoolName") String kustoPoolName,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @QueryParam("api-version") String apiVersion,
+            @PathParam("resourceGroupName") String resourceGroupName, @QueryParam("api-version") String apiVersion,
             @BodyParam("application/json") LanguageExtensionsList languageExtensionsToAdd,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
-                + "/{workspaceName}/kustoPools/{kustoPoolName}/removeLanguageExtensions")
-        @ExpectedResponses({200, 202})
+        @Headers({ "Content-Type: application/json" })
+        @Post("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces/{workspaceName}/kustoPools/{kustoPoolName}/removeLanguageExtensions")
+        @ExpectedResponses({ 200, 202 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> removeLanguageExtensions(
-            @HostParam("$host") String endpoint,
-            @PathParam("workspaceName") String workspaceName,
-            @PathParam("kustoPoolName") String kustoPoolName,
+        Mono<Response<Flux<ByteBuffer>>> removeLanguageExtensions(@HostParam("$host") String endpoint,
+            @PathParam("workspaceName") String workspaceName, @PathParam("kustoPoolName") String kustoPoolName,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @QueryParam("api-version") String apiVersion,
+            @PathParam("resourceGroupName") String resourceGroupName, @QueryParam("api-version") String apiVersion,
             @BodyParam("application/json") LanguageExtensionsList languageExtensionsToRemove,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
-                + "/{workspaceName}/kustoPools/{kustoPoolName}/listFollowerDatabases")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Post("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces/{workspaceName}/kustoPools/{kustoPoolName}/listFollowerDatabases")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<FollowerDatabaseListResult>> listFollowerDatabases(
-            @HostParam("$host") String endpoint,
-            @PathParam("workspaceName") String workspaceName,
-            @PathParam("kustoPoolName") String kustoPoolName,
+        Mono<Response<FollowerDatabaseListResult>> listFollowerDatabases(@HostParam("$host") String endpoint,
+            @PathParam("workspaceName") String workspaceName, @PathParam("kustoPoolName") String kustoPoolName,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
-                + "/{workspaceName}/kustoPools/{kustoPoolName}/detachFollowerDatabases")
-        @ExpectedResponses({200, 202})
+        @Headers({ "Content-Type: application/json" })
+        @Post("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces/{workspaceName}/kustoPools/{kustoPoolName}/detachFollowerDatabases")
+        @ExpectedResponses({ 200, 202 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> detachFollowerDatabases(
-            @HostParam("$host") String endpoint,
-            @PathParam("workspaceName") String workspaceName,
-            @PathParam("kustoPoolName") String kustoPoolName,
+        Mono<Response<Flux<ByteBuffer>>> detachFollowerDatabases(@HostParam("$host") String endpoint,
+            @PathParam("workspaceName") String workspaceName, @PathParam("kustoPoolName") String kustoPoolName,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @QueryParam("api-version") String apiVersion,
+            @PathParam("resourceGroupName") String resourceGroupName, @QueryParam("api-version") String apiVersion,
             @BodyParam("application/json") FollowerDatabaseDefinitionInner followerDatabaseToRemove,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @HeaderParam("Accept") String accept, Context context);
     }
 
     /**
      * Lists eligible SKUs for Kusto Pool resource.
-     *
+     * 
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of the SKU descriptions.
+     * @return the list of the SKU descriptions along with {@link PagedResponse} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<SkuDescriptionInner>> listSinglePageAsync() {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .list(this.client.getEndpoint(), apiVersion, this.client.getSubscriptionId(), accept, context))
-            .<PagedResponse<SkuDescriptionInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(), res.getStatusCode(), res.getHeaders(), res.getValue().value(), null, null))
+            .withContext(context -> service.list(this.client.getEndpoint(), apiVersion, this.client.getSubscriptionId(),
+                accept, context))
+            .<PagedResponse<SkuDescriptionInner>>map(res -> new PagedResponseBase<>(res.getRequest(),
+                res.getStatusCode(), res.getHeaders(), res.getValue().value(), null, null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Lists eligible SKUs for Kusto Pool resource.
-     *
+     * 
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of the SKU descriptions.
+     * @return the list of the SKU descriptions along with {@link PagedResponse} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<SkuDescriptionInner>> listSinglePageAsync(Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .list(this.client.getEndpoint(), apiVersion, this.client.getSubscriptionId(), accept, context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(), res.getStatusCode(), res.getHeaders(), res.getValue().value(), null, null));
+        return service.list(this.client.getEndpoint(), apiVersion, this.client.getSubscriptionId(), accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), null, null));
     }
 
     /**
      * Lists eligible SKUs for Kusto Pool resource.
-     *
+     * 
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of the SKU descriptions.
+     * @return the list of the SKU descriptions as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<SkuDescriptionInner> listAsync() {
@@ -405,12 +305,12 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
 
     /**
      * Lists eligible SKUs for Kusto Pool resource.
-     *
+     * 
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of the SKU descriptions.
+     * @return the list of the SKU descriptions as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<SkuDescriptionInner> listAsync(Context context) {
@@ -419,10 +319,10 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
 
     /**
      * Lists eligible SKUs for Kusto Pool resource.
-     *
+     * 
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of the SKU descriptions.
+     * @return the list of the SKU descriptions as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<SkuDescriptionInner> list() {
@@ -431,12 +331,12 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
 
     /**
      * Lists eligible SKUs for Kusto Pool resource.
-     *
+     * 
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of the SKU descriptions.
+     * @return the list of the SKU descriptions as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<SkuDescriptionInner> list(Context context) {
@@ -445,28 +345,25 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
 
     /**
      * Checks that the kusto pool name is valid and is not already in use.
-     *
+     * 
      * @param location The name of Azure region.
      * @param kustoPoolName The name of the cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the result returned from a check name availability request.
+     * @return the result returned from a check name availability request along with {@link Response} on successful
+     * completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<CheckNameResultInner>> checkNameAvailabilityWithResponseAsync(
-        String location, KustoPoolCheckNameRequest kustoPoolName) {
+    private Mono<Response<CheckNameResultInner>> checkNameAvailabilityWithResponseAsync(String location,
+        KustoPoolCheckNameRequest kustoPoolName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (location == null) {
             return Mono.error(new IllegalArgumentException("Parameter location is required and cannot be null."));
@@ -479,45 +376,33 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .checkNameAvailability(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            location,
-                            apiVersion,
-                            kustoPoolName,
-                            accept,
-                            context))
+            .withContext(context -> service.checkNameAvailability(this.client.getEndpoint(),
+                this.client.getSubscriptionId(), location, apiVersion, kustoPoolName, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Checks that the kusto pool name is valid and is not already in use.
-     *
+     * 
      * @param location The name of Azure region.
      * @param kustoPoolName The name of the cluster.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the result returned from a check name availability request.
+     * @return the result returned from a check name availability request along with {@link Response} on successful
+     * completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<CheckNameResultInner>> checkNameAvailabilityWithResponseAsync(
-        String location, KustoPoolCheckNameRequest kustoPoolName, Context context) {
+    private Mono<Response<CheckNameResultInner>> checkNameAvailabilityWithResponseAsync(String location,
+        KustoPoolCheckNameRequest kustoPoolName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (location == null) {
             return Mono.error(new IllegalArgumentException("Parameter location is required and cannot be null."));
@@ -530,44 +415,47 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .checkNameAvailability(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                location,
-                apiVersion,
-                kustoPoolName,
-                accept,
-                context);
+        return service.checkNameAvailability(this.client.getEndpoint(), this.client.getSubscriptionId(), location,
+            apiVersion, kustoPoolName, accept, context);
     }
 
     /**
      * Checks that the kusto pool name is valid and is not already in use.
-     *
+     * 
      * @param location The name of Azure region.
      * @param kustoPoolName The name of the cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the result returned from a check name availability request.
+     * @return the result returned from a check name availability request on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<CheckNameResultInner> checkNameAvailabilityAsync(
-        String location, KustoPoolCheckNameRequest kustoPoolName) {
+    private Mono<CheckNameResultInner> checkNameAvailabilityAsync(String location,
+        KustoPoolCheckNameRequest kustoPoolName) {
         return checkNameAvailabilityWithResponseAsync(location, kustoPoolName)
-            .flatMap(
-                (Response<CheckNameResultInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Checks that the kusto pool name is valid and is not already in use.
-     *
+     * 
+     * @param location The name of Azure region.
+     * @param kustoPoolName The name of the cluster.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the result returned from a check name availability request along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<CheckNameResultInner> checkNameAvailabilityWithResponse(String location,
+        KustoPoolCheckNameRequest kustoPoolName, Context context) {
+        return checkNameAvailabilityWithResponseAsync(location, kustoPoolName, context).block();
+    }
+
+    /**
+     * Checks that the kusto pool name is valid and is not already in use.
+     * 
      * @param location The name of Azure region.
      * @param kustoPoolName The name of the cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -577,54 +465,36 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public CheckNameResultInner checkNameAvailability(String location, KustoPoolCheckNameRequest kustoPoolName) {
-        return checkNameAvailabilityAsync(location, kustoPoolName).block();
+        return checkNameAvailabilityWithResponse(location, kustoPoolName, Context.NONE).getValue();
     }
 
     /**
-     * Checks that the kusto pool name is valid and is not already in use.
-     *
-     * @param location The name of Azure region.
-     * @param kustoPoolName The name of the cluster.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the result returned from a check name availability request.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<CheckNameResultInner> checkNameAvailabilityWithResponse(
-        String location, KustoPoolCheckNameRequest kustoPoolName, Context context) {
-        return checkNameAvailabilityWithResponseAsync(location, kustoPoolName, context).block();
-    }
-
-    /**
+     * List Kusto pools
+     * 
      * List all Kusto pools.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto pools operation response.
+     * @return the list Kusto pools operation response along with {@link Response} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<KustoPoolListResultInner>> listByWorkspaceWithResponseAsync(
-        String resourceGroupName, String workspaceName) {
+    private Mono<Response<KustoPoolListResultInner>> listByWorkspaceWithResponseAsync(String resourceGroupName,
+        String workspaceName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
                 .error(new IllegalArgumentException("Parameter resourceGroupName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -632,49 +502,39 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .listByWorkspace(
-                            this.client.getEndpoint(),
-                            apiVersion,
-                            resourceGroupName,
-                            this.client.getSubscriptionId(),
-                            workspaceName,
-                            accept,
-                            context))
+            .withContext(context -> service.listByWorkspace(this.client.getEndpoint(), apiVersion, resourceGroupName,
+                this.client.getSubscriptionId(), workspaceName, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
+     * List Kusto pools
+     * 
      * List all Kusto pools.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto pools operation response.
+     * @return the list Kusto pools operation response along with {@link Response} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<KustoPoolListResultInner>> listByWorkspaceWithResponseAsync(
-        String resourceGroupName, String workspaceName, Context context) {
+    private Mono<Response<KustoPoolListResultInner>> listByWorkspaceWithResponseAsync(String resourceGroupName,
+        String workspaceName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
                 .error(new IllegalArgumentException("Parameter resourceGroupName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -682,43 +542,52 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .listByWorkspace(
-                this.client.getEndpoint(),
-                apiVersion,
-                resourceGroupName,
-                this.client.getSubscriptionId(),
-                workspaceName,
-                accept,
-                context);
+        return service.listByWorkspace(this.client.getEndpoint(), apiVersion, resourceGroupName,
+            this.client.getSubscriptionId(), workspaceName, accept, context);
     }
 
     /**
+     * List Kusto pools
+     * 
      * List all Kusto pools.
-     *
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto pools operation response.
+     * @return the list Kusto pools operation response on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<KustoPoolListResultInner> listByWorkspaceAsync(String resourceGroupName, String workspaceName) {
         return listByWorkspaceWithResponseAsync(resourceGroupName, workspaceName)
-            .flatMap(
-                (Response<KustoPoolListResultInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
+     * List Kusto pools
+     * 
      * List all Kusto pools.
-     *
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the list Kusto pools operation response along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<KustoPoolListResultInner> listByWorkspaceWithResponse(String resourceGroupName,
+        String workspaceName, Context context) {
+        return listByWorkspaceWithResponseAsync(resourceGroupName, workspaceName, context).block();
+    }
+
+    /**
+     * List Kusto pools
+     * 
+     * List all Kusto pools.
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -728,45 +597,26 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public KustoPoolListResultInner listByWorkspace(String resourceGroupName, String workspaceName) {
-        return listByWorkspaceAsync(resourceGroupName, workspaceName).block();
-    }
-
-    /**
-     * List all Kusto pools.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto pools operation response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<KustoPoolListResultInner> listByWorkspaceWithResponse(
-        String resourceGroupName, String workspaceName, Context context) {
-        return listByWorkspaceWithResponseAsync(resourceGroupName, workspaceName, context).block();
+        return listByWorkspaceWithResponse(resourceGroupName, workspaceName, Context.NONE).getValue();
     }
 
     /**
      * Gets a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Kusto pool.
+     * @return a Kusto pool along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<KustoPoolInner>> getWithResponseAsync(
-        String workspaceName, String kustoPoolName, String resourceGroupName) {
+    private Mono<Response<KustoPoolInner>> getWithResponseAsync(String workspaceName, String kustoPoolName,
+        String resourceGroupName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -775,10 +625,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
             return Mono.error(new IllegalArgumentException("Parameter kustoPoolName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -787,24 +635,14 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .get(
-                            this.client.getEndpoint(),
-                            workspaceName,
-                            kustoPoolName,
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            apiVersion,
-                            accept,
-                            context))
+            .withContext(context -> service.get(this.client.getEndpoint(), workspaceName, kustoPoolName,
+                this.client.getSubscriptionId(), resourceGroupName, apiVersion, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Gets a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -812,16 +650,14 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Kusto pool.
+     * @return a Kusto pool along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<KustoPoolInner>> getWithResponseAsync(
-        String workspaceName, String kustoPoolName, String resourceGroupName, Context context) {
+    private Mono<Response<KustoPoolInner>> getWithResponseAsync(String workspaceName, String kustoPoolName,
+        String resourceGroupName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -830,10 +666,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
             return Mono.error(new IllegalArgumentException("Parameter kustoPoolName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -842,45 +676,48 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .get(
-                this.client.getEndpoint(),
-                workspaceName,
-                kustoPoolName,
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                apiVersion,
-                accept,
-                context);
+        return service.get(this.client.getEndpoint(), workspaceName, kustoPoolName, this.client.getSubscriptionId(),
+            resourceGroupName, apiVersion, accept, context);
     }
 
     /**
      * Gets a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Kusto pool.
+     * @return a Kusto pool on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<KustoPoolInner> getAsync(String workspaceName, String kustoPoolName, String resourceGroupName) {
         return getWithResponseAsync(workspaceName, kustoPoolName, resourceGroupName)
-            .flatMap(
-                (Response<KustoPoolInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Gets a Kusto pool.
-     *
+     * 
+     * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a Kusto pool along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<KustoPoolInner> getWithResponse(String workspaceName, String kustoPoolName,
+        String resourceGroupName, Context context) {
+        return getWithResponseAsync(workspaceName, kustoPoolName, resourceGroupName, context).block();
+    }
+
+    /**
+     * Gets a Kusto pool.
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -891,56 +728,32 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public KustoPoolInner get(String workspaceName, String kustoPoolName, String resourceGroupName) {
-        return getAsync(workspaceName, kustoPoolName, resourceGroupName).block();
-    }
-
-    /**
-     * Gets a Kusto pool.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Kusto pool.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<KustoPoolInner> getWithResponse(
-        String workspaceName, String kustoPoolName, String resourceGroupName, Context context) {
-        return getWithResponseAsync(workspaceName, kustoPoolName, resourceGroupName, context).block();
+        return getWithResponse(workspaceName, kustoPoolName, resourceGroupName, Context.NONE).getValue();
     }
 
     /**
      * Create or update a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
      * @param parameters The Kusto pool parameters supplied to the CreateOrUpdate operation.
      * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
-     *     the last-seen ETag value to prevent accidentally overwriting concurrent changes.
+     * the last-seen ETag value to prevent accidentally overwriting concurrent changes.
      * @param ifNoneMatch Set to '*' to allow a new Kusto Pool to be created, but to prevent updating an existing Kusto
-     *     Pool. Other values will result in a 412 Pre-condition Failed response.
+     * Pool. Other values will result in a 412 Pre-condition Failed response.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return class representing a Kusto kusto pool along with {@link Response} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(
-        String workspaceName,
-        String resourceGroupName,
-        String kustoPoolName,
-        KustoPoolInner parameters,
-        String ifMatch,
-        String ifNoneMatch) {
+    private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(String workspaceName,
+        String resourceGroupName, String kustoPoolName, KustoPoolInner parameters, String ifMatch, String ifNoneMatch) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -953,10 +766,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
             return Mono.error(new IllegalArgumentException("Parameter kustoPoolName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (parameters == null) {
             return Mono.error(new IllegalArgumentException("Parameter parameters is required and cannot be null."));
@@ -966,55 +777,37 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .createOrUpdate(
-                            this.client.getEndpoint(),
-                            workspaceName,
-                            resourceGroupName,
-                            kustoPoolName,
-                            ifMatch,
-                            ifNoneMatch,
-                            this.client.getSubscriptionId(),
-                            apiVersion,
-                            parameters,
-                            accept,
-                            context))
+            .withContext(context -> service.createOrUpdate(this.client.getEndpoint(), workspaceName, resourceGroupName,
+                kustoPoolName, ifMatch, ifNoneMatch, this.client.getSubscriptionId(), apiVersion, parameters, accept,
+                context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Create or update a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
      * @param parameters The Kusto pool parameters supplied to the CreateOrUpdate operation.
      * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
-     *     the last-seen ETag value to prevent accidentally overwriting concurrent changes.
+     * the last-seen ETag value to prevent accidentally overwriting concurrent changes.
      * @param ifNoneMatch Set to '*' to allow a new Kusto Pool to be created, but to prevent updating an existing Kusto
-     *     Pool. Other values will result in a 412 Pre-condition Failed response.
+     * Pool. Other values will result in a 412 Pre-condition Failed response.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return class representing a Kusto kusto pool along with {@link Response} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(
-        String workspaceName,
-        String resourceGroupName,
-        String kustoPoolName,
-        KustoPoolInner parameters,
-        String ifMatch,
-        String ifNoneMatch,
+    private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(String workspaceName,
+        String resourceGroupName, String kustoPoolName, KustoPoolInner parameters, String ifMatch, String ifNoneMatch,
         Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -1027,10 +820,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
             return Mono.error(new IllegalArgumentException("Parameter kustoPoolName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (parameters == null) {
             return Mono.error(new IllegalArgumentException("Parameter parameters is required and cannot be null."));
@@ -1040,183 +831,161 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .createOrUpdate(
-                this.client.getEndpoint(),
-                workspaceName,
-                resourceGroupName,
-                kustoPoolName,
-                ifMatch,
-                ifNoneMatch,
-                this.client.getSubscriptionId(),
-                apiVersion,
-                parameters,
-                accept,
-                context);
+        return service.createOrUpdate(this.client.getEndpoint(), workspaceName, resourceGroupName, kustoPoolName,
+            ifMatch, ifNoneMatch, this.client.getSubscriptionId(), apiVersion, parameters, accept, context);
     }
 
     /**
      * Create or update a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
      * @param parameters The Kusto pool parameters supplied to the CreateOrUpdate operation.
      * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
-     *     the last-seen ETag value to prevent accidentally overwriting concurrent changes.
+     * the last-seen ETag value to prevent accidentally overwriting concurrent changes.
      * @param ifNoneMatch Set to '*' to allow a new Kusto Pool to be created, but to prevent updating an existing Kusto
-     *     Pool. Other values will result in a 412 Pre-condition Failed response.
+     * Pool. Other values will result in a 412 Pre-condition Failed response.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return the {@link PollerFlux} for polling of class representing a Kusto kusto pool.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    private PollerFlux<PollResult<KustoPoolInner>, KustoPoolInner> beginCreateOrUpdateAsync(
-        String workspaceName,
-        String resourceGroupName,
-        String kustoPoolName,
-        KustoPoolInner parameters,
-        String ifMatch,
-        String ifNoneMatch) {
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            createOrUpdateWithResponseAsync(
-                workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch, ifNoneMatch);
-        return this
-            .client
-            .<KustoPoolInner, KustoPoolInner>getLroResult(
-                mono, this.client.getHttpPipeline(), KustoPoolInner.class, KustoPoolInner.class, Context.NONE);
+    private PollerFlux<PollResult<KustoPoolInner>, KustoPoolInner> beginCreateOrUpdateAsync(String workspaceName,
+        String resourceGroupName, String kustoPoolName, KustoPoolInner parameters, String ifMatch, String ifNoneMatch) {
+        Mono<Response<Flux<ByteBuffer>>> mono = createOrUpdateWithResponseAsync(workspaceName, resourceGroupName,
+            kustoPoolName, parameters, ifMatch, ifNoneMatch);
+        return this.client.<KustoPoolInner, KustoPoolInner>getLroResult(mono, this.client.getHttpPipeline(),
+            KustoPoolInner.class, KustoPoolInner.class, this.client.getContext());
     }
 
     /**
      * Create or update a Kusto pool.
-     *
+     * 
+     * @param workspaceName The name of the workspace.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param parameters The Kusto pool parameters supplied to the CreateOrUpdate operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link PollerFlux} for polling of class representing a Kusto kusto pool.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<KustoPoolInner>, KustoPoolInner> beginCreateOrUpdateAsync(String workspaceName,
+        String resourceGroupName, String kustoPoolName, KustoPoolInner parameters) {
+        final String ifMatch = null;
+        final String ifNoneMatch = null;
+        Mono<Response<Flux<ByteBuffer>>> mono = createOrUpdateWithResponseAsync(workspaceName, resourceGroupName,
+            kustoPoolName, parameters, ifMatch, ifNoneMatch);
+        return this.client.<KustoPoolInner, KustoPoolInner>getLroResult(mono, this.client.getHttpPipeline(),
+            KustoPoolInner.class, KustoPoolInner.class, this.client.getContext());
+    }
+
+    /**
+     * Create or update a Kusto pool.
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
      * @param parameters The Kusto pool parameters supplied to the CreateOrUpdate operation.
      * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
-     *     the last-seen ETag value to prevent accidentally overwriting concurrent changes.
+     * the last-seen ETag value to prevent accidentally overwriting concurrent changes.
      * @param ifNoneMatch Set to '*' to allow a new Kusto Pool to be created, but to prevent updating an existing Kusto
-     *     Pool. Other values will result in a 412 Pre-condition Failed response.
+     * Pool. Other values will result in a 412 Pre-condition Failed response.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return the {@link PollerFlux} for polling of class representing a Kusto kusto pool.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    private PollerFlux<PollResult<KustoPoolInner>, KustoPoolInner> beginCreateOrUpdateAsync(
-        String workspaceName,
-        String resourceGroupName,
-        String kustoPoolName,
-        KustoPoolInner parameters,
-        String ifMatch,
-        String ifNoneMatch,
+    private PollerFlux<PollResult<KustoPoolInner>, KustoPoolInner> beginCreateOrUpdateAsync(String workspaceName,
+        String resourceGroupName, String kustoPoolName, KustoPoolInner parameters, String ifMatch, String ifNoneMatch,
         Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            createOrUpdateWithResponseAsync(
-                workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch, ifNoneMatch, context);
+        Mono<Response<Flux<ByteBuffer>>> mono = createOrUpdateWithResponseAsync(workspaceName, resourceGroupName,
+            kustoPoolName, parameters, ifMatch, ifNoneMatch, context);
+        return this.client.<KustoPoolInner, KustoPoolInner>getLroResult(mono, this.client.getHttpPipeline(),
+            KustoPoolInner.class, KustoPoolInner.class, context);
+    }
+
+    /**
+     * Create or update a Kusto pool.
+     * 
+     * @param workspaceName The name of the workspace.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param parameters The Kusto pool parameters supplied to the CreateOrUpdate operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of class representing a Kusto kusto pool.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<KustoPoolInner>, KustoPoolInner> beginCreateOrUpdate(String workspaceName,
+        String resourceGroupName, String kustoPoolName, KustoPoolInner parameters) {
+        final String ifMatch = null;
+        final String ifNoneMatch = null;
         return this
-            .client
-            .<KustoPoolInner, KustoPoolInner>getLroResult(
-                mono, this.client.getHttpPipeline(), KustoPoolInner.class, KustoPoolInner.class, context);
-    }
-
-    /**
-     * Create or update a Kusto pool.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param parameters The Kusto pool parameters supplied to the CreateOrUpdate operation.
-     * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
-     *     the last-seen ETag value to prevent accidentally overwriting concurrent changes.
-     * @param ifNoneMatch Set to '*' to allow a new Kusto Pool to be created, but to prevent updating an existing Kusto
-     *     Pool. Other values will result in a 412 Pre-condition Failed response.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
-     */
-    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<KustoPoolInner>, KustoPoolInner> beginCreateOrUpdate(
-        String workspaceName,
-        String resourceGroupName,
-        String kustoPoolName,
-        KustoPoolInner parameters,
-        String ifMatch,
-        String ifNoneMatch) {
-        return beginCreateOrUpdateAsync(
-                workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch, ifNoneMatch)
+            .beginCreateOrUpdateAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch, ifNoneMatch)
             .getSyncPoller();
     }
 
     /**
      * Create or update a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
      * @param parameters The Kusto pool parameters supplied to the CreateOrUpdate operation.
      * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
-     *     the last-seen ETag value to prevent accidentally overwriting concurrent changes.
+     * the last-seen ETag value to prevent accidentally overwriting concurrent changes.
      * @param ifNoneMatch Set to '*' to allow a new Kusto Pool to be created, but to prevent updating an existing Kusto
-     *     Pool. Other values will result in a 412 Pre-condition Failed response.
+     * Pool. Other values will result in a 412 Pre-condition Failed response.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return the {@link SyncPoller} for polling of class representing a Kusto kusto pool.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<KustoPoolInner>, KustoPoolInner> beginCreateOrUpdate(
-        String workspaceName,
-        String resourceGroupName,
-        String kustoPoolName,
-        KustoPoolInner parameters,
-        String ifMatch,
-        String ifNoneMatch,
+    public SyncPoller<PollResult<KustoPoolInner>, KustoPoolInner> beginCreateOrUpdate(String workspaceName,
+        String resourceGroupName, String kustoPoolName, KustoPoolInner parameters, String ifMatch, String ifNoneMatch,
         Context context) {
-        return beginCreateOrUpdateAsync(
-                workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch, ifNoneMatch, context)
+        return this
+            .beginCreateOrUpdateAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch, ifNoneMatch,
+                context)
             .getSyncPoller();
     }
 
     /**
      * Create or update a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
      * @param parameters The Kusto pool parameters supplied to the CreateOrUpdate operation.
      * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
-     *     the last-seen ETag value to prevent accidentally overwriting concurrent changes.
+     * the last-seen ETag value to prevent accidentally overwriting concurrent changes.
      * @param ifNoneMatch Set to '*' to allow a new Kusto Pool to be created, but to prevent updating an existing Kusto
-     *     Pool. Other values will result in a 412 Pre-condition Failed response.
+     * Pool. Other values will result in a 412 Pre-condition Failed response.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return class representing a Kusto kusto pool on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<KustoPoolInner> createOrUpdateAsync(
-        String workspaceName,
-        String resourceGroupName,
-        String kustoPoolName,
-        KustoPoolInner parameters,
-        String ifMatch,
-        String ifNoneMatch) {
-        return beginCreateOrUpdateAsync(
-                workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch, ifNoneMatch)
-            .last()
-            .flatMap(this.client::getLroFinalResultOrError);
+    private Mono<KustoPoolInner> createOrUpdateAsync(String workspaceName, String resourceGroupName,
+        String kustoPoolName, KustoPoolInner parameters, String ifMatch, String ifNoneMatch) {
+        return beginCreateOrUpdateAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch,
+            ifNoneMatch).last().flatMap(this.client::getLroFinalResultOrError);
     }
 
     /**
      * Create or update a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
@@ -1224,82 +993,44 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return class representing a Kusto kusto pool on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<KustoPoolInner> createOrUpdateAsync(
-        String workspaceName, String resourceGroupName, String kustoPoolName, KustoPoolInner parameters) {
+    private Mono<KustoPoolInner> createOrUpdateAsync(String workspaceName, String resourceGroupName,
+        String kustoPoolName, KustoPoolInner parameters) {
         final String ifMatch = null;
         final String ifNoneMatch = null;
-        return beginCreateOrUpdateAsync(
-                workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch, ifNoneMatch)
-            .last()
-            .flatMap(this.client::getLroFinalResultOrError);
+        return beginCreateOrUpdateAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch,
+            ifNoneMatch).last().flatMap(this.client::getLroFinalResultOrError);
     }
 
     /**
      * Create or update a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
      * @param parameters The Kusto pool parameters supplied to the CreateOrUpdate operation.
      * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
-     *     the last-seen ETag value to prevent accidentally overwriting concurrent changes.
+     * the last-seen ETag value to prevent accidentally overwriting concurrent changes.
      * @param ifNoneMatch Set to '*' to allow a new Kusto Pool to be created, but to prevent updating an existing Kusto
-     *     Pool. Other values will result in a 412 Pre-condition Failed response.
+     * Pool. Other values will result in a 412 Pre-condition Failed response.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return class representing a Kusto kusto pool on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<KustoPoolInner> createOrUpdateAsync(
-        String workspaceName,
-        String resourceGroupName,
-        String kustoPoolName,
-        KustoPoolInner parameters,
-        String ifMatch,
-        String ifNoneMatch,
-        Context context) {
-        return beginCreateOrUpdateAsync(
-                workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch, ifNoneMatch, context)
-            .last()
-            .flatMap(this.client::getLroFinalResultOrError);
+    private Mono<KustoPoolInner> createOrUpdateAsync(String workspaceName, String resourceGroupName,
+        String kustoPoolName, KustoPoolInner parameters, String ifMatch, String ifNoneMatch, Context context) {
+        return beginCreateOrUpdateAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch,
+            ifNoneMatch, context).last().flatMap(this.client::getLroFinalResultOrError);
     }
 
     /**
      * Create or update a Kusto pool.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param parameters The Kusto pool parameters supplied to the CreateOrUpdate operation.
-     * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
-     *     the last-seen ETag value to prevent accidentally overwriting concurrent changes.
-     * @param ifNoneMatch Set to '*' to allow a new Kusto Pool to be created, but to prevent updating an existing Kusto
-     *     Pool. Other values will result in a 412 Pre-condition Failed response.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public KustoPoolInner createOrUpdate(
-        String workspaceName,
-        String resourceGroupName,
-        String kustoPoolName,
-        KustoPoolInner parameters,
-        String ifMatch,
-        String ifNoneMatch) {
-        return createOrUpdateAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch, ifNoneMatch)
-            .block();
-    }
-
-    /**
-     * Create or update a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
@@ -1310,8 +1041,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @return class representing a Kusto kusto pool.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public KustoPoolInner createOrUpdate(
-        String workspaceName, String resourceGroupName, String kustoPoolName, KustoPoolInner parameters) {
+    public KustoPoolInner createOrUpdate(String workspaceName, String resourceGroupName, String kustoPoolName,
+        KustoPoolInner parameters) {
         final String ifMatch = null;
         final String ifNoneMatch = null;
         return createOrUpdateAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch, ifNoneMatch)
@@ -1320,15 +1051,15 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
 
     /**
      * Create or update a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
      * @param parameters The Kusto pool parameters supplied to the CreateOrUpdate operation.
      * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
-     *     the last-seen ETag value to prevent accidentally overwriting concurrent changes.
+     * the last-seen ETag value to prevent accidentally overwriting concurrent changes.
      * @param ifNoneMatch Set to '*' to allow a new Kusto Pool to be created, but to prevent updating an existing Kusto
-     *     Pool. Other values will result in a 412 Pre-condition Failed response.
+     * Pool. Other values will result in a 412 Pre-condition Failed response.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
@@ -1336,45 +1067,33 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @return class representing a Kusto kusto pool.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public KustoPoolInner createOrUpdate(
-        String workspaceName,
-        String resourceGroupName,
-        String kustoPoolName,
-        KustoPoolInner parameters,
-        String ifMatch,
-        String ifNoneMatch,
-        Context context) {
-        return createOrUpdateAsync(
-                workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch, ifNoneMatch, context)
-            .block();
+    public KustoPoolInner createOrUpdate(String workspaceName, String resourceGroupName, String kustoPoolName,
+        KustoPoolInner parameters, String ifMatch, String ifNoneMatch, Context context) {
+        return createOrUpdateAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch, ifNoneMatch,
+            context).block();
     }
 
     /**
      * Update a Kusto Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
      * @param parameters The Kusto pool parameters supplied to the Update operation.
      * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
-     *     the last-seen ETag value to prevent accidentally overwriting concurrent changes.
+     * the last-seen ETag value to prevent accidentally overwriting concurrent changes.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return class representing a Kusto kusto pool along with {@link Response} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> updateWithResponseAsync(
-        String workspaceName,
-        String resourceGroupName,
-        String kustoPoolName,
-        KustoPoolUpdate parameters,
-        String ifMatch) {
+    private Mono<Response<Flux<ByteBuffer>>> updateWithResponseAsync(String workspaceName, String resourceGroupName,
+        String kustoPoolName, KustoPoolUpdate parameters, String ifMatch) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -1387,10 +1106,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
             return Mono.error(new IllegalArgumentException("Parameter kustoPoolName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (parameters == null) {
             return Mono.error(new IllegalArgumentException("Parameter parameters is required and cannot be null."));
@@ -1400,51 +1117,33 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .update(
-                            this.client.getEndpoint(),
-                            workspaceName,
-                            resourceGroupName,
-                            kustoPoolName,
-                            ifMatch,
-                            this.client.getSubscriptionId(),
-                            apiVersion,
-                            parameters,
-                            accept,
-                            context))
+            .withContext(context -> service.update(this.client.getEndpoint(), workspaceName, resourceGroupName,
+                kustoPoolName, ifMatch, this.client.getSubscriptionId(), apiVersion, parameters, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Update a Kusto Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
      * @param parameters The Kusto pool parameters supplied to the Update operation.
      * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
-     *     the last-seen ETag value to prevent accidentally overwriting concurrent changes.
+     * the last-seen ETag value to prevent accidentally overwriting concurrent changes.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return class representing a Kusto kusto pool along with {@link Response} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> updateWithResponseAsync(
-        String workspaceName,
-        String resourceGroupName,
-        String kustoPoolName,
-        KustoPoolUpdate parameters,
-        String ifMatch,
-        Context context) {
+    private Mono<Response<Flux<ByteBuffer>>> updateWithResponseAsync(String workspaceName, String resourceGroupName,
+        String kustoPoolName, KustoPoolUpdate parameters, String ifMatch, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -1457,10 +1156,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
             return Mono.error(new IllegalArgumentException("Parameter kustoPoolName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (parameters == null) {
             return Mono.error(new IllegalArgumentException("Parameter parameters is required and cannot be null."));
@@ -1470,161 +1167,146 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .update(
-                this.client.getEndpoint(),
-                workspaceName,
-                resourceGroupName,
-                kustoPoolName,
-                ifMatch,
-                this.client.getSubscriptionId(),
-                apiVersion,
-                parameters,
-                accept,
-                context);
+        return service.update(this.client.getEndpoint(), workspaceName, resourceGroupName, kustoPoolName, ifMatch,
+            this.client.getSubscriptionId(), apiVersion, parameters, accept, context);
     }
 
     /**
      * Update a Kusto Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
      * @param parameters The Kusto pool parameters supplied to the Update operation.
      * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
-     *     the last-seen ETag value to prevent accidentally overwriting concurrent changes.
+     * the last-seen ETag value to prevent accidentally overwriting concurrent changes.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return the {@link PollerFlux} for polling of class representing a Kusto kusto pool.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    private PollerFlux<PollResult<KustoPoolInner>, KustoPoolInner> beginUpdateAsync(
-        String workspaceName,
-        String resourceGroupName,
-        String kustoPoolName,
-        KustoPoolUpdate parameters,
-        String ifMatch) {
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            updateWithResponseAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch);
-        return this
-            .client
-            .<KustoPoolInner, KustoPoolInner>getLroResult(
-                mono, this.client.getHttpPipeline(), KustoPoolInner.class, KustoPoolInner.class, Context.NONE);
+    private PollerFlux<PollResult<KustoPoolInner>, KustoPoolInner> beginUpdateAsync(String workspaceName,
+        String resourceGroupName, String kustoPoolName, KustoPoolUpdate parameters, String ifMatch) {
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = updateWithResponseAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch);
+        return this.client.<KustoPoolInner, KustoPoolInner>getLroResult(mono, this.client.getHttpPipeline(),
+            KustoPoolInner.class, KustoPoolInner.class, this.client.getContext());
     }
 
     /**
      * Update a Kusto Kusto Pool.
-     *
+     * 
+     * @param workspaceName The name of the workspace.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param parameters The Kusto pool parameters supplied to the Update operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link PollerFlux} for polling of class representing a Kusto kusto pool.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<KustoPoolInner>, KustoPoolInner> beginUpdateAsync(String workspaceName,
+        String resourceGroupName, String kustoPoolName, KustoPoolUpdate parameters) {
+        final String ifMatch = null;
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = updateWithResponseAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch);
+        return this.client.<KustoPoolInner, KustoPoolInner>getLroResult(mono, this.client.getHttpPipeline(),
+            KustoPoolInner.class, KustoPoolInner.class, this.client.getContext());
+    }
+
+    /**
+     * Update a Kusto Kusto Pool.
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
      * @param parameters The Kusto pool parameters supplied to the Update operation.
      * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
-     *     the last-seen ETag value to prevent accidentally overwriting concurrent changes.
+     * the last-seen ETag value to prevent accidentally overwriting concurrent changes.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return the {@link PollerFlux} for polling of class representing a Kusto kusto pool.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    private PollerFlux<PollResult<KustoPoolInner>, KustoPoolInner> beginUpdateAsync(
-        String workspaceName,
-        String resourceGroupName,
-        String kustoPoolName,
-        KustoPoolUpdate parameters,
-        String ifMatch,
-        Context context) {
+    private PollerFlux<PollResult<KustoPoolInner>, KustoPoolInner> beginUpdateAsync(String workspaceName,
+        String resourceGroupName, String kustoPoolName, KustoPoolUpdate parameters, String ifMatch, Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            updateWithResponseAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch, context);
-        return this
-            .client
-            .<KustoPoolInner, KustoPoolInner>getLroResult(
-                mono, this.client.getHttpPipeline(), KustoPoolInner.class, KustoPoolInner.class, context);
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = updateWithResponseAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch, context);
+        return this.client.<KustoPoolInner, KustoPoolInner>getLroResult(mono, this.client.getHttpPipeline(),
+            KustoPoolInner.class, KustoPoolInner.class, context);
     }
 
     /**
      * Update a Kusto Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
      * @param parameters The Kusto pool parameters supplied to the Update operation.
-     * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
-     *     the last-seen ETag value to prevent accidentally overwriting concurrent changes.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return the {@link SyncPoller} for polling of class representing a Kusto kusto pool.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<KustoPoolInner>, KustoPoolInner> beginUpdate(
-        String workspaceName,
-        String resourceGroupName,
-        String kustoPoolName,
-        KustoPoolUpdate parameters,
-        String ifMatch) {
-        return beginUpdateAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch).getSyncPoller();
-    }
-
-    /**
-     * Update a Kusto Kusto Pool.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param parameters The Kusto pool parameters supplied to the Update operation.
-     * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
-     *     the last-seen ETag value to prevent accidentally overwriting concurrent changes.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
-     */
-    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<KustoPoolInner>, KustoPoolInner> beginUpdate(
-        String workspaceName,
-        String resourceGroupName,
-        String kustoPoolName,
-        KustoPoolUpdate parameters,
-        String ifMatch,
-        Context context) {
-        return beginUpdateAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch, context)
+    public SyncPoller<PollResult<KustoPoolInner>, KustoPoolInner> beginUpdate(String workspaceName,
+        String resourceGroupName, String kustoPoolName, KustoPoolUpdate parameters) {
+        final String ifMatch = null;
+        return this.beginUpdateAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch)
             .getSyncPoller();
     }
 
     /**
      * Update a Kusto Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
      * @param parameters The Kusto pool parameters supplied to the Update operation.
      * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
-     *     the last-seen ETag value to prevent accidentally overwriting concurrent changes.
+     * the last-seen ETag value to prevent accidentally overwriting concurrent changes.
+     * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return the {@link SyncPoller} for polling of class representing a Kusto kusto pool.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<KustoPoolInner>, KustoPoolInner> beginUpdate(String workspaceName,
+        String resourceGroupName, String kustoPoolName, KustoPoolUpdate parameters, String ifMatch, Context context) {
+        return this.beginUpdateAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch, context)
+            .getSyncPoller();
+    }
+
+    /**
+     * Update a Kusto Kusto Pool.
+     * 
+     * @param workspaceName The name of the workspace.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param parameters The Kusto pool parameters supplied to the Update operation.
+     * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
+     * the last-seen ETag value to prevent accidentally overwriting concurrent changes.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return class representing a Kusto kusto pool on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<KustoPoolInner> updateAsync(
-        String workspaceName,
-        String resourceGroupName,
-        String kustoPoolName,
-        KustoPoolUpdate parameters,
-        String ifMatch) {
-        return beginUpdateAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch)
-            .last()
+    private Mono<KustoPoolInner> updateAsync(String workspaceName, String resourceGroupName, String kustoPoolName,
+        KustoPoolUpdate parameters, String ifMatch) {
+        return beginUpdateAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
     /**
      * Update a Kusto Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
@@ -1632,26 +1314,66 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return class representing a Kusto kusto pool on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<KustoPoolInner> updateAsync(
-        String workspaceName, String resourceGroupName, String kustoPoolName, KustoPoolUpdate parameters) {
+    private Mono<KustoPoolInner> updateAsync(String workspaceName, String resourceGroupName, String kustoPoolName,
+        KustoPoolUpdate parameters) {
         final String ifMatch = null;
-        return beginUpdateAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch)
-            .last()
+        return beginUpdateAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
     /**
      * Update a Kusto Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
      * @param parameters The Kusto pool parameters supplied to the Update operation.
      * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
-     *     the last-seen ETag value to prevent accidentally overwriting concurrent changes.
+     * the last-seen ETag value to prevent accidentally overwriting concurrent changes.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return class representing a Kusto kusto pool on successful completion of {@link Mono}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    private Mono<KustoPoolInner> updateAsync(String workspaceName, String resourceGroupName, String kustoPoolName,
+        KustoPoolUpdate parameters, String ifMatch, Context context) {
+        return beginUpdateAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch, context).last()
+            .flatMap(this.client::getLroFinalResultOrError);
+    }
+
+    /**
+     * Update a Kusto Kusto Pool.
+     * 
+     * @param workspaceName The name of the workspace.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param parameters The Kusto pool parameters supplied to the Update operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return class representing a Kusto kusto pool.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public KustoPoolInner update(String workspaceName, String resourceGroupName, String kustoPoolName,
+        KustoPoolUpdate parameters) {
+        final String ifMatch = null;
+        return updateAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch).block();
+    }
+
+    /**
+     * Update a Kusto Kusto Pool.
+     * 
+     * @param workspaceName The name of the workspace.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param parameters The Kusto pool parameters supplied to the Update operation.
+     * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
+     * the last-seen ETag value to prevent accidentally overwriting concurrent changes.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
@@ -1659,106 +1381,28 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @return class representing a Kusto kusto pool.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<KustoPoolInner> updateAsync(
-        String workspaceName,
-        String resourceGroupName,
-        String kustoPoolName,
-        KustoPoolUpdate parameters,
-        String ifMatch,
-        Context context) {
-        return beginUpdateAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch, context)
-            .last()
-            .flatMap(this.client::getLroFinalResultOrError);
-    }
-
-    /**
-     * Update a Kusto Kusto Pool.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param parameters The Kusto pool parameters supplied to the Update operation.
-     * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
-     *     the last-seen ETag value to prevent accidentally overwriting concurrent changes.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public KustoPoolInner update(
-        String workspaceName,
-        String resourceGroupName,
-        String kustoPoolName,
-        KustoPoolUpdate parameters,
-        String ifMatch) {
-        return updateAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch).block();
-    }
-
-    /**
-     * Update a Kusto Kusto Pool.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param parameters The Kusto pool parameters supplied to the Update operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public KustoPoolInner update(
-        String workspaceName, String resourceGroupName, String kustoPoolName, KustoPoolUpdate parameters) {
-        final String ifMatch = null;
-        return updateAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch).block();
-    }
-
-    /**
-     * Update a Kusto Kusto Pool.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param parameters The Kusto pool parameters supplied to the Update operation.
-     * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
-     *     the last-seen ETag value to prevent accidentally overwriting concurrent changes.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public KustoPoolInner update(
-        String workspaceName,
-        String resourceGroupName,
-        String kustoPoolName,
-        KustoPoolUpdate parameters,
-        String ifMatch,
-        Context context) {
+    public KustoPoolInner update(String workspaceName, String resourceGroupName, String kustoPoolName,
+        KustoPoolUpdate parameters, String ifMatch, Context context) {
         return updateAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch, context).block();
     }
 
     /**
      * Deletes a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(
-        String workspaceName, String resourceGroupName, String kustoPoolName) {
+    private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(String workspaceName, String resourceGroupName,
+        String kustoPoolName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -1771,32 +1415,20 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
             return Mono.error(new IllegalArgumentException("Parameter kustoPoolName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .delete(
-                            this.client.getEndpoint(),
-                            workspaceName,
-                            resourceGroupName,
-                            kustoPoolName,
-                            this.client.getSubscriptionId(),
-                            apiVersion,
-                            accept,
-                            context))
+            .withContext(context -> service.delete(this.client.getEndpoint(), workspaceName, resourceGroupName,
+                kustoPoolName, this.client.getSubscriptionId(), apiVersion, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Deletes a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
@@ -1804,16 +1436,14 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(
-        String workspaceName, String resourceGroupName, String kustoPoolName, Context context) {
+    private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(String workspaceName, String resourceGroupName,
+        String kustoPoolName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -1826,50 +1456,39 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
             return Mono.error(new IllegalArgumentException("Parameter kustoPoolName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .delete(
-                this.client.getEndpoint(),
-                workspaceName,
-                resourceGroupName,
-                kustoPoolName,
-                this.client.getSubscriptionId(),
-                apiVersion,
-                accept,
-                context);
+        return service.delete(this.client.getEndpoint(), workspaceName, resourceGroupName, kustoPoolName,
+            this.client.getSubscriptionId(), apiVersion, accept, context);
     }
 
     /**
      * Deletes a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    private PollerFlux<PollResult<Void>, Void> beginDeleteAsync(
-        String workspaceName, String resourceGroupName, String kustoPoolName) {
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            deleteWithResponseAsync(workspaceName, resourceGroupName, kustoPoolName);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, Context.NONE);
+    private PollerFlux<PollResult<Void>, Void> beginDeleteAsync(String workspaceName, String resourceGroupName,
+        String kustoPoolName) {
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = deleteWithResponseAsync(workspaceName, resourceGroupName, kustoPoolName);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            this.client.getContext());
     }
 
     /**
      * Deletes a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
@@ -1877,39 +1496,38 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    private PollerFlux<PollResult<Void>, Void> beginDeleteAsync(
-        String workspaceName, String resourceGroupName, String kustoPoolName, Context context) {
+    private PollerFlux<PollResult<Void>, Void> beginDeleteAsync(String workspaceName, String resourceGroupName,
+        String kustoPoolName, Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            deleteWithResponseAsync(workspaceName, resourceGroupName, kustoPoolName, context);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, context);
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = deleteWithResponseAsync(workspaceName, resourceGroupName, kustoPoolName, context);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            context);
     }
 
     /**
      * Deletes a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<Void>, Void> beginDelete(
-        String workspaceName, String resourceGroupName, String kustoPoolName) {
-        return beginDeleteAsync(workspaceName, resourceGroupName, kustoPoolName).getSyncPoller();
+    public SyncPoller<PollResult<Void>, Void> beginDelete(String workspaceName, String resourceGroupName,
+        String kustoPoolName) {
+        return this.beginDeleteAsync(workspaceName, resourceGroupName, kustoPoolName).getSyncPoller();
     }
 
     /**
      * Deletes a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
@@ -1917,35 +1535,34 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<Void>, Void> beginDelete(
-        String workspaceName, String resourceGroupName, String kustoPoolName, Context context) {
-        return beginDeleteAsync(workspaceName, resourceGroupName, kustoPoolName, context).getSyncPoller();
+    public SyncPoller<PollResult<Void>, Void> beginDelete(String workspaceName, String resourceGroupName,
+        String kustoPoolName, Context context) {
+        return this.beginDeleteAsync(workspaceName, resourceGroupName, kustoPoolName, context).getSyncPoller();
     }
 
     /**
      * Deletes a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> deleteAsync(String workspaceName, String resourceGroupName, String kustoPoolName) {
-        return beginDeleteAsync(workspaceName, resourceGroupName, kustoPoolName)
-            .last()
+        return beginDeleteAsync(workspaceName, resourceGroupName, kustoPoolName).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
     /**
      * Deletes a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
@@ -1953,19 +1570,18 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> deleteAsync(
-        String workspaceName, String resourceGroupName, String kustoPoolName, Context context) {
-        return beginDeleteAsync(workspaceName, resourceGroupName, kustoPoolName, context)
-            .last()
+    private Mono<Void> deleteAsync(String workspaceName, String resourceGroupName, String kustoPoolName,
+        Context context) {
+        return beginDeleteAsync(workspaceName, resourceGroupName, kustoPoolName, context).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
     /**
      * Deletes a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
@@ -1980,7 +1596,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
 
     /**
      * Deletes a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
@@ -1996,23 +1612,21 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
 
     /**
      * Stops a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> stopWithResponseAsync(
-        String workspaceName, String kustoPoolName, String resourceGroupName) {
+    private Mono<Response<Flux<ByteBuffer>>> stopWithResponseAsync(String workspaceName, String kustoPoolName,
+        String resourceGroupName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -2021,10 +1635,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
             return Mono.error(new IllegalArgumentException("Parameter kustoPoolName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -2033,24 +1645,14 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .stop(
-                            this.client.getEndpoint(),
-                            workspaceName,
-                            kustoPoolName,
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            apiVersion,
-                            accept,
-                            context))
+            .withContext(context -> service.stop(this.client.getEndpoint(), workspaceName, kustoPoolName,
+                this.client.getSubscriptionId(), resourceGroupName, apiVersion, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Stops a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -2058,16 +1660,14 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> stopWithResponseAsync(
-        String workspaceName, String kustoPoolName, String resourceGroupName, Context context) {
+    private Mono<Response<Flux<ByteBuffer>>> stopWithResponseAsync(String workspaceName, String kustoPoolName,
+        String resourceGroupName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -2076,10 +1676,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
             return Mono.error(new IllegalArgumentException("Parameter kustoPoolName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -2088,41 +1686,32 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .stop(
-                this.client.getEndpoint(),
-                workspaceName,
-                kustoPoolName,
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                apiVersion,
-                accept,
-                context);
+        return service.stop(this.client.getEndpoint(), workspaceName, kustoPoolName, this.client.getSubscriptionId(),
+            resourceGroupName, apiVersion, accept, context);
     }
 
     /**
      * Stops a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    private PollerFlux<PollResult<Void>, Void> beginStopAsync(
-        String workspaceName, String kustoPoolName, String resourceGroupName) {
+    private PollerFlux<PollResult<Void>, Void> beginStopAsync(String workspaceName, String kustoPoolName,
+        String resourceGroupName) {
         Mono<Response<Flux<ByteBuffer>>> mono = stopWithResponseAsync(workspaceName, kustoPoolName, resourceGroupName);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, Context.NONE);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            this.client.getContext());
     }
 
     /**
      * Stops a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -2130,39 +1719,38 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    private PollerFlux<PollResult<Void>, Void> beginStopAsync(
-        String workspaceName, String kustoPoolName, String resourceGroupName, Context context) {
+    private PollerFlux<PollResult<Void>, Void> beginStopAsync(String workspaceName, String kustoPoolName,
+        String resourceGroupName, Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            stopWithResponseAsync(workspaceName, kustoPoolName, resourceGroupName, context);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, context);
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = stopWithResponseAsync(workspaceName, kustoPoolName, resourceGroupName, context);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            context);
     }
 
     /**
      * Stops a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<Void>, Void> beginStop(
-        String workspaceName, String kustoPoolName, String resourceGroupName) {
-        return beginStopAsync(workspaceName, kustoPoolName, resourceGroupName).getSyncPoller();
+    public SyncPoller<PollResult<Void>, Void> beginStop(String workspaceName, String kustoPoolName,
+        String resourceGroupName) {
+        return this.beginStopAsync(workspaceName, kustoPoolName, resourceGroupName).getSyncPoller();
     }
 
     /**
      * Stops a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -2170,35 +1758,34 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<Void>, Void> beginStop(
-        String workspaceName, String kustoPoolName, String resourceGroupName, Context context) {
-        return beginStopAsync(workspaceName, kustoPoolName, resourceGroupName, context).getSyncPoller();
+    public SyncPoller<PollResult<Void>, Void> beginStop(String workspaceName, String kustoPoolName,
+        String resourceGroupName, Context context) {
+        return this.beginStopAsync(workspaceName, kustoPoolName, resourceGroupName, context).getSyncPoller();
     }
 
     /**
      * Stops a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> stopAsync(String workspaceName, String kustoPoolName, String resourceGroupName) {
-        return beginStopAsync(workspaceName, kustoPoolName, resourceGroupName)
-            .last()
+        return beginStopAsync(workspaceName, kustoPoolName, resourceGroupName).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
     /**
      * Stops a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -2206,19 +1793,18 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> stopAsync(
-        String workspaceName, String kustoPoolName, String resourceGroupName, Context context) {
-        return beginStopAsync(workspaceName, kustoPoolName, resourceGroupName, context)
-            .last()
+    private Mono<Void> stopAsync(String workspaceName, String kustoPoolName, String resourceGroupName,
+        Context context) {
+        return beginStopAsync(workspaceName, kustoPoolName, resourceGroupName, context).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
     /**
      * Stops a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -2233,7 +1819,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
 
     /**
      * Stops a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -2249,23 +1835,21 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
 
     /**
      * Starts a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> startWithResponseAsync(
-        String workspaceName, String kustoPoolName, String resourceGroupName) {
+    private Mono<Response<Flux<ByteBuffer>>> startWithResponseAsync(String workspaceName, String kustoPoolName,
+        String resourceGroupName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -2274,10 +1858,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
             return Mono.error(new IllegalArgumentException("Parameter kustoPoolName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -2286,24 +1868,14 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .start(
-                            this.client.getEndpoint(),
-                            workspaceName,
-                            kustoPoolName,
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            apiVersion,
-                            accept,
-                            context))
+            .withContext(context -> service.start(this.client.getEndpoint(), workspaceName, kustoPoolName,
+                this.client.getSubscriptionId(), resourceGroupName, apiVersion, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Starts a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -2311,16 +1883,14 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> startWithResponseAsync(
-        String workspaceName, String kustoPoolName, String resourceGroupName, Context context) {
+    private Mono<Response<Flux<ByteBuffer>>> startWithResponseAsync(String workspaceName, String kustoPoolName,
+        String resourceGroupName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -2329,10 +1899,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
             return Mono.error(new IllegalArgumentException("Parameter kustoPoolName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -2341,41 +1909,32 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .start(
-                this.client.getEndpoint(),
-                workspaceName,
-                kustoPoolName,
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                apiVersion,
-                accept,
-                context);
+        return service.start(this.client.getEndpoint(), workspaceName, kustoPoolName, this.client.getSubscriptionId(),
+            resourceGroupName, apiVersion, accept, context);
     }
 
     /**
      * Starts a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    private PollerFlux<PollResult<Void>, Void> beginStartAsync(
-        String workspaceName, String kustoPoolName, String resourceGroupName) {
+    private PollerFlux<PollResult<Void>, Void> beginStartAsync(String workspaceName, String kustoPoolName,
+        String resourceGroupName) {
         Mono<Response<Flux<ByteBuffer>>> mono = startWithResponseAsync(workspaceName, kustoPoolName, resourceGroupName);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, Context.NONE);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            this.client.getContext());
     }
 
     /**
      * Starts a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -2383,39 +1942,38 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    private PollerFlux<PollResult<Void>, Void> beginStartAsync(
-        String workspaceName, String kustoPoolName, String resourceGroupName, Context context) {
+    private PollerFlux<PollResult<Void>, Void> beginStartAsync(String workspaceName, String kustoPoolName,
+        String resourceGroupName, Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            startWithResponseAsync(workspaceName, kustoPoolName, resourceGroupName, context);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, context);
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = startWithResponseAsync(workspaceName, kustoPoolName, resourceGroupName, context);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            context);
     }
 
     /**
      * Starts a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<Void>, Void> beginStart(
-        String workspaceName, String kustoPoolName, String resourceGroupName) {
-        return beginStartAsync(workspaceName, kustoPoolName, resourceGroupName).getSyncPoller();
+    public SyncPoller<PollResult<Void>, Void> beginStart(String workspaceName, String kustoPoolName,
+        String resourceGroupName) {
+        return this.beginStartAsync(workspaceName, kustoPoolName, resourceGroupName).getSyncPoller();
     }
 
     /**
      * Starts a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -2423,35 +1981,34 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<Void>, Void> beginStart(
-        String workspaceName, String kustoPoolName, String resourceGroupName, Context context) {
-        return beginStartAsync(workspaceName, kustoPoolName, resourceGroupName, context).getSyncPoller();
+    public SyncPoller<PollResult<Void>, Void> beginStart(String workspaceName, String kustoPoolName,
+        String resourceGroupName, Context context) {
+        return this.beginStartAsync(workspaceName, kustoPoolName, resourceGroupName, context).getSyncPoller();
     }
 
     /**
      * Starts a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> startAsync(String workspaceName, String kustoPoolName, String resourceGroupName) {
-        return beginStartAsync(workspaceName, kustoPoolName, resourceGroupName)
-            .last()
+        return beginStartAsync(workspaceName, kustoPoolName, resourceGroupName).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
     /**
      * Starts a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -2459,19 +2016,18 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> startAsync(
-        String workspaceName, String kustoPoolName, String resourceGroupName, Context context) {
-        return beginStartAsync(workspaceName, kustoPoolName, resourceGroupName, context)
-            .last()
+    private Mono<Void> startAsync(String workspaceName, String kustoPoolName, String resourceGroupName,
+        Context context) {
+        return beginStartAsync(workspaceName, kustoPoolName, resourceGroupName, context).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
     /**
      * Starts a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -2486,7 +2042,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
 
     /**
      * Starts a Kusto pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -2502,23 +2058,22 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
 
     /**
      * Returns the SKUs available for the provided resource.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of available SKUs for a Kusto Pool.
+     * @return list of available SKUs for a Kusto Pool along with {@link PagedResponse} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<AzureResourceSkuInner>> listSkusByResourceSinglePageAsync(
-        String workspaceName, String kustoPoolName, String resourceGroupName) {
+    private Mono<PagedResponse<AzureResourceSkuInner>> listSkusByResourceSinglePageAsync(String workspaceName,
+        String kustoPoolName, String resourceGroupName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -2527,10 +2082,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
             return Mono.error(new IllegalArgumentException("Parameter kustoPoolName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -2539,28 +2092,16 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .listSkusByResource(
-                            this.client.getEndpoint(),
-                            workspaceName,
-                            kustoPoolName,
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            apiVersion,
-                            accept,
-                            context))
-            .<PagedResponse<AzureResourceSkuInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(), res.getStatusCode(), res.getHeaders(), res.getValue().value(), null, null))
+            .withContext(context -> service.listSkusByResource(this.client.getEndpoint(), workspaceName, kustoPoolName,
+                this.client.getSubscriptionId(), resourceGroupName, apiVersion, accept, context))
+            .<PagedResponse<AzureResourceSkuInner>>map(res -> new PagedResponseBase<>(res.getRequest(),
+                res.getStatusCode(), res.getHeaders(), res.getValue().value(), null, null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Returns the SKUs available for the provided resource.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -2568,16 +2109,15 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of available SKUs for a Kusto Pool.
+     * @return list of available SKUs for a Kusto Pool along with {@link PagedResponse} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<AzureResourceSkuInner>> listSkusByResourceSinglePageAsync(
-        String workspaceName, String kustoPoolName, String resourceGroupName, Context context) {
+    private Mono<PagedResponse<AzureResourceSkuInner>> listSkusByResourceSinglePageAsync(String workspaceName,
+        String kustoPoolName, String resourceGroupName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -2586,10 +2126,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
             return Mono.error(new IllegalArgumentException("Parameter kustoPoolName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -2599,42 +2137,33 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
         final String accept = "application/json";
         context = this.client.mergeContext(context);
         return service
-            .listSkusByResource(
-                this.client.getEndpoint(),
-                workspaceName,
-                kustoPoolName,
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                apiVersion,
-                accept,
-                context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(), res.getStatusCode(), res.getHeaders(), res.getValue().value(), null, null));
+            .listSkusByResource(this.client.getEndpoint(), workspaceName, kustoPoolName,
+                this.client.getSubscriptionId(), resourceGroupName, apiVersion, accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), null, null));
     }
 
     /**
      * Returns the SKUs available for the provided resource.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of available SKUs for a Kusto Pool.
+     * @return list of available SKUs for a Kusto Pool as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<AzureResourceSkuInner> listSkusByResourceAsync(
-        String workspaceName, String kustoPoolName, String resourceGroupName) {
+    private PagedFlux<AzureResourceSkuInner> listSkusByResourceAsync(String workspaceName, String kustoPoolName,
+        String resourceGroupName) {
         return new PagedFlux<>(
             () -> listSkusByResourceSinglePageAsync(workspaceName, kustoPoolName, resourceGroupName));
     }
 
     /**
      * Returns the SKUs available for the provided resource.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -2642,35 +2171,35 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of available SKUs for a Kusto Pool.
+     * @return list of available SKUs for a Kusto Pool as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<AzureResourceSkuInner> listSkusByResourceAsync(
-        String workspaceName, String kustoPoolName, String resourceGroupName, Context context) {
+    private PagedFlux<AzureResourceSkuInner> listSkusByResourceAsync(String workspaceName, String kustoPoolName,
+        String resourceGroupName, Context context) {
         return new PagedFlux<>(
             () -> listSkusByResourceSinglePageAsync(workspaceName, kustoPoolName, resourceGroupName, context));
     }
 
     /**
      * Returns the SKUs available for the provided resource.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of available SKUs for a Kusto Pool.
+     * @return list of available SKUs for a Kusto Pool as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<AzureResourceSkuInner> listSkusByResource(
-        String workspaceName, String kustoPoolName, String resourceGroupName) {
+    public PagedIterable<AzureResourceSkuInner> listSkusByResource(String workspaceName, String kustoPoolName,
+        String resourceGroupName) {
         return new PagedIterable<>(listSkusByResourceAsync(workspaceName, kustoPoolName, resourceGroupName));
     }
 
     /**
      * Returns the SKUs available for the provided resource.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -2678,33 +2207,32 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of available SKUs for a Kusto Pool.
+     * @return list of available SKUs for a Kusto Pool as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<AzureResourceSkuInner> listSkusByResource(
-        String workspaceName, String kustoPoolName, String resourceGroupName, Context context) {
+    public PagedIterable<AzureResourceSkuInner> listSkusByResource(String workspaceName, String kustoPoolName,
+        String resourceGroupName, Context context) {
         return new PagedIterable<>(listSkusByResourceAsync(workspaceName, kustoPoolName, resourceGroupName, context));
     }
 
     /**
      * Returns a list of language extensions that can run within KQL queries.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of language extension objects.
+     * @return the list of language extension objects along with {@link PagedResponse} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<LanguageExtensionInner>> listLanguageExtensionsSinglePageAsync(
-        String workspaceName, String kustoPoolName, String resourceGroupName) {
+    private Mono<PagedResponse<LanguageExtensionInner>> listLanguageExtensionsSinglePageAsync(String workspaceName,
+        String kustoPoolName, String resourceGroupName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -2713,10 +2241,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
             return Mono.error(new IllegalArgumentException("Parameter kustoPoolName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -2725,28 +2251,16 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .listLanguageExtensions(
-                            this.client.getEndpoint(),
-                            workspaceName,
-                            kustoPoolName,
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            apiVersion,
-                            accept,
-                            context))
-            .<PagedResponse<LanguageExtensionInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(), res.getStatusCode(), res.getHeaders(), res.getValue().value(), null, null))
+            .withContext(context -> service.listLanguageExtensions(this.client.getEndpoint(), workspaceName,
+                kustoPoolName, this.client.getSubscriptionId(), resourceGroupName, apiVersion, accept, context))
+            .<PagedResponse<LanguageExtensionInner>>map(res -> new PagedResponseBase<>(res.getRequest(),
+                res.getStatusCode(), res.getHeaders(), res.getValue().value(), null, null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Returns a list of language extensions that can run within KQL queries.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -2754,16 +2268,15 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of language extension objects.
+     * @return the list of language extension objects along with {@link PagedResponse} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<LanguageExtensionInner>> listLanguageExtensionsSinglePageAsync(
-        String workspaceName, String kustoPoolName, String resourceGroupName, Context context) {
+    private Mono<PagedResponse<LanguageExtensionInner>> listLanguageExtensionsSinglePageAsync(String workspaceName,
+        String kustoPoolName, String resourceGroupName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -2772,10 +2285,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
             return Mono.error(new IllegalArgumentException("Parameter kustoPoolName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -2785,42 +2296,33 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
         final String accept = "application/json";
         context = this.client.mergeContext(context);
         return service
-            .listLanguageExtensions(
-                this.client.getEndpoint(),
-                workspaceName,
-                kustoPoolName,
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                apiVersion,
-                accept,
-                context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(), res.getStatusCode(), res.getHeaders(), res.getValue().value(), null, null));
+            .listLanguageExtensions(this.client.getEndpoint(), workspaceName, kustoPoolName,
+                this.client.getSubscriptionId(), resourceGroupName, apiVersion, accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), null, null));
     }
 
     /**
      * Returns a list of language extensions that can run within KQL queries.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of language extension objects.
+     * @return the list of language extension objects as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<LanguageExtensionInner> listLanguageExtensionsAsync(
-        String workspaceName, String kustoPoolName, String resourceGroupName) {
+    private PagedFlux<LanguageExtensionInner> listLanguageExtensionsAsync(String workspaceName, String kustoPoolName,
+        String resourceGroupName) {
         return new PagedFlux<>(
             () -> listLanguageExtensionsSinglePageAsync(workspaceName, kustoPoolName, resourceGroupName));
     }
 
     /**
      * Returns a list of language extensions that can run within KQL queries.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -2828,35 +2330,35 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of language extension objects.
+     * @return the list of language extension objects as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<LanguageExtensionInner> listLanguageExtensionsAsync(
-        String workspaceName, String kustoPoolName, String resourceGroupName, Context context) {
+    private PagedFlux<LanguageExtensionInner> listLanguageExtensionsAsync(String workspaceName, String kustoPoolName,
+        String resourceGroupName, Context context) {
         return new PagedFlux<>(
             () -> listLanguageExtensionsSinglePageAsync(workspaceName, kustoPoolName, resourceGroupName, context));
     }
 
     /**
      * Returns a list of language extensions that can run within KQL queries.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of language extension objects.
+     * @return the list of language extension objects as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<LanguageExtensionInner> listLanguageExtensions(
-        String workspaceName, String kustoPoolName, String resourceGroupName) {
+    public PagedIterable<LanguageExtensionInner> listLanguageExtensions(String workspaceName, String kustoPoolName,
+        String resourceGroupName) {
         return new PagedIterable<>(listLanguageExtensionsAsync(workspaceName, kustoPoolName, resourceGroupName));
     }
 
     /**
      * Returns a list of language extensions that can run within KQL queries.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -2864,18 +2366,18 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of language extension objects.
+     * @return the list of language extension objects as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<LanguageExtensionInner> listLanguageExtensions(
-        String workspaceName, String kustoPoolName, String resourceGroupName, Context context) {
+    public PagedIterable<LanguageExtensionInner> listLanguageExtensions(String workspaceName, String kustoPoolName,
+        String resourceGroupName, Context context) {
         return new PagedIterable<>(
             listLanguageExtensionsAsync(workspaceName, kustoPoolName, resourceGroupName, context));
     }
 
     /**
      * Add a list of language extensions that can run within KQL queries.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -2883,19 +2385,14 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> addLanguageExtensionsWithResponseAsync(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        LanguageExtensionsList languageExtensionsToAdd) {
+    private Mono<Response<Flux<ByteBuffer>>> addLanguageExtensionsWithResponseAsync(String workspaceName,
+        String kustoPoolName, String resourceGroupName, LanguageExtensionsList languageExtensionsToAdd) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -2904,44 +2401,31 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
             return Mono.error(new IllegalArgumentException("Parameter kustoPoolName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
                 .error(new IllegalArgumentException("Parameter resourceGroupName is required and cannot be null."));
         }
         if (languageExtensionsToAdd == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException("Parameter languageExtensionsToAdd is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter languageExtensionsToAdd is required and cannot be null."));
         } else {
             languageExtensionsToAdd.validate();
         }
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .addLanguageExtensions(
-                            this.client.getEndpoint(),
-                            workspaceName,
-                            kustoPoolName,
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            apiVersion,
-                            languageExtensionsToAdd,
-                            accept,
-                            context))
+            .withContext(context -> service.addLanguageExtensions(this.client.getEndpoint(), workspaceName,
+                kustoPoolName, this.client.getSubscriptionId(), resourceGroupName, apiVersion, languageExtensionsToAdd,
+                accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Add a list of language extensions that can run within KQL queries.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -2950,20 +2434,15 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> addLanguageExtensionsWithResponseAsync(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        LanguageExtensionsList languageExtensionsToAdd,
+    private Mono<Response<Flux<ByteBuffer>>> addLanguageExtensionsWithResponseAsync(String workspaceName,
+        String kustoPoolName, String resourceGroupName, LanguageExtensionsList languageExtensionsToAdd,
         Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -2972,41 +2451,29 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
             return Mono.error(new IllegalArgumentException("Parameter kustoPoolName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
                 .error(new IllegalArgumentException("Parameter resourceGroupName is required and cannot be null."));
         }
         if (languageExtensionsToAdd == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException("Parameter languageExtensionsToAdd is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter languageExtensionsToAdd is required and cannot be null."));
         } else {
             languageExtensionsToAdd.validate();
         }
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .addLanguageExtensions(
-                this.client.getEndpoint(),
-                workspaceName,
-                kustoPoolName,
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                apiVersion,
-                languageExtensionsToAdd,
-                accept,
-                context);
+        return service.addLanguageExtensions(this.client.getEndpoint(), workspaceName, kustoPoolName,
+            this.client.getSubscriptionId(), resourceGroupName, apiVersion, languageExtensionsToAdd, accept, context);
     }
 
     /**
      * Add a list of language extensions that can run within KQL queries.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -3014,25 +2481,20 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    private PollerFlux<PollResult<Void>, Void> beginAddLanguageExtensionsAsync(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        LanguageExtensionsList languageExtensionsToAdd) {
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            addLanguageExtensionsWithResponseAsync(
-                workspaceName, kustoPoolName, resourceGroupName, languageExtensionsToAdd);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, Context.NONE);
+    private PollerFlux<PollResult<Void>, Void> beginAddLanguageExtensionsAsync(String workspaceName,
+        String kustoPoolName, String resourceGroupName, LanguageExtensionsList languageExtensionsToAdd) {
+        Mono<Response<Flux<ByteBuffer>>> mono = addLanguageExtensionsWithResponseAsync(workspaceName, kustoPoolName,
+            resourceGroupName, languageExtensionsToAdd);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            this.client.getContext());
     }
 
     /**
      * Add a list of language extensions that can run within KQL queries.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -3041,49 +2503,42 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    private PollerFlux<PollResult<Void>, Void> beginAddLanguageExtensionsAsync(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        LanguageExtensionsList languageExtensionsToAdd,
+    private PollerFlux<PollResult<Void>, Void> beginAddLanguageExtensionsAsync(String workspaceName,
+        String kustoPoolName, String resourceGroupName, LanguageExtensionsList languageExtensionsToAdd,
         Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            addLanguageExtensionsWithResponseAsync(
-                workspaceName, kustoPoolName, resourceGroupName, languageExtensionsToAdd, context);
+        Mono<Response<Flux<ByteBuffer>>> mono = addLanguageExtensionsWithResponseAsync(workspaceName, kustoPoolName,
+            resourceGroupName, languageExtensionsToAdd, context);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            context);
+    }
+
+    /**
+     * Add a list of language extensions that can run within KQL queries.
+     * 
+     * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param languageExtensionsToAdd The language extensions to add.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of long-running operation.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<Void>, Void> beginAddLanguageExtensions(String workspaceName, String kustoPoolName,
+        String resourceGroupName, LanguageExtensionsList languageExtensionsToAdd) {
         return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, context);
-    }
-
-    /**
-     * Add a list of language extensions that can run within KQL queries.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param languageExtensionsToAdd The language extensions to add.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
-     */
-    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<Void>, Void> beginAddLanguageExtensions(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        LanguageExtensionsList languageExtensionsToAdd) {
-        return beginAddLanguageExtensionsAsync(workspaceName, kustoPoolName, resourceGroupName, languageExtensionsToAdd)
+            .beginAddLanguageExtensionsAsync(workspaceName, kustoPoolName, resourceGroupName, languageExtensionsToAdd)
             .getSyncPoller();
     }
 
     /**
      * Add a list of language extensions that can run within KQL queries.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -3092,23 +2547,20 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<Void>, Void> beginAddLanguageExtensions(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        LanguageExtensionsList languageExtensionsToAdd,
-        Context context) {
-        return beginAddLanguageExtensionsAsync(
-                workspaceName, kustoPoolName, resourceGroupName, languageExtensionsToAdd, context)
+    public SyncPoller<PollResult<Void>, Void> beginAddLanguageExtensions(String workspaceName, String kustoPoolName,
+        String resourceGroupName, LanguageExtensionsList languageExtensionsToAdd, Context context) {
+        return this
+            .beginAddLanguageExtensionsAsync(workspaceName, kustoPoolName, resourceGroupName, languageExtensionsToAdd,
+                context)
             .getSyncPoller();
     }
 
     /**
      * Add a list of language extensions that can run within KQL queries.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -3116,13 +2568,10 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> addLanguageExtensionsAsync(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
+    private Mono<Void> addLanguageExtensionsAsync(String workspaceName, String kustoPoolName, String resourceGroupName,
         LanguageExtensionsList languageExtensionsToAdd) {
         return beginAddLanguageExtensionsAsync(workspaceName, kustoPoolName, resourceGroupName, languageExtensionsToAdd)
             .last()
@@ -3131,7 +2580,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
 
     /**
      * Add a list of language extensions that can run within KQL queries.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -3140,24 +2589,18 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> addLanguageExtensionsAsync(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        LanguageExtensionsList languageExtensionsToAdd,
-        Context context) {
-        return beginAddLanguageExtensionsAsync(
-                workspaceName, kustoPoolName, resourceGroupName, languageExtensionsToAdd, context)
-            .last()
-            .flatMap(this.client::getLroFinalResultOrError);
+    private Mono<Void> addLanguageExtensionsAsync(String workspaceName, String kustoPoolName, String resourceGroupName,
+        LanguageExtensionsList languageExtensionsToAdd, Context context) {
+        return beginAddLanguageExtensionsAsync(workspaceName, kustoPoolName, resourceGroupName, languageExtensionsToAdd,
+            context).last().flatMap(this.client::getLroFinalResultOrError);
     }
 
     /**
      * Add a list of language extensions that can run within KQL queries.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -3167,17 +2610,14 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public void addLanguageExtensions(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
+    public void addLanguageExtensions(String workspaceName, String kustoPoolName, String resourceGroupName,
         LanguageExtensionsList languageExtensionsToAdd) {
         addLanguageExtensionsAsync(workspaceName, kustoPoolName, resourceGroupName, languageExtensionsToAdd).block();
     }
 
     /**
      * Add a list of language extensions that can run within KQL queries.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -3188,19 +2628,15 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public void addLanguageExtensions(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        LanguageExtensionsList languageExtensionsToAdd,
-        Context context) {
+    public void addLanguageExtensions(String workspaceName, String kustoPoolName, String resourceGroupName,
+        LanguageExtensionsList languageExtensionsToAdd, Context context) {
         addLanguageExtensionsAsync(workspaceName, kustoPoolName, resourceGroupName, languageExtensionsToAdd, context)
             .block();
     }
 
     /**
      * Remove a list of language extensions that can run within KQL queries.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -3208,19 +2644,14 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> removeLanguageExtensionsWithResponseAsync(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        LanguageExtensionsList languageExtensionsToRemove) {
+    private Mono<Response<Flux<ByteBuffer>>> removeLanguageExtensionsWithResponseAsync(String workspaceName,
+        String kustoPoolName, String resourceGroupName, LanguageExtensionsList languageExtensionsToRemove) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -3229,45 +2660,31 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
             return Mono.error(new IllegalArgumentException("Parameter kustoPoolName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
                 .error(new IllegalArgumentException("Parameter resourceGroupName is required and cannot be null."));
         }
         if (languageExtensionsToRemove == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter languageExtensionsToRemove is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter languageExtensionsToRemove is required and cannot be null."));
         } else {
             languageExtensionsToRemove.validate();
         }
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .removeLanguageExtensions(
-                            this.client.getEndpoint(),
-                            workspaceName,
-                            kustoPoolName,
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            apiVersion,
-                            languageExtensionsToRemove,
-                            accept,
-                            context))
+            .withContext(context -> service.removeLanguageExtensions(this.client.getEndpoint(), workspaceName,
+                kustoPoolName, this.client.getSubscriptionId(), resourceGroupName, apiVersion,
+                languageExtensionsToRemove, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Remove a list of language extensions that can run within KQL queries.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -3276,20 +2693,15 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> removeLanguageExtensionsWithResponseAsync(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        LanguageExtensionsList languageExtensionsToRemove,
+    private Mono<Response<Flux<ByteBuffer>>> removeLanguageExtensionsWithResponseAsync(String workspaceName,
+        String kustoPoolName, String resourceGroupName, LanguageExtensionsList languageExtensionsToRemove,
         Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -3298,42 +2710,30 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
             return Mono.error(new IllegalArgumentException("Parameter kustoPoolName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
                 .error(new IllegalArgumentException("Parameter resourceGroupName is required and cannot be null."));
         }
         if (languageExtensionsToRemove == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter languageExtensionsToRemove is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter languageExtensionsToRemove is required and cannot be null."));
         } else {
             languageExtensionsToRemove.validate();
         }
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .removeLanguageExtensions(
-                this.client.getEndpoint(),
-                workspaceName,
-                kustoPoolName,
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                apiVersion,
-                languageExtensionsToRemove,
-                accept,
-                context);
+        return service.removeLanguageExtensions(this.client.getEndpoint(), workspaceName, kustoPoolName,
+            this.client.getSubscriptionId(), resourceGroupName, apiVersion, languageExtensionsToRemove, accept,
+            context);
     }
 
     /**
      * Remove a list of language extensions that can run within KQL queries.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -3341,25 +2741,20 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    private PollerFlux<PollResult<Void>, Void> beginRemoveLanguageExtensionsAsync(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        LanguageExtensionsList languageExtensionsToRemove) {
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            removeLanguageExtensionsWithResponseAsync(
-                workspaceName, kustoPoolName, resourceGroupName, languageExtensionsToRemove);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, Context.NONE);
+    private PollerFlux<PollResult<Void>, Void> beginRemoveLanguageExtensionsAsync(String workspaceName,
+        String kustoPoolName, String resourceGroupName, LanguageExtensionsList languageExtensionsToRemove) {
+        Mono<Response<Flux<ByteBuffer>>> mono = removeLanguageExtensionsWithResponseAsync(workspaceName, kustoPoolName,
+            resourceGroupName, languageExtensionsToRemove);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            this.client.getContext());
     }
 
     /**
      * Remove a list of language extensions that can run within KQL queries.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -3368,50 +2763,43 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    private PollerFlux<PollResult<Void>, Void> beginRemoveLanguageExtensionsAsync(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        LanguageExtensionsList languageExtensionsToRemove,
+    private PollerFlux<PollResult<Void>, Void> beginRemoveLanguageExtensionsAsync(String workspaceName,
+        String kustoPoolName, String resourceGroupName, LanguageExtensionsList languageExtensionsToRemove,
         Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            removeLanguageExtensionsWithResponseAsync(
-                workspaceName, kustoPoolName, resourceGroupName, languageExtensionsToRemove, context);
+        Mono<Response<Flux<ByteBuffer>>> mono = removeLanguageExtensionsWithResponseAsync(workspaceName, kustoPoolName,
+            resourceGroupName, languageExtensionsToRemove, context);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            context);
+    }
+
+    /**
+     * Remove a list of language extensions that can run within KQL queries.
+     * 
+     * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param languageExtensionsToRemove The language extensions to remove.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of long-running operation.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<Void>, Void> beginRemoveLanguageExtensions(String workspaceName, String kustoPoolName,
+        String resourceGroupName, LanguageExtensionsList languageExtensionsToRemove) {
         return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, context);
-    }
-
-    /**
-     * Remove a list of language extensions that can run within KQL queries.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param languageExtensionsToRemove The language extensions to remove.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
-     */
-    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<Void>, Void> beginRemoveLanguageExtensions(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        LanguageExtensionsList languageExtensionsToRemove) {
-        return beginRemoveLanguageExtensionsAsync(
-                workspaceName, kustoPoolName, resourceGroupName, languageExtensionsToRemove)
+            .beginRemoveLanguageExtensionsAsync(workspaceName, kustoPoolName, resourceGroupName,
+                languageExtensionsToRemove)
             .getSyncPoller();
     }
 
     /**
      * Remove a list of language extensions that can run within KQL queries.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -3420,23 +2808,20 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<Void>, Void> beginRemoveLanguageExtensions(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        LanguageExtensionsList languageExtensionsToRemove,
-        Context context) {
-        return beginRemoveLanguageExtensionsAsync(
-                workspaceName, kustoPoolName, resourceGroupName, languageExtensionsToRemove, context)
+    public SyncPoller<PollResult<Void>, Void> beginRemoveLanguageExtensions(String workspaceName, String kustoPoolName,
+        String resourceGroupName, LanguageExtensionsList languageExtensionsToRemove, Context context) {
+        return this
+            .beginRemoveLanguageExtensionsAsync(workspaceName, kustoPoolName, resourceGroupName,
+                languageExtensionsToRemove, context)
             .getSyncPoller();
     }
 
     /**
      * Remove a list of language extensions that can run within KQL queries.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -3444,23 +2829,18 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> removeLanguageExtensionsAsync(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        LanguageExtensionsList languageExtensionsToRemove) {
-        return beginRemoveLanguageExtensionsAsync(
-                workspaceName, kustoPoolName, resourceGroupName, languageExtensionsToRemove)
-            .last()
-            .flatMap(this.client::getLroFinalResultOrError);
+    private Mono<Void> removeLanguageExtensionsAsync(String workspaceName, String kustoPoolName,
+        String resourceGroupName, LanguageExtensionsList languageExtensionsToRemove) {
+        return beginRemoveLanguageExtensionsAsync(workspaceName, kustoPoolName, resourceGroupName,
+            languageExtensionsToRemove).last().flatMap(this.client::getLroFinalResultOrError);
     }
 
     /**
      * Remove a list of language extensions that can run within KQL queries.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -3469,24 +2849,18 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> removeLanguageExtensionsAsync(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        LanguageExtensionsList languageExtensionsToRemove,
-        Context context) {
-        return beginRemoveLanguageExtensionsAsync(
-                workspaceName, kustoPoolName, resourceGroupName, languageExtensionsToRemove, context)
-            .last()
-            .flatMap(this.client::getLroFinalResultOrError);
+    private Mono<Void> removeLanguageExtensionsAsync(String workspaceName, String kustoPoolName,
+        String resourceGroupName, LanguageExtensionsList languageExtensionsToRemove, Context context) {
+        return beginRemoveLanguageExtensionsAsync(workspaceName, kustoPoolName, resourceGroupName,
+            languageExtensionsToRemove, context).last().flatMap(this.client::getLroFinalResultOrError);
     }
 
     /**
      * Remove a list of language extensions that can run within KQL queries.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -3496,10 +2870,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public void removeLanguageExtensions(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
+    public void removeLanguageExtensions(String workspaceName, String kustoPoolName, String resourceGroupName,
         LanguageExtensionsList languageExtensionsToRemove) {
         removeLanguageExtensionsAsync(workspaceName, kustoPoolName, resourceGroupName, languageExtensionsToRemove)
             .block();
@@ -3507,7 +2878,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
 
     /**
      * Remove a list of language extensions that can run within KQL queries.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -3518,36 +2889,30 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public void removeLanguageExtensions(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        LanguageExtensionsList languageExtensionsToRemove,
-        Context context) {
-        removeLanguageExtensionsAsync(
-                workspaceName, kustoPoolName, resourceGroupName, languageExtensionsToRemove, context)
-            .block();
+    public void removeLanguageExtensions(String workspaceName, String kustoPoolName, String resourceGroupName,
+        LanguageExtensionsList languageExtensionsToRemove, Context context) {
+        removeLanguageExtensionsAsync(workspaceName, kustoPoolName, resourceGroupName, languageExtensionsToRemove,
+            context).block();
     }
 
     /**
      * Returns a list of databases that are owned by this Kusto Pool and were followed by another Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto database principals operation response.
+     * @return the list Kusto database principals operation response along with {@link PagedResponse} on successful
+     * completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<FollowerDatabaseDefinitionInner>> listFollowerDatabasesSinglePageAsync(
-        String workspaceName, String kustoPoolName, String resourceGroupName) {
+    private Mono<PagedResponse<FollowerDatabaseDefinitionInner>>
+        listFollowerDatabasesSinglePageAsync(String workspaceName, String kustoPoolName, String resourceGroupName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -3556,10 +2921,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
             return Mono.error(new IllegalArgumentException("Parameter kustoPoolName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -3568,28 +2931,16 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .listFollowerDatabases(
-                            this.client.getEndpoint(),
-                            workspaceName,
-                            kustoPoolName,
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            apiVersion,
-                            accept,
-                            context))
-            .<PagedResponse<FollowerDatabaseDefinitionInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(), res.getStatusCode(), res.getHeaders(), res.getValue().value(), null, null))
+            .withContext(context -> service.listFollowerDatabases(this.client.getEndpoint(), workspaceName,
+                kustoPoolName, this.client.getSubscriptionId(), resourceGroupName, apiVersion, accept, context))
+            .<PagedResponse<FollowerDatabaseDefinitionInner>>map(res -> new PagedResponseBase<>(res.getRequest(),
+                res.getStatusCode(), res.getHeaders(), res.getValue().value(), null, null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Returns a list of databases that are owned by this Kusto Pool and were followed by another Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -3597,16 +2948,15 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto database principals operation response.
+     * @return the list Kusto database principals operation response along with {@link PagedResponse} on successful
+     * completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<FollowerDatabaseDefinitionInner>> listFollowerDatabasesSinglePageAsync(
         String workspaceName, String kustoPoolName, String resourceGroupName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -3615,10 +2965,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
             return Mono.error(new IllegalArgumentException("Parameter kustoPoolName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -3628,42 +2976,33 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
         final String accept = "application/json";
         context = this.client.mergeContext(context);
         return service
-            .listFollowerDatabases(
-                this.client.getEndpoint(),
-                workspaceName,
-                kustoPoolName,
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                apiVersion,
-                accept,
-                context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(), res.getStatusCode(), res.getHeaders(), res.getValue().value(), null, null));
+            .listFollowerDatabases(this.client.getEndpoint(), workspaceName, kustoPoolName,
+                this.client.getSubscriptionId(), resourceGroupName, apiVersion, accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), null, null));
     }
 
     /**
      * Returns a list of databases that are owned by this Kusto Pool and were followed by another Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto database principals operation response.
+     * @return the list Kusto database principals operation response as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<FollowerDatabaseDefinitionInner> listFollowerDatabasesAsync(
-        String workspaceName, String kustoPoolName, String resourceGroupName) {
+    private PagedFlux<FollowerDatabaseDefinitionInner> listFollowerDatabasesAsync(String workspaceName,
+        String kustoPoolName, String resourceGroupName) {
         return new PagedFlux<>(
             () -> listFollowerDatabasesSinglePageAsync(workspaceName, kustoPoolName, resourceGroupName));
     }
 
     /**
      * Returns a list of databases that are owned by this Kusto Pool and were followed by another Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -3671,35 +3010,35 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto database principals operation response.
+     * @return the list Kusto database principals operation response as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<FollowerDatabaseDefinitionInner> listFollowerDatabasesAsync(
-        String workspaceName, String kustoPoolName, String resourceGroupName, Context context) {
+    private PagedFlux<FollowerDatabaseDefinitionInner> listFollowerDatabasesAsync(String workspaceName,
+        String kustoPoolName, String resourceGroupName, Context context) {
         return new PagedFlux<>(
             () -> listFollowerDatabasesSinglePageAsync(workspaceName, kustoPoolName, resourceGroupName, context));
     }
 
     /**
      * Returns a list of databases that are owned by this Kusto Pool and were followed by another Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto database principals operation response.
+     * @return the list Kusto database principals operation response as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<FollowerDatabaseDefinitionInner> listFollowerDatabases(
-        String workspaceName, String kustoPoolName, String resourceGroupName) {
+    public PagedIterable<FollowerDatabaseDefinitionInner> listFollowerDatabases(String workspaceName,
+        String kustoPoolName, String resourceGroupName) {
         return new PagedIterable<>(listFollowerDatabasesAsync(workspaceName, kustoPoolName, resourceGroupName));
     }
 
     /**
      * Returns a list of databases that are owned by this Kusto Pool and were followed by another Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -3707,18 +3046,18 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto database principals operation response.
+     * @return the list Kusto database principals operation response as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<FollowerDatabaseDefinitionInner> listFollowerDatabases(
-        String workspaceName, String kustoPoolName, String resourceGroupName, Context context) {
+    public PagedIterable<FollowerDatabaseDefinitionInner> listFollowerDatabases(String workspaceName,
+        String kustoPoolName, String resourceGroupName, Context context) {
         return new PagedIterable<>(
             listFollowerDatabasesAsync(workspaceName, kustoPoolName, resourceGroupName, context));
     }
 
     /**
      * Detaches all followers of a database owned by this Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -3726,19 +3065,14 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> detachFollowerDatabasesWithResponseAsync(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        FollowerDatabaseDefinitionInner followerDatabaseToRemove) {
+    private Mono<Response<Flux<ByteBuffer>>> detachFollowerDatabasesWithResponseAsync(String workspaceName,
+        String kustoPoolName, String resourceGroupName, FollowerDatabaseDefinitionInner followerDatabaseToRemove) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -3747,44 +3081,31 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
             return Mono.error(new IllegalArgumentException("Parameter kustoPoolName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
                 .error(new IllegalArgumentException("Parameter resourceGroupName is required and cannot be null."));
         }
         if (followerDatabaseToRemove == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException("Parameter followerDatabaseToRemove is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter followerDatabaseToRemove is required and cannot be null."));
         } else {
             followerDatabaseToRemove.validate();
         }
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .detachFollowerDatabases(
-                            this.client.getEndpoint(),
-                            workspaceName,
-                            kustoPoolName,
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            apiVersion,
-                            followerDatabaseToRemove,
-                            accept,
-                            context))
+            .withContext(context -> service.detachFollowerDatabases(this.client.getEndpoint(), workspaceName,
+                kustoPoolName, this.client.getSubscriptionId(), resourceGroupName, apiVersion, followerDatabaseToRemove,
+                accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Detaches all followers of a database owned by this Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -3793,20 +3114,15 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> detachFollowerDatabasesWithResponseAsync(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        FollowerDatabaseDefinitionInner followerDatabaseToRemove,
+    private Mono<Response<Flux<ByteBuffer>>> detachFollowerDatabasesWithResponseAsync(String workspaceName,
+        String kustoPoolName, String resourceGroupName, FollowerDatabaseDefinitionInner followerDatabaseToRemove,
         Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (workspaceName == null) {
             return Mono.error(new IllegalArgumentException("Parameter workspaceName is required and cannot be null."));
@@ -3815,41 +3131,29 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
             return Mono.error(new IllegalArgumentException("Parameter kustoPoolName is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
                 .error(new IllegalArgumentException("Parameter resourceGroupName is required and cannot be null."));
         }
         if (followerDatabaseToRemove == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException("Parameter followerDatabaseToRemove is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter followerDatabaseToRemove is required and cannot be null."));
         } else {
             followerDatabaseToRemove.validate();
         }
         final String apiVersion = "2021-06-01-preview";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .detachFollowerDatabases(
-                this.client.getEndpoint(),
-                workspaceName,
-                kustoPoolName,
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                apiVersion,
-                followerDatabaseToRemove,
-                accept,
-                context);
+        return service.detachFollowerDatabases(this.client.getEndpoint(), workspaceName, kustoPoolName,
+            this.client.getSubscriptionId(), resourceGroupName, apiVersion, followerDatabaseToRemove, accept, context);
     }
 
     /**
      * Detaches all followers of a database owned by this Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -3857,25 +3161,20 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    private PollerFlux<PollResult<Void>, Void> beginDetachFollowerDatabasesAsync(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        FollowerDatabaseDefinitionInner followerDatabaseToRemove) {
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            detachFollowerDatabasesWithResponseAsync(
-                workspaceName, kustoPoolName, resourceGroupName, followerDatabaseToRemove);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, Context.NONE);
+    private PollerFlux<PollResult<Void>, Void> beginDetachFollowerDatabasesAsync(String workspaceName,
+        String kustoPoolName, String resourceGroupName, FollowerDatabaseDefinitionInner followerDatabaseToRemove) {
+        Mono<Response<Flux<ByteBuffer>>> mono = detachFollowerDatabasesWithResponseAsync(workspaceName, kustoPoolName,
+            resourceGroupName, followerDatabaseToRemove);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            this.client.getContext());
     }
 
     /**
      * Detaches all followers of a database owned by this Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -3884,50 +3183,43 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    private PollerFlux<PollResult<Void>, Void> beginDetachFollowerDatabasesAsync(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        FollowerDatabaseDefinitionInner followerDatabaseToRemove,
+    private PollerFlux<PollResult<Void>, Void> beginDetachFollowerDatabasesAsync(String workspaceName,
+        String kustoPoolName, String resourceGroupName, FollowerDatabaseDefinitionInner followerDatabaseToRemove,
         Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            detachFollowerDatabasesWithResponseAsync(
-                workspaceName, kustoPoolName, resourceGroupName, followerDatabaseToRemove, context);
+        Mono<Response<Flux<ByteBuffer>>> mono = detachFollowerDatabasesWithResponseAsync(workspaceName, kustoPoolName,
+            resourceGroupName, followerDatabaseToRemove, context);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            context);
+    }
+
+    /**
+     * Detaches all followers of a database owned by this Kusto Pool.
+     * 
+     * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param followerDatabaseToRemove The follower databases properties to remove.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of long-running operation.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<Void>, Void> beginDetachFollowerDatabases(String workspaceName, String kustoPoolName,
+        String resourceGroupName, FollowerDatabaseDefinitionInner followerDatabaseToRemove) {
         return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, context);
-    }
-
-    /**
-     * Detaches all followers of a database owned by this Kusto Pool.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param followerDatabaseToRemove The follower databases properties to remove.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
-     */
-    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<Void>, Void> beginDetachFollowerDatabases(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        FollowerDatabaseDefinitionInner followerDatabaseToRemove) {
-        return beginDetachFollowerDatabasesAsync(
-                workspaceName, kustoPoolName, resourceGroupName, followerDatabaseToRemove)
+            .beginDetachFollowerDatabasesAsync(workspaceName, kustoPoolName, resourceGroupName,
+                followerDatabaseToRemove)
             .getSyncPoller();
     }
 
     /**
      * Detaches all followers of a database owned by this Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -3936,23 +3228,20 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<Void>, Void> beginDetachFollowerDatabases(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        FollowerDatabaseDefinitionInner followerDatabaseToRemove,
-        Context context) {
-        return beginDetachFollowerDatabasesAsync(
-                workspaceName, kustoPoolName, resourceGroupName, followerDatabaseToRemove, context)
+    public SyncPoller<PollResult<Void>, Void> beginDetachFollowerDatabases(String workspaceName, String kustoPoolName,
+        String resourceGroupName, FollowerDatabaseDefinitionInner followerDatabaseToRemove, Context context) {
+        return this
+            .beginDetachFollowerDatabasesAsync(workspaceName, kustoPoolName, resourceGroupName,
+                followerDatabaseToRemove, context)
             .getSyncPoller();
     }
 
     /**
      * Detaches all followers of a database owned by this Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -3960,23 +3249,18 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> detachFollowerDatabasesAsync(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        FollowerDatabaseDefinitionInner followerDatabaseToRemove) {
-        return beginDetachFollowerDatabasesAsync(
-                workspaceName, kustoPoolName, resourceGroupName, followerDatabaseToRemove)
-            .last()
-            .flatMap(this.client::getLroFinalResultOrError);
+    private Mono<Void> detachFollowerDatabasesAsync(String workspaceName, String kustoPoolName,
+        String resourceGroupName, FollowerDatabaseDefinitionInner followerDatabaseToRemove) {
+        return beginDetachFollowerDatabasesAsync(workspaceName, kustoPoolName, resourceGroupName,
+            followerDatabaseToRemove).last().flatMap(this.client::getLroFinalResultOrError);
     }
 
     /**
      * Detaches all followers of a database owned by this Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -3985,24 +3269,18 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> detachFollowerDatabasesAsync(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        FollowerDatabaseDefinitionInner followerDatabaseToRemove,
-        Context context) {
-        return beginDetachFollowerDatabasesAsync(
-                workspaceName, kustoPoolName, resourceGroupName, followerDatabaseToRemove, context)
-            .last()
-            .flatMap(this.client::getLroFinalResultOrError);
+    private Mono<Void> detachFollowerDatabasesAsync(String workspaceName, String kustoPoolName,
+        String resourceGroupName, FollowerDatabaseDefinitionInner followerDatabaseToRemove, Context context) {
+        return beginDetachFollowerDatabasesAsync(workspaceName, kustoPoolName, resourceGroupName,
+            followerDatabaseToRemove, context).last().flatMap(this.client::getLroFinalResultOrError);
     }
 
     /**
      * Detaches all followers of a database owned by this Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -4012,17 +3290,14 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public void detachFollowerDatabases(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
+    public void detachFollowerDatabases(String workspaceName, String kustoPoolName, String resourceGroupName,
         FollowerDatabaseDefinitionInner followerDatabaseToRemove) {
         detachFollowerDatabasesAsync(workspaceName, kustoPoolName, resourceGroupName, followerDatabaseToRemove).block();
     }
 
     /**
      * Detaches all followers of a database owned by this Kusto Pool.
-     *
+     * 
      * @param workspaceName The name of the workspace.
      * @param kustoPoolName The name of the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -4033,12 +3308,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public void detachFollowerDatabases(
-        String workspaceName,
-        String kustoPoolName,
-        String resourceGroupName,
-        FollowerDatabaseDefinitionInner followerDatabaseToRemove,
-        Context context) {
+    public void detachFollowerDatabases(String workspaceName, String kustoPoolName, String resourceGroupName,
+        FollowerDatabaseDefinitionInner followerDatabaseToRemove, Context context) {
         detachFollowerDatabasesAsync(workspaceName, kustoPoolName, resourceGroupName, followerDatabaseToRemove, context)
             .block();
     }

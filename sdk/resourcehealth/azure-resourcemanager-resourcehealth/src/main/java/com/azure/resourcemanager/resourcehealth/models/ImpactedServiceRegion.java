@@ -5,8 +5,6 @@
 package com.azure.resourcemanager.resourcehealth.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -14,8 +12,6 @@ import java.util.List;
 /** Azure region impacted by the service health event. */
 @Fluent
 public final class ImpactedServiceRegion {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ImpactedServiceRegion.class);
-
     /*
      * Impacted region name.
      */
@@ -35,8 +31,13 @@ public final class ImpactedServiceRegion {
     private List<String> impactedSubscriptions;
 
     /*
-     * It provides the Timestamp for when the last update for the service
-     * health event.
+     * List tenant impacted by the service health event.
+     */
+    @JsonProperty(value = "impactedTenants")
+    private List<String> impactedTenants;
+
+    /*
+     * It provides the Timestamp for when the last update for the service health event.
      */
     @JsonProperty(value = "lastUpdateTime")
     private OffsetDateTime lastUpdateTime;
@@ -46,6 +47,10 @@ public final class ImpactedServiceRegion {
      */
     @JsonProperty(value = "updates")
     private List<Update> updates;
+
+    /** Creates an instance of ImpactedServiceRegion class. */
+    public ImpactedServiceRegion() {
+    }
 
     /**
      * Get the impactedRegion property: Impacted region name.
@@ -104,6 +109,26 @@ public final class ImpactedServiceRegion {
      */
     public ImpactedServiceRegion withImpactedSubscriptions(List<String> impactedSubscriptions) {
         this.impactedSubscriptions = impactedSubscriptions;
+        return this;
+    }
+
+    /**
+     * Get the impactedTenants property: List tenant impacted by the service health event.
+     *
+     * @return the impactedTenants value.
+     */
+    public List<String> impactedTenants() {
+        return this.impactedTenants;
+    }
+
+    /**
+     * Set the impactedTenants property: List tenant impacted by the service health event.
+     *
+     * @param impactedTenants the impactedTenants value to set.
+     * @return the ImpactedServiceRegion object itself.
+     */
+    public ImpactedServiceRegion withImpactedTenants(List<String> impactedTenants) {
+        this.impactedTenants = impactedTenants;
         return this;
     }
 

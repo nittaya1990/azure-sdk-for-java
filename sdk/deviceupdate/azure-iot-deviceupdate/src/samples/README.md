@@ -1,259 +1,306 @@
+# Introduction
+
+These samples demonstrate basic operations with `DeviceUpdateClient` and `DeviceManagementClient` service clients. 
+`DeviceUpdateClient` is used to manage updates and `DeviceManagementClient` is used to manage devices and deployments.
+Ech method call sends a request to the service's REST API. To get started, you'll need Device Update for IoT Hub 
+AccountId (hostname) and InstanceId which you can access in Azure Portal. 
+See the [README](https://github.com/Azure/azure-sdk-for-net/tree/main/sdk/deviceupdate/Azure.IoT.DeviceUpdate/README.md) 
+for links and instructions.
+
 # Device Update for IoT Hub Samples
-You can explore Device Update for IoT Hub APIs (using the SDK) with our samples project. This document describes the most commonly used API methods for the most common scenarios (this section does not attempt to be a complete API documentation).
 
- The sample covers these scanarios and actions:
+Samples here demonstrate the following:
 
-- publish new update 
-- retrieve the newly imported update
-- create device group (if not exists already)
-- wait for update to be installable to our device group
-- create deployment to deploy our new update to our device
-- check deployment and wait for the device to report the update being deployed
-- retrieve all updates installed on the device
-- delete the update
-- retrieve the deleted update and check that it no longer exists
+- Instantiate the client
+- Enumerate available updates
+- Retrieve a specific device update metadata and the corresponding file metadata
+- Import new device update
+- Delete existing device update
+- Enumerate devices, groups and device classes
+- Retrieve best updates for devices in a specific group
+- Deploy existing update to a group of devices
 
-## Running the samples
+## Prerequisites
 
-To run the samples, you need to compile console Samples project. The executable retrieves arguments from the following environment settings:
+You need an [Azure subscription][https://azure.microsoft.com/free/], and a [Device Update for IoT Hub][https://docs.microsoft.com/azure/iot-hub-device-update/understand-device-update] 
+account and instance to use this package.
 
-| Environment variable   | Description                  |
-| ---------------------- | ---------------------------- |
-| AZURE_TENANT_ID        | AAD tenant id                |
-| AZURE_CLIENT_ID        | AAD client id                |
-| AZURE_CLIENT_SECRET    | AAD client secret            |
-| AZURE_STORAGE_NAME     | Azure Storage account name   |
-| AZURE_STORAGE_KEY      | Azure Storage account key    |
-| AZURE_ACCOUNT_ENDPOINT | ADU account endpoint         |
-| AZURE_INSTANCE_ID      | ADU instance id              |
-| AZURE_DEVICE_ID        | IoT device id                |
+Set the following environment variables:
 
-## Creating Client
+- `AZURE_CLIENT_ID`: AAD service principal client id
+- `AZURE_TENANT_ID`: AAD tenant id
+- `AZURE_CLIENT_SECRET` or `AZURE_CLIENT_CERTIFICATE_PATH`: AAD service principal client secret
 
-You need to use AzureDeviceUpdateClientBuilder to create a proper valid AzureDeviceUpdateClient. This main client will let you access the other clients - Updates for update management, Devices for device management and finally Deployments for deployment management. To create a new client, you need the Device Update for IoT Hub account, instance and credentials.
-In the sample below, you can set `accountEndpoint`, `instanceId`, `tenantId` and `clientId` through the above mentioned environment variables. The client requires an instance of [TokenCredential](https://docs.microsoft.com/java/api/com.azure.core.credential.tokencredential?view=azure-java-stable).
-In these samples, we illustrate how to use just derived class: InteractiveLogin. There are other options if you want to use client certificates for authentication (ClientCertificateCredential) or client secret (ClientSecretCredential).
+- `DEVICEUPDATE_ENDPOINT`: Device Update for IoT Hub hostname
+- `DEVICEUPDATE_INSTANCE_ID`: Device Update for IoT Hub instance name
+- `DEVICEUPDATE_UPDATE_PROVIDER`: Update provider to retrieve, deploy or delete
+- `DEVICEUPDATE_UPDATE_NAME`: Update name to retrieve, deploy or delete
+- `DEVICEUPDATE_UPDATE_VERSION`: Update version to retrieve, deploy or delete
+- `DEVICEUPDATE_DEVICE_GROUP`: Device group to enumerate or deploy update to
 
-``` java
-InteractiveBrowserCredential credentials = new InteractiveBrowserCredentialBuilder()
-    .tenantId(tenantId))
-    .clientId(clientId)
-    .build();
-BearerTokenAuthenticationPolicy bearerTokenAuthenticationPolicy = new BearerTokenAuthenticationPolicy(credentials, "6ee392c4-d339-4083-b04d-6b7947c6cf78/.default");
-HttpHeaders headers = new HttpHeaders().put("Accept", ContentType.APPLICATION_JSON);
-AddHeadersPolicy addHeadersPolicy = new AddHeadersPolicy(headers);
-HttpPipeline httpPipeline = new HttpPipelineBuilder()
-    .httpClient(HttpClient.createDefault())
-    .policies(bearerTokenAuthenticationPolicy, addHeadersPolicy)
-    .build();
-AzureDeviceUpdateClient client = new AzureDeviceUpdateClientBuilder()
-    .accountEndpoint(accountEndpoint)
-    .instanceId(instanceId)
-    .pipeline(httpPipeline)
+## Creating service client
+
+We have to clients, `DeviceUpdateClient` to manage updates and `DeviceManagementClient` to manage devices and deployments.
+
+Let's start by creating instance of `DeviceUpdateClient` using environment variables:
+
+``` java com.azure.iot.deviceupdate.DeviceUpdateClient.instantiate
+DeviceUpdateClient client = new DeviceUpdateClientBuilder()
+    .endpoint(Configuration.getGlobalConfiguration().get("AZURE_ACCOUNT_ENDPOINT"))
+    .instanceId(Configuration.getGlobalConfiguration().get("AZURE_INSTANCE_ID"))
+    .credential(new DefaultAzureCredentialBuilder().build())
+    .httpLogOptions(new HttpLogOptions().setLogLevel(HttpLogDetailLevel.BODY_AND_HEADERS))
     .buildClient();
 ```
 
-## Update Management
+To instantiate `DeviceManagementClient` we use similar code:
 
-### Import Update
-
-Device Update for IoT Hub client library allows you to import a device update into ADU, as well as the ability to view and delete previously imported update. For Public Preview, ADU supports rolling out a single update per device, making it ideal for full-image updates that update an entire OS partition at once as well as a Desired-State Manifest that describes all the packages you might want to update on your device.
-
-Each update in ADU is described by an **Update** entity. The Update entity describes basic metadata about the entity itself, like its identity and version, as well as metadata about the files that make up the update.
-
-Update identity in ADU consists of three parts: **provider**, **name**, and **version**. In the ADU Public Preview, the names that make up the identity must follow some simple rules in order for updates to be delivered to the correct, compatible devices. The `provider` must match the device manufacturer name, and the `name` must match the device model name.
-
-The importing workflow is as follows:
-
-1. Build/download a device image update or create a Desired-State Manifest for package update
-2. Create an ADU import manifest describing the update and its files
-3. Upload the manifest and files to an Azure Blob storage
-4. Call the API NewUpdate API, passing it the URLs of the manifest and other files
-5. Wait for the import process to finish
-6. Deploy the update to one or more devices via the ADU Deployment Management API
-
-#### Create Update Payload
-
-We mentioned above that you need to build/download a device image update or create Device-State Manifest. In this Sample code we will deploy an update to a simulator device and we can therefore create simulated device image (arbitrary file would do). In the Samples you will see that we simply create a simple JSON file that we name `setup.exe` and deploy to the simulator device.
-
-#### Create Import Manifest
-
-Create an ADU import manifest (metadata about the update). The manifest will contain compatibility/applicability information, as well as file names and hashes for validation.
-
-#### Upload Import Manifest and Update Payload to Azure Blob
-
-The Samples application uses two envioronment variables `AZURE_STORAGE_NAME` and `AZURE_STORAGE_KEY` that will be used to upload the two files to Azure Blob container `test`.
-
-#### Import the update
-
-Now that we have the update artifacts ready, we can create `ImportUpdateInput` and start the import. The Samples uses the following code to create the proper object:
-
-``` java
-Map<String, String> hashes = new HashMap<String, String>();
-hashes.put("SHA256", importManifestFileHash);
-ImportManifestMetadata importManifest = new ImportManifestMetadata()
-    .setUrl(importManifestUrl)
-    .setSizeInBytes(importManifestFileSize)
-    .setHashes(hashes);
-List<FileImportMetadata> files = new ArrayList<FileImportMetadata>();
-files.add(
-    new FileImportMetadata()
-        .setFilename(FILE_NAME)
-        .setUrl(payloadUrl));
-ImportUpdateInput update = new ImportUpdateInput()
-    .setImportManifest(importManifest)
-    .setFiles(files);
+``` java com.azure.iot.deviceupdate.DeviceManagementClient.instantiate
+DeviceManagementClient client = new DeviceManagementClientBuilder()
+    .endpoint(Configuration.getGlobalConfiguration().get("AZURE_ACCOUNT_ENDPOINT"))
+    .instanceId(Configuration.getGlobalConfiguration().get("AZURE_INSTANCE_ID"))
+    .credential(new DefaultAzureCredentialBuilder().build())
+    .httpLogOptions(new HttpLogOptions().setLogLevel(HttpLogDetailLevel.BODY_AND_HEADERS))
+    .buildClient();
 ```
 
-With that we can the import:
 
-``` java
-UpdatesImportUpdateResponse response = client.getUpdates()
-    .importUpdateWithResponseAsync(update)
-    .block();
-string location = response.getHeaders().get("Location").getValue();
-string operationId = location.substring(location.lastIndexOf("/") + 1);
-```
+### Enumerate update providers
 
-The import operation is asynchronous long-running operation that uses step-aside approach. The operation returns the operation identifier, that you can use to check the status of the import operation.
+Let's start by enumerating all update providers:
 
-``` java
-while (true)
-{
-    UpdatesGetOperationResponse operation = client.getUpdates()
-        .getOperationWithResponseAsync(operationId, null)
-        .block();
-    if (operation.getValue().getStatus() == OperationStatus.SUCCEEDED)
-    {
-		break;
-    }
-    else if (operation.getValue().getStatus() == OperationStatus.FAILED)
-    {
-        Error error = operation.getValue().getError();
-        ObjectMapper objectMapper = new ObjectMapper();
-        throw new Exception("Import failed:\n" +
-            objectMapper.writeValueAsString(error));
-    }
-    else
-    {
-        Thread.sleep(getRetryAfter(operation.getHeaders()) * 1000);
-    }
+``` java com.azure.iot.deviceupdate.DeviceUpdateClient.EnumerateProviders
+PagedIterable<BinaryData> providers = client.listProviders(null);
+for (BinaryData p: providers) {
+    System.out.println(p);
 }
 ```
 
-`getRetryAfter` is a helper method that retrieves `Retry-After` header value to wait before checking the status again.
+### Enumerate update names
 
-### Retrieve existing Update
+Let's enumerate all update names for a given update provider:
 
-Using `getUpdateWithResponseAsync` you can retrieve existing update:
-
-``` java
-Update update = client.getUpdates()
-    .getUpdateAsync(provider, name, version, null)
-    .block();
-```
-
-If the update doesn't exist, then the method will throw HttpResponseException where you can check the status code:
-
-``` java
-try {
-    Update response = client.getUpdates()
-        .getUpdateAsync(provider, name, version, null)
-        .block();
-} catch (HttpResponseException e) {
-    if (e.getResponse().getStatusCode() == 404) {
-        // TODO:
-    }
+``` java com.azure.iot.deviceupdate.DeviceUpdateClient.EnumerateNames
+System.out.println("Providers:");
+PagedIterable<BinaryData> names = client.listNames(updateProvider, null);
+for (BinaryData n: names) {
+    System.out.println(n);
 }
 ```
 
-### Delete Update
+### Enumerate update versions
 
-To delete an update, pass in the update identity to `deleteUpdateWithResponseAsync` method:
+Let's enumerate all update version for a given update provider and update name:
 
-``` java
-UpdatesDeleteUpdateResponse response = client.getUpdates()
-    .deleteUpdateWithResponseAsync(provider, name, version)
-    .block();
+``` java com.azure.iot.deviceupdate.DeviceUpdateClient.EnumerateVersions
+PagedIterable<BinaryData> versions = client.listVersions(updateProvider, updateName, null);
+for (BinaryData v: versions) {
+    System.out.println(v);
+}
 ```
 
-Similar to importing update, the method will return job identity and you need to check the status of the asynchronous job.
+### Get update information
 
-## Device Management
-
-### Create Simulator Device
-
-To create a simulator device, follow steps on [Getting Started Using Ubuntu (18.04 x64) Simulator Reference Client](https://docs.microsoft.com/azure/iot-hub-device-update/device-update-simulator) page.
-
-When you do that and have your simulator running, use your device identifier as `device` command-line argument.
-
-### Device properties
-
-Before you install something on a device you might want to check the currently installed update on a device:
+Let's retrieve specific update metadata. As before we first read environment variables to 
+retrieve specific update identity to retrieve:
 
 ``` java
-Device device = client.getDevices()
-    .getDeviceAsync(deviceId)
-    .block();
-UpdateId currentlyInstalledUpdateId = device.getInstalledUpdateId();
-```
-Instead of checking all individual devices, you can check update compliance for a device group:
-
-``` java
-UpdateCompliance compliance = client.getDevices()
-    .getGroupUpdateComplianceAsync(groupId)
-    .block();
-int totalNumberOfDevicesInGroup = compliance.getTotalDeviceCount();
-int devicesThatCouldBeUpdated = compliance.getNewUpdatesAvailableDeviceCount();
+String updateProvider = Configuration.getGlobalConfiguration().get("DEVICEUPDATE_UPDATE_PROVIDER");
+String updateName = Configuration.getGlobalConfiguration().get("DEVICEUPDATE_UPDATE_NAME");
+String updateVersion = Configuration.getGlobalConfiguration().get("DEVICEUPDATE_UPDATE_VERSION");
 ```
 
-Based on this we can decided to deploy a specific update to the group of devices.
+Now we get request the specific update metadata:
 
-## Deployment Management
-
-### Deploy Update to Device
-
-We can deploy ADU update to a device group (that contains our simulator device):
-
-``` java
-List<String> groups = new ArrayList<String>();
-groups.add(groupId);
-Deployment response = client.getDeployments()
-    .createOrUpdateDeploymentAsync(
-    deploymentId,
-    new Deployment()
-        .setDeploymentId(deploymentId)
-        .setDeploymentType(DeploymentType.COMPLETE)
-        .setStartDateTime(OffsetDateTime.now())
-        .setDeviceGroupType(DeviceGroupType.DEVICE_GROUP_DEFINITIONS)
-        .setDeviceGroupDefinition(groups)
-        .setUpdateId(
-            new UpdateId()
-                .setProvider(provider)
-                .setName(name)
-                .setVersion(version))
-    )
-    .block();
+``` java com.azure.iot.deviceupdate.DeviceUpdateClient.GetUpdate
+System.out.println("Update:");
+Response<BinaryData> updateResponse = client.getUpdateWithResponse(updateProvider, updateName, updateVersion, null);
+ObjectMapper updateMapper = new ObjectMapper();
+JsonNode updateJsonNode = updateMapper.readTree(updateResponse.getValue().toBytes());
+System.out.println("  Provider: " + updateJsonNode.get("updateId").get("provider").asText());
+System.out.println("  Name: " + updateJsonNode.get("updateId").get("name").asText());
+System.out.println("  Version: " + updateJsonNode.get("updateId").get("version").asText());
+System.out.println("Metadata:");
+System.out.println(updateResponse.getValue());
 ```
 
-`DeploymentId` must be a new unique string identifier for this particular deployment. 
+### Enumerate update files
 
-It will take some time for the update to get deployed. You can monitor the progress of the deployment by checking its status:
+To enumerate all update files corresponding to our device update:
 
-``` java
-DeploymentStatus deploymentStatus = client.getDeployments()
-    .getDeploymentStatusAsync(deployment_id)
-    .block();
+``` java com.azure.iot.deviceupdate.DeviceUpdateClient.EnumerateUpdateFiles
+PagedIterable<BinaryData> items = client.listFiles(updateProvider, updateName, updateVersion, null);
+List<String> fileIds = new ArrayList<String>();
+ObjectMapper fileIdMapper = new ObjectMapper();
+for (BinaryData i: items) {
+    String fileId = fileIdMapper.readTree(i.toBytes()).asText();
+    System.out.println(fileId);
+    fileIds.add(fileId);
+}
 ```
 
-The response object has `DeploymentState` property where you can see the current status. 
+### Get update file information
 
-### Cancel Deployment
+Now that we know update file identities, we can retrieve their metadata:
 
-You can cancel current deployment by calling `cancelDeploymentWithResponseAsync` method.
+``` java com.azure.iot.deviceupdate.DeviceUpdateClient.GetFiles
+PagedIterable<BinaryData> files = client.listFiles(updateProvider, updateName, updateVersion, null);
+ObjectMapper fileMapper = new ObjectMapper();
+for (String fileId: fileIds) {
+    System.out.println("File:");
+    Response<BinaryData> fileResponse  = client.getFileWithResponse(updateProvider, updateName, updateVersion, fileId, null);
+    JsonNode fileJsonNode = fileMapper.readTree(fileResponse.getValue().toBytes());
+    System.out.println("  FileId: " + fileJsonNode.get("fileId").asText());
+    System.out.println("Metadata:");
+    System.out.println(fileResponse.getValue());
+}
+```
+
+### Enumerate devices
+
+To enumerate all registered devices and print their device identifiers:
+
+``` java com.azure.iot.deviceupdate.DeviceManagementClient.EnumerateDevices
+PagedIterable<BinaryData> devices = client.listDevices(null);
+for (BinaryData d: devices) {
+    System.out.println(new ObjectMapper().readTree(d.toBytes()).get("deviceId").asText());
+}
+```
+
+### Enumerate device groups
+
+To enumerate all available device groups and print their group identifiers:
+
+``` java com.azure.iot.deviceupdate.DeviceManagementClient.EnumerateGroups
+PagedIterable<BinaryData> groups = client.listGroups(null);
+for (BinaryData g: groups) {
+    System.out.println(new ObjectMapper().readTree(g.toBytes()).get("groupId").asText());
+}
+```
+
+### Enumerate device classes
+
+To enumerate all available device classes and print their device class identifiers:
+
+``` java com.azure.iot.deviceupdate.DeviceManagementClient.EnumerateDeviceClasses
+PagedIterable<BinaryData> deviceClasses = client.listDeviceClasses(null);
+for (BinaryData dc: deviceClasses) {
+    System.out.println(new ObjectMapper().readTree(dc.toBytes()).get("deviceClassId").asText());
+}
+```
+
+### Get best updates for all devices within a specific device group
+
+Finally, lets find out all best updates for all devices in a specific group, groupped by their device class identifier:
+
+``` java com.azure.iot.deviceupdate.DeviceManagementClient.GetBestUpdates
+PagedIterable<BinaryData> bestUpdates = client.listBestUpdatesForGroup(groupId, null);
+ObjectMapper updateMapper = new ObjectMapper();
+for (BinaryData bu: bestUpdates) {
+    JsonNode json = updateMapper.readTree(bu.toBytes());
+    System.out.println(String.format("For device class '%s' in group '%s', the best update is:",
+        json.get("deviceClassId").asText(), groupId));
+    System.out.println("  Provider: " + json.get("update").get("updateId").get("provider").asText());
+    System.out.println("  Name: " + json.get("update").get("updateId").get("name").asText());
+    System.out.println("  Version: " + json.get("update").get("updateId").get("version").asText());
+}
+```
+
+### Import update
+
+Before we can import device update, we need to upload all device update artifacts, in our case payload file and import 
+manifest file, to an Azure Blob container. Let's assume we have local artifact file and import manifest 
+local filepath as well as Azure Blob Urls save in environment variables..
+
+We will need to be able to calculate file hash and file size. For that we will use the following methods:
 
 ``` java
-Deployment deployment = client.getDeployments()
-    .cancelDeploymentAsync(deployment_id)
-    .block();
+private static long GetFileSize(String payloadLocalFile) {
+    File file = new File(payloadLocalFile);
+    return file.length();
+}
+
+private static String GetFileName(String payloadLocalFile) {
+    File file = new File(payloadLocalFile);
+    return file.getName();
+}
+
+private static String GetFileHash(String payloadLocalFile) throws IOException {
+    try {
+        MessageDigest mDigest = MessageDigest.getInstance("SHA-256");
+        String payload = ReadAllTextFromFile(payloadLocalFile);
+        byte[] result = mDigest.digest(payload.getBytes());
+
+        return Base64.getEncoder().encodeToString(result);
+    } catch (NoSuchAlgorithmException e) {
+        return null;
+    }
+}
+
+private static String ReadAllTextFromFile(String filePath) throws IOException {
+    String content = new String ( Files.readAllBytes( Paths.get(filePath) ) );
+    return content;
+}
+```
+
+Now we can create import request.
+
+``` java
+String payloadFile = Configuration.getGlobalConfiguration().get("DEVICEUPDATE_PAYLOAD_FILE");
+String payloadUrl = Configuration.getGlobalConfiguration().get("DEVICEUPDATE_PAYLOAD_URL");
+String manifestFile = Configuration.getGlobalConfiguration().get("DEVICEUPDATE_MANIFEST_FILE");
+String manifestUrl = Configuration.getGlobalConfiguration().get("DEVICEUPDATE_MANIFEST_URL");
+
+String content = String.format("[{\"importManifest\": {\"url\": \"%s\", \"sizeInBytes\": %s, \"hashes\": { \"sha256\": \"%s\" }}, " +
+        "\"files\": [{\"fileName\": \"%s\", \"url\": \"%s\" }]" +
+        "}]",
+    manifestUrl, GetFileSize(manifestFile), GetFileHash(manifestFile),
+    GetFileName(payloadFile), payloadUrl);
+```
+
+Now we can start import process.
+
+``` java com.azure.iot.deviceupdate.DeviceUpdateClient.ImportUpdate
+SyncPoller<BinaryData, BinaryData> response = client.beginImportUpdate(BinaryData.fromString(content), null);
+response.waitForCompletion();
+```
+
+### Delete update
+
+Let's retrieve specific update metadata:
+
+``` java com.azure.iot.deviceupdate.DeviceUpdateClient.DeleteUpdate
+SyncPoller<BinaryData, BinaryData> response = client.beginDeleteUpdate(updateProvider, updateName, updateVersion, null);
+response.waitForCompletion();
+```
+
+### Deploy update to a group of devices
+
+First we need to create new deployment:
+
+``` java
+String deploymentId = UUID.randomUUID().toString();
+String startAt = OffsetDateTime.now().toString();
+String deployment = String.format("{\"deploymentId\": \"%s\", \"startDateTime\": \"%s\", \"update\": {" +
+        "\"updateId\": {" +
+        "\"provider\": \"%s\", \"name\": \"%s\", \"version\": \"%s\"" +
+        "}}," +
+        "\"groupId\": \"%s\"" +
+        "}",
+    deploymentId, startAt,
+    updateProvider, updateName, updateVersion,
+    groupId);
+```
+
+Then we can start the deployment:
+
+``` java com.azure.iot.deviceupdate.DeviceManagementClient.DeployUpdate
+Response<BinaryData> response = client.createOrUpdateDeploymentWithResponse(groupId, deploymentId, BinaryData.fromString(deployment), null);
+```
+
+To monitor the progress of the deployment:
+
+``` java com.azure.iot.deviceupdate.DeviceManagementClient.CheckDeploymentState
+Response<BinaryData> stateResponse = client.getDeploymentStatusWithResponse(groupId, deploymentId, null);
+System.out.println(stateResponse.getValue());
 ```

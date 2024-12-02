@@ -8,29 +8,52 @@ import com.azure.core.util.ExpandableStringEnum;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.Collection;
 
-/** Defines values for FileType. */
+/**
+ * The type of the file (for Linux files - Executable is used).
+ */
 public final class FileType extends ExpandableStringEnum<FileType> {
-    /** Static value Exe for FileType. */
+    /**
+     * Static value Exe for FileType.
+     */
     public static final FileType EXE = fromString("Exe");
 
-    /** Static value Dll for FileType. */
+    /**
+     * Static value Dll for FileType.
+     */
     public static final FileType DLL = fromString("Dll");
 
-    /** Static value Msi for FileType. */
+    /**
+     * Static value Msi for FileType.
+     */
     public static final FileType MSI = fromString("Msi");
 
-    /** Static value Script for FileType. */
+    /**
+     * Static value Script for FileType.
+     */
     public static final FileType SCRIPT = fromString("Script");
 
-    /** Static value Executable for FileType. */
+    /**
+     * Static value Executable for FileType.
+     */
     public static final FileType EXECUTABLE = fromString("Executable");
 
-    /** Static value Unknown for FileType. */
+    /**
+     * Static value Unknown for FileType.
+     */
     public static final FileType UNKNOWN = fromString("Unknown");
 
     /**
+     * Creates a new instance of FileType value.
+     * 
+     * @deprecated Use the {@link #fromString(String)} factory method.
+     */
+    @Deprecated
+    public FileType() {
+    }
+
+    /**
      * Creates or finds a FileType from its string representation.
-     *
+     * 
      * @param name a name to look for.
      * @return the corresponding FileType.
      */
@@ -39,7 +62,11 @@ public final class FileType extends ExpandableStringEnum<FileType> {
         return fromString(name, FileType.class);
     }
 
-    /** @return known FileType values. */
+    /**
+     * Gets known FileType values.
+     * 
+     * @return known FileType values.
+     */
     public static Collection<FileType> values() {
         return values(FileType.class);
     }

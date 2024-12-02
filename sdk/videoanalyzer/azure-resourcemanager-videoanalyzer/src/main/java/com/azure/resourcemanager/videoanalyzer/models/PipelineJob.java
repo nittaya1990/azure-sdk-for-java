@@ -88,6 +88,13 @@ public interface PipelineJob {
     List<ParameterDefinition> parameters();
 
     /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
+
+    /**
      * Gets the inner com.azure.resourcemanager.videoanalyzer.fluent.models.PipelineJobInner object.
      *
      * @return the inner object.
@@ -98,11 +105,13 @@ public interface PipelineJob {
     interface Definition
         extends DefinitionStages.Blank, DefinitionStages.WithParentResource, DefinitionStages.WithCreate {
     }
+
     /** The PipelineJob definition stages. */
     interface DefinitionStages {
         /** The first stage of the PipelineJob definition. */
         interface Blank extends WithParentResource {
         }
+
         /** The stage of the PipelineJob definition allowing to specify parent resource. */
         interface WithParentResource {
             /**
@@ -114,14 +123,13 @@ public interface PipelineJob {
              */
             WithCreate withExistingVideoAnalyzer(String resourceGroupName, String accountName);
         }
+
         /**
          * The stage of the PipelineJob definition which contains all the minimum required properties for the resource
          * to be created, but also allows for any other optional properties to be specified.
          */
-        interface WithCreate
-            extends DefinitionStages.WithTopologyName,
-                DefinitionStages.WithDescription,
-                DefinitionStages.WithParameters {
+        interface WithCreate extends DefinitionStages.WithTopologyName, DefinitionStages.WithDescription,
+            DefinitionStages.WithParameters {
             /**
              * Executes the create request.
              *
@@ -137,6 +145,7 @@ public interface PipelineJob {
              */
             PipelineJob create(Context context);
         }
+
         /** The stage of the PipelineJob definition allowing to specify topologyName. */
         interface WithTopologyName {
             /**
@@ -149,6 +158,7 @@ public interface PipelineJob {
              */
             WithCreate withTopologyName(String topologyName);
         }
+
         /** The stage of the PipelineJob definition allowing to specify description. */
         interface WithDescription {
             /**
@@ -159,6 +169,7 @@ public interface PipelineJob {
              */
             WithCreate withDescription(String description);
         }
+
         /** The stage of the PipelineJob definition allowing to specify parameters. */
         interface WithParameters {
             /**
@@ -176,6 +187,7 @@ public interface PipelineJob {
             WithCreate withParameters(List<ParameterDefinition> parameters);
         }
     }
+
     /**
      * Begins update for the PipelineJob resource.
      *
@@ -200,6 +212,7 @@ public interface PipelineJob {
          */
         PipelineJob apply(Context context);
     }
+
     /** The PipelineJob update stages. */
     interface UpdateStages {
         /** The stage of the PipelineJob update allowing to specify topologyName. */
@@ -214,6 +227,7 @@ public interface PipelineJob {
              */
             Update withTopologyName(String topologyName);
         }
+
         /** The stage of the PipelineJob update allowing to specify description. */
         interface WithDescription {
             /**
@@ -224,6 +238,7 @@ public interface PipelineJob {
              */
             Update withDescription(String description);
         }
+
         /** The stage of the PipelineJob update allowing to specify parameters. */
         interface WithParameters {
             /**
@@ -241,6 +256,7 @@ public interface PipelineJob {
             Update withParameters(List<ParameterDefinition> parameters);
         }
     }
+
     /**
      * Refreshes the resource to sync with Azure.
      *

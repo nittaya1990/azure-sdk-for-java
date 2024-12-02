@@ -5,17 +5,13 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.models.RegistrationDelegationSettingsProperties;
 import com.azure.resourcemanager.apimanagement.models.SubscriptionsDelegationSettingsProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Delegation settings contract properties. */
 @Fluent
 public final class PortalDelegationSettingsProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PortalDelegationSettingsProperties.class);
-
     /*
      * A delegation Url.
      */
@@ -23,8 +19,7 @@ public final class PortalDelegationSettingsProperties {
     private String url;
 
     /*
-     * A base64-encoded validation key to validate, that a request is coming
-     * from Azure API Management.
+     * A base64-encoded validation key to validate, that a request is coming from Azure API Management.
      */
     @JsonProperty(value = "validationKey")
     private String validationKey;
@@ -40,6 +35,10 @@ public final class PortalDelegationSettingsProperties {
      */
     @JsonProperty(value = "userRegistration")
     private RegistrationDelegationSettingsProperties userRegistration;
+
+    /** Creates an instance of PortalDelegationSettingsProperties class. */
+    public PortalDelegationSettingsProperties() {
+    }
 
     /**
      * Get the url property: A delegation Url.
@@ -98,8 +97,8 @@ public final class PortalDelegationSettingsProperties {
      * @param subscriptions the subscriptions value to set.
      * @return the PortalDelegationSettingsProperties object itself.
      */
-    public PortalDelegationSettingsProperties withSubscriptions(
-        SubscriptionsDelegationSettingsProperties subscriptions) {
+    public PortalDelegationSettingsProperties
+        withSubscriptions(SubscriptionsDelegationSettingsProperties subscriptions) {
         this.subscriptions = subscriptions;
         return this;
     }
@@ -119,8 +118,8 @@ public final class PortalDelegationSettingsProperties {
      * @param userRegistration the userRegistration value to set.
      * @return the PortalDelegationSettingsProperties object itself.
      */
-    public PortalDelegationSettingsProperties withUserRegistration(
-        RegistrationDelegationSettingsProperties userRegistration) {
+    public PortalDelegationSettingsProperties
+        withUserRegistration(RegistrationDelegationSettingsProperties userRegistration) {
         this.userRegistration = userRegistration;
         return this;
     }

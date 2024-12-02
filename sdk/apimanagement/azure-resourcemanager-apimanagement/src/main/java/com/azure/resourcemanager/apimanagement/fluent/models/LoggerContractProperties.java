@@ -7,7 +7,6 @@ package com.azure.resourcemanager.apimanagement.fluent.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.models.LoggerType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
@@ -18,8 +17,6 @@ import java.util.Map;
  */
 @Fluent
 public final class LoggerContractProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(LoggerContractProperties.class);
-
     /*
      * Logger type.
      */
@@ -33,8 +30,7 @@ public final class LoggerContractProperties {
     private String description;
 
     /*
-     * The name and SendRule connection string of the event hub for
-     * azureEventHub logger.
+     * The name and SendRule connection string of the event hub for azureEventHub logger.
      * Instrumentation key for applicationInsights logger.
      */
     @JsonProperty(value = "credentials")
@@ -42,18 +38,20 @@ public final class LoggerContractProperties {
     private Map<String, String> credentials;
 
     /*
-     * Whether records are buffered in the logger before publishing. Default is
-     * assumed to be true.
+     * Whether records are buffered in the logger before publishing. Default is assumed to be true.
      */
     @JsonProperty(value = "isBuffered")
     private Boolean isBuffered;
 
     /*
-     * Azure Resource Id of a log target (either Azure Event Hub resource or
-     * Azure Application Insights resource).
+     * Azure Resource Id of a log target (either Azure Event Hub resource or Azure Application Insights resource).
      */
     @JsonProperty(value = "resourceId")
     private String resourceId;
+
+    /** Creates an instance of LoggerContractProperties class. */
+    public LoggerContractProperties() {
+    }
 
     /**
      * Get the loggerType property: Logger type.
@@ -168,10 +166,10 @@ public final class LoggerContractProperties {
      */
     public void validate() {
         if (loggerType() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property loggerType in model LoggerContractProperties"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property loggerType in model LoggerContractProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(LoggerContractProperties.class);
 }

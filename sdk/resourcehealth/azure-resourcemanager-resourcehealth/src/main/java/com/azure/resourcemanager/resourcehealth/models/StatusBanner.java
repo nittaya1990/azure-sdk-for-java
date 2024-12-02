@@ -5,16 +5,12 @@
 package com.azure.resourcemanager.resourcehealth.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
 /** Banner type of emerging issue. */
 @Fluent
 public final class StatusBanner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(StatusBanner.class);
-
     /*
      * The banner title.
      */
@@ -38,6 +34,10 @@ public final class StatusBanner {
      */
     @JsonProperty(value = "lastModifiedTime")
     private OffsetDateTime lastModifiedTime;
+
+    /** Creates an instance of StatusBanner class. */
+    public StatusBanner() {
+    }
 
     /**
      * Get the title property: The banner title.

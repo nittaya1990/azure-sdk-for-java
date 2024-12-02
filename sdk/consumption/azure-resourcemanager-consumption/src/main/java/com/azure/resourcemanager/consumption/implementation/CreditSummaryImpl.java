@@ -9,16 +9,14 @@ import com.azure.resourcemanager.consumption.models.Amount;
 import com.azure.resourcemanager.consumption.models.CreditBalanceSummary;
 import com.azure.resourcemanager.consumption.models.CreditSummary;
 import com.azure.resourcemanager.consumption.models.Reseller;
-import java.util.Collections;
-import java.util.Map;
 
 public final class CreditSummaryImpl implements CreditSummary {
     private CreditSummaryInner innerObject;
 
     private final com.azure.resourcemanager.consumption.ConsumptionManager serviceManager;
 
-    CreditSummaryImpl(
-        CreditSummaryInner innerObject, com.azure.resourcemanager.consumption.ConsumptionManager serviceManager) {
+    CreditSummaryImpl(CreditSummaryInner innerObject,
+        com.azure.resourcemanager.consumption.ConsumptionManager serviceManager) {
         this.innerObject = innerObject;
         this.serviceManager = serviceManager;
     }
@@ -35,12 +33,8 @@ public final class CreditSummaryImpl implements CreditSummary {
         return this.innerModel().type();
     }
 
-    public String creditCurrency() {
-        return this.innerModel().creditCurrency();
-    }
-
-    public String billingCurrency() {
-        return this.innerModel().billingCurrency();
+    public String etag() {
+        return this.innerModel().etag();
     }
 
     public CreditBalanceSummary balanceSummary() {
@@ -59,21 +53,20 @@ public final class CreditSummaryImpl implements CreditSummary {
         return this.innerModel().pendingEligibleCharges();
     }
 
+    public String creditCurrency() {
+        return this.innerModel().creditCurrency();
+    }
+
+    public String billingCurrency() {
+        return this.innerModel().billingCurrency();
+    }
+
     public Reseller reseller() {
         return this.innerModel().reseller();
     }
 
-    public String etag() {
-        return this.innerModel().etag();
-    }
-
-    public Map<String, String> tags() {
-        Map<String, String> inner = this.innerModel().tags();
-        if (inner != null) {
-            return Collections.unmodifiableMap(inner);
-        } else {
-            return Collections.emptyMap();
-        }
+    public String etagPropertiesEtag() {
+        return this.innerModel().etagPropertiesEtag();
     }
 
     public CreditSummaryInner innerModel() {

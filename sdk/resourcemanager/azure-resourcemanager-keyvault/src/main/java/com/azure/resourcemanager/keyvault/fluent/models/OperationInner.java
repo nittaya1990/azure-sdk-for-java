@@ -5,52 +5,53 @@
 package com.azure.resourcemanager.keyvault.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonSerializable;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
 import com.azure.resourcemanager.keyvault.models.OperationDisplay;
 import com.azure.resourcemanager.keyvault.models.ServiceSpecification;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.IOException;
 
-/** Key Vault REST API operation definition. */
-@JsonFlatten
+/**
+ * Key Vault REST API operation definition.
+ */
 @Fluent
-public class OperationInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OperationInner.class);
-
+public final class OperationInner implements JsonSerializable<OperationInner> {
     /*
      * Operation name: {provider}/{resource}/{operation}
      */
-    @JsonProperty(value = "name")
     private String name;
 
     /*
      * Display metadata associated with the operation.
      */
-    @JsonProperty(value = "display")
     private OperationDisplay display;
 
     /*
      * The origin of operations.
      */
-    @JsonProperty(value = "origin")
     private String origin;
+
+    /*
+     * Properties of operation, include metric specifications.
+     */
+    private OperationProperties innerOperationProperties;
 
     /*
      * Property to specify whether the action is a data action.
      */
-    @JsonProperty(value = "isDataAction")
     private Boolean isDataAction;
 
-    /*
-     * One property of operation, include metric specifications.
+    /**
+     * Creates an instance of OperationInner class.
      */
-    @JsonProperty(value = "properties.serviceSpecification")
-    private ServiceSpecification serviceSpecification;
+    public OperationInner() {
+    }
 
     /**
      * Get the name property: Operation name: {provider}/{resource}/{operation}.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -59,7 +60,7 @@ public class OperationInner {
 
     /**
      * Set the name property: Operation name: {provider}/{resource}/{operation}.
-     *
+     * 
      * @param name the name value to set.
      * @return the OperationInner object itself.
      */
@@ -70,7 +71,7 @@ public class OperationInner {
 
     /**
      * Get the display property: Display metadata associated with the operation.
-     *
+     * 
      * @return the display value.
      */
     public OperationDisplay display() {
@@ -79,7 +80,7 @@ public class OperationInner {
 
     /**
      * Set the display property: Display metadata associated with the operation.
-     *
+     * 
      * @param display the display value to set.
      * @return the OperationInner object itself.
      */
@@ -90,7 +91,7 @@ public class OperationInner {
 
     /**
      * Get the origin property: The origin of operations.
-     *
+     * 
      * @return the origin value.
      */
     public String origin() {
@@ -99,7 +100,7 @@ public class OperationInner {
 
     /**
      * Set the origin property: The origin of operations.
-     *
+     * 
      * @param origin the origin value to set.
      * @return the OperationInner object itself.
      */
@@ -109,8 +110,17 @@ public class OperationInner {
     }
 
     /**
+     * Get the innerOperationProperties property: Properties of operation, include metric specifications.
+     * 
+     * @return the innerOperationProperties value.
+     */
+    private OperationProperties innerOperationProperties() {
+        return this.innerOperationProperties;
+    }
+
+    /**
      * Get the isDataAction property: Property to specify whether the action is a data action.
-     *
+     * 
      * @return the isDataAction value.
      */
     public Boolean isDataAction() {
@@ -119,7 +129,7 @@ public class OperationInner {
 
     /**
      * Set the isDataAction property: Property to specify whether the action is a data action.
-     *
+     * 
      * @param isDataAction the isDataAction value to set.
      * @return the OperationInner object itself.
      */
@@ -130,35 +140,86 @@ public class OperationInner {
 
     /**
      * Get the serviceSpecification property: One property of operation, include metric specifications.
-     *
+     * 
      * @return the serviceSpecification value.
      */
     public ServiceSpecification serviceSpecification() {
-        return this.serviceSpecification;
+        return this.innerOperationProperties() == null ? null : this.innerOperationProperties().serviceSpecification();
     }
 
     /**
      * Set the serviceSpecification property: One property of operation, include metric specifications.
-     *
+     * 
      * @param serviceSpecification the serviceSpecification value to set.
      * @return the OperationInner object itself.
      */
     public OperationInner withServiceSpecification(ServiceSpecification serviceSpecification) {
-        this.serviceSpecification = serviceSpecification;
+        if (this.innerOperationProperties() == null) {
+            this.innerOperationProperties = new OperationProperties();
+        }
+        this.innerOperationProperties().withServiceSpecification(serviceSpecification);
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (display() != null) {
             display().validate();
         }
-        if (serviceSpecification() != null) {
-            serviceSpecification().validate();
+        if (innerOperationProperties() != null) {
+            innerOperationProperties().validate();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeStringField("name", this.name);
+        jsonWriter.writeJsonField("display", this.display);
+        jsonWriter.writeStringField("origin", this.origin);
+        jsonWriter.writeJsonField("properties", this.innerOperationProperties);
+        jsonWriter.writeBooleanField("isDataAction", this.isDataAction);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of OperationInner from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of OperationInner if the JsonReader was pointing to an instance of it, or null if it was
+     * pointing to JSON null.
+     * @throws IOException If an error occurs while reading the OperationInner.
+     */
+    public static OperationInner fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            OperationInner deserializedOperationInner = new OperationInner();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("name".equals(fieldName)) {
+                    deserializedOperationInner.name = reader.getString();
+                } else if ("display".equals(fieldName)) {
+                    deserializedOperationInner.display = OperationDisplay.fromJson(reader);
+                } else if ("origin".equals(fieldName)) {
+                    deserializedOperationInner.origin = reader.getString();
+                } else if ("properties".equals(fieldName)) {
+                    deserializedOperationInner.innerOperationProperties = OperationProperties.fromJson(reader);
+                } else if ("isDataAction".equals(fieldName)) {
+                    deserializedOperationInner.isDataAction = reader.getNullable(JsonReader::getBoolean);
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedOperationInner;
+        });
     }
 }

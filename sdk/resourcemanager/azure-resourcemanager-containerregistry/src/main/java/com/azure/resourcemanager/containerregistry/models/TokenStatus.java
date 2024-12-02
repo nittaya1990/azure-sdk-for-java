@@ -5,29 +5,46 @@
 package com.azure.resourcemanager.containerregistry.models;
 
 import com.azure.core.util.ExpandableStringEnum;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.Collection;
 
-/** Defines values for TokenStatus. */
+/**
+ * The status of the token example enabled or disabled.
+ */
 public final class TokenStatus extends ExpandableStringEnum<TokenStatus> {
-    /** Static value enabled for TokenStatus. */
+    /**
+     * Static value enabled for TokenStatus.
+     */
     public static final TokenStatus ENABLED = fromString("enabled");
 
-    /** Static value disabled for TokenStatus. */
+    /**
+     * Static value disabled for TokenStatus.
+     */
     public static final TokenStatus DISABLED = fromString("disabled");
 
     /**
+     * Creates a new instance of TokenStatus value.
+     * 
+     * @deprecated Use the {@link #fromString(String)} factory method.
+     */
+    @Deprecated
+    public TokenStatus() {
+    }
+
+    /**
      * Creates or finds a TokenStatus from its string representation.
-     *
+     * 
      * @param name a name to look for.
      * @return the corresponding TokenStatus.
      */
-    @JsonCreator
     public static TokenStatus fromString(String name) {
         return fromString(name, TokenStatus.class);
     }
 
-    /** @return known TokenStatus values. */
+    /**
+     * Gets known TokenStatus values.
+     * 
+     * @return known TokenStatus values.
+     */
     public static Collection<TokenStatus> values() {
         return values(TokenStatus.class);
     }

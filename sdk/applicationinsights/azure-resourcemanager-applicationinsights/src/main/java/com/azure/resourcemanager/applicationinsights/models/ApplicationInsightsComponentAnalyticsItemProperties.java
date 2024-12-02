@@ -5,8 +5,6 @@
 package com.azure.resourcemanager.applicationinsights.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -15,14 +13,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @Fluent
 public final class ApplicationInsightsComponentAnalyticsItemProperties {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(ApplicationInsightsComponentAnalyticsItemProperties.class);
-
     /*
      * A function alias, used when the type of the item is Function
      */
     @JsonProperty(value = "functionAlias")
     private String functionAlias;
+
+    /** Creates an instance of ApplicationInsightsComponentAnalyticsItemProperties class. */
+    public ApplicationInsightsComponentAnalyticsItemProperties() {
+    }
 
     /**
      * Get the functionAlias property: A function alias, used when the type of the item is Function.

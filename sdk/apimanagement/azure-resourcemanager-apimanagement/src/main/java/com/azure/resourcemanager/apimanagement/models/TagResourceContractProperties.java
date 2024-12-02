@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Contract defining the Tag property in the Tag Resource Contract. */
 @Fluent
 public final class TagResourceContractProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TagResourceContractProperties.class);
-
     /*
      * Tag identifier
      */
@@ -25,6 +21,10 @@ public final class TagResourceContractProperties {
      */
     @JsonProperty(value = "name")
     private String name;
+
+    /** Creates an instance of TagResourceContractProperties class. */
+    public TagResourceContractProperties() {
+    }
 
     /**
      * Get the id property: Tag identifier.

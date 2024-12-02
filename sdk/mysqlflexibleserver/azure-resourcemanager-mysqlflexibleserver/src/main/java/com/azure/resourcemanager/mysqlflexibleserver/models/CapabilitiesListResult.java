@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.mysqlflexibleserver.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.mysqlflexibleserver.fluent.models.CapabilityPropertiesInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** location capability. */
+/**
+ * location capability.
+ */
 @Immutable
 public final class CapabilitiesListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CapabilitiesListResult.class);
-
     /*
      * A list of supported capabilities.
      */
@@ -29,8 +27,14 @@ public final class CapabilitiesListResult {
     private String nextLink;
 
     /**
+     * Creates an instance of CapabilitiesListResult class.
+     */
+    public CapabilitiesListResult() {
+    }
+
+    /**
      * Get the value property: A list of supported capabilities.
-     *
+     * 
      * @return the value value.
      */
     public List<CapabilityPropertiesInner> value() {
@@ -39,7 +43,7 @@ public final class CapabilitiesListResult {
 
     /**
      * Get the nextLink property: Link to retrieve next page of results.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -48,7 +52,7 @@ public final class CapabilitiesListResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

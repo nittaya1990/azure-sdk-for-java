@@ -5,19 +5,14 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.models.KeyVaultContractCreateProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Parameters supplied to the CreateOrUpdate certificate operation. */
 @Fluent
 public final class CertificateCreateOrUpdateProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CertificateCreateOrUpdateProperties.class);
-
     /*
-     * Base 64 encoded certificate using the application/x-pkcs12
-     * representation.
+     * Base 64 encoded certificate using the application/x-pkcs12 representation.
      */
     @JsonProperty(value = "data")
     private String data;
@@ -33,6 +28,10 @@ public final class CertificateCreateOrUpdateProperties {
      */
     @JsonProperty(value = "keyVault")
     private KeyVaultContractCreateProperties keyVault;
+
+    /** Creates an instance of CertificateCreateOrUpdateProperties class. */
+    public CertificateCreateOrUpdateProperties() {
+    }
 
     /**
      * Get the data property: Base 64 encoded certificate using the application/x-pkcs12 representation.

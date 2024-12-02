@@ -5,25 +5,35 @@
 package com.azure.resourcemanager.postgresqlflexibleserver.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.resourcemanager.postgresqlflexibleserver.models.AuthConfig;
 import com.azure.resourcemanager.postgresqlflexibleserver.models.Backup;
 import com.azure.resourcemanager.postgresqlflexibleserver.models.CreateModeForUpdate;
+import com.azure.resourcemanager.postgresqlflexibleserver.models.DataEncryption;
 import com.azure.resourcemanager.postgresqlflexibleserver.models.HighAvailability;
 import com.azure.resourcemanager.postgresqlflexibleserver.models.MaintenanceWindow;
+import com.azure.resourcemanager.postgresqlflexibleserver.models.Network;
+import com.azure.resourcemanager.postgresqlflexibleserver.models.Replica;
+import com.azure.resourcemanager.postgresqlflexibleserver.models.ReplicationRole;
+import com.azure.resourcemanager.postgresqlflexibleserver.models.ServerVersion;
 import com.azure.resourcemanager.postgresqlflexibleserver.models.Storage;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The ServerPropertiesForUpdate model. */
+/**
+ * The ServerPropertiesForUpdate model.
+ */
 @Fluent
 public final class ServerPropertiesForUpdate {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ServerPropertiesForUpdate.class);
-
     /*
      * The password of the administrator login.
      */
     @JsonProperty(value = "administratorLoginPassword")
     private String administratorLoginPassword;
+
+    /*
+     * PostgreSQL Server version. Version 16 is currently not supported for MVU.
+     */
+    @JsonProperty(value = "version")
+    private ServerVersion version;
 
     /*
      * Storage properties of a server.
@@ -50,14 +60,50 @@ public final class ServerPropertiesForUpdate {
     private MaintenanceWindow maintenanceWindow;
 
     /*
+     * AuthConfig properties of a server.
+     */
+    @JsonProperty(value = "authConfig")
+    private AuthConfig authConfig;
+
+    /*
+     * Data encryption properties of a server.
+     */
+    @JsonProperty(value = "dataEncryption")
+    private DataEncryption dataEncryption;
+
+    /*
      * The mode to update a new PostgreSQL server.
      */
     @JsonProperty(value = "createMode")
     private CreateModeForUpdate createMode;
 
+    /*
+     * Replication role of the server
+     */
+    @JsonProperty(value = "replicationRole")
+    private ReplicationRole replicationRole;
+
+    /*
+     * Replica properties of a server. These Replica properties are required to be passed only in case you want to Promote a server.
+     */
+    @JsonProperty(value = "replica")
+    private Replica replica;
+
+    /*
+     * Network properties of a server. These are required to be passed only in case if server is a private access server.
+     */
+    @JsonProperty(value = "network")
+    private Network network;
+
+    /**
+     * Creates an instance of ServerPropertiesForUpdate class.
+     */
+    public ServerPropertiesForUpdate() {
+    }
+
     /**
      * Get the administratorLoginPassword property: The password of the administrator login.
-     *
+     * 
      * @return the administratorLoginPassword value.
      */
     public String administratorLoginPassword() {
@@ -66,7 +112,7 @@ public final class ServerPropertiesForUpdate {
 
     /**
      * Set the administratorLoginPassword property: The password of the administrator login.
-     *
+     * 
      * @param administratorLoginPassword the administratorLoginPassword value to set.
      * @return the ServerPropertiesForUpdate object itself.
      */
@@ -76,8 +122,28 @@ public final class ServerPropertiesForUpdate {
     }
 
     /**
+     * Get the version property: PostgreSQL Server version. Version 16 is currently not supported for MVU.
+     * 
+     * @return the version value.
+     */
+    public ServerVersion version() {
+        return this.version;
+    }
+
+    /**
+     * Set the version property: PostgreSQL Server version. Version 16 is currently not supported for MVU.
+     * 
+     * @param version the version value to set.
+     * @return the ServerPropertiesForUpdate object itself.
+     */
+    public ServerPropertiesForUpdate withVersion(ServerVersion version) {
+        this.version = version;
+        return this;
+    }
+
+    /**
      * Get the storage property: Storage properties of a server.
-     *
+     * 
      * @return the storage value.
      */
     public Storage storage() {
@@ -86,7 +152,7 @@ public final class ServerPropertiesForUpdate {
 
     /**
      * Set the storage property: Storage properties of a server.
-     *
+     * 
      * @param storage the storage value to set.
      * @return the ServerPropertiesForUpdate object itself.
      */
@@ -97,7 +163,7 @@ public final class ServerPropertiesForUpdate {
 
     /**
      * Get the backup property: Backup properties of a server.
-     *
+     * 
      * @return the backup value.
      */
     public Backup backup() {
@@ -106,7 +172,7 @@ public final class ServerPropertiesForUpdate {
 
     /**
      * Set the backup property: Backup properties of a server.
-     *
+     * 
      * @param backup the backup value to set.
      * @return the ServerPropertiesForUpdate object itself.
      */
@@ -117,7 +183,7 @@ public final class ServerPropertiesForUpdate {
 
     /**
      * Get the highAvailability property: High availability properties of a server.
-     *
+     * 
      * @return the highAvailability value.
      */
     public HighAvailability highAvailability() {
@@ -126,7 +192,7 @@ public final class ServerPropertiesForUpdate {
 
     /**
      * Set the highAvailability property: High availability properties of a server.
-     *
+     * 
      * @param highAvailability the highAvailability value to set.
      * @return the ServerPropertiesForUpdate object itself.
      */
@@ -137,7 +203,7 @@ public final class ServerPropertiesForUpdate {
 
     /**
      * Get the maintenanceWindow property: Maintenance window properties of a server.
-     *
+     * 
      * @return the maintenanceWindow value.
      */
     public MaintenanceWindow maintenanceWindow() {
@@ -146,7 +212,7 @@ public final class ServerPropertiesForUpdate {
 
     /**
      * Set the maintenanceWindow property: Maintenance window properties of a server.
-     *
+     * 
      * @param maintenanceWindow the maintenanceWindow value to set.
      * @return the ServerPropertiesForUpdate object itself.
      */
@@ -156,8 +222,48 @@ public final class ServerPropertiesForUpdate {
     }
 
     /**
+     * Get the authConfig property: AuthConfig properties of a server.
+     * 
+     * @return the authConfig value.
+     */
+    public AuthConfig authConfig() {
+        return this.authConfig;
+    }
+
+    /**
+     * Set the authConfig property: AuthConfig properties of a server.
+     * 
+     * @param authConfig the authConfig value to set.
+     * @return the ServerPropertiesForUpdate object itself.
+     */
+    public ServerPropertiesForUpdate withAuthConfig(AuthConfig authConfig) {
+        this.authConfig = authConfig;
+        return this;
+    }
+
+    /**
+     * Get the dataEncryption property: Data encryption properties of a server.
+     * 
+     * @return the dataEncryption value.
+     */
+    public DataEncryption dataEncryption() {
+        return this.dataEncryption;
+    }
+
+    /**
+     * Set the dataEncryption property: Data encryption properties of a server.
+     * 
+     * @param dataEncryption the dataEncryption value to set.
+     * @return the ServerPropertiesForUpdate object itself.
+     */
+    public ServerPropertiesForUpdate withDataEncryption(DataEncryption dataEncryption) {
+        this.dataEncryption = dataEncryption;
+        return this;
+    }
+
+    /**
      * Get the createMode property: The mode to update a new PostgreSQL server.
-     *
+     * 
      * @return the createMode value.
      */
     public CreateModeForUpdate createMode() {
@@ -166,7 +272,7 @@ public final class ServerPropertiesForUpdate {
 
     /**
      * Set the createMode property: The mode to update a new PostgreSQL server.
-     *
+     * 
      * @param createMode the createMode value to set.
      * @return the ServerPropertiesForUpdate object itself.
      */
@@ -176,8 +282,72 @@ public final class ServerPropertiesForUpdate {
     }
 
     /**
+     * Get the replicationRole property: Replication role of the server.
+     * 
+     * @return the replicationRole value.
+     */
+    public ReplicationRole replicationRole() {
+        return this.replicationRole;
+    }
+
+    /**
+     * Set the replicationRole property: Replication role of the server.
+     * 
+     * @param replicationRole the replicationRole value to set.
+     * @return the ServerPropertiesForUpdate object itself.
+     */
+    public ServerPropertiesForUpdate withReplicationRole(ReplicationRole replicationRole) {
+        this.replicationRole = replicationRole;
+        return this;
+    }
+
+    /**
+     * Get the replica property: Replica properties of a server. These Replica properties are required to be passed only
+     * in case you want to Promote a server.
+     * 
+     * @return the replica value.
+     */
+    public Replica replica() {
+        return this.replica;
+    }
+
+    /**
+     * Set the replica property: Replica properties of a server. These Replica properties are required to be passed only
+     * in case you want to Promote a server.
+     * 
+     * @param replica the replica value to set.
+     * @return the ServerPropertiesForUpdate object itself.
+     */
+    public ServerPropertiesForUpdate withReplica(Replica replica) {
+        this.replica = replica;
+        return this;
+    }
+
+    /**
+     * Get the network property: Network properties of a server. These are required to be passed only in case if server
+     * is a private access server.
+     * 
+     * @return the network value.
+     */
+    public Network network() {
+        return this.network;
+    }
+
+    /**
+     * Set the network property: Network properties of a server. These are required to be passed only in case if server
+     * is a private access server.
+     * 
+     * @param network the network value to set.
+     * @return the ServerPropertiesForUpdate object itself.
+     */
+    public ServerPropertiesForUpdate withNetwork(Network network) {
+        this.network = network;
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
@@ -192,6 +362,18 @@ public final class ServerPropertiesForUpdate {
         }
         if (maintenanceWindow() != null) {
             maintenanceWindow().validate();
+        }
+        if (authConfig() != null) {
+            authConfig().validate();
+        }
+        if (dataEncryption() != null) {
+            dataEncryption().validate();
+        }
+        if (replica() != null) {
+            replica().validate();
+        }
+        if (network() != null) {
+            network().validate();
         }
     }
 }

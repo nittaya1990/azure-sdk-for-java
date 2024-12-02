@@ -6,16 +6,14 @@ package com.azure.resourcemanager.frontdoor.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.SubResource;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** A collection of backends that can be routed to. */
+/**
+ * A collection of backends that can be routed to.
+ */
 @Fluent
 public class BackendPoolUpdateParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(BackendPoolUpdateParameters.class);
-
     /*
      * The set of backends for this pool
      */
@@ -35,8 +33,14 @@ public class BackendPoolUpdateParameters {
     private SubResource healthProbeSettings;
 
     /**
+     * Creates an instance of BackendPoolUpdateParameters class.
+     */
+    public BackendPoolUpdateParameters() {
+    }
+
+    /**
      * Get the backends property: The set of backends for this pool.
-     *
+     * 
      * @return the backends value.
      */
     public List<Backend> backends() {
@@ -45,7 +49,7 @@ public class BackendPoolUpdateParameters {
 
     /**
      * Set the backends property: The set of backends for this pool.
-     *
+     * 
      * @param backends the backends value to set.
      * @return the BackendPoolUpdateParameters object itself.
      */
@@ -56,7 +60,7 @@ public class BackendPoolUpdateParameters {
 
     /**
      * Get the loadBalancingSettings property: Load balancing settings for a backend pool.
-     *
+     * 
      * @return the loadBalancingSettings value.
      */
     public SubResource loadBalancingSettings() {
@@ -65,7 +69,7 @@ public class BackendPoolUpdateParameters {
 
     /**
      * Set the loadBalancingSettings property: Load balancing settings for a backend pool.
-     *
+     * 
      * @param loadBalancingSettings the loadBalancingSettings value to set.
      * @return the BackendPoolUpdateParameters object itself.
      */
@@ -76,7 +80,7 @@ public class BackendPoolUpdateParameters {
 
     /**
      * Get the healthProbeSettings property: L7 health probe settings for a backend pool.
-     *
+     * 
      * @return the healthProbeSettings value.
      */
     public SubResource healthProbeSettings() {
@@ -85,7 +89,7 @@ public class BackendPoolUpdateParameters {
 
     /**
      * Set the healthProbeSettings property: L7 health probe settings for a backend pool.
-     *
+     * 
      * @param healthProbeSettings the healthProbeSettings value to set.
      * @return the BackendPoolUpdateParameters object itself.
      */
@@ -96,7 +100,7 @@ public class BackendPoolUpdateParameters {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

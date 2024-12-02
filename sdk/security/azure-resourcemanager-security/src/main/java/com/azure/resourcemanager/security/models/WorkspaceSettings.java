@@ -8,34 +8,49 @@ import com.azure.core.http.rest.PagedIterable;
 import com.azure.core.http.rest.Response;
 import com.azure.core.util.Context;
 
-/** Resource collection API of WorkspaceSettings. */
+/**
+ * Resource collection API of WorkspaceSettings.
+ */
 public interface WorkspaceSettings {
     /**
      * Settings about where we should store your security data and logs. If the result is empty, it means that no
      * custom-workspace configuration was set.
-     *
+     * 
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of workspace settings response.
+     * @return list of workspace settings response as paginated response with {@link PagedIterable}.
      */
     PagedIterable<WorkspaceSetting> list();
 
     /**
      * Settings about where we should store your security data and logs. If the result is empty, it means that no
      * custom-workspace configuration was set.
-     *
+     * 
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of workspace settings response.
+     * @return list of workspace settings response as paginated response with {@link PagedIterable}.
      */
     PagedIterable<WorkspaceSetting> list(Context context);
 
     /**
      * Settings about where we should store your security data and logs. If the result is empty, it means that no
      * custom-workspace configuration was set.
-     *
+     * 
+     * @param workspaceSettingName Name of the security setting.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return configures where to store the OMS agent data for workspaces under a scope along with {@link Response}.
+     */
+    Response<WorkspaceSetting> getWithResponse(String workspaceSettingName, Context context);
+
+    /**
+     * Settings about where we should store your security data and logs. If the result is empty, it means that no
+     * custom-workspace configuration was set.
+     * 
      * @param workspaceSettingName Name of the security setting.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
@@ -45,21 +60,20 @@ public interface WorkspaceSettings {
     WorkspaceSetting get(String workspaceSettingName);
 
     /**
-     * Settings about where we should store your security data and logs. If the result is empty, it means that no
-     * custom-workspace configuration was set.
-     *
+     * Deletes the custom workspace settings for this subscription. new VMs will report to the default workspace.
+     * 
      * @param workspaceSettingName Name of the security setting.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return configures where to store the OMS agent data for workspaces under a scope.
+     * @return the {@link Response}.
      */
-    Response<WorkspaceSetting> getWithResponse(String workspaceSettingName, Context context);
+    Response<Void> deleteWithResponse(String workspaceSettingName, Context context);
 
     /**
      * Deletes the custom workspace settings for this subscription. new VMs will report to the default workspace.
-     *
+     * 
      * @param workspaceSettingName Name of the security setting.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
@@ -68,45 +82,33 @@ public interface WorkspaceSettings {
     void delete(String workspaceSettingName);
 
     /**
-     * Deletes the custom workspace settings for this subscription. new VMs will report to the default workspace.
-     *
-     * @param workspaceSettingName Name of the security setting.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    Response<Void> deleteWithResponse(String workspaceSettingName, Context context);
-
-    /**
      * Settings about where we should store your security data and logs. If the result is empty, it means that no
      * custom-workspace configuration was set.
-     *
+     * 
      * @param id the resource ID.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return configures where to store the OMS agent data for workspaces under a scope.
+     * @return configures where to store the OMS agent data for workspaces under a scope along with {@link Response}.
      */
     WorkspaceSetting getById(String id);
 
     /**
      * Settings about where we should store your security data and logs. If the result is empty, it means that no
      * custom-workspace configuration was set.
-     *
+     * 
      * @param id the resource ID.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return configures where to store the OMS agent data for workspaces under a scope.
+     * @return configures where to store the OMS agent data for workspaces under a scope along with {@link Response}.
      */
     Response<WorkspaceSetting> getByIdWithResponse(String id, Context context);
 
     /**
      * Deletes the custom workspace settings for this subscription. new VMs will report to the default workspace.
-     *
+     * 
      * @param id the resource ID.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
@@ -116,19 +118,19 @@ public interface WorkspaceSettings {
 
     /**
      * Deletes the custom workspace settings for this subscription. new VMs will report to the default workspace.
-     *
+     * 
      * @param id the resource ID.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
     Response<Void> deleteByIdWithResponse(String id, Context context);
 
     /**
      * Begins definition for a new WorkspaceSetting resource.
-     *
+     * 
      * @param name resource name.
      * @return the first stage of the new WorkspaceSetting definition.
      */

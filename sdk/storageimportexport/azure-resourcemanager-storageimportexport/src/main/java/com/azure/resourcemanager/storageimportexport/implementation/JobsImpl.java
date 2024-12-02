@@ -13,17 +13,15 @@ import com.azure.resourcemanager.storageimportexport.fluent.JobsClient;
 import com.azure.resourcemanager.storageimportexport.fluent.models.JobResponseInner;
 import com.azure.resourcemanager.storageimportexport.models.JobResponse;
 import com.azure.resourcemanager.storageimportexport.models.Jobs;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class JobsImpl implements Jobs {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(JobsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(JobsImpl.class);
 
     private final JobsClient innerClient;
 
     private final com.azure.resourcemanager.storageimportexport.StorageImportExportManager serviceManager;
 
-    public JobsImpl(
-        JobsClient innerClient,
+    public JobsImpl(JobsClient innerClient,
         com.azure.resourcemanager.storageimportexport.StorageImportExportManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
@@ -31,24 +29,36 @@ public final class JobsImpl implements Jobs {
 
     public PagedIterable<JobResponse> list() {
         PagedIterable<JobResponseInner> inner = this.serviceClient().list();
-        return Utils.mapPage(inner, inner1 -> new JobResponseImpl(inner1, this.manager()));
+        return ResourceManagerUtils.mapPage(inner, inner1 -> new JobResponseImpl(inner1, this.manager()));
     }
 
     public PagedIterable<JobResponse> list(Long top, String filter, Context context) {
         PagedIterable<JobResponseInner> inner = this.serviceClient().list(top, filter, context);
-        return Utils.mapPage(inner, inner1 -> new JobResponseImpl(inner1, this.manager()));
+        return ResourceManagerUtils.mapPage(inner, inner1 -> new JobResponseImpl(inner1, this.manager()));
     }
 
     public PagedIterable<JobResponse> listByResourceGroup(String resourceGroupName) {
         PagedIterable<JobResponseInner> inner = this.serviceClient().listByResourceGroup(resourceGroupName);
-        return Utils.mapPage(inner, inner1 -> new JobResponseImpl(inner1, this.manager()));
+        return ResourceManagerUtils.mapPage(inner, inner1 -> new JobResponseImpl(inner1, this.manager()));
     }
 
-    public PagedIterable<JobResponse> listByResourceGroup(
-        String resourceGroupName, Long top, String filter, Context context) {
-        PagedIterable<JobResponseInner> inner =
-            this.serviceClient().listByResourceGroup(resourceGroupName, top, filter, context);
-        return Utils.mapPage(inner, inner1 -> new JobResponseImpl(inner1, this.manager()));
+    public PagedIterable<JobResponse> listByResourceGroup(String resourceGroupName, Long top, String filter,
+        Context context) {
+        PagedIterable<JobResponseInner> inner
+            = this.serviceClient().listByResourceGroup(resourceGroupName, top, filter, context);
+        return ResourceManagerUtils.mapPage(inner, inner1 -> new JobResponseImpl(inner1, this.manager()));
+    }
+
+    public Response<JobResponse> getByResourceGroupWithResponse(String resourceGroupName, String jobName,
+        Context context) {
+        Response<JobResponseInner> inner
+            = this.serviceClient().getByResourceGroupWithResponse(resourceGroupName, jobName, context);
+        if (inner != null) {
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
+                new JobResponseImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
     }
 
     public JobResponse getByResourceGroup(String resourceGroupName, String jobName) {
@@ -60,103 +70,68 @@ public final class JobsImpl implements Jobs {
         }
     }
 
-    public Response<JobResponse> getByResourceGroupWithResponse(
-        String resourceGroupName, String jobName, Context context) {
-        Response<JobResponseInner> inner =
-            this.serviceClient().getByResourceGroupWithResponse(resourceGroupName, jobName, context);
-        if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
-                new JobResponseImpl(inner.getValue(), this.manager()));
-        } else {
-            return null;
-        }
+    public Response<Void> deleteByResourceGroupWithResponse(String resourceGroupName, String jobName, Context context) {
+        return this.serviceClient().deleteWithResponse(resourceGroupName, jobName, context);
     }
 
     public void deleteByResourceGroup(String resourceGroupName, String jobName) {
         this.serviceClient().delete(resourceGroupName, jobName);
     }
 
-    public Response<Void> deleteWithResponse(String resourceGroupName, String jobName, Context context) {
-        return this.serviceClient().deleteWithResponse(resourceGroupName, jobName, context);
-    }
-
     public JobResponse getById(String id) {
-        String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
+        String resourceGroupName = ResourceManagerUtils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
-        String jobName = Utils.getValueFromIdByName(id, "jobs");
+        String jobName = ResourceManagerUtils.getValueFromIdByName(id, "jobs");
         if (jobName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'jobs'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'jobs'.", id)));
         }
         return this.getByResourceGroupWithResponse(resourceGroupName, jobName, Context.NONE).getValue();
     }
 
     public Response<JobResponse> getByIdWithResponse(String id, Context context) {
-        String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
+        String resourceGroupName = ResourceManagerUtils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
-        String jobName = Utils.getValueFromIdByName(id, "jobs");
+        String jobName = ResourceManagerUtils.getValueFromIdByName(id, "jobs");
         if (jobName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'jobs'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'jobs'.", id)));
         }
         return this.getByResourceGroupWithResponse(resourceGroupName, jobName, context);
     }
 
     public void deleteById(String id) {
-        String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
+        String resourceGroupName = ResourceManagerUtils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
-        String jobName = Utils.getValueFromIdByName(id, "jobs");
+        String jobName = ResourceManagerUtils.getValueFromIdByName(id, "jobs");
         if (jobName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'jobs'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'jobs'.", id)));
         }
-        this.deleteWithResponse(resourceGroupName, jobName, Context.NONE).getValue();
+        this.deleteByResourceGroupWithResponse(resourceGroupName, jobName, Context.NONE);
     }
 
     public Response<Void> deleteByIdWithResponse(String id, Context context) {
-        String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
+        String resourceGroupName = ResourceManagerUtils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
-        String jobName = Utils.getValueFromIdByName(id, "jobs");
+        String jobName = ResourceManagerUtils.getValueFromIdByName(id, "jobs");
         if (jobName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'jobs'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'jobs'.", id)));
         }
-        return this.deleteWithResponse(resourceGroupName, jobName, context);
+        return this.deleteByResourceGroupWithResponse(resourceGroupName, jobName, context);
     }
 
     private JobsClient serviceClient() {

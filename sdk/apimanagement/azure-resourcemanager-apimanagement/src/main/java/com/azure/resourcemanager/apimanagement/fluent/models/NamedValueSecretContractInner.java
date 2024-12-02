@@ -5,20 +5,20 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Client or app secret used in IdentityProviders, Aad, OpenID or OAuth. */
 @Fluent
 public final class NamedValueSecretContractInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(NamedValueSecretContractInner.class);
-
     /*
      * This is secret value of the NamedValue entity.
      */
     @JsonProperty(value = "value")
     private String value;
+
+    /** Creates an instance of NamedValueSecretContractInner class. */
+    public NamedValueSecretContractInner() {
+    }
 
     /**
      * Get the value property: This is secret value of the NamedValue entity.

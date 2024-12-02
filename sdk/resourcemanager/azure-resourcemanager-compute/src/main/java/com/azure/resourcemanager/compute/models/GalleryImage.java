@@ -26,12 +26,8 @@ import reactor.core.publisher.Mono;
  * multiple versions of the same image.
  */
 @Fluent
-public interface GalleryImage
-    extends HasInnerModel<GalleryImageInner>,
-        Indexable,
-        Refreshable<GalleryImage>,
-        Updatable<GalleryImage.Update>,
-        HasManager<ComputeManager> {
+public interface GalleryImage extends HasInnerModel<GalleryImageInner>, Indexable, Refreshable<GalleryImage>,
+    Updatable<GalleryImage.Update>, HasManager<ComputeManager> {
     /** @return the description of the image. */
     String description();
 
@@ -80,6 +76,12 @@ public interface GalleryImage
     /** @return the uri to the image release note. */
     String releaseNoteUri();
 
+    /** @return the hypervisor generation. */
+    HyperVGeneration hyperVGeneration();
+
+    /** @return the security type, whether trusted launch or confidential VM. */
+    SecurityTypes securityType();
+
     /** @return the tags associated with the image. */
     Map<String, String> tags();
 
@@ -119,13 +121,8 @@ public interface GalleryImage
     PagedIterable<GalleryImageVersion> listVersions();
 
     /** The entirety of the gallery image definition. */
-    interface Definition
-        extends DefinitionStages.Blank,
-            DefinitionStages.WithGallery,
-            DefinitionStages.WithLocation,
-            DefinitionStages.WithIdentifier,
-            DefinitionStages.WithOsTypeAndState,
-            DefinitionStages.WithCreate {
+    interface Definition extends DefinitionStages.Blank, DefinitionStages.WithGallery, DefinitionStages.WithLocation,
+        DefinitionStages.WithIdentifier, DefinitionStages.WithOsTypeAndState, DefinitionStages.WithCreate {
     }
 
     /** Grouping of gallery image definition stages. */
@@ -197,6 +194,9 @@ public interface GalleryImage
             WithOsTypeAndState withIdentifier(String publisher, String offer, String sku);
         }
 
+        /**
+         * The stage of the gallery image definition allowing to specify the OS type and state.
+         */
         interface WithOsTypeAndState {
             /**
              * Specifies that image is a Windows image with OS state as generalized.
@@ -399,6 +399,29 @@ public interface GalleryImage
             WithCreate withReleaseNoteUri(String releaseNoteUri);
         }
 
+        /** The stage of the gallery image definition allowing to specify hypervisor generation. */
+        interface WithHyperVGeneration {
+            /**
+             * Specifies the hypervisor generation of the Virtual Machine. Applicable to OS disks only.
+             * @param hyperVGeneration the hypervisor generation
+             * @return the next definition stage
+             */
+            WithCreate withHyperVGeneration(HyperVGeneration hyperVGeneration);
+        }
+
+        /** The stage of the gallery image definition allowing to specify security type.  */
+        interface WithSecurityTypes {
+            /**
+             * Enables trusted launch.
+             * <p>
+             * Trusted launch only supports hypervisor generation V2.
+             * </p>
+             *
+             * @return the next definition stage
+             */
+            WithCreate withTrustedLaunch();
+        }
+
         /** The stage of the gallery image definition allowing to specify tags. */
         interface WithTags {
             /**
@@ -414,31 +437,19 @@ public interface GalleryImage
          * The stage of the definition which contains all the minimum required inputs for the resource to be created
          * (via {@link WithCreate#create()}), but also allows for any other optional settings to be specified.
          */
-        interface WithCreate
-            extends Creatable<GalleryImage>,
-                DefinitionStages.WithDescription,
-                DefinitionStages.WithDisallowed,
-                DefinitionStages.WithEndOfLifeDate,
-                DefinitionStages.WithEula,
-                DefinitionStages.WithPrivacyStatementUri,
-                DefinitionStages.WithPurchasePlan,
-                DefinitionStages.WithRecommendedVMConfiguration,
-                DefinitionStages.WithReleaseNoteUri,
-                DefinitionStages.WithTags {
+        interface WithCreate extends Creatable<GalleryImage>, DefinitionStages.WithDescription,
+            DefinitionStages.WithDisallowed, DefinitionStages.WithEndOfLifeDate, DefinitionStages.WithEula,
+            DefinitionStages.WithPrivacyStatementUri, DefinitionStages.WithPurchasePlan,
+            DefinitionStages.WithRecommendedVMConfiguration, DefinitionStages.WithReleaseNoteUri,
+            DefinitionStages.WithHyperVGeneration, DefinitionStages.WithSecurityTypes, DefinitionStages.WithTags {
         }
     }
+
     /** The template for a gallery image update operation, containing all the settings that can be modified. */
-    interface Update
-        extends Appliable<GalleryImage>,
-            UpdateStages.WithDescription,
-            UpdateStages.WithDisallowed,
-            UpdateStages.WithEndOfLifeDate,
-            UpdateStages.WithEula,
-            UpdateStages.WithOsState,
-            UpdateStages.WithPrivacyStatementUri,
-            UpdateStages.WithRecommendedVMConfiguration,
-            UpdateStages.WithReleaseNoteUri,
-            UpdateStages.WithTags {
+    interface Update extends Appliable<GalleryImage>, UpdateStages.WithDescription, UpdateStages.WithDisallowed,
+        UpdateStages.WithEndOfLifeDate, UpdateStages.WithEula, UpdateStages.WithOsState,
+        UpdateStages.WithPrivacyStatementUri, UpdateStages.WithRecommendedVMConfiguration,
+        UpdateStages.WithReleaseNoteUri, UpdateStages.WithTags {
     }
 
     /** Grouping of gallery image update stages. */

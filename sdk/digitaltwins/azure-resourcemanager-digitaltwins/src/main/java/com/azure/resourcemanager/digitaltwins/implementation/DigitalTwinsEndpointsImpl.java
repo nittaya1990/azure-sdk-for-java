@@ -9,66 +9,52 @@ import com.azure.core.http.rest.Response;
 import com.azure.core.http.rest.SimpleResponse;
 import com.azure.core.util.Context;
 import com.azure.core.util.logging.ClientLogger;
-import com.azure.resourcemanager.digitaltwins.AzureDigitalTwinsManager;
 import com.azure.resourcemanager.digitaltwins.fluent.DigitalTwinsEndpointsClient;
 import com.azure.resourcemanager.digitaltwins.fluent.models.DigitalTwinsEndpointResourceInner;
 import com.azure.resourcemanager.digitaltwins.models.DigitalTwinsEndpointResource;
 import com.azure.resourcemanager.digitaltwins.models.DigitalTwinsEndpoints;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class DigitalTwinsEndpointsImpl implements DigitalTwinsEndpoints {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DigitalTwinsEndpointsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(DigitalTwinsEndpointsImpl.class);
 
     private final DigitalTwinsEndpointsClient innerClient;
 
-    private final AzureDigitalTwinsManager serviceManager;
+    private final com.azure.resourcemanager.digitaltwins.AzureDigitalTwinsManager serviceManager;
 
-    public DigitalTwinsEndpointsImpl(DigitalTwinsEndpointsClient innerClient, AzureDigitalTwinsManager serviceManager) {
+    public DigitalTwinsEndpointsImpl(DigitalTwinsEndpointsClient innerClient,
+        com.azure.resourcemanager.digitaltwins.AzureDigitalTwinsManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
     }
 
     public PagedIterable<DigitalTwinsEndpointResource> list(String resourceGroupName, String resourceName) {
-        PagedIterable<DigitalTwinsEndpointResourceInner> inner =
-            this.serviceClient().list(resourceGroupName, resourceName);
+        PagedIterable<DigitalTwinsEndpointResourceInner> inner
+            = this.serviceClient().list(resourceGroupName, resourceName);
         return Utils.mapPage(inner, inner1 -> new DigitalTwinsEndpointResourceImpl(inner1, this.manager()));
     }
 
-    public PagedIterable<DigitalTwinsEndpointResource> list(
-        String resourceGroupName, String resourceName, Context context) {
-        PagedIterable<DigitalTwinsEndpointResourceInner> inner =
-            this.serviceClient().list(resourceGroupName, resourceName, context);
+    public PagedIterable<DigitalTwinsEndpointResource> list(String resourceGroupName, String resourceName,
+        Context context) {
+        PagedIterable<DigitalTwinsEndpointResourceInner> inner
+            = this.serviceClient().list(resourceGroupName, resourceName, context);
         return Utils.mapPage(inner, inner1 -> new DigitalTwinsEndpointResourceImpl(inner1, this.manager()));
     }
 
-    public DigitalTwinsEndpointResource get(String resourceGroupName, String resourceName, String endpointName) {
-        DigitalTwinsEndpointResourceInner inner =
-            this.serviceClient().get(resourceGroupName, resourceName, endpointName);
+    public Response<DigitalTwinsEndpointResource> getWithResponse(String resourceGroupName, String resourceName,
+        String endpointName, Context context) {
+        Response<DigitalTwinsEndpointResourceInner> inner
+            = this.serviceClient().getWithResponse(resourceGroupName, resourceName, endpointName, context);
         if (inner != null) {
-            return new DigitalTwinsEndpointResourceImpl(inner, this.manager());
-        } else {
-            return null;
-        }
-    }
-
-    public Response<DigitalTwinsEndpointResource> getWithResponse(
-        String resourceGroupName, String resourceName, String endpointName, Context context) {
-        Response<DigitalTwinsEndpointResourceInner> inner =
-            this.serviceClient().getWithResponse(resourceGroupName, resourceName, endpointName, context);
-        if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
                 new DigitalTwinsEndpointResourceImpl(inner.getValue(), this.manager()));
         } else {
             return null;
         }
     }
 
-    public DigitalTwinsEndpointResource delete(String resourceGroupName, String resourceName, String endpointName) {
-        DigitalTwinsEndpointResourceInner inner =
-            this.serviceClient().delete(resourceGroupName, resourceName, endpointName);
+    public DigitalTwinsEndpointResource get(String resourceGroupName, String resourceName, String endpointName) {
+        DigitalTwinsEndpointResourceInner inner
+            = this.serviceClient().get(resourceGroupName, resourceName, endpointName);
         if (inner != null) {
             return new DigitalTwinsEndpointResourceImpl(inner, this.manager());
         } else {
@@ -76,10 +62,20 @@ public final class DigitalTwinsEndpointsImpl implements DigitalTwinsEndpoints {
         }
     }
 
-    public DigitalTwinsEndpointResource delete(
-        String resourceGroupName, String resourceName, String endpointName, Context context) {
-        DigitalTwinsEndpointResourceInner inner =
-            this.serviceClient().delete(resourceGroupName, resourceName, endpointName, context);
+    public DigitalTwinsEndpointResource delete(String resourceGroupName, String resourceName, String endpointName) {
+        DigitalTwinsEndpointResourceInner inner
+            = this.serviceClient().delete(resourceGroupName, resourceName, endpointName);
+        if (inner != null) {
+            return new DigitalTwinsEndpointResourceImpl(inner, this.manager());
+        } else {
+            return null;
+        }
+    }
+
+    public DigitalTwinsEndpointResource delete(String resourceGroupName, String resourceName, String endpointName,
+        Context context) {
+        DigitalTwinsEndpointResourceInner inner
+            = this.serviceClient().delete(resourceGroupName, resourceName, endpointName, context);
         if (inner != null) {
             return new DigitalTwinsEndpointResourceImpl(inner, this.manager());
         } else {
@@ -90,28 +86,18 @@ public final class DigitalTwinsEndpointsImpl implements DigitalTwinsEndpoints {
     public DigitalTwinsEndpointResource getById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
         String resourceName = Utils.getValueFromIdByName(id, "digitalTwinsInstances");
         if (resourceName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format(
-                                "The resource ID '%s' is not valid. Missing path segment 'digitalTwinsInstances'.",
-                                id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'digitalTwinsInstances'.", id)));
         }
         String endpointName = Utils.getValueFromIdByName(id, "endpoints");
         if (endpointName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'endpoints'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'endpoints'.", id)));
         }
         return this.getWithResponse(resourceGroupName, resourceName, endpointName, Context.NONE).getValue();
     }
@@ -119,28 +105,18 @@ public final class DigitalTwinsEndpointsImpl implements DigitalTwinsEndpoints {
     public Response<DigitalTwinsEndpointResource> getByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
         String resourceName = Utils.getValueFromIdByName(id, "digitalTwinsInstances");
         if (resourceName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format(
-                                "The resource ID '%s' is not valid. Missing path segment 'digitalTwinsInstances'.",
-                                id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'digitalTwinsInstances'.", id)));
         }
         String endpointName = Utils.getValueFromIdByName(id, "endpoints");
         if (endpointName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'endpoints'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'endpoints'.", id)));
         }
         return this.getWithResponse(resourceGroupName, resourceName, endpointName, context);
     }
@@ -148,28 +124,18 @@ public final class DigitalTwinsEndpointsImpl implements DigitalTwinsEndpoints {
     public DigitalTwinsEndpointResource deleteById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
         String resourceName = Utils.getValueFromIdByName(id, "digitalTwinsInstances");
         if (resourceName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format(
-                                "The resource ID '%s' is not valid. Missing path segment 'digitalTwinsInstances'.",
-                                id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'digitalTwinsInstances'.", id)));
         }
         String endpointName = Utils.getValueFromIdByName(id, "endpoints");
         if (endpointName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'endpoints'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'endpoints'.", id)));
         }
         return this.delete(resourceGroupName, resourceName, endpointName, Context.NONE);
     }
@@ -177,28 +143,18 @@ public final class DigitalTwinsEndpointsImpl implements DigitalTwinsEndpoints {
     public DigitalTwinsEndpointResource deleteByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
         String resourceName = Utils.getValueFromIdByName(id, "digitalTwinsInstances");
         if (resourceName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format(
-                                "The resource ID '%s' is not valid. Missing path segment 'digitalTwinsInstances'.",
-                                id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'digitalTwinsInstances'.", id)));
         }
         String endpointName = Utils.getValueFromIdByName(id, "endpoints");
         if (endpointName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'endpoints'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'endpoints'.", id)));
         }
         return this.delete(resourceGroupName, resourceName, endpointName, context);
     }
@@ -207,7 +163,7 @@ public final class DigitalTwinsEndpointsImpl implements DigitalTwinsEndpoints {
         return this.innerClient;
     }
 
-    private AzureDigitalTwinsManager manager() {
+    private com.azure.resourcemanager.digitaltwins.AzureDigitalTwinsManager manager() {
         return this.serviceManager;
     }
 

@@ -312,6 +312,13 @@ public interface LabVirtualMachine {
     String regionName();
 
     /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
+
+    /**
      * Gets the inner com.azure.resourcemanager.devtestlabs.fluent.models.LabVirtualMachineInner object.
      *
      * @return the inner object.
@@ -319,17 +326,16 @@ public interface LabVirtualMachine {
     LabVirtualMachineInner innerModel();
 
     /** The entirety of the LabVirtualMachine definition. */
-    interface Definition
-        extends DefinitionStages.Blank,
-            DefinitionStages.WithLocation,
-            DefinitionStages.WithParentResource,
-            DefinitionStages.WithCreate {
+    interface Definition extends DefinitionStages.Blank, DefinitionStages.WithLocation,
+        DefinitionStages.WithParentResource, DefinitionStages.WithCreate {
     }
+
     /** The LabVirtualMachine definition stages. */
     interface DefinitionStages {
         /** The first stage of the LabVirtualMachine definition. */
         interface Blank extends WithLocation {
         }
+
         /** The stage of the LabVirtualMachine definition allowing to specify location. */
         interface WithLocation {
             /**
@@ -348,6 +354,7 @@ public interface LabVirtualMachine {
              */
             WithParentResource withRegion(String location);
         }
+
         /** The stage of the LabVirtualMachine definition allowing to specify parent resource. */
         interface WithParentResource {
             /**
@@ -359,35 +366,21 @@ public interface LabVirtualMachine {
              */
             WithCreate withExistingLab(String resourceGroupName, String labName);
         }
+
         /**
          * The stage of the LabVirtualMachine definition which contains all the minimum required properties for the
          * resource to be created, but also allows for any other optional properties to be specified.
          */
-        interface WithCreate
-            extends DefinitionStages.WithTags,
-                DefinitionStages.WithNotes,
-                DefinitionStages.WithOwnerObjectId,
-                DefinitionStages.WithOwnerUserPrincipalName,
-                DefinitionStages.WithCreatedDate,
-                DefinitionStages.WithCustomImageId,
-                DefinitionStages.WithSize,
-                DefinitionStages.WithUsername,
-                DefinitionStages.WithPassword,
-                DefinitionStages.WithSshKey,
-                DefinitionStages.WithIsAuthenticationWithSshKey,
-                DefinitionStages.WithLabSubnetName,
-                DefinitionStages.WithLabVirtualNetworkId,
-                DefinitionStages.WithDisallowPublicIpAddress,
-                DefinitionStages.WithArtifacts,
-                DefinitionStages.WithGalleryImageReference,
-                DefinitionStages.WithPlanId,
-                DefinitionStages.WithNetworkInterface,
-                DefinitionStages.WithExpirationDate,
-                DefinitionStages.WithAllowClaim,
-                DefinitionStages.WithStorageType,
-                DefinitionStages.WithEnvironmentId,
-                DefinitionStages.WithDataDiskParameters,
-                DefinitionStages.WithScheduleParameters {
+        interface WithCreate extends DefinitionStages.WithTags, DefinitionStages.WithNotes,
+            DefinitionStages.WithOwnerObjectId, DefinitionStages.WithOwnerUserPrincipalName,
+            DefinitionStages.WithCreatedDate, DefinitionStages.WithCustomImageId, DefinitionStages.WithSize,
+            DefinitionStages.WithUsername, DefinitionStages.WithPassword, DefinitionStages.WithSshKey,
+            DefinitionStages.WithIsAuthenticationWithSshKey, DefinitionStages.WithLabSubnetName,
+            DefinitionStages.WithLabVirtualNetworkId, DefinitionStages.WithDisallowPublicIpAddress,
+            DefinitionStages.WithArtifacts, DefinitionStages.WithGalleryImageReference, DefinitionStages.WithPlanId,
+            DefinitionStages.WithNetworkInterface, DefinitionStages.WithExpirationDate, DefinitionStages.WithAllowClaim,
+            DefinitionStages.WithStorageType, DefinitionStages.WithEnvironmentId,
+            DefinitionStages.WithDataDiskParameters, DefinitionStages.WithScheduleParameters {
             /**
              * Executes the create request.
              *
@@ -403,6 +396,7 @@ public interface LabVirtualMachine {
              */
             LabVirtualMachine create(Context context);
         }
+
         /** The stage of the LabVirtualMachine definition allowing to specify tags. */
         interface WithTags {
             /**
@@ -413,6 +407,7 @@ public interface LabVirtualMachine {
              */
             WithCreate withTags(Map<String, String> tags);
         }
+
         /** The stage of the LabVirtualMachine definition allowing to specify notes. */
         interface WithNotes {
             /**
@@ -423,6 +418,7 @@ public interface LabVirtualMachine {
              */
             WithCreate withNotes(String notes);
         }
+
         /** The stage of the LabVirtualMachine definition allowing to specify ownerObjectId. */
         interface WithOwnerObjectId {
             /**
@@ -433,6 +429,7 @@ public interface LabVirtualMachine {
              */
             WithCreate withOwnerObjectId(String ownerObjectId);
         }
+
         /** The stage of the LabVirtualMachine definition allowing to specify ownerUserPrincipalName. */
         interface WithOwnerUserPrincipalName {
             /**
@@ -443,6 +440,7 @@ public interface LabVirtualMachine {
              */
             WithCreate withOwnerUserPrincipalName(String ownerUserPrincipalName);
         }
+
         /** The stage of the LabVirtualMachine definition allowing to specify createdDate. */
         interface WithCreatedDate {
             /**
@@ -453,6 +451,7 @@ public interface LabVirtualMachine {
              */
             WithCreate withCreatedDate(OffsetDateTime createdDate);
         }
+
         /** The stage of the LabVirtualMachine definition allowing to specify customImageId. */
         interface WithCustomImageId {
             /**
@@ -463,6 +462,7 @@ public interface LabVirtualMachine {
              */
             WithCreate withCustomImageId(String customImageId);
         }
+
         /** The stage of the LabVirtualMachine definition allowing to specify size. */
         interface WithSize {
             /**
@@ -473,6 +473,7 @@ public interface LabVirtualMachine {
              */
             WithCreate withSize(String size);
         }
+
         /** The stage of the LabVirtualMachine definition allowing to specify username. */
         interface WithUsername {
             /**
@@ -483,6 +484,7 @@ public interface LabVirtualMachine {
              */
             WithCreate withUsername(String username);
         }
+
         /** The stage of the LabVirtualMachine definition allowing to specify password. */
         interface WithPassword {
             /**
@@ -493,6 +495,7 @@ public interface LabVirtualMachine {
              */
             WithCreate withPassword(String password);
         }
+
         /** The stage of the LabVirtualMachine definition allowing to specify sshKey. */
         interface WithSshKey {
             /**
@@ -503,6 +506,7 @@ public interface LabVirtualMachine {
              */
             WithCreate withSshKey(String sshKey);
         }
+
         /** The stage of the LabVirtualMachine definition allowing to specify isAuthenticationWithSshKey. */
         interface WithIsAuthenticationWithSshKey {
             /**
@@ -515,6 +519,7 @@ public interface LabVirtualMachine {
              */
             WithCreate withIsAuthenticationWithSshKey(Boolean isAuthenticationWithSshKey);
         }
+
         /** The stage of the LabVirtualMachine definition allowing to specify labSubnetName. */
         interface WithLabSubnetName {
             /**
@@ -525,6 +530,7 @@ public interface LabVirtualMachine {
              */
             WithCreate withLabSubnetName(String labSubnetName);
         }
+
         /** The stage of the LabVirtualMachine definition allowing to specify labVirtualNetworkId. */
         interface WithLabVirtualNetworkId {
             /**
@@ -535,6 +541,7 @@ public interface LabVirtualMachine {
              */
             WithCreate withLabVirtualNetworkId(String labVirtualNetworkId);
         }
+
         /** The stage of the LabVirtualMachine definition allowing to specify disallowPublicIpAddress. */
         interface WithDisallowPublicIpAddress {
             /**
@@ -547,6 +554,7 @@ public interface LabVirtualMachine {
              */
             WithCreate withDisallowPublicIpAddress(Boolean disallowPublicIpAddress);
         }
+
         /** The stage of the LabVirtualMachine definition allowing to specify artifacts. */
         interface WithArtifacts {
             /**
@@ -557,6 +565,7 @@ public interface LabVirtualMachine {
              */
             WithCreate withArtifacts(List<ArtifactInstallProperties> artifacts);
         }
+
         /** The stage of the LabVirtualMachine definition allowing to specify galleryImageReference. */
         interface WithGalleryImageReference {
             /**
@@ -568,6 +577,7 @@ public interface LabVirtualMachine {
              */
             WithCreate withGalleryImageReference(GalleryImageReference galleryImageReference);
         }
+
         /** The stage of the LabVirtualMachine definition allowing to specify planId. */
         interface WithPlanId {
             /**
@@ -578,6 +588,7 @@ public interface LabVirtualMachine {
              */
             WithCreate withPlanId(String planId);
         }
+
         /** The stage of the LabVirtualMachine definition allowing to specify networkInterface. */
         interface WithNetworkInterface {
             /**
@@ -588,6 +599,7 @@ public interface LabVirtualMachine {
              */
             WithCreate withNetworkInterface(NetworkInterfaceProperties networkInterface);
         }
+
         /** The stage of the LabVirtualMachine definition allowing to specify expirationDate. */
         interface WithExpirationDate {
             /**
@@ -598,6 +610,7 @@ public interface LabVirtualMachine {
              */
             WithCreate withExpirationDate(OffsetDateTime expirationDate);
         }
+
         /** The stage of the LabVirtualMachine definition allowing to specify allowClaim. */
         interface WithAllowClaim {
             /**
@@ -609,6 +622,7 @@ public interface LabVirtualMachine {
              */
             WithCreate withAllowClaim(Boolean allowClaim);
         }
+
         /** The stage of the LabVirtualMachine definition allowing to specify storageType. */
         interface WithStorageType {
             /**
@@ -619,6 +633,7 @@ public interface LabVirtualMachine {
              */
             WithCreate withStorageType(String storageType);
         }
+
         /** The stage of the LabVirtualMachine definition allowing to specify environmentId. */
         interface WithEnvironmentId {
             /**
@@ -630,6 +645,7 @@ public interface LabVirtualMachine {
              */
             WithCreate withEnvironmentId(String environmentId);
         }
+
         /** The stage of the LabVirtualMachine definition allowing to specify dataDiskParameters. */
         interface WithDataDiskParameters {
             /**
@@ -641,6 +657,7 @@ public interface LabVirtualMachine {
              */
             WithCreate withDataDiskParameters(List<DataDiskProperties> dataDiskParameters);
         }
+
         /** The stage of the LabVirtualMachine definition allowing to specify scheduleParameters. */
         interface WithScheduleParameters {
             /**
@@ -652,6 +669,7 @@ public interface LabVirtualMachine {
             WithCreate withScheduleParameters(List<ScheduleCreationParameter> scheduleParameters);
         }
     }
+
     /**
      * Begins update for the LabVirtualMachine resource.
      *
@@ -676,6 +694,7 @@ public interface LabVirtualMachine {
          */
         LabVirtualMachine apply(Context context);
     }
+
     /** The LabVirtualMachine update stages. */
     interface UpdateStages {
         /** The stage of the LabVirtualMachine update allowing to specify tags. */
@@ -689,6 +708,7 @@ public interface LabVirtualMachine {
             Update withTags(Map<String, String> tags);
         }
     }
+
     /**
      * Refreshes the resource to sync with Azure.
      *
@@ -788,6 +808,18 @@ public interface LabVirtualMachine {
     /**
      * Gets a string that represents the contents of the RDP file for the virtual machine.
      *
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a string that represents the contents of the RDP file for the virtual machine along with {@link
+     *     Response}.
+     */
+    Response<RdpConnection> getRdpFileContentsWithResponse(Context context);
+
+    /**
+     * Gets a string that represents the contents of the RDP file for the virtual machine.
+     *
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return a string that represents the contents of the RDP file for the virtual machine.
@@ -795,15 +827,15 @@ public interface LabVirtualMachine {
     RdpConnection getRdpFileContents();
 
     /**
-     * Gets a string that represents the contents of the RDP file for the virtual machine.
+     * Lists the applicable start/stop schedules, if any.
      *
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a string that represents the contents of the RDP file for the virtual machine.
+     * @return schedules applicable to a virtual machine along with {@link Response}.
      */
-    Response<RdpConnection> getRdpFileContentsWithResponse(Context context);
+    Response<ApplicableSchedule> listApplicableSchedulesWithResponse(Context context);
 
     /**
      * Lists the applicable start/stop schedules, if any.
@@ -813,17 +845,6 @@ public interface LabVirtualMachine {
      * @return schedules applicable to a virtual machine.
      */
     ApplicableSchedule listApplicableSchedules();
-
-    /**
-     * Lists the applicable start/stop schedules, if any.
-     *
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return schedules applicable to a virtual machine.
-     */
-    Response<ApplicableSchedule> listApplicableSchedulesWithResponse(Context context);
 
     /**
      * Redeploy a virtual machine This operation can take a while to complete.

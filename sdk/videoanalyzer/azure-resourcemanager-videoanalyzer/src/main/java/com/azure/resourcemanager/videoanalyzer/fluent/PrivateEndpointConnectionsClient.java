@@ -36,11 +36,11 @@ public interface PrivateEndpointConnectionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all private endpoint connections under video analyzer account.
+     * @return all private endpoint connections under video analyzer account along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<PrivateEndpointConnectionListResultInner> listWithResponse(
-        String resourceGroupName, String accountName, Context context);
+    Response<PrivateEndpointConnectionListResultInner> listWithResponse(String resourceGroupName, String accountName,
+        Context context);
 
     /**
      * Get private endpoint connection under video analyzer account.
@@ -66,11 +66,11 @@ public interface PrivateEndpointConnectionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return private endpoint connection under video analyzer account.
+     * @return private endpoint connection under video analyzer account along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<PrivateEndpointConnectionInner> getWithResponse(
-        String resourceGroupName, String accountName, String name, Context context);
+    Response<PrivateEndpointConnectionInner> getWithResponse(String resourceGroupName, String accountName, String name,
+        Context context);
 
     /**
      * Update private endpoint connection state under video analyzer account.
@@ -85,8 +85,8 @@ public interface PrivateEndpointConnectionsClient {
      * @return the Private Endpoint Connection resource.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    PrivateEndpointConnectionInner createOrUpdate(
-        String resourceGroupName, String accountName, String name, PrivateEndpointConnectionInner parameters);
+    PrivateEndpointConnectionInner createOrUpdate(String resourceGroupName, String accountName, String name,
+        PrivateEndpointConnectionInner parameters);
 
     /**
      * Update private endpoint connection state under video analyzer account.
@@ -102,12 +102,8 @@ public interface PrivateEndpointConnectionsClient {
      * @return the Private Endpoint Connection resource.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    PrivateEndpointConnectionsCreateOrUpdateResponse createOrUpdateWithResponse(
-        String resourceGroupName,
-        String accountName,
-        String name,
-        PrivateEndpointConnectionInner parameters,
-        Context context);
+    PrivateEndpointConnectionsCreateOrUpdateResponse createOrUpdateWithResponse(String resourceGroupName,
+        String accountName, String name, PrivateEndpointConnectionInner parameters, Context context);
 
     /**
      * Delete private endpoint connection under video analyzer account.
@@ -132,7 +128,7 @@ public interface PrivateEndpointConnectionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     Response<Void> deleteWithResponse(String resourceGroupName, String accountName, String name, Context context);

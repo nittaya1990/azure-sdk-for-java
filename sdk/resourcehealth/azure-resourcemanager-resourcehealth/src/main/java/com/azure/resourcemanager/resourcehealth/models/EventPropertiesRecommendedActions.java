@@ -5,16 +5,12 @@
 package com.azure.resourcemanager.resourcehealth.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Recommended actions of event. */
 @Fluent
 public final class EventPropertiesRecommendedActions {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(EventPropertiesRecommendedActions.class);
-
     /*
      * Recommended action title for the service health event.
      */
@@ -32,6 +28,10 @@ public final class EventPropertiesRecommendedActions {
      */
     @JsonProperty(value = "localeCode")
     private String localeCode;
+
+    /** Creates an instance of EventPropertiesRecommendedActions class. */
+    public EventPropertiesRecommendedActions() {
+    }
 
     /**
      * Get the message property: Recommended action title for the service health event.

@@ -5,20 +5,20 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Subscriptions delegation settings properties. */
 @Fluent
 public final class SubscriptionsDelegationSettingsProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SubscriptionsDelegationSettingsProperties.class);
-
     /*
      * Enable or disable delegation for subscriptions.
      */
     @JsonProperty(value = "enabled")
     private Boolean enabled;
+
+    /** Creates an instance of SubscriptionsDelegationSettingsProperties class. */
+    public SubscriptionsDelegationSettingsProperties() {
+    }
 
     /**
      * Get the enabled property: Enable or disable delegation for subscriptions.

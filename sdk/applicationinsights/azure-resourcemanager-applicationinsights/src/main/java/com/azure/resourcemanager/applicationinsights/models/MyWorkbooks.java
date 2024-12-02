@@ -20,7 +20,8 @@ public interface MyWorkbooks {
      * @throws com.azure.resourcemanager.applicationinsights.models.ErrorDefinitionException thrown if the request is
      *     rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all private workbooks defined within a specified resource group and category.
+     * @return all private workbooks defined within a specified resource group and category as paginated response with
+     *     {@link PagedIterable}.
      */
     PagedIterable<MyWorkbook> listByResourceGroup(String resourceGroupName, CategoryType category);
 
@@ -38,15 +39,11 @@ public interface MyWorkbooks {
      * @throws com.azure.resourcemanager.applicationinsights.models.ErrorDefinitionException thrown if the request is
      *     rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all private workbooks defined within a specified resource group and category.
+     * @return all private workbooks defined within a specified resource group and category as paginated response with
+     *     {@link PagedIterable}.
      */
-    PagedIterable<MyWorkbook> listByResourceGroup(
-        String resourceGroupName,
-        CategoryType category,
-        List<String> tags,
-        String sourceId,
-        Boolean canFetchContent,
-        Context context);
+    PagedIterable<MyWorkbook> listByResourceGroup(String resourceGroupName, CategoryType category, List<String> tags,
+        String sourceId, Boolean canFetchContent, Context context);
 
     /**
      * Get all private workbooks defined within a specified subscription and category.
@@ -56,7 +53,8 @@ public interface MyWorkbooks {
      * @throws com.azure.resourcemanager.applicationinsights.models.ErrorDefinitionException thrown if the request is
      *     rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all private workbooks defined within a specified subscription and category.
+     * @return all private workbooks defined within a specified subscription and category as paginated response with
+     *     {@link PagedIterable}.
      */
     PagedIterable<MyWorkbook> list(CategoryType category);
 
@@ -72,9 +70,24 @@ public interface MyWorkbooks {
      * @throws com.azure.resourcemanager.applicationinsights.models.ErrorDefinitionException thrown if the request is
      *     rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all private workbooks defined within a specified subscription and category.
+     * @return all private workbooks defined within a specified subscription and category as paginated response with
+     *     {@link PagedIterable}.
      */
     PagedIterable<MyWorkbook> list(CategoryType category, List<String> tags, Boolean canFetchContent, Context context);
+
+    /**
+     * Get a single private workbook by its resourceName.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param resourceName The name of the Application Insights component resource.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.resourcemanager.applicationinsights.models.ErrorDefinitionException thrown if the request is
+     *     rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a single private workbook by its resourceName along with {@link Response}.
+     */
+    Response<MyWorkbook> getByResourceGroupWithResponse(String resourceGroupName, String resourceName, Context context);
 
     /**
      * Get a single private workbook by its resourceName.
@@ -90,7 +103,7 @@ public interface MyWorkbooks {
     MyWorkbook getByResourceGroup(String resourceGroupName, String resourceName);
 
     /**
-     * Get a single private workbook by its resourceName.
+     * Delete a private workbook.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param resourceName The name of the Application Insights component resource.
@@ -99,9 +112,9 @@ public interface MyWorkbooks {
      * @throws com.azure.resourcemanager.applicationinsights.models.ErrorDefinitionException thrown if the request is
      *     rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single private workbook by its resourceName.
+     * @return the {@link Response}.
      */
-    Response<MyWorkbook> getByResourceGroupWithResponse(String resourceGroupName, String resourceName, Context context);
+    Response<Void> deleteByResourceGroupWithResponse(String resourceGroupName, String resourceName, Context context);
 
     /**
      * Delete a private workbook.
@@ -116,20 +129,6 @@ public interface MyWorkbooks {
     void deleteByResourceGroup(String resourceGroupName, String resourceName);
 
     /**
-     * Delete a private workbook.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param resourceName The name of the Application Insights component resource.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.resourcemanager.applicationinsights.models.ErrorDefinitionException thrown if the request is
-     *     rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    Response<Void> deleteWithResponse(String resourceGroupName, String resourceName, Context context);
-
-    /**
      * Get a single private workbook by its resourceName.
      *
      * @param id the resource ID.
@@ -137,7 +136,7 @@ public interface MyWorkbooks {
      * @throws com.azure.resourcemanager.applicationinsights.models.ErrorDefinitionException thrown if the request is
      *     rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single private workbook by its resourceName.
+     * @return a single private workbook by its resourceName along with {@link Response}.
      */
     MyWorkbook getById(String id);
 
@@ -150,7 +149,7 @@ public interface MyWorkbooks {
      * @throws com.azure.resourcemanager.applicationinsights.models.ErrorDefinitionException thrown if the request is
      *     rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single private workbook by its resourceName.
+     * @return a single private workbook by its resourceName along with {@link Response}.
      */
     Response<MyWorkbook> getByIdWithResponse(String id, Context context);
 
@@ -174,7 +173,7 @@ public interface MyWorkbooks {
      * @throws com.azure.resourcemanager.applicationinsights.models.ErrorDefinitionException thrown if the request is
      *     rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
     Response<Void> deleteByIdWithResponse(String id, Context context);
 

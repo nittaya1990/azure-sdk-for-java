@@ -5,22 +5,22 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.models.ApiContractUpdateProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** API update contract details. */
 @Fluent
 public final class ApiUpdateContract {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApiUpdateContract.class);
-
     /*
      * Properties of the API entity that can be updated.
      */
     @JsonProperty(value = "properties")
     private ApiContractUpdateProperties innerProperties;
+
+    /** Creates an instance of ApiUpdateContract class. */
+    public ApiUpdateContract() {
+    }
 
     /**
      * Get the innerProperties property: Properties of the API entity that can be updated.
@@ -188,8 +188,8 @@ public final class ApiUpdateContract {
      * @param subscriptionKeyParameterNames the subscriptionKeyParameterNames value to set.
      * @return the ApiUpdateContract object itself.
      */
-    public ApiUpdateContract withSubscriptionKeyParameterNames(
-        SubscriptionKeyParameterNamesContract subscriptionKeyParameterNames) {
+    public ApiUpdateContract
+        withSubscriptionKeyParameterNames(SubscriptionKeyParameterNamesContract subscriptionKeyParameterNames) {
         if (this.innerProperties() == null) {
             this.innerProperties = new ApiContractUpdateProperties();
         }
@@ -221,7 +221,7 @@ public final class ApiUpdateContract {
     }
 
     /**
-     * Get the apiRevision property: Describes the Revision of the Api. If no value is provided, default revision 1 is
+     * Get the apiRevision property: Describes the revision of the API. If no value is provided, default revision 1 is
      * created.
      *
      * @return the apiRevision value.
@@ -231,7 +231,7 @@ public final class ApiUpdateContract {
     }
 
     /**
-     * Set the apiRevision property: Describes the Revision of the Api. If no value is provided, default revision 1 is
+     * Set the apiRevision property: Describes the revision of the API. If no value is provided, default revision 1 is
      * created.
      *
      * @param apiRevision the apiRevision value to set.
@@ -246,7 +246,7 @@ public final class ApiUpdateContract {
     }
 
     /**
-     * Get the apiVersion property: Indicates the Version identifier of the API if the API is versioned.
+     * Get the apiVersion property: Indicates the version identifier of the API if the API is versioned.
      *
      * @return the apiVersion value.
      */
@@ -255,7 +255,7 @@ public final class ApiUpdateContract {
     }
 
     /**
-     * Set the apiVersion property: Indicates the Version identifier of the API if the API is versioned.
+     * Set the apiVersion property: Indicates the version identifier of the API if the API is versioned.
      *
      * @param apiVersion the apiVersion value to set.
      * @return the ApiUpdateContract object itself.
@@ -301,7 +301,7 @@ public final class ApiUpdateContract {
     }
 
     /**
-     * Get the apiRevisionDescription property: Description of the Api Revision.
+     * Get the apiRevisionDescription property: Description of the API Revision.
      *
      * @return the apiRevisionDescription value.
      */
@@ -310,7 +310,7 @@ public final class ApiUpdateContract {
     }
 
     /**
-     * Set the apiRevisionDescription property: Description of the Api Revision.
+     * Set the apiRevisionDescription property: Description of the API Revision.
      *
      * @param apiRevisionDescription the apiRevisionDescription value to set.
      * @return the ApiUpdateContract object itself.
@@ -324,7 +324,7 @@ public final class ApiUpdateContract {
     }
 
     /**
-     * Get the apiVersionDescription property: Description of the Api Version.
+     * Get the apiVersionDescription property: Description of the API Version.
      *
      * @return the apiVersionDescription value.
      */
@@ -333,7 +333,7 @@ public final class ApiUpdateContract {
     }
 
     /**
-     * Set the apiVersionDescription property: Description of the Api Version.
+     * Set the apiVersionDescription property: Description of the API Version.
      *
      * @param apiVersionDescription the apiVersionDescription value to set.
      * @return the ApiUpdateContract object itself.
@@ -391,6 +391,75 @@ public final class ApiUpdateContract {
             this.innerProperties = new ApiContractUpdateProperties();
         }
         this.innerProperties().withSubscriptionRequired(subscriptionRequired);
+        return this;
+    }
+
+    /**
+     * Get the termsOfServiceUrl property: A URL to the Terms of Service for the API. MUST be in the format of a URL.
+     *
+     * @return the termsOfServiceUrl value.
+     */
+    public String termsOfServiceUrl() {
+        return this.innerProperties() == null ? null : this.innerProperties().termsOfServiceUrl();
+    }
+
+    /**
+     * Set the termsOfServiceUrl property: A URL to the Terms of Service for the API. MUST be in the format of a URL.
+     *
+     * @param termsOfServiceUrl the termsOfServiceUrl value to set.
+     * @return the ApiUpdateContract object itself.
+     */
+    public ApiUpdateContract withTermsOfServiceUrl(String termsOfServiceUrl) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new ApiContractUpdateProperties();
+        }
+        this.innerProperties().withTermsOfServiceUrl(termsOfServiceUrl);
+        return this;
+    }
+
+    /**
+     * Get the contact property: Contact information for the API.
+     *
+     * @return the contact value.
+     */
+    public ApiContactInformation contact() {
+        return this.innerProperties() == null ? null : this.innerProperties().contact();
+    }
+
+    /**
+     * Set the contact property: Contact information for the API.
+     *
+     * @param contact the contact value to set.
+     * @return the ApiUpdateContract object itself.
+     */
+    public ApiUpdateContract withContact(ApiContactInformation contact) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new ApiContractUpdateProperties();
+        }
+        this.innerProperties().withContact(contact);
+        return this;
+    }
+
+    /**
+     * Get the license property: License information for the API.
+     *
+     * @return the license value.
+     */
+    public ApiLicenseInformation license() {
+        return this.innerProperties() == null ? null : this.innerProperties().license();
+    }
+
+    /**
+     * Set the license property: License information for the API.
+     *
+     * @param license the license value to set.
+     * @return the ApiUpdateContract object itself.
+     */
+    public ApiUpdateContract withLicense(ApiLicenseInformation license) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new ApiContractUpdateProperties();
+        }
+        this.innerProperties().withLicense(license);
         return this;
     }
 

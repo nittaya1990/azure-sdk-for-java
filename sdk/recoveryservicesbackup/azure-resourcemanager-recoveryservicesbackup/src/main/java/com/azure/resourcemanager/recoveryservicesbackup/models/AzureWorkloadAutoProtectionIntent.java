@@ -4,58 +4,91 @@
 
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
-import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.azure.core.annotation.Fluent;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** Azure Recovery Services Vault specific protection intent item. */
+/**
+ * Azure Recovery Services Vault specific protection intent item.
+ */
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
-    include = JsonTypeInfo.As.PROPERTY,
     property = "protectionIntentItemType",
-    defaultImpl = AzureWorkloadAutoProtectionIntent.class)
+    defaultImpl = AzureWorkloadAutoProtectionIntent.class,
+    visible = true)
 @JsonTypeName("AzureWorkloadAutoProtectionIntent")
 @JsonSubTypes({
     @JsonSubTypes.Type(
         name = "AzureWorkloadSQLAutoProtectionIntent",
-        value = AzureWorkloadSqlAutoProtectionIntent.class)
-})
-@Immutable
+        value = AzureWorkloadSqlAutoProtectionIntent.class) })
+@Fluent
 public class AzureWorkloadAutoProtectionIntent extends AzureRecoveryServiceVaultProtectionIntent {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureWorkloadAutoProtectionIntent.class);
+    /*
+     * backup protectionIntent type.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "protectionIntentItemType", required = true)
+    private ProtectionIntentItemType protectionIntentItemType
+        = ProtectionIntentItemType.AZURE_WORKLOAD_AUTO_PROTECTION_INTENT;
 
-    /** {@inheritDoc} */
+    /**
+     * Creates an instance of AzureWorkloadAutoProtectionIntent class.
+     */
+    public AzureWorkloadAutoProtectionIntent() {
+    }
+
+    /**
+     * Get the protectionIntentItemType property: backup protectionIntent type.
+     * 
+     * @return the protectionIntentItemType value.
+     */
+    @Override
+    public ProtectionIntentItemType protectionIntentItemType() {
+        return this.protectionIntentItemType;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureWorkloadAutoProtectionIntent withBackupManagementType(BackupManagementType backupManagementType) {
         super.withBackupManagementType(backupManagementType);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureWorkloadAutoProtectionIntent withSourceResourceId(String sourceResourceId) {
         super.withSourceResourceId(sourceResourceId);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureWorkloadAutoProtectionIntent withItemId(String itemId) {
         super.withItemId(itemId);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureWorkloadAutoProtectionIntent withPolicyId(String policyId) {
         super.withPolicyId(policyId);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureWorkloadAutoProtectionIntent withProtectionState(ProtectionStatus protectionState) {
         super.withProtectionState(protectionState);
@@ -64,7 +97,7 @@ public class AzureWorkloadAutoProtectionIntent extends AzureRecoveryServiceVault
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

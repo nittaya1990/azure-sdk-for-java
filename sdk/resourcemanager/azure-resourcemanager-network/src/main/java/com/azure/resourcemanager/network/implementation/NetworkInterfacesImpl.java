@@ -19,14 +19,14 @@ import com.azure.resourcemanager.resources.fluentcore.arm.ResourceUtils;
 import com.azure.resourcemanager.resources.fluentcore.arm.collection.implementation.TopLevelModifiableResourcesImpl;
 import com.azure.resourcemanager.resources.fluentcore.model.Accepted;
 import com.azure.resourcemanager.resources.fluentcore.model.implementation.AcceptedImpl;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.function.Function;
 
 /** Implementation for {@link NetworkInterfaces}. */
-public class NetworkInterfacesImpl
-    extends TopLevelModifiableResourcesImpl<
-        NetworkInterface, NetworkInterfaceImpl, NetworkInterfaceInner, NetworkInterfacesClient, NetworkManager>
+public class NetworkInterfacesImpl extends
+    TopLevelModifiableResourcesImpl<NetworkInterface, NetworkInterfaceImpl, NetworkInterfaceInner, NetworkInterfacesClient, NetworkManager>
     implements NetworkInterfaces {
 
     private final ClientLogger logger = new ClientLogger(this.getClass());
@@ -36,40 +36,48 @@ public class NetworkInterfacesImpl
     }
 
     @Override
-    public VirtualMachineScaleSetNetworkInterface getByVirtualMachineScaleSetInstanceId(
-        String resourceGroupName, String scaleSetName, String instanceId, String name) {
-        VirtualMachineScaleSetNetworkInterfacesImpl scaleSetNetworkInterfaces =
-            new VirtualMachineScaleSetNetworkInterfacesImpl(resourceGroupName, scaleSetName, this.manager());
+    public VirtualMachineScaleSetNetworkInterface getByVirtualMachineScaleSetInstanceId(String resourceGroupName,
+        String scaleSetName, String instanceId, String name) {
+        VirtualMachineScaleSetNetworkInterfacesImpl scaleSetNetworkInterfaces
+            = new VirtualMachineScaleSetNetworkInterfacesImpl(resourceGroupName, scaleSetName, this.manager());
         return scaleSetNetworkInterfaces.getByVirtualMachineInstanceId(instanceId, name);
     }
 
     @Override
-    public PagedIterable<VirtualMachineScaleSetNetworkInterface> listByVirtualMachineScaleSet(
-        String resourceGroupName, String scaleSetName) {
-        VirtualMachineScaleSetNetworkInterfacesImpl scaleSetNetworkInterfaces =
-            new VirtualMachineScaleSetNetworkInterfacesImpl(resourceGroupName, scaleSetName, this.manager());
+    public Mono<VirtualMachineScaleSetNetworkInterface> getByVirtualMachineScaleSetInstanceIdAsync(
+        String resourceGroupName, String scaleSetName, String instanceId, String name) {
+        VirtualMachineScaleSetNetworkInterfacesImpl scaleSetNetworkInterfaces
+            = new VirtualMachineScaleSetNetworkInterfacesImpl(resourceGroupName, scaleSetName, this.manager());
+        return scaleSetNetworkInterfaces.getByVirtualMachineInstanceIdAsync(instanceId, name);
+    }
+
+    @Override
+    public PagedIterable<VirtualMachineScaleSetNetworkInterface> listByVirtualMachineScaleSet(String resourceGroupName,
+        String scaleSetName) {
+        VirtualMachineScaleSetNetworkInterfacesImpl scaleSetNetworkInterfaces
+            = new VirtualMachineScaleSetNetworkInterfacesImpl(resourceGroupName, scaleSetName, this.manager());
         return scaleSetNetworkInterfaces.list();
     }
 
     @Override
     public PagedIterable<VirtualMachineScaleSetNetworkInterface> listByVirtualMachineScaleSetId(String id) {
-        return this
-            .listByVirtualMachineScaleSet(ResourceUtils.groupFromResourceId(id), ResourceUtils.nameFromResourceId(id));
+        return this.listByVirtualMachineScaleSet(ResourceUtils.groupFromResourceId(id),
+            ResourceUtils.nameFromResourceId(id));
     }
 
     @Override
-    public PagedIterable<VirtualMachineScaleSetNetworkInterface> listByVirtualMachineScaleSetInstanceId(
-        String resourceGroupName, String scaleSetName, String instanceId) {
-        VirtualMachineScaleSetNetworkInterfacesImpl scaleSetNetworkInterfaces =
-            new VirtualMachineScaleSetNetworkInterfacesImpl(resourceGroupName, scaleSetName, this.manager());
+    public PagedIterable<VirtualMachineScaleSetNetworkInterface>
+        listByVirtualMachineScaleSetInstanceId(String resourceGroupName, String scaleSetName, String instanceId) {
+        VirtualMachineScaleSetNetworkInterfacesImpl scaleSetNetworkInterfaces
+            = new VirtualMachineScaleSetNetworkInterfacesImpl(resourceGroupName, scaleSetName, this.manager());
         return scaleSetNetworkInterfaces.listByVirtualMachineInstanceId(instanceId);
     }
 
     @Override
-    public PagedFlux<VirtualMachineScaleSetNetworkInterface> listByVirtualMachineScaleSetInstanceIdAsync(
-        String resourceGroupName, String scaleSetName, String instanceId) {
-        VirtualMachineScaleSetNetworkInterfacesImpl scaleSetNetworkInterfaces =
-            new VirtualMachineScaleSetNetworkInterfacesImpl(resourceGroupName, scaleSetName, this.manager());
+    public PagedFlux<VirtualMachineScaleSetNetworkInterface>
+        listByVirtualMachineScaleSetInstanceIdAsync(String resourceGroupName, String scaleSetName, String instanceId) {
+        VirtualMachineScaleSetNetworkInterfacesImpl scaleSetNetworkInterfaces
+            = new VirtualMachineScaleSetNetworkInterfacesImpl(resourceGroupName, scaleSetName, this.manager());
         return scaleSetNetworkInterfaces.listByVirtualMachineInstanceIdAsync(instanceId);
     }
 
@@ -101,15 +109,9 @@ public class NetworkInterfacesImpl
 
     @Override
     public Accepted<Void> beginDeleteByResourceGroup(String resourceGroupName, String name) {
-        return AcceptedImpl
-            .newAccepted(
-                logger,
-                this.manager().serviceClient().getHttpPipeline(),
-                this.manager().serviceClient().getDefaultPollInterval(),
-                () -> this.inner().deleteWithResponseAsync(resourceGroupName, name).block(),
-                Function.identity(),
-                Void.class,
-                null,
-                Context.NONE);
+        return AcceptedImpl.newAccepted(logger, this.manager().serviceClient().getHttpPipeline(),
+            this.manager().serviceClient().getDefaultPollInterval(),
+            () -> this.inner().deleteWithResponseAsync(resourceGroupName, name).block(), Function.identity(),
+            Void.class, null, Context.NONE);
     }
 }

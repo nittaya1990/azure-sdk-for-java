@@ -16,6 +16,9 @@ import java.util.List;
  */
 @Immutable
 public final class TableTransactionFailedException extends TableServiceException {
+    /**
+     * The index position of the failed transaction in the collection submitted.
+     */
     private final Integer failedTransactionActionIndex;
 
     /**
@@ -32,7 +35,7 @@ public final class TableTransactionFailedException extends TableServiceException
      * {@link TableTransactionAction} failed.
      */
     public TableTransactionFailedException(String message, HttpResponse response, TableServiceError value,
-                                           Integer failedTransactionActionIndex) {
+        Integer failedTransactionActionIndex) {
         super(message, response, value);
 
         this.failedTransactionActionIndex = failedTransactionActionIndex;

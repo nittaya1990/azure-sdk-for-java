@@ -15,12 +15,17 @@ import com.azure.core.management.exception.ManagementException;
 import com.azure.core.management.polling.PollResult;
 import com.azure.core.management.polling.PollerFactory;
 import com.azure.core.util.Context;
+import com.azure.core.util.CoreUtils;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.core.util.polling.AsyncPollResponse;
 import com.azure.core.util.polling.LongRunningOperationStatus;
 import com.azure.core.util.polling.PollerFlux;
 import com.azure.core.util.serializer.SerializerAdapter;
 import com.azure.core.util.serializer.SerializerEncoding;
+import com.azure.resourcemanager.kubernetesconfiguration.fluent.ExtensionsClient;
+import com.azure.resourcemanager.kubernetesconfiguration.fluent.FluxConfigOperationStatusClient;
+import com.azure.resourcemanager.kubernetesconfiguration.fluent.FluxConfigurationsClient;
+import com.azure.resourcemanager.kubernetesconfiguration.fluent.OperationStatusClient;
 import com.azure.resourcemanager.kubernetesconfiguration.fluent.OperationsClient;
 import com.azure.resourcemanager.kubernetesconfiguration.fluent.SourceControlConfigurationClient;
 import com.azure.resourcemanager.kubernetesconfiguration.fluent.SourceControlConfigurationsClient;
@@ -30,20 +35,17 @@ import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
-import java.util.Map;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /** Initializes a new instance of the SourceControlConfigurationClientImpl type. */
 @ServiceClient(builder = SourceControlConfigurationClientBuilder.class)
 public final class SourceControlConfigurationClientImpl implements SourceControlConfigurationClient {
-    private final ClientLogger logger = new ClientLogger(SourceControlConfigurationClientImpl.class);
-
-    /** The Azure subscription ID. This is a GUID-formatted string (e.g. 00000000-0000-0000-0000-000000000000). */
+    /** The ID of the target subscription. */
     private final String subscriptionId;
 
     /**
-     * Gets The Azure subscription ID. This is a GUID-formatted string (e.g. 00000000-0000-0000-0000-000000000000).
+     * Gets The ID of the target subscription.
      *
      * @return the subscriptionId value.
      */
@@ -111,6 +113,54 @@ public final class SourceControlConfigurationClientImpl implements SourceControl
         return this.defaultPollInterval;
     }
 
+    /** The ExtensionsClient object to access its operations. */
+    private final ExtensionsClient extensions;
+
+    /**
+     * Gets the ExtensionsClient object to access its operations.
+     *
+     * @return the ExtensionsClient object.
+     */
+    public ExtensionsClient getExtensions() {
+        return this.extensions;
+    }
+
+    /** The OperationStatusClient object to access its operations. */
+    private final OperationStatusClient operationStatus;
+
+    /**
+     * Gets the OperationStatusClient object to access its operations.
+     *
+     * @return the OperationStatusClient object.
+     */
+    public OperationStatusClient getOperationStatus() {
+        return this.operationStatus;
+    }
+
+    /** The FluxConfigurationsClient object to access its operations. */
+    private final FluxConfigurationsClient fluxConfigurations;
+
+    /**
+     * Gets the FluxConfigurationsClient object to access its operations.
+     *
+     * @return the FluxConfigurationsClient object.
+     */
+    public FluxConfigurationsClient getFluxConfigurations() {
+        return this.fluxConfigurations;
+    }
+
+    /** The FluxConfigOperationStatusClient object to access its operations. */
+    private final FluxConfigOperationStatusClient fluxConfigOperationStatus;
+
+    /**
+     * Gets the FluxConfigOperationStatusClient object to access its operations.
+     *
+     * @return the FluxConfigOperationStatusClient object.
+     */
+    public FluxConfigOperationStatusClient getFluxConfigOperationStatus() {
+        return this.fluxConfigOperationStatus;
+    }
+
     /** The SourceControlConfigurationsClient object to access its operations. */
     private final SourceControlConfigurationsClient sourceControlConfigurations;
 
@@ -142,23 +192,21 @@ public final class SourceControlConfigurationClientImpl implements SourceControl
      * @param serializerAdapter The serializer to serialize an object into a string.
      * @param defaultPollInterval The default poll interval for long-running operation.
      * @param environment The Azure environment.
-     * @param subscriptionId The Azure subscription ID. This is a GUID-formatted string (e.g.
-     *     00000000-0000-0000-0000-000000000000).
+     * @param subscriptionId The ID of the target subscription.
      * @param endpoint server parameter.
      */
-    SourceControlConfigurationClientImpl(
-        HttpPipeline httpPipeline,
-        SerializerAdapter serializerAdapter,
-        Duration defaultPollInterval,
-        AzureEnvironment environment,
-        String subscriptionId,
-        String endpoint) {
+    SourceControlConfigurationClientImpl(HttpPipeline httpPipeline, SerializerAdapter serializerAdapter,
+        Duration defaultPollInterval, AzureEnvironment environment, String subscriptionId, String endpoint) {
         this.httpPipeline = httpPipeline;
         this.serializerAdapter = serializerAdapter;
         this.defaultPollInterval = defaultPollInterval;
         this.subscriptionId = subscriptionId;
         this.endpoint = endpoint;
-        this.apiVersion = "2021-03-01";
+        this.apiVersion = "2023-05-01";
+        this.extensions = new ExtensionsClientImpl(this);
+        this.operationStatus = new OperationStatusClientImpl(this);
+        this.fluxConfigurations = new FluxConfigurationsClientImpl(this);
+        this.fluxConfigOperationStatus = new FluxConfigOperationStatusClientImpl(this);
         this.sourceControlConfigurations = new SourceControlConfigurationsClientImpl(this);
         this.operations = new OperationsClientImpl(this);
     }
@@ -179,10 +227,7 @@ public final class SourceControlConfigurationClientImpl implements SourceControl
      * @return the merged context.
      */
     public Context mergeContext(Context context) {
-        for (Map.Entry<Object, Object> entry : this.getContext().getValues().entrySet()) {
-            context = context.addData(entry.getKey(), entry.getValue());
-        }
-        return context;
+        return CoreUtils.mergeContexts(this.getContext(), context);
     }
 
     /**
@@ -197,21 +242,10 @@ public final class SourceControlConfigurationClientImpl implements SourceControl
      * @param <U> type of final result.
      * @return poller flux for poll result and final result.
      */
-    public <T, U> PollerFlux<PollResult<T>, U> getLroResult(
-        Mono<Response<Flux<ByteBuffer>>> activationResponse,
-        HttpPipeline httpPipeline,
-        Type pollResultType,
-        Type finalResultType,
-        Context context) {
-        return PollerFactory
-            .create(
-                serializerAdapter,
-                httpPipeline,
-                pollResultType,
-                finalResultType,
-                defaultPollInterval,
-                activationResponse,
-                context);
+    public <T, U> PollerFlux<PollResult<T>, U> getLroResult(Mono<Response<Flux<ByteBuffer>>> activationResponse,
+        HttpPipeline httpPipeline, Type pollResultType, Type finalResultType, Context context) {
+        return PollerFactory.create(serializerAdapter, httpPipeline, pollResultType, finalResultType,
+            defaultPollInterval, activationResponse, context);
     }
 
     /**
@@ -229,24 +263,21 @@ public final class SourceControlConfigurationClientImpl implements SourceControl
             HttpResponse errorResponse = null;
             PollResult.Error lroError = response.getValue().getError();
             if (lroError != null) {
-                errorResponse =
-                    new HttpResponseImpl(
-                        lroError.getResponseStatusCode(), lroError.getResponseHeaders(), lroError.getResponseBody());
+                errorResponse = new HttpResponseImpl(lroError.getResponseStatusCode(), lroError.getResponseHeaders(),
+                    lroError.getResponseBody());
 
                 errorMessage = response.getValue().getError().getMessage();
                 String errorBody = response.getValue().getError().getResponseBody();
                 if (errorBody != null) {
                     // try to deserialize error body to ManagementError
                     try {
-                        managementError =
-                            this
-                                .getSerializerAdapter()
-                                .deserialize(errorBody, ManagementError.class, SerializerEncoding.JSON);
+                        managementError = this.getSerializerAdapter()
+                            .deserialize(errorBody, ManagementError.class, SerializerEncoding.JSON);
                         if (managementError.getCode() == null || managementError.getMessage() == null) {
                             managementError = null;
                         }
                     } catch (IOException | RuntimeException ioe) {
-                        logger.logThrowableAsWarning(ioe);
+                        LOGGER.logThrowableAsWarning(ioe);
                     }
                 }
             } else {
@@ -305,4 +336,6 @@ public final class SourceControlConfigurationClientImpl implements SourceControl
             return Mono.just(new String(responseBody, charset));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(SourceControlConfigurationClientImpl.class);
 }

@@ -31,7 +31,6 @@ import com.azure.core.management.exception.ManagementException;
 import com.azure.core.management.polling.PollResult;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.core.util.polling.PollerFlux;
 import com.azure.core.util.polling.SyncPoller;
 import com.azure.resourcemanager.devtestlabs.fluent.ServiceFabricSchedulesClient;
@@ -44,8 +43,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in ServiceFabricSchedulesClient. */
 public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSchedulesClient {
-    private final ClientLogger logger = new ClientLogger(ServiceFabricSchedulesClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final ServiceFabricSchedulesService service;
 
@@ -58,9 +55,8 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @param client the instance of the service client containing this operation class.
      */
     ServiceFabricSchedulesClientImpl(DevTestLabsClientImpl client) {
-        this.service =
-            RestProxy
-                .create(ServiceFabricSchedulesService.class, client.getHttpPipeline(), client.getSerializerAdapter());
+        this.service = RestProxy.create(ServiceFabricSchedulesService.class, client.getHttpPipeline(),
+            client.getSerializerAdapter());
         this.client = client;
     }
 
@@ -70,130 +66,82 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      */
     @Host("{$host}")
     @ServiceInterface(name = "DevTestLabsClientSer")
-    private interface ServiceFabricSchedulesService {
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DevTestLab/labs"
-                + "/{labName}/users/{userName}/servicefabrics/{serviceFabricName}/schedules")
-        @ExpectedResponses({200})
+    public interface ServiceFabricSchedulesService {
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DevTestLab/labs/{labName}/users/{userName}/servicefabrics/{serviceFabricName}/schedules")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<ScheduleList>> list(
-            @HostParam("$host") String endpoint,
+        Mono<Response<ScheduleList>> list(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("labName") String labName,
-            @PathParam("userName") String username,
-            @PathParam("serviceFabricName") String serviceFabricName,
-            @QueryParam("$expand") String expand,
-            @QueryParam("$filter") String filter,
-            @QueryParam("$top") Integer top,
-            @QueryParam("$orderby") String orderby,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("labName") String labName,
+            @PathParam("userName") String username, @PathParam("serviceFabricName") String serviceFabricName,
+            @QueryParam("$expand") String expand, @QueryParam("$filter") String filter, @QueryParam("$top") Integer top,
+            @QueryParam("$orderby") String orderby, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
+
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DevTestLab/labs/{labName}/users/{userName}/servicefabrics/{serviceFabricName}/schedules/{name}")
+        @ExpectedResponses({ 200 })
+        @UnexpectedResponseExceptionType(ManagementException.class)
+        Mono<Response<ScheduleInner>> get(@HostParam("$host") String endpoint,
+            @PathParam("subscriptionId") String subscriptionId,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("labName") String labName,
+            @PathParam("userName") String username, @PathParam("serviceFabricName") String serviceFabricName,
+            @PathParam("name") String name, @QueryParam("$expand") String expand,
+            @QueryParam("api-version") String apiVersion, @HeaderParam("Accept") String accept, Context context);
+
+        @Headers({ "Content-Type: application/json" })
+        @Put("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DevTestLab/labs/{labName}/users/{userName}/servicefabrics/{serviceFabricName}/schedules/{name}")
+        @ExpectedResponses({ 200, 201 })
+        @UnexpectedResponseExceptionType(ManagementException.class)
+        Mono<Response<ScheduleInner>> createOrUpdate(@HostParam("$host") String endpoint,
+            @PathParam("subscriptionId") String subscriptionId,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("labName") String labName,
+            @PathParam("userName") String username, @PathParam("serviceFabricName") String serviceFabricName,
+            @PathParam("name") String name, @QueryParam("api-version") String apiVersion,
+            @BodyParam("application/json") ScheduleInner schedule, @HeaderParam("Accept") String accept,
             Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DevTestLab/labs"
-                + "/{labName}/users/{userName}/servicefabrics/{serviceFabricName}/schedules/{name}")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Delete("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DevTestLab/labs/{labName}/users/{userName}/servicefabrics/{serviceFabricName}/schedules/{name}")
+        @ExpectedResponses({ 200, 204 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<ScheduleInner>> get(
-            @HostParam("$host") String endpoint,
+        Mono<Response<Void>> delete(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("labName") String labName,
-            @PathParam("userName") String username,
-            @PathParam("serviceFabricName") String serviceFabricName,
-            @PathParam("name") String name,
-            @QueryParam("$expand") String expand,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("labName") String labName,
+            @PathParam("userName") String username, @PathParam("serviceFabricName") String serviceFabricName,
+            @PathParam("name") String name, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
+
+        @Headers({ "Content-Type: application/json" })
+        @Patch("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DevTestLab/labs/{labName}/users/{userName}/servicefabrics/{serviceFabricName}/schedules/{name}")
+        @ExpectedResponses({ 200 })
+        @UnexpectedResponseExceptionType(ManagementException.class)
+        Mono<Response<ScheduleInner>> update(@HostParam("$host") String endpoint,
+            @PathParam("subscriptionId") String subscriptionId,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("labName") String labName,
+            @PathParam("userName") String username, @PathParam("serviceFabricName") String serviceFabricName,
+            @PathParam("name") String name, @QueryParam("api-version") String apiVersion,
+            @BodyParam("application/json") ScheduleFragment schedule, @HeaderParam("Accept") String accept,
             Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Put(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DevTestLab/labs"
-                + "/{labName}/users/{userName}/servicefabrics/{serviceFabricName}/schedules/{name}")
-        @ExpectedResponses({200, 201})
+        @Headers({ "Content-Type: application/json" })
+        @Post("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DevTestLab/labs/{labName}/users/{userName}/servicefabrics/{serviceFabricName}/schedules/{name}/execute")
+        @ExpectedResponses({ 200, 202 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<ScheduleInner>> createOrUpdate(
-            @HostParam("$host") String endpoint,
+        Mono<Response<Flux<ByteBuffer>>> execute(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("labName") String labName,
-            @PathParam("userName") String username,
-            @PathParam("serviceFabricName") String serviceFabricName,
-            @PathParam("name") String name,
-            @QueryParam("api-version") String apiVersion,
-            @BodyParam("application/json") ScheduleInner schedule,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("labName") String labName,
+            @PathParam("userName") String username, @PathParam("serviceFabricName") String serviceFabricName,
+            @PathParam("name") String name, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Delete(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DevTestLab/labs"
-                + "/{labName}/users/{userName}/servicefabrics/{serviceFabricName}/schedules/{name}")
-        @ExpectedResponses({200, 204})
-        @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Void>> delete(
-            @HostParam("$host") String endpoint,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("labName") String labName,
-            @PathParam("userName") String username,
-            @PathParam("serviceFabricName") String serviceFabricName,
-            @PathParam("name") String name,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
-
-        @Headers({"Content-Type: application/json"})
-        @Patch(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DevTestLab/labs"
-                + "/{labName}/users/{userName}/servicefabrics/{serviceFabricName}/schedules/{name}")
-        @ExpectedResponses({200})
-        @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<ScheduleInner>> update(
-            @HostParam("$host") String endpoint,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("labName") String labName,
-            @PathParam("userName") String username,
-            @PathParam("serviceFabricName") String serviceFabricName,
-            @PathParam("name") String name,
-            @QueryParam("api-version") String apiVersion,
-            @BodyParam("application/json") ScheduleFragment schedule,
-            @HeaderParam("Accept") String accept,
-            Context context);
-
-        @Headers({"Content-Type: application/json"})
-        @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DevTestLab/labs"
-                + "/{labName}/users/{userName}/servicefabrics/{serviceFabricName}/schedules/{name}/execute")
-        @ExpectedResponses({200, 202})
-        @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> execute(
-            @HostParam("$host") String endpoint,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("labName") String labName,
-            @PathParam("userName") String username,
-            @PathParam("serviceFabricName") String serviceFabricName,
-            @PathParam("name") String name,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
-
-        @Headers({"Content-Type: application/json"})
+        @Headers({ "Content-Type: application/json" })
         @Get("{nextLink}")
-        @ExpectedResponses({200})
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<ScheduleList>> listNext(
-            @PathParam(value = "nextLink", encoded = true) String nextLink,
-            @HostParam("$host") String endpoint,
-            @HeaderParam("Accept") String accept,
-            Context context);
+        Mono<Response<ScheduleList>> listNext(@PathParam(value = "nextLink", encoded = true) String nextLink,
+            @HostParam("$host") String endpoint, @HeaderParam("Accept") String accept, Context context);
     }
 
     /**
@@ -210,29 +158,19 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<ScheduleInner>> listSinglePageAsync(
-        String resourceGroupName,
-        String labName,
-        String username,
-        String serviceFabricName,
-        String expand,
-        String filter,
-        Integer top,
-        String orderby) {
+    private Mono<PagedResponse<ScheduleInner>> listSinglePageAsync(String resourceGroupName, String labName,
+        String username, String serviceFabricName, String expand, String filter, Integer top, String orderby) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -250,32 +188,11 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .list(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            labName,
-                            username,
-                            serviceFabricName,
-                            expand,
-                            filter,
-                            top,
-                            orderby,
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
-            .<PagedResponse<ScheduleInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null))
+            .withContext(context -> service.list(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                resourceGroupName, labName, username, serviceFabricName, expand, filter, top, orderby,
+                this.client.getApiVersion(), accept, context))
+            .<PagedResponse<ScheduleInner>>map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(),
+                res.getHeaders(), res.getValue().value(), res.getValue().nextLink(), null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -294,30 +211,20 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<ScheduleInner>> listSinglePageAsync(
-        String resourceGroupName,
-        String labName,
-        String username,
-        String serviceFabricName,
-        String expand,
-        String filter,
-        Integer top,
-        String orderby,
+    private Mono<PagedResponse<ScheduleInner>> listSinglePageAsync(String resourceGroupName, String labName,
+        String username, String serviceFabricName, String expand, String filter, Integer top, String orderby,
         Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -336,29 +243,10 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
         final String accept = "application/json";
         context = this.client.mergeContext(context);
         return service
-            .list(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                labName,
-                username,
-                serviceFabricName,
-                expand,
-                filter,
-                top,
-                orderby,
-                this.client.getApiVersion(),
-                accept,
-                context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null));
+            .list(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName, labName, username,
+                serviceFabricName, expand, filter, top, orderby, this.client.getApiVersion(), accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), res.getValue().nextLink(), null));
     }
 
     /**
@@ -375,23 +263,13 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<ScheduleInner> listAsync(
-        String resourceGroupName,
-        String labName,
-        String username,
-        String serviceFabricName,
-        String expand,
-        String filter,
-        Integer top,
-        String orderby) {
-        return new PagedFlux<>(
-            () ->
-                listSinglePageAsync(
-                    resourceGroupName, labName, username, serviceFabricName, expand, filter, top, orderby),
-            nextLink -> listNextSinglePageAsync(nextLink));
+    private PagedFlux<ScheduleInner> listAsync(String resourceGroupName, String labName, String username,
+        String serviceFabricName, String expand, String filter, Integer top, String orderby) {
+        return new PagedFlux<>(() -> listSinglePageAsync(resourceGroupName, labName, username, serviceFabricName,
+            expand, filter, top, orderby), nextLink -> listNextSinglePageAsync(nextLink));
     }
 
     /**
@@ -404,20 +282,17 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<ScheduleInner> listAsync(
-        String resourceGroupName, String labName, String username, String serviceFabricName) {
+    private PagedFlux<ScheduleInner> listAsync(String resourceGroupName, String labName, String username,
+        String serviceFabricName) {
         final String expand = null;
         final String filter = null;
         final Integer top = null;
         final String orderby = null;
-        return new PagedFlux<>(
-            () ->
-                listSinglePageAsync(
-                    resourceGroupName, labName, username, serviceFabricName, expand, filter, top, orderby),
-            nextLink -> listNextSinglePageAsync(nextLink));
+        return new PagedFlux<>(() -> listSinglePageAsync(resourceGroupName, labName, username, serviceFabricName,
+            expand, filter, top, orderby), nextLink -> listNextSinglePageAsync(nextLink));
     }
 
     /**
@@ -435,24 +310,13 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<ScheduleInner> listAsync(
-        String resourceGroupName,
-        String labName,
-        String username,
-        String serviceFabricName,
-        String expand,
-        String filter,
-        Integer top,
-        String orderby,
-        Context context) {
-        return new PagedFlux<>(
-            () ->
-                listSinglePageAsync(
-                    resourceGroupName, labName, username, serviceFabricName, expand, filter, top, orderby, context),
-            nextLink -> listNextSinglePageAsync(nextLink, context));
+    private PagedFlux<ScheduleInner> listAsync(String resourceGroupName, String labName, String username,
+        String serviceFabricName, String expand, String filter, Integer top, String orderby, Context context) {
+        return new PagedFlux<>(() -> listSinglePageAsync(resourceGroupName, labName, username, serviceFabricName,
+            expand, filter, top, orderby, context), nextLink -> listNextSinglePageAsync(nextLink, context));
     }
 
     /**
@@ -465,11 +329,11 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<ScheduleInner> list(
-        String resourceGroupName, String labName, String username, String serviceFabricName) {
+    public PagedIterable<ScheduleInner> list(String resourceGroupName, String labName, String username,
+        String serviceFabricName) {
         final String expand = null;
         final String filter = null;
         final Integer top = null;
@@ -493,19 +357,11 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<ScheduleInner> list(
-        String resourceGroupName,
-        String labName,
-        String username,
-        String serviceFabricName,
-        String expand,
-        String filter,
-        Integer top,
-        String orderby,
-        Context context) {
+    public PagedIterable<ScheduleInner> list(String resourceGroupName, String labName, String username,
+        String serviceFabricName, String expand, String filter, Integer top, String orderby, Context context) {
         return new PagedIterable<>(
             listAsync(resourceGroupName, labName, username, serviceFabricName, expand, filter, top, orderby, context));
     }
@@ -522,27 +378,18 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return schedule.
+     * @return schedule along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<ScheduleInner>> getWithResponseAsync(
-        String resourceGroupName,
-        String labName,
-        String username,
-        String serviceFabricName,
-        String name,
-        String expand) {
+    private Mono<Response<ScheduleInner>> getWithResponseAsync(String resourceGroupName, String labName,
+        String username, String serviceFabricName, String name, String expand) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -564,20 +411,8 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
         final String accept = "application/json";
         return FluxUtil
             .withContext(
-                context ->
-                    service
-                        .get(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            labName,
-                            username,
-                            serviceFabricName,
-                            name,
-                            expand,
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
+                context -> service.get(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+                    labName, username, serviceFabricName, name, expand, this.client.getApiVersion(), accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -594,28 +429,18 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return schedule.
+     * @return schedule along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<ScheduleInner>> getWithResponseAsync(
-        String resourceGroupName,
-        String labName,
-        String username,
-        String serviceFabricName,
-        String name,
-        String expand,
-        Context context) {
+    private Mono<Response<ScheduleInner>> getWithResponseAsync(String resourceGroupName, String labName,
+        String username, String serviceFabricName, String name, String expand, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -636,52 +461,8 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .get(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                labName,
-                username,
-                serviceFabricName,
-                name,
-                expand,
-                this.client.getApiVersion(),
-                accept,
-                context);
-    }
-
-    /**
-     * Get schedule.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param labName The name of the lab.
-     * @param username The name of the user profile.
-     * @param serviceFabricName The name of the service fabric.
-     * @param name The name of the schedule.
-     * @param expand Specify the $expand query. Example: 'properties($select=status)'.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return schedule.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<ScheduleInner> getAsync(
-        String resourceGroupName,
-        String labName,
-        String username,
-        String serviceFabricName,
-        String name,
-        String expand) {
-        return getWithResponseAsync(resourceGroupName, labName, username, serviceFabricName, name, expand)
-            .flatMap(
-                (Response<ScheduleInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+        return service.get(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName, labName,
+            username, serviceFabricName, name, expand, this.client.getApiVersion(), accept, context);
     }
 
     /**
@@ -695,41 +476,14 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return schedule.
+     * @return schedule on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<ScheduleInner> getAsync(
-        String resourceGroupName, String labName, String username, String serviceFabricName, String name) {
+    private Mono<ScheduleInner> getAsync(String resourceGroupName, String labName, String username,
+        String serviceFabricName, String name) {
         final String expand = null;
         return getWithResponseAsync(resourceGroupName, labName, username, serviceFabricName, name, expand)
-            .flatMap(
-                (Response<ScheduleInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
-    }
-
-    /**
-     * Get schedule.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param labName The name of the lab.
-     * @param username The name of the user profile.
-     * @param serviceFabricName The name of the service fabric.
-     * @param name The name of the schedule.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return schedule.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public ScheduleInner get(
-        String resourceGroupName, String labName, String username, String serviceFabricName, String name) {
-        final String expand = null;
-        return getAsync(resourceGroupName, labName, username, serviceFabricName, name, expand).block();
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
@@ -745,22 +499,37 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return schedule.
+     * @return schedule along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<ScheduleInner> getWithResponse(
-        String resourceGroupName,
-        String labName,
-        String username,
-        String serviceFabricName,
-        String name,
-        String expand,
-        Context context) {
+    public Response<ScheduleInner> getWithResponse(String resourceGroupName, String labName, String username,
+        String serviceFabricName, String name, String expand, Context context) {
         return getWithResponseAsync(resourceGroupName, labName, username, serviceFabricName, name, expand, context)
             .block();
     }
 
     /**
+     * Get schedule.
+     *
+     * @param resourceGroupName The name of the resource group.
+     * @param labName The name of the lab.
+     * @param username The name of the user profile.
+     * @param serviceFabricName The name of the service fabric.
+     * @param name The name of the schedule.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return schedule.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public ScheduleInner get(String resourceGroupName, String labName, String username, String serviceFabricName,
+        String name) {
+        final String expand = null;
+        return getWithResponse(resourceGroupName, labName, username, serviceFabricName, name, expand, Context.NONE)
+            .getValue();
+    }
+
+    /**
      * Create or replace an existing schedule.
      *
      * @param resourceGroupName The name of the resource group.
@@ -772,27 +541,18 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a schedule.
+     * @return a schedule along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<ScheduleInner>> createOrUpdateWithResponseAsync(
-        String resourceGroupName,
-        String labName,
-        String username,
-        String serviceFabricName,
-        String name,
-        ScheduleInner schedule) {
+    private Mono<Response<ScheduleInner>> createOrUpdateWithResponseAsync(String resourceGroupName, String labName,
+        String username, String serviceFabricName, String name, ScheduleInner schedule) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -818,21 +578,9 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .createOrUpdate(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            labName,
-                            username,
-                            serviceFabricName,
-                            name,
-                            this.client.getApiVersion(),
-                            schedule,
-                            accept,
-                            context))
+            .withContext(context -> service.createOrUpdate(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                resourceGroupName, labName, username, serviceFabricName, name, this.client.getApiVersion(), schedule,
+                accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -849,28 +597,18 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a schedule.
+     * @return a schedule along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<ScheduleInner>> createOrUpdateWithResponseAsync(
-        String resourceGroupName,
-        String labName,
-        String username,
-        String serviceFabricName,
-        String name,
-        ScheduleInner schedule,
-        Context context) {
+    private Mono<Response<ScheduleInner>> createOrUpdateWithResponseAsync(String resourceGroupName, String labName,
+        String username, String serviceFabricName, String name, ScheduleInner schedule, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -896,19 +634,8 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .createOrUpdate(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                labName,
-                username,
-                serviceFabricName,
-                name,
-                this.client.getApiVersion(),
-                schedule,
-                accept,
-                context);
+        return service.createOrUpdate(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+            labName, username, serviceFabricName, name, this.client.getApiVersion(), schedule, accept, context);
     }
 
     /**
@@ -923,50 +650,13 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a schedule.
+     * @return a schedule on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<ScheduleInner> createOrUpdateAsync(
-        String resourceGroupName,
-        String labName,
-        String username,
-        String serviceFabricName,
-        String name,
-        ScheduleInner schedule) {
+    private Mono<ScheduleInner> createOrUpdateAsync(String resourceGroupName, String labName, String username,
+        String serviceFabricName, String name, ScheduleInner schedule) {
         return createOrUpdateWithResponseAsync(resourceGroupName, labName, username, serviceFabricName, name, schedule)
-            .flatMap(
-                (Response<ScheduleInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
-    }
-
-    /**
-     * Create or replace an existing schedule.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param labName The name of the lab.
-     * @param username The name of the user profile.
-     * @param serviceFabricName The name of the service fabric.
-     * @param name The name of the schedule.
-     * @param schedule A schedule.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a schedule.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public ScheduleInner createOrUpdate(
-        String resourceGroupName,
-        String labName,
-        String username,
-        String serviceFabricName,
-        String name,
-        ScheduleInner schedule) {
-        return createOrUpdateAsync(resourceGroupName, labName, username, serviceFabricName, name, schedule).block();
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
@@ -982,20 +672,34 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a schedule along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<ScheduleInner> createOrUpdateWithResponse(String resourceGroupName, String labName, String username,
+        String serviceFabricName, String name, ScheduleInner schedule, Context context) {
+        return createOrUpdateWithResponseAsync(resourceGroupName, labName, username, serviceFabricName, name, schedule,
+            context).block();
+    }
+
+    /**
+     * Create or replace an existing schedule.
+     *
+     * @param resourceGroupName The name of the resource group.
+     * @param labName The name of the lab.
+     * @param username The name of the user profile.
+     * @param serviceFabricName The name of the service fabric.
+     * @param name The name of the schedule.
+     * @param schedule A schedule.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return a schedule.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<ScheduleInner> createOrUpdateWithResponse(
-        String resourceGroupName,
-        String labName,
-        String username,
-        String serviceFabricName,
-        String name,
-        ScheduleInner schedule,
-        Context context) {
-        return createOrUpdateWithResponseAsync(
-                resourceGroupName, labName, username, serviceFabricName, name, schedule, context)
-            .block();
+    public ScheduleInner createOrUpdate(String resourceGroupName, String labName, String username,
+        String serviceFabricName, String name, ScheduleInner schedule) {
+        return createOrUpdateWithResponse(resourceGroupName, labName, username, serviceFabricName, name, schedule,
+            Context.NONE).getValue();
     }
 
     /**
@@ -1009,22 +713,18 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Void>> deleteWithResponseAsync(
-        String resourceGroupName, String labName, String username, String serviceFabricName, String name) {
+    private Mono<Response<Void>> deleteWithResponseAsync(String resourceGroupName, String labName, String username,
+        String serviceFabricName, String name) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1046,19 +746,8 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
         final String accept = "application/json";
         return FluxUtil
             .withContext(
-                context ->
-                    service
-                        .delete(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            labName,
-                            username,
-                            serviceFabricName,
-                            name,
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
+                context -> service.delete(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+                    labName, username, serviceFabricName, name, this.client.getApiVersion(), accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -1074,27 +763,18 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Void>> deleteWithResponseAsync(
-        String resourceGroupName,
-        String labName,
-        String username,
-        String serviceFabricName,
-        String name,
-        Context context) {
+    private Mono<Response<Void>> deleteWithResponseAsync(String resourceGroupName, String labName, String username,
+        String serviceFabricName, String name, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1115,18 +795,8 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .delete(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                labName,
-                username,
-                serviceFabricName,
-                name,
-                this.client.getApiVersion(),
-                accept,
-                context);
+        return service.delete(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName, labName,
+            username, serviceFabricName, name, this.client.getApiVersion(), accept, context);
     }
 
     /**
@@ -1140,31 +810,13 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> deleteAsync(
-        String resourceGroupName, String labName, String username, String serviceFabricName, String name) {
+    private Mono<Void> deleteAsync(String resourceGroupName, String labName, String username, String serviceFabricName,
+        String name) {
         return deleteWithResponseAsync(resourceGroupName, labName, username, serviceFabricName, name)
-            .flatMap((Response<Void> res) -> Mono.empty());
-    }
-
-    /**
-     * Delete schedule.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param labName The name of the lab.
-     * @param username The name of the user profile.
-     * @param serviceFabricName The name of the service fabric.
-     * @param name The name of the schedule.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public void delete(
-        String resourceGroupName, String labName, String username, String serviceFabricName, String name) {
-        deleteAsync(resourceGroupName, labName, username, serviceFabricName, name).block();
+            .flatMap(ignored -> Mono.empty());
     }
 
     /**
@@ -1179,20 +831,33 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> deleteWithResponse(
-        String resourceGroupName,
-        String labName,
-        String username,
-        String serviceFabricName,
-        String name,
-        Context context) {
+    public Response<Void> deleteWithResponse(String resourceGroupName, String labName, String username,
+        String serviceFabricName, String name, Context context) {
         return deleteWithResponseAsync(resourceGroupName, labName, username, serviceFabricName, name, context).block();
     }
 
     /**
+     * Delete schedule.
+     *
+     * @param resourceGroupName The name of the resource group.
+     * @param labName The name of the lab.
+     * @param username The name of the user profile.
+     * @param serviceFabricName The name of the service fabric.
+     * @param name The name of the schedule.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public void delete(String resourceGroupName, String labName, String username, String serviceFabricName,
+        String name) {
+        deleteWithResponse(resourceGroupName, labName, username, serviceFabricName, name, Context.NONE);
+    }
+
+    /**
      * Allows modifying tags of schedules. All other properties will be ignored.
      *
      * @param resourceGroupName The name of the resource group.
@@ -1204,27 +869,18 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a schedule.
+     * @return a schedule along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<ScheduleInner>> updateWithResponseAsync(
-        String resourceGroupName,
-        String labName,
-        String username,
-        String serviceFabricName,
-        String name,
-        ScheduleFragment schedule) {
+    private Mono<Response<ScheduleInner>> updateWithResponseAsync(String resourceGroupName, String labName,
+        String username, String serviceFabricName, String name, ScheduleFragment schedule) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1251,20 +907,8 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
         final String accept = "application/json";
         return FluxUtil
             .withContext(
-                context ->
-                    service
-                        .update(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            labName,
-                            username,
-                            serviceFabricName,
-                            name,
-                            this.client.getApiVersion(),
-                            schedule,
-                            accept,
-                            context))
+                context -> service.update(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+                    labName, username, serviceFabricName, name, this.client.getApiVersion(), schedule, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -1281,28 +925,18 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a schedule.
+     * @return a schedule along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<ScheduleInner>> updateWithResponseAsync(
-        String resourceGroupName,
-        String labName,
-        String username,
-        String serviceFabricName,
-        String name,
-        ScheduleFragment schedule,
-        Context context) {
+    private Mono<Response<ScheduleInner>> updateWithResponseAsync(String resourceGroupName, String labName,
+        String username, String serviceFabricName, String name, ScheduleFragment schedule, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1328,19 +962,8 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .update(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                labName,
-                username,
-                serviceFabricName,
-                name,
-                this.client.getApiVersion(),
-                schedule,
-                accept,
-                context);
+        return service.update(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName, labName,
+            username, serviceFabricName, name, this.client.getApiVersion(), schedule, accept, context);
     }
 
     /**
@@ -1355,50 +978,13 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a schedule.
+     * @return a schedule on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<ScheduleInner> updateAsync(
-        String resourceGroupName,
-        String labName,
-        String username,
-        String serviceFabricName,
-        String name,
-        ScheduleFragment schedule) {
+    private Mono<ScheduleInner> updateAsync(String resourceGroupName, String labName, String username,
+        String serviceFabricName, String name, ScheduleFragment schedule) {
         return updateWithResponseAsync(resourceGroupName, labName, username, serviceFabricName, name, schedule)
-            .flatMap(
-                (Response<ScheduleInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
-    }
-
-    /**
-     * Allows modifying tags of schedules. All other properties will be ignored.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param labName The name of the lab.
-     * @param username The name of the user profile.
-     * @param serviceFabricName The name of the service fabric.
-     * @param name The name of the schedule.
-     * @param schedule A schedule.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a schedule.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public ScheduleInner update(
-        String resourceGroupName,
-        String labName,
-        String username,
-        String serviceFabricName,
-        String name,
-        ScheduleFragment schedule) {
-        return updateAsync(resourceGroupName, labName, username, serviceFabricName, name, schedule).block();
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
@@ -1414,22 +1000,37 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a schedule.
+     * @return a schedule along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<ScheduleInner> updateWithResponse(
-        String resourceGroupName,
-        String labName,
-        String username,
-        String serviceFabricName,
-        String name,
-        ScheduleFragment schedule,
-        Context context) {
+    public Response<ScheduleInner> updateWithResponse(String resourceGroupName, String labName, String username,
+        String serviceFabricName, String name, ScheduleFragment schedule, Context context) {
         return updateWithResponseAsync(resourceGroupName, labName, username, serviceFabricName, name, schedule, context)
             .block();
     }
 
     /**
+     * Allows modifying tags of schedules. All other properties will be ignored.
+     *
+     * @param resourceGroupName The name of the resource group.
+     * @param labName The name of the lab.
+     * @param username The name of the user profile.
+     * @param serviceFabricName The name of the service fabric.
+     * @param name The name of the schedule.
+     * @param schedule A schedule.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a schedule.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public ScheduleInner update(String resourceGroupName, String labName, String username, String serviceFabricName,
+        String name, ScheduleFragment schedule) {
+        return updateWithResponse(resourceGroupName, labName, username, serviceFabricName, name, schedule, Context.NONE)
+            .getValue();
+    }
+
+    /**
      * Execute a schedule. This operation can take a while to complete.
      *
      * @param resourceGroupName The name of the resource group.
@@ -1440,22 +1041,18 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> executeWithResponseAsync(
-        String resourceGroupName, String labName, String username, String serviceFabricName, String name) {
+    private Mono<Response<Flux<ByteBuffer>>> executeWithResponseAsync(String resourceGroupName, String labName,
+        String username, String serviceFabricName, String name) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1476,20 +1073,9 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .execute(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            labName,
-                            username,
-                            serviceFabricName,
-                            name,
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
+            .withContext(context -> service.execute(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                resourceGroupName, labName, username, serviceFabricName, name, this.client.getApiVersion(), accept,
+                context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -1505,27 +1091,18 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> executeWithResponseAsync(
-        String resourceGroupName,
-        String labName,
-        String username,
-        String serviceFabricName,
-        String name,
-        Context context) {
+    private Mono<Response<Flux<ByteBuffer>>> executeWithResponseAsync(String resourceGroupName, String labName,
+        String username, String serviceFabricName, String name, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1546,18 +1123,8 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .execute(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                labName,
-                username,
-                serviceFabricName,
-                name,
-                this.client.getApiVersion(),
-                accept,
-                context);
+        return service.execute(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName, labName,
+            username, serviceFabricName, name, this.client.getApiVersion(), accept, context);
     }
 
     /**
@@ -1571,16 +1138,15 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private PollerFlux<PollResult<Void>, Void> beginExecuteAsync(
-        String resourceGroupName, String labName, String username, String serviceFabricName, String name) {
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            executeWithResponseAsync(resourceGroupName, labName, username, serviceFabricName, name);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, Context.NONE);
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<Void>, Void> beginExecuteAsync(String resourceGroupName, String labName,
+        String username, String serviceFabricName, String name) {
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = executeWithResponseAsync(resourceGroupName, labName, username, serviceFabricName, name);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            this.client.getContext());
     }
 
     /**
@@ -1595,22 +1161,16 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private PollerFlux<PollResult<Void>, Void> beginExecuteAsync(
-        String resourceGroupName,
-        String labName,
-        String username,
-        String serviceFabricName,
-        String name,
-        Context context) {
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<Void>, Void> beginExecuteAsync(String resourceGroupName, String labName,
+        String username, String serviceFabricName, String name, Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            executeWithResponseAsync(resourceGroupName, labName, username, serviceFabricName, name, context);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, context);
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = executeWithResponseAsync(resourceGroupName, labName, username, serviceFabricName, name, context);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            context);
     }
 
     /**
@@ -1624,12 +1184,12 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public SyncPoller<PollResult<Void>, Void> beginExecute(
-        String resourceGroupName, String labName, String username, String serviceFabricName, String name) {
-        return beginExecuteAsync(resourceGroupName, labName, username, serviceFabricName, name).getSyncPoller();
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<Void>, Void> beginExecute(String resourceGroupName, String labName, String username,
+        String serviceFabricName, String name) {
+        return this.beginExecuteAsync(resourceGroupName, labName, username, serviceFabricName, name).getSyncPoller();
     }
 
     /**
@@ -1644,17 +1204,12 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public SyncPoller<PollResult<Void>, Void> beginExecute(
-        String resourceGroupName,
-        String labName,
-        String username,
-        String serviceFabricName,
-        String name,
-        Context context) {
-        return beginExecuteAsync(resourceGroupName, labName, username, serviceFabricName, name, context)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<Void>, Void> beginExecute(String resourceGroupName, String labName, String username,
+        String serviceFabricName, String name, Context context) {
+        return this.beginExecuteAsync(resourceGroupName, labName, username, serviceFabricName, name, context)
             .getSyncPoller();
     }
 
@@ -1669,13 +1224,12 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> executeAsync(
-        String resourceGroupName, String labName, String username, String serviceFabricName, String name) {
-        return beginExecuteAsync(resourceGroupName, labName, username, serviceFabricName, name)
-            .last()
+    private Mono<Void> executeAsync(String resourceGroupName, String labName, String username, String serviceFabricName,
+        String name) {
+        return beginExecuteAsync(resourceGroupName, labName, username, serviceFabricName, name).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
@@ -1691,18 +1245,12 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> executeAsync(
-        String resourceGroupName,
-        String labName,
-        String username,
-        String serviceFabricName,
-        String name,
-        Context context) {
-        return beginExecuteAsync(resourceGroupName, labName, username, serviceFabricName, name, context)
-            .last()
+    private Mono<Void> executeAsync(String resourceGroupName, String labName, String username, String serviceFabricName,
+        String name, Context context) {
+        return beginExecuteAsync(resourceGroupName, labName, username, serviceFabricName, name, context).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
@@ -1719,8 +1267,8 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public void execute(
-        String resourceGroupName, String labName, String username, String serviceFabricName, String name) {
+    public void execute(String resourceGroupName, String labName, String username, String serviceFabricName,
+        String name) {
         executeAsync(resourceGroupName, labName, username, serviceFabricName, name).block();
     }
 
@@ -1738,24 +1286,21 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public void execute(
-        String resourceGroupName,
-        String labName,
-        String username,
-        String serviceFabricName,
-        String name,
-        Context context) {
+    public void execute(String resourceGroupName, String labName, String username, String serviceFabricName,
+        String name, Context context) {
         executeAsync(resourceGroupName, labName, username, serviceFabricName, name, context).block();
     }
 
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ScheduleInner>> listNextSinglePageAsync(String nextLink) {
@@ -1763,35 +1308,27 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
             return Mono.error(new IllegalArgumentException("Parameter nextLink is required and cannot be null."));
         }
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         final String accept = "application/json";
-        return FluxUtil
-            .withContext(context -> service.listNext(nextLink, this.client.getEndpoint(), accept, context))
-            .<PagedResponse<ScheduleInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null))
+        return FluxUtil.withContext(context -> service.listNext(nextLink, this.client.getEndpoint(), accept, context))
+            .<PagedResponse<ScheduleInner>>map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(),
+                res.getHeaders(), res.getValue().value(), res.getValue().nextLink(), null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ScheduleInner>> listNextSinglePageAsync(String nextLink, Context context) {
@@ -1799,23 +1336,13 @@ public final class ServiceFabricSchedulesClientImpl implements ServiceFabricSche
             return Mono.error(new IllegalArgumentException("Parameter nextLink is required and cannot be null."));
         }
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .listNext(nextLink, this.client.getEndpoint(), accept, context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null));
+        return service.listNext(nextLink, this.client.getEndpoint(), accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), res.getValue().nextLink(), null));
     }
 }

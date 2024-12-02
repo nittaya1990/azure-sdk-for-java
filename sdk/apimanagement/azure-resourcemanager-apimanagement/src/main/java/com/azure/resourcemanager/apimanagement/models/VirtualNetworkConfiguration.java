@@ -5,18 +5,13 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Configuration of a virtual network to which API Management service is deployed. */
 @Fluent
 public final class VirtualNetworkConfiguration {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(VirtualNetworkConfiguration.class);
-
     /*
-     * The virtual network ID. This is typically a GUID. Expect a null GUID by
-     * default.
+     * The virtual network ID. This is typically a GUID. Expect a null GUID by default.
      */
     @JsonProperty(value = "vnetid", access = JsonProperty.Access.WRITE_ONLY)
     private String vnetid;
@@ -28,11 +23,14 @@ public final class VirtualNetworkConfiguration {
     private String subnetname;
 
     /*
-     * The full resource ID of a subnet in a virtual network to deploy the API
-     * Management service in.
+     * The full resource ID of a subnet in a virtual network to deploy the API Management service in.
      */
     @JsonProperty(value = "subnetResourceId")
     private String subnetResourceId;
+
+    /** Creates an instance of VirtualNetworkConfiguration class. */
+    public VirtualNetworkConfiguration() {
+    }
 
     /**
      * Get the vnetid property: The virtual network ID. This is typically a GUID. Expect a null GUID by default.

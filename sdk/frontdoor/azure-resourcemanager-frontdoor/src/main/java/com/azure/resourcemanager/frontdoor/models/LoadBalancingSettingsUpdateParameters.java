@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.frontdoor.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Round-Robin load balancing settings for a backend pool. */
+/**
+ * Round-Robin load balancing settings for a backend pool.
+ */
 @Fluent
 public class LoadBalancingSettingsUpdateParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(LoadBalancingSettingsUpdateParameters.class);
-
     /*
      * The number of samples to consider for load balancing decisions
      */
@@ -27,15 +25,20 @@ public class LoadBalancingSettingsUpdateParameters {
     private Integer successfulSamplesRequired;
 
     /*
-     * The additional latency in milliseconds for probes to fall into the
-     * lowest latency bucket
+     * The additional latency in milliseconds for probes to fall into the lowest latency bucket
      */
     @JsonProperty(value = "additionalLatencyMilliseconds")
     private Integer additionalLatencyMilliseconds;
 
     /**
+     * Creates an instance of LoadBalancingSettingsUpdateParameters class.
+     */
+    public LoadBalancingSettingsUpdateParameters() {
+    }
+
+    /**
      * Get the sampleSize property: The number of samples to consider for load balancing decisions.
-     *
+     * 
      * @return the sampleSize value.
      */
     public Integer sampleSize() {
@@ -44,7 +47,7 @@ public class LoadBalancingSettingsUpdateParameters {
 
     /**
      * Set the sampleSize property: The number of samples to consider for load balancing decisions.
-     *
+     * 
      * @param sampleSize the sampleSize value to set.
      * @return the LoadBalancingSettingsUpdateParameters object itself.
      */
@@ -55,7 +58,7 @@ public class LoadBalancingSettingsUpdateParameters {
 
     /**
      * Get the successfulSamplesRequired property: The number of samples within the sample period that must succeed.
-     *
+     * 
      * @return the successfulSamplesRequired value.
      */
     public Integer successfulSamplesRequired() {
@@ -64,7 +67,7 @@ public class LoadBalancingSettingsUpdateParameters {
 
     /**
      * Set the successfulSamplesRequired property: The number of samples within the sample period that must succeed.
-     *
+     * 
      * @param successfulSamplesRequired the successfulSamplesRequired value to set.
      * @return the LoadBalancingSettingsUpdateParameters object itself.
      */
@@ -76,7 +79,7 @@ public class LoadBalancingSettingsUpdateParameters {
     /**
      * Get the additionalLatencyMilliseconds property: The additional latency in milliseconds for probes to fall into
      * the lowest latency bucket.
-     *
+     * 
      * @return the additionalLatencyMilliseconds value.
      */
     public Integer additionalLatencyMilliseconds() {
@@ -86,19 +89,19 @@ public class LoadBalancingSettingsUpdateParameters {
     /**
      * Set the additionalLatencyMilliseconds property: The additional latency in milliseconds for probes to fall into
      * the lowest latency bucket.
-     *
+     * 
      * @param additionalLatencyMilliseconds the additionalLatencyMilliseconds value to set.
      * @return the LoadBalancingSettingsUpdateParameters object itself.
      */
-    public LoadBalancingSettingsUpdateParameters withAdditionalLatencyMilliseconds(
-        Integer additionalLatencyMilliseconds) {
+    public LoadBalancingSettingsUpdateParameters
+        withAdditionalLatencyMilliseconds(Integer additionalLatencyMilliseconds) {
         this.additionalLatencyMilliseconds = additionalLatencyMilliseconds;
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

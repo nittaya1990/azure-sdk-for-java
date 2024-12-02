@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.storagecache.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Properties pertaining to the ClfsTarget. */
+/**
+ * Properties pertaining to the ClfsTarget.
+ */
 @Fluent
 public final class ClfsTarget {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ClfsTarget.class);
-
     /*
      * Resource ID of storage container.
      */
@@ -21,8 +19,14 @@ public final class ClfsTarget {
     private String target;
 
     /**
+     * Creates an instance of ClfsTarget class.
+     */
+    public ClfsTarget() {
+    }
+
+    /**
      * Get the target property: Resource ID of storage container.
-     *
+     * 
      * @return the target value.
      */
     public String target() {
@@ -31,7 +35,7 @@ public final class ClfsTarget {
 
     /**
      * Set the target property: Resource ID of storage container.
-     *
+     * 
      * @param target the target value to set.
      * @return the ClfsTarget object itself.
      */
@@ -42,7 +46,7 @@ public final class ClfsTarget {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

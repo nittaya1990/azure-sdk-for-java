@@ -5,169 +5,53 @@
 package com.azure.resourcemanager.streamanalytics.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import com.azure.resourcemanager.streamanalytics.fluent.models.EventHubStreamInputDataSourceProperties;
+import java.io.IOException;
 
-/** Describes an Event Hub input data source that contains stream data. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@JsonTypeName("Microsoft.EventHub/EventHub")
-@JsonFlatten
+/**
+ * Describes an Event Hub input data source that contains stream data.
+ */
 @Fluent
-public class EventHubV2StreamInputDataSource extends StreamInputDataSource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(EventHubV2StreamInputDataSource.class);
+public final class EventHubV2StreamInputDataSource extends StreamInputDataSource {
+    /*
+     * Indicates the type of input data source containing stream data. Required on PUT (CreateOrReplace) requests.
+     */
+    private String type = "Microsoft.EventHub/EventHub";
 
     /*
-     * The namespace that is associated with the desired Event Hub, Service Bus
-     * Queue, Service Bus Topic, etc. Required on PUT (CreateOrReplace)
-     * requests.
+     * The properties that are associated with an Event Hub input containing stream data. Required on PUT
+     * (CreateOrReplace) requests.
      */
-    @JsonProperty(value = "properties.serviceBusNamespace")
-    private String serviceBusNamespace;
-
-    /*
-     * The shared access policy name for the Event Hub, Service Bus Queue,
-     * Service Bus Topic, etc. Required on PUT (CreateOrReplace) requests.
-     */
-    @JsonProperty(value = "properties.sharedAccessPolicyName")
-    private String sharedAccessPolicyName;
-
-    /*
-     * The shared access policy key for the specified shared access policy.
-     * Required on PUT (CreateOrReplace) requests.
-     */
-    @JsonProperty(value = "properties.sharedAccessPolicyKey")
-    private String sharedAccessPolicyKey;
-
-    /*
-     * Authentication Mode.
-     */
-    @JsonProperty(value = "properties.authenticationMode")
-    private AuthenticationMode authenticationMode;
-
-    /*
-     * The name of the Event Hub. Required on PUT (CreateOrReplace) requests.
-     */
-    @JsonProperty(value = "properties.eventHubName")
-    private String eventHubName;
-
-    /*
-     * The name of an Event Hub Consumer Group that should be used to read
-     * events from the Event Hub. Specifying distinct consumer group names for
-     * multiple inputs allows each of those inputs to receive the same events
-     * from the Event Hub. If not specified, the input uses the Event Hub’s
-     * default consumer group.
-     */
-    @JsonProperty(value = "properties.consumerGroupName")
-    private String consumerGroupName;
+    private EventHubStreamInputDataSourceProperties innerProperties;
 
     /**
-     * Get the serviceBusNamespace property: The namespace that is associated with the desired Event Hub, Service Bus
-     * Queue, Service Bus Topic, etc. Required on PUT (CreateOrReplace) requests.
-     *
-     * @return the serviceBusNamespace value.
+     * Creates an instance of EventHubV2StreamInputDataSource class.
      */
-    public String serviceBusNamespace() {
-        return this.serviceBusNamespace;
+    public EventHubV2StreamInputDataSource() {
     }
 
     /**
-     * Set the serviceBusNamespace property: The namespace that is associated with the desired Event Hub, Service Bus
-     * Queue, Service Bus Topic, etc. Required on PUT (CreateOrReplace) requests.
-     *
-     * @param serviceBusNamespace the serviceBusNamespace value to set.
-     * @return the EventHubV2StreamInputDataSource object itself.
+     * Get the type property: Indicates the type of input data source containing stream data. Required on PUT
+     * (CreateOrReplace) requests.
+     * 
+     * @return the type value.
      */
-    public EventHubV2StreamInputDataSource withServiceBusNamespace(String serviceBusNamespace) {
-        this.serviceBusNamespace = serviceBusNamespace;
-        return this;
+    @Override
+    public String type() {
+        return this.type;
     }
 
     /**
-     * Get the sharedAccessPolicyName property: The shared access policy name for the Event Hub, Service Bus Queue,
-     * Service Bus Topic, etc. Required on PUT (CreateOrReplace) requests.
-     *
-     * @return the sharedAccessPolicyName value.
+     * Get the innerProperties property: The properties that are associated with an Event Hub input containing stream
+     * data. Required on PUT (CreateOrReplace) requests.
+     * 
+     * @return the innerProperties value.
      */
-    public String sharedAccessPolicyName() {
-        return this.sharedAccessPolicyName;
-    }
-
-    /**
-     * Set the sharedAccessPolicyName property: The shared access policy name for the Event Hub, Service Bus Queue,
-     * Service Bus Topic, etc. Required on PUT (CreateOrReplace) requests.
-     *
-     * @param sharedAccessPolicyName the sharedAccessPolicyName value to set.
-     * @return the EventHubV2StreamInputDataSource object itself.
-     */
-    public EventHubV2StreamInputDataSource withSharedAccessPolicyName(String sharedAccessPolicyName) {
-        this.sharedAccessPolicyName = sharedAccessPolicyName;
-        return this;
-    }
-
-    /**
-     * Get the sharedAccessPolicyKey property: The shared access policy key for the specified shared access policy.
-     * Required on PUT (CreateOrReplace) requests.
-     *
-     * @return the sharedAccessPolicyKey value.
-     */
-    public String sharedAccessPolicyKey() {
-        return this.sharedAccessPolicyKey;
-    }
-
-    /**
-     * Set the sharedAccessPolicyKey property: The shared access policy key for the specified shared access policy.
-     * Required on PUT (CreateOrReplace) requests.
-     *
-     * @param sharedAccessPolicyKey the sharedAccessPolicyKey value to set.
-     * @return the EventHubV2StreamInputDataSource object itself.
-     */
-    public EventHubV2StreamInputDataSource withSharedAccessPolicyKey(String sharedAccessPolicyKey) {
-        this.sharedAccessPolicyKey = sharedAccessPolicyKey;
-        return this;
-    }
-
-    /**
-     * Get the authenticationMode property: Authentication Mode.
-     *
-     * @return the authenticationMode value.
-     */
-    public AuthenticationMode authenticationMode() {
-        return this.authenticationMode;
-    }
-
-    /**
-     * Set the authenticationMode property: Authentication Mode.
-     *
-     * @param authenticationMode the authenticationMode value to set.
-     * @return the EventHubV2StreamInputDataSource object itself.
-     */
-    public EventHubV2StreamInputDataSource withAuthenticationMode(AuthenticationMode authenticationMode) {
-        this.authenticationMode = authenticationMode;
-        return this;
-    }
-
-    /**
-     * Get the eventHubName property: The name of the Event Hub. Required on PUT (CreateOrReplace) requests.
-     *
-     * @return the eventHubName value.
-     */
-    public String eventHubName() {
-        return this.eventHubName;
-    }
-
-    /**
-     * Set the eventHubName property: The name of the Event Hub. Required on PUT (CreateOrReplace) requests.
-     *
-     * @param eventHubName the eventHubName value to set.
-     * @return the EventHubV2StreamInputDataSource object itself.
-     */
-    public EventHubV2StreamInputDataSource withEventHubName(String eventHubName) {
-        this.eventHubName = eventHubName;
-        return this;
+    private EventHubStreamInputDataSourceProperties innerProperties() {
+        return this.innerProperties;
     }
 
     /**
@@ -175,11 +59,11 @@ public class EventHubV2StreamInputDataSource extends StreamInputDataSource {
      * from the Event Hub. Specifying distinct consumer group names for multiple inputs allows each of those inputs to
      * receive the same events from the Event Hub. If not specified, the input uses the Event Hub’s default consumer
      * group.
-     *
+     * 
      * @return the consumerGroupName value.
      */
     public String consumerGroupName() {
-        return this.consumerGroupName;
+        return this.innerProperties() == null ? null : this.innerProperties().consumerGroupName();
     }
 
     /**
@@ -187,22 +71,235 @@ public class EventHubV2StreamInputDataSource extends StreamInputDataSource {
      * from the Event Hub. Specifying distinct consumer group names for multiple inputs allows each of those inputs to
      * receive the same events from the Event Hub. If not specified, the input uses the Event Hub’s default consumer
      * group.
-     *
+     * 
      * @param consumerGroupName the consumerGroupName value to set.
      * @return the EventHubV2StreamInputDataSource object itself.
      */
     public EventHubV2StreamInputDataSource withConsumerGroupName(String consumerGroupName) {
-        this.consumerGroupName = consumerGroupName;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventHubStreamInputDataSourceProperties();
+        }
+        this.innerProperties().withConsumerGroupName(consumerGroupName);
+        return this;
+    }
+
+    /**
+     * Get the prefetchCount property: The number of messages that the message receiver can simultaneously request.
+     * 
+     * @return the prefetchCount value.
+     */
+    public Integer prefetchCount() {
+        return this.innerProperties() == null ? null : this.innerProperties().prefetchCount();
+    }
+
+    /**
+     * Set the prefetchCount property: The number of messages that the message receiver can simultaneously request.
+     * 
+     * @param prefetchCount the prefetchCount value to set.
+     * @return the EventHubV2StreamInputDataSource object itself.
+     */
+    public EventHubV2StreamInputDataSource withPrefetchCount(Integer prefetchCount) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventHubStreamInputDataSourceProperties();
+        }
+        this.innerProperties().withPrefetchCount(prefetchCount);
+        return this;
+    }
+
+    /**
+     * Get the eventHubName property: The name of the Event Hub. Required on PUT (CreateOrReplace) requests.
+     * 
+     * @return the eventHubName value.
+     */
+    public String eventHubName() {
+        return this.innerProperties() == null ? null : this.innerProperties().eventHubName();
+    }
+
+    /**
+     * Set the eventHubName property: The name of the Event Hub. Required on PUT (CreateOrReplace) requests.
+     * 
+     * @param eventHubName the eventHubName value to set.
+     * @return the EventHubV2StreamInputDataSource object itself.
+     */
+    public EventHubV2StreamInputDataSource withEventHubName(String eventHubName) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventHubStreamInputDataSourceProperties();
+        }
+        this.innerProperties().withEventHubName(eventHubName);
+        return this;
+    }
+
+    /**
+     * Get the partitionCount property: The partition count of the event hub data source. Range 1 - 256.
+     * 
+     * @return the partitionCount value.
+     */
+    public Integer partitionCount() {
+        return this.innerProperties() == null ? null : this.innerProperties().partitionCount();
+    }
+
+    /**
+     * Set the partitionCount property: The partition count of the event hub data source. Range 1 - 256.
+     * 
+     * @param partitionCount the partitionCount value to set.
+     * @return the EventHubV2StreamInputDataSource object itself.
+     */
+    public EventHubV2StreamInputDataSource withPartitionCount(Integer partitionCount) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventHubStreamInputDataSourceProperties();
+        }
+        this.innerProperties().withPartitionCount(partitionCount);
+        return this;
+    }
+
+    /**
+     * Get the serviceBusNamespace property: The namespace that is associated with the desired Event Hub, Service Bus
+     * Queue, Service Bus Topic, etc. Required on PUT (CreateOrReplace) requests.
+     * 
+     * @return the serviceBusNamespace value.
+     */
+    public String serviceBusNamespace() {
+        return this.innerProperties() == null ? null : this.innerProperties().serviceBusNamespace();
+    }
+
+    /**
+     * Set the serviceBusNamespace property: The namespace that is associated with the desired Event Hub, Service Bus
+     * Queue, Service Bus Topic, etc. Required on PUT (CreateOrReplace) requests.
+     * 
+     * @param serviceBusNamespace the serviceBusNamespace value to set.
+     * @return the EventHubV2StreamInputDataSource object itself.
+     */
+    public EventHubV2StreamInputDataSource withServiceBusNamespace(String serviceBusNamespace) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventHubStreamInputDataSourceProperties();
+        }
+        this.innerProperties().withServiceBusNamespace(serviceBusNamespace);
+        return this;
+    }
+
+    /**
+     * Get the sharedAccessPolicyName property: The shared access policy name for the Event Hub, Service Bus Queue,
+     * Service Bus Topic, etc. Required on PUT (CreateOrReplace) requests.
+     * 
+     * @return the sharedAccessPolicyName value.
+     */
+    public String sharedAccessPolicyName() {
+        return this.innerProperties() == null ? null : this.innerProperties().sharedAccessPolicyName();
+    }
+
+    /**
+     * Set the sharedAccessPolicyName property: The shared access policy name for the Event Hub, Service Bus Queue,
+     * Service Bus Topic, etc. Required on PUT (CreateOrReplace) requests.
+     * 
+     * @param sharedAccessPolicyName the sharedAccessPolicyName value to set.
+     * @return the EventHubV2StreamInputDataSource object itself.
+     */
+    public EventHubV2StreamInputDataSource withSharedAccessPolicyName(String sharedAccessPolicyName) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventHubStreamInputDataSourceProperties();
+        }
+        this.innerProperties().withSharedAccessPolicyName(sharedAccessPolicyName);
+        return this;
+    }
+
+    /**
+     * Get the sharedAccessPolicyKey property: The shared access policy key for the specified shared access policy.
+     * Required on PUT (CreateOrReplace) requests.
+     * 
+     * @return the sharedAccessPolicyKey value.
+     */
+    public String sharedAccessPolicyKey() {
+        return this.innerProperties() == null ? null : this.innerProperties().sharedAccessPolicyKey();
+    }
+
+    /**
+     * Set the sharedAccessPolicyKey property: The shared access policy key for the specified shared access policy.
+     * Required on PUT (CreateOrReplace) requests.
+     * 
+     * @param sharedAccessPolicyKey the sharedAccessPolicyKey value to set.
+     * @return the EventHubV2StreamInputDataSource object itself.
+     */
+    public EventHubV2StreamInputDataSource withSharedAccessPolicyKey(String sharedAccessPolicyKey) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventHubStreamInputDataSourceProperties();
+        }
+        this.innerProperties().withSharedAccessPolicyKey(sharedAccessPolicyKey);
+        return this;
+    }
+
+    /**
+     * Get the authenticationMode property: Authentication Mode.
+     * 
+     * @return the authenticationMode value.
+     */
+    public AuthenticationMode authenticationMode() {
+        return this.innerProperties() == null ? null : this.innerProperties().authenticationMode();
+    }
+
+    /**
+     * Set the authenticationMode property: Authentication Mode.
+     * 
+     * @param authenticationMode the authenticationMode value to set.
+     * @return the EventHubV2StreamInputDataSource object itself.
+     */
+    public EventHubV2StreamInputDataSource withAuthenticationMode(AuthenticationMode authenticationMode) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventHubStreamInputDataSourceProperties();
+        }
+        this.innerProperties().withAuthenticationMode(authenticationMode);
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
-        super.validate();
+        if (innerProperties() != null) {
+            innerProperties().validate();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeStringField("type", this.type);
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of EventHubV2StreamInputDataSource from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of EventHubV2StreamInputDataSource if the JsonReader was pointing to an instance of it, or
+     * null if it was pointing to JSON null.
+     * @throws IOException If an error occurs while reading the EventHubV2StreamInputDataSource.
+     */
+    public static EventHubV2StreamInputDataSource fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            EventHubV2StreamInputDataSource deserializedEventHubV2StreamInputDataSource
+                = new EventHubV2StreamInputDataSource();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("type".equals(fieldName)) {
+                    deserializedEventHubV2StreamInputDataSource.type = reader.getString();
+                } else if ("properties".equals(fieldName)) {
+                    deserializedEventHubV2StreamInputDataSource.innerProperties
+                        = EventHubStreamInputDataSourceProperties.fromJson(reader);
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedEventHubV2StreamInputDataSource;
+        });
     }
 }

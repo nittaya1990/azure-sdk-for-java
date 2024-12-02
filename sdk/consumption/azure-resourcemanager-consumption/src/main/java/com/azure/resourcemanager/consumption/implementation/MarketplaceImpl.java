@@ -17,8 +17,8 @@ public final class MarketplaceImpl implements Marketplace {
 
     private final com.azure.resourcemanager.consumption.ConsumptionManager serviceManager;
 
-    MarketplaceImpl(
-        MarketplaceInner innerObject, com.azure.resourcemanager.consumption.ConsumptionManager serviceManager) {
+    MarketplaceImpl(MarketplaceInner innerObject,
+        com.azure.resourcemanager.consumption.ConsumptionManager serviceManager) {
         this.innerObject = innerObject;
         this.serviceManager = serviceManager;
     }
@@ -33,6 +33,19 @@ public final class MarketplaceImpl implements Marketplace {
 
     public String type() {
         return this.innerModel().type();
+    }
+
+    public String etag() {
+        return this.innerModel().etag();
+    }
+
+    public Map<String, String> tags() {
+        Map<String, String> inner = this.innerModel().tags();
+        if (inner != null) {
+            return Collections.unmodifiableMap(inner);
+        } else {
+            return Collections.emptyMap();
+        }
     }
 
     public String billingPeriodId() {
@@ -137,19 +150,6 @@ public final class MarketplaceImpl implements Marketplace {
 
     public Boolean isRecurringCharge() {
         return this.innerModel().isRecurringCharge();
-    }
-
-    public String etag() {
-        return this.innerModel().etag();
-    }
-
-    public Map<String, String> tags() {
-        Map<String, String> inner = this.innerModel().tags();
-        if (inner != null) {
-            return Collections.unmodifiableMap(inner);
-        } else {
-            return Collections.emptyMap();
-        }
     }
 
     public MarketplaceInner innerModel() {

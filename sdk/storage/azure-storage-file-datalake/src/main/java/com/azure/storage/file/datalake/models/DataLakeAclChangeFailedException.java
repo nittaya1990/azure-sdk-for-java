@@ -10,6 +10,9 @@ import com.azure.core.exception.AzureException;
  */
 public class DataLakeAclChangeFailedException extends AzureException {
 
+    /**
+     * The continuation token returned from the previous successful response.
+     */
     private final String continuationToken;
 
     /**
@@ -39,6 +42,8 @@ public class DataLakeAclChangeFailedException extends AzureException {
     }
 
     /**
+     * Gets the continuation token to resume a datalake recursive acl function.
+     *
      * @return the continuation token to resume a datalake recursive acl function.
      */
     public String getContinuationToken() {

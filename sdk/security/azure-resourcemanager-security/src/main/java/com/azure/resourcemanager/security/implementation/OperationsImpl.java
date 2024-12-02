@@ -11,29 +11,28 @@ import com.azure.resourcemanager.security.fluent.OperationsClient;
 import com.azure.resourcemanager.security.fluent.models.OperationInner;
 import com.azure.resourcemanager.security.models.Operation;
 import com.azure.resourcemanager.security.models.Operations;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class OperationsImpl implements Operations {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OperationsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(OperationsImpl.class);
 
     private final OperationsClient innerClient;
 
     private final com.azure.resourcemanager.security.SecurityManager serviceManager;
 
-    public OperationsImpl(
-        OperationsClient innerClient, com.azure.resourcemanager.security.SecurityManager serviceManager) {
+    public OperationsImpl(OperationsClient innerClient,
+        com.azure.resourcemanager.security.SecurityManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
     }
 
     public PagedIterable<Operation> list() {
         PagedIterable<OperationInner> inner = this.serviceClient().list();
-        return Utils.mapPage(inner, inner1 -> new OperationImpl(inner1, this.manager()));
+        return ResourceManagerUtils.mapPage(inner, inner1 -> new OperationImpl(inner1, this.manager()));
     }
 
     public PagedIterable<Operation> list(Context context) {
         PagedIterable<OperationInner> inner = this.serviceClient().list(context);
-        return Utils.mapPage(inner, inner1 -> new OperationImpl(inner1, this.manager()));
+        return ResourceManagerUtils.mapPage(inner, inner1 -> new OperationImpl(inner1, this.manager()));
     }
 
     private OperationsClient serviceClient() {

@@ -7,30 +7,34 @@ package com.azure.resourcemanager.eventgrid.fluent.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.ProxyResource;
 import com.azure.core.management.SystemData;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Event grid Extension Topic. This is used for getting Event Grid related metrics for Azure resources. */
+/**
+ * Event grid Extension Topic. This is used for getting Event Grid related metrics for Azure resources.
+ */
 @Fluent
 public final class ExtensionTopicInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ExtensionTopicInner.class);
-
     /*
-     * Properties of the extension topic
+     * Properties of the extension topic.
      */
     @JsonProperty(value = "properties")
     private ExtensionTopicProperties innerProperties;
 
     /*
-     * The system metadata relating to the Extension Topic resource.
+     * The system metadata relating to Extension Topic resource.
      */
     @JsonProperty(value = "systemData", access = JsonProperty.Access.WRITE_ONLY)
     private SystemData systemData;
 
     /**
+     * Creates an instance of ExtensionTopicInner class.
+     */
+    public ExtensionTopicInner() {
+    }
+
+    /**
      * Get the innerProperties property: Properties of the extension topic.
-     *
+     * 
      * @return the innerProperties value.
      */
     private ExtensionTopicProperties innerProperties() {
@@ -38,8 +42,8 @@ public final class ExtensionTopicInner extends ProxyResource {
     }
 
     /**
-     * Get the systemData property: The system metadata relating to the Extension Topic resource.
-     *
+     * Get the systemData property: The system metadata relating to Extension Topic resource.
+     * 
      * @return the systemData value.
      */
     public SystemData systemData() {
@@ -48,7 +52,7 @@ public final class ExtensionTopicInner extends ProxyResource {
 
     /**
      * Get the description property: Description of the extension topic.
-     *
+     * 
      * @return the description value.
      */
     public String description() {
@@ -57,7 +61,7 @@ public final class ExtensionTopicInner extends ProxyResource {
 
     /**
      * Set the description property: Description of the extension topic.
-     *
+     * 
      * @param description the description value to set.
      * @return the ExtensionTopicInner object itself.
      */
@@ -71,7 +75,7 @@ public final class ExtensionTopicInner extends ProxyResource {
 
     /**
      * Get the systemTopic property: System topic resource id which is mapped to the source.
-     *
+     * 
      * @return the systemTopic value.
      */
     public String systemTopic() {
@@ -80,7 +84,7 @@ public final class ExtensionTopicInner extends ProxyResource {
 
     /**
      * Set the systemTopic property: System topic resource id which is mapped to the source.
-     *
+     * 
      * @param systemTopic the systemTopic value to set.
      * @return the ExtensionTopicInner object itself.
      */
@@ -94,7 +98,7 @@ public final class ExtensionTopicInner extends ProxyResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -5,22 +5,20 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Response of the GetDomainOwnershipIdentifier operation. */
 @Immutable
 public final class ApiManagementServiceGetDomainOwnershipIdentifierResultInner {
-    @JsonIgnore
-    private final ClientLogger logger =
-        new ClientLogger(ApiManagementServiceGetDomainOwnershipIdentifierResultInner.class);
-
     /*
      * The domain ownership identifier value.
      */
     @JsonProperty(value = "domainOwnershipIdentifier", access = JsonProperty.Access.WRITE_ONLY)
     private String domainOwnershipIdentifier;
+
+    /** Creates an instance of ApiManagementServiceGetDomainOwnershipIdentifierResultInner class. */
+    public ApiManagementServiceGetDomainOwnershipIdentifierResultInner() {
+    }
 
     /**
      * Get the domainOwnershipIdentifier property: The domain ownership identifier value.

@@ -6,19 +6,20 @@ package com.azure.resourcemanager.applicationinsights.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Response containing operationId for a specific purge action. */
 @Fluent
 public final class ComponentPurgeResponseInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ComponentPurgeResponseInner.class);
-
     /*
      * Id to use when querying for status for a particular purge operation.
      */
     @JsonProperty(value = "operationId", required = true)
     private String operationId;
+
+    /** Creates an instance of ComponentPurgeResponseInner class. */
+    public ComponentPurgeResponseInner() {
+    }
 
     /**
      * Get the operationId property: Id to use when querying for status for a particular purge operation.
@@ -47,10 +48,10 @@ public final class ComponentPurgeResponseInner {
      */
     public void validate() {
         if (operationId() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property operationId in model ComponentPurgeResponseInner"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property operationId in model ComponentPurgeResponseInner"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(ComponentPurgeResponseInner.class);
 }

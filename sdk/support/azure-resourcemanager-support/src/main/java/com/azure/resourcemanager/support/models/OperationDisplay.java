@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.support.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The object that describes the operation. */
+/**
+ * The object that describes the operation.
+ */
 @Immutable
 public final class OperationDisplay {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OperationDisplay.class);
-
     /*
      * The description of the operation.
      */
@@ -39,8 +37,14 @@ public final class OperationDisplay {
     private String resource;
 
     /**
+     * Creates an instance of OperationDisplay class.
+     */
+    public OperationDisplay() {
+    }
+
+    /**
      * Get the description property: The description of the operation.
-     *
+     * 
      * @return the description value.
      */
     public String description() {
@@ -49,7 +53,7 @@ public final class OperationDisplay {
 
     /**
      * Get the operation property: The action that users can perform, based on their permission level.
-     *
+     * 
      * @return the operation value.
      */
     public String operation() {
@@ -58,7 +62,7 @@ public final class OperationDisplay {
 
     /**
      * Get the provider property: Service provider: Microsoft Support.
-     *
+     * 
      * @return the provider value.
      */
     public String provider() {
@@ -67,7 +71,7 @@ public final class OperationDisplay {
 
     /**
      * Get the resource property: Resource on which the operation is performed.
-     *
+     * 
      * @return the resource value.
      */
     public String resource() {
@@ -76,7 +80,7 @@ public final class OperationDisplay {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

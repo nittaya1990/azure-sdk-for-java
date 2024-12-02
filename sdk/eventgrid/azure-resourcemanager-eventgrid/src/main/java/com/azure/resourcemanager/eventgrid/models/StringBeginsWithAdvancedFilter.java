@@ -5,19 +5,29 @@
 package com.azure.resourcemanager.eventgrid.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.List;
 
-/** StringBeginsWith Advanced Filter. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "operatorType")
+/**
+ * StringBeginsWith Advanced Filter.
+ */
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    property = "operatorType",
+    defaultImpl = StringBeginsWithAdvancedFilter.class,
+    visible = true)
 @JsonTypeName("StringBeginsWith")
 @Fluent
 public final class StringBeginsWithAdvancedFilter extends AdvancedFilter {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(StringBeginsWithAdvancedFilter.class);
+    /*
+     * The operator type used for filtering, e.g., NumberIn, StringContains, BoolEquals and others.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "operatorType", required = true)
+    private AdvancedFilterOperatorType operatorType = AdvancedFilterOperatorType.STRING_BEGINS_WITH;
 
     /*
      * The set of filter values.
@@ -26,8 +36,25 @@ public final class StringBeginsWithAdvancedFilter extends AdvancedFilter {
     private List<String> values;
 
     /**
+     * Creates an instance of StringBeginsWithAdvancedFilter class.
+     */
+    public StringBeginsWithAdvancedFilter() {
+    }
+
+    /**
+     * Get the operatorType property: The operator type used for filtering, e.g., NumberIn, StringContains, BoolEquals
+     * and others.
+     * 
+     * @return the operatorType value.
+     */
+    @Override
+    public AdvancedFilterOperatorType operatorType() {
+        return this.operatorType;
+    }
+
+    /**
      * Get the values property: The set of filter values.
-     *
+     * 
      * @return the values value.
      */
     public List<String> values() {
@@ -36,7 +63,7 @@ public final class StringBeginsWithAdvancedFilter extends AdvancedFilter {
 
     /**
      * Set the values property: The set of filter values.
-     *
+     * 
      * @param values the values value to set.
      * @return the StringBeginsWithAdvancedFilter object itself.
      */
@@ -45,7 +72,9 @@ public final class StringBeginsWithAdvancedFilter extends AdvancedFilter {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public StringBeginsWithAdvancedFilter withKey(String key) {
         super.withKey(key);
@@ -54,7 +83,7 @@ public final class StringBeginsWithAdvancedFilter extends AdvancedFilter {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

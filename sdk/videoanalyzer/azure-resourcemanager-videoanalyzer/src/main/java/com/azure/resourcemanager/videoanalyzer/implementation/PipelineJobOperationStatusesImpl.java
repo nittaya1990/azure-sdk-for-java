@@ -12,26 +12,24 @@ import com.azure.resourcemanager.videoanalyzer.fluent.PipelineJobOperationStatus
 import com.azure.resourcemanager.videoanalyzer.fluent.models.PipelineJobOperationStatusInner;
 import com.azure.resourcemanager.videoanalyzer.models.PipelineJobOperationStatus;
 import com.azure.resourcemanager.videoanalyzer.models.PipelineJobOperationStatuses;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class PipelineJobOperationStatusesImpl implements PipelineJobOperationStatuses {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PipelineJobOperationStatusesImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(PipelineJobOperationStatusesImpl.class);
 
     private final PipelineJobOperationStatusesClient innerClient;
 
     private final com.azure.resourcemanager.videoanalyzer.VideoAnalyzerManager serviceManager;
 
-    public PipelineJobOperationStatusesImpl(
-        PipelineJobOperationStatusesClient innerClient,
+    public PipelineJobOperationStatusesImpl(PipelineJobOperationStatusesClient innerClient,
         com.azure.resourcemanager.videoanalyzer.VideoAnalyzerManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
     }
 
-    public PipelineJobOperationStatus get(
-        String resourceGroupName, String accountName, String pipelineJobName, String operationId) {
-        PipelineJobOperationStatusInner inner =
-            this.serviceClient().get(resourceGroupName, accountName, pipelineJobName, operationId);
+    public PipelineJobOperationStatus get(String resourceGroupName, String accountName, String pipelineJobName,
+        String operationId) {
+        PipelineJobOperationStatusInner inner
+            = this.serviceClient().get(resourceGroupName, accountName, pipelineJobName, operationId);
         if (inner != null) {
             return new PipelineJobOperationStatusImpl(inner, this.manager());
         } else {
@@ -39,15 +37,12 @@ public final class PipelineJobOperationStatusesImpl implements PipelineJobOperat
         }
     }
 
-    public Response<PipelineJobOperationStatus> getWithResponse(
-        String resourceGroupName, String accountName, String pipelineJobName, String operationId, Context context) {
-        Response<PipelineJobOperationStatusInner> inner =
-            this.serviceClient().getWithResponse(resourceGroupName, accountName, pipelineJobName, operationId, context);
+    public Response<PipelineJobOperationStatus> getWithResponse(String resourceGroupName, String accountName,
+        String pipelineJobName, String operationId, Context context) {
+        Response<PipelineJobOperationStatusInner> inner = this.serviceClient()
+            .getWithResponse(resourceGroupName, accountName, pipelineJobName, operationId, context);
         if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
                 new PipelineJobOperationStatusImpl(inner.getValue(), this.manager()));
         } else {
             return null;

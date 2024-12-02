@@ -25,14 +25,36 @@ public interface Subnet extends HasInnerModel<SubnetInner>, ChildResource<Networ
      */
     Collection<NicIpConfiguration> listNetworkInterfaceIPConfigurations();
 
-    /** @return available private IP addresses within this network */
+    /**
+     * List available private IP addresses within this subnet.
+     * <pre>Starting IPs of the address prefixes are not returned, due to:
+     * 1. They are usually reserved by platform(e.g. for gateway usage).
+     * 2. For backward-compatibility.</pre>
+     *
+     * @return available private IP addresses within this network
+     */
     Set<String> listAvailablePrivateIPAddresses();
 
     /** @return number of network interface IP configurations associated with this subnet */
     int networkInterfaceIPConfigurationCount();
 
-    /** @return the address space prefix, in CIDR notation, assigned to this subnet */
+    /**
+     * Gets the address space prefix, in CIDR notation, assigned to this subnet.
+     * <p>Use {@link Subnet#addressPrefixes} if this subnet has multiple prefixes.</p>
+     *
+     * @return the address space prefix, in CIDR notation, assigned to this subnet
+     * @see Subnet#addressPrefixes
+     */
     String addressPrefix();
+
+    /**
+     * Gets address space prefixes, in CIDR notation, assigned to this subnet.
+     * <p>Use {@link Subnet#addressPrefix} if this subnet is created/updated using that property.</p>
+     *
+     * @return address space prefixes, in CIDR notation, assigned to this subnet
+     * @see Subnet#addressPrefix
+     */
+    List<String> addressPrefixes();
 
     /**
      * @return the network security group associated with this subnet, if any
@@ -58,6 +80,9 @@ public interface Subnet extends HasInnerModel<SubnetInner>, ChildResource<Networ
     /** @return the ID of the subnet. */
     String id();
 
+    /** @return the resource ID of the NAT gateway associated with this subnet, if any */
+    String natGatewayId();
+
     /** Grouping of subnet definition stages. */
     interface DefinitionStages {
         /**
@@ -81,6 +106,14 @@ public interface Subnet extends HasInnerModel<SubnetInner>, ChildResource<Networ
              * @return the next stage of the definition
              */
             WithAttach<ParentT> withAddressPrefix(String cidr);
+
+            /**
+             * Specifies the IP address spaces of the subnet, within the address space of the network.
+             *
+             * @param addressPrefixes the IP address space prefixes using the CIDR notation
+             * @return the next stage of the definition
+             */
+            WithAttach<ParentT> withAddressPrefixes(Collection<String> addressPrefixes);
         }
 
         /**
@@ -189,6 +222,21 @@ public interface Subnet extends HasInnerModel<SubnetInner>, ChildResource<Networ
         }
 
         /**
+         * The stage of a subnet definition allowing to specify the network NAT gateway to assign to the subnet.
+         *
+         * @param <ParentT> the stage of the parent definition to return to after attaching this definition
+         */
+        interface WithNatGateway<ParentT> {
+            /**
+             * Specifies an existing NAT gateway to associate with the subnet.
+             *
+             * @param resourceId the resource ID of the NAT gateway
+             * @return the next stage of the definition
+             */
+            WithAttach<ParentT> withExistingNatGateway(String resourceId);
+        }
+
+        /**
          * The final stage of the subnet definition.
          *
          * <p>At this stage, any remaining optional settings can be specified, or the subnet definition can be attached
@@ -197,13 +245,9 @@ public interface Subnet extends HasInnerModel<SubnetInner>, ChildResource<Networ
          * @param <ParentT> the stage of the parent definition to return to after attaching this definition
          */
         interface WithAttach<ParentT>
-            extends Attachable.InDefinition<ParentT>,
-                WithNetworkSecurityGroup<ParentT>,
-                WithRouteTable<ParentT>,
-                WithDelegation<ParentT>,
-                WithServiceEndpoint<ParentT>,
-                WithPrivateEndpointNetworkPolicies<ParentT>,
-                WithPrivateLinkServiceNetworkPolicies<ParentT> {
+            extends Attachable.InDefinition<ParentT>, WithNetworkSecurityGroup<ParentT>, WithRouteTable<ParentT>,
+            WithDelegation<ParentT>, WithServiceEndpoint<ParentT>, WithPrivateEndpointNetworkPolicies<ParentT>,
+            WithPrivateLinkServiceNetworkPolicies<ParentT>, WithNatGateway<ParentT> {
         }
     }
 
@@ -212,10 +256,8 @@ public interface Subnet extends HasInnerModel<SubnetInner>, ChildResource<Networ
      *
      * @param <ParentT> the stage of the parent definition to return to after attaching this definition
      */
-    interface Definition<ParentT>
-        extends DefinitionStages.Blank<ParentT>,
-            DefinitionStages.WithAddressPrefix<ParentT>,
-            DefinitionStages.WithAttach<ParentT> {
+    interface Definition<ParentT> extends DefinitionStages.Blank<ParentT>, DefinitionStages.WithAddressPrefix<ParentT>,
+        DefinitionStages.WithAttach<ParentT> {
     }
 
     /** Grouping of subnet update stages. */
@@ -229,6 +271,14 @@ public interface Subnet extends HasInnerModel<SubnetInner>, ChildResource<Networ
              * @return the next stage
              */
             Update withAddressPrefix(String cidr);
+
+            /**
+             * Specifies the IP address spaces of the subnet, within the address space of the network.
+             *
+             * @param addressPrefixes the IP address space prefixes using the CIDR notation
+             * @return the next stage
+             */
+            Update withAddressPrefixes(Collection<String> addressPrefixes);
         }
 
         /** The stage of the subnet update allowing to change the network security group to assign to the subnet. */
@@ -364,18 +414,27 @@ public interface Subnet extends HasInnerModel<SubnetInner>, ChildResource<Networ
              */
             Update disableNetworkPoliciesOnPrivateLinkService();
         }
+
+        /**
+         * The stage of a subnet update allowing to specify the network NAT gateway to assign to the subnet.
+         *
+         */
+        interface WithNatGateway {
+            /**
+             * Specifies an existing NAT gateway to associate with the subnet.
+             *
+             * @param resourceId the resource ID of the NAT gateway
+             * @return the next stage of the definition
+             */
+            Update withExistingNatGateway(String resourceId);
+        }
     }
 
     /** The entirety of a subnet update as part of a network update. */
     interface Update
-        extends UpdateStages.WithAddressPrefix,
-            UpdateStages.WithNetworkSecurityGroup,
-            UpdateStages.WithRouteTable,
-            UpdateStages.WithDelegation,
-            UpdateStages.WithServiceEndpoint,
-            UpdateStages.WithPrivateEndpointNetworkPolicies,
-            UpdateStages.WithPrivateLinkServiceNetworkPolicies,
-            Settable<Network.Update> {
+        extends UpdateStages.WithAddressPrefix, UpdateStages.WithNetworkSecurityGroup, UpdateStages.WithRouteTable,
+        UpdateStages.WithDelegation, UpdateStages.WithServiceEndpoint, UpdateStages.WithPrivateEndpointNetworkPolicies,
+        UpdateStages.WithPrivateLinkServiceNetworkPolicies, UpdateStages.WithNatGateway, Settable<Network.Update> {
     }
 
     /** Grouping of subnet definition stages applicable as part of a virtual network update. */
@@ -401,6 +460,14 @@ public interface Subnet extends HasInnerModel<SubnetInner>, ChildResource<Networ
              * @return the next stage of the definition
              */
             WithAttach<ParentT> withAddressPrefix(String cidr);
+
+            /**
+             * Specifies the IP address spaces of the subnet, within the address space of the network.
+             *
+             * @param addressPrefixes the IP address space prefixes using the CIDR notation
+             * @return the next stage of the definition
+             */
+            WithAttach<ParentT> withAddressPrefixes(Collection<String> addressPrefixes);
         }
 
         /**
@@ -495,6 +562,21 @@ public interface Subnet extends HasInnerModel<SubnetInner>, ChildResource<Networ
         }
 
         /**
+         * The stage of a subnet definition allowing to specify the network NAT gateway to assign to the subnet.
+         *
+         * @param <ParentT> the stage of the parent definition to return to after attaching this definition
+         */
+        interface WithNatGateway<ParentT> {
+            /**
+             * Specifies an existing NAT gateway to associate with the subnet.
+             *
+             * @param resourceId the resource ID of the NAT gateway
+             * @return the next stage of the definition
+             */
+            WithAttach<ParentT> withExistingNatGateway(String resourceId);
+        }
+
+        /**
          * The final stage of the subnet definition.
          *
          * <p>At this stage, any remaining optional settings can be specified, or the subnet definition can be attached
@@ -502,13 +584,9 @@ public interface Subnet extends HasInnerModel<SubnetInner>, ChildResource<Networ
          *
          * @param <ParentT> the stage of the parent definition to return to after attaching this definition
          */
-        interface WithAttach<ParentT>
-            extends Attachable.InUpdate<ParentT>,
-                WithNetworkSecurityGroup<ParentT>,
-                WithRouteTable<ParentT>,
-                WithDelegation<ParentT>,
-                WithServiceEndpoint<ParentT>,
-                WithPrivateEndpointNetworkPolicies<ParentT> {
+        interface WithAttach<ParentT> extends Attachable.InUpdate<ParentT>, WithNetworkSecurityGroup<ParentT>,
+            WithRouteTable<ParentT>, WithDelegation<ParentT>, WithServiceEndpoint<ParentT>,
+            WithPrivateEndpointNetworkPolicies<ParentT>, WithNatGateway<ParentT> {
         }
     }
 
@@ -518,9 +596,7 @@ public interface Subnet extends HasInnerModel<SubnetInner>, ChildResource<Networ
      * @param <ParentT> the stage of the parent definition to return to after attaching this definition
      */
     interface UpdateDefinition<ParentT>
-        extends UpdateDefinitionStages.Blank<ParentT>,
-            UpdateDefinitionStages.WithAddressPrefix<ParentT>,
-            UpdateDefinitionStages.WithNetworkSecurityGroup<ParentT>,
-            UpdateDefinitionStages.WithAttach<ParentT> {
+        extends UpdateDefinitionStages.Blank<ParentT>, UpdateDefinitionStages.WithAddressPrefix<ParentT>,
+        UpdateDefinitionStages.WithNetworkSecurityGroup<ParentT>, UpdateDefinitionStages.WithAttach<ParentT> {
     }
 }

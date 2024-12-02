@@ -5,20 +5,31 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.recoveryservicesbackup.fluent.models.VaultStorageConfigOperationResultResponseInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.Map;
 
-/** Prepare DataMove Response. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "objectType")
+/**
+ * Prepare DataMove Response.
+ */
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    property = "objectType",
+    defaultImpl = PrepareDataMoveResponse.class,
+    visible = true)
 @JsonTypeName("PrepareDataMoveResponse")
 @Fluent
 public final class PrepareDataMoveResponse extends VaultStorageConfigOperationResultResponseInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PrepareDataMoveResponse.class);
+    /*
+     * This property will be used as the discriminator for deciding the specific types in the polymorphic chain of types.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "objectType", required = true)
+    private String objectType = "PrepareDataMoveResponse";
 
     /*
      * Co-relationId for move operation
@@ -30,11 +41,29 @@ public final class PrepareDataMoveResponse extends VaultStorageConfigOperationRe
      * Source Vault Properties
      */
     @JsonProperty(value = "sourceVaultProperties")
+    @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
     private Map<String, String> sourceVaultProperties;
 
     /**
+     * Creates an instance of PrepareDataMoveResponse class.
+     */
+    public PrepareDataMoveResponse() {
+    }
+
+    /**
+     * Get the objectType property: This property will be used as the discriminator for deciding the specific types in
+     * the polymorphic chain of types.
+     * 
+     * @return the objectType value.
+     */
+    @Override
+    public String objectType() {
+        return this.objectType;
+    }
+
+    /**
      * Get the correlationId property: Co-relationId for move operation.
-     *
+     * 
      * @return the correlationId value.
      */
     public String correlationId() {
@@ -43,7 +72,7 @@ public final class PrepareDataMoveResponse extends VaultStorageConfigOperationRe
 
     /**
      * Set the correlationId property: Co-relationId for move operation.
-     *
+     * 
      * @param correlationId the correlationId value to set.
      * @return the PrepareDataMoveResponse object itself.
      */
@@ -54,7 +83,7 @@ public final class PrepareDataMoveResponse extends VaultStorageConfigOperationRe
 
     /**
      * Get the sourceVaultProperties property: Source Vault Properties.
-     *
+     * 
      * @return the sourceVaultProperties value.
      */
     public Map<String, String> sourceVaultProperties() {
@@ -63,7 +92,7 @@ public final class PrepareDataMoveResponse extends VaultStorageConfigOperationRe
 
     /**
      * Set the sourceVaultProperties property: Source Vault Properties.
-     *
+     * 
      * @param sourceVaultProperties the sourceVaultProperties value to set.
      * @return the PrepareDataMoveResponse object itself.
      */
@@ -74,7 +103,7 @@ public final class PrepareDataMoveResponse extends VaultStorageConfigOperationRe
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

@@ -32,7 +32,8 @@ public interface SavedSearch {
     String type();
 
     /**
-     * Gets the etag property: The ETag of the saved search.
+     * Gets the etag property: The ETag of the saved search. To override an existing saved search, use "*" or specify
+     * the current Etag.
      *
      * @return the etag value.
      */
@@ -91,6 +92,13 @@ public interface SavedSearch {
     List<Tag> tags();
 
     /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
+
+    /**
      * Gets the inner com.azure.resourcemanager.loganalytics.fluent.models.SavedSearchInner object.
      *
      * @return the inner object.
@@ -99,18 +107,16 @@ public interface SavedSearch {
 
     /** The entirety of the SavedSearch definition. */
     interface Definition
-        extends DefinitionStages.Blank,
-            DefinitionStages.WithParentResource,
-            DefinitionStages.WithCategory,
-            DefinitionStages.WithDisplayName,
-            DefinitionStages.WithQuery,
-            DefinitionStages.WithCreate {
+        extends DefinitionStages.Blank, DefinitionStages.WithParentResource, DefinitionStages.WithCategory,
+        DefinitionStages.WithDisplayName, DefinitionStages.WithQuery, DefinitionStages.WithCreate {
     }
+
     /** The SavedSearch definition stages. */
     interface DefinitionStages {
         /** The first stage of the SavedSearch definition. */
         interface Blank extends WithParentResource {
         }
+
         /** The stage of the SavedSearch definition allowing to specify parent resource. */
         interface WithParentResource {
             /**
@@ -122,6 +128,7 @@ public interface SavedSearch {
              */
             WithCategory withExistingWorkspace(String resourceGroupName, String workspaceName);
         }
+
         /** The stage of the SavedSearch definition allowing to specify category. */
         interface WithCategory {
             /**
@@ -133,6 +140,7 @@ public interface SavedSearch {
              */
             WithDisplayName withCategory(String category);
         }
+
         /** The stage of the SavedSearch definition allowing to specify displayName. */
         interface WithDisplayName {
             /**
@@ -143,6 +151,7 @@ public interface SavedSearch {
              */
             WithQuery withDisplayName(String displayName);
         }
+
         /** The stage of the SavedSearch definition allowing to specify query. */
         interface WithQuery {
             /**
@@ -153,16 +162,13 @@ public interface SavedSearch {
              */
             WithCreate withQuery(String query);
         }
+
         /**
          * The stage of the SavedSearch definition which contains all the minimum required properties for the resource
          * to be created, but also allows for any other optional properties to be specified.
          */
-        interface WithCreate
-            extends DefinitionStages.WithTags,
-                DefinitionStages.WithEtag,
-                DefinitionStages.WithFunctionAlias,
-                DefinitionStages.WithFunctionParameters,
-                DefinitionStages.WithVersion {
+        interface WithCreate extends DefinitionStages.WithTags, DefinitionStages.WithEtag,
+            DefinitionStages.WithFunctionAlias, DefinitionStages.WithFunctionParameters, DefinitionStages.WithVersion {
             /**
              * Executes the create request.
              *
@@ -178,6 +184,7 @@ public interface SavedSearch {
              */
             SavedSearch create(Context context);
         }
+
         /** The stage of the SavedSearch definition allowing to specify tags. */
         interface WithTags {
             /**
@@ -188,16 +195,20 @@ public interface SavedSearch {
              */
             WithCreate withTags(List<Tag> tags);
         }
+
         /** The stage of the SavedSearch definition allowing to specify etag. */
         interface WithEtag {
             /**
-             * Specifies the etag property: The ETag of the saved search..
+             * Specifies the etag property: The ETag of the saved search. To override an existing saved search, use "*"
+             * or specify the current Etag.
              *
-             * @param etag The ETag of the saved search.
+             * @param etag The ETag of the saved search. To override an existing saved search, use "*" or specify the
+             *     current Etag.
              * @return the next definition stage.
              */
             WithCreate withEtag(String etag);
         }
+
         /** The stage of the SavedSearch definition allowing to specify functionAlias. */
         interface WithFunctionAlias {
             /**
@@ -208,6 +219,7 @@ public interface SavedSearch {
              */
             WithCreate withFunctionAlias(String functionAlias);
         }
+
         /** The stage of the SavedSearch definition allowing to specify functionParameters. */
         interface WithFunctionParameters {
             /**
@@ -224,6 +236,7 @@ public interface SavedSearch {
              */
             WithCreate withFunctionParameters(String functionParameters);
         }
+
         /** The stage of the SavedSearch definition allowing to specify version. */
         interface WithVersion {
             /**
@@ -236,6 +249,7 @@ public interface SavedSearch {
             WithCreate withVersion(Long version);
         }
     }
+
     /**
      * Begins update for the SavedSearch resource.
      *
@@ -244,15 +258,9 @@ public interface SavedSearch {
     SavedSearch.Update update();
 
     /** The template for SavedSearch update. */
-    interface Update
-        extends UpdateStages.WithTags,
-            UpdateStages.WithEtag,
-            UpdateStages.WithCategory,
-            UpdateStages.WithDisplayName,
-            UpdateStages.WithQuery,
-            UpdateStages.WithFunctionAlias,
-            UpdateStages.WithFunctionParameters,
-            UpdateStages.WithVersion {
+    interface Update extends UpdateStages.WithTags, UpdateStages.WithEtag, UpdateStages.WithCategory,
+        UpdateStages.WithDisplayName, UpdateStages.WithQuery, UpdateStages.WithFunctionAlias,
+        UpdateStages.WithFunctionParameters, UpdateStages.WithVersion {
         /**
          * Executes the update request.
          *
@@ -268,6 +276,7 @@ public interface SavedSearch {
          */
         SavedSearch apply(Context context);
     }
+
     /** The SavedSearch update stages. */
     interface UpdateStages {
         /** The stage of the SavedSearch update allowing to specify tags. */
@@ -280,16 +289,20 @@ public interface SavedSearch {
              */
             Update withTags(List<Tag> tags);
         }
+
         /** The stage of the SavedSearch update allowing to specify etag. */
         interface WithEtag {
             /**
-             * Specifies the etag property: The ETag of the saved search..
+             * Specifies the etag property: The ETag of the saved search. To override an existing saved search, use "*"
+             * or specify the current Etag.
              *
-             * @param etag The ETag of the saved search.
+             * @param etag The ETag of the saved search. To override an existing saved search, use "*" or specify the
+             *     current Etag.
              * @return the next definition stage.
              */
             Update withEtag(String etag);
         }
+
         /** The stage of the SavedSearch update allowing to specify category. */
         interface WithCategory {
             /**
@@ -301,6 +314,7 @@ public interface SavedSearch {
              */
             Update withCategory(String category);
         }
+
         /** The stage of the SavedSearch update allowing to specify displayName. */
         interface WithDisplayName {
             /**
@@ -311,6 +325,7 @@ public interface SavedSearch {
              */
             Update withDisplayName(String displayName);
         }
+
         /** The stage of the SavedSearch update allowing to specify query. */
         interface WithQuery {
             /**
@@ -321,6 +336,7 @@ public interface SavedSearch {
              */
             Update withQuery(String query);
         }
+
         /** The stage of the SavedSearch update allowing to specify functionAlias. */
         interface WithFunctionAlias {
             /**
@@ -331,6 +347,7 @@ public interface SavedSearch {
              */
             Update withFunctionAlias(String functionAlias);
         }
+
         /** The stage of the SavedSearch update allowing to specify functionParameters. */
         interface WithFunctionParameters {
             /**
@@ -347,6 +364,7 @@ public interface SavedSearch {
              */
             Update withFunctionParameters(String functionParameters);
         }
+
         /** The stage of the SavedSearch update allowing to specify version. */
         interface WithVersion {
             /**
@@ -359,6 +377,7 @@ public interface SavedSearch {
             Update withVersion(Long version);
         }
     }
+
     /**
      * Refreshes the resource to sync with Azure.
      *

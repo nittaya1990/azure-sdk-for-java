@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.security.fluent.models.SecuritySubAssessmentInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** List of security sub-assessments. */
+/**
+ * List of security sub-assessments.
+ */
 @Immutable
 public final class SecuritySubAssessmentList {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SecuritySubAssessmentList.class);
-
     /*
      * The value property.
      */
@@ -29,8 +27,14 @@ public final class SecuritySubAssessmentList {
     private String nextLink;
 
     /**
+     * Creates an instance of SecuritySubAssessmentList class.
+     */
+    public SecuritySubAssessmentList() {
+    }
+
+    /**
      * Get the value property: The value property.
-     *
+     * 
      * @return the value value.
      */
     public List<SecuritySubAssessmentInner> value() {
@@ -39,7 +43,7 @@ public final class SecuritySubAssessmentList {
 
     /**
      * Get the nextLink property: The URI to fetch the next page.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -48,7 +52,7 @@ public final class SecuritySubAssessmentList {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

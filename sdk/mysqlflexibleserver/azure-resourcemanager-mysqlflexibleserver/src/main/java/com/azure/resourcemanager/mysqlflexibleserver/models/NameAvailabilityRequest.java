@@ -6,14 +6,13 @@ package com.azure.resourcemanager.mysqlflexibleserver.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Request from client to check resource name availability. */
+/**
+ * Request from client to check resource name availability.
+ */
 @Fluent
 public final class NameAvailabilityRequest {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(NameAvailabilityRequest.class);
-
     /*
      * Resource name to verify.
      */
@@ -27,8 +26,14 @@ public final class NameAvailabilityRequest {
     private String type;
 
     /**
+     * Creates an instance of NameAvailabilityRequest class.
+     */
+    public NameAvailabilityRequest() {
+    }
+
+    /**
      * Get the name property: Resource name to verify.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -37,7 +42,7 @@ public final class NameAvailabilityRequest {
 
     /**
      * Set the name property: Resource name to verify.
-     *
+     * 
      * @param name the name value to set.
      * @return the NameAvailabilityRequest object itself.
      */
@@ -48,7 +53,7 @@ public final class NameAvailabilityRequest {
 
     /**
      * Get the type property: Resource type used for verification.
-     *
+     * 
      * @return the type value.
      */
     public String type() {
@@ -57,7 +62,7 @@ public final class NameAvailabilityRequest {
 
     /**
      * Set the type property: Resource type used for verification.
-     *
+     * 
      * @param type the type value to set.
      * @return the NameAvailabilityRequest object itself.
      */
@@ -68,14 +73,15 @@ public final class NameAvailabilityRequest {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (name() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property name in model NameAvailabilityRequest"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property name in model NameAvailabilityRequest"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(NameAvailabilityRequest.class);
 }

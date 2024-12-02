@@ -7,24 +7,38 @@ package com.azure.resourcemanager.security.models;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/** Defines values for Rank. */
+/**
+ * The rank of the sensitivity label.
+ */
 public enum Rank {
-    /** Enum value None. */
+    /**
+     * Enum value None.
+     */
     NONE("None"),
 
-    /** Enum value Low. */
+    /**
+     * Enum value Low.
+     */
     LOW("Low"),
 
-    /** Enum value Medium. */
+    /**
+     * Enum value Medium.
+     */
     MEDIUM("Medium"),
 
-    /** Enum value High. */
+    /**
+     * Enum value High.
+     */
     HIGH("High"),
 
-    /** Enum value Critical. */
+    /**
+     * Enum value Critical.
+     */
     CRITICAL("Critical");
 
-    /** The actual serialized value for a Rank instance. */
+    /**
+     * The actual serialized value for a Rank instance.
+     */
     private final String value;
 
     Rank(String value) {
@@ -33,12 +47,15 @@ public enum Rank {
 
     /**
      * Parses a serialized value to a Rank instance.
-     *
+     * 
      * @param value the serialized value to parse.
      * @return the parsed Rank object, or null if unable to parse.
      */
     @JsonCreator
     public static Rank fromString(String value) {
+        if (value == null) {
+            return null;
+        }
         Rank[] items = Rank.values();
         for (Rank item : items) {
             if (item.toString().equalsIgnoreCase(value)) {
@@ -48,6 +65,9 @@ public enum Rank {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @JsonValue
     @Override
     public String toString() {

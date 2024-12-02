@@ -4,135 +4,236 @@
 
 package com.azure.resourcemanager.consumption.models;
 
-import com.azure.core.annotation.Immutable;
-import com.azure.core.annotation.JsonFlatten;
+import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import com.azure.resourcemanager.consumption.fluent.models.LegacyChargeSummaryProperties;
+import java.io.IOException;
 import java.math.BigDecimal;
 
-/** Legacy charge summary. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "kind")
-@JsonTypeName("legacy")
-@JsonFlatten
-@Immutable
-public class LegacyChargeSummary extends ChargeSummary {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(LegacyChargeSummary.class);
+/**
+ * Legacy charge summary.
+ */
+@Fluent
+public final class LegacyChargeSummary extends ChargeSummary {
+    /*
+     * Specifies the kind of charge summary.
+     */
+    private ChargeSummaryKind kind = ChargeSummaryKind.LEGACY;
 
     /*
-     * The id of the billing period resource that the charge belongs to.
+     * Properties for legacy charge summary
      */
-    @JsonProperty(value = "properties.billingPeriodId", access = JsonProperty.Access.WRITE_ONLY)
-    private String billingPeriodId;
+    private LegacyChargeSummaryProperties innerProperties = new LegacyChargeSummaryProperties();
 
     /*
-     * Usage start date.
+     * The type of the resource.
      */
-    @JsonProperty(value = "properties.usageStart", access = JsonProperty.Access.WRITE_ONLY)
-    private String usageStart;
+    private String type;
 
     /*
-     * Usage end date.
+     * The name of the resource.
      */
-    @JsonProperty(value = "properties.usageEnd", access = JsonProperty.Access.WRITE_ONLY)
-    private String usageEnd;
+    private String name;
 
     /*
-     * Azure Charges.
+     * Fully qualified resource Id for the resource.
      */
-    @JsonProperty(value = "properties.azureCharges", access = JsonProperty.Access.WRITE_ONLY)
-    private BigDecimal azureCharges;
+    private String id;
 
-    /*
-     * Charges Billed separately.
+    /**
+     * Creates an instance of LegacyChargeSummary class.
      */
-    @JsonProperty(value = "properties.chargesBilledSeparately", access = JsonProperty.Access.WRITE_ONLY)
-    private BigDecimal chargesBilledSeparately;
+    public LegacyChargeSummary() {
+    }
 
-    /*
-     * Marketplace Charges.
+    /**
+     * Get the kind property: Specifies the kind of charge summary.
+     * 
+     * @return the kind value.
      */
-    @JsonProperty(value = "properties.marketplaceCharges", access = JsonProperty.Access.WRITE_ONLY)
-    private BigDecimal marketplaceCharges;
+    @Override
+    public ChargeSummaryKind kind() {
+        return this.kind;
+    }
 
-    /*
-     * Currency Code
+    /**
+     * Get the innerProperties property: Properties for legacy charge summary.
+     * 
+     * @return the innerProperties value.
      */
-    @JsonProperty(value = "properties.currency", access = JsonProperty.Access.WRITE_ONLY)
-    private String currency;
+    private LegacyChargeSummaryProperties innerProperties() {
+        return this.innerProperties;
+    }
+
+    /**
+     * Get the type property: The type of the resource.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
+     * Get the name property: The name of the resource.
+     * 
+     * @return the name value.
+     */
+    @Override
+    public String name() {
+        return this.name;
+    }
+
+    /**
+     * Get the id property: Fully qualified resource Id for the resource.
+     * 
+     * @return the id value.
+     */
+    @Override
+    public String id() {
+        return this.id;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public LegacyChargeSummary withEtag(String etag) {
+        super.withEtag(etag);
+        return this;
+    }
 
     /**
      * Get the billingPeriodId property: The id of the billing period resource that the charge belongs to.
-     *
+     * 
      * @return the billingPeriodId value.
      */
     public String billingPeriodId() {
-        return this.billingPeriodId;
+        return this.innerProperties() == null ? null : this.innerProperties().billingPeriodId();
     }
 
     /**
      * Get the usageStart property: Usage start date.
-     *
+     * 
      * @return the usageStart value.
      */
     public String usageStart() {
-        return this.usageStart;
+        return this.innerProperties() == null ? null : this.innerProperties().usageStart();
     }
 
     /**
      * Get the usageEnd property: Usage end date.
-     *
+     * 
      * @return the usageEnd value.
      */
     public String usageEnd() {
-        return this.usageEnd;
+        return this.innerProperties() == null ? null : this.innerProperties().usageEnd();
     }
 
     /**
      * Get the azureCharges property: Azure Charges.
-     *
+     * 
      * @return the azureCharges value.
      */
     public BigDecimal azureCharges() {
-        return this.azureCharges;
+        return this.innerProperties() == null ? null : this.innerProperties().azureCharges();
     }
 
     /**
      * Get the chargesBilledSeparately property: Charges Billed separately.
-     *
+     * 
      * @return the chargesBilledSeparately value.
      */
     public BigDecimal chargesBilledSeparately() {
-        return this.chargesBilledSeparately;
+        return this.innerProperties() == null ? null : this.innerProperties().chargesBilledSeparately();
     }
 
     /**
-     * Get the marketplaceCharges property: Marketplace Charges.
-     *
-     * @return the marketplaceCharges value.
+     * Get the azureMarketplaceCharges property: Marketplace Charges.
+     * 
+     * @return the azureMarketplaceCharges value.
      */
-    public BigDecimal marketplaceCharges() {
-        return this.marketplaceCharges;
+    public BigDecimal azureMarketplaceCharges() {
+        return this.innerProperties() == null ? null : this.innerProperties().azureMarketplaceCharges();
     }
 
     /**
      * Get the currency property: Currency Code.
-     *
+     * 
      * @return the currency value.
      */
     public String currency() {
-        return this.currency;
+        return this.innerProperties() == null ? null : this.innerProperties().currency();
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
-        super.validate();
+        if (innerProperties() == null) {
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property innerProperties in model LegacyChargeSummary"));
+        } else {
+            innerProperties().validate();
+        }
+    }
+
+    private static final ClientLogger LOGGER = new ClientLogger(LegacyChargeSummary.class);
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeStringField("eTag", etag());
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        jsonWriter.writeStringField("kind", this.kind == null ? null : this.kind.toString());
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of LegacyChargeSummary from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of LegacyChargeSummary if the JsonReader was pointing to an instance of it, or null if it was
+     * pointing to JSON null.
+     * @throws IllegalStateException If the deserialized JSON object was missing any required properties.
+     * @throws IOException If an error occurs while reading the LegacyChargeSummary.
+     */
+    public static LegacyChargeSummary fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            LegacyChargeSummary deserializedLegacyChargeSummary = new LegacyChargeSummary();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("id".equals(fieldName)) {
+                    deserializedLegacyChargeSummary.id = reader.getString();
+                } else if ("name".equals(fieldName)) {
+                    deserializedLegacyChargeSummary.name = reader.getString();
+                } else if ("type".equals(fieldName)) {
+                    deserializedLegacyChargeSummary.type = reader.getString();
+                } else if ("eTag".equals(fieldName)) {
+                    deserializedLegacyChargeSummary.withEtag(reader.getString());
+                } else if ("properties".equals(fieldName)) {
+                    deserializedLegacyChargeSummary.innerProperties = LegacyChargeSummaryProperties.fromJson(reader);
+                } else if ("kind".equals(fieldName)) {
+                    deserializedLegacyChargeSummary.kind = ChargeSummaryKind.fromString(reader.getString());
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedLegacyChargeSummary;
+        });
     }
 }

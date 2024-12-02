@@ -8,14 +8,11 @@ import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.iothub.models.IotHubCapacity;
 import com.azure.resourcemanager.iothub.models.IotHubSkuInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** SKU properties. */
 @Fluent
 public final class IotHubSkuDescriptionInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(IotHubSkuDescriptionInner.class);
-
     /*
      * The type of the resource.
      */
@@ -33,6 +30,10 @@ public final class IotHubSkuDescriptionInner {
      */
     @JsonProperty(value = "capacity", required = true)
     private IotHubCapacity capacity;
+
+    /** Creates an instance of IotHubSkuDescriptionInner class. */
+    public IotHubSkuDescriptionInner() {
+    }
 
     /**
      * Get the resourceType property: The type of the resource.
@@ -90,19 +91,18 @@ public final class IotHubSkuDescriptionInner {
      */
     public void validate() {
         if (sku() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property sku in model IotHubSkuDescriptionInner"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property sku in model IotHubSkuDescriptionInner"));
         } else {
             sku().validate();
         }
         if (capacity() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property capacity in model IotHubSkuDescriptionInner"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property capacity in model IotHubSkuDescriptionInner"));
         } else {
             capacity().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(IotHubSkuDescriptionInner.class);
 }

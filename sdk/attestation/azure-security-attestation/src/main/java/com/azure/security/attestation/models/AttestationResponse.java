@@ -4,22 +4,24 @@
 
 package com.azure.security.attestation.models;
 
-import com.azure.core.annotation.Fluent;
+import com.azure.core.annotation.Immutable;
 import com.azure.core.http.HttpHeaders;
 import com.azure.core.http.HttpRequest;
 import com.azure.core.http.rest.ResponseBase;
 
 /**
  * The result of an attestation operation.
+ *
+ * @param <T> The type of the attestation response value.
  */
-@Fluent
+@Immutable
 public final class AttestationResponse<T> extends ResponseBase<Void, T> {
 
     /*
      * An RFC 7519 JSON Web Token, the body of which is an AttestationResult
      * object.
      */
-    private AttestationToken token;
+    private final AttestationToken token;
 
     /**
      * Creates a {@link ResponseBase}.
@@ -30,7 +32,8 @@ public final class AttestationResponse<T> extends ResponseBase<Void, T> {
      * @param value The deserialized value of the HTTP response.
      * @param token The Attestation Token which was returned from the service.
      */
-    public AttestationResponse(HttpRequest request, int statusCode, HttpHeaders headers, T value, AttestationToken token) {
+    public AttestationResponse(HttpRequest request, int statusCode, HttpHeaders headers, T value,
+        AttestationToken token) {
         super(request, statusCode, headers, value, null);
         this.token = token;
     }
@@ -42,24 +45,5 @@ public final class AttestationResponse<T> extends ResponseBase<Void, T> {
      */
     public AttestationToken getToken() {
         return this.token;
-    }
-
-    /**
-     * Set the token property: An RFC 7519 JSON Web Token, the body of which is an AttestationResult object.
-     *
-     * @param token the token value to set.
-     * @return the AttestationResponse object itself.
-     */
-    public AttestationResponse<T> setToken(AttestationToken token) {
-        this.token = token;
-        return this;
-    }
-
-    /**
-     * Validates the instance.
-     *
-     * @throws IllegalArgumentException thrown if the instance is not valid.
-     */
-    public void validate() {
     }
 }

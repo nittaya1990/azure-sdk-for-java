@@ -6,10 +6,8 @@ package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.exception.ManagementError;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.models.AsyncOperationStatus;
 import com.azure.resourcemanager.apimanagement.models.OperationResultLogItemContract;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -17,8 +15,6 @@ import java.util.List;
 /** Operation Result. */
 @Fluent
 public final class OperationResultContractProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OperationResultContractProperties.class);
-
     /*
      * Operation result identifier.
      */
@@ -32,17 +28,16 @@ public final class OperationResultContractProperties {
     private AsyncOperationStatus status;
 
     /*
-     * Start time of an async operation. The date conforms to the following
-     * format: `yyyy-MM-ddTHH:mm:ssZ` as specified by the ISO 8601 standard.
+     * Start time of an async operation. The date conforms to the following format: `yyyy-MM-ddTHH:mm:ssZ` as specified
+     * by the ISO 8601 standard.
      *
      */
     @JsonProperty(value = "started")
     private OffsetDateTime started;
 
     /*
-     * Last update time of an async operation. The date conforms to the
-     * following format: `yyyy-MM-ddTHH:mm:ssZ` as specified by the ISO 8601
-     * standard.
+     * Last update time of an async operation. The date conforms to the following format: `yyyy-MM-ddTHH:mm:ssZ` as
+     * specified by the ISO 8601 standard.
      *
      */
     @JsonProperty(value = "updated")
@@ -61,13 +56,15 @@ public final class OperationResultContractProperties {
     private ManagementError error;
 
     /*
-     * This property if only provided as part of the
-     * TenantConfiguration_Validate operation. It contains the log the entities
-     * which will be updated/created/deleted as part of the
-     * TenantConfiguration_Deploy operation.
+     * This property if only provided as part of the TenantConfiguration_Validate operation. It contains the log the
+     * entities which will be updated/created/deleted as part of the TenantConfiguration_Deploy operation.
      */
     @JsonProperty(value = "actionLog", access = JsonProperty.Access.WRITE_ONLY)
     private List<OperationResultLogItemContract> actionLog;
+
+    /** Creates an instance of OperationResultContractProperties class. */
+    public OperationResultContractProperties() {
+    }
 
     /**
      * Get the id property: Operation result identifier.

@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.recoveryservices.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.recoveryservices.fluent.models.ReplicationUsageInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Replication usages for vault. */
+/**
+ * Replication usages for vault.
+ */
 @Fluent
 public final class ReplicationUsageList {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ReplicationUsageList.class);
-
     /*
      * The list of replication usages for the given vault.
      */
@@ -23,8 +21,14 @@ public final class ReplicationUsageList {
     private List<ReplicationUsageInner> value;
 
     /**
+     * Creates an instance of ReplicationUsageList class.
+     */
+    public ReplicationUsageList() {
+    }
+
+    /**
      * Get the value property: The list of replication usages for the given vault.
-     *
+     * 
      * @return the value value.
      */
     public List<ReplicationUsageInner> value() {
@@ -33,7 +37,7 @@ public final class ReplicationUsageList {
 
     /**
      * Set the value property: The list of replication usages for the given vault.
-     *
+     * 
      * @param value the value value to set.
      * @return the ReplicationUsageList object itself.
      */
@@ -44,7 +48,7 @@ public final class ReplicationUsageList {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

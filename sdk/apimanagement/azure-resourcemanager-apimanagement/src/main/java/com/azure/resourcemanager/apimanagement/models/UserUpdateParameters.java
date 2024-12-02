@@ -5,23 +5,23 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.models.UserIdentityContractInner;
 import com.azure.resourcemanager.apimanagement.fluent.models.UserUpdateParametersProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** User update parameters. */
 @Fluent
 public final class UserUpdateParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(UserUpdateParameters.class);
-
     /*
      * User entity update contract properties.
      */
     @JsonProperty(value = "properties")
     private UserUpdateParametersProperties innerProperties;
+
+    /** Creates an instance of UserUpdateParameters class. */
+    public UserUpdateParameters() {
+    }
 
     /**
      * Get the innerProperties property: User entity update contract properties.

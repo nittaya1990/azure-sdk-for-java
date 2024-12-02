@@ -3,8 +3,13 @@
 
 package com.azure.core.util.logging;
 
+import com.azure.core.http.rest.Response;
+import com.azure.core.http.rest.SimpleResponse;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Code snippets for {@link ClientLogger} javadocs
@@ -73,6 +78,69 @@ public class ClientLoggerJavaDocCodeSnippets {
             logger.error("A formattable message. Hello, {}", name, ex);
         }
         // END: com.azure.core.util.logging.clientlogger.error#string-object
+
+        // BEGIN: com.azure.core.util.logging.clientlogger#globalcontext
+        Map<String, Object> context = new HashMap<>();
+        context.put("connectionId", "95a47cf");
+
+        ClientLogger loggerWithContext = new ClientLogger(ClientLoggerJavaDocCodeSnippets.class, context);
+        loggerWithContext.info("A formattable message. Hello, {}", name);
+        // END: com.azure.core.util.logging.clientlogger#globalcontext
+
+        // BEGIN: com.azure.core.util.logging.clientlogger.atInfo
+        logger.atInfo()
+            .addKeyValue("key", "value")
+            .log("A formattable message. Hello, {}", name);
+        // END: com.azure.core.util.logging.clientlogger.atInfo
+
+        // BEGIN: com.azure.core.util.logging.clientlogger.atWarning
+        logger.atWarning()
+            .addKeyValue("key", "value")
+            .log("A formattable message. Hello, {}", name, exception);
+        // END: com.azure.core.util.logging.clientlogger.atWarning
+
+        // BEGIN: com.azure.core.util.logging.clientlogger.atError#deferred-value
+        try {
+            upload(resource);
+        } catch (IOException ex) {
+            logger.atError()
+                .addKeyValue("key", () -> "Expensive to calculate value")
+                .log("A formattable message. Hello, {}", name, ex);
+        }
+        // END: com.azure.core.util.logging.clientlogger.atError#deferred-value
+
+        Response<Void> response = getResponse();
+        // BEGIN: com.azure.core.util.logging.clientlogger.atLevel
+        LogLevel level = response.getStatusCode() == 200 ? LogLevel.INFORMATIONAL : LogLevel.WARNING;
+        logger.atLevel(level)
+            .addKeyValue("key", "value")
+            .log("message");
+        // END: com.azure.core.util.logging.clientlogger.atLevel
+
+        // BEGIN: com.azure.core.util.logging.ClientLogger.atVerbose.addKeyValue#primitive
+        logger.atVerbose()
+            .addKeyValue("key", 1L)
+            .log(() -> String.format("Param 1: %s, Param 2: %s, Param 3: %s", "param1", "param2", "param3"));
+        // END: com.azure.core.util.logging.ClientLogger.atVerbose.addKeyValue#primitive
+
+        // BEGIN: com.azure.core.util.logging.loggingeventbuilder
+        logger.atInfo()
+            .addKeyValue("key1", "value1")
+            .addKeyValue("key2", true)
+            .addKeyValue("key3", () -> getName())
+            .log("A formattable message. Hello, {}", name);
+        // END: com.azure.core.util.logging.loggingeventbuilder
+
+        // BEGIN: com.azure.core.util.logging.ClientLogger.atVerbose.addKeyValue#object
+        logger.atVerbose()
+            // equivalent to addKeyValue("key", () -> new LoggableObject("string representation").toString()
+            .addKeyValue("key", new LoggableObject("string representation"))
+            .log("Param 1: {}, Param 2: {}, Param 3: {}", "param1", "param2", "param3");
+        // END: com.azure.core.util.logging.ClientLogger.atVerbose.addKeyValue#object
+    }
+
+    private Response<Void> getResponse() {
+        return new SimpleResponse<Void>(null, 200, null, null);
     }
 
     /**
@@ -101,5 +169,17 @@ public class ClientLoggerJavaDocCodeSnippets {
      */
     private void upload(File resource) throws IOException {
         throw new IOException();
+    }
+
+    class LoggableObject {
+        private final String str;
+        LoggableObject(String str) {
+            this.str = str;
+        }
+
+        @Override
+        public String toString() {
+            return str;
+        }
     }
 }

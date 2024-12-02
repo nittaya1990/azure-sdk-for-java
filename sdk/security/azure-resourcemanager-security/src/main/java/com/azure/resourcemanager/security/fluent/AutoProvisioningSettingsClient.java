@@ -11,33 +11,48 @@ import com.azure.core.http.rest.Response;
 import com.azure.core.util.Context;
 import com.azure.resourcemanager.security.fluent.models.AutoProvisioningSettingInner;
 
-/** An instance of this class provides access to all the operations defined in AutoProvisioningSettingsClient. */
+/**
+ * An instance of this class provides access to all the operations defined in AutoProvisioningSettingsClient.
+ */
 public interface AutoProvisioningSettingsClient {
     /**
      * Exposes the auto provisioning settings of the subscriptions.
-     *
+     * 
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of all the auto provisioning settings response.
+     * @return list of all the auto provisioning settings response as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<AutoProvisioningSettingInner> list();
 
     /**
      * Exposes the auto provisioning settings of the subscriptions.
-     *
+     * 
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of all the auto provisioning settings response.
+     * @return list of all the auto provisioning settings response as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<AutoProvisioningSettingInner> list(Context context);
 
     /**
      * Details of a specific setting.
-     *
+     * 
+     * @param settingName Auto provisioning setting key.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return auto provisioning setting along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<AutoProvisioningSettingInner> getWithResponse(String settingName, Context context);
+
+    /**
+     * Details of a specific setting.
+     * 
      * @param settingName Auto provisioning setting key.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
@@ -49,20 +64,22 @@ public interface AutoProvisioningSettingsClient {
 
     /**
      * Details of a specific setting.
-     *
+     * 
      * @param settingName Auto provisioning setting key.
+     * @param setting Auto provisioning setting key.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return auto provisioning setting.
+     * @return auto provisioning setting along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<AutoProvisioningSettingInner> getWithResponse(String settingName, Context context);
+    Response<AutoProvisioningSettingInner> createWithResponse(String settingName, AutoProvisioningSettingInner setting,
+        Context context);
 
     /**
      * Details of a specific setting.
-     *
+     * 
      * @param settingName Auto provisioning setting key.
      * @param setting Auto provisioning setting key.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -72,19 +89,4 @@ public interface AutoProvisioningSettingsClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     AutoProvisioningSettingInner create(String settingName, AutoProvisioningSettingInner setting);
-
-    /**
-     * Details of a specific setting.
-     *
-     * @param settingName Auto provisioning setting key.
-     * @param setting Auto provisioning setting key.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return auto provisioning setting.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<AutoProvisioningSettingInner> createWithResponse(
-        String settingName, AutoProvisioningSettingInner setting, Context context);
 }

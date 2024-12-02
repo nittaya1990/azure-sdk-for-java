@@ -7,15 +7,12 @@ package com.azure.resourcemanager.resourcehealth.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.resourcehealth.fluent.models.AvailabilityStatusInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** The List availabilityStatus operation response. */
 @Fluent
 public final class AvailabilityStatusListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AvailabilityStatusListResult.class);
-
     /*
      * The list of availabilityStatuses.
      */
@@ -23,11 +20,15 @@ public final class AvailabilityStatusListResult {
     private List<AvailabilityStatusInner> value;
 
     /*
-     * The URI to fetch the next page of availabilityStatuses. Call ListNext()
-     * with this URI to fetch the next page of availabilityStatuses.
+     * The URI to fetch the next page of availabilityStatuses. Call ListNext() with this URI to fetch the next page of
+     * availabilityStatuses.
      */
     @JsonProperty(value = "nextLink")
     private String nextLink;
+
+    /** Creates an instance of AvailabilityStatusListResult class. */
+    public AvailabilityStatusListResult() {
+    }
 
     /**
      * Get the value property: The list of availabilityStatuses.
@@ -78,12 +79,12 @@ public final class AvailabilityStatusListResult {
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property value in model AvailabilityStatusListResult"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property value in model AvailabilityStatusListResult"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(AvailabilityStatusListResult.class);
 }

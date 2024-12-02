@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.mysqlflexibleserver.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.mysqlflexibleserver.fluent.models.ServerInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** A list of servers. */
+/**
+ * A list of servers.
+ */
 @Fluent
 public final class ServerListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ServerListResult.class);
-
     /*
      * The list of servers
      */
@@ -29,8 +27,14 @@ public final class ServerListResult {
     private String nextLink;
 
     /**
+     * Creates an instance of ServerListResult class.
+     */
+    public ServerListResult() {
+    }
+
+    /**
      * Get the value property: The list of servers.
-     *
+     * 
      * @return the value value.
      */
     public List<ServerInner> value() {
@@ -39,7 +43,7 @@ public final class ServerListResult {
 
     /**
      * Set the value property: The list of servers.
-     *
+     * 
      * @param value the value value to set.
      * @return the ServerListResult object itself.
      */
@@ -50,7 +54,7 @@ public final class ServerListResult {
 
     /**
      * Get the nextLink property: The link used to get the next page of operations.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -59,7 +63,7 @@ public final class ServerListResult {
 
     /**
      * Set the nextLink property: The link used to get the next page of operations.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the ServerListResult object itself.
      */
@@ -70,7 +74,7 @@ public final class ServerListResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

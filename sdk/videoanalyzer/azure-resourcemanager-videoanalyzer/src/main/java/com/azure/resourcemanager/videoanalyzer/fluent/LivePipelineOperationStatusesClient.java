@@ -25,8 +25,8 @@ public interface LivePipelineOperationStatusesClient {
      * @return the operation status of a live pipeline.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    LivePipelineOperationStatusInner get(
-        String resourceGroupName, String accountName, String livePipelineName, String operationId);
+    LivePipelineOperationStatusInner get(String resourceGroupName, String accountName, String livePipelineName,
+        String operationId);
 
     /**
      * Get the operation status of a live pipeline.
@@ -39,9 +39,9 @@ public interface LivePipelineOperationStatusesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the operation status of a live pipeline.
+     * @return the operation status of a live pipeline along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<LivePipelineOperationStatusInner> getWithResponse(
-        String resourceGroupName, String accountName, String livePipelineName, String operationId, Context context);
+    Response<LivePipelineOperationStatusInner> getWithResponse(String resourceGroupName, String accountName,
+        String livePipelineName, String operationId, Context context);
 }

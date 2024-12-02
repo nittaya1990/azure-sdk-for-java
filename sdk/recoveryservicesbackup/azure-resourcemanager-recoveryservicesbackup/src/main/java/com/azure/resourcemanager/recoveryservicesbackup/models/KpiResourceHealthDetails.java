@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** KPI Resource Health Details. */
+/**
+ * KPI Resource Health Details.
+ */
 @Fluent
 public final class KpiResourceHealthDetails {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(KpiResourceHealthDetails.class);
-
     /*
      * Resource Health Status
      */
@@ -28,8 +26,14 @@ public final class KpiResourceHealthDetails {
     private List<ResourceHealthDetails> resourceHealthDetails;
 
     /**
+     * Creates an instance of KpiResourceHealthDetails class.
+     */
+    public KpiResourceHealthDetails() {
+    }
+
+    /**
      * Get the resourceHealthStatus property: Resource Health Status.
-     *
+     * 
      * @return the resourceHealthStatus value.
      */
     public ResourceHealthStatus resourceHealthStatus() {
@@ -38,7 +42,7 @@ public final class KpiResourceHealthDetails {
 
     /**
      * Set the resourceHealthStatus property: Resource Health Status.
-     *
+     * 
      * @param resourceHealthStatus the resourceHealthStatus value to set.
      * @return the KpiResourceHealthDetails object itself.
      */
@@ -49,7 +53,7 @@ public final class KpiResourceHealthDetails {
 
     /**
      * Get the resourceHealthDetails property: Resource Health Status.
-     *
+     * 
      * @return the resourceHealthDetails value.
      */
     public List<ResourceHealthDetails> resourceHealthDetails() {
@@ -58,7 +62,7 @@ public final class KpiResourceHealthDetails {
 
     /**
      * Set the resourceHealthDetails property: Resource Health Status.
-     *
+     * 
      * @param resourceHealthDetails the resourceHealthDetails value to set.
      * @return the KpiResourceHealthDetails object itself.
      */
@@ -69,7 +73,7 @@ public final class KpiResourceHealthDetails {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

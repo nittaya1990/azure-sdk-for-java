@@ -5,22 +5,20 @@
 package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.azure.resourcemanager.security.fluent.models.SecurityAssessmentInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.azure.resourcemanager.security.fluent.models.SecurityAssessmentResponseInner;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Page of a security assessments list. */
+/**
+ * Page of a security assessments list.
+ */
 @Immutable
 public final class SecurityAssessmentList {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SecurityAssessmentList.class);
-
     /*
      * Collection of security assessments in this page
      */
     @JsonProperty(value = "value", access = JsonProperty.Access.WRITE_ONLY)
-    private List<SecurityAssessmentInner> value;
+    private List<SecurityAssessmentResponseInner> value;
 
     /*
      * The URI to fetch the next page.
@@ -29,17 +27,23 @@ public final class SecurityAssessmentList {
     private String nextLink;
 
     /**
+     * Creates an instance of SecurityAssessmentList class.
+     */
+    public SecurityAssessmentList() {
+    }
+
+    /**
      * Get the value property: Collection of security assessments in this page.
-     *
+     * 
      * @return the value value.
      */
-    public List<SecurityAssessmentInner> value() {
+    public List<SecurityAssessmentResponseInner> value() {
         return this.value;
     }
 
     /**
      * Get the nextLink property: The URI to fetch the next page.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -48,7 +52,7 @@ public final class SecurityAssessmentList {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

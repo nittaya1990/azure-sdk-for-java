@@ -8,23 +8,42 @@ import com.azure.core.util.ExpandableStringEnum;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.Collection;
 
-/** Defines values for VaultUpgradeState. */
+/**
+ * Status of the vault upgrade operation.
+ */
 public final class VaultUpgradeState extends ExpandableStringEnum<VaultUpgradeState> {
-    /** Static value Unknown for VaultUpgradeState. */
+    /**
+     * Static value Unknown for VaultUpgradeState.
+     */
     public static final VaultUpgradeState UNKNOWN = fromString("Unknown");
 
-    /** Static value InProgress for VaultUpgradeState. */
+    /**
+     * Static value InProgress for VaultUpgradeState.
+     */
     public static final VaultUpgradeState IN_PROGRESS = fromString("InProgress");
 
-    /** Static value Upgraded for VaultUpgradeState. */
+    /**
+     * Static value Upgraded for VaultUpgradeState.
+     */
     public static final VaultUpgradeState UPGRADED = fromString("Upgraded");
 
-    /** Static value Failed for VaultUpgradeState. */
+    /**
+     * Static value Failed for VaultUpgradeState.
+     */
     public static final VaultUpgradeState FAILED = fromString("Failed");
 
     /**
+     * Creates a new instance of VaultUpgradeState value.
+     * 
+     * @deprecated Use the {@link #fromString(String)} factory method.
+     */
+    @Deprecated
+    public VaultUpgradeState() {
+    }
+
+    /**
      * Creates or finds a VaultUpgradeState from its string representation.
-     *
+     * 
      * @param name a name to look for.
      * @return the corresponding VaultUpgradeState.
      */
@@ -33,7 +52,11 @@ public final class VaultUpgradeState extends ExpandableStringEnum<VaultUpgradeSt
         return fromString(name, VaultUpgradeState.class);
     }
 
-    /** @return known VaultUpgradeState values. */
+    /**
+     * Gets known VaultUpgradeState values.
+     * 
+     * @return known VaultUpgradeState values.
+     */
     public static Collection<VaultUpgradeState> values() {
         return values(VaultUpgradeState.class);
     }

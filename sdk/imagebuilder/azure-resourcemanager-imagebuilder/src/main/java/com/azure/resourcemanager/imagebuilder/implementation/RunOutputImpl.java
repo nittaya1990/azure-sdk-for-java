@@ -4,6 +4,7 @@
 
 package com.azure.resourcemanager.imagebuilder.implementation;
 
+import com.azure.core.management.SystemData;
 import com.azure.resourcemanager.imagebuilder.fluent.models.RunOutputInner;
 import com.azure.resourcemanager.imagebuilder.models.ProvisioningState;
 import com.azure.resourcemanager.imagebuilder.models.RunOutput;
@@ -13,14 +14,26 @@ public final class RunOutputImpl implements RunOutput {
 
     private final com.azure.resourcemanager.imagebuilder.ImageBuilderManager serviceManager;
 
-    RunOutputImpl(
-        RunOutputInner innerObject, com.azure.resourcemanager.imagebuilder.ImageBuilderManager serviceManager) {
+    RunOutputImpl(RunOutputInner innerObject,
+        com.azure.resourcemanager.imagebuilder.ImageBuilderManager serviceManager) {
         this.innerObject = innerObject;
         this.serviceManager = serviceManager;
     }
 
     public String id() {
         return this.innerModel().id();
+    }
+
+    public String name() {
+        return this.innerModel().name();
+    }
+
+    public String type() {
+        return this.innerModel().type();
+    }
+
+    public SystemData systemData() {
+        return this.innerModel().systemData();
     }
 
     public String artifactId() {
@@ -33,14 +46,6 @@ public final class RunOutputImpl implements RunOutput {
 
     public ProvisioningState provisioningState() {
         return this.innerModel().provisioningState();
-    }
-
-    public String name() {
-        return this.innerModel().name();
-    }
-
-    public String type() {
-        return this.innerModel().type();
     }
 
     public RunOutputInner innerModel() {

@@ -6,7 +6,6 @@ package com.azure.resourcemanager.videoanalyzer.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -20,11 +19,9 @@ import java.util.List;
     property = "@type",
     defaultImpl = SinkNodeBase.class)
 @JsonTypeName("#Microsoft.VideoAnalyzer.SinkNodeBase")
-@JsonSubTypes({@JsonSubTypes.Type(name = "#Microsoft.VideoAnalyzer.VideoSink", value = VideoSink.class)})
+@JsonSubTypes({ @JsonSubTypes.Type(name = "#Microsoft.VideoAnalyzer.VideoSink", value = VideoSink.class) })
 @Fluent
 public class SinkNodeBase extends NodeBase {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SinkNodeBase.class);
-
     /*
      * An array of upstream node references within the topology to be used as
      * inputs for this node.
@@ -70,11 +67,12 @@ public class SinkNodeBase extends NodeBase {
     public void validate() {
         super.validate();
         if (inputs() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property inputs in model SinkNodeBase"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property inputs in model SinkNodeBase"));
         } else {
             inputs().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(SinkNodeBase.class);
 }

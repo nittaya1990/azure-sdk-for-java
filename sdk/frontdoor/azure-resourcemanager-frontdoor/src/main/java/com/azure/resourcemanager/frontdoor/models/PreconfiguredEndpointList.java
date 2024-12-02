@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.frontdoor.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.frontdoor.fluent.models.PreconfiguredEndpointInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Defines a list of preconfigured endpoints. */
+/**
+ * Defines a list of preconfigured endpoints.
+ */
 @Fluent
 public final class PreconfiguredEndpointList {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PreconfiguredEndpointList.class);
-
     /*
      * List of PreconfiguredEndpoints supported by NetworkExperiment.
      */
@@ -29,8 +27,14 @@ public final class PreconfiguredEndpointList {
     private String nextLink;
 
     /**
+     * Creates an instance of PreconfiguredEndpointList class.
+     */
+    public PreconfiguredEndpointList() {
+    }
+
+    /**
      * Get the value property: List of PreconfiguredEndpoints supported by NetworkExperiment.
-     *
+     * 
      * @return the value value.
      */
     public List<PreconfiguredEndpointInner> value() {
@@ -39,7 +43,7 @@ public final class PreconfiguredEndpointList {
 
     /**
      * Get the nextLink property: URL to get the next set of PreconfiguredEndpoints if there are any.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -48,7 +52,7 @@ public final class PreconfiguredEndpointList {
 
     /**
      * Set the nextLink property: URL to get the next set of PreconfiguredEndpoints if there are any.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the PreconfiguredEndpointList object itself.
      */
@@ -59,7 +63,7 @@ public final class PreconfiguredEndpointList {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -5,20 +5,16 @@
 package com.azure.resourcemanager.communication.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.communication.fluent.models.OperationInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /**
- * A list of REST API operations supported by an Azure Resource Provider. It contains an URL link to get the next set of
- * results.
+ * A list of REST API operations supported by an Azure Resource Provider. It contains an URL link to get the next set
+ * of results.
  */
 @Immutable
 public final class OperationListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OperationListResult.class);
-
     /*
      * List of operations supported by the resource provider
      */
@@ -32,8 +28,14 @@ public final class OperationListResult {
     private String nextLink;
 
     /**
+     * Creates an instance of OperationListResult class.
+     */
+    public OperationListResult() {
+    }
+
+    /**
      * Get the value property: List of operations supported by the resource provider.
-     *
+     * 
      * @return the value value.
      */
     public List<OperationInner> value() {
@@ -42,7 +44,7 @@ public final class OperationListResult {
 
     /**
      * Get the nextLink property: URL to get the next set of operation list results (if there are any).
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -51,7 +53,7 @@ public final class OperationListResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

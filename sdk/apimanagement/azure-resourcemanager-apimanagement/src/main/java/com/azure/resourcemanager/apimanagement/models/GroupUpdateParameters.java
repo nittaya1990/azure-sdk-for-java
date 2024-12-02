@@ -5,21 +5,21 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.models.GroupUpdateParametersProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Parameters supplied to the Update Group operation. */
 @Fluent
 public final class GroupUpdateParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(GroupUpdateParameters.class);
-
     /*
      * Group entity update contract properties.
      */
     @JsonProperty(value = "properties")
     private GroupUpdateParametersProperties innerProperties;
+
+    /** Creates an instance of GroupUpdateParameters class. */
+    public GroupUpdateParameters() {
+    }
 
     /**
      * Get the innerProperties property: Group entity update contract properties.

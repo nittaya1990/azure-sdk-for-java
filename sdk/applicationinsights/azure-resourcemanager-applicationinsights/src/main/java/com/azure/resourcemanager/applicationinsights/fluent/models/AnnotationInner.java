@@ -5,16 +5,12 @@
 package com.azure.resourcemanager.applicationinsights.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
 /** Annotation associated with an application insights resource. */
 @Fluent
 public final class AnnotationInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AnnotationInner.class);
-
     /*
      * Name of annotation
      */
@@ -50,6 +46,10 @@ public final class AnnotationInner {
      */
     @JsonProperty(value = "RelatedAnnotation")
     private String relatedAnnotation;
+
+    /** Creates an instance of AnnotationInner class. */
+    public AnnotationInner() {
+    }
 
     /**
      * Get the annotationName property: Name of annotation.

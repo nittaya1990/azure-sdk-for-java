@@ -10,17 +10,16 @@ import com.azure.resourcemanager.botservice.fluent.OperationResultsClient;
 import com.azure.resourcemanager.botservice.fluent.models.OperationResultsDescriptionInner;
 import com.azure.resourcemanager.botservice.models.OperationResults;
 import com.azure.resourcemanager.botservice.models.OperationResultsDescription;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class OperationResultsImpl implements OperationResults {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OperationResultsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(OperationResultsImpl.class);
 
     private final OperationResultsClient innerClient;
 
     private final com.azure.resourcemanager.botservice.BotServiceManager serviceManager;
 
-    public OperationResultsImpl(
-        OperationResultsClient innerClient, com.azure.resourcemanager.botservice.BotServiceManager serviceManager) {
+    public OperationResultsImpl(OperationResultsClient innerClient,
+        com.azure.resourcemanager.botservice.BotServiceManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
     }

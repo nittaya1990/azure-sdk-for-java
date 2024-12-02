@@ -5,129 +5,166 @@
 package com.azure.resourcemanager.security.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
-import com.azure.resourcemanager.security.models.AlertNotifications;
-import com.azure.resourcemanager.security.models.AlertsToAdmins;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.azure.resourcemanager.security.models.NotificationsSource;
+import com.azure.resourcemanager.security.models.SecurityContactPropertiesNotificationsByRole;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 
-/** Contact details for security issues. */
-@JsonFlatten
+/**
+ * Contact details and configurations for notifications coming from Microsoft Defender for Cloud.
+ */
 @Fluent
-public class SecurityContactInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SecurityContactInner.class);
-
+public final class SecurityContactInner extends ProxyResource {
     /*
-     * The email of this security contact
+     * Security contact data
      */
-    @JsonProperty(value = "properties.email")
-    private String email;
-
-    /*
-     * The phone number of this security contact
-     */
-    @JsonProperty(value = "properties.phone")
-    private String phone;
-
-    /*
-     * Whether to send security alerts notifications to the security contact
-     */
-    @JsonProperty(value = "properties.alertNotifications")
-    private AlertNotifications alertNotifications;
-
-    /*
-     * Whether to send security alerts notifications to subscription admins
-     */
-    @JsonProperty(value = "properties.alertsToAdmins")
-    private AlertsToAdmins alertsToAdmins;
+    @JsonProperty(value = "properties")
+    private SecurityContactProperties innerProperties;
 
     /**
-     * Get the email property: The email of this security contact.
-     *
-     * @return the email value.
+     * Creates an instance of SecurityContactInner class.
      */
-    public String email() {
-        return this.email;
+    public SecurityContactInner() {
     }
 
     /**
-     * Set the email property: The email of this security contact.
-     *
-     * @param email the email value to set.
+     * Get the innerProperties property: Security contact data.
+     * 
+     * @return the innerProperties value.
+     */
+    private SecurityContactProperties innerProperties() {
+        return this.innerProperties;
+    }
+
+    /**
+     * Get the emails property: List of email addresses which will get notifications from Microsoft Defender for Cloud
+     * by the configurations defined in this security contact.
+     * 
+     * @return the emails value.
+     */
+    public String emails() {
+        return this.innerProperties() == null ? null : this.innerProperties().emails();
+    }
+
+    /**
+     * Set the emails property: List of email addresses which will get notifications from Microsoft Defender for Cloud
+     * by the configurations defined in this security contact.
+     * 
+     * @param emails the emails value to set.
      * @return the SecurityContactInner object itself.
      */
-    public SecurityContactInner withEmail(String email) {
-        this.email = email;
+    public SecurityContactInner withEmails(String emails) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new SecurityContactProperties();
+        }
+        this.innerProperties().withEmails(emails);
         return this;
     }
 
     /**
-     * Get the phone property: The phone number of this security contact.
-     *
+     * Get the phone property: The security contact's phone number.
+     * 
      * @return the phone value.
      */
     public String phone() {
-        return this.phone;
+        return this.innerProperties() == null ? null : this.innerProperties().phone();
     }
 
     /**
-     * Set the phone property: The phone number of this security contact.
-     *
+     * Set the phone property: The security contact's phone number.
+     * 
      * @param phone the phone value to set.
      * @return the SecurityContactInner object itself.
      */
     public SecurityContactInner withPhone(String phone) {
-        this.phone = phone;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new SecurityContactProperties();
+        }
+        this.innerProperties().withPhone(phone);
         return this;
     }
 
     /**
-     * Get the alertNotifications property: Whether to send security alerts notifications to the security contact.
-     *
-     * @return the alertNotifications value.
+     * Get the isEnabled property: Indicates whether the security contact is enabled.
+     * 
+     * @return the isEnabled value.
      */
-    public AlertNotifications alertNotifications() {
-        return this.alertNotifications;
+    public Boolean isEnabled() {
+        return this.innerProperties() == null ? null : this.innerProperties().isEnabled();
     }
 
     /**
-     * Set the alertNotifications property: Whether to send security alerts notifications to the security contact.
-     *
-     * @param alertNotifications the alertNotifications value to set.
+     * Set the isEnabled property: Indicates whether the security contact is enabled.
+     * 
+     * @param isEnabled the isEnabled value to set.
      * @return the SecurityContactInner object itself.
      */
-    public SecurityContactInner withAlertNotifications(AlertNotifications alertNotifications) {
-        this.alertNotifications = alertNotifications;
+    public SecurityContactInner withIsEnabled(Boolean isEnabled) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new SecurityContactProperties();
+        }
+        this.innerProperties().withIsEnabled(isEnabled);
         return this;
     }
 
     /**
-     * Get the alertsToAdmins property: Whether to send security alerts notifications to subscription admins.
-     *
-     * @return the alertsToAdmins value.
+     * Get the notificationsSources property: A collection of sources types which evaluate the email notification.
+     * 
+     * @return the notificationsSources value.
      */
-    public AlertsToAdmins alertsToAdmins() {
-        return this.alertsToAdmins;
+    public List<NotificationsSource> notificationsSources() {
+        return this.innerProperties() == null ? null : this.innerProperties().notificationsSources();
     }
 
     /**
-     * Set the alertsToAdmins property: Whether to send security alerts notifications to subscription admins.
-     *
-     * @param alertsToAdmins the alertsToAdmins value to set.
+     * Set the notificationsSources property: A collection of sources types which evaluate the email notification.
+     * 
+     * @param notificationsSources the notificationsSources value to set.
      * @return the SecurityContactInner object itself.
      */
-    public SecurityContactInner withAlertsToAdmins(AlertsToAdmins alertsToAdmins) {
-        this.alertsToAdmins = alertsToAdmins;
+    public SecurityContactInner withNotificationsSources(List<NotificationsSource> notificationsSources) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new SecurityContactProperties();
+        }
+        this.innerProperties().withNotificationsSources(notificationsSources);
+        return this;
+    }
+
+    /**
+     * Get the notificationsByRole property: Defines whether to send email notifications from Microsoft Defender for
+     * Cloud to persons with specific RBAC roles on the subscription.
+     * 
+     * @return the notificationsByRole value.
+     */
+    public SecurityContactPropertiesNotificationsByRole notificationsByRole() {
+        return this.innerProperties() == null ? null : this.innerProperties().notificationsByRole();
+    }
+
+    /**
+     * Set the notificationsByRole property: Defines whether to send email notifications from Microsoft Defender for
+     * Cloud to persons with specific RBAC roles on the subscription.
+     * 
+     * @param notificationsByRole the notificationsByRole value to set.
+     * @return the SecurityContactInner object itself.
+     */
+    public SecurityContactInner
+        withNotificationsByRole(SecurityContactPropertiesNotificationsByRole notificationsByRole) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new SecurityContactProperties();
+        }
+        this.innerProperties().withNotificationsByRole(notificationsByRole);
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
+        if (innerProperties() != null) {
+            innerProperties().validate();
+        }
     }
 }

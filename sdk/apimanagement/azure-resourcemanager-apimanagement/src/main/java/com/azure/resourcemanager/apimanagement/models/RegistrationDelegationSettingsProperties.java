@@ -5,20 +5,20 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** User registration delegation settings properties. */
 @Fluent
 public final class RegistrationDelegationSettingsProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RegistrationDelegationSettingsProperties.class);
-
     /*
      * Enable or disable delegation for user registration.
      */
     @JsonProperty(value = "enabled")
     private Boolean enabled;
+
+    /** Creates an instance of RegistrationDelegationSettingsProperties class. */
+    public RegistrationDelegationSettingsProperties() {
+    }
 
     /**
      * Get the enabled property: Enable or disable delegation for user registration.

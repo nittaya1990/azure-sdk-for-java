@@ -5,228 +5,69 @@
 package com.azure.resourcemanager.consumption.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 
-/** A management group aggregated cost resource. */
-@JsonFlatten
+/**
+ * A management group aggregated cost resource.
+ */
 @Fluent
-public class ManagementGroupAggregatedCostResultInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ManagementGroupAggregatedCostResultInner.class);
+public final class ManagementGroupAggregatedCostResultInner extends ProxyResource {
+    /*
+     * The properties of the Management Group Aggregated Cost.
+     */
+    private ManagementGroupAggregatedCostProperties innerProperties;
 
     /*
-     * The id of the billing period resource that the aggregated cost belongs
-     * to.
+     * The etag for the resource.
      */
-    @JsonProperty(value = "properties.billingPeriodId", access = JsonProperty.Access.WRITE_ONLY)
-    private String billingPeriodId;
-
-    /*
-     * The start of the date time range covered by aggregated cost.
-     */
-    @JsonProperty(value = "properties.usageStart", access = JsonProperty.Access.WRITE_ONLY)
-    private OffsetDateTime usageStart;
-
-    /*
-     * The end of the date time range covered by the aggregated cost.
-     */
-    @JsonProperty(value = "properties.usageEnd", access = JsonProperty.Access.WRITE_ONLY)
-    private OffsetDateTime usageEnd;
-
-    /*
-     * Azure Charges.
-     */
-    @JsonProperty(value = "properties.azureCharges", access = JsonProperty.Access.WRITE_ONLY)
-    private BigDecimal azureCharges;
-
-    /*
-     * Marketplace Charges.
-     */
-    @JsonProperty(value = "properties.marketplaceCharges", access = JsonProperty.Access.WRITE_ONLY)
-    private BigDecimal marketplaceCharges;
-
-    /*
-     * Charges Billed Separately.
-     */
-    @JsonProperty(value = "properties.chargesBilledSeparately", access = JsonProperty.Access.WRITE_ONLY)
-    private BigDecimal chargesBilledSeparately;
-
-    /*
-     * The ISO currency in which the meter is charged, for example, USD.
-     */
-    @JsonProperty(value = "properties.currency", access = JsonProperty.Access.WRITE_ONLY)
-    private String currency;
-
-    /*
-     * Children of a management group
-     */
-    @JsonProperty(value = "properties.children")
-    private List<ManagementGroupAggregatedCostResultInner> children;
-
-    /*
-     * List of subscription Guids included in the calculation of aggregated
-     * cost
-     */
-    @JsonProperty(value = "properties.includedSubscriptions")
-    private List<String> includedSubscriptions;
-
-    /*
-     * List of subscription Guids excluded from the calculation of aggregated
-     * cost
-     */
-    @JsonProperty(value = "properties.excludedSubscriptions")
-    private List<String> excludedSubscriptions;
-
-    /*
-     * Resource etag.
-     */
-    @JsonProperty(value = "etag", access = JsonProperty.Access.WRITE_ONLY)
     private String etag;
 
     /*
      * Resource tags.
      */
-    @JsonProperty(value = "tags", access = JsonProperty.Access.WRITE_ONLY)
     private Map<String, String> tags;
 
-    /**
-     * Get the billingPeriodId property: The id of the billing period resource that the aggregated cost belongs to.
-     *
-     * @return the billingPeriodId value.
+    /*
+     * The type of the resource.
      */
-    public String billingPeriodId() {
-        return this.billingPeriodId;
+    private String type;
+
+    /*
+     * The name of the resource.
+     */
+    private String name;
+
+    /*
+     * Fully qualified resource Id for the resource.
+     */
+    private String id;
+
+    /**
+     * Creates an instance of ManagementGroupAggregatedCostResultInner class.
+     */
+    public ManagementGroupAggregatedCostResultInner() {
     }
 
     /**
-     * Get the usageStart property: The start of the date time range covered by aggregated cost.
-     *
-     * @return the usageStart value.
+     * Get the innerProperties property: The properties of the Management Group Aggregated Cost.
+     * 
+     * @return the innerProperties value.
      */
-    public OffsetDateTime usageStart() {
-        return this.usageStart;
+    private ManagementGroupAggregatedCostProperties innerProperties() {
+        return this.innerProperties;
     }
 
     /**
-     * Get the usageEnd property: The end of the date time range covered by the aggregated cost.
-     *
-     * @return the usageEnd value.
-     */
-    public OffsetDateTime usageEnd() {
-        return this.usageEnd;
-    }
-
-    /**
-     * Get the azureCharges property: Azure Charges.
-     *
-     * @return the azureCharges value.
-     */
-    public BigDecimal azureCharges() {
-        return this.azureCharges;
-    }
-
-    /**
-     * Get the marketplaceCharges property: Marketplace Charges.
-     *
-     * @return the marketplaceCharges value.
-     */
-    public BigDecimal marketplaceCharges() {
-        return this.marketplaceCharges;
-    }
-
-    /**
-     * Get the chargesBilledSeparately property: Charges Billed Separately.
-     *
-     * @return the chargesBilledSeparately value.
-     */
-    public BigDecimal chargesBilledSeparately() {
-        return this.chargesBilledSeparately;
-    }
-
-    /**
-     * Get the currency property: The ISO currency in which the meter is charged, for example, USD.
-     *
-     * @return the currency value.
-     */
-    public String currency() {
-        return this.currency;
-    }
-
-    /**
-     * Get the children property: Children of a management group.
-     *
-     * @return the children value.
-     */
-    public List<ManagementGroupAggregatedCostResultInner> children() {
-        return this.children;
-    }
-
-    /**
-     * Set the children property: Children of a management group.
-     *
-     * @param children the children value to set.
-     * @return the ManagementGroupAggregatedCostResultInner object itself.
-     */
-    public ManagementGroupAggregatedCostResultInner withChildren(
-        List<ManagementGroupAggregatedCostResultInner> children) {
-        this.children = children;
-        return this;
-    }
-
-    /**
-     * Get the includedSubscriptions property: List of subscription Guids included in the calculation of aggregated
-     * cost.
-     *
-     * @return the includedSubscriptions value.
-     */
-    public List<String> includedSubscriptions() {
-        return this.includedSubscriptions;
-    }
-
-    /**
-     * Set the includedSubscriptions property: List of subscription Guids included in the calculation of aggregated
-     * cost.
-     *
-     * @param includedSubscriptions the includedSubscriptions value to set.
-     * @return the ManagementGroupAggregatedCostResultInner object itself.
-     */
-    public ManagementGroupAggregatedCostResultInner withIncludedSubscriptions(List<String> includedSubscriptions) {
-        this.includedSubscriptions = includedSubscriptions;
-        return this;
-    }
-
-    /**
-     * Get the excludedSubscriptions property: List of subscription Guids excluded from the calculation of aggregated
-     * cost.
-     *
-     * @return the excludedSubscriptions value.
-     */
-    public List<String> excludedSubscriptions() {
-        return this.excludedSubscriptions;
-    }
-
-    /**
-     * Set the excludedSubscriptions property: List of subscription Guids excluded from the calculation of aggregated
-     * cost.
-     *
-     * @param excludedSubscriptions the excludedSubscriptions value to set.
-     * @return the ManagementGroupAggregatedCostResultInner object itself.
-     */
-    public ManagementGroupAggregatedCostResultInner withExcludedSubscriptions(List<String> excludedSubscriptions) {
-        this.excludedSubscriptions = excludedSubscriptions;
-        return this;
-    }
-
-    /**
-     * Get the etag property: Resource etag.
-     *
+     * Get the etag property: The etag for the resource.
+     * 
      * @return the etag value.
      */
     public String etag() {
@@ -235,7 +76,7 @@ public class ManagementGroupAggregatedCostResultInner extends ProxyResource {
 
     /**
      * Get the tags property: Resource tags.
-     *
+     * 
      * @return the tags value.
      */
     public Map<String, String> tags() {
@@ -243,13 +84,230 @@ public class ManagementGroupAggregatedCostResultInner extends ProxyResource {
     }
 
     /**
+     * Get the type property: The type of the resource.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
+     * Get the name property: The name of the resource.
+     * 
+     * @return the name value.
+     */
+    @Override
+    public String name() {
+        return this.name;
+    }
+
+    /**
+     * Get the id property: Fully qualified resource Id for the resource.
+     * 
+     * @return the id value.
+     */
+    @Override
+    public String id() {
+        return this.id;
+    }
+
+    /**
+     * Get the billingPeriodId property: The id of the billing period resource that the aggregated cost belongs to.
+     * 
+     * @return the billingPeriodId value.
+     */
+    public String billingPeriodId() {
+        return this.innerProperties() == null ? null : this.innerProperties().billingPeriodId();
+    }
+
+    /**
+     * Get the usageStart property: The start of the date time range covered by aggregated cost.
+     * 
+     * @return the usageStart value.
+     */
+    public OffsetDateTime usageStart() {
+        return this.innerProperties() == null ? null : this.innerProperties().usageStart();
+    }
+
+    /**
+     * Get the usageEnd property: The end of the date time range covered by the aggregated cost.
+     * 
+     * @return the usageEnd value.
+     */
+    public OffsetDateTime usageEnd() {
+        return this.innerProperties() == null ? null : this.innerProperties().usageEnd();
+    }
+
+    /**
+     * Get the azureCharges property: Azure Charges.
+     * 
+     * @return the azureCharges value.
+     */
+    public BigDecimal azureCharges() {
+        return this.innerProperties() == null ? null : this.innerProperties().azureCharges();
+    }
+
+    /**
+     * Get the marketplaceCharges property: Marketplace Charges.
+     * 
+     * @return the marketplaceCharges value.
+     */
+    public BigDecimal marketplaceCharges() {
+        return this.innerProperties() == null ? null : this.innerProperties().marketplaceCharges();
+    }
+
+    /**
+     * Get the chargesBilledSeparately property: Charges Billed Separately.
+     * 
+     * @return the chargesBilledSeparately value.
+     */
+    public BigDecimal chargesBilledSeparately() {
+        return this.innerProperties() == null ? null : this.innerProperties().chargesBilledSeparately();
+    }
+
+    /**
+     * Get the currency property: The ISO currency in which the meter is charged, for example, USD.
+     * 
+     * @return the currency value.
+     */
+    public String currency() {
+        return this.innerProperties() == null ? null : this.innerProperties().currency();
+    }
+
+    /**
+     * Get the children property: Children of a management group.
+     * 
+     * @return the children value.
+     */
+    public List<ManagementGroupAggregatedCostResultInner> children() {
+        return this.innerProperties() == null ? null : this.innerProperties().children();
+    }
+
+    /**
+     * Set the children property: Children of a management group.
+     * 
+     * @param children the children value to set.
+     * @return the ManagementGroupAggregatedCostResultInner object itself.
+     */
+    public ManagementGroupAggregatedCostResultInner
+        withChildren(List<ManagementGroupAggregatedCostResultInner> children) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new ManagementGroupAggregatedCostProperties();
+        }
+        this.innerProperties().withChildren(children);
+        return this;
+    }
+
+    /**
+     * Get the includedSubscriptions property: List of subscription Guids included in the calculation of aggregated
+     * cost.
+     * 
+     * @return the includedSubscriptions value.
+     */
+    public List<String> includedSubscriptions() {
+        return this.innerProperties() == null ? null : this.innerProperties().includedSubscriptions();
+    }
+
+    /**
+     * Set the includedSubscriptions property: List of subscription Guids included in the calculation of aggregated
+     * cost.
+     * 
+     * @param includedSubscriptions the includedSubscriptions value to set.
+     * @return the ManagementGroupAggregatedCostResultInner object itself.
+     */
+    public ManagementGroupAggregatedCostResultInner withIncludedSubscriptions(List<String> includedSubscriptions) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new ManagementGroupAggregatedCostProperties();
+        }
+        this.innerProperties().withIncludedSubscriptions(includedSubscriptions);
+        return this;
+    }
+
+    /**
+     * Get the excludedSubscriptions property: List of subscription Guids excluded from the calculation of aggregated
+     * cost.
+     * 
+     * @return the excludedSubscriptions value.
+     */
+    public List<String> excludedSubscriptions() {
+        return this.innerProperties() == null ? null : this.innerProperties().excludedSubscriptions();
+    }
+
+    /**
+     * Set the excludedSubscriptions property: List of subscription Guids excluded from the calculation of aggregated
+     * cost.
+     * 
+     * @param excludedSubscriptions the excludedSubscriptions value to set.
+     * @return the ManagementGroupAggregatedCostResultInner object itself.
+     */
+    public ManagementGroupAggregatedCostResultInner withExcludedSubscriptions(List<String> excludedSubscriptions) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new ManagementGroupAggregatedCostProperties();
+        }
+        this.innerProperties().withExcludedSubscriptions(excludedSubscriptions);
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
-        if (children() != null) {
-            children().forEach(e -> e.validate());
+        if (innerProperties() != null) {
+            innerProperties().validate();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of ManagementGroupAggregatedCostResultInner from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of ManagementGroupAggregatedCostResultInner if the JsonReader was pointing to an instance of
+     * it, or null if it was pointing to JSON null.
+     * @throws IllegalStateException If the deserialized JSON object was missing any required properties.
+     * @throws IOException If an error occurs while reading the ManagementGroupAggregatedCostResultInner.
+     */
+    public static ManagementGroupAggregatedCostResultInner fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            ManagementGroupAggregatedCostResultInner deserializedManagementGroupAggregatedCostResultInner
+                = new ManagementGroupAggregatedCostResultInner();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("id".equals(fieldName)) {
+                    deserializedManagementGroupAggregatedCostResultInner.id = reader.getString();
+                } else if ("name".equals(fieldName)) {
+                    deserializedManagementGroupAggregatedCostResultInner.name = reader.getString();
+                } else if ("type".equals(fieldName)) {
+                    deserializedManagementGroupAggregatedCostResultInner.type = reader.getString();
+                } else if ("properties".equals(fieldName)) {
+                    deserializedManagementGroupAggregatedCostResultInner.innerProperties
+                        = ManagementGroupAggregatedCostProperties.fromJson(reader);
+                } else if ("etag".equals(fieldName)) {
+                    deserializedManagementGroupAggregatedCostResultInner.etag = reader.getString();
+                } else if ("tags".equals(fieldName)) {
+                    Map<String, String> tags = reader.readMap(reader1 -> reader1.getString());
+                    deserializedManagementGroupAggregatedCostResultInner.tags = tags;
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedManagementGroupAggregatedCostResultInner;
+        });
     }
 }

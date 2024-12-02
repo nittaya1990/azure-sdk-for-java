@@ -5,20 +5,20 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Body logging settings. */
 @Fluent
 public final class BodyDiagnosticSettings {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(BodyDiagnosticSettings.class);
-
     /*
      * Number of request body bytes to log.
      */
     @JsonProperty(value = "bytes")
     private Integer bytes;
+
+    /** Creates an instance of BodyDiagnosticSettings class. */
+    public BodyDiagnosticSettings() {
+    }
 
     /**
      * Get the bytes property: Number of request body bytes to log.

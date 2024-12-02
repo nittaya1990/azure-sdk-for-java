@@ -6,14 +6,11 @@ package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Product profile. */
 @Fluent
 public final class ProductTagResourceContractProperties extends ProductEntityBaseParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ProductTagResourceContractProperties.class);
-
     /*
      * Identifier of the product in the form of /products/{productId}
      */
@@ -25,6 +22,10 @@ public final class ProductTagResourceContractProperties extends ProductEntityBas
      */
     @JsonProperty(value = "name", required = true)
     private String name;
+
+    /** Creates an instance of ProductTagResourceContractProperties class. */
+    public ProductTagResourceContractProperties() {
+    }
 
     /**
      * Get the id property: Identifier of the product in the form of /products/{productId}.
@@ -117,10 +118,10 @@ public final class ProductTagResourceContractProperties extends ProductEntityBas
     public void validate() {
         super.validate();
         if (name() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property name in model ProductTagResourceContractProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property name in model ProductTagResourceContractProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(ProductTagResourceContractProperties.class);
 }

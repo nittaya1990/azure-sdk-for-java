@@ -7,15 +7,14 @@ package com.azure.resourcemanager.security.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.security.fluent.models.ComplianceResultInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** List of compliance results response. */
+/**
+ * List of compliance results response.
+ */
 @Fluent
 public final class ComplianceResultList {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ComplianceResultList.class);
-
     /*
      * List of compliance results
      */
@@ -29,8 +28,14 @@ public final class ComplianceResultList {
     private String nextLink;
 
     /**
+     * Creates an instance of ComplianceResultList class.
+     */
+    public ComplianceResultList() {
+    }
+
+    /**
      * Get the value property: List of compliance results.
-     *
+     * 
      * @return the value value.
      */
     public List<ComplianceResultInner> value() {
@@ -39,7 +44,7 @@ public final class ComplianceResultList {
 
     /**
      * Set the value property: List of compliance results.
-     *
+     * 
      * @param value the value value to set.
      * @return the ComplianceResultList object itself.
      */
@@ -50,7 +55,7 @@ public final class ComplianceResultList {
 
     /**
      * Get the nextLink property: The URI to fetch the next page.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -59,16 +64,17 @@ public final class ComplianceResultList {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property value in model ComplianceResultList"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property value in model ComplianceResultList"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(ComplianceResultList.class);
 }

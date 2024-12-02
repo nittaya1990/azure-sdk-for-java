@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.postgresqlflexibleserver.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
-/** Backup properties of a server. */
+/**
+ * Backup properties of a server.
+ */
 @Fluent
 public final class Backup {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Backup.class);
-
     /*
      * Backup retention days for the server.
      */
@@ -22,8 +20,7 @@ public final class Backup {
     private Integer backupRetentionDays;
 
     /*
-     * A value indicating whether Geo-Redundant backup is enabled on the
-     * server.
+     * A value indicating whether Geo-Redundant backup is enabled on the server.
      */
     @JsonProperty(value = "geoRedundantBackup")
     private GeoRedundantBackupEnum geoRedundantBackup;
@@ -35,8 +32,14 @@ public final class Backup {
     private OffsetDateTime earliestRestoreDate;
 
     /**
+     * Creates an instance of Backup class.
+     */
+    public Backup() {
+    }
+
+    /**
      * Get the backupRetentionDays property: Backup retention days for the server.
-     *
+     * 
      * @return the backupRetentionDays value.
      */
     public Integer backupRetentionDays() {
@@ -45,7 +48,7 @@ public final class Backup {
 
     /**
      * Set the backupRetentionDays property: Backup retention days for the server.
-     *
+     * 
      * @param backupRetentionDays the backupRetentionDays value to set.
      * @return the Backup object itself.
      */
@@ -56,7 +59,7 @@ public final class Backup {
 
     /**
      * Get the geoRedundantBackup property: A value indicating whether Geo-Redundant backup is enabled on the server.
-     *
+     * 
      * @return the geoRedundantBackup value.
      */
     public GeoRedundantBackupEnum geoRedundantBackup() {
@@ -65,7 +68,7 @@ public final class Backup {
 
     /**
      * Set the geoRedundantBackup property: A value indicating whether Geo-Redundant backup is enabled on the server.
-     *
+     * 
      * @param geoRedundantBackup the geoRedundantBackup value to set.
      * @return the Backup object itself.
      */
@@ -76,7 +79,7 @@ public final class Backup {
 
     /**
      * Get the earliestRestoreDate property: The earliest restore point time (ISO8601 format) for server.
-     *
+     * 
      * @return the earliestRestoreDate value.
      */
     public OffsetDateTime earliestRestoreDate() {
@@ -85,7 +88,7 @@ public final class Backup {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

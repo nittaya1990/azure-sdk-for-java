@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Api Version set base parameters. */
+/** API Version set base parameters. */
 @Fluent
 public class ApiVersionSetEntityBase {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApiVersionSetEntityBase.class);
-
     /*
      * Description of API Version Set.
      */
@@ -21,18 +17,20 @@ public class ApiVersionSetEntityBase {
     private String description;
 
     /*
-     * Name of query parameter that indicates the API Version if
-     * versioningScheme is set to `query`.
+     * Name of query parameter that indicates the API Version if versioningScheme is set to `query`.
      */
     @JsonProperty(value = "versionQueryName")
     private String versionQueryName;
 
     /*
-     * Name of HTTP header parameter that indicates the API Version if
-     * versioningScheme is set to `header`.
+     * Name of HTTP header parameter that indicates the API Version if versioningScheme is set to `header`.
      */
     @JsonProperty(value = "versionHeaderName")
     private String versionHeaderName;
+
+    /** Creates an instance of ApiVersionSetEntityBase class. */
+    public ApiVersionSetEntityBase() {
+    }
 
     /**
      * Get the description property: Description of API Version Set.

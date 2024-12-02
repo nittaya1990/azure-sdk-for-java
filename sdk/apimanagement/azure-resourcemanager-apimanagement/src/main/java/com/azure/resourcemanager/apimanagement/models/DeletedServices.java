@@ -15,7 +15,8 @@ public interface DeletedServices {
      *
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged deleted Api Management Services List Representation.
+     * @return paged deleted API Management Services List Representation as paginated response with {@link
+     *     PagedIterable}.
      */
     PagedIterable<DeletedServiceContract> list();
 
@@ -26,9 +27,23 @@ public interface DeletedServices {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged deleted Api Management Services List Representation.
+     * @return paged deleted API Management Services List Representation as paginated response with {@link
+     *     PagedIterable}.
      */
     PagedIterable<DeletedServiceContract> list(Context context);
+
+    /**
+     * Get soft-deleted Api Management Service by name.
+     *
+     * @param serviceName The name of the API Management service.
+     * @param location The location of the deleted API Management service.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return soft-deleted Api Management Service by name along with {@link Response}.
+     */
+    Response<DeletedServiceContract> getByNameWithResponse(String serviceName, String location, Context context);
 
     /**
      * Get soft-deleted Api Management Service by name.
@@ -41,19 +56,6 @@ public interface DeletedServices {
      * @return soft-deleted Api Management Service by name.
      */
     DeletedServiceContract getByName(String serviceName, String location);
-
-    /**
-     * Get soft-deleted Api Management Service by name.
-     *
-     * @param serviceName The name of the API Management service.
-     * @param location The location of the deleted API Management service.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return soft-deleted Api Management Service by name.
-     */
-    Response<DeletedServiceContract> getByNameWithResponse(String serviceName, String location, Context context);
 
     /**
      * Purges Api Management Service (deletes it with no option to undelete).

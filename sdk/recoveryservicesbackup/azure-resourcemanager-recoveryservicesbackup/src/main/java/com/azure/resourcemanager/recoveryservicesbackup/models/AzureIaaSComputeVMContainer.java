@@ -4,62 +4,110 @@
 
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
-import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.azure.core.annotation.Fluent;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** IaaS VM workload-specific backup item representing an Azure Resource Manager virtual machine. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "containerType")
+/**
+ * IaaS VM workload-specific backup item representing an Azure Resource Manager virtual machine.
+ */
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    property = "containerType",
+    defaultImpl = AzureIaaSComputeVMContainer.class,
+    visible = true)
 @JsonTypeName("Microsoft.Compute/virtualMachines")
-@Immutable
+@Fluent
 public final class AzureIaaSComputeVMContainer extends IaaSvmContainer {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureIaaSComputeVMContainer.class);
+    /*
+     * Type of the container. The value of this property for: 1. Compute Azure VM is Microsoft.Compute/virtualMachines 2.
+     * Classic Compute Azure VM is Microsoft.ClassicCompute/virtualMachines 3. Windows machines (like MAB, DPM etc) is
+     * Windows 4. Azure SQL instance is AzureSqlContainer. 5. Storage containers is StorageContainer. 6. Azure workload
+     * Backup is VMAppContainer
+     */
+    @JsonTypeId
+    @JsonProperty(value = "containerType", required = true)
+    private ProtectableContainerType containerType = ProtectableContainerType.MICROSOFT_COMPUTE_VIRTUAL_MACHINES;
 
-    /** {@inheritDoc} */
+    /**
+     * Creates an instance of AzureIaaSComputeVMContainer class.
+     */
+    public AzureIaaSComputeVMContainer() {
+    }
+
+    /**
+     * Get the containerType property: Type of the container. The value of this property for: 1. Compute Azure VM is
+     * Microsoft.Compute/virtualMachines 2.
+     * Classic Compute Azure VM is Microsoft.ClassicCompute/virtualMachines 3. Windows machines (like MAB, DPM etc) is
+     * Windows 4. Azure SQL instance is AzureSqlContainer. 5. Storage containers is StorageContainer. 6. Azure workload
+     * Backup is VMAppContainer.
+     * 
+     * @return the containerType value.
+     */
+    @Override
+    public ProtectableContainerType containerType() {
+        return this.containerType;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureIaaSComputeVMContainer withVirtualMachineId(String virtualMachineId) {
         super.withVirtualMachineId(virtualMachineId);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureIaaSComputeVMContainer withVirtualMachineVersion(String virtualMachineVersion) {
         super.withVirtualMachineVersion(virtualMachineVersion);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureIaaSComputeVMContainer withResourceGroup(String resourceGroup) {
         super.withResourceGroup(resourceGroup);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureIaaSComputeVMContainer withFriendlyName(String friendlyName) {
         super.withFriendlyName(friendlyName);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureIaaSComputeVMContainer withBackupManagementType(BackupManagementType backupManagementType) {
         super.withBackupManagementType(backupManagementType);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureIaaSComputeVMContainer withRegistrationStatus(String registrationStatus) {
         super.withRegistrationStatus(registrationStatus);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureIaaSComputeVMContainer withHealthStatus(String healthStatus) {
         super.withHealthStatus(healthStatus);
@@ -67,8 +115,17 @@ public final class AzureIaaSComputeVMContainer extends IaaSvmContainer {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AzureIaaSComputeVMContainer withProtectableObjectType(String protectableObjectType) {
+        super.withProtectableObjectType(protectableObjectType);
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

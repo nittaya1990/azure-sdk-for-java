@@ -4,193 +4,207 @@
 
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
-import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.azure.core.annotation.Fluent;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 
-/** IaaS VM workload-specific backup item representing the Classic Compute VM. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "protectedItemType")
+/**
+ * IaaS VM workload-specific backup item representing the Classic Compute VM.
+ */
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    property = "protectedItemType",
+    defaultImpl = AzureIaaSClassicComputeVMProtectedItem.class,
+    visible = true)
 @JsonTypeName("Microsoft.ClassicCompute/virtualMachines")
-@Immutable
+@Fluent
 public final class AzureIaaSClassicComputeVMProtectedItem extends AzureIaaSvmProtectedItem {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureIaaSClassicComputeVMProtectedItem.class);
+    /*
+     * backup item type.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "protectedItemType", required = true)
+    private String protectedItemType = "Microsoft.ClassicCompute/virtualMachines";
 
-    /** {@inheritDoc} */
-    @Override
-    public AzureIaaSClassicComputeVMProtectedItem withFriendlyName(String friendlyName) {
-        super.withFriendlyName(friendlyName);
-        return this;
+    /**
+     * Creates an instance of AzureIaaSClassicComputeVMProtectedItem class.
+     */
+    public AzureIaaSClassicComputeVMProtectedItem() {
     }
 
-    /** {@inheritDoc} */
+    /**
+     * Get the protectedItemType property: backup item type.
+     * 
+     * @return the protectedItemType value.
+     */
     @Override
-    public AzureIaaSClassicComputeVMProtectedItem withVirtualMachineId(String virtualMachineId) {
-        super.withVirtualMachineId(virtualMachineId);
-        return this;
+    public String protectedItemType() {
+        return this.protectedItemType;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureIaaSClassicComputeVMProtectedItem withProtectionStatus(String protectionStatus) {
         super.withProtectionStatus(protectionStatus);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureIaaSClassicComputeVMProtectedItem withProtectionState(ProtectionState protectionState) {
         super.withProtectionState(protectionState);
         return this;
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public AzureIaaSClassicComputeVMProtectedItem withHealthStatus(HealthStatus healthStatus) {
-        super.withHealthStatus(healthStatus);
-        return this;
-    }
-
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureIaaSClassicComputeVMProtectedItem withHealthDetails(List<AzureIaaSvmHealthDetails> healthDetails) {
         super.withHealthDetails(healthDetails);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureIaaSClassicComputeVMProtectedItem withKpisHealths(Map<String, KpiResourceHealthDetails> kpisHealths) {
         super.withKpisHealths(kpisHealths);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureIaaSClassicComputeVMProtectedItem withLastBackupStatus(String lastBackupStatus) {
         super.withLastBackupStatus(lastBackupStatus);
         return this;
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public AzureIaaSClassicComputeVMProtectedItem withLastBackupTime(OffsetDateTime lastBackupTime) {
-        super.withLastBackupTime(lastBackupTime);
-        return this;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public AzureIaaSClassicComputeVMProtectedItem withProtectedItemDataId(String protectedItemDataId) {
-        super.withProtectedItemDataId(protectedItemDataId);
-        return this;
-    }
-
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureIaaSClassicComputeVMProtectedItem withExtendedInfo(AzureIaaSvmProtectedItemExtendedInfo extendedInfo) {
         super.withExtendedInfo(extendedInfo);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureIaaSClassicComputeVMProtectedItem withExtendedProperties(ExtendedProperties extendedProperties) {
         super.withExtendedProperties(extendedProperties);
         return this;
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public AzureIaaSClassicComputeVMProtectedItem withBackupManagementType(BackupManagementType backupManagementType) {
-        super.withBackupManagementType(backupManagementType);
-        return this;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public AzureIaaSClassicComputeVMProtectedItem withWorkloadType(DataSourceType workloadType) {
-        super.withWorkloadType(workloadType);
-        return this;
-    }
-
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureIaaSClassicComputeVMProtectedItem withContainerName(String containerName) {
         super.withContainerName(containerName);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureIaaSClassicComputeVMProtectedItem withSourceResourceId(String sourceResourceId) {
         super.withSourceResourceId(sourceResourceId);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureIaaSClassicComputeVMProtectedItem withPolicyId(String policyId) {
         super.withPolicyId(policyId);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureIaaSClassicComputeVMProtectedItem withLastRecoveryPoint(OffsetDateTime lastRecoveryPoint) {
         super.withLastRecoveryPoint(lastRecoveryPoint);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureIaaSClassicComputeVMProtectedItem withBackupSetName(String backupSetName) {
         super.withBackupSetName(backupSetName);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureIaaSClassicComputeVMProtectedItem withCreateMode(CreateMode createMode) {
         super.withCreateMode(createMode);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureIaaSClassicComputeVMProtectedItem withDeferredDeleteTimeInUtc(OffsetDateTime deferredDeleteTimeInUtc) {
         super.withDeferredDeleteTimeInUtc(deferredDeleteTimeInUtc);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public AzureIaaSClassicComputeVMProtectedItem withIsScheduledForDeferredDelete(
-        Boolean isScheduledForDeferredDelete) {
+    public AzureIaaSClassicComputeVMProtectedItem
+        withIsScheduledForDeferredDelete(Boolean isScheduledForDeferredDelete) {
         super.withIsScheduledForDeferredDelete(isScheduledForDeferredDelete);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureIaaSClassicComputeVMProtectedItem withDeferredDeleteTimeRemaining(String deferredDeleteTimeRemaining) {
         super.withDeferredDeleteTimeRemaining(deferredDeleteTimeRemaining);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public AzureIaaSClassicComputeVMProtectedItem withIsDeferredDeleteScheduleUpcoming(
-        Boolean isDeferredDeleteScheduleUpcoming) {
+    public AzureIaaSClassicComputeVMProtectedItem
+        withIsDeferredDeleteScheduleUpcoming(Boolean isDeferredDeleteScheduleUpcoming) {
         super.withIsDeferredDeleteScheduleUpcoming(isDeferredDeleteScheduleUpcoming);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureIaaSClassicComputeVMProtectedItem withIsRehydrate(Boolean isRehydrate) {
         super.withIsRehydrate(isRehydrate);
@@ -198,8 +212,45 @@ public final class AzureIaaSClassicComputeVMProtectedItem extends AzureIaaSvmPro
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AzureIaaSClassicComputeVMProtectedItem
+        withResourceGuardOperationRequests(List<String> resourceGuardOperationRequests) {
+        super.withResourceGuardOperationRequests(resourceGuardOperationRequests);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AzureIaaSClassicComputeVMProtectedItem withIsArchiveEnabled(Boolean isArchiveEnabled) {
+        super.withIsArchiveEnabled(isArchiveEnabled);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AzureIaaSClassicComputeVMProtectedItem withPolicyName(String policyName) {
+        super.withPolicyName(policyName);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AzureIaaSClassicComputeVMProtectedItem withSoftDeleteRetentionPeriod(Integer softDeleteRetentionPeriod) {
+        super.withSoftDeleteRetentionPeriod(softDeleteRetentionPeriod);
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

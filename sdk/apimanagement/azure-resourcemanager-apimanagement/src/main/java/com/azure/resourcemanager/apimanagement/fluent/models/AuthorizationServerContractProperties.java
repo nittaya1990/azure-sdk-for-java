@@ -12,15 +12,12 @@ import com.azure.resourcemanager.apimanagement.models.BearerTokenSendingMethod;
 import com.azure.resourcemanager.apimanagement.models.ClientAuthenticationMethod;
 import com.azure.resourcemanager.apimanagement.models.GrantType;
 import com.azure.resourcemanager.apimanagement.models.TokenBodyParameterContract;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** External OAuth authorization server settings Properties. */
 @Fluent
 public final class AuthorizationServerContractProperties extends AuthorizationServerContractBaseProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AuthorizationServerContractProperties.class);
-
     /*
      * User-friendly authorization server name.
      */
@@ -28,23 +25,34 @@ public final class AuthorizationServerContractProperties extends AuthorizationSe
     private String displayName;
 
     /*
-     * Optional reference to a page where client or app registration for this
-     * authorization server is performed. Contains absolute URL to entity being
-     * referenced.
+     * If true, the authorization server may be used in the developer portal test console. True by default if no value
+     * is provided.
+     */
+    @JsonProperty(value = "useInTestConsole")
+    private Boolean useInTestConsole;
+
+    /*
+     * If true, the authorization server will be used in the API documentation in the developer portal. False by
+     * default if no value is provided.
+     */
+    @JsonProperty(value = "useInApiDocumentation")
+    private Boolean useInApiDocumentation;
+
+    /*
+     * Optional reference to a page where client or app registration for this authorization server is performed.
+     * Contains absolute URL to entity being referenced.
      */
     @JsonProperty(value = "clientRegistrationEndpoint", required = true)
     private String clientRegistrationEndpoint;
 
     /*
-     * OAuth authorization endpoint. See
-     * http://tools.ietf.org/html/rfc6749#section-3.2.
+     * OAuth authorization endpoint. See http://tools.ietf.org/html/rfc6749#section-3.2.
      */
     @JsonProperty(value = "authorizationEndpoint", required = true)
     private String authorizationEndpoint;
 
     /*
-     * Form of an authorization grant, which the client uses to request the
-     * access token.
+     * Form of an authorization grant, which the client uses to request the access token.
      */
     @JsonProperty(value = "grantTypes", required = true)
     private List<GrantType> grantTypes;
@@ -56,12 +64,15 @@ public final class AuthorizationServerContractProperties extends AuthorizationSe
     private String clientId;
 
     /*
-     * Client or app secret registered with this authorization server. This
-     * property will not be filled on 'GET' operations! Use '/listSecrets' POST
-     * request to get the value.
+     * Client or app secret registered with this authorization server. This property will not be filled on 'GET'
+     * operations! Use '/listSecrets' POST request to get the value.
      */
     @JsonProperty(value = "clientSecret")
     private String clientSecret;
+
+    /** Creates an instance of AuthorizationServerContractProperties class. */
+    public AuthorizationServerContractProperties() {
+    }
 
     /**
      * Get the displayName property: User-friendly authorization server name.
@@ -80,6 +91,50 @@ public final class AuthorizationServerContractProperties extends AuthorizationSe
      */
     public AuthorizationServerContractProperties withDisplayName(String displayName) {
         this.displayName = displayName;
+        return this;
+    }
+
+    /**
+     * Get the useInTestConsole property: If true, the authorization server may be used in the developer portal test
+     * console. True by default if no value is provided.
+     *
+     * @return the useInTestConsole value.
+     */
+    public Boolean useInTestConsole() {
+        return this.useInTestConsole;
+    }
+
+    /**
+     * Set the useInTestConsole property: If true, the authorization server may be used in the developer portal test
+     * console. True by default if no value is provided.
+     *
+     * @param useInTestConsole the useInTestConsole value to set.
+     * @return the AuthorizationServerContractProperties object itself.
+     */
+    public AuthorizationServerContractProperties withUseInTestConsole(Boolean useInTestConsole) {
+        this.useInTestConsole = useInTestConsole;
+        return this;
+    }
+
+    /**
+     * Get the useInApiDocumentation property: If true, the authorization server will be used in the API documentation
+     * in the developer portal. False by default if no value is provided.
+     *
+     * @return the useInApiDocumentation value.
+     */
+    public Boolean useInApiDocumentation() {
+        return this.useInApiDocumentation;
+    }
+
+    /**
+     * Set the useInApiDocumentation property: If true, the authorization server will be used in the API documentation
+     * in the developer portal. False by default if no value is provided.
+     *
+     * @param useInApiDocumentation the useInApiDocumentation value to set.
+     * @return the AuthorizationServerContractProperties object itself.
+     */
+    public AuthorizationServerContractProperties withUseInApiDocumentation(Boolean useInApiDocumentation) {
+        this.useInApiDocumentation = useInApiDocumentation;
         return this;
     }
 
@@ -198,24 +253,24 @@ public final class AuthorizationServerContractProperties extends AuthorizationSe
 
     /** {@inheritDoc} */
     @Override
-    public AuthorizationServerContractProperties withAuthorizationMethods(
-        List<AuthorizationMethod> authorizationMethods) {
+    public AuthorizationServerContractProperties
+        withAuthorizationMethods(List<AuthorizationMethod> authorizationMethods) {
         super.withAuthorizationMethods(authorizationMethods);
         return this;
     }
 
     /** {@inheritDoc} */
     @Override
-    public AuthorizationServerContractProperties withClientAuthenticationMethod(
-        List<ClientAuthenticationMethod> clientAuthenticationMethod) {
+    public AuthorizationServerContractProperties
+        withClientAuthenticationMethod(List<ClientAuthenticationMethod> clientAuthenticationMethod) {
         super.withClientAuthenticationMethod(clientAuthenticationMethod);
         return this;
     }
 
     /** {@inheritDoc} */
     @Override
-    public AuthorizationServerContractProperties withTokenBodyParameters(
-        List<TokenBodyParameterContract> tokenBodyParameters) {
+    public AuthorizationServerContractProperties
+        withTokenBodyParameters(List<TokenBodyParameterContract> tokenBodyParameters) {
         super.withTokenBodyParameters(tokenBodyParameters);
         return this;
     }
@@ -243,8 +298,8 @@ public final class AuthorizationServerContractProperties extends AuthorizationSe
 
     /** {@inheritDoc} */
     @Override
-    public AuthorizationServerContractProperties withBearerTokenSendingMethods(
-        List<BearerTokenSendingMethod> bearerTokenSendingMethods) {
+    public AuthorizationServerContractProperties
+        withBearerTokenSendingMethods(List<BearerTokenSendingMethod> bearerTokenSendingMethods) {
         super.withBearerTokenSendingMethods(bearerTokenSendingMethods);
         return this;
     }
@@ -272,36 +327,27 @@ public final class AuthorizationServerContractProperties extends AuthorizationSe
     public void validate() {
         super.validate();
         if (displayName() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property displayName in model AuthorizationServerContractProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property displayName in model AuthorizationServerContractProperties"));
         }
         if (clientRegistrationEndpoint() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property clientRegistrationEndpoint in model"
-                            + " AuthorizationServerContractProperties"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property clientRegistrationEndpoint in model"
+                    + " AuthorizationServerContractProperties"));
         }
         if (authorizationEndpoint() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property authorizationEndpoint in model"
-                            + " AuthorizationServerContractProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property authorizationEndpoint in model" + " AuthorizationServerContractProperties"));
         }
         if (grantTypes() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property grantTypes in model AuthorizationServerContractProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property grantTypes in model AuthorizationServerContractProperties"));
         }
         if (clientId() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property clientId in model AuthorizationServerContractProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property clientId in model AuthorizationServerContractProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(AuthorizationServerContractProperties.class);
 }

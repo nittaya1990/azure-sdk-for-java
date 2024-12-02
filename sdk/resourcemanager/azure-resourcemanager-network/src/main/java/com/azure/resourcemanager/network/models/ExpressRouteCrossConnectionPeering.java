@@ -18,10 +18,8 @@ import com.azure.resourcemanager.resources.fluentcore.model.Updatable;
  */
 @Fluent
 public interface ExpressRouteCrossConnectionPeering
-    extends IndependentChild<NetworkManager>,
-        HasInnerModel<ExpressRouteCrossConnectionPeeringInner>,
-        Refreshable<ExpressRouteCrossConnectionPeering>,
-        Updatable<ExpressRouteCrossConnectionPeering.Update> {
+    extends IndependentChild<NetworkManager>, HasInnerModel<ExpressRouteCrossConnectionPeeringInner>,
+    Refreshable<ExpressRouteCrossConnectionPeering>, Updatable<ExpressRouteCrossConnectionPeering.Update> {
     /** @return the peering type */
     ExpressRoutePeeringType peeringType();
 
@@ -68,20 +66,17 @@ public interface ExpressRouteCrossConnectionPeering
     Ipv6ExpressRouteCircuitPeeringConfig ipv6PeeringConfig();
 
     /** The entirety of the express route Cross Connection peering definition. */
-    interface Definition
-        extends DefinitionStages.Blank,
-            DefinitionStages.WithAdvertisedPublicPrefixes,
-            DefinitionStages.WithCustomerASN,
-            DefinitionStages.WithRoutingRegistryName,
-            DefinitionStages.WithPrimaryPeerAddressPrefix,
-            DefinitionStages.WithSecondaryPeerAddressPrefix,
-            DefinitionStages.WithVlanId,
-            DefinitionStages.WithPeerASN,
-            DefinitionStages.WithCreate {
+    interface Definition extends DefinitionStages.Blank, DefinitionStages.WithAdvertisedPublicPrefixes,
+        DefinitionStages.WithCustomerASN, DefinitionStages.WithRoutingRegistryName,
+        DefinitionStages.WithPrimaryPeerAddressPrefix, DefinitionStages.WithSecondaryPeerAddressPrefix,
+        DefinitionStages.WithVlanId, DefinitionStages.WithPeerASN, DefinitionStages.WithCreate {
     }
 
     /** Grouping of express route Cross Connection peering definition stages. */
     interface DefinitionStages {
+        /**
+         * The first stage of an Express Route Cross Connection Peering configuration.
+         */
         interface Blank extends WithPrimaryPeerAddressPrefix {
         }
 
@@ -127,6 +122,12 @@ public interface ExpressRouteCrossConnectionPeering
          * The stage of Express Route Cross Connection Peering definition allowing to specify primary address prefix.
          */
         interface WithPrimaryPeerAddressPrefix {
+            /**
+             * Specifies the primary peer address prefix.
+             *
+             * @param addressPrefix the primary peer address prefix
+             * @return the next stage of the definition
+             */
             WithSecondaryPeerAddressPrefix withPrimaryPeerAddressPrefix(String addressPrefix);
         }
 
@@ -134,6 +135,12 @@ public interface ExpressRouteCrossConnectionPeering
          * The stage of Express Route Cross Connection Peering definition allowing to specify secondary address prefix.
          */
         interface WithSecondaryPeerAddressPrefix {
+            /**
+             * Specifies the secondary peer address prefix.
+             *
+             * @param addressPrefix the secondary peer address prefix
+             * @return the next stage of the definition
+             */
             WithVlanId withSecondaryPeerAddressPrefix(String addressPrefix);
         }
 
@@ -156,13 +163,31 @@ public interface ExpressRouteCrossConnectionPeering
             WithCreate withPeerAsn(long peerASN);
         }
 
+        /** The stage of Express Route Cross Connection Peering definition allowing to specify a Shared Key. */
         interface WithSharedKey {
+            /**
+             * Specifies the shared key.
+             *
+             * @param sharedKey the shared key
+             * @return the next stage of the definition
+             */
             WithCreate withSharedKey(String sharedKey);
         }
 
+        /** Specifies IPv6 configuration. */
         interface WithIpv6PeeringConfig {
+            /**
+             * Begins the definition of IPv6 configuration.
+             *
+             * @return next stage of Ipv6 configuration definition
+             */
             Ipv6PeeringConfig.DefinitionStages.Blank<WithCreate> defineIpv6Config();
 
+            /**
+             * Removes IPv6 configuration from peering.
+             *
+             * @return the next stage of the update
+             */
             WithCreate withoutIpv6Config();
         }
 
@@ -177,26 +202,20 @@ public interface ExpressRouteCrossConnectionPeering
             WithCreate withState(ExpressRoutePeeringState state);
         }
 
-        interface WithCreate
-            extends Creatable<ExpressRouteCrossConnectionPeering>,
-                DefinitionStages.WithSharedKey,
-                DefinitionStages.WithIpv6PeeringConfig,
-                DefinitionStages.WithState {
+        /**
+         * The stage of the Express Route Cross Connection Peering definition which contains all the minimum required
+         * inputs for the resource to be created, but also allows for any other optional settings to be specified.
+         */
+        interface WithCreate extends Creatable<ExpressRouteCrossConnectionPeering>, DefinitionStages.WithSharedKey,
+            DefinitionStages.WithIpv6PeeringConfig, DefinitionStages.WithState {
         }
     }
 
     /** Grouping of express route cross connection peering update stages. */
-    interface Update
-        extends Appliable<ExpressRouteCrossConnectionPeering>,
-            UpdateStages.WithAdvertisedPublicPrefixes,
-            UpdateStages.WithCustomerASN,
-            UpdateStages.WithRoutingRegistryName,
-            UpdateStages.WithPrimaryPeerAddressPrefix,
-            UpdateStages.WithSecondaryPeerAddressPrefix,
-            UpdateStages.WithVlanId,
-            UpdateStages.WithPeerASN,
-            UpdateStages.WithIpv6PeeringConfig,
-            UpdateStages.WithState {
+    interface Update extends Appliable<ExpressRouteCrossConnectionPeering>, UpdateStages.WithAdvertisedPublicPrefixes,
+        UpdateStages.WithCustomerASN, UpdateStages.WithRoutingRegistryName, UpdateStages.WithPrimaryPeerAddressPrefix,
+        UpdateStages.WithSecondaryPeerAddressPrefix, UpdateStages.WithVlanId, UpdateStages.WithPeerASN,
+        UpdateStages.WithIpv6PeeringConfig, UpdateStages.WithState {
     }
 
     /**
@@ -208,6 +227,12 @@ public interface ExpressRouteCrossConnectionPeering
          * The stage of Express Route Cross Connection Peering update allowing to specify advertised address prefixes.
          */
         interface WithAdvertisedPublicPrefixes {
+            /**
+             * Specifies the advertised public prefixes.
+             *
+             * @param publicPrefixes the advertised public prefixes
+             * @return the next stage of the definition
+             */
             Update withAdvertisedPublicPrefixes(String publicPrefixes);
         }
 
@@ -217,7 +242,7 @@ public interface ExpressRouteCrossConnectionPeering
              * Specifies customer ASN.
              *
              * @param customerASN customer ASN
-             * @return the next stage of the definition
+             * @return the next stage of the update
              */
             Update withCustomerAsn(int customerASN);
         }
@@ -228,13 +253,19 @@ public interface ExpressRouteCrossConnectionPeering
              * Specifies routing registry name.
              *
              * @param routingRegistryName routing registry name
-             * @return the next stage of the definition
+             * @return the next stage of the update
              */
             Update withRoutingRegistryName(String routingRegistryName);
         }
 
         /** The stage of Express Route Cross Connection Peering update allowing to specify primary address prefix. */
         interface WithPrimaryPeerAddressPrefix {
+            /**
+             * Specifies the primary peer address prefix.
+             *
+             * @param addressPrefix the primary peer address prefix
+             * @return the next stage of the update
+             */
             Update withPrimaryPeerAddressPrefix(String addressPrefix);
         }
 

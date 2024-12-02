@@ -7,15 +7,12 @@ package com.azure.resourcemanager.apimanagement.fluent.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.models.KeyVaultContractProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
 /** Properties of the Certificate contract. */
 @Fluent
 public final class CertificateContractProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CertificateContractProperties.class);
-
     /*
      * Subject attribute of the certificate.
      */
@@ -29,8 +26,8 @@ public final class CertificateContractProperties {
     private String thumbprint;
 
     /*
-     * Expiration date of the certificate. The date conforms to the following
-     * format: `yyyy-MM-ddTHH:mm:ssZ` as specified by the ISO 8601 standard.
+     * Expiration date of the certificate. The date conforms to the following format: `yyyy-MM-ddTHH:mm:ssZ` as
+     * specified by the ISO 8601 standard.
      *
      */
     @JsonProperty(value = "expirationDate", required = true)
@@ -41,6 +38,10 @@ public final class CertificateContractProperties {
      */
     @JsonProperty(value = "keyVault")
     private KeyVaultContractProperties keyVault;
+
+    /** Creates an instance of CertificateContractProperties class. */
+    public CertificateContractProperties() {
+    }
 
     /**
      * Get the subject property: Subject attribute of the certificate.
@@ -131,25 +132,21 @@ public final class CertificateContractProperties {
      */
     public void validate() {
         if (subject() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property subject in model CertificateContractProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property subject in model CertificateContractProperties"));
         }
         if (thumbprint() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property thumbprint in model CertificateContractProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property thumbprint in model CertificateContractProperties"));
         }
         if (expirationDate() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property expirationDate in model CertificateContractProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property expirationDate in model CertificateContractProperties"));
         }
         if (keyVault() != null) {
             keyVault().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(CertificateContractProperties.class);
 }

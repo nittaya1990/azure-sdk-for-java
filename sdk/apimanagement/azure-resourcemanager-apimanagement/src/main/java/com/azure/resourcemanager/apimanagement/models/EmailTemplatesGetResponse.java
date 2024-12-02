@@ -21,16 +21,16 @@ public final class EmailTemplatesGetResponse
      * @param value the deserialized value of the HTTP response.
      * @param headers the deserialized headers of the HTTP response.
      */
-    public EmailTemplatesGetResponse(
-        HttpRequest request,
-        int statusCode,
-        HttpHeaders rawHeaders,
-        EmailTemplateContractInner value,
-        EmailTemplatesGetHeaders headers) {
+    public EmailTemplatesGetResponse(HttpRequest request, int statusCode, HttpHeaders rawHeaders,
+        EmailTemplateContractInner value, EmailTemplatesGetHeaders headers) {
         super(request, statusCode, rawHeaders, value, headers);
     }
 
-    /** @return the deserialized response body. */
+    /**
+     * Gets the deserialized response body.
+     *
+     * @return the deserialized response body.
+     */
     @Override
     public EmailTemplateContractInner getValue() {
         return super.getValue();

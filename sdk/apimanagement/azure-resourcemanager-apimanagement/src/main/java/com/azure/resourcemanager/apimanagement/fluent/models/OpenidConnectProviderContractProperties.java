@@ -6,14 +6,11 @@ package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** OpenID Connect Providers Contract. */
 @Fluent
 public final class OpenidConnectProviderContractProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OpenidConnectProviderContractProperties.class);
-
     /*
      * User-friendly OpenID Connect Provider name.
      */
@@ -43,6 +40,24 @@ public final class OpenidConnectProviderContractProperties {
      */
     @JsonProperty(value = "clientSecret")
     private String clientSecret;
+
+    /*
+     * If true, the Open ID Connect provider may be used in the developer portal test console. True by default if no
+     * value is provided.
+     */
+    @JsonProperty(value = "useInTestConsole")
+    private Boolean useInTestConsole;
+
+    /*
+     * If true, the Open ID Connect provider will be used in the API documentation in the developer portal. False by
+     * default if no value is provided.
+     */
+    @JsonProperty(value = "useInApiDocumentation")
+    private Boolean useInApiDocumentation;
+
+    /** Creates an instance of OpenidConnectProviderContractProperties class. */
+    public OpenidConnectProviderContractProperties() {
+    }
 
     /**
      * Get the displayName property: User-friendly OpenID Connect Provider name.
@@ -145,28 +160,68 @@ public final class OpenidConnectProviderContractProperties {
     }
 
     /**
+     * Get the useInTestConsole property: If true, the Open ID Connect provider may be used in the developer portal test
+     * console. True by default if no value is provided.
+     *
+     * @return the useInTestConsole value.
+     */
+    public Boolean useInTestConsole() {
+        return this.useInTestConsole;
+    }
+
+    /**
+     * Set the useInTestConsole property: If true, the Open ID Connect provider may be used in the developer portal test
+     * console. True by default if no value is provided.
+     *
+     * @param useInTestConsole the useInTestConsole value to set.
+     * @return the OpenidConnectProviderContractProperties object itself.
+     */
+    public OpenidConnectProviderContractProperties withUseInTestConsole(Boolean useInTestConsole) {
+        this.useInTestConsole = useInTestConsole;
+        return this;
+    }
+
+    /**
+     * Get the useInApiDocumentation property: If true, the Open ID Connect provider will be used in the API
+     * documentation in the developer portal. False by default if no value is provided.
+     *
+     * @return the useInApiDocumentation value.
+     */
+    public Boolean useInApiDocumentation() {
+        return this.useInApiDocumentation;
+    }
+
+    /**
+     * Set the useInApiDocumentation property: If true, the Open ID Connect provider will be used in the API
+     * documentation in the developer portal. False by default if no value is provided.
+     *
+     * @param useInApiDocumentation the useInApiDocumentation value to set.
+     * @return the OpenidConnectProviderContractProperties object itself.
+     */
+    public OpenidConnectProviderContractProperties withUseInApiDocumentation(Boolean useInApiDocumentation) {
+        this.useInApiDocumentation = useInApiDocumentation;
+        return this;
+    }
+
+    /**
      * Validates the instance.
      *
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (displayName() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property displayName in model OpenidConnectProviderContractProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property displayName in model OpenidConnectProviderContractProperties"));
         }
         if (metadataEndpoint() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property metadataEndpoint in model OpenidConnectProviderContractProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property metadataEndpoint in model OpenidConnectProviderContractProperties"));
         }
         if (clientId() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property clientId in model OpenidConnectProviderContractProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property clientId in model OpenidConnectProviderContractProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(OpenidConnectProviderContractProperties.class);
 }

@@ -10,15 +10,12 @@ import com.azure.resourcemanager.apimanagement.models.OperationEntityBaseContrac
 import com.azure.resourcemanager.apimanagement.models.ParameterContract;
 import com.azure.resourcemanager.apimanagement.models.RequestContract;
 import com.azure.resourcemanager.apimanagement.models.ResponseContract;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Operation Contract Properties. */
 @Fluent
 public final class OperationContractProperties extends OperationEntityBaseContract {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OperationContractProperties.class);
-
     /*
      * Operation Name.
      */
@@ -26,19 +23,21 @@ public final class OperationContractProperties extends OperationEntityBaseContra
     private String displayName;
 
     /*
-     * A Valid HTTP Operation Method. Typical Http Methods like GET, PUT, POST
-     * but not limited by only them.
+     * A Valid HTTP Operation Method. Typical Http Methods like GET, PUT, POST but not limited by only them.
      */
     @JsonProperty(value = "method", required = true)
     private String method;
 
     /*
-     * Relative URL template identifying the target resource for this
-     * operation. May include parameters. Example:
+     * Relative URL template identifying the target resource for this operation. May include parameters. Example:
      * /customers/{cid}/orders/{oid}/?date={date}
      */
     @JsonProperty(value = "urlTemplate", required = true)
     private String urlTemplate;
+
+    /** Creates an instance of OperationContractProperties class. */
+    public OperationContractProperties() {
+    }
 
     /**
      * Get the displayName property: Operation Name.
@@ -148,22 +147,18 @@ public final class OperationContractProperties extends OperationEntityBaseContra
     public void validate() {
         super.validate();
         if (displayName() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property displayName in model OperationContractProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property displayName in model OperationContractProperties"));
         }
         if (method() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property method in model OperationContractProperties"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property method in model OperationContractProperties"));
         }
         if (urlTemplate() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property urlTemplate in model OperationContractProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property urlTemplate in model OperationContractProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(OperationContractProperties.class);
 }

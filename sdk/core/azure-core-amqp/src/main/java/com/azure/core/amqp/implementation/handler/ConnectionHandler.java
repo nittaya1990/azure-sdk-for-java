@@ -4,13 +4,14 @@
 package com.azure.core.amqp.implementation.handler;
 
 import com.azure.core.amqp.exception.AmqpErrorContext;
+import com.azure.core.amqp.implementation.AmqpMetricsProvider;
 import com.azure.core.amqp.implementation.ClientConstants;
 import com.azure.core.amqp.implementation.ConnectionOptions;
 import com.azure.core.amqp.implementation.ExceptionUtil;
 import com.azure.core.util.ClientOptions;
 import com.azure.core.util.CoreUtils;
 import com.azure.core.util.UserAgentUtil;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.core.util.logging.LoggingEventBuilder;
 import org.apache.qpid.proton.Proton;
 import org.apache.qpid.proton.amqp.Symbol;
 import org.apache.qpid.proton.amqp.transport.ErrorCondition;
@@ -29,11 +30,31 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import static com.azure.core.amqp.implementation.AmqpLoggingUtils.addErrorCondition;
+import static com.azure.core.amqp.implementation.ClientConstants.FULLY_QUALIFIED_NAMESPACE_KEY;
+import static com.azure.core.amqp.implementation.ClientConstants.HOSTNAME_KEY;
+
 /**
  * Creates an AMQP connection using sockets.
  */
 public class ConnectionHandler extends Handler {
+    /**
+     * Gets the secure AMQP (amqps) port. The standard AMQP port number that has been assigned by IANA for secure
+     * TCP using TLS.
+     * When using <b>secure</b> AMQP, the TCP connection is first overlaid with TLS before entering the AMQP protocol
+     * handshake.
+     *
+     * @see <a href="https://learn.microsoft.com/azure/service-bus-messaging/service-bus-amqp-protocol-guide">
+     *     Connections and sessions</a>
+     */
     public static final int AMQPS_PORT = 5671;
+    /**
+     * Gets the AMQP (amqp) port.  The standard AMQP port number that has been assigned by IANA for TCP, UDP, and SCTP.
+     * Currently, there is no mapping for UDP nor SCTP.
+     * When using AMQP, the TCP connection does not, initially, need to be overlaid with TLS, whereby the server
+     * immediately <b>offers a mandatory upgrade of connection</b> to TLS using the AMQP-prescribed model.
+     */
+    public static final int AMQP_PORT = 5672;
 
     static final Symbol PRODUCT = Symbol.valueOf("product");
     static final Symbol VERSION = Symbol.valueOf("version");
@@ -47,18 +68,42 @@ public class ConnectionHandler extends Handler {
     private final Map<String, Object> connectionProperties;
     private final ConnectionOptions connectionOptions;
     private final SslPeerDetails peerDetails;
+    private final AmqpMetricsProvider metricProvider;
+    private final boolean enableSsl;
+
+    /**
+     * Creates a handler that handles proton-j's connection events without using SSL.
+     *
+     * @param connectionId Identifier for this connection.
+     * @param connectionOptions Options used when creating the AMQP connection.
+     * @param metricProvider The AMQP metrics provider.
+     * @throws NullPointerException if {@code connectionOptions}, {@code peerDetails}, or {@code metricProvider} is
+     * null.
+     */
+    public ConnectionHandler(final String connectionId, final ConnectionOptions connectionOptions,
+        AmqpMetricsProvider metricProvider) {
+        this(connectionId, connectionOptions, null, metricProvider, false);
+    }
 
     /**
      * Creates a handler that handles proton-j's connection events.
      *
      * @param connectionId Identifier for this connection.
      * @param connectionOptions Options used when creating the AMQP connection.
+     * @param peerDetails The peer details for this connection.
+     * @param metricProvider The AMQP metrics provider.
+     * @throws NullPointerException if {@code connectionOptions}, {@code peerDetails}, or {@code metricProvider} is
+     * null.
      */
     public ConnectionHandler(final String connectionId, final ConnectionOptions connectionOptions,
-        SslPeerDetails peerDetails) {
+        SslPeerDetails peerDetails, AmqpMetricsProvider metricProvider) {
+        this(connectionId, connectionOptions, peerDetails, metricProvider, true);
+    }
+
+    ConnectionHandler(String connectionId, ConnectionOptions connectionOptions, SslPeerDetails peerDetails,
+        AmqpMetricsProvider metricProvider, boolean enableSsl) {
         super(connectionId,
-            Objects.requireNonNull(connectionOptions, "'connectionOptions' cannot be null.").getHostname(),
-            new ClientLogger(ConnectionHandler.class));
+            Objects.requireNonNull(connectionOptions, "'connectionOptions' cannot be null.").getHostname());
         add(new Handshaker());
 
         this.connectionOptions = connectionOptions;
@@ -69,15 +114,21 @@ public class ConnectionHandler extends Handler {
         this.connectionProperties.put(FRAMEWORK.toString(), ClientConstants.FRAMEWORK_INFO);
 
         final ClientOptions clientOptions = connectionOptions.getClientOptions();
-        final String applicationId = !CoreUtils.isNullOrEmpty(clientOptions.getApplicationId())
-            ? clientOptions.getApplicationId()
-            : null;
+        final String applicationId
+            = !CoreUtils.isNullOrEmpty(clientOptions.getApplicationId()) ? clientOptions.getApplicationId() : null;
         final String userAgent = UserAgentUtil.toUserAgentString(applicationId, connectionOptions.getProduct(),
             connectionOptions.getClientVersion(), null);
 
         this.connectionProperties.put(USER_AGENT.toString(), userAgent);
 
-        this.peerDetails = Objects.requireNonNull(peerDetails, "'peerDetails' cannot be null.");
+        if (enableSsl) {
+            this.peerDetails = Objects.requireNonNull(peerDetails, "'peerDetails' cannot be null.");
+        } else {
+            this.peerDetails = peerDetails;
+        }
+
+        this.metricProvider = Objects.requireNonNull(metricProvider, "'metricProvider' cannot be null.");
+        this.enableSsl = enableSsl;
     }
 
     /**
@@ -115,9 +166,13 @@ public class ConnectionHandler extends Handler {
      */
     protected void addTransportLayers(Event event, TransportInternal transport) {
         // default connection idle timeout is 0.
-        // Giving it a idle timeout will enable the client side to know broken connection faster.
+        // Giving it an idle timeout will enable the client side to know broken connection faster.
         // Refer to http://docs.oasis-open.org/amqp/core/v1.0/os/amqp-core-transport-v1.0-os.html#doc-doc-idle-time-out
         transport.setIdleTimeout(CONNECTION_IDLE_TIMEOUT);
+
+        if (!enableSsl) {
+            return;
+        }
 
         final SslDomain sslDomain = Proton.sslDomain();
         sslDomain.init(SslDomain.Mode.CLIENT);
@@ -131,8 +186,8 @@ public class ConnectionHandler extends Handler {
             try {
                 defaultSslContext = SSLContext.getDefault();
             } catch (NoSuchAlgorithmException e) {
-                throw logger.logExceptionAsError(new RuntimeException(
-                    "Default SSL algorithm not found in JRE. Please check your JRE setup.", e));
+                throw logger.logExceptionAsError(
+                    new RuntimeException("Default SSL algorithm not found in JRE. Please check your JRE setup.", e));
             }
         }
 
@@ -150,11 +205,11 @@ public class ConnectionHandler extends Handler {
             sslDomain.setSslContext(defaultSslContext);
             sslDomain.setPeerAuthentication(SslDomain.VerifyMode.VERIFY_PEER);
         } else if (verifyMode == SslDomain.VerifyMode.ANONYMOUS_PEER) {
-            logger.warning("connectionId[{}] '{}' is not secure.", getConnectionId(), verifyMode);
+            logger.warning("'{}' is not secure.", verifyMode);
             sslDomain.setPeerAuthentication(SslDomain.VerifyMode.ANONYMOUS_PEER);
         } else {
-            throw logger.logExceptionAsError(new UnsupportedOperationException(
-                "verifyMode is not supported: " + verifyMode));
+            throw logger
+                .logExceptionAsError(new UnsupportedOperationException("verifyMode is not supported: " + verifyMode));
         }
 
         transport.ssl(sslDomain);
@@ -162,12 +217,14 @@ public class ConnectionHandler extends Handler {
 
     @Override
     public void onConnectionInit(Event event) {
-        logger.info("onConnectionInit connectionId[{}] hostname[{}] amqpHostname[{}]",
-            getConnectionId(), getHostname(), connectionOptions.getFullyQualifiedNamespace());
+        logger.atInfo()
+            .addKeyValue(HOSTNAME_KEY, getHostname())
+            .addKeyValue(FULLY_QUALIFIED_NAMESPACE_KEY, connectionOptions.getFullyQualifiedNamespace())
+            .log("onConnectionInit");
 
         final Connection connection = event.getConnection();
         if (connection == null) {
-            logger.warning("connectionId[{}] Underlying connection is null. Should not be possible.");
+            logger.warning("Underlying connection is null. Should not be possible.");
             close();
             return;
         }
@@ -188,8 +245,12 @@ public class ConnectionHandler extends Handler {
     public void onConnectionBound(Event event) {
         final Transport transport = event.getTransport();
 
-        logger.info("onConnectionBound connectionId[{}] hostname[{}] peerDetails[{}:{}]", getConnectionId(),
-            getHostname(), peerDetails.getHostname(), peerDetails.getPort());
+        final LoggingEventBuilder builder = logger.atInfo().addKeyValue(HOSTNAME_KEY, getHostname());
+        if (peerDetails != null) {
+            builder.addKeyValue("peerDetails", () -> peerDetails.getHostname() + ":" + peerDetails.getPort());
+        }
+
+        builder.log("onConnectionBound");
 
         this.addTransportLayers(event, (TransportInternal) transport);
 
@@ -202,8 +263,11 @@ public class ConnectionHandler extends Handler {
     @Override
     public void onConnectionUnbound(Event event) {
         final Connection connection = event.getConnection();
-        logger.info("onConnectionUnbound hostname[{}], connectionId[{}], state[{}], remoteState[{}]",
-            connection.getHostname(), getConnectionId(), connection.getLocalState(), connection.getRemoteState());
+        logger.atInfo()
+            .addKeyValue(HOSTNAME_KEY, connection.getHostname())
+            .addKeyValue("state", connection.getLocalState())
+            .addKeyValue("remoteState", connection.getRemoteState())
+            .log("onConnectionUnbound");
 
         // if failure happened while establishing transport - nothing to free up.
         if (connection.getRemoteState() != EndpointState.UNINITIALIZED) {
@@ -219,10 +283,10 @@ public class ConnectionHandler extends Handler {
         final Transport transport = event.getTransport();
         final ErrorCondition condition = transport.getCondition();
 
-        logger.warning("onTransportError hostname[{}], connectionId[{}], error[{}]",
-            connection != null ? connection.getHostname() : ClientConstants.NOT_APPLICABLE,
-            getConnectionId(),
-            condition != null ? condition.getDescription() : ClientConstants.NOT_APPLICABLE);
+        addErrorCondition(logger.atWarning(), condition)
+            .addKeyValue(HOSTNAME_KEY, connection != null ? connection.getHostname() : ClientConstants.NOT_APPLICABLE)
+            .log("onTransportError");
+        metricProvider.recordHandlerError(AmqpMetricsProvider.ErrorSource.TRANSPORT, condition);
 
         if (connection != null) {
             notifyErrorContext(connection, condition);
@@ -238,10 +302,9 @@ public class ConnectionHandler extends Handler {
         final Transport transport = event.getTransport();
         final ErrorCondition condition = transport.getCondition();
 
-        logger.info("onTransportClosed hostname[{}], connectionId[{}], error[{}]",
-            connection != null ? connection.getHostname() : ClientConstants.NOT_APPLICABLE,
-            getConnectionId(),
-            condition != null ? condition.getDescription() : ClientConstants.NOT_APPLICABLE);
+        addErrorCondition(logger.atInfo(), condition)
+            .addKeyValue(HOSTNAME_KEY, connection != null ? connection.getHostname() : ClientConstants.NOT_APPLICABLE)
+            .log("onTransportClosed");
 
         if (connection != null) {
             notifyErrorContext(connection, condition);
@@ -260,8 +323,10 @@ public class ConnectionHandler extends Handler {
     public void onConnectionRemoteOpen(Event event) {
         final Connection connection = event.getConnection();
 
-        logger.info("onConnectionRemoteOpen hostname[{}], connectionId[{}], remoteContainer[{}]",
-            connection.getHostname(), getConnectionId(), connection.getRemoteContainer());
+        logger.atInfo()
+            .addKeyValue(HOSTNAME_KEY, connection.getHostname())
+            .addKeyValue("remoteContainer", connection.getRemoteContainer())
+            .log("onConnectionRemoteOpen");
 
         onNext(connection.getRemoteState());
     }
@@ -303,10 +368,16 @@ public class ConnectionHandler extends Handler {
         logErrorCondition("onConnectionFinal", connection, error);
         onNext(EndpointState.CLOSED);
 
+        metricProvider.recordConnectionClosed(error);
         // Complete the processors because they no longer have any work to do.
         close();
     }
 
+    /**
+     * Gets the error context for this connection.
+     *
+     * @return The error context for this connection.
+     */
     public AmqpErrorContext getErrorContext() {
         return new AmqpErrorContext(getHostname());
     }
@@ -317,8 +388,8 @@ public class ConnectionHandler extends Handler {
         }
 
         if (condition == null) {
-            throw logger.logExceptionAsError(new IllegalStateException(String.format(
-                "connectionId[%s]: notifyErrorContext does not have an ErrorCondition.", getConnectionId())));
+            throw logger
+                .logExceptionAsError(new IllegalStateException("notifyErrorContext does not have an ErrorCondition."));
         }
 
         // if the remote-peer abruptly closes the connection without issuing close frame issue one
@@ -329,11 +400,6 @@ public class ConnectionHandler extends Handler {
     }
 
     private void logErrorCondition(String eventName, Connection connection, ErrorCondition error) {
-        logger.info("{} connectionId[{}] hostname[{}] errorCondition[{}] errorDescription[{}]",
-            eventName,
-            getConnectionId(),
-            connection.getHostname(),
-            error != null ? error.getCondition() : ClientConstants.NOT_APPLICABLE,
-            error != null ? error.getDescription() : ClientConstants.NOT_APPLICABLE);
+        addErrorCondition(logger.atInfo(), error).addKeyValue(HOSTNAME_KEY, connection.getHostname()).log(eventName);
     }
 }

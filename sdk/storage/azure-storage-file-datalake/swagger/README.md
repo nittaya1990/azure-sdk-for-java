@@ -10,29 +10,33 @@
 > see https://github.com/Azure/autorest.java/releases for the latest version of autorest
 ```ps
 cd <swagger-folder>
-mvn install
-autorest --java --use:@autorest/java@4.0.x
+autorest
 ```
 
 ### Code generation settings
 ``` yaml
-input-file: https://raw.githubusercontent.com/Azure/azure-rest-api-specs/storage-dataplane-preview/specification/storage/data-plane/Microsoft.StorageDataLake/stable/2020-06-12/DataLakeStorage.json
+use: '@autorest/java@4.1.39'
+input-file: https://raw.githubusercontent.com/Azure/azure-rest-api-specs/688a906172823628e75b19ea8964d998cb7560fd/specification/storage/data-plane/Azure.Storage.Files.DataLake/preview/2023-05-03/DataLakeStorage.json
 java: true
 output-folder: ../
 namespace: com.azure.storage.file.datalake
-enable-xml: true
 generate-client-as-impl: true
 generate-client-interfaces: false
 service-interface-as-public: true
-sync-methods: none
 license-header: MICROSOFT_MIT_SMALL
+enable-sync-stack: true
 context-client-method-parameter: true
 optional-constant-as-enum: true
+default-http-exception-type: com.azure.storage.file.datalake.implementation.models.DataLakeStorageExceptionInternal
 models-subpackage: implementation.models
-custom-types: FileSystemInfo,FileSystemItem,FileSystemProperties,PathInfo,PathItem,PathProperties,ListFileSystemsOptions,PathHttpHeaders
+custom-types: FileSystemInfo,FileSystemItem,FileSystemProperties,PathInfo,PathItem,PathProperties,ListFileSystemsOptions,PathHttpHeaders,EncryptionAlgorithmType,LeaseAction
 custom-types-subpackage: models
-customization-jar-path: target/azure-storage-file-datalake-customization-1.0.0-beta.1.jar
-customization-class: com.azure.storage.file.datalake.customization.DataLakeStorageCustomization
+customization-class: src/main/java/DataLakeStorageCustomization.java
+generic-response-type: true
+use-input-stream-for-binary: true
+no-custom-headers: true
+disable-client-builder: true
+stream-style-serialization: true
 ```
 
 ### Make the body of append octet-stream /{filesystem}/{path}?action=append
@@ -50,7 +54,6 @@ directive:
 - from: swagger-document
   where: $["x-ms-paths"]["/{filesystem}/{path}"]["head"]["responses"]["200"]
   transform: >
-      delete $.headers["x-ms-acl"]["x-ms-client-name"];
       $.headers["x-ms-acl"]["x-ms-client-name"] = "acl";
 ```
 
@@ -70,16 +73,7 @@ directive:
     $.TransactionalContentMD5["x-ms-parameter-grouping"].name = "path-http-headers";
 ```
 
-### Make eTag in Path JsonProperty to etag
-``` yaml
-directive:
-- from: Path.java
-  where: $
-  transform: >
-    return $.replace('@JsonProperty(value = "eTag")\n    private String eTag;', '@JsonProperty(value = "etag")\n    private String eTag;');
-```
-
-### Delete FileSystem_ListPaths x-ms-pageable as autorest doesnt allow you to set the nextLinkName to be a header.
+### Delete FileSystem_ListPaths x-ms-pageable as autorest doesn't allow you to set the nextLinkName to be a header.
 ``` yaml
 directive:
 - from: swagger-document
@@ -111,6 +105,18 @@ directive:
       $.required.push("NextMarker");
     }
 ```
+
+### Turn Path eTag into etag
+``` yaml
+directive:
+- from: swagger-document
+  where: $.definitions.Path
+  transform: >
+    $.properties.etag = $.properties.eTag;
+    delete $.properties.eTag;
+    $.properties.etag["x-ms-client-name"] = "eTag";
+```
+
 
 ![Impressions](https://azure-sdk-impressions.azurewebsites.net/api/impressions/azure-sdk-for-java%2Fsdk%2Fstorage%2Fazure-storage-file-datalake%2Fswagger%2FREADME.png)
 

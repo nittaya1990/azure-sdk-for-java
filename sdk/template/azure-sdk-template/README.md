@@ -60,8 +60,8 @@ Include code snippets and short descriptions for each task you listed in the [In
 Briefly explain each operation, but include enough clarity to explain complex or otherwise tricky operations.
 
 If possible, use the same example snippets that your in-code documentation uses. For example, use the snippets in your 
-`ReadmeSamples.java` that `embedme` ingests via its [alternate syntax](https://github.com/zakhenry/embedme#alternate-embedding-syntax) 
-directive. The `ReadmeSamples.java` file containing the snippets should reside alongside your package's code, and should be 
+`ReadmeSamples.java` that `codesnippet-maven-plugin` ingests via its [README syntax](https://github.com/Azure/azure-sdk-tools/tree/main/packages/java-packages/codesnippet-maven-plugin#injecting-codesnippets-into-readmes). 
+The `ReadmeSamples.java` file containing the snippets should reside alongside your package's code, and should be 
 validated in an automated fashion.
 
 Each example in the *Examples* section starts with an H3 that describes the example. At the top of this section, just 
@@ -117,7 +117,7 @@ locate the root issue. View the [logging][logging] wiki for guidance about enabl
 
 ### Default HTTP Client
 
-By default, a Netty based HTTP client will be used. The [HTTP clients wiki](https://github.com/Azure/azure-sdk-for-java/wiki/HTTP-clients)
+By default, a Netty based HTTP client will be used. The [HTTP clients wiki](https://learn.microsoft.com/azure/developer/java/sdk/http-client-pipeline#http-clients)
 provides more information on configuring or changing the HTTP client.
 
 ## Next steps
@@ -129,8 +129,8 @@ provides more information on configuring or changing the HTTP client.
   they might be looking for.
   
 * After adding the new SDK, you need to include the package in the following locations
-1. version_client.txt - include the package with the version.
-2. parent pom - <enlistmentroot>\pom.xml - Multiple places in the file.
+1. `version_client.txt` - include the package with the version.
+2. parent pom - `<enlistmentroot>\pom.xml` - Multiple places in the file.
 
 ## Contributing
 
@@ -148,7 +148,7 @@ This project has adopted the [Microsoft Open Source Code of Conduct][coc]. For m
 <!-- LINKS -->
 [style-guide-msft]: https://docs.microsoft.com/style-guide/capitalization
 [jdk]: https://docs.microsoft.com/java/azure/jdk/?view=azure-java-stable
-[logging]: https://github.com/Azure/azure-sdk-for-java/wiki/Logging-with-Azure-SDK
+[logging]: https://github.com/Azure/azure-sdk-for-java/wiki/Logging-in-Azure-SDK
 [cla]: https://cla.microsoft.com
 [coc]: https://opensource.microsoft.com/codeofconduct/
 [coc_faq]: https://opensource.microsoft.com/codeofconduct/faq/

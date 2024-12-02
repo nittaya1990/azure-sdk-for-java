@@ -16,13 +16,13 @@ public interface ProductGroupsClient {
     /**
      * Lists the collection of developer groups associated with the specified product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Group list representation.
+     * @return paged Group list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<GroupContractInner> listByProduct(String resourceGroupName, String serviceName, String productId);
@@ -30,7 +30,7 @@ public interface ProductGroupsClient {
     /**
      * Lists the collection of developer groups associated with the specified product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @param filter | Field | Usage | Supported operators | Supported functions
@@ -43,22 +43,33 @@ public interface ProductGroupsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Group list representation.
+     * @return paged Group list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<GroupContractInner> listByProduct(
-        String resourceGroupName,
-        String serviceName,
-        String productId,
-        String filter,
-        Integer top,
-        Integer skip,
-        Context context);
+    PagedIterable<GroupContractInner> listByProduct(String resourceGroupName, String serviceName, String productId,
+        String filter, Integer top, Integer skip, Context context);
 
     /**
      * Checks that Group entity specified by identifier is associated with the Product entity.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param productId Product identifier. Must be unique in the current API Management service instance.
+     * @param groupId Group identifier. Must be unique in the current API Management service instance.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<Void> checkEntityExistsWithResponse(String resourceGroupName, String serviceName, String productId,
+        String groupId, Context context);
+
+    /**
+     * Checks that Group entity specified by identifier is associated with the Product entity.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
@@ -70,9 +81,9 @@ public interface ProductGroupsClient {
     void checkEntityExists(String resourceGroupName, String serviceName, String productId, String groupId);
 
     /**
-     * Checks that Group entity specified by identifier is associated with the Product entity.
+     * Adds the association between the specified developer group with the specified product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
@@ -80,16 +91,16 @@ public interface ProductGroupsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return contract details along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<Void> checkEntityExistsWithResponse(
-        String resourceGroupName, String serviceName, String productId, String groupId, Context context);
+    Response<GroupContractInner> createOrUpdateWithResponse(String resourceGroupName, String serviceName,
+        String productId, String groupId, Context context);
 
     /**
      * Adds the association between the specified developer group with the specified product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
@@ -102,9 +113,9 @@ public interface ProductGroupsClient {
     GroupContractInner createOrUpdate(String resourceGroupName, String serviceName, String productId, String groupId);
 
     /**
-     * Adds the association between the specified developer group with the specified product.
+     * Deletes the association between the specified group and product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
@@ -112,16 +123,16 @@ public interface ProductGroupsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return contract details.
+     * @return the {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<GroupContractInner> createOrUpdateWithResponse(
-        String resourceGroupName, String serviceName, String productId, String groupId, Context context);
+    Response<Void> deleteWithResponse(String resourceGroupName, String serviceName, String productId, String groupId,
+        Context context);
 
     /**
      * Deletes the association between the specified group and product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
@@ -131,21 +142,4 @@ public interface ProductGroupsClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     void delete(String resourceGroupName, String serviceName, String productId, String groupId);
-
-    /**
-     * Deletes the association between the specified group and product.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param productId Product identifier. Must be unique in the current API Management service instance.
-     * @param groupId Group identifier. Must be unique in the current API Management service instance.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<Void> deleteWithResponse(
-        String resourceGroupName, String serviceName, String productId, String groupId, Context context);
 }

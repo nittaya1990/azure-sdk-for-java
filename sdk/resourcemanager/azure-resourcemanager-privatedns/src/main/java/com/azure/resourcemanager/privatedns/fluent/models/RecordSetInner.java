@@ -5,110 +5,61 @@
 package com.azure.resourcemanager.privatedns.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
-import com.azure.resourcemanager.privatedns.models.ARecord;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
 import com.azure.resourcemanager.privatedns.models.AaaaRecord;
+import com.azure.resourcemanager.privatedns.models.ARecord;
 import com.azure.resourcemanager.privatedns.models.CnameRecord;
 import com.azure.resourcemanager.privatedns.models.MxRecord;
 import com.azure.resourcemanager.privatedns.models.PtrRecord;
 import com.azure.resourcemanager.privatedns.models.SoaRecord;
 import com.azure.resourcemanager.privatedns.models.SrvRecord;
 import com.azure.resourcemanager.privatedns.models.TxtRecord;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-/** Describes a DNS record set (a collection of DNS records with the same name and type) in a Private DNS zone. */
-@JsonFlatten
+/**
+ * Describes a DNS record set (a collection of DNS records with the same name and type) in a Private DNS zone.
+ */
 @Fluent
-public class RecordSetInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RecordSetInner.class);
-
+public final class RecordSetInner extends ProxyResource {
     /*
      * The ETag of the record set.
      */
-    @JsonProperty(value = "etag")
     private String etag;
 
     /*
-     * The metadata attached to the record set.
+     * The properties of the record set.
      */
-    @JsonProperty(value = "properties.metadata")
-    private Map<String, String> metadata;
+    private RecordSetProperties innerProperties;
 
     /*
-     * The TTL (time-to-live) of the records in the record set.
+     * The type of the resource.
      */
-    @JsonProperty(value = "properties.ttl")
-    private Long ttl;
+    private String type;
 
     /*
-     * Fully qualified domain name of the record set.
+     * The name of the resource.
      */
-    @JsonProperty(value = "properties.fqdn", access = JsonProperty.Access.WRITE_ONLY)
-    private String fqdn;
+    private String name;
 
     /*
-     * Is the record set auto-registered in the Private DNS zone through a
-     * virtual network link?
+     * Fully qualified resource Id for the resource.
      */
-    @JsonProperty(value = "properties.isAutoRegistered", access = JsonProperty.Access.WRITE_ONLY)
-    private Boolean isAutoRegistered;
+    private String id;
 
-    /*
-     * The list of A records in the record set.
+    /**
+     * Creates an instance of RecordSetInner class.
      */
-    @JsonProperty(value = "properties.aRecords")
-    private List<ARecord> aRecords;
-
-    /*
-     * The list of AAAA records in the record set.
-     */
-    @JsonProperty(value = "properties.aaaaRecords")
-    private List<AaaaRecord> aaaaRecords;
-
-    /*
-     * The CNAME record in the record set.
-     */
-    @JsonProperty(value = "properties.cnameRecord")
-    private CnameRecord cnameRecord;
-
-    /*
-     * The list of MX records in the record set.
-     */
-    @JsonProperty(value = "properties.mxRecords")
-    private List<MxRecord> mxRecords;
-
-    /*
-     * The list of PTR records in the record set.
-     */
-    @JsonProperty(value = "properties.ptrRecords")
-    private List<PtrRecord> ptrRecords;
-
-    /*
-     * The SOA record in the record set.
-     */
-    @JsonProperty(value = "properties.soaRecord")
-    private SoaRecord soaRecord;
-
-    /*
-     * The list of SRV records in the record set.
-     */
-    @JsonProperty(value = "properties.srvRecords")
-    private List<SrvRecord> srvRecords;
-
-    /*
-     * The list of TXT records in the record set.
-     */
-    @JsonProperty(value = "properties.txtRecords")
-    private List<TxtRecord> txtRecords;
+    public RecordSetInner() {
+    }
 
     /**
      * Get the etag property: The ETag of the record set.
-     *
+     * 
      * @return the etag value.
      */
     public String etag() {
@@ -117,7 +68,7 @@ public class RecordSetInner extends ProxyResource {
 
     /**
      * Set the etag property: The ETag of the record set.
-     *
+     * 
      * @param etag the etag value to set.
      * @return the RecordSetInner object itself.
      */
@@ -127,253 +78,347 @@ public class RecordSetInner extends ProxyResource {
     }
 
     /**
+     * Get the innerProperties property: The properties of the record set.
+     * 
+     * @return the innerProperties value.
+     */
+    private RecordSetProperties innerProperties() {
+        return this.innerProperties;
+    }
+
+    /**
+     * Get the type property: The type of the resource.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
+     * Get the name property: The name of the resource.
+     * 
+     * @return the name value.
+     */
+    @Override
+    public String name() {
+        return this.name;
+    }
+
+    /**
+     * Get the id property: Fully qualified resource Id for the resource.
+     * 
+     * @return the id value.
+     */
+    @Override
+    public String id() {
+        return this.id;
+    }
+
+    /**
      * Get the metadata property: The metadata attached to the record set.
-     *
+     * 
      * @return the metadata value.
      */
     public Map<String, String> metadata() {
-        return this.metadata;
+        return this.innerProperties() == null ? null : this.innerProperties().metadata();
     }
 
     /**
      * Set the metadata property: The metadata attached to the record set.
-     *
+     * 
      * @param metadata the metadata value to set.
      * @return the RecordSetInner object itself.
      */
     public RecordSetInner withMetadata(Map<String, String> metadata) {
-        this.metadata = metadata;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new RecordSetProperties();
+        }
+        this.innerProperties().withMetadata(metadata);
         return this;
     }
 
     /**
      * Get the ttl property: The TTL (time-to-live) of the records in the record set.
-     *
+     * 
      * @return the ttl value.
      */
     public Long ttl() {
-        return this.ttl;
+        return this.innerProperties() == null ? null : this.innerProperties().ttl();
     }
 
     /**
      * Set the ttl property: The TTL (time-to-live) of the records in the record set.
-     *
+     * 
      * @param ttl the ttl value to set.
      * @return the RecordSetInner object itself.
      */
     public RecordSetInner withTtl(Long ttl) {
-        this.ttl = ttl;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new RecordSetProperties();
+        }
+        this.innerProperties().withTtl(ttl);
         return this;
     }
 
     /**
      * Get the fqdn property: Fully qualified domain name of the record set.
-     *
+     * 
      * @return the fqdn value.
      */
     public String fqdn() {
-        return this.fqdn;
+        return this.innerProperties() == null ? null : this.innerProperties().fqdn();
     }
 
     /**
      * Get the isAutoRegistered property: Is the record set auto-registered in the Private DNS zone through a virtual
      * network link?.
-     *
+     * 
      * @return the isAutoRegistered value.
      */
     public Boolean isAutoRegistered() {
-        return this.isAutoRegistered;
+        return this.innerProperties() == null ? null : this.innerProperties().isAutoRegistered();
     }
 
     /**
      * Get the aRecords property: The list of A records in the record set.
-     *
+     * 
      * @return the aRecords value.
      */
     public List<ARecord> aRecords() {
-        return this.aRecords;
+        return this.innerProperties() == null ? null : this.innerProperties().aRecords();
     }
 
     /**
      * Set the aRecords property: The list of A records in the record set.
-     *
+     * 
      * @param aRecords the aRecords value to set.
      * @return the RecordSetInner object itself.
      */
     public RecordSetInner withARecords(List<ARecord> aRecords) {
-        this.aRecords = aRecords;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new RecordSetProperties();
+        }
+        this.innerProperties().withARecords(aRecords);
         return this;
     }
 
     /**
      * Get the aaaaRecords property: The list of AAAA records in the record set.
-     *
+     * 
      * @return the aaaaRecords value.
      */
     public List<AaaaRecord> aaaaRecords() {
-        return this.aaaaRecords;
+        return this.innerProperties() == null ? null : this.innerProperties().aaaaRecords();
     }
 
     /**
      * Set the aaaaRecords property: The list of AAAA records in the record set.
-     *
+     * 
      * @param aaaaRecords the aaaaRecords value to set.
      * @return the RecordSetInner object itself.
      */
     public RecordSetInner withAaaaRecords(List<AaaaRecord> aaaaRecords) {
-        this.aaaaRecords = aaaaRecords;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new RecordSetProperties();
+        }
+        this.innerProperties().withAaaaRecords(aaaaRecords);
         return this;
     }
 
     /**
      * Get the cnameRecord property: The CNAME record in the record set.
-     *
+     * 
      * @return the cnameRecord value.
      */
     public CnameRecord cnameRecord() {
-        return this.cnameRecord;
+        return this.innerProperties() == null ? null : this.innerProperties().cnameRecord();
     }
 
     /**
      * Set the cnameRecord property: The CNAME record in the record set.
-     *
+     * 
      * @param cnameRecord the cnameRecord value to set.
      * @return the RecordSetInner object itself.
      */
     public RecordSetInner withCnameRecord(CnameRecord cnameRecord) {
-        this.cnameRecord = cnameRecord;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new RecordSetProperties();
+        }
+        this.innerProperties().withCnameRecord(cnameRecord);
         return this;
     }
 
     /**
      * Get the mxRecords property: The list of MX records in the record set.
-     *
+     * 
      * @return the mxRecords value.
      */
     public List<MxRecord> mxRecords() {
-        return this.mxRecords;
+        return this.innerProperties() == null ? null : this.innerProperties().mxRecords();
     }
 
     /**
      * Set the mxRecords property: The list of MX records in the record set.
-     *
+     * 
      * @param mxRecords the mxRecords value to set.
      * @return the RecordSetInner object itself.
      */
     public RecordSetInner withMxRecords(List<MxRecord> mxRecords) {
-        this.mxRecords = mxRecords;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new RecordSetProperties();
+        }
+        this.innerProperties().withMxRecords(mxRecords);
         return this;
     }
 
     /**
      * Get the ptrRecords property: The list of PTR records in the record set.
-     *
+     * 
      * @return the ptrRecords value.
      */
     public List<PtrRecord> ptrRecords() {
-        return this.ptrRecords;
+        return this.innerProperties() == null ? null : this.innerProperties().ptrRecords();
     }
 
     /**
      * Set the ptrRecords property: The list of PTR records in the record set.
-     *
+     * 
      * @param ptrRecords the ptrRecords value to set.
      * @return the RecordSetInner object itself.
      */
     public RecordSetInner withPtrRecords(List<PtrRecord> ptrRecords) {
-        this.ptrRecords = ptrRecords;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new RecordSetProperties();
+        }
+        this.innerProperties().withPtrRecords(ptrRecords);
         return this;
     }
 
     /**
      * Get the soaRecord property: The SOA record in the record set.
-     *
+     * 
      * @return the soaRecord value.
      */
     public SoaRecord soaRecord() {
-        return this.soaRecord;
+        return this.innerProperties() == null ? null : this.innerProperties().soaRecord();
     }
 
     /**
      * Set the soaRecord property: The SOA record in the record set.
-     *
+     * 
      * @param soaRecord the soaRecord value to set.
      * @return the RecordSetInner object itself.
      */
     public RecordSetInner withSoaRecord(SoaRecord soaRecord) {
-        this.soaRecord = soaRecord;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new RecordSetProperties();
+        }
+        this.innerProperties().withSoaRecord(soaRecord);
         return this;
     }
 
     /**
      * Get the srvRecords property: The list of SRV records in the record set.
-     *
+     * 
      * @return the srvRecords value.
      */
     public List<SrvRecord> srvRecords() {
-        return this.srvRecords;
+        return this.innerProperties() == null ? null : this.innerProperties().srvRecords();
     }
 
     /**
      * Set the srvRecords property: The list of SRV records in the record set.
-     *
+     * 
      * @param srvRecords the srvRecords value to set.
      * @return the RecordSetInner object itself.
      */
     public RecordSetInner withSrvRecords(List<SrvRecord> srvRecords) {
-        this.srvRecords = srvRecords;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new RecordSetProperties();
+        }
+        this.innerProperties().withSrvRecords(srvRecords);
         return this;
     }
 
     /**
      * Get the txtRecords property: The list of TXT records in the record set.
-     *
+     * 
      * @return the txtRecords value.
      */
     public List<TxtRecord> txtRecords() {
-        return this.txtRecords;
+        return this.innerProperties() == null ? null : this.innerProperties().txtRecords();
     }
 
     /**
      * Set the txtRecords property: The list of TXT records in the record set.
-     *
+     * 
      * @param txtRecords the txtRecords value to set.
      * @return the RecordSetInner object itself.
      */
     public RecordSetInner withTxtRecords(List<TxtRecord> txtRecords) {
-        this.txtRecords = txtRecords;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new RecordSetProperties();
+        }
+        this.innerProperties().withTxtRecords(txtRecords);
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
-        if (aRecords() != null) {
-            aRecords().forEach(e -> e.validate());
+        if (innerProperties() != null) {
+            innerProperties().validate();
         }
-        if (aaaaRecords() != null) {
-            aaaaRecords().forEach(e -> e.validate());
-        }
-        if (cnameRecord() != null) {
-            cnameRecord().validate();
-        }
-        if (mxRecords() != null) {
-            mxRecords().forEach(e -> e.validate());
-        }
-        if (ptrRecords() != null) {
-            ptrRecords().forEach(e -> e.validate());
-        }
-        if (soaRecord() != null) {
-            soaRecord().validate();
-        }
-        if (srvRecords() != null) {
-            srvRecords().forEach(e -> e.validate());
-        }
-        if (txtRecords() != null) {
-            txtRecords().forEach(e -> e.validate());
-        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeStringField("etag", this.etag);
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of RecordSetInner from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of RecordSetInner if the JsonReader was pointing to an instance of it, or null if it was
+     * pointing to JSON null.
+     * @throws IllegalStateException If the deserialized JSON object was missing any required properties.
+     * @throws IOException If an error occurs while reading the RecordSetInner.
+     */
+    public static RecordSetInner fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            RecordSetInner deserializedRecordSetInner = new RecordSetInner();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("id".equals(fieldName)) {
+                    deserializedRecordSetInner.id = reader.getString();
+                } else if ("name".equals(fieldName)) {
+                    deserializedRecordSetInner.name = reader.getString();
+                } else if ("type".equals(fieldName)) {
+                    deserializedRecordSetInner.type = reader.getString();
+                } else if ("etag".equals(fieldName)) {
+                    deserializedRecordSetInner.etag = reader.getString();
+                } else if ("properties".equals(fieldName)) {
+                    deserializedRecordSetInner.innerProperties = RecordSetProperties.fromJson(reader);
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedRecordSetInner;
+        });
     }
 }

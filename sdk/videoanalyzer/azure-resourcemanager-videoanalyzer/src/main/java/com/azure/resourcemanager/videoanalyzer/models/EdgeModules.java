@@ -18,7 +18,7 @@ public interface EdgeModules {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of EdgeModuleEntity items.
+     * @return a collection of EdgeModuleEntity items as paginated response with {@link PagedIterable}.
      */
     PagedIterable<EdgeModuleEntity> list(String resourceGroupName, String accountName);
 
@@ -33,7 +33,7 @@ public interface EdgeModules {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of EdgeModuleEntity items.
+     * @return a collection of EdgeModuleEntity items as paginated response with {@link PagedIterable}.
      */
     PagedIterable<EdgeModuleEntity> list(String resourceGroupName, String accountName, Integer top, Context context);
 
@@ -60,10 +60,10 @@ public interface EdgeModules {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the representation of an edge module.
+     * @return the representation of an edge module along with {@link Response}.
      */
-    Response<EdgeModuleEntity> getWithResponse(
-        String resourceGroupName, String accountName, String edgeModuleName, Context context);
+    Response<EdgeModuleEntity> getWithResponse(String resourceGroupName, String accountName, String edgeModuleName,
+        Context context);
 
     /**
      * Deletes an existing edge module resource. Deleting the edge module resource will prevent an Azure Video Analyzer
@@ -91,10 +91,10 @@ public interface EdgeModules {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
-    Response<Void> deleteWithResponse(
-        String resourceGroupName, String accountName, String edgeModuleName, Context context);
+    Response<Void> deleteWithResponse(String resourceGroupName, String accountName, String edgeModuleName,
+        Context context);
 
     /**
      * Creates a new provisioning token. A provisioning token allows for a single instance of Azure Video analyzer IoT
@@ -113,8 +113,8 @@ public interface EdgeModules {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return provisioning token properties.
      */
-    EdgeModuleProvisioningToken listProvisioningToken(
-        String resourceGroupName, String accountName, String edgeModuleName, ListProvisioningTokenInput parameters);
+    EdgeModuleProvisioningToken listProvisioningToken(String resourceGroupName, String accountName,
+        String edgeModuleName, ListProvisioningTokenInput parameters);
 
     /**
      * Creates a new provisioning token. A provisioning token allows for a single instance of Azure Video analyzer IoT
@@ -132,14 +132,10 @@ public interface EdgeModules {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return provisioning token properties.
+     * @return provisioning token properties along with {@link Response}.
      */
-    Response<EdgeModuleProvisioningToken> listProvisioningTokenWithResponse(
-        String resourceGroupName,
-        String accountName,
-        String edgeModuleName,
-        ListProvisioningTokenInput parameters,
-        Context context);
+    Response<EdgeModuleProvisioningToken> listProvisioningTokenWithResponse(String resourceGroupName,
+        String accountName, String edgeModuleName, ListProvisioningTokenInput parameters, Context context);
 
     /**
      * Retrieves an existing edge module resource with the given name.
@@ -148,7 +144,7 @@ public interface EdgeModules {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the representation of an edge module.
+     * @return the representation of an edge module along with {@link Response}.
      */
     EdgeModuleEntity getById(String id);
 
@@ -160,7 +156,7 @@ public interface EdgeModules {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the representation of an edge module.
+     * @return the representation of an edge module along with {@link Response}.
      */
     Response<EdgeModuleEntity> getByIdWithResponse(String id, Context context);
 
@@ -186,7 +182,7 @@ public interface EdgeModules {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
     Response<Void> deleteByIdWithResponse(String id, Context context);
 

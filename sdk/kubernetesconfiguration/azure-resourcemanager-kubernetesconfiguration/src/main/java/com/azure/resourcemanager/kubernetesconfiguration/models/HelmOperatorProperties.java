@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.kubernetesconfiguration.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Properties for Helm operator. */
 @Fluent
 public final class HelmOperatorProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(HelmOperatorProperties.class);
-
     /*
      * Version of the operator Helm chart.
      */
@@ -25,6 +21,10 @@ public final class HelmOperatorProperties {
      */
     @JsonProperty(value = "chartValues")
     private String chartValues;
+
+    /** Creates an instance of HelmOperatorProperties class. */
+    public HelmOperatorProperties() {
+    }
 
     /**
      * Get the chartVersion property: Version of the operator Helm chart.

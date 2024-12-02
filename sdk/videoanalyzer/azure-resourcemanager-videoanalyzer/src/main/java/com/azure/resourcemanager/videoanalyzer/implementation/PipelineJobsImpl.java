@@ -13,17 +13,16 @@ import com.azure.resourcemanager.videoanalyzer.fluent.PipelineJobsClient;
 import com.azure.resourcemanager.videoanalyzer.fluent.models.PipelineJobInner;
 import com.azure.resourcemanager.videoanalyzer.models.PipelineJob;
 import com.azure.resourcemanager.videoanalyzer.models.PipelineJobs;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class PipelineJobsImpl implements PipelineJobs {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PipelineJobsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(PipelineJobsImpl.class);
 
     private final PipelineJobsClient innerClient;
 
     private final com.azure.resourcemanager.videoanalyzer.VideoAnalyzerManager serviceManager;
 
-    public PipelineJobsImpl(
-        PipelineJobsClient innerClient, com.azure.resourcemanager.videoanalyzer.VideoAnalyzerManager serviceManager) {
+    public PipelineJobsImpl(PipelineJobsClient innerClient,
+        com.azure.resourcemanager.videoanalyzer.VideoAnalyzerManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
     }
@@ -33,10 +32,10 @@ public final class PipelineJobsImpl implements PipelineJobs {
         return Utils.mapPage(inner, inner1 -> new PipelineJobImpl(inner1, this.manager()));
     }
 
-    public PagedIterable<PipelineJob> list(
-        String resourceGroupName, String accountName, String filter, Integer top, Context context) {
-        PagedIterable<PipelineJobInner> inner =
-            this.serviceClient().list(resourceGroupName, accountName, filter, top, context);
+    public PagedIterable<PipelineJob> list(String resourceGroupName, String accountName, String filter, Integer top,
+        Context context) {
+        PagedIterable<PipelineJobInner> inner
+            = this.serviceClient().list(resourceGroupName, accountName, filter, top, context);
         return Utils.mapPage(inner, inner1 -> new PipelineJobImpl(inner1, this.manager()));
     }
 
@@ -49,15 +48,12 @@ public final class PipelineJobsImpl implements PipelineJobs {
         }
     }
 
-    public Response<PipelineJob> getWithResponse(
-        String resourceGroupName, String accountName, String pipelineJobName, Context context) {
-        Response<PipelineJobInner> inner =
-            this.serviceClient().getWithResponse(resourceGroupName, accountName, pipelineJobName, context);
+    public Response<PipelineJob> getWithResponse(String resourceGroupName, String accountName, String pipelineJobName,
+        Context context) {
+        Response<PipelineJobInner> inner
+            = this.serviceClient().getWithResponse(resourceGroupName, accountName, pipelineJobName, context);
         if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
                 new PipelineJobImpl(inner.getValue(), this.manager()));
         } else {
             return null;
@@ -68,8 +64,8 @@ public final class PipelineJobsImpl implements PipelineJobs {
         this.serviceClient().delete(resourceGroupName, accountName, pipelineJobName);
     }
 
-    public Response<Void> deleteWithResponse(
-        String resourceGroupName, String accountName, String pipelineJobName, Context context) {
+    public Response<Void> deleteWithResponse(String resourceGroupName, String accountName, String pipelineJobName,
+        Context context) {
         return this.serviceClient().deleteWithResponse(resourceGroupName, accountName, pipelineJobName, context);
     }
 
@@ -84,26 +80,18 @@ public final class PipelineJobsImpl implements PipelineJobs {
     public PipelineJob getById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
         String accountName = Utils.getValueFromIdByName(id, "videoAnalyzers");
         if (accountName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'videoAnalyzers'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'videoAnalyzers'.", id)));
         }
         String pipelineJobName = Utils.getValueFromIdByName(id, "pipelineJobs");
         if (pipelineJobName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'pipelineJobs'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'pipelineJobs'.", id)));
         }
         return this.getWithResponse(resourceGroupName, accountName, pipelineJobName, Context.NONE).getValue();
     }
@@ -111,26 +99,18 @@ public final class PipelineJobsImpl implements PipelineJobs {
     public Response<PipelineJob> getByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
         String accountName = Utils.getValueFromIdByName(id, "videoAnalyzers");
         if (accountName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'videoAnalyzers'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'videoAnalyzers'.", id)));
         }
         String pipelineJobName = Utils.getValueFromIdByName(id, "pipelineJobs");
         if (pipelineJobName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'pipelineJobs'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'pipelineJobs'.", id)));
         }
         return this.getWithResponse(resourceGroupName, accountName, pipelineJobName, context);
     }
@@ -138,53 +118,37 @@ public final class PipelineJobsImpl implements PipelineJobs {
     public void deleteById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
         String accountName = Utils.getValueFromIdByName(id, "videoAnalyzers");
         if (accountName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'videoAnalyzers'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'videoAnalyzers'.", id)));
         }
         String pipelineJobName = Utils.getValueFromIdByName(id, "pipelineJobs");
         if (pipelineJobName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'pipelineJobs'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'pipelineJobs'.", id)));
         }
-        this.deleteWithResponse(resourceGroupName, accountName, pipelineJobName, Context.NONE).getValue();
+        this.deleteWithResponse(resourceGroupName, accountName, pipelineJobName, Context.NONE);
     }
 
     public Response<Void> deleteByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
         String accountName = Utils.getValueFromIdByName(id, "videoAnalyzers");
         if (accountName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'videoAnalyzers'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'videoAnalyzers'.", id)));
         }
         String pipelineJobName = Utils.getValueFromIdByName(id, "pipelineJobs");
         if (pipelineJobName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'pipelineJobs'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'pipelineJobs'.", id)));
         }
         return this.deleteWithResponse(resourceGroupName, accountName, pipelineJobName, context);
     }

@@ -21,16 +21,16 @@ public final class ApiOperationPoliciesCreateOrUpdateResponse
      * @param value the deserialized value of the HTTP response.
      * @param headers the deserialized headers of the HTTP response.
      */
-    public ApiOperationPoliciesCreateOrUpdateResponse(
-        HttpRequest request,
-        int statusCode,
-        HttpHeaders rawHeaders,
-        PolicyContractInner value,
-        ApiOperationPoliciesCreateOrUpdateHeaders headers) {
+    public ApiOperationPoliciesCreateOrUpdateResponse(HttpRequest request, int statusCode, HttpHeaders rawHeaders,
+        PolicyContractInner value, ApiOperationPoliciesCreateOrUpdateHeaders headers) {
         super(request, statusCode, rawHeaders, value, headers);
     }
 
-    /** @return the deserialized response body. */
+    /**
+     * Gets the deserialized response body.
+     *
+     * @return the deserialized response body.
+     */
     @Override
     public PolicyContractInner getValue() {
         return super.getValue();

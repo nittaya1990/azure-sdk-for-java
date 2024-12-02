@@ -5,16 +5,12 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Notification Parameter contract. */
 @Fluent
 public final class RecipientsContractProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RecipientsContractProperties.class);
-
     /*
      * List of Emails subscribed for the notification.
      */
@@ -26,6 +22,10 @@ public final class RecipientsContractProperties {
      */
     @JsonProperty(value = "users")
     private List<String> users;
+
+    /** Creates an instance of RecipientsContractProperties class. */
+    public RecipientsContractProperties() {
+    }
 
     /**
      * Get the emails property: List of Emails subscribed for the notification.

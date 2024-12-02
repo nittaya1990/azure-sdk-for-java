@@ -19,10 +19,8 @@ import reactor.core.publisher.Mono;
 /** Entry point for Virtual Network Gateway management API in Azure. */
 @Fluent
 public interface VirtualNetworkGateway
-    extends GroupableResource<NetworkManager, VirtualNetworkGatewayInner>,
-        Refreshable<VirtualNetworkGateway>,
-        Updatable<VirtualNetworkGateway.Update>,
-        UpdatableWithTags<VirtualNetworkGateway> {
+    extends GroupableResource<NetworkManager, VirtualNetworkGatewayInner>, Refreshable<VirtualNetworkGateway>,
+    Updatable<VirtualNetworkGateway.Update>, UpdatableWithTags<VirtualNetworkGateway> {
 
     // Actions
 
@@ -102,14 +100,8 @@ public interface VirtualNetworkGateway
     Collection<VirtualNetworkGatewayIpConfiguration> ipConfigurations();
 
     /** The entirety of the virtual network gateway definition. */
-    interface Definition
-        extends DefinitionStages.Blank,
-            DefinitionStages.WithGroup,
-            DefinitionStages.WithGatewayType,
-            DefinitionStages.WithSku,
-            DefinitionStages.WithNetwork,
-            DefinitionStages.WithBgp,
-            DefinitionStages.WithCreate {
+    interface Definition extends DefinitionStages.Blank, DefinitionStages.WithGroup, DefinitionStages.WithGatewayType,
+        DefinitionStages.WithSku, DefinitionStages.WithNetwork, DefinitionStages.WithBgp, DefinitionStages.WithCreate {
     }
 
     /** Grouping of virtual network gateway definition stages. */
@@ -191,6 +183,12 @@ public interface VirtualNetworkGateway
 
         /** The stage of virtual network gateway definition allowing to specify SKU. */
         interface WithSku {
+            /**
+             * Specifies the SKU.
+             *
+             * @param skuName the SKU
+             * @return the next stage of the definition
+             */
             WithCreate withSku(VirtualNetworkGatewaySkuName skuName);
         }
 
@@ -218,11 +216,8 @@ public interface VirtualNetworkGateway
          * The stage of the virtual network gateway definition which contains all the minimum required inputs for the
          * resource to be created, but also allows for any other optional settings to be specified.
          */
-        interface WithCreate
-            extends Creatable<VirtualNetworkGateway>,
-                Resource.DefinitionWithTags<WithCreate>,
-                DefinitionStages.WithPublicIPAddress,
-                DefinitionStages.WithBgp {
+        interface WithCreate extends Creatable<VirtualNetworkGateway>, Resource.DefinitionWithTags<WithCreate>,
+            DefinitionStages.WithPublicIPAddress, DefinitionStages.WithBgp {
         }
     }
 
@@ -230,6 +225,11 @@ public interface VirtualNetworkGateway
     interface UpdateStages {
         /** The stage of virtual network gateway update allowing to change SKU. */
         interface WithSku {
+            /**
+             * Specifies the SKU.
+             * @param skuName the SKU
+             * @return the next stage of the update
+             */
             Update withSku(VirtualNetworkGatewaySkuName skuName);
         }
 
@@ -265,6 +265,11 @@ public interface VirtualNetworkGateway
              */
             PointToSiteConfiguration.DefinitionStages.Blank<Update> definePointToSiteConfiguration();
 
+            /**
+             * Begins the update of point-to-site configuration to be added to this virtual network gateway.
+             *
+             * @return the first stage of the point-to-site configuration update
+             */
             PointToSiteConfiguration.Update updatePointToSiteConfiguration();
         }
     }
@@ -272,11 +277,7 @@ public interface VirtualNetworkGateway
     /**
      * The template for a virtual network gateway update operation, containing all the settings that can be modified.
      */
-    interface Update
-        extends Appliable<VirtualNetworkGateway>,
-            Resource.UpdateWithTags<Update>,
-            UpdateStages.WithSku,
-            UpdateStages.WithBgp,
-            UpdateStages.WithPointToSiteConfiguration {
+    interface Update extends Appliable<VirtualNetworkGateway>, Resource.UpdateWithTags<Update>, UpdateStages.WithSku,
+        UpdateStages.WithBgp, UpdateStages.WithPointToSiteConfiguration {
     }
 }

@@ -5,200 +5,292 @@
 package com.azure.resourcemanager.streamanalytics.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import com.azure.resourcemanager.streamanalytics.fluent.models.AzureMachineLearningServiceFunctionBindingProperties;
+import java.io.IOException;
 import java.util.List;
 
-/** The binding to an Azure Machine Learning web service. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@JsonTypeName("Microsoft.MachineLearningServices")
-@JsonFlatten
+/**
+ * The binding to an Azure Machine Learning web service.
+ */
 @Fluent
-public class AzureMachineLearningServiceFunctionBinding extends FunctionBinding {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureMachineLearningServiceFunctionBinding.class);
+public final class AzureMachineLearningServiceFunctionBinding extends FunctionBinding {
+    /*
+     * Indicates the function binding type.
+     */
+    private String type = "Microsoft.MachineLearningServices";
 
     /*
-     * The Request-Response execute endpoint of the Azure Machine Learning web
-     * service.
+     * The binding properties associated with an Azure Machine learning web service.
      */
-    @JsonProperty(value = "properties.endpoint")
-    private String endpoint;
+    private AzureMachineLearningServiceFunctionBindingProperties innerProperties;
 
-    /*
-     * The API key used to authenticate with Request-Response endpoint.
+    /**
+     * Creates an instance of AzureMachineLearningServiceFunctionBinding class.
      */
-    @JsonProperty(value = "properties.apiKey")
-    private String apiKey;
+    public AzureMachineLearningServiceFunctionBinding() {
+    }
 
-    /*
-     * The inputs for the Azure Machine Learning web service endpoint.
+    /**
+     * Get the type property: Indicates the function binding type.
+     * 
+     * @return the type value.
      */
-    @JsonProperty(value = "properties.inputs")
-    private List<AzureMachineLearningServiceInputColumn> inputs;
+    @Override
+    public String type() {
+        return this.type;
+    }
 
-    /*
-     * A list of outputs from the Azure Machine Learning web service endpoint
-     * execution.
+    /**
+     * Get the innerProperties property: The binding properties associated with an Azure Machine learning web service.
+     * 
+     * @return the innerProperties value.
      */
-    @JsonProperty(value = "properties.outputs")
-    private List<AzureMachineLearningServiceOutputColumn> outputs;
-
-    /*
-     * Number between 1 and 10000 describing maximum number of rows for every
-     * Azure ML RRS execute request. Default is 1000.
-     */
-    @JsonProperty(value = "properties.batchSize")
-    private Integer batchSize;
-
-    /*
-     * The number of parallel requests that will be sent per partition of your
-     * job to the machine learning service. Default is 1.
-     */
-    @JsonProperty(value = "properties.numberOfParallelRequests")
-    private Integer numberOfParallelRequests;
+    private AzureMachineLearningServiceFunctionBindingProperties innerProperties() {
+        return this.innerProperties;
+    }
 
     /**
      * Get the endpoint property: The Request-Response execute endpoint of the Azure Machine Learning web service.
-     *
+     * 
      * @return the endpoint value.
      */
     public String endpoint() {
-        return this.endpoint;
+        return this.innerProperties() == null ? null : this.innerProperties().endpoint();
     }
 
     /**
      * Set the endpoint property: The Request-Response execute endpoint of the Azure Machine Learning web service.
-     *
+     * 
      * @param endpoint the endpoint value to set.
      * @return the AzureMachineLearningServiceFunctionBinding object itself.
      */
     public AzureMachineLearningServiceFunctionBinding withEndpoint(String endpoint) {
-        this.endpoint = endpoint;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AzureMachineLearningServiceFunctionBindingProperties();
+        }
+        this.innerProperties().withEndpoint(endpoint);
         return this;
     }
 
     /**
      * Get the apiKey property: The API key used to authenticate with Request-Response endpoint.
-     *
+     * 
      * @return the apiKey value.
      */
     public String apiKey() {
-        return this.apiKey;
+        return this.innerProperties() == null ? null : this.innerProperties().apiKey();
     }
 
     /**
      * Set the apiKey property: The API key used to authenticate with Request-Response endpoint.
-     *
+     * 
      * @param apiKey the apiKey value to set.
      * @return the AzureMachineLearningServiceFunctionBinding object itself.
      */
     public AzureMachineLearningServiceFunctionBinding withApiKey(String apiKey) {
-        this.apiKey = apiKey;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AzureMachineLearningServiceFunctionBindingProperties();
+        }
+        this.innerProperties().withApiKey(apiKey);
         return this;
     }
 
     /**
      * Get the inputs property: The inputs for the Azure Machine Learning web service endpoint.
-     *
+     * 
      * @return the inputs value.
      */
     public List<AzureMachineLearningServiceInputColumn> inputs() {
-        return this.inputs;
+        return this.innerProperties() == null ? null : this.innerProperties().inputs();
     }
 
     /**
      * Set the inputs property: The inputs for the Azure Machine Learning web service endpoint.
-     *
+     * 
      * @param inputs the inputs value to set.
      * @return the AzureMachineLearningServiceFunctionBinding object itself.
      */
     public AzureMachineLearningServiceFunctionBinding withInputs(List<AzureMachineLearningServiceInputColumn> inputs) {
-        this.inputs = inputs;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AzureMachineLearningServiceFunctionBindingProperties();
+        }
+        this.innerProperties().withInputs(inputs);
         return this;
     }
 
     /**
      * Get the outputs property: A list of outputs from the Azure Machine Learning web service endpoint execution.
-     *
+     * 
      * @return the outputs value.
      */
     public List<AzureMachineLearningServiceOutputColumn> outputs() {
-        return this.outputs;
+        return this.innerProperties() == null ? null : this.innerProperties().outputs();
     }
 
     /**
      * Set the outputs property: A list of outputs from the Azure Machine Learning web service endpoint execution.
-     *
+     * 
      * @param outputs the outputs value to set.
      * @return the AzureMachineLearningServiceFunctionBinding object itself.
      */
-    public AzureMachineLearningServiceFunctionBinding withOutputs(
-        List<AzureMachineLearningServiceOutputColumn> outputs) {
-        this.outputs = outputs;
+    public AzureMachineLearningServiceFunctionBinding
+        withOutputs(List<AzureMachineLearningServiceOutputColumn> outputs) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AzureMachineLearningServiceFunctionBindingProperties();
+        }
+        this.innerProperties().withOutputs(outputs);
         return this;
     }
 
     /**
      * Get the batchSize property: Number between 1 and 10000 describing maximum number of rows for every Azure ML RRS
      * execute request. Default is 1000.
-     *
+     * 
      * @return the batchSize value.
      */
     public Integer batchSize() {
-        return this.batchSize;
+        return this.innerProperties() == null ? null : this.innerProperties().batchSize();
     }
 
     /**
      * Set the batchSize property: Number between 1 and 10000 describing maximum number of rows for every Azure ML RRS
      * execute request. Default is 1000.
-     *
+     * 
      * @param batchSize the batchSize value to set.
      * @return the AzureMachineLearningServiceFunctionBinding object itself.
      */
     public AzureMachineLearningServiceFunctionBinding withBatchSize(Integer batchSize) {
-        this.batchSize = batchSize;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AzureMachineLearningServiceFunctionBindingProperties();
+        }
+        this.innerProperties().withBatchSize(batchSize);
         return this;
     }
 
     /**
      * Get the numberOfParallelRequests property: The number of parallel requests that will be sent per partition of
      * your job to the machine learning service. Default is 1.
-     *
+     * 
      * @return the numberOfParallelRequests value.
      */
     public Integer numberOfParallelRequests() {
-        return this.numberOfParallelRequests;
+        return this.innerProperties() == null ? null : this.innerProperties().numberOfParallelRequests();
     }
 
     /**
      * Set the numberOfParallelRequests property: The number of parallel requests that will be sent per partition of
      * your job to the machine learning service. Default is 1.
-     *
+     * 
      * @param numberOfParallelRequests the numberOfParallelRequests value to set.
      * @return the AzureMachineLearningServiceFunctionBinding object itself.
      */
     public AzureMachineLearningServiceFunctionBinding withNumberOfParallelRequests(Integer numberOfParallelRequests) {
-        this.numberOfParallelRequests = numberOfParallelRequests;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AzureMachineLearningServiceFunctionBindingProperties();
+        }
+        this.innerProperties().withNumberOfParallelRequests(numberOfParallelRequests);
+        return this;
+    }
+
+    /**
+     * Get the inputRequestName property: Label for the input request object.
+     * 
+     * @return the inputRequestName value.
+     */
+    public String inputRequestName() {
+        return this.innerProperties() == null ? null : this.innerProperties().inputRequestName();
+    }
+
+    /**
+     * Set the inputRequestName property: Label for the input request object.
+     * 
+     * @param inputRequestName the inputRequestName value to set.
+     * @return the AzureMachineLearningServiceFunctionBinding object itself.
+     */
+    public AzureMachineLearningServiceFunctionBinding withInputRequestName(String inputRequestName) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AzureMachineLearningServiceFunctionBindingProperties();
+        }
+        this.innerProperties().withInputRequestName(inputRequestName);
+        return this;
+    }
+
+    /**
+     * Get the outputResponseName property: Label for the output request object.
+     * 
+     * @return the outputResponseName value.
+     */
+    public String outputResponseName() {
+        return this.innerProperties() == null ? null : this.innerProperties().outputResponseName();
+    }
+
+    /**
+     * Set the outputResponseName property: Label for the output request object.
+     * 
+     * @param outputResponseName the outputResponseName value to set.
+     * @return the AzureMachineLearningServiceFunctionBinding object itself.
+     */
+    public AzureMachineLearningServiceFunctionBinding withOutputResponseName(String outputResponseName) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AzureMachineLearningServiceFunctionBindingProperties();
+        }
+        this.innerProperties().withOutputResponseName(outputResponseName);
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
-        super.validate();
-        if (inputs() != null) {
-            inputs().forEach(e -> e.validate());
+        if (innerProperties() != null) {
+            innerProperties().validate();
         }
-        if (outputs() != null) {
-            outputs().forEach(e -> e.validate());
-        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeStringField("type", this.type);
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of AzureMachineLearningServiceFunctionBinding from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of AzureMachineLearningServiceFunctionBinding if the JsonReader was pointing to an instance
+     * of it, or null if it was pointing to JSON null.
+     * @throws IOException If an error occurs while reading the AzureMachineLearningServiceFunctionBinding.
+     */
+    public static AzureMachineLearningServiceFunctionBinding fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            AzureMachineLearningServiceFunctionBinding deserializedAzureMachineLearningServiceFunctionBinding
+                = new AzureMachineLearningServiceFunctionBinding();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("type".equals(fieldName)) {
+                    deserializedAzureMachineLearningServiceFunctionBinding.type = reader.getString();
+                } else if ("properties".equals(fieldName)) {
+                    deserializedAzureMachineLearningServiceFunctionBinding.innerProperties
+                        = AzureMachineLearningServiceFunctionBindingProperties.fromJson(reader);
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedAzureMachineLearningServiceFunctionBinding;
+        });
     }
 }

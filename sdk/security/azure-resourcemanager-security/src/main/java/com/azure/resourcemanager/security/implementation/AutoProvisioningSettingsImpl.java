@@ -13,29 +13,38 @@ import com.azure.resourcemanager.security.fluent.AutoProvisioningSettingsClient;
 import com.azure.resourcemanager.security.fluent.models.AutoProvisioningSettingInner;
 import com.azure.resourcemanager.security.models.AutoProvisioningSetting;
 import com.azure.resourcemanager.security.models.AutoProvisioningSettings;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class AutoProvisioningSettingsImpl implements AutoProvisioningSettings {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AutoProvisioningSettingsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(AutoProvisioningSettingsImpl.class);
 
     private final AutoProvisioningSettingsClient innerClient;
 
     private final com.azure.resourcemanager.security.SecurityManager serviceManager;
 
-    public AutoProvisioningSettingsImpl(
-        AutoProvisioningSettingsClient innerClient, com.azure.resourcemanager.security.SecurityManager serviceManager) {
+    public AutoProvisioningSettingsImpl(AutoProvisioningSettingsClient innerClient,
+        com.azure.resourcemanager.security.SecurityManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
     }
 
     public PagedIterable<AutoProvisioningSetting> list() {
         PagedIterable<AutoProvisioningSettingInner> inner = this.serviceClient().list();
-        return Utils.mapPage(inner, inner1 -> new AutoProvisioningSettingImpl(inner1, this.manager()));
+        return ResourceManagerUtils.mapPage(inner, inner1 -> new AutoProvisioningSettingImpl(inner1, this.manager()));
     }
 
     public PagedIterable<AutoProvisioningSetting> list(Context context) {
         PagedIterable<AutoProvisioningSettingInner> inner = this.serviceClient().list(context);
-        return Utils.mapPage(inner, inner1 -> new AutoProvisioningSettingImpl(inner1, this.manager()));
+        return ResourceManagerUtils.mapPage(inner, inner1 -> new AutoProvisioningSettingImpl(inner1, this.manager()));
+    }
+
+    public Response<AutoProvisioningSetting> getWithResponse(String settingName, Context context) {
+        Response<AutoProvisioningSettingInner> inner = this.serviceClient().getWithResponse(settingName, context);
+        if (inner != null) {
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
+                new AutoProvisioningSettingImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
     }
 
     public AutoProvisioningSetting get(String settingName) {
@@ -47,43 +56,20 @@ public final class AutoProvisioningSettingsImpl implements AutoProvisioningSetti
         }
     }
 
-    public Response<AutoProvisioningSetting> getWithResponse(String settingName, Context context) {
-        Response<AutoProvisioningSettingInner> inner = this.serviceClient().getWithResponse(settingName, context);
-        if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
-                new AutoProvisioningSettingImpl(inner.getValue(), this.manager()));
-        } else {
-            return null;
-        }
-    }
-
     public AutoProvisioningSetting getById(String id) {
-        String settingName = Utils.getValueFromIdByName(id, "autoProvisioningSettings");
+        String settingName = ResourceManagerUtils.getValueFromIdByName(id, "autoProvisioningSettings");
         if (settingName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format(
-                                "The resource ID '%s' is not valid. Missing path segment 'autoProvisioningSettings'.",
-                                id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(String
+                .format("The resource ID '%s' is not valid. Missing path segment 'autoProvisioningSettings'.", id)));
         }
         return this.getWithResponse(settingName, Context.NONE).getValue();
     }
 
     public Response<AutoProvisioningSetting> getByIdWithResponse(String id, Context context) {
-        String settingName = Utils.getValueFromIdByName(id, "autoProvisioningSettings");
+        String settingName = ResourceManagerUtils.getValueFromIdByName(id, "autoProvisioningSettings");
         if (settingName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format(
-                                "The resource ID '%s' is not valid. Missing path segment 'autoProvisioningSettings'.",
-                                id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(String
+                .format("The resource ID '%s' is not valid. Missing path segment 'autoProvisioningSettings'.", id)));
         }
         return this.getWithResponse(settingName, context);
     }

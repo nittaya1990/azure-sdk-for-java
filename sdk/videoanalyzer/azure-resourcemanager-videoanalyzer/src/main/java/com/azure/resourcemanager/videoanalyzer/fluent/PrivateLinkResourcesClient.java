@@ -35,11 +35,11 @@ public interface PrivateLinkResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of group IDs for video analyzer account.
+     * @return list of group IDs for video analyzer account along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<PrivateLinkResourceListResultInner> listWithResponse(
-        String resourceGroupName, String accountName, Context context);
+    Response<PrivateLinkResourceListResultInner> listWithResponse(String resourceGroupName, String accountName,
+        Context context);
 
     /**
      * Get group ID for video analyzer account.
@@ -65,9 +65,9 @@ public interface PrivateLinkResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return group ID for video analyzer account.
+     * @return group ID for video analyzer account along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<PrivateLinkResourceInner> getWithResponse(
-        String resourceGroupName, String accountName, String name, Context context);
+    Response<PrivateLinkResourceInner> getWithResponse(String resourceGroupName, String accountName, String name,
+        Context context);
 }

@@ -12,10 +12,8 @@ import java.util.Set;
 
 /** A client-side representation of an application gateway probe. */
 @Fluent()
-public interface ApplicationGatewayProbe
-    extends HasInnerModel<ApplicationGatewayProbeInner>,
-        ChildResource<ApplicationGateway>,
-        HasProtocol<ApplicationGatewayProtocol> {
+public interface ApplicationGatewayProbe extends HasInnerModel<ApplicationGatewayProbeInner>,
+    ChildResource<ApplicationGateway>, HasProtocol<ApplicationGatewayProtocol> {
 
     /** @return the number of seconds between probe retries */
     int timeBetweenProbesInSeconds();
@@ -50,6 +48,13 @@ public interface ApplicationGatewayProbe
     /** @return host name to send the probe to */
     String host();
 
+    /**
+     * Whether probe uses the host name from the HTTP settings to which this probe is associated.
+     *
+     * @return Whether probe uses the host name from the HTTP settings.
+     */
+    Boolean isHostNameFromBackendHttpSettings();
+
     /** Grouping of application gateway probe definition stages. */
     interface DefinitionStages {
         /**
@@ -75,6 +80,13 @@ public interface ApplicationGatewayProbe
              * @return the next stage of the definition
              */
             WithPath<ParentT> withHost(String host);
+
+            /**
+             * Specifies using the host name from the HTTP settings to which this probe is associated.
+             *
+             * @return the next stage of the definition
+             */
+            WithPath<ParentT> withHostNameFromBackendHttpSettings();
         }
 
         /**
@@ -233,11 +245,8 @@ public interface ApplicationGatewayProbe
          *     definition
          */
         interface WithAttach<ReturnT>
-            extends Attachable.InDefinitionAlt<ReturnT>,
-                WithInterval<ReturnT>,
-                WithRetries<ReturnT>,
-                WithHealthyHttpResponseStatusCodeRanges<ReturnT>,
-                WithHealthyHttpResponseBodyContents<ReturnT> {
+            extends Attachable.InDefinitionAlt<ReturnT>, WithInterval<ReturnT>, WithRetries<ReturnT>,
+            WithHealthyHttpResponseStatusCodeRanges<ReturnT>, WithHealthyHttpResponseBodyContents<ReturnT> {
         }
     }
 
@@ -247,13 +256,9 @@ public interface ApplicationGatewayProbe
      * @param <ParentT> the stage of the parent application gateway definition to return to after attaching this
      *     definition
      */
-    interface Definition<ParentT>
-        extends DefinitionStages.Blank<ParentT>,
-            DefinitionStages.WithAttach<ParentT>,
-            DefinitionStages.WithProtocol<ParentT>,
-            DefinitionStages.WithPath<ParentT>,
-            DefinitionStages.WithHost<ParentT>,
-            DefinitionStages.WithTimeout<ParentT> {
+    interface Definition<ParentT> extends DefinitionStages.Blank<ParentT>, DefinitionStages.WithAttach<ParentT>,
+        DefinitionStages.WithProtocol<ParentT>, DefinitionStages.WithPath<ParentT>, DefinitionStages.WithHost<ParentT>,
+        DefinitionStages.WithTimeout<ParentT> {
     }
 
     /** Grouping of application gateway probe update stages. */
@@ -267,6 +272,20 @@ public interface ApplicationGatewayProbe
              * @return the next stage of the update
              */
             Update withHost(String host);
+
+            /**
+             * Specifies using the host name from the HTTP settings to which this probe is associated.
+             *
+             * @return the next stage of the definition
+             */
+            Update withHostNameFromBackendHttpSettings();
+
+            /**
+             * Specifies not using the host name from the HTTP settings.
+             *
+             * @return the next stage of the definition
+             */
+            Update withoutHostNameFromBackendHttpSettings();
         }
 
         /** Stage of an application gateway probe update allowing to specify the protocol of the probe. */
@@ -398,16 +417,9 @@ public interface ApplicationGatewayProbe
     }
 
     /** The entirety of an application gateway probe update as part of an application gateway update. */
-    interface Update
-        extends Settable<ApplicationGateway.Update>,
-            UpdateStages.WithProtocol,
-            UpdateStages.WithPath,
-            UpdateStages.WithHost,
-            UpdateStages.WithTimeout,
-            UpdateStages.WithInterval,
-            UpdateStages.WithRetries,
-            UpdateStages.WithHealthyHttpResponseStatusCodeRanges,
-            UpdateStages.WithHealthyHttpResponseBodyContents {
+    interface Update extends Settable<ApplicationGateway.Update>, UpdateStages.WithProtocol, UpdateStages.WithPath,
+        UpdateStages.WithHost, UpdateStages.WithTimeout, UpdateStages.WithInterval, UpdateStages.WithRetries,
+        UpdateStages.WithHealthyHttpResponseStatusCodeRanges, UpdateStages.WithHealthyHttpResponseBodyContents {
     }
 
     /** Grouping of application gateway probe definition stages applicable as part of an application gateway update. */
@@ -435,6 +447,13 @@ public interface ApplicationGatewayProbe
              * @return the next stage of the definition
              */
             WithPath<ParentT> withHost(String host);
+
+            /**
+             * Specifies using the host name from the HTTP settings to which this probe is associated.
+             *
+             * @return the next stage of the definition
+             */
+            WithPath<ParentT> withHostNameFromBackendHttpSettings();
         }
 
         /**
@@ -593,11 +612,8 @@ public interface ApplicationGatewayProbe
          *     definition
          */
         interface WithAttach<ParentT>
-            extends Attachable.InUpdateAlt<ParentT>,
-                WithInterval<ParentT>,
-                WithRetries<ParentT>,
-                WithHealthyHttpResponseStatusCodeRanges<ParentT>,
-                WithHealthyHttpResponseBodyContents<ParentT> {
+            extends Attachable.InUpdateAlt<ParentT>, WithInterval<ParentT>, WithRetries<ParentT>,
+            WithHealthyHttpResponseStatusCodeRanges<ParentT>, WithHealthyHttpResponseBodyContents<ParentT> {
         }
     }
 
@@ -607,13 +623,9 @@ public interface ApplicationGatewayProbe
      * @param <ParentT> the stage of the parent application gateway definition to return to after attaching this
      *     definition
      */
-    interface UpdateDefinition<ParentT>
-        extends UpdateDefinitionStages.Blank<ParentT>,
-            UpdateDefinitionStages.WithAttach<ParentT>,
-            UpdateDefinitionStages.WithProtocol<ParentT>,
-            UpdateDefinitionStages.WithPath<ParentT>,
-            UpdateDefinitionStages.WithHost<ParentT>,
-            UpdateDefinitionStages.WithTimeout<ParentT>,
-            UpdateDefinitionStages.WithInterval<ParentT> {
+    interface UpdateDefinition<ParentT> extends UpdateDefinitionStages.Blank<ParentT>,
+        UpdateDefinitionStages.WithAttach<ParentT>, UpdateDefinitionStages.WithProtocol<ParentT>,
+        UpdateDefinitionStages.WithPath<ParentT>, UpdateDefinitionStages.WithHost<ParentT>,
+        UpdateDefinitionStages.WithTimeout<ParentT>, UpdateDefinitionStages.WithInterval<ParentT> {
     }
 }

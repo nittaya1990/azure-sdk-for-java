@@ -7,15 +7,13 @@ package com.azure.resourcemanager.storagecache.models;
 import com.azure.core.annotation.Immutable;
 import com.azure.core.management.ProxyResource;
 import com.azure.core.management.SystemData;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Resource used by a Cache. */
+/**
+ * Resource used by a cache.
+ */
 @Immutable
 public class StorageTargetResource extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(StorageTargetResource.class);
-
     /*
      * Region name string.
      */
@@ -29,8 +27,14 @@ public class StorageTargetResource extends ProxyResource {
     private SystemData systemData;
 
     /**
+     * Creates an instance of StorageTargetResource class.
+     */
+    public StorageTargetResource() {
+    }
+
+    /**
      * Get the location property: Region name string.
-     *
+     * 
      * @return the location value.
      */
     public String location() {
@@ -39,7 +43,7 @@ public class StorageTargetResource extends ProxyResource {
 
     /**
      * Get the systemData property: The system meta data relating to this resource.
-     *
+     * 
      * @return the systemData value.
      */
     public SystemData systemData() {
@@ -48,7 +52,7 @@ public class StorageTargetResource extends ProxyResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

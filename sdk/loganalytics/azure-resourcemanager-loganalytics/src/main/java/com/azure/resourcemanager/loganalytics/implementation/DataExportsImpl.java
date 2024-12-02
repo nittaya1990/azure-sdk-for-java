@@ -13,17 +13,16 @@ import com.azure.resourcemanager.loganalytics.fluent.DataExportsClient;
 import com.azure.resourcemanager.loganalytics.fluent.models.DataExportInner;
 import com.azure.resourcemanager.loganalytics.models.DataExport;
 import com.azure.resourcemanager.loganalytics.models.DataExports;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class DataExportsImpl implements DataExports {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DataExportsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(DataExportsImpl.class);
 
     private final DataExportsClient innerClient;
 
     private final com.azure.resourcemanager.loganalytics.LogAnalyticsManager serviceManager;
 
-    public DataExportsImpl(
-        DataExportsClient innerClient, com.azure.resourcemanager.loganalytics.LogAnalyticsManager serviceManager) {
+    public DataExportsImpl(DataExportsClient innerClient,
+        com.azure.resourcemanager.loganalytics.LogAnalyticsManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
     }
@@ -34,9 +33,21 @@ public final class DataExportsImpl implements DataExports {
     }
 
     public PagedIterable<DataExport> listByWorkspace(String resourceGroupName, String workspaceName, Context context) {
-        PagedIterable<DataExportInner> inner =
-            this.serviceClient().listByWorkspace(resourceGroupName, workspaceName, context);
+        PagedIterable<DataExportInner> inner
+            = this.serviceClient().listByWorkspace(resourceGroupName, workspaceName, context);
         return Utils.mapPage(inner, inner1 -> new DataExportImpl(inner1, this.manager()));
+    }
+
+    public Response<DataExport> getWithResponse(String resourceGroupName, String workspaceName, String dataExportName,
+        Context context) {
+        Response<DataExportInner> inner
+            = this.serviceClient().getWithResponse(resourceGroupName, workspaceName, dataExportName, context);
+        if (inner != null) {
+            return new SimpleResponse<>(inner.getRequest(), inner.getStatusCode(), inner.getHeaders(),
+                new DataExportImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
     }
 
     public DataExport get(String resourceGroupName, String workspaceName, String dataExportName) {
@@ -48,52 +59,30 @@ public final class DataExportsImpl implements DataExports {
         }
     }
 
-    public Response<DataExport> getWithResponse(
-        String resourceGroupName, String workspaceName, String dataExportName, Context context) {
-        Response<DataExportInner> inner =
-            this.serviceClient().getWithResponse(resourceGroupName, workspaceName, dataExportName, context);
-        if (inner != null) {
-            return new SimpleResponse<>(
-                inner.getRequest(),
-                inner.getStatusCode(),
-                inner.getHeaders(),
-                new DataExportImpl(inner.getValue(), this.manager()));
-        } else {
-            return null;
-        }
+    public Response<Void> deleteWithResponse(String resourceGroupName, String workspaceName, String dataExportName,
+        Context context) {
+        return this.serviceClient().deleteWithResponse(resourceGroupName, workspaceName, dataExportName, context);
     }
 
     public void delete(String resourceGroupName, String workspaceName, String dataExportName) {
         this.serviceClient().delete(resourceGroupName, workspaceName, dataExportName);
     }
 
-    public Response<Void> deleteWithResponse(
-        String resourceGroupName, String workspaceName, String dataExportName, Context context) {
-        return this.serviceClient().deleteWithResponse(resourceGroupName, workspaceName, dataExportName, context);
-    }
-
     public DataExport getById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourcegroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourcegroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourcegroups'.", id)));
         }
         String workspaceName = Utils.getValueFromIdByName(id, "workspaces");
         if (workspaceName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'workspaces'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'workspaces'.", id)));
         }
         String dataExportName = Utils.getValueFromIdByName(id, "dataExports");
         if (dataExportName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'dataExports'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'dataExports'.", id)));
         }
         return this.getWithResponse(resourceGroupName, workspaceName, dataExportName, Context.NONE).getValue();
     }
@@ -101,25 +90,18 @@ public final class DataExportsImpl implements DataExports {
     public Response<DataExport> getByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourcegroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourcegroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourcegroups'.", id)));
         }
         String workspaceName = Utils.getValueFromIdByName(id, "workspaces");
         if (workspaceName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'workspaces'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'workspaces'.", id)));
         }
         String dataExportName = Utils.getValueFromIdByName(id, "dataExports");
         if (dataExportName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'dataExports'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'dataExports'.", id)));
         }
         return this.getWithResponse(resourceGroupName, workspaceName, dataExportName, context);
     }
@@ -127,51 +109,37 @@ public final class DataExportsImpl implements DataExports {
     public void deleteById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourcegroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourcegroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourcegroups'.", id)));
         }
         String workspaceName = Utils.getValueFromIdByName(id, "workspaces");
         if (workspaceName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'workspaces'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'workspaces'.", id)));
         }
         String dataExportName = Utils.getValueFromIdByName(id, "dataExports");
         if (dataExportName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'dataExports'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'dataExports'.", id)));
         }
-        this.deleteWithResponse(resourceGroupName, workspaceName, dataExportName, Context.NONE).getValue();
+        this.deleteWithResponse(resourceGroupName, workspaceName, dataExportName, Context.NONE);
     }
 
     public Response<Void> deleteByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourcegroups");
         if (resourceGroupName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String
-                            .format("The resource ID '%s' is not valid. Missing path segment 'resourcegroups'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'resourcegroups'.", id)));
         }
         String workspaceName = Utils.getValueFromIdByName(id, "workspaces");
         if (workspaceName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'workspaces'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'workspaces'.", id)));
         }
         String dataExportName = Utils.getValueFromIdByName(id, "dataExports");
         if (dataExportName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'dataExports'.", id)));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                String.format("The resource ID '%s' is not valid. Missing path segment 'dataExports'.", id)));
         }
         return this.deleteWithResponse(resourceGroupName, workspaceName, dataExportName, context);
     }

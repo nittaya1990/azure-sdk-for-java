@@ -6,20 +6,20 @@ package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Parameters supplied to the CheckNameAvailability operation. */
 @Fluent
 public final class ApiManagementServiceCheckNameAvailabilityParameters {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(ApiManagementServiceCheckNameAvailabilityParameters.class);
-
     /*
      * The name to check for availability.
      */
     @JsonProperty(value = "name", required = true)
     private String name;
+
+    /** Creates an instance of ApiManagementServiceCheckNameAvailabilityParameters class. */
+    public ApiManagementServiceCheckNameAvailabilityParameters() {
+    }
 
     /**
      * Get the name property: The name to check for availability.
@@ -48,10 +48,11 @@ public final class ApiManagementServiceCheckNameAvailabilityParameters {
      */
     public void validate() {
         if (name() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property name in model ApiManagementServiceCheckNameAvailabilityParameters"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property name in model ApiManagementServiceCheckNameAvailabilityParameters"));
         }
     }
+
+    private static final ClientLogger LOGGER
+        = new ClientLogger(ApiManagementServiceCheckNameAvailabilityParameters.class);
 }

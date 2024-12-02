@@ -5,17 +5,13 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.models.CertificateContractInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Paged Certificates list representation. */
 @Fluent
 public final class CertificateCollection {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CertificateCollection.class);
-
     /*
      * Page values.
      */
@@ -33,6 +29,10 @@ public final class CertificateCollection {
      */
     @JsonProperty(value = "nextLink")
     private String nextLink;
+
+    /** Creates an instance of CertificateCollection class. */
+    public CertificateCollection() {
+    }
 
     /**
      * Get the value property: Page values.

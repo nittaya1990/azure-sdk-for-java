@@ -11,38 +11,40 @@ import com.azure.core.util.Context;
 import com.azure.core.util.polling.SyncPoller;
 import com.azure.resourcemanager.botservice.fluent.models.OperationResultsDescriptionInner;
 
-/** An instance of this class provides access to all the operations defined in OperationResultsClient. */
+/**
+ * An instance of this class provides access to all the operations defined in OperationResultsClient.
+ */
 public interface OperationResultsClient {
     /**
      * Get the operation result for a long running operation.
-     *
+     * 
      * @param operationResultId The ID of the operation result to get.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the operation result for a long running operation.
+     * @return the {@link SyncPoller} for polling of the operation result for a long running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    SyncPoller<PollResult<OperationResultsDescriptionInner>, OperationResultsDescriptionInner> beginGet(
-        String operationResultId);
+    SyncPoller<PollResult<OperationResultsDescriptionInner>, OperationResultsDescriptionInner>
+        beginGet(String operationResultId);
 
     /**
      * Get the operation result for a long running operation.
-     *
+     * 
      * @param operationResultId The ID of the operation result to get.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the operation result for a long running operation.
+     * @return the {@link SyncPoller} for polling of the operation result for a long running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    SyncPoller<PollResult<OperationResultsDescriptionInner>, OperationResultsDescriptionInner> beginGet(
-        String operationResultId, Context context);
+    SyncPoller<PollResult<OperationResultsDescriptionInner>, OperationResultsDescriptionInner>
+        beginGet(String operationResultId, Context context);
 
     /**
      * Get the operation result for a long running operation.
-     *
+     * 
      * @param operationResultId The ID of the operation result to get.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
@@ -54,7 +56,7 @@ public interface OperationResultsClient {
 
     /**
      * Get the operation result for a long running operation.
-     *
+     * 
      * @param operationResultId The ID of the operation result to get.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.

@@ -41,6 +41,10 @@ public final class AccessPolicyEntityImpl
         return this.innerModel().authentication();
     }
 
+    public String resourceGroupName() {
+        return resourceGroupName;
+    }
+
     public AccessPolicyEntityInner innerModel() {
         return this.innerObject;
     }
@@ -62,24 +66,19 @@ public final class AccessPolicyEntityImpl
     }
 
     public AccessPolicyEntity create() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getAccessPolicies()
-                .createOrUpdateWithResponse(
-                    resourceGroupName, accountName, accessPolicyName, this.innerModel(), Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getAccessPolicies()
+            .createOrUpdateWithResponse(resourceGroupName, accountName, accessPolicyName, this.innerModel(),
+                Context.NONE)
+            .getValue();
         return this;
     }
 
     public AccessPolicyEntity create(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getAccessPolicies()
-                .createOrUpdateWithResponse(
-                    resourceGroupName, accountName, accessPolicyName, this.innerModel(), context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getAccessPolicies()
+            .createOrUpdateWithResponse(resourceGroupName, accountName, accessPolicyName, this.innerModel(), context)
+            .getValue();
         return this;
     }
 
@@ -94,27 +93,22 @@ public final class AccessPolicyEntityImpl
     }
 
     public AccessPolicyEntity apply() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getAccessPolicies()
-                .updateWithResponse(resourceGroupName, accountName, accessPolicyName, this.innerModel(), Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getAccessPolicies()
+            .updateWithResponse(resourceGroupName, accountName, accessPolicyName, this.innerModel(), Context.NONE)
+            .getValue();
         return this;
     }
 
     public AccessPolicyEntity apply(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getAccessPolicies()
-                .updateWithResponse(resourceGroupName, accountName, accessPolicyName, this.innerModel(), context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getAccessPolicies()
+            .updateWithResponse(resourceGroupName, accountName, accessPolicyName, this.innerModel(), context)
+            .getValue();
         return this;
     }
 
-    AccessPolicyEntityImpl(
-        AccessPolicyEntityInner innerObject,
+    AccessPolicyEntityImpl(AccessPolicyEntityInner innerObject,
         com.azure.resourcemanager.videoanalyzer.VideoAnalyzerManager serviceManager) {
         this.innerObject = innerObject;
         this.serviceManager = serviceManager;
@@ -124,22 +118,18 @@ public final class AccessPolicyEntityImpl
     }
 
     public AccessPolicyEntity refresh() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getAccessPolicies()
-                .getWithResponse(resourceGroupName, accountName, accessPolicyName, Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getAccessPolicies()
+            .getWithResponse(resourceGroupName, accountName, accessPolicyName, Context.NONE)
+            .getValue();
         return this;
     }
 
     public AccessPolicyEntity refresh(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getAccessPolicies()
-                .getWithResponse(resourceGroupName, accountName, accessPolicyName, context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getAccessPolicies()
+            .getWithResponse(resourceGroupName, accountName, accessPolicyName, context)
+            .getValue();
         return this;
     }
 

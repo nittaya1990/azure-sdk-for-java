@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The resource storage details. */
+/**
+ * The resource storage details.
+ */
 @Fluent
 public final class BackupResourceConfig {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(BackupResourceConfig.class);
-
     /*
      * Storage type
      */
@@ -27,8 +25,7 @@ public final class BackupResourceConfig {
     private StorageType storageType;
 
     /*
-     * Locked or Unlocked. Once a machine is registered against a resource, the
-     * storageTypeState is always Locked.
+     * Locked or Unlocked. Once a machine is registered against a resource, the storageTypeState is always Locked.
      */
     @JsonProperty(value = "storageTypeState")
     private StorageTypeState storageTypeState;
@@ -39,9 +36,27 @@ public final class BackupResourceConfig {
     @JsonProperty(value = "crossRegionRestoreFlag")
     private Boolean crossRegionRestoreFlag;
 
+    /*
+     * Vault Dedup state
+     */
+    @JsonProperty(value = "dedupState")
+    private DedupState dedupState;
+
+    /*
+     * Vault x-cool state
+     */
+    @JsonProperty(value = "xcoolState")
+    private XcoolState xcoolState;
+
+    /**
+     * Creates an instance of BackupResourceConfig class.
+     */
+    public BackupResourceConfig() {
+    }
+
     /**
      * Get the storageModelType property: Storage type.
-     *
+     * 
      * @return the storageModelType value.
      */
     public StorageType storageModelType() {
@@ -50,7 +65,7 @@ public final class BackupResourceConfig {
 
     /**
      * Set the storageModelType property: Storage type.
-     *
+     * 
      * @param storageModelType the storageModelType value to set.
      * @return the BackupResourceConfig object itself.
      */
@@ -61,7 +76,7 @@ public final class BackupResourceConfig {
 
     /**
      * Get the storageType property: Storage type.
-     *
+     * 
      * @return the storageType value.
      */
     public StorageType storageType() {
@@ -70,7 +85,7 @@ public final class BackupResourceConfig {
 
     /**
      * Set the storageType property: Storage type.
-     *
+     * 
      * @param storageType the storageType value to set.
      * @return the BackupResourceConfig object itself.
      */
@@ -82,7 +97,7 @@ public final class BackupResourceConfig {
     /**
      * Get the storageTypeState property: Locked or Unlocked. Once a machine is registered against a resource, the
      * storageTypeState is always Locked.
-     *
+     * 
      * @return the storageTypeState value.
      */
     public StorageTypeState storageTypeState() {
@@ -92,7 +107,7 @@ public final class BackupResourceConfig {
     /**
      * Set the storageTypeState property: Locked or Unlocked. Once a machine is registered against a resource, the
      * storageTypeState is always Locked.
-     *
+     * 
      * @param storageTypeState the storageTypeState value to set.
      * @return the BackupResourceConfig object itself.
      */
@@ -103,7 +118,7 @@ public final class BackupResourceConfig {
 
     /**
      * Get the crossRegionRestoreFlag property: Opt in details of Cross Region Restore feature.
-     *
+     * 
      * @return the crossRegionRestoreFlag value.
      */
     public Boolean crossRegionRestoreFlag() {
@@ -112,7 +127,7 @@ public final class BackupResourceConfig {
 
     /**
      * Set the crossRegionRestoreFlag property: Opt in details of Cross Region Restore feature.
-     *
+     * 
      * @param crossRegionRestoreFlag the crossRegionRestoreFlag value to set.
      * @return the BackupResourceConfig object itself.
      */
@@ -122,8 +137,48 @@ public final class BackupResourceConfig {
     }
 
     /**
+     * Get the dedupState property: Vault Dedup state.
+     * 
+     * @return the dedupState value.
+     */
+    public DedupState dedupState() {
+        return this.dedupState;
+    }
+
+    /**
+     * Set the dedupState property: Vault Dedup state.
+     * 
+     * @param dedupState the dedupState value to set.
+     * @return the BackupResourceConfig object itself.
+     */
+    public BackupResourceConfig withDedupState(DedupState dedupState) {
+        this.dedupState = dedupState;
+        return this;
+    }
+
+    /**
+     * Get the xcoolState property: Vault x-cool state.
+     * 
+     * @return the xcoolState value.
+     */
+    public XcoolState xcoolState() {
+        return this.xcoolState;
+    }
+
+    /**
+     * Set the xcoolState property: Vault x-cool state.
+     * 
+     * @param xcoolState the xcoolState value to set.
+     * @return the BackupResourceConfig object itself.
+     */
+    public BackupResourceConfig withXcoolState(XcoolState xcoolState) {
+        this.xcoolState = xcoolState;
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

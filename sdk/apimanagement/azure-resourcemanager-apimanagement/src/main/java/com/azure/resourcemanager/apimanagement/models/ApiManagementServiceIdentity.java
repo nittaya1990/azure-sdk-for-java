@@ -6,7 +6,6 @@ package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
@@ -14,14 +13,11 @@ import java.util.UUID;
 
 /** Identity properties of the Api Management service resource. */
 @Fluent
-public class ApiManagementServiceIdentity {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApiManagementServiceIdentity.class);
-
+public final class ApiManagementServiceIdentity {
     /*
-     * The type of identity used for the resource. The type 'SystemAssigned,
-     * UserAssigned' includes both an implicitly created identity and a set of
-     * user assigned identities. The type 'None' will remove any identities
-     * from the service.
+     * The type of identity used for the resource. The type 'SystemAssigned, UserAssigned' includes both an implicitly
+     * created identity and a set of user assigned identities. The type 'None' will remove any identities from the
+     * service.
      */
     @JsonProperty(value = "type", required = true)
     private ApimIdentityType type;
@@ -39,8 +35,7 @@ public class ApiManagementServiceIdentity {
     private UUID tenantId;
 
     /*
-     * The list of user identities associated with the resource. The user
-     * identity
+     * The list of user identities associated with the resource. The user identity
      * dictionary key references will be ARM resource ids in the form:
      * '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/
      * providers/Microsoft.ManagedIdentity/userAssignedIdentities/{identityName}'.
@@ -48,6 +43,10 @@ public class ApiManagementServiceIdentity {
     @JsonProperty(value = "userAssignedIdentities")
     @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
     private Map<String, UserIdentityProperties> userAssignedIdentities;
+
+    /** Creates an instance of ApiManagementServiceIdentity class. */
+    public ApiManagementServiceIdentity() {
+    }
 
     /**
      * Get the type property: The type of identity used for the resource. The type 'SystemAssigned, UserAssigned'
@@ -112,8 +111,8 @@ public class ApiManagementServiceIdentity {
      * @param userAssignedIdentities the userAssignedIdentities value to set.
      * @return the ApiManagementServiceIdentity object itself.
      */
-    public ApiManagementServiceIdentity withUserAssignedIdentities(
-        Map<String, UserIdentityProperties> userAssignedIdentities) {
+    public ApiManagementServiceIdentity
+        withUserAssignedIdentities(Map<String, UserIdentityProperties> userAssignedIdentities) {
         this.userAssignedIdentities = userAssignedIdentities;
         return this;
     }
@@ -125,20 +124,17 @@ public class ApiManagementServiceIdentity {
      */
     public void validate() {
         if (type() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property type in model ApiManagementServiceIdentity"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property type in model ApiManagementServiceIdentity"));
         }
         if (userAssignedIdentities() != null) {
-            userAssignedIdentities()
-                .values()
-                .forEach(
-                    e -> {
-                        if (e != null) {
-                            e.validate();
-                        }
-                    });
+            userAssignedIdentities().values().forEach(e -> {
+                if (e != null) {
+                    e.validate();
+                }
+            });
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(ApiManagementServiceIdentity.class);
 }

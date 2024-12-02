@@ -20,16 +20,16 @@ public final class ProductsUpdateResponse extends ResponseBase<ProductsUpdateHea
      * @param value the deserialized value of the HTTP response.
      * @param headers the deserialized headers of the HTTP response.
      */
-    public ProductsUpdateResponse(
-        HttpRequest request,
-        int statusCode,
-        HttpHeaders rawHeaders,
-        ProductContractInner value,
-        ProductsUpdateHeaders headers) {
+    public ProductsUpdateResponse(HttpRequest request, int statusCode, HttpHeaders rawHeaders,
+        ProductContractInner value, ProductsUpdateHeaders headers) {
         super(request, statusCode, rawHeaders, value, headers);
     }
 
-    /** @return the deserialized response body. */
+    /**
+     * Gets the deserialized response body.
+     *
+     * @return the deserialized response body.
+     */
     @Override
     public ProductContractInner getValue() {
         return super.getValue();

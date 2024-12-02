@@ -5,39 +5,53 @@
 package com.azure.resourcemanager.security.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.security.models.ResourceStatus;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** a compliance result. */
-@JsonFlatten
+/**
+ * a compliance result.
+ */
 @Immutable
-public class ComplianceResultInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ComplianceResultInner.class);
-
+public final class ComplianceResultInner extends ProxyResource {
     /*
-     * The status of the resource regarding a single assessment
+     * Compliance result data
      */
-    @JsonProperty(value = "properties.resourceStatus", access = JsonProperty.Access.WRITE_ONLY)
-    private ResourceStatus resourceStatus;
+    @JsonProperty(value = "properties")
+    private ComplianceResultProperties innerProperties;
+
+    /**
+     * Creates an instance of ComplianceResultInner class.
+     */
+    public ComplianceResultInner() {
+    }
+
+    /**
+     * Get the innerProperties property: Compliance result data.
+     * 
+     * @return the innerProperties value.
+     */
+    private ComplianceResultProperties innerProperties() {
+        return this.innerProperties;
+    }
 
     /**
      * Get the resourceStatus property: The status of the resource regarding a single assessment.
-     *
+     * 
      * @return the resourceStatus value.
      */
     public ResourceStatus resourceStatus() {
-        return this.resourceStatus;
+        return this.innerProperties() == null ? null : this.innerProperties().resourceStatus();
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
+        if (innerProperties() != null) {
+            innerProperties().validate();
+        }
     }
 }

@@ -5,18 +5,14 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.models.IssueContractBaseProperties;
 import com.azure.resourcemanager.apimanagement.models.State;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
 /** Issue contract Update Properties. */
 @Fluent
 public final class IssueUpdateContractProperties extends IssueContractBaseProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(IssueUpdateContractProperties.class);
-
     /*
      * The issue title.
      */
@@ -34,6 +30,10 @@ public final class IssueUpdateContractProperties extends IssueContractBaseProper
      */
     @JsonProperty(value = "userId")
     private String userId;
+
+    /** Creates an instance of IssueUpdateContractProperties class. */
+    public IssueUpdateContractProperties() {
+    }
 
     /**
      * Get the title property: The issue title.

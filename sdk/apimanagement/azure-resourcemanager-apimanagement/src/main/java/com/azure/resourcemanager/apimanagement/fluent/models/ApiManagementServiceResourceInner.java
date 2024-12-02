@@ -5,6 +5,7 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
+import com.azure.core.management.SystemData;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.models.AdditionalLocation;
 import com.azure.resourcemanager.apimanagement.models.ApiManagementServiceIdentity;
@@ -13,9 +14,12 @@ import com.azure.resourcemanager.apimanagement.models.ApiVersionConstraint;
 import com.azure.resourcemanager.apimanagement.models.ApimResource;
 import com.azure.resourcemanager.apimanagement.models.CertificateConfiguration;
 import com.azure.resourcemanager.apimanagement.models.HostnameConfiguration;
+import com.azure.resourcemanager.apimanagement.models.NatGatewayState;
+import com.azure.resourcemanager.apimanagement.models.PlatformVersion;
+import com.azure.resourcemanager.apimanagement.models.PublicNetworkAccess;
+import com.azure.resourcemanager.apimanagement.models.RemotePrivateEndpointConnectionWrapper;
 import com.azure.resourcemanager.apimanagement.models.VirtualNetworkConfiguration;
 import com.azure.resourcemanager.apimanagement.models.VirtualNetworkType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -24,8 +28,6 @@ import java.util.Map;
 /** A single API Management service resource in List or Get response. */
 @Fluent
 public final class ApiManagementServiceResourceInner extends ApimResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApiManagementServiceResourceInner.class);
-
     /*
      * Properties of the API Management service.
      */
@@ -45,6 +47,12 @@ public final class ApiManagementServiceResourceInner extends ApimResource {
     private ApiManagementServiceIdentity identity;
 
     /*
+     * Metadata pertaining to creation and last modification of the resource.
+     */
+    @JsonProperty(value = "systemData", access = JsonProperty.Access.WRITE_ONLY)
+    private SystemData systemData;
+
+    /*
      * Resource location.
      */
     @JsonProperty(value = "location", required = true)
@@ -57,11 +65,14 @@ public final class ApiManagementServiceResourceInner extends ApimResource {
     private String etag;
 
     /*
-     * A list of availability zones denoting where the resource needs to come
-     * from.
+     * A list of availability zones denoting where the resource needs to come from.
      */
     @JsonProperty(value = "zones")
     private List<String> zones;
+
+    /** Creates an instance of ApiManagementServiceResourceInner class. */
+    public ApiManagementServiceResourceInner() {
+    }
 
     /**
      * Get the innerProperties property: Properties of the API Management service.
@@ -110,6 +121,15 @@ public final class ApiManagementServiceResourceInner extends ApimResource {
     public ApiManagementServiceResourceInner withIdentity(ApiManagementServiceIdentity identity) {
         this.identity = identity;
         return this;
+    }
+
+    /**
+     * Get the systemData property: Metadata pertaining to creation and last modification of the resource.
+     *
+     * @return the systemData value.
+     */
+    public SystemData systemData() {
+        return this.systemData;
     }
 
     /**
@@ -336,8 +356,8 @@ public final class ApiManagementServiceResourceInner extends ApimResource {
      * @param hostnameConfigurations the hostnameConfigurations value to set.
      * @return the ApiManagementServiceResourceInner object itself.
      */
-    public ApiManagementServiceResourceInner withHostnameConfigurations(
-        List<HostnameConfiguration> hostnameConfigurations) {
+    public ApiManagementServiceResourceInner
+        withHostnameConfigurations(List<HostnameConfiguration> hostnameConfigurations) {
         if (this.innerProperties() == null) {
             this.innerProperties = new ApiManagementServiceProperties();
         }
@@ -367,6 +387,60 @@ public final class ApiManagementServiceResourceInner extends ApimResource {
     }
 
     /**
+     * Get the publicIpAddressId property: Public Standard SKU IP V4 based IP address to be associated with Virtual
+     * Network deployed service in the region. Supported only for Developer and Premium SKU being deployed in Virtual
+     * Network.
+     *
+     * @return the publicIpAddressId value.
+     */
+    public String publicIpAddressId() {
+        return this.innerProperties() == null ? null : this.innerProperties().publicIpAddressId();
+    }
+
+    /**
+     * Set the publicIpAddressId property: Public Standard SKU IP V4 based IP address to be associated with Virtual
+     * Network deployed service in the region. Supported only for Developer and Premium SKU being deployed in Virtual
+     * Network.
+     *
+     * @param publicIpAddressId the publicIpAddressId value to set.
+     * @return the ApiManagementServiceResourceInner object itself.
+     */
+    public ApiManagementServiceResourceInner withPublicIpAddressId(String publicIpAddressId) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new ApiManagementServiceProperties();
+        }
+        this.innerProperties().withPublicIpAddressId(publicIpAddressId);
+        return this;
+    }
+
+    /**
+     * Get the publicNetworkAccess property: Whether or not public endpoint access is allowed for this API Management
+     * service. Value is optional but if passed in, must be 'Enabled' or 'Disabled'. If 'Disabled', private endpoints
+     * are the exclusive access method. Default value is 'Enabled'.
+     *
+     * @return the publicNetworkAccess value.
+     */
+    public PublicNetworkAccess publicNetworkAccess() {
+        return this.innerProperties() == null ? null : this.innerProperties().publicNetworkAccess();
+    }
+
+    /**
+     * Set the publicNetworkAccess property: Whether or not public endpoint access is allowed for this API Management
+     * service. Value is optional but if passed in, must be 'Enabled' or 'Disabled'. If 'Disabled', private endpoints
+     * are the exclusive access method. Default value is 'Enabled'.
+     *
+     * @param publicNetworkAccess the publicNetworkAccess value to set.
+     * @return the ApiManagementServiceResourceInner object itself.
+     */
+    public ApiManagementServiceResourceInner withPublicNetworkAccess(PublicNetworkAccess publicNetworkAccess) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new ApiManagementServiceProperties();
+        }
+        this.innerProperties().withPublicNetworkAccess(publicNetworkAccess);
+        return this;
+    }
+
+    /**
      * Get the virtualNetworkConfiguration property: Virtual network configuration of the API Management service.
      *
      * @return the virtualNetworkConfiguration value.
@@ -381,8 +455,8 @@ public final class ApiManagementServiceResourceInner extends ApimResource {
      * @param virtualNetworkConfiguration the virtualNetworkConfiguration value to set.
      * @return the ApiManagementServiceResourceInner object itself.
      */
-    public ApiManagementServiceResourceInner withVirtualNetworkConfiguration(
-        VirtualNetworkConfiguration virtualNetworkConfiguration) {
+    public ApiManagementServiceResourceInner
+        withVirtualNetworkConfiguration(VirtualNetworkConfiguration virtualNetworkConfiguration) {
         if (this.innerProperties() == null) {
             this.innerProperties = new ApiManagementServiceProperties();
         }
@@ -427,16 +501,16 @@ public final class ApiManagementServiceResourceInner extends ApimResource {
      * `Microsoft.WindowsAzure.ApiManagement.Gateway.Protocols.Server.Http2` can be used to enable HTTP2 protocol on an
      * API Management service.&lt;/br&gt;Not specifying any of these properties on PATCH operation will reset omitted
      * properties' values to their defaults. For all the settings except Http2 the default value is `True` if the
-     * service was created on or before April 1st 2018 and `False` otherwise. Http2 setting's default value is
-     * `False`.&lt;/br&gt;&lt;/br&gt;You can disable any of next ciphers by using settings
+     * service was created on or before April 1, 2018 and `False` otherwise. Http2 setting's default value is
+     * `False`.&lt;/br&gt;&lt;/br&gt;You can disable any of the following ciphers by using settings
      * `Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Ciphers.[cipher_name]`:
      * TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA, TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
      * TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA, TLS_RSA_WITH_AES_128_GCM_SHA256, TLS_RSA_WITH_AES_256_CBC_SHA256,
      * TLS_RSA_WITH_AES_128_CBC_SHA256, TLS_RSA_WITH_AES_256_CBC_SHA, TLS_RSA_WITH_AES_128_CBC_SHA. For example,
      * `Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Ciphers.TLS_RSA_WITH_AES_128_CBC_SHA256`:`false`. The
-     * default value is `true` for them. Note: next ciphers can't be disabled since they are required by Azure
-     * CloudService internal components:
-     * TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_256_GCM_SHA384.
+     * default value is `true` for them.&lt;/br&gt; Note: The following ciphers can't be disabled since they are
+     * required by internal platform components:
+     * TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256.
      *
      * @return the customProperties value.
      */
@@ -458,16 +532,16 @@ public final class ApiManagementServiceResourceInner extends ApimResource {
      * `Microsoft.WindowsAzure.ApiManagement.Gateway.Protocols.Server.Http2` can be used to enable HTTP2 protocol on an
      * API Management service.&lt;/br&gt;Not specifying any of these properties on PATCH operation will reset omitted
      * properties' values to their defaults. For all the settings except Http2 the default value is `True` if the
-     * service was created on or before April 1st 2018 and `False` otherwise. Http2 setting's default value is
-     * `False`.&lt;/br&gt;&lt;/br&gt;You can disable any of next ciphers by using settings
+     * service was created on or before April 1, 2018 and `False` otherwise. Http2 setting's default value is
+     * `False`.&lt;/br&gt;&lt;/br&gt;You can disable any of the following ciphers by using settings
      * `Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Ciphers.[cipher_name]`:
      * TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA, TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
      * TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA, TLS_RSA_WITH_AES_128_GCM_SHA256, TLS_RSA_WITH_AES_256_CBC_SHA256,
      * TLS_RSA_WITH_AES_128_CBC_SHA256, TLS_RSA_WITH_AES_256_CBC_SHA, TLS_RSA_WITH_AES_128_CBC_SHA. For example,
      * `Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Ciphers.TLS_RSA_WITH_AES_128_CBC_SHA256`:`false`. The
-     * default value is `true` for them. Note: next ciphers can't be disabled since they are required by Azure
-     * CloudService internal components:
-     * TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_256_GCM_SHA384.
+     * default value is `true` for them.&lt;/br&gt; Note: The following ciphers can't be disabled since they are
+     * required by internal platform components:
+     * TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256.
      *
      * @param customProperties the customProperties value to set.
      * @return the ApiManagementServiceResourceInner object itself.
@@ -530,6 +604,39 @@ public final class ApiManagementServiceResourceInner extends ApimResource {
         }
         this.innerProperties().withEnableClientCertificate(enableClientCertificate);
         return this;
+    }
+
+    /**
+     * Get the natGatewayState property: Property can be used to enable NAT Gateway for this API Management service.
+     *
+     * @return the natGatewayState value.
+     */
+    public NatGatewayState natGatewayState() {
+        return this.innerProperties() == null ? null : this.innerProperties().natGatewayState();
+    }
+
+    /**
+     * Set the natGatewayState property: Property can be used to enable NAT Gateway for this API Management service.
+     *
+     * @param natGatewayState the natGatewayState value to set.
+     * @return the ApiManagementServiceResourceInner object itself.
+     */
+    public ApiManagementServiceResourceInner withNatGatewayState(NatGatewayState natGatewayState) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new ApiManagementServiceProperties();
+        }
+        this.innerProperties().withNatGatewayState(natGatewayState);
+        return this;
+    }
+
+    /**
+     * Get the outboundPublicIpAddresses property: Outbound public IPV4 address prefixes associated with NAT Gateway
+     * deployed service. Available only for Premium SKU on stv2 platform.
+     *
+     * @return the outboundPublicIpAddresses value.
+     */
+    public List<String> outboundPublicIpAddresses() {
+        return this.innerProperties() == null ? null : this.innerProperties().outboundPublicIpAddresses();
     }
 
     /**
@@ -635,6 +742,39 @@ public final class ApiManagementServiceResourceInner extends ApimResource {
     }
 
     /**
+     * Get the privateEndpointConnections property: List of Private Endpoint Connections of this service.
+     *
+     * @return the privateEndpointConnections value.
+     */
+    public List<RemotePrivateEndpointConnectionWrapper> privateEndpointConnections() {
+        return this.innerProperties() == null ? null : this.innerProperties().privateEndpointConnections();
+    }
+
+    /**
+     * Set the privateEndpointConnections property: List of Private Endpoint Connections of this service.
+     *
+     * @param privateEndpointConnections the privateEndpointConnections value to set.
+     * @return the ApiManagementServiceResourceInner object itself.
+     */
+    public ApiManagementServiceResourceInner
+        withPrivateEndpointConnections(List<RemotePrivateEndpointConnectionWrapper> privateEndpointConnections) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new ApiManagementServiceProperties();
+        }
+        this.innerProperties().withPrivateEndpointConnections(privateEndpointConnections);
+        return this;
+    }
+
+    /**
+     * Get the platformVersion property: Compute Platform Version running the service in this location.
+     *
+     * @return the platformVersion value.
+     */
+    public PlatformVersion platformVersion() {
+        return this.innerProperties() == null ? null : this.innerProperties().platformVersion();
+    }
+
+    /**
      * Validates the instance.
      *
      * @throws IllegalArgumentException thrown if the instance is not valid.
@@ -643,18 +783,14 @@ public final class ApiManagementServiceResourceInner extends ApimResource {
     public void validate() {
         super.validate();
         if (innerProperties() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property innerProperties in model ApiManagementServiceResourceInner"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property innerProperties in model ApiManagementServiceResourceInner"));
         } else {
             innerProperties().validate();
         }
         if (sku() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property sku in model ApiManagementServiceResourceInner"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property sku in model ApiManagementServiceResourceInner"));
         } else {
             sku().validate();
         }
@@ -662,10 +798,10 @@ public final class ApiManagementServiceResourceInner extends ApimResource {
             identity().validate();
         }
         if (location() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property location in model ApiManagementServiceResourceInner"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property location in model ApiManagementServiceResourceInner"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(ApiManagementServiceResourceInner.class);
 }

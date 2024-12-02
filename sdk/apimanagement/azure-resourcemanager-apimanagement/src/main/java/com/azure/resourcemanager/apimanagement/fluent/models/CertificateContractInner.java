@@ -6,22 +6,22 @@ package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.models.KeyVaultContractProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
 /** Certificate details. */
 @Fluent
 public final class CertificateContractInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CertificateContractInner.class);
-
     /*
      * Certificate properties details.
      */
     @JsonProperty(value = "properties")
     private CertificateContractProperties innerProperties;
+
+    /** Creates an instance of CertificateContractInner class. */
+    public CertificateContractInner() {
+    }
 
     /**
      * Get the innerProperties property: Certificate properties details.

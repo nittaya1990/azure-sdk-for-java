@@ -5,9 +5,7 @@
 package com.azure.resourcemanager.frontdoor.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.frontdoor.fluent.models.FrontDoorInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
@@ -17,8 +15,6 @@ import java.util.List;
  */
 @Fluent
 public final class FrontDoorListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(FrontDoorListResult.class);
-
     /*
      * List of Front Doors within a resource group.
      */
@@ -32,8 +28,14 @@ public final class FrontDoorListResult {
     private String nextLink;
 
     /**
+     * Creates an instance of FrontDoorListResult class.
+     */
+    public FrontDoorListResult() {
+    }
+
+    /**
      * Get the value property: List of Front Doors within a resource group.
-     *
+     * 
      * @return the value value.
      */
     public List<FrontDoorInner> value() {
@@ -42,7 +44,7 @@ public final class FrontDoorListResult {
 
     /**
      * Get the nextLink property: URL to get the next set of Front Door objects if there are any.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -51,7 +53,7 @@ public final class FrontDoorListResult {
 
     /**
      * Set the nextLink property: URL to get the next set of Front Door objects if there are any.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the FrontDoorListResult object itself.
      */
@@ -62,7 +64,7 @@ public final class FrontDoorListResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

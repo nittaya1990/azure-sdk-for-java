@@ -5,25 +5,30 @@
 package com.azure.analytics.purview.scanning;
 
 import com.azure.analytics.purview.scanning.implementation.FiltersImpl;
+import com.azure.core.annotation.Generated;
 import com.azure.core.annotation.ReturnType;
 import com.azure.core.annotation.ServiceClient;
 import com.azure.core.annotation.ServiceMethod;
+import com.azure.core.exception.ClientAuthenticationException;
 import com.azure.core.exception.HttpResponseException;
+import com.azure.core.exception.ResourceModifiedException;
+import com.azure.core.exception.ResourceNotFoundException;
 import com.azure.core.http.rest.RequestOptions;
 import com.azure.core.http.rest.Response;
 import com.azure.core.util.BinaryData;
-import com.azure.core.util.Context;
 
 /** Initializes a new instance of the synchronous PurviewScanningClient type. */
 @ServiceClient(builder = PurviewScanningClientBuilder.class)
 public final class FiltersClient {
+    @Generated
     private final FiltersImpl serviceClient;
 
     /**
-     * Initializes an instance of Filters client.
+     * Initializes an instance of FiltersClient class.
      *
      * @param serviceClient the service client implementation.
      */
+    @Generated
     FiltersClient(FiltersImpl serviceClient) {
         this.serviceClient = serviceClient;
     }
@@ -31,26 +36,18 @@ public final class FiltersClient {
     /**
      * Get a filter.
      *
-     * <p><strong>Query Parameters</strong>
-     *
-     * <table border="1">
-     *     <caption>Query Parameters</caption>
-     *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
-     *     <tr><td>apiVersion</td><td>String</td><td>Yes</td><td>Api Version</td></tr>
-     * </table>
-     *
      * <p><strong>Response Body Schema</strong>
      *
      * <pre>{@code
      * {
-     *     id: String
-     *     name: String
-     *     properties: {
-     *         excludeUriPrefixes: [
-     *             String
+     *     id: String (Optional)
+     *     name: String (Optional)
+     *     properties (Optional): {
+     *         excludeUriPrefixes (Optional): [
+     *             String (Optional)
      *         ]
-     *         includeUriPrefixes: [
-     *             String
+     *         includeUriPrefixes (Optional): [
+     *             String (Optional)
      *         ]
      *     }
      * }
@@ -59,40 +56,43 @@ public final class FiltersClient {
      * @param dataSourceName The dataSourceName parameter.
      * @param scanName The scanName parameter.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @param context The context to associate with this operation.
-     * @throws HttpResponseException thrown if status code is 400 or above, if throwOnError in requestOptions is not
-     *     false.
-     * @return a filter.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @throws ClientAuthenticationException thrown if the request is rejected by server on status code 401.
+     * @throws ResourceNotFoundException thrown if the request is rejected by server on status code 404.
+     * @throws ResourceModifiedException thrown if the request is rejected by server on status code 409.
+     * @return a filter along with {@link Response}.
      */
+    @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<BinaryData> getWithResponse(
-            String dataSourceName, String scanName, RequestOptions requestOptions, Context context) {
-        return this.serviceClient.getWithResponse(dataSourceName, scanName, requestOptions, context);
+    public Response<BinaryData> getWithResponse(String dataSourceName, String scanName, RequestOptions requestOptions) {
+        return this.serviceClient.getWithResponse(dataSourceName, scanName, requestOptions);
     }
 
     /**
      * Creates or updates a filter.
      *
-     * <p><strong>Query Parameters</strong>
+     * <p><strong>Header Parameters</strong>
      *
      * <table border="1">
-     *     <caption>Query Parameters</caption>
+     *     <caption>Header Parameters</caption>
      *     <tr><th>Name</th><th>Type</th><th>Required</th><th>Description</th></tr>
-     *     <tr><td>apiVersion</td><td>String</td><td>Yes</td><td>Api Version</td></tr>
+     *     <tr><td>Content-Type</td><td>String</td><td>No</td><td>The content type. Allowed values: "application/json".</td></tr>
      * </table>
+     *
+     * You can add these to a request with {@link RequestOptions#addHeader}
      *
      * <p><strong>Request Body Schema</strong>
      *
      * <pre>{@code
      * {
-     *     id: String
-     *     name: String
-     *     properties: {
-     *         excludeUriPrefixes: [
-     *             String
+     *     id: String (Optional)
+     *     name: String (Optional)
+     *     properties (Optional): {
+     *         excludeUriPrefixes (Optional): [
+     *             String (Optional)
      *         ]
-     *         includeUriPrefixes: [
-     *             String
+     *         includeUriPrefixes (Optional): [
+     *             String (Optional)
      *         ]
      *     }
      * }
@@ -102,14 +102,14 @@ public final class FiltersClient {
      *
      * <pre>{@code
      * {
-     *     id: String
-     *     name: String
-     *     properties: {
-     *         excludeUriPrefixes: [
-     *             String
+     *     id: String (Optional)
+     *     name: String (Optional)
+     *     properties (Optional): {
+     *         excludeUriPrefixes (Optional): [
+     *             String (Optional)
      *         ]
-     *         includeUriPrefixes: [
-     *             String
+     *         includeUriPrefixes (Optional): [
+     *             String (Optional)
      *         ]
      *     }
      * }
@@ -118,14 +118,16 @@ public final class FiltersClient {
      * @param dataSourceName The dataSourceName parameter.
      * @param scanName The scanName parameter.
      * @param requestOptions The options to configure the HTTP request before HTTP client sends it.
-     * @param context The context to associate with this operation.
-     * @throws HttpResponseException thrown if status code is 400 or above, if throwOnError in requestOptions is not
-     *     false.
-     * @return the response.
+     * @throws HttpResponseException thrown if the request is rejected by server.
+     * @throws ClientAuthenticationException thrown if the request is rejected by server on status code 401.
+     * @throws ResourceNotFoundException thrown if the request is rejected by server on status code 404.
+     * @throws ResourceModifiedException thrown if the request is rejected by server on status code 409.
+     * @return the response body along with {@link Response}.
      */
+    @Generated
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<BinaryData> upsertWithResponse(
-            String dataSourceName, String scanName, RequestOptions requestOptions, Context context) {
-        return this.serviceClient.upsertWithResponse(dataSourceName, scanName, requestOptions, context);
+    public Response<BinaryData> createOrUpdateWithResponse(String dataSourceName, String scanName,
+        RequestOptions requestOptions) {
+        return this.serviceClient.createOrUpdateWithResponse(dataSourceName, scanName, requestOptions);
     }
 }

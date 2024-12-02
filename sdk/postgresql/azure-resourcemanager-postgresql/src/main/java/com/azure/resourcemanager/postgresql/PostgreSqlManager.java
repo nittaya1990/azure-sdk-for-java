@@ -8,6 +8,7 @@ import com.azure.core.credential.TokenCredential;
 import com.azure.core.http.HttpClient;
 import com.azure.core.http.HttpPipeline;
 import com.azure.core.http.HttpPipelineBuilder;
+import com.azure.core.http.HttpPipelinePosition;
 import com.azure.core.http.policy.AddDatePolicy;
 import com.azure.core.http.policy.HttpLogOptions;
 import com.azure.core.http.policy.HttpLoggingPolicy;
@@ -63,6 +64,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Entry point to PostgreSqlManager. The Microsoft Azure management API provides create, read, update, and delete
@@ -111,13 +113,11 @@ public final class PostgreSqlManager {
     private PostgreSqlManager(HttpPipeline httpPipeline, AzureProfile profile, Duration defaultPollInterval) {
         Objects.requireNonNull(httpPipeline, "'httpPipeline' cannot be null.");
         Objects.requireNonNull(profile, "'profile' cannot be null.");
-        this.clientObject =
-            new PostgreSqlManagementClientBuilder()
-                .pipeline(httpPipeline)
-                .endpoint(profile.getEnvironment().getResourceManagerEndpoint())
-                .subscriptionId(profile.getSubscriptionId())
-                .defaultPollInterval(defaultPollInterval)
-                .buildClient();
+        this.clientObject = new PostgreSqlManagementClientBuilder().pipeline(httpPipeline)
+            .endpoint(profile.getEnvironment().getResourceManagerEndpoint())
+            .subscriptionId(profile.getSubscriptionId())
+            .defaultPollInterval(defaultPollInterval)
+            .buildClient();
     }
 
     /**
@@ -237,15 +237,13 @@ public final class PostgreSqlManager {
             Objects.requireNonNull(profile, "'profile' cannot be null.");
 
             StringBuilder userAgentBuilder = new StringBuilder();
-            userAgentBuilder
-                .append("azsdk-java")
+            userAgentBuilder.append("azsdk-java")
                 .append("-")
                 .append("com.azure.resourcemanager.postgresql")
                 .append("/")
-                .append("1.0.1");
+                .append("1.0.2");
             if (!Configuration.getGlobalConfiguration().get("AZURE_TELEMETRY_DISABLED", false)) {
-                userAgentBuilder
-                    .append(" (")
+                userAgentBuilder.append(" (")
                     .append(Configuration.getGlobalConfiguration().get("java.version"))
                     .append("; ")
                     .append(Configuration.getGlobalConfiguration().get("os.name"))
@@ -265,18 +263,21 @@ public final class PostgreSqlManager {
             List<HttpPipelinePolicy> policies = new ArrayList<>();
             policies.add(new UserAgentPolicy(userAgentBuilder.toString()));
             policies.add(new RequestIdPolicy());
+            policies.addAll(this.policies.stream()
+                .filter(p -> p.getPipelinePosition() == HttpPipelinePosition.PER_CALL)
+                .collect(Collectors.toList()));
             HttpPolicyProviders.addBeforeRetryPolicies(policies);
             policies.add(retryPolicy);
             policies.add(new AddDatePolicy());
             policies.add(new ArmChallengeAuthenticationPolicy(credential, scopes.toArray(new String[0])));
-            policies.addAll(this.policies);
+            policies.addAll(this.policies.stream()
+                .filter(p -> p.getPipelinePosition() == HttpPipelinePosition.PER_RETRY)
+                .collect(Collectors.toList()));
             HttpPolicyProviders.addAfterRetryPolicies(policies);
             policies.add(new HttpLoggingPolicy(httpLogOptions));
-            HttpPipeline httpPipeline =
-                new HttpPipelineBuilder()
-                    .httpClient(httpClient)
-                    .policies(policies.toArray(new HttpPipelinePolicy[0]))
-                    .build();
+            HttpPipeline httpPipeline = new HttpPipelineBuilder().httpClient(httpClient)
+                .policies(policies.toArray(new HttpPipelinePolicy[0]))
+                .build();
             return new PostgreSqlManager(httpPipeline, profile, defaultPollInterval);
         }
     }
@@ -364,8 +365,8 @@ public final class PostgreSqlManager {
     /** @return Resource collection API of ServerBasedPerformanceTiers. */
     public ServerBasedPerformanceTiers serverBasedPerformanceTiers() {
         if (this.serverBasedPerformanceTiers == null) {
-            this.serverBasedPerformanceTiers =
-                new ServerBasedPerformanceTiersImpl(clientObject.getServerBasedPerformanceTiers(), this);
+            this.serverBasedPerformanceTiers
+                = new ServerBasedPerformanceTiersImpl(clientObject.getServerBasedPerformanceTiers(), this);
         }
         return serverBasedPerformanceTiers;
     }
@@ -373,8 +374,8 @@ public final class PostgreSqlManager {
     /** @return Resource collection API of LocationBasedPerformanceTiers. */
     public LocationBasedPerformanceTiers locationBasedPerformanceTiers() {
         if (this.locationBasedPerformanceTiers == null) {
-            this.locationBasedPerformanceTiers =
-                new LocationBasedPerformanceTiersImpl(clientObject.getLocationBasedPerformanceTiers(), this);
+            this.locationBasedPerformanceTiers
+                = new LocationBasedPerformanceTiersImpl(clientObject.getLocationBasedPerformanceTiers(), this);
         }
         return locationBasedPerformanceTiers;
     }
@@ -382,8 +383,8 @@ public final class PostgreSqlManager {
     /** @return Resource collection API of CheckNameAvailabilities. */
     public CheckNameAvailabilities checkNameAvailabilities() {
         if (this.checkNameAvailabilities == null) {
-            this.checkNameAvailabilities =
-                new CheckNameAvailabilitiesImpl(clientObject.getCheckNameAvailabilities(), this);
+            this.checkNameAvailabilities
+                = new CheckNameAvailabilitiesImpl(clientObject.getCheckNameAvailabilities(), this);
         }
         return checkNameAvailabilities;
     }
@@ -399,8 +400,8 @@ public final class PostgreSqlManager {
     /** @return Resource collection API of ServerSecurityAlertPolicies. */
     public ServerSecurityAlertPolicies serverSecurityAlertPolicies() {
         if (this.serverSecurityAlertPolicies == null) {
-            this.serverSecurityAlertPolicies =
-                new ServerSecurityAlertPoliciesImpl(clientObject.getServerSecurityAlertPolicies(), this);
+            this.serverSecurityAlertPolicies
+                = new ServerSecurityAlertPoliciesImpl(clientObject.getServerSecurityAlertPolicies(), this);
         }
         return serverSecurityAlertPolicies;
     }
@@ -408,8 +409,8 @@ public final class PostgreSqlManager {
     /** @return Resource collection API of PrivateEndpointConnections. */
     public PrivateEndpointConnections privateEndpointConnections() {
         if (this.privateEndpointConnections == null) {
-            this.privateEndpointConnections =
-                new PrivateEndpointConnectionsImpl(clientObject.getPrivateEndpointConnections(), this);
+            this.privateEndpointConnections
+                = new PrivateEndpointConnectionsImpl(clientObject.getPrivateEndpointConnections(), this);
         }
         return privateEndpointConnections;
     }

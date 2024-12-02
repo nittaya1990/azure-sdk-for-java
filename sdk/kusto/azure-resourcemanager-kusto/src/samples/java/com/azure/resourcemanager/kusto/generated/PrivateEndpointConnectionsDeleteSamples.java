@@ -4,12 +4,10 @@
 
 package com.azure.resourcemanager.kusto.generated;
 
-import com.azure.core.util.Context;
-
 /** Samples for PrivateEndpointConnections Delete. */
 public final class PrivateEndpointConnectionsDeleteSamples {
     /*
-     * x-ms-original-file: specification/azure-kusto/resource-manager/Microsoft.Kusto/stable/2021-08-27/examples/KustoPrivateEndpointConnectionsDelete.json
+     * x-ms-original-file: specification/azure-kusto/resource-manager/Microsoft.Kusto/stable/2023-08-15/examples/KustoPrivateEndpointConnectionsDelete.json
      */
     /**
      * Sample code: Deletes a private endpoint connection with a given name.
@@ -20,6 +18,6 @@ public final class PrivateEndpointConnectionsDeleteSamples {
         com.azure.resourcemanager.kusto.KustoManager manager) {
         manager
             .privateEndpointConnections()
-            .delete("kustorptest", "kustoclusterrptest4", "privateEndpointConnectionName", Context.NONE);
+            .delete("kustorptest", "kustoCluster", "privateEndpointTest", com.azure.core.util.Context.NONE);
     }
 }

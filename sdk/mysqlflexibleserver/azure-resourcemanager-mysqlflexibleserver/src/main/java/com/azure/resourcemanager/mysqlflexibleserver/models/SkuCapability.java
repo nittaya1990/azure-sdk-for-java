@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.mysqlflexibleserver.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Sku capability. */
+/**
+ * Sku capability.
+ */
 @Immutable
 public final class SkuCapability {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SkuCapability.class);
-
     /*
      * vCore name
      */
@@ -39,8 +37,14 @@ public final class SkuCapability {
     private Long supportedMemoryPerVCoreMB;
 
     /**
+     * Creates an instance of SkuCapability class.
+     */
+    public SkuCapability() {
+    }
+
+    /**
      * Get the name property: vCore name.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -49,7 +53,7 @@ public final class SkuCapability {
 
     /**
      * Get the vCores property: supported vCores.
-     *
+     * 
      * @return the vCores value.
      */
     public Long vCores() {
@@ -58,7 +62,7 @@ public final class SkuCapability {
 
     /**
      * Get the supportedIops property: supported IOPS.
-     *
+     * 
      * @return the supportedIops value.
      */
     public Long supportedIops() {
@@ -67,7 +71,7 @@ public final class SkuCapability {
 
     /**
      * Get the supportedMemoryPerVCoreMB property: supported memory per vCore in MB.
-     *
+     * 
      * @return the supportedMemoryPerVCoreMB value.
      */
     public Long supportedMemoryPerVCoreMB() {
@@ -76,7 +80,7 @@ public final class SkuCapability {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

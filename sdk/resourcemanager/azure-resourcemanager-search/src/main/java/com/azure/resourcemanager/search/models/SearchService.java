@@ -21,10 +21,8 @@ import reactor.core.publisher.Mono;
  * An immutable client-side representation of an Azure Cognitive Search service.
  */
 @Fluent
-public interface SearchService extends
-    GroupableResource<SearchServiceManager, SearchServiceInner>,
-    Refreshable<SearchService>,
-    Updatable<SearchService.Update> {
+public interface SearchService extends GroupableResource<SearchServiceManager, SearchServiceInner>,
+    Refreshable<SearchService>, Updatable<SearchService.Update> {
 
     /**
      * The hosting mode value.
@@ -200,17 +198,19 @@ public interface SearchService extends
      */
     Mono<Void> deleteQueryKeyAsync(String key);
 
+    /**
+     * Whether the search service can be accessed from public network.
+     *
+     * @return whether the search service can be accessed from public network.
+     */
+    PublicNetworkAccess publicNetworkAccess();
 
     /**
      * The entirety of the Search service definition.
      */
-    interface Definition extends
-        DefinitionStages.Blank,
-        DefinitionStages.WithGroup,
-        DefinitionStages.WithSku,
-        DefinitionStages.WithPartitionsAndCreate,
-        DefinitionStages.WithReplicasAndCreate,
-        DefinitionStages.WithCreate {
+    interface Definition extends DefinitionStages.Blank, DefinitionStages.WithGroup, DefinitionStages.WithSku,
+        DefinitionStages.WithPublicNetworkAccess, DefinitionStages.WithPartitionsAndCreate,
+        DefinitionStages.WithReplicasAndCreate, DefinitionStages.WithCreate {
     }
 
     /**
@@ -220,15 +220,13 @@ public interface SearchService extends
         /**
          * The first stage of the Search service definition.
          */
-        interface Blank
-            extends GroupableResource.DefinitionWithRegion<WithGroup> {
+        interface Blank extends GroupableResource.DefinitionWithRegion<WithGroup> {
         }
 
         /**
          * The stage of the Search service definition allowing to specify the resource group.
          */
-        interface WithGroup
-            extends GroupableResource.DefinitionStages.WithGroup<DefinitionStages.WithSku> {
+        interface WithGroup extends GroupableResource.DefinitionStages.WithGroup<DefinitionStages.WithSku> {
         }
 
         /**
@@ -265,6 +263,19 @@ public interface SearchService extends
             WithPartitionsAndCreate withStandardSku();
         }
 
+        /** The stage of search service definition allowing to configure network access settings. */
+        interface WithPublicNetworkAccess {
+            /**
+             * Disables public network access for the search service.
+             *
+             * @return the next stage of the definition
+             */
+            WithCreate disablePublicNetworkAccess();
+        }
+
+        /**
+         * The stage of the Search service definition allowing to specify the replica count.
+         */
         interface WithReplicasAndCreate extends WithCreate {
             /**
              * Specifies the SKU of the Search service.
@@ -275,6 +286,9 @@ public interface SearchService extends
             WithCreate withReplicaCount(int count);
         }
 
+        /**
+         * The stage of the Search service definition allowing to specify the partition count.
+         */
         interface WithPartitionsAndCreate extends WithReplicasAndCreate {
             /**
              * Specifies the SKU of the Search service.
@@ -289,20 +303,16 @@ public interface SearchService extends
          * The stage of the definition which contains all the minimum required inputs for the resource to be created
          *   (via {@link WithCreate#create()}), but also allows for any other optional settings to be specified.
          */
-        interface WithCreate extends
-            Creatable<SearchService>,
-            Resource.DefinitionWithTags<WithCreate> {
+        interface WithCreate
+            extends Creatable<SearchService>, Resource.DefinitionWithTags<WithCreate>, WithPublicNetworkAccess {
         }
     }
 
     /**
      * The template for a Search service update operation, containing all the settings that can be modified.
      */
-    interface Update extends
-        Appliable<SearchService>,
-        Resource.UpdateWithTags<Update>,
-        UpdateStages.WithReplicaCount,
-        UpdateStages.WithPartitionCount {
+    interface Update extends Appliable<SearchService>, Resource.UpdateWithTags<Update>, UpdateStages.WithReplicaCount,
+        UpdateStages.WithPartitionCount, UpdateStages.WithPublicNetworkAccess {
     }
 
     /**
@@ -336,6 +346,23 @@ public interface SearchService extends
              * @return the next stage of the definition
              */
             Update withPartitionCount(int count);
+        }
+
+        /** The stage of search service update allowing to configure network access settings. */
+        interface WithPublicNetworkAccess {
+            /**
+             * Enables public network access for the search service.
+             *
+             * @return the next stage of the update
+             */
+            Update enablePublicNetworkAccess();
+
+            /**
+             * Disables public network access for the search service.
+             *
+             * @return the next stage of the update
+             */
+            Update disablePublicNetworkAccess();
         }
     }
 }

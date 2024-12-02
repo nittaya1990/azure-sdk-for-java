@@ -8,36 +8,55 @@ import com.azure.core.http.rest.PagedIterable;
 import com.azure.core.http.rest.Response;
 import com.azure.core.util.Context;
 
-/** Resource collection API of Datasets. */
+/**
+ * Resource collection API of Datasets.
+ */
 public interface Datasets {
     /**
      * Lists datasets.
-     *
+     * 
      * @param resourceGroupName The resource group name.
      * @param factoryName The factory name.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of dataset resources.
+     * @return a list of dataset resources as paginated response with {@link PagedIterable}.
      */
     PagedIterable<DatasetResource> listByFactory(String resourceGroupName, String factoryName);
 
     /**
      * Lists datasets.
-     *
+     * 
      * @param resourceGroupName The resource group name.
      * @param factoryName The factory name.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of dataset resources.
+     * @return a list of dataset resources as paginated response with {@link PagedIterable}.
      */
     PagedIterable<DatasetResource> listByFactory(String resourceGroupName, String factoryName, Context context);
 
     /**
      * Gets a dataset.
-     *
+     * 
+     * @param resourceGroupName The resource group name.
+     * @param factoryName The factory name.
+     * @param datasetName The dataset name.
+     * @param ifNoneMatch ETag of the dataset entity. Should only be specified for get. If the ETag matches the existing
+     * entity tag, or if * was provided, then no content will be returned.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a dataset along with {@link Response}.
+     */
+    Response<DatasetResource> getWithResponse(String resourceGroupName, String factoryName, String datasetName,
+        String ifNoneMatch, Context context);
+
+    /**
+     * Gets a dataset.
+     * 
      * @param resourceGroupName The resource group name.
      * @param factoryName The factory name.
      * @param datasetName The dataset name.
@@ -49,25 +68,23 @@ public interface Datasets {
     DatasetResource get(String resourceGroupName, String factoryName, String datasetName);
 
     /**
-     * Gets a dataset.
-     *
+     * Deletes a dataset.
+     * 
      * @param resourceGroupName The resource group name.
      * @param factoryName The factory name.
      * @param datasetName The dataset name.
-     * @param ifNoneMatch ETag of the dataset entity. Should only be specified for get. If the ETag matches the existing
-     *     entity tag, or if * was provided, then no content will be returned.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a dataset.
+     * @return the {@link Response}.
      */
-    Response<DatasetResource> getWithResponse(
-        String resourceGroupName, String factoryName, String datasetName, String ifNoneMatch, Context context);
+    Response<Void> deleteWithResponse(String resourceGroupName, String factoryName, String datasetName,
+        Context context);
 
     /**
      * Deletes a dataset.
-     *
+     * 
      * @param resourceGroupName The resource group name.
      * @param factoryName The factory name.
      * @param datasetName The dataset name.
@@ -78,48 +95,33 @@ public interface Datasets {
     void delete(String resourceGroupName, String factoryName, String datasetName);
 
     /**
-     * Deletes a dataset.
-     *
-     * @param resourceGroupName The resource group name.
-     * @param factoryName The factory name.
-     * @param datasetName The dataset name.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    Response<Void> deleteWithResponse(
-        String resourceGroupName, String factoryName, String datasetName, Context context);
-
-    /**
      * Gets a dataset.
-     *
+     * 
      * @param id the resource ID.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a dataset.
+     * @return a dataset along with {@link Response}.
      */
     DatasetResource getById(String id);
 
     /**
      * Gets a dataset.
-     *
+     * 
      * @param id the resource ID.
      * @param ifNoneMatch ETag of the dataset entity. Should only be specified for get. If the ETag matches the existing
-     *     entity tag, or if * was provided, then no content will be returned.
+     * entity tag, or if * was provided, then no content will be returned.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a dataset.
+     * @return a dataset along with {@link Response}.
      */
     Response<DatasetResource> getByIdWithResponse(String id, String ifNoneMatch, Context context);
 
     /**
      * Deletes a dataset.
-     *
+     * 
      * @param id the resource ID.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
@@ -129,19 +131,19 @@ public interface Datasets {
 
     /**
      * Deletes a dataset.
-     *
+     * 
      * @param id the resource ID.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
     Response<Void> deleteByIdWithResponse(String id, Context context);
 
     /**
      * Begins definition for a new DatasetResource resource.
-     *
+     * 
      * @param name resource name.
      * @return the first stage of the new DatasetResource definition.
      */

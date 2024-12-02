@@ -6,19 +6,18 @@ package com.azure.resourcemanager.recoveryservices.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.Resource;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.core.management.SystemData;
 import com.azure.resourcemanager.recoveryservices.models.IdentityData;
 import com.azure.resourcemanager.recoveryservices.models.Sku;
 import com.azure.resourcemanager.recoveryservices.models.VaultProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
-/** Resource information, as returned by the resource provider. */
+/**
+ * Resource information, as returned by the resource provider.
+ */
 @Fluent
 public final class VaultInner extends Resource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(VaultInner.class);
-
     /*
      * Identity for the resource.
      */
@@ -37,9 +36,27 @@ public final class VaultInner extends Resource {
     @JsonProperty(value = "sku")
     private Sku sku;
 
+    /*
+     * Metadata pertaining to creation and last modification of the resource.
+     */
+    @JsonProperty(value = "systemData", access = JsonProperty.Access.WRITE_ONLY)
+    private SystemData systemData;
+
+    /*
+     * Optional ETag.
+     */
+    @JsonProperty(value = "etag")
+    private String etag;
+
+    /**
+     * Creates an instance of VaultInner class.
+     */
+    public VaultInner() {
+    }
+
     /**
      * Get the identity property: Identity for the resource.
-     *
+     * 
      * @return the identity value.
      */
     public IdentityData identity() {
@@ -48,7 +65,7 @@ public final class VaultInner extends Resource {
 
     /**
      * Set the identity property: Identity for the resource.
-     *
+     * 
      * @param identity the identity value to set.
      * @return the VaultInner object itself.
      */
@@ -59,7 +76,7 @@ public final class VaultInner extends Resource {
 
     /**
      * Get the properties property: Properties of the vault.
-     *
+     * 
      * @return the properties value.
      */
     public VaultProperties properties() {
@@ -68,7 +85,7 @@ public final class VaultInner extends Resource {
 
     /**
      * Set the properties property: Properties of the vault.
-     *
+     * 
      * @param properties the properties value to set.
      * @return the VaultInner object itself.
      */
@@ -79,7 +96,7 @@ public final class VaultInner extends Resource {
 
     /**
      * Get the sku property: Identifies the unique system identifier for each Azure resource.
-     *
+     * 
      * @return the sku value.
      */
     public Sku sku() {
@@ -88,7 +105,7 @@ public final class VaultInner extends Resource {
 
     /**
      * Set the sku property: Identifies the unique system identifier for each Azure resource.
-     *
+     * 
      * @param sku the sku value to set.
      * @return the VaultInner object itself.
      */
@@ -97,14 +114,47 @@ public final class VaultInner extends Resource {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * Get the systemData property: Metadata pertaining to creation and last modification of the resource.
+     * 
+     * @return the systemData value.
+     */
+    public SystemData systemData() {
+        return this.systemData;
+    }
+
+    /**
+     * Get the etag property: Optional ETag.
+     * 
+     * @return the etag value.
+     */
+    public String etag() {
+        return this.etag;
+    }
+
+    /**
+     * Set the etag property: Optional ETag.
+     * 
+     * @param etag the etag value to set.
+     * @return the VaultInner object itself.
+     */
+    public VaultInner withEtag(String etag) {
+        this.etag = etag;
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public VaultInner withLocation(String location) {
         super.withLocation(location);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public VaultInner withTags(Map<String, String> tags) {
         super.withTags(tags);
@@ -113,7 +163,7 @@ public final class VaultInner extends Resource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

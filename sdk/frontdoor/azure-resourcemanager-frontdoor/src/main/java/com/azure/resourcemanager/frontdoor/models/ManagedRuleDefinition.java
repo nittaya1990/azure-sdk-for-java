@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.frontdoor.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Describes a managed rule definition. */
+/**
+ * Describes a managed rule definition.
+ */
 @Immutable
 public final class ManagedRuleDefinition {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ManagedRuleDefinition.class);
-
     /*
      * Identifier for the managed rule.
      */
@@ -27,8 +25,7 @@ public final class ManagedRuleDefinition {
     private ManagedRuleEnabledState defaultState;
 
     /*
-     * Describes the default action to be applied when the managed rule
-     * matches.
+     * Describes the default action to be applied when the managed rule matches.
      */
     @JsonProperty(value = "defaultAction", access = JsonProperty.Access.WRITE_ONLY)
     private ActionType defaultAction;
@@ -40,8 +37,14 @@ public final class ManagedRuleDefinition {
     private String description;
 
     /**
+     * Creates an instance of ManagedRuleDefinition class.
+     */
+    public ManagedRuleDefinition() {
+    }
+
+    /**
      * Get the ruleId property: Identifier for the managed rule.
-     *
+     * 
      * @return the ruleId value.
      */
     public String ruleId() {
@@ -50,7 +53,7 @@ public final class ManagedRuleDefinition {
 
     /**
      * Get the defaultState property: Describes the default state for the managed rule.
-     *
+     * 
      * @return the defaultState value.
      */
     public ManagedRuleEnabledState defaultState() {
@@ -59,7 +62,7 @@ public final class ManagedRuleDefinition {
 
     /**
      * Get the defaultAction property: Describes the default action to be applied when the managed rule matches.
-     *
+     * 
      * @return the defaultAction value.
      */
     public ActionType defaultAction() {
@@ -68,7 +71,7 @@ public final class ManagedRuleDefinition {
 
     /**
      * Get the description property: Describes the functionality of the managed rule.
-     *
+     * 
      * @return the description value.
      */
     public String description() {
@@ -77,7 +80,7 @@ public final class ManagedRuleDefinition {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

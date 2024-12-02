@@ -6,6 +6,7 @@ package com.azure.resourcemanager.deviceprovisioningservices.models;
 
 import com.azure.core.http.rest.PagedIterable;
 import com.azure.core.management.Region;
+import com.azure.core.management.SystemData;
 import com.azure.core.util.Context;
 import com.azure.resourcemanager.deviceprovisioningservices.fluent.models.ProvisioningServiceDescriptionInner;
 import java.util.Map;
@@ -70,6 +71,13 @@ public interface ProvisioningServiceDescription {
     IotDpsSkuInfo sku();
 
     /**
+     * Gets the systemData property: Metadata pertaining to creation and last modification of the resource.
+     *
+     * @return the systemData value.
+     */
+    SystemData systemData();
+
+    /**
      * Gets the region of the resource.
      *
      * @return the region of the resource.
@@ -84,6 +92,13 @@ public interface ProvisioningServiceDescription {
     String regionName();
 
     /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
+
+    /**
      * Gets the inner
      * com.azure.resourcemanager.deviceprovisioningservices.fluent.models.ProvisioningServiceDescriptionInner object.
      *
@@ -93,18 +108,16 @@ public interface ProvisioningServiceDescription {
 
     /** The entirety of the ProvisioningServiceDescription definition. */
     interface Definition
-        extends DefinitionStages.Blank,
-            DefinitionStages.WithLocation,
-            DefinitionStages.WithResourceGroup,
-            DefinitionStages.WithProperties,
-            DefinitionStages.WithSku,
-            DefinitionStages.WithCreate {
+        extends DefinitionStages.Blank, DefinitionStages.WithLocation, DefinitionStages.WithResourceGroup,
+        DefinitionStages.WithProperties, DefinitionStages.WithSku, DefinitionStages.WithCreate {
     }
+
     /** The ProvisioningServiceDescription definition stages. */
     interface DefinitionStages {
         /** The first stage of the ProvisioningServiceDescription definition. */
         interface Blank extends WithLocation {
         }
+
         /** The stage of the ProvisioningServiceDescription definition allowing to specify location. */
         interface WithLocation {
             /**
@@ -123,6 +136,7 @@ public interface ProvisioningServiceDescription {
              */
             WithResourceGroup withRegion(String location);
         }
+
         /** The stage of the ProvisioningServiceDescription definition allowing to specify parent resource. */
         interface WithResourceGroup {
             /**
@@ -133,6 +147,7 @@ public interface ProvisioningServiceDescription {
              */
             WithProperties withExistingResourceGroup(String resourceGroupName);
         }
+
         /** The stage of the ProvisioningServiceDescription definition allowing to specify properties. */
         interface WithProperties {
             /**
@@ -143,6 +158,7 @@ public interface ProvisioningServiceDescription {
              */
             WithSku withProperties(IotDpsPropertiesDescription properties);
         }
+
         /** The stage of the ProvisioningServiceDescription definition allowing to specify sku. */
         interface WithSku {
             /**
@@ -153,6 +169,7 @@ public interface ProvisioningServiceDescription {
              */
             WithCreate withSku(IotDpsSkuInfo sku);
         }
+
         /**
          * The stage of the ProvisioningServiceDescription definition which contains all the minimum required properties
          * for the resource to be created, but also allows for any other optional properties to be specified.
@@ -173,6 +190,7 @@ public interface ProvisioningServiceDescription {
              */
             ProvisioningServiceDescription create(Context context);
         }
+
         /** The stage of the ProvisioningServiceDescription definition allowing to specify tags. */
         interface WithTags {
             /**
@@ -183,6 +201,7 @@ public interface ProvisioningServiceDescription {
              */
             WithCreate withTags(Map<String, String> tags);
         }
+
         /** The stage of the ProvisioningServiceDescription definition allowing to specify etag. */
         interface WithEtag {
             /**
@@ -196,6 +215,7 @@ public interface ProvisioningServiceDescription {
             WithCreate withEtag(String etag);
         }
     }
+
     /**
      * Begins update for the ProvisioningServiceDescription resource.
      *
@@ -220,6 +240,7 @@ public interface ProvisioningServiceDescription {
          */
         ProvisioningServiceDescription apply(Context context);
     }
+
     /** The ProvisioningServiceDescription update stages. */
     interface UpdateStages {
         /** The stage of the ProvisioningServiceDescription update allowing to specify tags. */
@@ -233,6 +254,7 @@ public interface ProvisioningServiceDescription {
             Update withTags(Map<String, String> tags);
         }
     }
+
     /**
      * Refreshes the resource to sync with Azure.
      *
@@ -254,7 +276,7 @@ public interface ProvisioningServiceDescription {
      * @throws com.azure.resourcemanager.deviceprovisioningservices.models.ErrorDetailsException thrown if the request
      *     is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of shared access keys.
+     * @return list of shared access keys as paginated response with {@link PagedIterable}.
      */
     PagedIterable<SharedAccessSignatureAuthorizationRule> listKeys();
 
@@ -266,7 +288,7 @@ public interface ProvisioningServiceDescription {
      * @throws com.azure.resourcemanager.deviceprovisioningservices.models.ErrorDetailsException thrown if the request
      *     is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of shared access keys.
+     * @return list of shared access keys as paginated response with {@link PagedIterable}.
      */
     PagedIterable<SharedAccessSignatureAuthorizationRule> listKeys(Context context);
 }

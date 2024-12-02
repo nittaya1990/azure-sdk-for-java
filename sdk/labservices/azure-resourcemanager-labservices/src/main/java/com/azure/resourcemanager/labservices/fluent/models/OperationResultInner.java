@@ -5,76 +5,253 @@
 package com.azure.resourcemanager.labservices.fluent.models;
 
 import com.azure.core.annotation.Fluent;
+import com.azure.core.management.exception.ManagementError;
+import com.azure.core.util.CoreUtils;
 import com.azure.core.util.logging.ClientLogger;
-import com.azure.resourcemanager.labservices.models.OperationError;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonSerializable;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import com.azure.resourcemanager.labservices.models.OperationStatus;
+import java.io.IOException;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 
-/** An Operation Result. */
+/**
+ * A long running operation result.
+ */
 @Fluent
-public final class OperationResultInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OperationResultInner.class);
+public final class OperationResultInner implements JsonSerializable<OperationResultInner> {
+    /*
+     * Fully qualified resource ID for the resource. Ex -
+     * /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{
+     * resourceType}/{resourceName}
+     */
+    private String id;
 
     /*
-     * The operation status.
+     * The name of the resource
      */
-    @JsonProperty(value = "status")
-    private String status;
+    private String name;
 
     /*
-     * Error details for the operation in case of a failure.
+     * The operation status
      */
-    @JsonProperty(value = "error")
-    private OperationError error;
+    private OperationStatus status;
+
+    /*
+     * Start time
+     */
+    private OffsetDateTime startTime;
+
+    /*
+     * End time
+     */
+    private OffsetDateTime endTime;
+
+    /*
+     * Percent completion
+     */
+    private Float percentComplete;
+
+    /*
+     * The error for a failure if the operation failed.
+     */
+    private ManagementError error;
+
+    /**
+     * Creates an instance of OperationResultInner class.
+     */
+    public OperationResultInner() {
+    }
+
+    /**
+     * Get the id property: Fully qualified resource ID for the resource. Ex -
+     * /subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/{resourceProviderNamespace}/{resourceType}/{resourceName}.
+     * 
+     * @return the id value.
+     */
+    public String id() {
+        return this.id;
+    }
+
+    /**
+     * Get the name property: The name of the resource.
+     * 
+     * @return the name value.
+     */
+    public String name() {
+        return this.name;
+    }
 
     /**
      * Get the status property: The operation status.
-     *
+     * 
      * @return the status value.
      */
-    public String status() {
+    public OperationStatus status() {
         return this.status;
     }
 
     /**
      * Set the status property: The operation status.
-     *
+     * 
      * @param status the status value to set.
      * @return the OperationResultInner object itself.
      */
-    public OperationResultInner withStatus(String status) {
+    public OperationResultInner withStatus(OperationStatus status) {
         this.status = status;
         return this;
     }
 
     /**
-     * Get the error property: Error details for the operation in case of a failure.
-     *
+     * Get the startTime property: Start time.
+     * 
+     * @return the startTime value.
+     */
+    public OffsetDateTime startTime() {
+        return this.startTime;
+    }
+
+    /**
+     * Set the startTime property: Start time.
+     * 
+     * @param startTime the startTime value to set.
+     * @return the OperationResultInner object itself.
+     */
+    public OperationResultInner withStartTime(OffsetDateTime startTime) {
+        this.startTime = startTime;
+        return this;
+    }
+
+    /**
+     * Get the endTime property: End time.
+     * 
+     * @return the endTime value.
+     */
+    public OffsetDateTime endTime() {
+        return this.endTime;
+    }
+
+    /**
+     * Set the endTime property: End time.
+     * 
+     * @param endTime the endTime value to set.
+     * @return the OperationResultInner object itself.
+     */
+    public OperationResultInner withEndTime(OffsetDateTime endTime) {
+        this.endTime = endTime;
+        return this;
+    }
+
+    /**
+     * Get the percentComplete property: Percent completion.
+     * 
+     * @return the percentComplete value.
+     */
+    public Float percentComplete() {
+        return this.percentComplete;
+    }
+
+    /**
+     * Set the percentComplete property: Percent completion.
+     * 
+     * @param percentComplete the percentComplete value to set.
+     * @return the OperationResultInner object itself.
+     */
+    public OperationResultInner withPercentComplete(Float percentComplete) {
+        this.percentComplete = percentComplete;
+        return this;
+    }
+
+    /**
+     * Get the error property: The error for a failure if the operation failed.
+     * 
      * @return the error value.
      */
-    public OperationError error() {
+    public ManagementError error() {
         return this.error;
     }
 
     /**
-     * Set the error property: Error details for the operation in case of a failure.
-     *
+     * Set the error property: The error for a failure if the operation failed.
+     * 
      * @param error the error value to set.
      * @return the OperationResultInner object itself.
      */
-    public OperationResultInner withError(OperationError error) {
+    public OperationResultInner withError(ManagementError error) {
         this.error = error;
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
-        if (error() != null) {
-            error().validate();
+        if (status() == null) {
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property status in model OperationResultInner"));
         }
+    }
+
+    private static final ClientLogger LOGGER = new ClientLogger(OperationResultInner.class);
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeStringField("status", this.status == null ? null : this.status.toString());
+        jsonWriter.writeStringField("startTime",
+            this.startTime == null ? null : DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(this.startTime));
+        jsonWriter.writeStringField("endTime",
+            this.endTime == null ? null : DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(this.endTime));
+        jsonWriter.writeNumberField("percentComplete", this.percentComplete);
+        jsonWriter.writeJsonField("error", this.error);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of OperationResultInner from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of OperationResultInner if the JsonReader was pointing to an instance of it, or null if it
+     * was pointing to JSON null.
+     * @throws IllegalStateException If the deserialized JSON object was missing any required properties.
+     * @throws IOException If an error occurs while reading the OperationResultInner.
+     */
+    public static OperationResultInner fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            OperationResultInner deserializedOperationResultInner = new OperationResultInner();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("status".equals(fieldName)) {
+                    deserializedOperationResultInner.status = OperationStatus.fromString(reader.getString());
+                } else if ("id".equals(fieldName)) {
+                    deserializedOperationResultInner.id = reader.getString();
+                } else if ("name".equals(fieldName)) {
+                    deserializedOperationResultInner.name = reader.getString();
+                } else if ("startTime".equals(fieldName)) {
+                    deserializedOperationResultInner.startTime = reader
+                        .getNullable(nonNullReader -> CoreUtils.parseBestOffsetDateTime(nonNullReader.getString()));
+                } else if ("endTime".equals(fieldName)) {
+                    deserializedOperationResultInner.endTime = reader
+                        .getNullable(nonNullReader -> CoreUtils.parseBestOffsetDateTime(nonNullReader.getString()));
+                } else if ("percentComplete".equals(fieldName)) {
+                    deserializedOperationResultInner.percentComplete = reader.getNullable(JsonReader::getFloat);
+                } else if ("error".equals(fieldName)) {
+                    deserializedOperationResultInner.error = ManagementError.fromJson(reader);
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedOperationResultInner;
+        });
     }
 }

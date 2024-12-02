@@ -5,252 +5,119 @@
 package com.azure.resourcemanager.labservices.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.management.Resource;
+import com.azure.core.management.SystemData;
 import com.azure.core.util.logging.ClientLogger;
-import com.azure.resourcemanager.labservices.models.LabUserAccessMode;
-import com.azure.resourcemanager.labservices.models.LatestOperationResult;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import java.time.Duration;
-import java.time.OffsetDateTime;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import com.azure.resourcemanager.labservices.models.AutoShutdownProfile;
+import com.azure.resourcemanager.labservices.models.ConnectionProfile;
+import com.azure.resourcemanager.labservices.models.LabNetworkProfile;
+import com.azure.resourcemanager.labservices.models.LabState;
+import com.azure.resourcemanager.labservices.models.ProvisioningState;
+import com.azure.resourcemanager.labservices.models.RosterProfile;
+import com.azure.resourcemanager.labservices.models.SecurityProfile;
+import com.azure.resourcemanager.labservices.models.VirtualMachineProfile;
+import java.io.IOException;
 import java.util.Map;
 
-/** Represents a lab. */
-@JsonFlatten
+/**
+ * The lab resource.
+ */
 @Fluent
-public class LabInner extends Resource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(LabInner.class);
+public final class LabInner extends Resource {
+    /*
+     * Metadata pertaining to creation and last modification of the lab.
+     */
+    private SystemData systemData;
 
     /*
-     * Maximum number of users allowed in the lab.
+     * Lab resource properties
      */
-    @JsonProperty(value = "properties.maxUsersInLab")
-    private Integer maxUsersInLab;
+    private LabProperties innerProperties = new LabProperties();
 
     /*
-     * Maximum value MaxUsersInLab can be set to, as specified by the service
+     * The type of the resource.
      */
-    @JsonProperty(value = "properties.userQuota", access = JsonProperty.Access.WRITE_ONLY)
-    private Integer userQuota;
+    private String type;
 
     /*
-     * Invitation code that users can use to join a lab.
+     * The name of the resource.
      */
-    @JsonProperty(value = "properties.invitationCode", access = JsonProperty.Access.WRITE_ONLY)
-    private String invitationCode;
+    private String name;
 
     /*
-     * Object id of the user that created the lab.
+     * Fully qualified resource Id for the resource.
      */
-    @JsonProperty(value = "properties.createdByObjectId", access = JsonProperty.Access.WRITE_ONLY)
-    private String createdByObjectId;
-
-    /*
-     * Maximum duration a user can use an environment for in the lab.
-     */
-    @JsonProperty(value = "properties.usageQuota")
-    private Duration usageQuota;
-
-    /*
-     * Lab user access mode (open to all vs. restricted to those listed on the
-     * lab).
-     */
-    @JsonProperty(value = "properties.userAccessMode")
-    private LabUserAccessMode userAccessMode;
-
-    /*
-     * Lab creator name
-     */
-    @JsonProperty(value = "properties.createdByUserPrincipalName", access = JsonProperty.Access.WRITE_ONLY)
-    private String createdByUserPrincipalName;
-
-    /*
-     * Creation date for the lab
-     */
-    @JsonProperty(value = "properties.createdDate", access = JsonProperty.Access.WRITE_ONLY)
-    private OffsetDateTime createdDate;
-
-    /*
-     * The provisioning status of the resource.
-     */
-    @JsonProperty(value = "properties.provisioningState")
-    private String provisioningState;
-
-    /*
-     * The unique immutable identifier of a resource (Guid).
-     */
-    @JsonProperty(value = "properties.uniqueIdentifier")
-    private String uniqueIdentifier;
-
-    /*
-     * The details of the latest operation. ex: status, error
-     */
-    @JsonProperty(value = "properties.latestOperationResult", access = JsonProperty.Access.WRITE_ONLY)
-    private LatestOperationResult latestOperationResult;
+    private String id;
 
     /**
-     * Get the maxUsersInLab property: Maximum number of users allowed in the lab.
-     *
-     * @return the maxUsersInLab value.
+     * Creates an instance of LabInner class.
      */
-    public Integer maxUsersInLab() {
-        return this.maxUsersInLab;
+    public LabInner() {
     }
 
     /**
-     * Set the maxUsersInLab property: Maximum number of users allowed in the lab.
-     *
-     * @param maxUsersInLab the maxUsersInLab value to set.
-     * @return the LabInner object itself.
+     * Get the systemData property: Metadata pertaining to creation and last modification of the lab.
+     * 
+     * @return the systemData value.
      */
-    public LabInner withMaxUsersInLab(Integer maxUsersInLab) {
-        this.maxUsersInLab = maxUsersInLab;
-        return this;
+    public SystemData systemData() {
+        return this.systemData;
     }
 
     /**
-     * Get the userQuota property: Maximum value MaxUsersInLab can be set to, as specified by the service.
-     *
-     * @return the userQuota value.
+     * Get the innerProperties property: Lab resource properties.
+     * 
+     * @return the innerProperties value.
      */
-    public Integer userQuota() {
-        return this.userQuota;
+    private LabProperties innerProperties() {
+        return this.innerProperties;
     }
 
     /**
-     * Get the invitationCode property: Invitation code that users can use to join a lab.
-     *
-     * @return the invitationCode value.
+     * Get the type property: The type of the resource.
+     * 
+     * @return the type value.
      */
-    public String invitationCode() {
-        return this.invitationCode;
+    @Override
+    public String type() {
+        return this.type;
     }
 
     /**
-     * Get the createdByObjectId property: Object id of the user that created the lab.
-     *
-     * @return the createdByObjectId value.
+     * Get the name property: The name of the resource.
+     * 
+     * @return the name value.
      */
-    public String createdByObjectId() {
-        return this.createdByObjectId;
+    @Override
+    public String name() {
+        return this.name;
     }
 
     /**
-     * Get the usageQuota property: Maximum duration a user can use an environment for in the lab.
-     *
-     * @return the usageQuota value.
+     * Get the id property: Fully qualified resource Id for the resource.
+     * 
+     * @return the id value.
      */
-    public Duration usageQuota() {
-        return this.usageQuota;
+    @Override
+    public String id() {
+        return this.id;
     }
 
     /**
-     * Set the usageQuota property: Maximum duration a user can use an environment for in the lab.
-     *
-     * @param usageQuota the usageQuota value to set.
-     * @return the LabInner object itself.
+     * {@inheritDoc}
      */
-    public LabInner withUsageQuota(Duration usageQuota) {
-        this.usageQuota = usageQuota;
-        return this;
-    }
-
-    /**
-     * Get the userAccessMode property: Lab user access mode (open to all vs. restricted to those listed on the lab).
-     *
-     * @return the userAccessMode value.
-     */
-    public LabUserAccessMode userAccessMode() {
-        return this.userAccessMode;
-    }
-
-    /**
-     * Set the userAccessMode property: Lab user access mode (open to all vs. restricted to those listed on the lab).
-     *
-     * @param userAccessMode the userAccessMode value to set.
-     * @return the LabInner object itself.
-     */
-    public LabInner withUserAccessMode(LabUserAccessMode userAccessMode) {
-        this.userAccessMode = userAccessMode;
-        return this;
-    }
-
-    /**
-     * Get the createdByUserPrincipalName property: Lab creator name.
-     *
-     * @return the createdByUserPrincipalName value.
-     */
-    public String createdByUserPrincipalName() {
-        return this.createdByUserPrincipalName;
-    }
-
-    /**
-     * Get the createdDate property: Creation date for the lab.
-     *
-     * @return the createdDate value.
-     */
-    public OffsetDateTime createdDate() {
-        return this.createdDate;
-    }
-
-    /**
-     * Get the provisioningState property: The provisioning status of the resource.
-     *
-     * @return the provisioningState value.
-     */
-    public String provisioningState() {
-        return this.provisioningState;
-    }
-
-    /**
-     * Set the provisioningState property: The provisioning status of the resource.
-     *
-     * @param provisioningState the provisioningState value to set.
-     * @return the LabInner object itself.
-     */
-    public LabInner withProvisioningState(String provisioningState) {
-        this.provisioningState = provisioningState;
-        return this;
-    }
-
-    /**
-     * Get the uniqueIdentifier property: The unique immutable identifier of a resource (Guid).
-     *
-     * @return the uniqueIdentifier value.
-     */
-    public String uniqueIdentifier() {
-        return this.uniqueIdentifier;
-    }
-
-    /**
-     * Set the uniqueIdentifier property: The unique immutable identifier of a resource (Guid).
-     *
-     * @param uniqueIdentifier the uniqueIdentifier value to set.
-     * @return the LabInner object itself.
-     */
-    public LabInner withUniqueIdentifier(String uniqueIdentifier) {
-        this.uniqueIdentifier = uniqueIdentifier;
-        return this;
-    }
-
-    /**
-     * Get the latestOperationResult property: The details of the latest operation. ex: status, error.
-     *
-     * @return the latestOperationResult value.
-     */
-    public LatestOperationResult latestOperationResult() {
-        return this.latestOperationResult;
-    }
-
-    /** {@inheritDoc} */
     @Override
     public LabInner withLocation(String location) {
         super.withLocation(location);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public LabInner withTags(Map<String, String> tags) {
         super.withTags(tags);
@@ -258,13 +125,305 @@ public class LabInner extends Resource {
     }
 
     /**
+     * Get the provisioningState property: Current provisioning state of the lab.
+     * 
+     * @return the provisioningState value.
+     */
+    public ProvisioningState provisioningState() {
+        return this.innerProperties() == null ? null : this.innerProperties().provisioningState();
+    }
+
+    /**
+     * Get the networkProfile property: The network profile for the lab, typically applied via a lab plan. This profile
+     * cannot be modified once a lab has been created.
+     * 
+     * @return the networkProfile value.
+     */
+    public LabNetworkProfile networkProfile() {
+        return this.innerProperties() == null ? null : this.innerProperties().networkProfile();
+    }
+
+    /**
+     * Set the networkProfile property: The network profile for the lab, typically applied via a lab plan. This profile
+     * cannot be modified once a lab has been created.
+     * 
+     * @param networkProfile the networkProfile value to set.
+     * @return the LabInner object itself.
+     */
+    public LabInner withNetworkProfile(LabNetworkProfile networkProfile) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new LabProperties();
+        }
+        this.innerProperties().withNetworkProfile(networkProfile);
+        return this;
+    }
+
+    /**
+     * Get the state property: The lab state.
+     * 
+     * @return the state value.
+     */
+    public LabState state() {
+        return this.innerProperties() == null ? null : this.innerProperties().state();
+    }
+
+    /**
+     * Get the autoShutdownProfile property: The resource auto shutdown configuration for the lab. This controls whether
+     * actions are taken on resources that are sitting idle.
+     * 
+     * @return the autoShutdownProfile value.
+     */
+    public AutoShutdownProfile autoShutdownProfile() {
+        return this.innerProperties() == null ? null : this.innerProperties().autoShutdownProfile();
+    }
+
+    /**
+     * Set the autoShutdownProfile property: The resource auto shutdown configuration for the lab. This controls whether
+     * actions are taken on resources that are sitting idle.
+     * 
+     * @param autoShutdownProfile the autoShutdownProfile value to set.
+     * @return the LabInner object itself.
+     */
+    public LabInner withAutoShutdownProfile(AutoShutdownProfile autoShutdownProfile) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new LabProperties();
+        }
+        this.innerProperties().withAutoShutdownProfile(autoShutdownProfile);
+        return this;
+    }
+
+    /**
+     * Get the connectionProfile property: The connection profile for the lab. This controls settings such as web access
+     * to lab resources or whether RDP or SSH ports are open.
+     * 
+     * @return the connectionProfile value.
+     */
+    public ConnectionProfile connectionProfile() {
+        return this.innerProperties() == null ? null : this.innerProperties().connectionProfile();
+    }
+
+    /**
+     * Set the connectionProfile property: The connection profile for the lab. This controls settings such as web access
+     * to lab resources or whether RDP or SSH ports are open.
+     * 
+     * @param connectionProfile the connectionProfile value to set.
+     * @return the LabInner object itself.
+     */
+    public LabInner withConnectionProfile(ConnectionProfile connectionProfile) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new LabProperties();
+        }
+        this.innerProperties().withConnectionProfile(connectionProfile);
+        return this;
+    }
+
+    /**
+     * Get the virtualMachineProfile property: The profile used for creating lab virtual machines.
+     * 
+     * @return the virtualMachineProfile value.
+     */
+    public VirtualMachineProfile virtualMachineProfile() {
+        return this.innerProperties() == null ? null : this.innerProperties().virtualMachineProfile();
+    }
+
+    /**
+     * Set the virtualMachineProfile property: The profile used for creating lab virtual machines.
+     * 
+     * @param virtualMachineProfile the virtualMachineProfile value to set.
+     * @return the LabInner object itself.
+     */
+    public LabInner withVirtualMachineProfile(VirtualMachineProfile virtualMachineProfile) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new LabProperties();
+        }
+        this.innerProperties().withVirtualMachineProfile(virtualMachineProfile);
+        return this;
+    }
+
+    /**
+     * Get the securityProfile property: The lab security profile.
+     * 
+     * @return the securityProfile value.
+     */
+    public SecurityProfile securityProfile() {
+        return this.innerProperties() == null ? null : this.innerProperties().securityProfile();
+    }
+
+    /**
+     * Set the securityProfile property: The lab security profile.
+     * 
+     * @param securityProfile the securityProfile value to set.
+     * @return the LabInner object itself.
+     */
+    public LabInner withSecurityProfile(SecurityProfile securityProfile) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new LabProperties();
+        }
+        this.innerProperties().withSecurityProfile(securityProfile);
+        return this;
+    }
+
+    /**
+     * Get the rosterProfile property: The lab user list management profile.
+     * 
+     * @return the rosterProfile value.
+     */
+    public RosterProfile rosterProfile() {
+        return this.innerProperties() == null ? null : this.innerProperties().rosterProfile();
+    }
+
+    /**
+     * Set the rosterProfile property: The lab user list management profile.
+     * 
+     * @param rosterProfile the rosterProfile value to set.
+     * @return the LabInner object itself.
+     */
+    public LabInner withRosterProfile(RosterProfile rosterProfile) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new LabProperties();
+        }
+        this.innerProperties().withRosterProfile(rosterProfile);
+        return this;
+    }
+
+    /**
+     * Get the labPlanId property: The ID of the lab plan. Used during resource creation to provide defaults and acts as
+     * a permission container when creating a lab via labs.azure.com. Setting a labPlanId on an existing lab provides
+     * organization..
+     * 
+     * @return the labPlanId value.
+     */
+    public String labPlanId() {
+        return this.innerProperties() == null ? null : this.innerProperties().labPlanId();
+    }
+
+    /**
+     * Set the labPlanId property: The ID of the lab plan. Used during resource creation to provide defaults and acts as
+     * a permission container when creating a lab via labs.azure.com. Setting a labPlanId on an existing lab provides
+     * organization..
+     * 
+     * @param labPlanId the labPlanId value to set.
+     * @return the LabInner object itself.
+     */
+    public LabInner withLabPlanId(String labPlanId) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new LabProperties();
+        }
+        this.innerProperties().withLabPlanId(labPlanId);
+        return this;
+    }
+
+    /**
+     * Get the title property: The title of the lab.
+     * 
+     * @return the title value.
+     */
+    public String title() {
+        return this.innerProperties() == null ? null : this.innerProperties().title();
+    }
+
+    /**
+     * Set the title property: The title of the lab.
+     * 
+     * @param title the title value to set.
+     * @return the LabInner object itself.
+     */
+    public LabInner withTitle(String title) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new LabProperties();
+        }
+        this.innerProperties().withTitle(title);
+        return this;
+    }
+
+    /**
+     * Get the description property: The description of the lab.
+     * 
+     * @return the description value.
+     */
+    public String description() {
+        return this.innerProperties() == null ? null : this.innerProperties().description();
+    }
+
+    /**
+     * Set the description property: The description of the lab.
+     * 
+     * @param description the description value to set.
+     * @return the LabInner object itself.
+     */
+    public LabInner withDescription(String description) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new LabProperties();
+        }
+        this.innerProperties().withDescription(description);
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
-        if (latestOperationResult() != null) {
-            latestOperationResult().validate();
+        if (innerProperties() == null) {
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property innerProperties in model LabInner"));
+        } else {
+            innerProperties().validate();
         }
+    }
+
+    private static final ClientLogger LOGGER = new ClientLogger(LabInner.class);
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeStringField("location", location());
+        jsonWriter.writeMapField("tags", tags(), (writer, element) -> writer.writeString(element));
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of LabInner from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of LabInner if the JsonReader was pointing to an instance of it, or null if it was pointing
+     * to JSON null.
+     * @throws IllegalStateException If the deserialized JSON object was missing any required properties.
+     * @throws IOException If an error occurs while reading the LabInner.
+     */
+    public static LabInner fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            LabInner deserializedLabInner = new LabInner();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("id".equals(fieldName)) {
+                    deserializedLabInner.id = reader.getString();
+                } else if ("name".equals(fieldName)) {
+                    deserializedLabInner.name = reader.getString();
+                } else if ("type".equals(fieldName)) {
+                    deserializedLabInner.type = reader.getString();
+                } else if ("location".equals(fieldName)) {
+                    deserializedLabInner.withLocation(reader.getString());
+                } else if ("tags".equals(fieldName)) {
+                    Map<String, String> tags = reader.readMap(reader1 -> reader1.getString());
+                    deserializedLabInner.withTags(tags);
+                } else if ("properties".equals(fieldName)) {
+                    deserializedLabInner.innerProperties = LabProperties.fromJson(reader);
+                } else if ("systemData".equals(fieldName)) {
+                    deserializedLabInner.systemData = SystemData.fromJson(reader);
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedLabInner;
+        });
     }
 }

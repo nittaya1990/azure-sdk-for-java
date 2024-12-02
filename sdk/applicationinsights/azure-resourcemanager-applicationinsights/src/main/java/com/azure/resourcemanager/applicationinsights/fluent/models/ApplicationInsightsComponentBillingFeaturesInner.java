@@ -5,18 +5,13 @@
 package com.azure.resourcemanager.applicationinsights.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.applicationinsights.models.ApplicationInsightsComponentDataVolumeCap;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** An Application Insights component billing features. */
 @Fluent
 public final class ApplicationInsightsComponentBillingFeaturesInner {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(ApplicationInsightsComponentBillingFeaturesInner.class);
-
     /*
      * An Application Insights component daily data volume cap
      */
@@ -24,11 +19,15 @@ public final class ApplicationInsightsComponentBillingFeaturesInner {
     private ApplicationInsightsComponentDataVolumeCap dataVolumeCap;
 
     /*
-     * Current enabled pricing plan. When the component is in the Enterprise
-     * plan, this will list both 'Basic' and 'Application Insights Enterprise'.
+     * Current enabled pricing plan. When the component is in the Enterprise plan, this will list both 'Basic' and
+     * 'Application Insights Enterprise'.
      */
     @JsonProperty(value = "CurrentBillingFeatures")
     private List<String> currentBillingFeatures;
+
+    /** Creates an instance of ApplicationInsightsComponentBillingFeaturesInner class. */
+    public ApplicationInsightsComponentBillingFeaturesInner() {
+    }
 
     /**
      * Get the dataVolumeCap property: An Application Insights component daily data volume cap.
@@ -45,8 +44,8 @@ public final class ApplicationInsightsComponentBillingFeaturesInner {
      * @param dataVolumeCap the dataVolumeCap value to set.
      * @return the ApplicationInsightsComponentBillingFeaturesInner object itself.
      */
-    public ApplicationInsightsComponentBillingFeaturesInner withDataVolumeCap(
-        ApplicationInsightsComponentDataVolumeCap dataVolumeCap) {
+    public ApplicationInsightsComponentBillingFeaturesInner
+        withDataVolumeCap(ApplicationInsightsComponentDataVolumeCap dataVolumeCap) {
         this.dataVolumeCap = dataVolumeCap;
         return this;
     }
@@ -68,8 +67,8 @@ public final class ApplicationInsightsComponentBillingFeaturesInner {
      * @param currentBillingFeatures the currentBillingFeatures value to set.
      * @return the ApplicationInsightsComponentBillingFeaturesInner object itself.
      */
-    public ApplicationInsightsComponentBillingFeaturesInner withCurrentBillingFeatures(
-        List<String> currentBillingFeatures) {
+    public ApplicationInsightsComponentBillingFeaturesInner
+        withCurrentBillingFeatures(List<String> currentBillingFeatures) {
         this.currentBillingFeatures = currentBillingFeatures;
         return this;
     }

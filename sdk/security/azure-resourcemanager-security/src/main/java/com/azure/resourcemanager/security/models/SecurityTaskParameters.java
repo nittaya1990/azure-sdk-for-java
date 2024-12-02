@@ -5,7 +5,6 @@
 package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -13,11 +12,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.HashMap;
 import java.util.Map;
 
-/** Changing set of properties, depending on the task type that is derived from the name field. */
+/**
+ * Changing set of properties, depending on the task type that is derived from the name field.
+ */
 @Fluent
 public final class SecurityTaskParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SecurityTaskParameters.class);
-
     /*
      * Name of the task type
      */
@@ -25,14 +24,20 @@ public final class SecurityTaskParameters {
     private String name;
 
     /*
-     * Changing set of properties, depending on the task type that is derived
-     * from the name field
+     * Changing set of properties, depending on the task type that is derived from the name field
      */
-    @JsonIgnore private Map<String, Object> additionalProperties;
+    @JsonIgnore
+    private Map<String, Object> additionalProperties;
+
+    /**
+     * Creates an instance of SecurityTaskParameters class.
+     */
+    public SecurityTaskParameters() {
+    }
 
     /**
      * Get the name property: Name of the task type.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -42,7 +47,7 @@ public final class SecurityTaskParameters {
     /**
      * Get the additionalProperties property: Changing set of properties, depending on the task type that is derived
      * from the name field.
-     *
+     * 
      * @return the additionalProperties value.
      */
     @JsonAnyGetter
@@ -53,7 +58,7 @@ public final class SecurityTaskParameters {
     /**
      * Set the additionalProperties property: Changing set of properties, depending on the task type that is derived
      * from the name field.
-     *
+     * 
      * @param additionalProperties the additionalProperties value to set.
      * @return the SecurityTaskParameters object itself.
      */
@@ -72,7 +77,7 @@ public final class SecurityTaskParameters {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

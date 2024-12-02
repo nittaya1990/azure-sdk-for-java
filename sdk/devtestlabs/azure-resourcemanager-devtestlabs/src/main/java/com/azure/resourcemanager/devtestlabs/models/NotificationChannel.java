@@ -122,6 +122,13 @@ public interface NotificationChannel {
     String regionName();
 
     /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
+
+    /**
      * Gets the inner com.azure.resourcemanager.devtestlabs.fluent.models.NotificationChannelInner object.
      *
      * @return the inner object.
@@ -129,17 +136,16 @@ public interface NotificationChannel {
     NotificationChannelInner innerModel();
 
     /** The entirety of the NotificationChannel definition. */
-    interface Definition
-        extends DefinitionStages.Blank,
-            DefinitionStages.WithLocation,
-            DefinitionStages.WithParentResource,
-            DefinitionStages.WithCreate {
+    interface Definition extends DefinitionStages.Blank, DefinitionStages.WithLocation,
+        DefinitionStages.WithParentResource, DefinitionStages.WithCreate {
     }
+
     /** The NotificationChannel definition stages. */
     interface DefinitionStages {
         /** The first stage of the NotificationChannel definition. */
         interface Blank extends WithLocation {
         }
+
         /** The stage of the NotificationChannel definition allowing to specify location. */
         interface WithLocation {
             /**
@@ -158,6 +164,7 @@ public interface NotificationChannel {
              */
             WithParentResource withRegion(String location);
         }
+
         /** The stage of the NotificationChannel definition allowing to specify parent resource. */
         interface WithParentResource {
             /**
@@ -169,17 +176,14 @@ public interface NotificationChannel {
              */
             WithCreate withExistingLab(String resourceGroupName, String labName);
         }
+
         /**
          * The stage of the NotificationChannel definition which contains all the minimum required properties for the
          * resource to be created, but also allows for any other optional properties to be specified.
          */
         interface WithCreate
-            extends DefinitionStages.WithTags,
-                DefinitionStages.WithWebhookUrl,
-                DefinitionStages.WithEmailRecipient,
-                DefinitionStages.WithNotificationLocale,
-                DefinitionStages.WithDescription,
-                DefinitionStages.WithEvents {
+            extends DefinitionStages.WithTags, DefinitionStages.WithWebhookUrl, DefinitionStages.WithEmailRecipient,
+            DefinitionStages.WithNotificationLocale, DefinitionStages.WithDescription, DefinitionStages.WithEvents {
             /**
              * Executes the create request.
              *
@@ -195,6 +199,7 @@ public interface NotificationChannel {
              */
             NotificationChannel create(Context context);
         }
+
         /** The stage of the NotificationChannel definition allowing to specify tags. */
         interface WithTags {
             /**
@@ -205,6 +210,7 @@ public interface NotificationChannel {
              */
             WithCreate withTags(Map<String, String> tags);
         }
+
         /** The stage of the NotificationChannel definition allowing to specify webhookUrl. */
         interface WithWebhookUrl {
             /**
@@ -215,6 +221,7 @@ public interface NotificationChannel {
              */
             WithCreate withWebhookUrl(String webhookUrl);
         }
+
         /** The stage of the NotificationChannel definition allowing to specify emailRecipient. */
         interface WithEmailRecipient {
             /**
@@ -227,6 +234,7 @@ public interface NotificationChannel {
              */
             WithCreate withEmailRecipient(String emailRecipient);
         }
+
         /** The stage of the NotificationChannel definition allowing to specify notificationLocale. */
         interface WithNotificationLocale {
             /**
@@ -239,6 +247,7 @@ public interface NotificationChannel {
              */
             WithCreate withNotificationLocale(String notificationLocale);
         }
+
         /** The stage of the NotificationChannel definition allowing to specify description. */
         interface WithDescription {
             /**
@@ -249,6 +258,7 @@ public interface NotificationChannel {
              */
             WithCreate withDescription(String description);
         }
+
         /** The stage of the NotificationChannel definition allowing to specify events. */
         interface WithEvents {
             /**
@@ -260,6 +270,7 @@ public interface NotificationChannel {
             WithCreate withEvents(List<Event> events);
         }
     }
+
     /**
      * Begins update for the NotificationChannel resource.
      *
@@ -284,6 +295,7 @@ public interface NotificationChannel {
          */
         NotificationChannel apply(Context context);
     }
+
     /** The NotificationChannel update stages. */
     interface UpdateStages {
         /** The stage of the NotificationChannel update allowing to specify tags. */
@@ -297,6 +309,7 @@ public interface NotificationChannel {
             Update withTags(Map<String, String> tags);
         }
     }
+
     /**
      * Refreshes the resource to sync with Azure.
      *
@@ -316,21 +329,21 @@ public interface NotificationChannel {
      * Send notification to provided channel.
      *
      * @param notifyParameters Properties for generating a Notification.
+     * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
      */
-    void notify(NotifyParameters notifyParameters);
+    Response<Void> notifyWithResponse(NotifyParameters notifyParameters, Context context);
 
     /**
      * Send notification to provided channel.
      *
      * @param notifyParameters Properties for generating a Notification.
-     * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
      */
-    Response<Void> notifyWithResponse(NotifyParameters notifyParameters, Context context);
+    void notify(NotifyParameters notifyParameters);
 }

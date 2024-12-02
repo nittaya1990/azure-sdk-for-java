@@ -5,26 +5,21 @@
 package com.azure.resourcemanager.applicationinsights.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Properties that define an API key of an Application Insights Component. */
 @Fluent
 public final class ApplicationInsightsComponentApiKeyInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApplicationInsightsComponentApiKeyInner.class);
-
     /*
-     * The unique ID of the API key inside an Application Insights component.
-     * It is auto generated when the API key is created.
+     * The unique ID of the API key inside an Application Insights component. It is auto generated when the API key is
+     * created.
      */
     @JsonProperty(value = "id", access = JsonProperty.Access.WRITE_ONLY)
     private String id;
 
     /*
-     * The API key value. It will be only return once when the API Key was
-     * created.
+     * The API key value. It will be only return once when the API Key was created.
      */
     @JsonProperty(value = "apiKey", access = JsonProperty.Access.WRITE_ONLY)
     private String apiKey;
@@ -52,6 +47,10 @@ public final class ApplicationInsightsComponentApiKeyInner {
      */
     @JsonProperty(value = "linkedWriteProperties")
     private List<String> linkedWriteProperties;
+
+    /** Creates an instance of ApplicationInsightsComponentApiKeyInner class. */
+    public ApplicationInsightsComponentApiKeyInner() {
+    }
 
     /**
      * Get the id property: The unique ID of the API key inside an Application Insights component. It is auto generated

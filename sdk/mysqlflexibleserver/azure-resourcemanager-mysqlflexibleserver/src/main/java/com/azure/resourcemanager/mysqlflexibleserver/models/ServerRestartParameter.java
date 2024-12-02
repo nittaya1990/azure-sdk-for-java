@@ -5,18 +5,15 @@
 package com.azure.resourcemanager.mysqlflexibleserver.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Server restart parameters. */
+/**
+ * Server restart parameters.
+ */
 @Fluent
 public final class ServerRestartParameter {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ServerRestartParameter.class);
-
     /*
-     * Whether or not failover to standby server when restarting a server with
-     * high availability enabled.
+     * Whether or not failover to standby server when restarting a server with high availability enabled.
      */
     @JsonProperty(value = "restartWithFailover")
     private EnableStatusEnum restartWithFailover;
@@ -28,9 +25,15 @@ public final class ServerRestartParameter {
     private Integer maxFailoverSeconds;
 
     /**
+     * Creates an instance of ServerRestartParameter class.
+     */
+    public ServerRestartParameter() {
+    }
+
+    /**
      * Get the restartWithFailover property: Whether or not failover to standby server when restarting a server with
      * high availability enabled.
-     *
+     * 
      * @return the restartWithFailover value.
      */
     public EnableStatusEnum restartWithFailover() {
@@ -40,7 +43,7 @@ public final class ServerRestartParameter {
     /**
      * Set the restartWithFailover property: Whether or not failover to standby server when restarting a server with
      * high availability enabled.
-     *
+     * 
      * @param restartWithFailover the restartWithFailover value to set.
      * @return the ServerRestartParameter object itself.
      */
@@ -51,7 +54,7 @@ public final class ServerRestartParameter {
 
     /**
      * Get the maxFailoverSeconds property: The maximum allowed failover time in seconds.
-     *
+     * 
      * @return the maxFailoverSeconds value.
      */
     public Integer maxFailoverSeconds() {
@@ -60,7 +63,7 @@ public final class ServerRestartParameter {
 
     /**
      * Set the maxFailoverSeconds property: The maximum allowed failover time in seconds.
-     *
+     * 
      * @param maxFailoverSeconds the maxFailoverSeconds value to set.
      * @return the ServerRestartParameter object itself.
      */
@@ -71,7 +74,7 @@ public final class ServerRestartParameter {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

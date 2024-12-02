@@ -5,16 +5,12 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
 /** API Release details. */
 @Fluent
 public final class ApiReleaseContractProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApiReleaseContractProperties.class);
-
     /*
      * Identifier of the API the release belongs to.
      */
@@ -22,8 +18,8 @@ public final class ApiReleaseContractProperties {
     private String apiId;
 
     /*
-     * The time the API was released. The date conforms to the following
-     * format: yyyy-MM-ddTHH:mm:ssZ as specified by the ISO 8601 standard.
+     * The time the API was released. The date conforms to the following format: yyyy-MM-ddTHH:mm:ssZ as specified by
+     * the ISO 8601 standard.
      */
     @JsonProperty(value = "createdDateTime", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createdDateTime;
@@ -39,6 +35,10 @@ public final class ApiReleaseContractProperties {
      */
     @JsonProperty(value = "notes")
     private String notes;
+
+    /** Creates an instance of ApiReleaseContractProperties class. */
+    public ApiReleaseContractProperties() {
+    }
 
     /**
      * Get the apiId property: Identifier of the API the release belongs to.

@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.recoveryservices.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Class to represent shoebox log specification in json client discovery. */
+/**
+ * Class to represent shoebox log specification in json client discovery.
+ */
 @Fluent
 public final class ClientDiscoveryForLogSpecification {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ClientDiscoveryForLogSpecification.class);
-
     /*
      * Name of the log.
      */
@@ -33,8 +31,14 @@ public final class ClientDiscoveryForLogSpecification {
     private String blobDuration;
 
     /**
+     * Creates an instance of ClientDiscoveryForLogSpecification class.
+     */
+    public ClientDiscoveryForLogSpecification() {
+    }
+
+    /**
      * Get the name property: Name of the log.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -43,7 +47,7 @@ public final class ClientDiscoveryForLogSpecification {
 
     /**
      * Set the name property: Name of the log.
-     *
+     * 
      * @param name the name value to set.
      * @return the ClientDiscoveryForLogSpecification object itself.
      */
@@ -54,7 +58,7 @@ public final class ClientDiscoveryForLogSpecification {
 
     /**
      * Get the displayName property: Localized display name.
-     *
+     * 
      * @return the displayName value.
      */
     public String displayName() {
@@ -63,7 +67,7 @@ public final class ClientDiscoveryForLogSpecification {
 
     /**
      * Set the displayName property: Localized display name.
-     *
+     * 
      * @param displayName the displayName value to set.
      * @return the ClientDiscoveryForLogSpecification object itself.
      */
@@ -74,7 +78,7 @@ public final class ClientDiscoveryForLogSpecification {
 
     /**
      * Get the blobDuration property: Blobs created in customer storage account per hour.
-     *
+     * 
      * @return the blobDuration value.
      */
     public String blobDuration() {
@@ -83,7 +87,7 @@ public final class ClientDiscoveryForLogSpecification {
 
     /**
      * Set the blobDuration property: Blobs created in customer storage account per hour.
-     *
+     * 
      * @param blobDuration the blobDuration value to set.
      * @return the ClientDiscoveryForLogSpecification object itself.
      */
@@ -94,7 +98,7 @@ public final class ClientDiscoveryForLogSpecification {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

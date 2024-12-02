@@ -4,6 +4,7 @@
 
 package com.azure.resourcemanager.digitaltwins.models;
 
+import com.azure.core.management.SystemData;
 import com.azure.core.util.Context;
 import com.azure.resourcemanager.digitaltwins.fluent.models.PrivateEndpointConnectionInner;
 
@@ -31,11 +32,26 @@ public interface PrivateEndpointConnection {
     String type();
 
     /**
-     * Gets the properties property: The properties of a private endpoint connection.
+     * Gets the properties property: The connection properties.
      *
      * @return the properties value.
      */
     ConnectionProperties properties();
+
+    /**
+     * Gets the systemData property: Metadata pertaining to creation and last modification of the private endpoint
+     * connection.
+     *
+     * @return the systemData value.
+     */
+    SystemData systemData();
+
+    /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
 
     /**
      * Gets the inner com.azure.resourcemanager.digitaltwins.fluent.models.PrivateEndpointConnectionInner object.
@@ -45,17 +61,16 @@ public interface PrivateEndpointConnection {
     PrivateEndpointConnectionInner innerModel();
 
     /** The entirety of the PrivateEndpointConnection definition. */
-    interface Definition
-        extends DefinitionStages.Blank,
-            DefinitionStages.WithParentResource,
-            DefinitionStages.WithProperties,
-            DefinitionStages.WithCreate {
+    interface Definition extends DefinitionStages.Blank, DefinitionStages.WithParentResource,
+        DefinitionStages.WithProperties, DefinitionStages.WithCreate {
     }
+
     /** The PrivateEndpointConnection definition stages. */
     interface DefinitionStages {
         /** The first stage of the PrivateEndpointConnection definition. */
         interface Blank extends WithParentResource {
         }
+
         /** The stage of the PrivateEndpointConnection definition allowing to specify parent resource. */
         interface WithParentResource {
             /**
@@ -67,16 +82,18 @@ public interface PrivateEndpointConnection {
              */
             WithProperties withExistingDigitalTwinsInstance(String resourceGroupName, String resourceName);
         }
+
         /** The stage of the PrivateEndpointConnection definition allowing to specify properties. */
         interface WithProperties {
             /**
-             * Specifies the properties property: The properties of a private endpoint connection..
+             * Specifies the properties property: The connection properties..
              *
-             * @param properties The properties of a private endpoint connection.
+             * @param properties The connection properties.
              * @return the next definition stage.
              */
             WithCreate withProperties(ConnectionProperties properties);
         }
+
         /**
          * The stage of the PrivateEndpointConnection definition which contains all the minimum required properties for
          * the resource to be created, but also allows for any other optional properties to be specified.
@@ -98,6 +115,7 @@ public interface PrivateEndpointConnection {
             PrivateEndpointConnection create(Context context);
         }
     }
+
     /**
      * Begins update for the PrivateEndpointConnection resource.
      *
@@ -122,19 +140,21 @@ public interface PrivateEndpointConnection {
          */
         PrivateEndpointConnection apply(Context context);
     }
+
     /** The PrivateEndpointConnection update stages. */
     interface UpdateStages {
         /** The stage of the PrivateEndpointConnection update allowing to specify properties. */
         interface WithProperties {
             /**
-             * Specifies the properties property: The properties of a private endpoint connection..
+             * Specifies the properties property: The connection properties..
              *
-             * @param properties The properties of a private endpoint connection.
+             * @param properties The connection properties.
              * @return the next definition stage.
              */
             Update withProperties(ConnectionProperties properties);
         }
     }
+
     /**
      * Refreshes the resource to sync with Azure.
      *

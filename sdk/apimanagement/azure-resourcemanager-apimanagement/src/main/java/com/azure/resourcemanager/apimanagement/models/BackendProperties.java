@@ -5,20 +5,20 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Properties specific to the Backend Type. */
 @Fluent
 public final class BackendProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(BackendProperties.class);
-
     /*
      * Backend Service Fabric Cluster Properties
      */
     @JsonProperty(value = "serviceFabricCluster")
     private BackendServiceFabricClusterProperties serviceFabricCluster;
+
+    /** Creates an instance of BackendProperties class. */
+    public BackendProperties() {
+    }
 
     /**
      * Get the serviceFabricCluster property: Backend Service Fabric Cluster Properties.

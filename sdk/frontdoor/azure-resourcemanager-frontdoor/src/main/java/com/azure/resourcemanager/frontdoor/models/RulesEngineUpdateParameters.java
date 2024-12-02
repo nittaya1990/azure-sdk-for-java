@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.frontdoor.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Rules Engine Configuration to apply to a Routing Rule. */
+/**
+ * Rules Engine Configuration to apply to a Routing Rule.
+ */
 @Fluent
 public class RulesEngineUpdateParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RulesEngineUpdateParameters.class);
-
     /*
      * A list of rules that define a particular Rules Engine Configuration.
      */
@@ -22,8 +20,14 @@ public class RulesEngineUpdateParameters {
     private List<RulesEngineRule> rules;
 
     /**
+     * Creates an instance of RulesEngineUpdateParameters class.
+     */
+    public RulesEngineUpdateParameters() {
+    }
+
+    /**
      * Get the rules property: A list of rules that define a particular Rules Engine Configuration.
-     *
+     * 
      * @return the rules value.
      */
     public List<RulesEngineRule> rules() {
@@ -32,7 +36,7 @@ public class RulesEngineUpdateParameters {
 
     /**
      * Set the rules property: A list of rules that define a particular Rules Engine Configuration.
-     *
+     * 
      * @param rules the rules value to set.
      * @return the RulesEngineUpdateParameters object itself.
      */
@@ -43,7 +47,7 @@ public class RulesEngineUpdateParameters {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

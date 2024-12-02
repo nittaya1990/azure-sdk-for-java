@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.support.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.support.fluent.models.SupportTicketDetailsInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Object that represents a collection of SupportTicket resources. */
+/**
+ * Object that represents a collection of SupportTicket resources.
+ */
 @Fluent
 public final class SupportTicketsListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SupportTicketsListResult.class);
-
     /*
      * List of SupportTicket resources.
      */
@@ -29,8 +27,14 @@ public final class SupportTicketsListResult {
     private String nextLink;
 
     /**
+     * Creates an instance of SupportTicketsListResult class.
+     */
+    public SupportTicketsListResult() {
+    }
+
+    /**
      * Get the value property: List of SupportTicket resources.
-     *
+     * 
      * @return the value value.
      */
     public List<SupportTicketDetailsInner> value() {
@@ -39,7 +43,7 @@ public final class SupportTicketsListResult {
 
     /**
      * Set the value property: List of SupportTicket resources.
-     *
+     * 
      * @param value the value value to set.
      * @return the SupportTicketsListResult object itself.
      */
@@ -50,7 +54,7 @@ public final class SupportTicketsListResult {
 
     /**
      * Get the nextLink property: The URI to fetch the next page of SupportTicket resources.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -59,7 +63,7 @@ public final class SupportTicketsListResult {
 
     /**
      * Set the nextLink property: The URI to fetch the next page of SupportTicket resources.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the SupportTicketsListResult object itself.
      */
@@ -70,7 +74,7 @@ public final class SupportTicketsListResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

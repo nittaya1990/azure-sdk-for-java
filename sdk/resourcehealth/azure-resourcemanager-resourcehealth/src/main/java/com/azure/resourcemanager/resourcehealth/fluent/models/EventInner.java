@@ -5,156 +5,60 @@
 package com.azure.resourcemanager.resourcehealth.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.core.management.SystemData;
 import com.azure.resourcemanager.resourcehealth.models.EventLevelValues;
+import com.azure.resourcemanager.resourcehealth.models.EventPropertiesAdditionalInformation;
 import com.azure.resourcemanager.resourcehealth.models.EventPropertiesArticle;
 import com.azure.resourcemanager.resourcehealth.models.EventPropertiesRecommendedActions;
 import com.azure.resourcemanager.resourcehealth.models.EventSourceValues;
 import com.azure.resourcemanager.resourcehealth.models.EventStatusValues;
+import com.azure.resourcemanager.resourcehealth.models.EventSubTypeValues;
 import com.azure.resourcemanager.resourcehealth.models.EventTypeValues;
 import com.azure.resourcemanager.resourcehealth.models.Faq;
 import com.azure.resourcemanager.resourcehealth.models.Impact;
 import com.azure.resourcemanager.resourcehealth.models.LevelValues;
 import com.azure.resourcemanager.resourcehealth.models.Link;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 import java.util.List;
 
 /** Service health event. */
-@JsonFlatten
 @Fluent
-public class EventInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(EventInner.class);
+public final class EventInner extends ProxyResource {
+    /*
+     * Properties of event.
+     */
+    @JsonProperty(value = "properties")
+    private EventProperties innerProperties;
 
     /*
-     * Type of event.
+     * Azure Resource Manager metadata containing createdBy and modifiedBy information.
      */
-    @JsonProperty(value = "properties.eventType")
-    private EventTypeValues eventType;
+    @JsonProperty(value = "systemData", access = JsonProperty.Access.WRITE_ONLY)
+    private SystemData systemData;
 
-    /*
-     * Source of event.
-     */
-    @JsonProperty(value = "properties.eventSource")
-    private EventSourceValues eventSource;
+    /** Creates an instance of EventInner class. */
+    public EventInner() {
+    }
 
-    /*
-     * Current status of event.
+    /**
+     * Get the innerProperties property: Properties of event.
+     *
+     * @return the innerProperties value.
      */
-    @JsonProperty(value = "properties.status")
-    private EventStatusValues status;
+    private EventProperties innerProperties() {
+        return this.innerProperties;
+    }
 
-    /*
-     * Title text of event.
+    /**
+     * Get the systemData property: Azure Resource Manager metadata containing createdBy and modifiedBy information.
+     *
+     * @return the systemData value.
      */
-    @JsonProperty(value = "properties.title")
-    private String title;
-
-    /*
-     * Summary text of event.
-     */
-    @JsonProperty(value = "properties.summary")
-    private String summary;
-
-    /*
-     * Header text of event.
-     */
-    @JsonProperty(value = "properties.header")
-    private String headerProperty;
-
-    /*
-     * Level of insight.
-     */
-    @JsonProperty(value = "properties.level")
-    private LevelValues level;
-
-    /*
-     * Level of event.
-     */
-    @JsonProperty(value = "properties.eventLevel")
-    private EventLevelValues eventLevel;
-
-    /*
-     * Article of event.
-     */
-    @JsonProperty(value = "properties.article")
-    private EventPropertiesArticle article;
-
-    /*
-     * Useful links of event.
-     */
-    @JsonProperty(value = "properties.links")
-    private List<Link> links;
-
-    /*
-     * It provides the Timestamp for when the health impacting event started.
-     */
-    @JsonProperty(value = "properties.impactStartTime")
-    private OffsetDateTime impactStartTime;
-
-    /*
-     * It provides the Timestamp for when the health impacting event resolved.
-     */
-    @JsonProperty(value = "properties.impactMitigationTime")
-    private OffsetDateTime impactMitigationTime;
-
-    /*
-     * List services impacted by the service health event.
-     */
-    @JsonProperty(value = "properties.impact")
-    private List<Impact> impact;
-
-    /*
-     * Recommended actions of event.
-     */
-    @JsonProperty(value = "properties.recommendedActions")
-    private EventPropertiesRecommendedActions recommendedActions;
-
-    /*
-     * Frequently asked questions for the service health event.
-     */
-    @JsonProperty(value = "properties.faqs")
-    private List<Faq> faqs;
-
-    /*
-     * It provides information if the event is High incident rate event or not.
-     */
-    @JsonProperty(value = "properties.isHIR")
-    private Boolean isHir;
-
-    /*
-     * Tells if we want to enable or disable Microsoft Support for this event.
-     */
-    @JsonProperty(value = "properties.enableMicrosoftSupport")
-    private Boolean enableMicrosoftSupport;
-
-    /*
-     * Tells if we want to enable or disable Microsoft Support for this event.
-     */
-    @JsonProperty(value = "properties.enableChatWithUs")
-    private Boolean enableChatWithUs;
-
-    /*
-     * Priority level of the event.
-     */
-    @JsonProperty(value = "properties.priority")
-    private Integer priority;
-
-    /*
-     * It provides the Timestamp for when the health impacting event was last
-     * updated.
-     */
-    @JsonProperty(value = "properties.lastUpdateTime")
-    private OffsetDateTime lastUpdateTime;
-
-    /*
-     * Stage for HIR Document
-     */
-    @JsonProperty(value = "properties.hirStage")
-    private String hirStage;
+    public SystemData systemData() {
+        return this.systemData;
+    }
 
     /**
      * Get the eventType property: Type of event.
@@ -162,7 +66,7 @@ public class EventInner extends ProxyResource {
      * @return the eventType value.
      */
     public EventTypeValues eventType() {
-        return this.eventType;
+        return this.innerProperties() == null ? null : this.innerProperties().eventType();
     }
 
     /**
@@ -172,7 +76,35 @@ public class EventInner extends ProxyResource {
      * @return the EventInner object itself.
      */
     public EventInner withEventType(EventTypeValues eventType) {
-        this.eventType = eventType;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventProperties();
+        }
+        this.innerProperties().withEventType(eventType);
+        return this;
+    }
+
+    /**
+     * Get the eventSubType property: Sub type of the event. Currently used to determine retirement communications for
+     * health advisory events.
+     *
+     * @return the eventSubType value.
+     */
+    public EventSubTypeValues eventSubType() {
+        return this.innerProperties() == null ? null : this.innerProperties().eventSubType();
+    }
+
+    /**
+     * Set the eventSubType property: Sub type of the event. Currently used to determine retirement communications for
+     * health advisory events.
+     *
+     * @param eventSubType the eventSubType value to set.
+     * @return the EventInner object itself.
+     */
+    public EventInner withEventSubType(EventSubTypeValues eventSubType) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventProperties();
+        }
+        this.innerProperties().withEventSubType(eventSubType);
         return this;
     }
 
@@ -182,7 +114,7 @@ public class EventInner extends ProxyResource {
      * @return the eventSource value.
      */
     public EventSourceValues eventSource() {
-        return this.eventSource;
+        return this.innerProperties() == null ? null : this.innerProperties().eventSource();
     }
 
     /**
@@ -192,7 +124,10 @@ public class EventInner extends ProxyResource {
      * @return the EventInner object itself.
      */
     public EventInner withEventSource(EventSourceValues eventSource) {
-        this.eventSource = eventSource;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventProperties();
+        }
+        this.innerProperties().withEventSource(eventSource);
         return this;
     }
 
@@ -202,7 +137,7 @@ public class EventInner extends ProxyResource {
      * @return the status value.
      */
     public EventStatusValues status() {
-        return this.status;
+        return this.innerProperties() == null ? null : this.innerProperties().status();
     }
 
     /**
@@ -212,7 +147,10 @@ public class EventInner extends ProxyResource {
      * @return the EventInner object itself.
      */
     public EventInner withStatus(EventStatusValues status) {
-        this.status = status;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventProperties();
+        }
+        this.innerProperties().withStatus(status);
         return this;
     }
 
@@ -222,7 +160,7 @@ public class EventInner extends ProxyResource {
      * @return the title value.
      */
     public String title() {
-        return this.title;
+        return this.innerProperties() == null ? null : this.innerProperties().title();
     }
 
     /**
@@ -232,7 +170,10 @@ public class EventInner extends ProxyResource {
      * @return the EventInner object itself.
      */
     public EventInner withTitle(String title) {
-        this.title = title;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventProperties();
+        }
+        this.innerProperties().withTitle(title);
         return this;
     }
 
@@ -242,7 +183,7 @@ public class EventInner extends ProxyResource {
      * @return the summary value.
      */
     public String summary() {
-        return this.summary;
+        return this.innerProperties() == null ? null : this.innerProperties().summary();
     }
 
     /**
@@ -252,7 +193,10 @@ public class EventInner extends ProxyResource {
      * @return the EventInner object itself.
      */
     public EventInner withSummary(String summary) {
-        this.summary = summary;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventProperties();
+        }
+        this.innerProperties().withSummary(summary);
         return this;
     }
 
@@ -262,7 +206,7 @@ public class EventInner extends ProxyResource {
      * @return the headerProperty value.
      */
     public String headerProperty() {
-        return this.headerProperty;
+        return this.innerProperties() == null ? null : this.innerProperties().headerProperty();
     }
 
     /**
@@ -272,7 +216,10 @@ public class EventInner extends ProxyResource {
      * @return the EventInner object itself.
      */
     public EventInner withHeaderProperty(String headerProperty) {
-        this.headerProperty = headerProperty;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventProperties();
+        }
+        this.innerProperties().withHeaderProperty(headerProperty);
         return this;
     }
 
@@ -282,7 +229,7 @@ public class EventInner extends ProxyResource {
      * @return the level value.
      */
     public LevelValues level() {
-        return this.level;
+        return this.innerProperties() == null ? null : this.innerProperties().level();
     }
 
     /**
@@ -292,7 +239,10 @@ public class EventInner extends ProxyResource {
      * @return the EventInner object itself.
      */
     public EventInner withLevel(LevelValues level) {
-        this.level = level;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventProperties();
+        }
+        this.innerProperties().withLevel(level);
         return this;
     }
 
@@ -302,7 +252,7 @@ public class EventInner extends ProxyResource {
      * @return the eventLevel value.
      */
     public EventLevelValues eventLevel() {
-        return this.eventLevel;
+        return this.innerProperties() == null ? null : this.innerProperties().eventLevel();
     }
 
     /**
@@ -312,7 +262,56 @@ public class EventInner extends ProxyResource {
      * @return the EventInner object itself.
      */
     public EventInner withEventLevel(EventLevelValues eventLevel) {
-        this.eventLevel = eventLevel;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventProperties();
+        }
+        this.innerProperties().withEventLevel(eventLevel);
+        return this;
+    }
+
+    /**
+     * Get the externalIncidentId property: The id of the Incident.
+     *
+     * @return the externalIncidentId value.
+     */
+    public String externalIncidentId() {
+        return this.innerProperties() == null ? null : this.innerProperties().externalIncidentId();
+    }
+
+    /**
+     * Set the externalIncidentId property: The id of the Incident.
+     *
+     * @param externalIncidentId the externalIncidentId value to set.
+     * @return the EventInner object itself.
+     */
+    public EventInner withExternalIncidentId(String externalIncidentId) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventProperties();
+        }
+        this.innerProperties().withExternalIncidentId(externalIncidentId);
+        return this;
+    }
+
+    /**
+     * Get the reason property: The reason for the Incident.
+     *
+     * @return the reason value.
+     */
+    public String reason() {
+        return this.innerProperties() == null ? null : this.innerProperties().reason();
+    }
+
+    /**
+     * Set the reason property: The reason for the Incident.
+     *
+     * @param reason the reason value to set.
+     * @return the EventInner object itself.
+     */
+    public EventInner withReason(String reason) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventProperties();
+        }
+        this.innerProperties().withReason(reason);
         return this;
     }
 
@@ -322,7 +321,7 @@ public class EventInner extends ProxyResource {
      * @return the article value.
      */
     public EventPropertiesArticle article() {
-        return this.article;
+        return this.innerProperties() == null ? null : this.innerProperties().article();
     }
 
     /**
@@ -332,7 +331,10 @@ public class EventInner extends ProxyResource {
      * @return the EventInner object itself.
      */
     public EventInner withArticle(EventPropertiesArticle article) {
-        this.article = article;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventProperties();
+        }
+        this.innerProperties().withArticle(article);
         return this;
     }
 
@@ -342,7 +344,7 @@ public class EventInner extends ProxyResource {
      * @return the links value.
      */
     public List<Link> links() {
-        return this.links;
+        return this.innerProperties() == null ? null : this.innerProperties().links();
     }
 
     /**
@@ -352,7 +354,10 @@ public class EventInner extends ProxyResource {
      * @return the EventInner object itself.
      */
     public EventInner withLinks(List<Link> links) {
-        this.links = links;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventProperties();
+        }
+        this.innerProperties().withLinks(links);
         return this;
     }
 
@@ -362,7 +367,7 @@ public class EventInner extends ProxyResource {
      * @return the impactStartTime value.
      */
     public OffsetDateTime impactStartTime() {
-        return this.impactStartTime;
+        return this.innerProperties() == null ? null : this.innerProperties().impactStartTime();
     }
 
     /**
@@ -372,7 +377,10 @@ public class EventInner extends ProxyResource {
      * @return the EventInner object itself.
      */
     public EventInner withImpactStartTime(OffsetDateTime impactStartTime) {
-        this.impactStartTime = impactStartTime;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventProperties();
+        }
+        this.innerProperties().withImpactStartTime(impactStartTime);
         return this;
     }
 
@@ -382,7 +390,7 @@ public class EventInner extends ProxyResource {
      * @return the impactMitigationTime value.
      */
     public OffsetDateTime impactMitigationTime() {
-        return this.impactMitigationTime;
+        return this.innerProperties() == null ? null : this.innerProperties().impactMitigationTime();
     }
 
     /**
@@ -392,7 +400,10 @@ public class EventInner extends ProxyResource {
      * @return the EventInner object itself.
      */
     public EventInner withImpactMitigationTime(OffsetDateTime impactMitigationTime) {
-        this.impactMitigationTime = impactMitigationTime;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventProperties();
+        }
+        this.innerProperties().withImpactMitigationTime(impactMitigationTime);
         return this;
     }
 
@@ -402,7 +413,7 @@ public class EventInner extends ProxyResource {
      * @return the impact value.
      */
     public List<Impact> impact() {
-        return this.impact;
+        return this.innerProperties() == null ? null : this.innerProperties().impact();
     }
 
     /**
@@ -412,7 +423,10 @@ public class EventInner extends ProxyResource {
      * @return the EventInner object itself.
      */
     public EventInner withImpact(List<Impact> impact) {
-        this.impact = impact;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventProperties();
+        }
+        this.innerProperties().withImpact(impact);
         return this;
     }
 
@@ -422,7 +436,7 @@ public class EventInner extends ProxyResource {
      * @return the recommendedActions value.
      */
     public EventPropertiesRecommendedActions recommendedActions() {
-        return this.recommendedActions;
+        return this.innerProperties() == null ? null : this.innerProperties().recommendedActions();
     }
 
     /**
@@ -432,7 +446,10 @@ public class EventInner extends ProxyResource {
      * @return the EventInner object itself.
      */
     public EventInner withRecommendedActions(EventPropertiesRecommendedActions recommendedActions) {
-        this.recommendedActions = recommendedActions;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventProperties();
+        }
+        this.innerProperties().withRecommendedActions(recommendedActions);
         return this;
     }
 
@@ -442,7 +459,7 @@ public class EventInner extends ProxyResource {
      * @return the faqs value.
      */
     public List<Faq> faqs() {
-        return this.faqs;
+        return this.innerProperties() == null ? null : this.innerProperties().faqs();
     }
 
     /**
@@ -452,7 +469,10 @@ public class EventInner extends ProxyResource {
      * @return the EventInner object itself.
      */
     public EventInner withFaqs(List<Faq> faqs) {
-        this.faqs = faqs;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventProperties();
+        }
+        this.innerProperties().withFaqs(faqs);
         return this;
     }
 
@@ -462,7 +482,7 @@ public class EventInner extends ProxyResource {
      * @return the isHir value.
      */
     public Boolean isHir() {
-        return this.isHir;
+        return this.innerProperties() == null ? null : this.innerProperties().isHir();
     }
 
     /**
@@ -472,7 +492,10 @@ public class EventInner extends ProxyResource {
      * @return the EventInner object itself.
      */
     public EventInner withIsHir(Boolean isHir) {
-        this.isHir = isHir;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventProperties();
+        }
+        this.innerProperties().withIsHir(isHir);
         return this;
     }
 
@@ -482,7 +505,7 @@ public class EventInner extends ProxyResource {
      * @return the enableMicrosoftSupport value.
      */
     public Boolean enableMicrosoftSupport() {
-        return this.enableMicrosoftSupport;
+        return this.innerProperties() == null ? null : this.innerProperties().enableMicrosoftSupport();
     }
 
     /**
@@ -492,7 +515,58 @@ public class EventInner extends ProxyResource {
      * @return the EventInner object itself.
      */
     public EventInner withEnableMicrosoftSupport(Boolean enableMicrosoftSupport) {
-        this.enableMicrosoftSupport = enableMicrosoftSupport;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventProperties();
+        }
+        this.innerProperties().withEnableMicrosoftSupport(enableMicrosoftSupport);
+        return this;
+    }
+
+    /**
+     * Get the description property: Contains the communication message for the event, that could include summary, root
+     * cause and other details.
+     *
+     * @return the description value.
+     */
+    public String description() {
+        return this.innerProperties() == null ? null : this.innerProperties().description();
+    }
+
+    /**
+     * Set the description property: Contains the communication message for the event, that could include summary, root
+     * cause and other details.
+     *
+     * @param description the description value to set.
+     * @return the EventInner object itself.
+     */
+    public EventInner withDescription(String description) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventProperties();
+        }
+        this.innerProperties().withDescription(description);
+        return this;
+    }
+
+    /**
+     * Get the platformInitiated property: Is true if the event is platform initiated.
+     *
+     * @return the platformInitiated value.
+     */
+    public Boolean platformInitiated() {
+        return this.innerProperties() == null ? null : this.innerProperties().platformInitiated();
+    }
+
+    /**
+     * Set the platformInitiated property: Is true if the event is platform initiated.
+     *
+     * @param platformInitiated the platformInitiated value to set.
+     * @return the EventInner object itself.
+     */
+    public EventInner withPlatformInitiated(Boolean platformInitiated) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventProperties();
+        }
+        this.innerProperties().withPlatformInitiated(platformInitiated);
         return this;
     }
 
@@ -502,7 +576,7 @@ public class EventInner extends ProxyResource {
      * @return the enableChatWithUs value.
      */
     public Boolean enableChatWithUs() {
-        return this.enableChatWithUs;
+        return this.innerProperties() == null ? null : this.innerProperties().enableChatWithUs();
     }
 
     /**
@@ -512,27 +586,39 @@ public class EventInner extends ProxyResource {
      * @return the EventInner object itself.
      */
     public EventInner withEnableChatWithUs(Boolean enableChatWithUs) {
-        this.enableChatWithUs = enableChatWithUs;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventProperties();
+        }
+        this.innerProperties().withEnableChatWithUs(enableChatWithUs);
         return this;
     }
 
     /**
-     * Get the priority property: Priority level of the event.
+     * Get the priority property: Priority level of the event. Has value from 0 to 23. 0 is the highest priority.
+     * Service issue events have higher priority followed by planned maintenance and health advisory. Critical events
+     * have higher priority followed by error, warning and informational. Furthermore, active events have higher
+     * priority than resolved.
      *
      * @return the priority value.
      */
     public Integer priority() {
-        return this.priority;
+        return this.innerProperties() == null ? null : this.innerProperties().priority();
     }
 
     /**
-     * Set the priority property: Priority level of the event.
+     * Set the priority property: Priority level of the event. Has value from 0 to 23. 0 is the highest priority.
+     * Service issue events have higher priority followed by planned maintenance and health advisory. Critical events
+     * have higher priority followed by error, warning and informational. Furthermore, active events have higher
+     * priority than resolved.
      *
      * @param priority the priority value to set.
      * @return the EventInner object itself.
      */
     public EventInner withPriority(Integer priority) {
-        this.priority = priority;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventProperties();
+        }
+        this.innerProperties().withPriority(priority);
         return this;
     }
 
@@ -542,7 +628,7 @@ public class EventInner extends ProxyResource {
      * @return the lastUpdateTime value.
      */
     public OffsetDateTime lastUpdateTime() {
-        return this.lastUpdateTime;
+        return this.innerProperties() == null ? null : this.innerProperties().lastUpdateTime();
     }
 
     /**
@@ -552,7 +638,10 @@ public class EventInner extends ProxyResource {
      * @return the EventInner object itself.
      */
     public EventInner withLastUpdateTime(OffsetDateTime lastUpdateTime) {
-        this.lastUpdateTime = lastUpdateTime;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventProperties();
+        }
+        this.innerProperties().withLastUpdateTime(lastUpdateTime);
         return this;
     }
 
@@ -562,7 +651,7 @@ public class EventInner extends ProxyResource {
      * @return the hirStage value.
      */
     public String hirStage() {
-        return this.hirStage;
+        return this.innerProperties() == null ? null : this.innerProperties().hirStage();
     }
 
     /**
@@ -572,7 +661,150 @@ public class EventInner extends ProxyResource {
      * @return the EventInner object itself.
      */
     public EventInner withHirStage(String hirStage) {
-        this.hirStage = hirStage;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventProperties();
+        }
+        this.innerProperties().withHirStage(hirStage);
+        return this;
+    }
+
+    /**
+     * Get the additionalInformation property: Additional information.
+     *
+     * @return the additionalInformation value.
+     */
+    public EventPropertiesAdditionalInformation additionalInformation() {
+        return this.innerProperties() == null ? null : this.innerProperties().additionalInformation();
+    }
+
+    /**
+     * Set the additionalInformation property: Additional information.
+     *
+     * @param additionalInformation the additionalInformation value to set.
+     * @return the EventInner object itself.
+     */
+    public EventInner withAdditionalInformation(EventPropertiesAdditionalInformation additionalInformation) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventProperties();
+        }
+        this.innerProperties().withAdditionalInformation(additionalInformation);
+        return this;
+    }
+
+    /**
+     * Get the duration property: duration in seconds.
+     *
+     * @return the duration value.
+     */
+    public Integer duration() {
+        return this.innerProperties() == null ? null : this.innerProperties().duration();
+    }
+
+    /**
+     * Set the duration property: duration in seconds.
+     *
+     * @param duration the duration value to set.
+     * @return the EventInner object itself.
+     */
+    public EventInner withDuration(Integer duration) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventProperties();
+        }
+        this.innerProperties().withDuration(duration);
+        return this;
+    }
+
+    /**
+     * Get the impactType property: The type of the impact.
+     *
+     * @return the impactType value.
+     */
+    public String impactType() {
+        return this.innerProperties() == null ? null : this.innerProperties().impactType();
+    }
+
+    /**
+     * Set the impactType property: The type of the impact.
+     *
+     * @param impactType the impactType value to set.
+     * @return the EventInner object itself.
+     */
+    public EventInner withImpactType(String impactType) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventProperties();
+        }
+        this.innerProperties().withImpactType(impactType);
+        return this;
+    }
+
+    /**
+     * Get the maintenanceId property: Unique identifier for planned maintenance event.
+     *
+     * @return the maintenanceId value.
+     */
+    public String maintenanceId() {
+        return this.innerProperties() == null ? null : this.innerProperties().maintenanceId();
+    }
+
+    /**
+     * Set the maintenanceId property: Unique identifier for planned maintenance event.
+     *
+     * @param maintenanceId the maintenanceId value to set.
+     * @return the EventInner object itself.
+     */
+    public EventInner withMaintenanceId(String maintenanceId) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventProperties();
+        }
+        this.innerProperties().withMaintenanceId(maintenanceId);
+        return this;
+    }
+
+    /**
+     * Get the maintenanceType property: The type of planned maintenance event.
+     *
+     * @return the maintenanceType value.
+     */
+    public String maintenanceType() {
+        return this.innerProperties() == null ? null : this.innerProperties().maintenanceType();
+    }
+
+    /**
+     * Set the maintenanceType property: The type of planned maintenance event.
+     *
+     * @param maintenanceType the maintenanceType value to set.
+     * @return the EventInner object itself.
+     */
+    public EventInner withMaintenanceType(String maintenanceType) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventProperties();
+        }
+        this.innerProperties().withMaintenanceType(maintenanceType);
+        return this;
+    }
+
+    /**
+     * Get the argQuery property: Azure Resource Graph query to fetch the affected resources from their existing Azure
+     * Resource Graph locations.
+     *
+     * @return the argQuery value.
+     */
+    public String argQuery() {
+        return this.innerProperties() == null ? null : this.innerProperties().argQuery();
+    }
+
+    /**
+     * Set the argQuery property: Azure Resource Graph query to fetch the affected resources from their existing Azure
+     * Resource Graph locations.
+     *
+     * @param argQuery the argQuery value to set.
+     * @return the EventInner object itself.
+     */
+    public EventInner withArgQuery(String argQuery) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new EventProperties();
+        }
+        this.innerProperties().withArgQuery(argQuery);
         return this;
     }
 
@@ -582,20 +814,8 @@ public class EventInner extends ProxyResource {
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
-        if (article() != null) {
-            article().validate();
-        }
-        if (links() != null) {
-            links().forEach(e -> e.validate());
-        }
-        if (impact() != null) {
-            impact().forEach(e -> e.validate());
-        }
-        if (recommendedActions() != null) {
-            recommendedActions().validate();
-        }
-        if (faqs() != null) {
-            faqs().forEach(e -> e.validate());
+        if (innerProperties() != null) {
+            innerProperties().validate();
         }
     }
 }

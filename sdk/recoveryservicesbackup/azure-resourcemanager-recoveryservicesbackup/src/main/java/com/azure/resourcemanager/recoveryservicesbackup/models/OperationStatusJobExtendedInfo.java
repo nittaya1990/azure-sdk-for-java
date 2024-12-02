@@ -5,18 +5,28 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** Operation status job extended info. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "objectType")
+/**
+ * Operation status job extended info.
+ */
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    property = "objectType",
+    defaultImpl = OperationStatusJobExtendedInfo.class,
+    visible = true)
 @JsonTypeName("OperationStatusJobExtendedInfo")
 @Fluent
 public final class OperationStatusJobExtendedInfo extends OperationStatusExtendedInfo {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OperationStatusJobExtendedInfo.class);
+    /*
+     * This property will be used as the discriminator for deciding the specific types in the polymorphic chain of types.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "objectType", required = true)
+    private String objectType = "OperationStatusJobExtendedInfo";
 
     /*
      * ID of the job created for this protected item.
@@ -25,8 +35,25 @@ public final class OperationStatusJobExtendedInfo extends OperationStatusExtende
     private String jobId;
 
     /**
+     * Creates an instance of OperationStatusJobExtendedInfo class.
+     */
+    public OperationStatusJobExtendedInfo() {
+    }
+
+    /**
+     * Get the objectType property: This property will be used as the discriminator for deciding the specific types in
+     * the polymorphic chain of types.
+     * 
+     * @return the objectType value.
+     */
+    @Override
+    public String objectType() {
+        return this.objectType;
+    }
+
+    /**
      * Get the jobId property: ID of the job created for this protected item.
-     *
+     * 
      * @return the jobId value.
      */
     public String jobId() {
@@ -35,7 +62,7 @@ public final class OperationStatusJobExtendedInfo extends OperationStatusExtende
 
     /**
      * Set the jobId property: ID of the job created for this protected item.
-     *
+     * 
      * @param jobId the jobId value to set.
      * @return the OperationStatusJobExtendedInfo object itself.
      */
@@ -46,7 +73,7 @@ public final class OperationStatusJobExtendedInfo extends OperationStatusExtende
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

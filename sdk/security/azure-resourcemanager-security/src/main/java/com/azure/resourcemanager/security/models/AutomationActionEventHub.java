@@ -5,21 +5,29 @@
 package com.azure.resourcemanager.security.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * The target Event Hub to which event data will be exported. To learn more about Security Center continuous export
- * capabilities, visit https://aka.ms/ASCExportLearnMore.
+ * The target Event Hub to which event data will be exported. To learn more about Microsoft Defender for Cloud
+ * continuous export capabilities, visit https://aka.ms/ASCExportLearnMore.
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "actionType")
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    property = "actionType",
+    defaultImpl = AutomationActionEventHub.class,
+    visible = true)
 @JsonTypeName("EventHub")
 @Fluent
 public final class AutomationActionEventHub extends AutomationAction {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AutomationActionEventHub.class);
+    /*
+     * The type of the action that will be triggered by the Automation
+     */
+    @JsonTypeId
+    @JsonProperty(value = "actionType", required = true)
+    private ActionType actionType = ActionType.EVENT_HUB;
 
     /*
      * The target Event Hub Azure Resource ID.
@@ -34,15 +42,36 @@ public final class AutomationActionEventHub extends AutomationAction {
     private String sasPolicyName;
 
     /*
-     * The target Event Hub connection string (it will not be included in any
-     * response).
+     * The target Event Hub connection string (it will not be included in any response).
      */
     @JsonProperty(value = "connectionString")
     private String connectionString;
 
+    /*
+     * Indicates whether the trusted service is enabled or not.
+     */
+    @JsonProperty(value = "isTrustedServiceEnabled")
+    private Boolean isTrustedServiceEnabled;
+
+    /**
+     * Creates an instance of AutomationActionEventHub class.
+     */
+    public AutomationActionEventHub() {
+    }
+
+    /**
+     * Get the actionType property: The type of the action that will be triggered by the Automation.
+     * 
+     * @return the actionType value.
+     */
+    @Override
+    public ActionType actionType() {
+        return this.actionType;
+    }
+
     /**
      * Get the eventHubResourceId property: The target Event Hub Azure Resource ID.
-     *
+     * 
      * @return the eventHubResourceId value.
      */
     public String eventHubResourceId() {
@@ -51,7 +80,7 @@ public final class AutomationActionEventHub extends AutomationAction {
 
     /**
      * Set the eventHubResourceId property: The target Event Hub Azure Resource ID.
-     *
+     * 
      * @param eventHubResourceId the eventHubResourceId value to set.
      * @return the AutomationActionEventHub object itself.
      */
@@ -62,7 +91,7 @@ public final class AutomationActionEventHub extends AutomationAction {
 
     /**
      * Get the sasPolicyName property: The target Event Hub SAS policy name.
-     *
+     * 
      * @return the sasPolicyName value.
      */
     public String sasPolicyName() {
@@ -72,7 +101,7 @@ public final class AutomationActionEventHub extends AutomationAction {
     /**
      * Get the connectionString property: The target Event Hub connection string (it will not be included in any
      * response).
-     *
+     * 
      * @return the connectionString value.
      */
     public String connectionString() {
@@ -82,7 +111,7 @@ public final class AutomationActionEventHub extends AutomationAction {
     /**
      * Set the connectionString property: The target Event Hub connection string (it will not be included in any
      * response).
-     *
+     * 
      * @param connectionString the connectionString value to set.
      * @return the AutomationActionEventHub object itself.
      */
@@ -92,8 +121,28 @@ public final class AutomationActionEventHub extends AutomationAction {
     }
 
     /**
+     * Get the isTrustedServiceEnabled property: Indicates whether the trusted service is enabled or not.
+     * 
+     * @return the isTrustedServiceEnabled value.
+     */
+    public Boolean isTrustedServiceEnabled() {
+        return this.isTrustedServiceEnabled;
+    }
+
+    /**
+     * Set the isTrustedServiceEnabled property: Indicates whether the trusted service is enabled or not.
+     * 
+     * @param isTrustedServiceEnabled the isTrustedServiceEnabled value to set.
+     * @return the AutomationActionEventHub object itself.
+     */
+    public AutomationActionEventHub withIsTrustedServiceEnabled(Boolean isTrustedServiceEnabled) {
+        this.isTrustedServiceEnabled = isTrustedServiceEnabled;
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

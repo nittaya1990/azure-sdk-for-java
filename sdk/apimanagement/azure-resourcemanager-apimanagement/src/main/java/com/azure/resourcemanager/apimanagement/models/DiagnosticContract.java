@@ -95,6 +95,21 @@ public interface DiagnosticContract {
     OperationNameFormat operationNameFormat();
 
     /**
+     * Gets the metrics property: Emit custom metrics via emit-metric policy. Applicable only to Application Insights
+     * diagnostic settings.
+     *
+     * @return the metrics value.
+     */
+    Boolean metrics();
+
+    /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
+
+    /**
      * Gets the inner com.azure.resourcemanager.apimanagement.fluent.models.DiagnosticContractInner object.
      *
      * @return the inner object.
@@ -105,38 +120,35 @@ public interface DiagnosticContract {
     interface Definition
         extends DefinitionStages.Blank, DefinitionStages.WithParentResource, DefinitionStages.WithCreate {
     }
+
     /** The DiagnosticContract definition stages. */
     interface DefinitionStages {
         /** The first stage of the DiagnosticContract definition. */
         interface Blank extends WithParentResource {
         }
+
         /** The stage of the DiagnosticContract definition allowing to specify parent resource. */
         interface WithParentResource {
             /**
              * Specifies resourceGroupName, serviceName, apiId.
              *
-             * @param resourceGroupName The name of the resource group.
+             * @param resourceGroupName The name of the resource group. The name is case insensitive.
              * @param serviceName The name of the API Management service.
              * @param apiId API identifier. Must be unique in the current API Management service instance.
              * @return the next definition stage.
              */
             WithCreate withExistingApi(String resourceGroupName, String serviceName, String apiId);
         }
+
         /**
          * The stage of the DiagnosticContract definition which contains all the minimum required properties for the
          * resource to be created, but also allows for any other optional properties to be specified.
          */
         interface WithCreate
-            extends DefinitionStages.WithAlwaysLog,
-                DefinitionStages.WithLoggerId,
-                DefinitionStages.WithSampling,
-                DefinitionStages.WithFrontend,
-                DefinitionStages.WithBackend,
-                DefinitionStages.WithLogClientIp,
-                DefinitionStages.WithHttpCorrelationProtocol,
-                DefinitionStages.WithVerbosity,
-                DefinitionStages.WithOperationNameFormat,
-                DefinitionStages.WithIfMatch {
+            extends DefinitionStages.WithAlwaysLog, DefinitionStages.WithLoggerId, DefinitionStages.WithSampling,
+            DefinitionStages.WithFrontend, DefinitionStages.WithBackend, DefinitionStages.WithLogClientIp,
+            DefinitionStages.WithHttpCorrelationProtocol, DefinitionStages.WithVerbosity,
+            DefinitionStages.WithOperationNameFormat, DefinitionStages.WithMetrics, DefinitionStages.WithIfMatch {
             /**
              * Executes the create request.
              *
@@ -152,6 +164,7 @@ public interface DiagnosticContract {
              */
             DiagnosticContract create(Context context);
         }
+
         /** The stage of the DiagnosticContract definition allowing to specify alwaysLog. */
         interface WithAlwaysLog {
             /**
@@ -163,6 +176,7 @@ public interface DiagnosticContract {
              */
             WithCreate withAlwaysLog(AlwaysLog alwaysLog);
         }
+
         /** The stage of the DiagnosticContract definition allowing to specify loggerId. */
         interface WithLoggerId {
             /**
@@ -173,6 +187,7 @@ public interface DiagnosticContract {
              */
             WithCreate withLoggerId(String loggerId);
         }
+
         /** The stage of the DiagnosticContract definition allowing to specify sampling. */
         interface WithSampling {
             /**
@@ -183,6 +198,7 @@ public interface DiagnosticContract {
              */
             WithCreate withSampling(SamplingSettings sampling);
         }
+
         /** The stage of the DiagnosticContract definition allowing to specify frontend. */
         interface WithFrontend {
             /**
@@ -193,6 +209,7 @@ public interface DiagnosticContract {
              */
             WithCreate withFrontend(PipelineDiagnosticSettings frontend);
         }
+
         /** The stage of the DiagnosticContract definition allowing to specify backend. */
         interface WithBackend {
             /**
@@ -203,6 +220,7 @@ public interface DiagnosticContract {
              */
             WithCreate withBackend(PipelineDiagnosticSettings backend);
         }
+
         /** The stage of the DiagnosticContract definition allowing to specify logClientIp. */
         interface WithLogClientIp {
             /**
@@ -213,6 +231,7 @@ public interface DiagnosticContract {
              */
             WithCreate withLogClientIp(Boolean logClientIp);
         }
+
         /** The stage of the DiagnosticContract definition allowing to specify httpCorrelationProtocol. */
         interface WithHttpCorrelationProtocol {
             /**
@@ -224,6 +243,7 @@ public interface DiagnosticContract {
              */
             WithCreate withHttpCorrelationProtocol(HttpCorrelationProtocol httpCorrelationProtocol);
         }
+
         /** The stage of the DiagnosticContract definition allowing to specify verbosity. */
         interface WithVerbosity {
             /**
@@ -234,6 +254,7 @@ public interface DiagnosticContract {
              */
             WithCreate withVerbosity(Verbosity verbosity);
         }
+
         /** The stage of the DiagnosticContract definition allowing to specify operationNameFormat. */
         interface WithOperationNameFormat {
             /**
@@ -246,6 +267,20 @@ public interface DiagnosticContract {
              */
             WithCreate withOperationNameFormat(OperationNameFormat operationNameFormat);
         }
+
+        /** The stage of the DiagnosticContract definition allowing to specify metrics. */
+        interface WithMetrics {
+            /**
+             * Specifies the metrics property: Emit custom metrics via emit-metric policy. Applicable only to
+             * Application Insights diagnostic settings..
+             *
+             * @param metrics Emit custom metrics via emit-metric policy. Applicable only to Application Insights
+             *     diagnostic settings.
+             * @return the next definition stage.
+             */
+            WithCreate withMetrics(Boolean metrics);
+        }
+
         /** The stage of the DiagnosticContract definition allowing to specify ifMatch. */
         interface WithIfMatch {
             /**
@@ -259,6 +294,7 @@ public interface DiagnosticContract {
             WithCreate withIfMatch(String ifMatch);
         }
     }
+
     /**
      * Begins update for the DiagnosticContract resource.
      *
@@ -267,17 +303,10 @@ public interface DiagnosticContract {
     DiagnosticContract.Update update();
 
     /** The template for DiagnosticContract update. */
-    interface Update
-        extends UpdateStages.WithAlwaysLog,
-            UpdateStages.WithLoggerId,
-            UpdateStages.WithSampling,
-            UpdateStages.WithFrontend,
-            UpdateStages.WithBackend,
-            UpdateStages.WithLogClientIp,
-            UpdateStages.WithHttpCorrelationProtocol,
-            UpdateStages.WithVerbosity,
-            UpdateStages.WithOperationNameFormat,
-            UpdateStages.WithIfMatch {
+    interface Update extends UpdateStages.WithAlwaysLog, UpdateStages.WithLoggerId, UpdateStages.WithSampling,
+        UpdateStages.WithFrontend, UpdateStages.WithBackend, UpdateStages.WithLogClientIp,
+        UpdateStages.WithHttpCorrelationProtocol, UpdateStages.WithVerbosity, UpdateStages.WithOperationNameFormat,
+        UpdateStages.WithMetrics, UpdateStages.WithIfMatch {
         /**
          * Executes the update request.
          *
@@ -293,6 +322,7 @@ public interface DiagnosticContract {
          */
         DiagnosticContract apply(Context context);
     }
+
     /** The DiagnosticContract update stages. */
     interface UpdateStages {
         /** The stage of the DiagnosticContract update allowing to specify alwaysLog. */
@@ -306,6 +336,7 @@ public interface DiagnosticContract {
              */
             Update withAlwaysLog(AlwaysLog alwaysLog);
         }
+
         /** The stage of the DiagnosticContract update allowing to specify loggerId. */
         interface WithLoggerId {
             /**
@@ -316,6 +347,7 @@ public interface DiagnosticContract {
              */
             Update withLoggerId(String loggerId);
         }
+
         /** The stage of the DiagnosticContract update allowing to specify sampling. */
         interface WithSampling {
             /**
@@ -326,6 +358,7 @@ public interface DiagnosticContract {
              */
             Update withSampling(SamplingSettings sampling);
         }
+
         /** The stage of the DiagnosticContract update allowing to specify frontend. */
         interface WithFrontend {
             /**
@@ -336,6 +369,7 @@ public interface DiagnosticContract {
              */
             Update withFrontend(PipelineDiagnosticSettings frontend);
         }
+
         /** The stage of the DiagnosticContract update allowing to specify backend. */
         interface WithBackend {
             /**
@@ -346,6 +380,7 @@ public interface DiagnosticContract {
              */
             Update withBackend(PipelineDiagnosticSettings backend);
         }
+
         /** The stage of the DiagnosticContract update allowing to specify logClientIp. */
         interface WithLogClientIp {
             /**
@@ -356,6 +391,7 @@ public interface DiagnosticContract {
              */
             Update withLogClientIp(Boolean logClientIp);
         }
+
         /** The stage of the DiagnosticContract update allowing to specify httpCorrelationProtocol. */
         interface WithHttpCorrelationProtocol {
             /**
@@ -367,6 +403,7 @@ public interface DiagnosticContract {
              */
             Update withHttpCorrelationProtocol(HttpCorrelationProtocol httpCorrelationProtocol);
         }
+
         /** The stage of the DiagnosticContract update allowing to specify verbosity. */
         interface WithVerbosity {
             /**
@@ -377,6 +414,7 @@ public interface DiagnosticContract {
              */
             Update withVerbosity(Verbosity verbosity);
         }
+
         /** The stage of the DiagnosticContract update allowing to specify operationNameFormat. */
         interface WithOperationNameFormat {
             /**
@@ -389,6 +427,20 @@ public interface DiagnosticContract {
              */
             Update withOperationNameFormat(OperationNameFormat operationNameFormat);
         }
+
+        /** The stage of the DiagnosticContract update allowing to specify metrics. */
+        interface WithMetrics {
+            /**
+             * Specifies the metrics property: Emit custom metrics via emit-metric policy. Applicable only to
+             * Application Insights diagnostic settings..
+             *
+             * @param metrics Emit custom metrics via emit-metric policy. Applicable only to Application Insights
+             *     diagnostic settings.
+             * @return the next definition stage.
+             */
+            Update withMetrics(Boolean metrics);
+        }
+
         /** The stage of the DiagnosticContract update allowing to specify ifMatch. */
         interface WithIfMatch {
             /**
@@ -402,6 +454,7 @@ public interface DiagnosticContract {
             Update withIfMatch(String ifMatch);
         }
     }
+
     /**
      * Refreshes the resource to sync with Azure.
      *

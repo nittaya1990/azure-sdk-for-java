@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.recoveryservices.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.recoveryservices.fluent.models.VaultUsageInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Usage for vault. */
+/**
+ * Usage for vault.
+ */
 @Fluent
 public final class VaultUsageList {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(VaultUsageList.class);
-
     /*
      * The list of usages for the given vault.
      */
@@ -23,8 +21,14 @@ public final class VaultUsageList {
     private List<VaultUsageInner> value;
 
     /**
+     * Creates an instance of VaultUsageList class.
+     */
+    public VaultUsageList() {
+    }
+
+    /**
      * Get the value property: The list of usages for the given vault.
-     *
+     * 
      * @return the value value.
      */
     public List<VaultUsageInner> value() {
@@ -33,7 +37,7 @@ public final class VaultUsageList {
 
     /**
      * Set the value property: The list of usages for the given vault.
-     *
+     * 
      * @param value the value value to set.
      * @return the VaultUsageList object itself.
      */
@@ -44,7 +48,7 @@ public final class VaultUsageList {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

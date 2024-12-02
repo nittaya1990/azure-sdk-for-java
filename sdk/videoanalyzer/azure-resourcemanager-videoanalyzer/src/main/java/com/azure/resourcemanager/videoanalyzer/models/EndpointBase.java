@@ -6,7 +6,6 @@ package com.azure.resourcemanager.videoanalyzer.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -21,12 +20,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("EndpointBase")
 @JsonSubTypes({
     @JsonSubTypes.Type(name = "#Microsoft.VideoAnalyzer.UnsecuredEndpoint", value = UnsecuredEndpoint.class),
-    @JsonSubTypes.Type(name = "#Microsoft.VideoAnalyzer.TlsEndpoint", value = TlsEndpoint.class)
-})
+    @JsonSubTypes.Type(name = "#Microsoft.VideoAnalyzer.TlsEndpoint", value = TlsEndpoint.class) })
 @Fluent
 public class EndpointBase {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(EndpointBase.class);
-
     /*
      * Credentials to be presented to the endpoint.
      */
@@ -116,19 +112,19 @@ public class EndpointBase {
      */
     public void validate() {
         if (credentials() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property credentials in model EndpointBase"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property credentials in model EndpointBase"));
         } else {
             credentials().validate();
         }
         if (url() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property url in model EndpointBase"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property url in model EndpointBase"));
         }
         if (tunnel() != null) {
             tunnel().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(EndpointBase.class);
 }

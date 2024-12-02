@@ -27,9 +27,8 @@ import java.util.function.BiConsumer;
  * </p>
  *
  */
-
 @Fluent
-public class AttestationTokenValidationOptions {
+public final class AttestationTokenValidationOptions {
     private boolean validateToken;
     private String expectedIssuer;
     private boolean validateExpiresOn;
@@ -51,7 +50,7 @@ public class AttestationTokenValidationOptions {
     /**
      * Sets whether the token is to be validated at all. If the validateToken parameter is set to false,
      * then no validations will be performed (default: true)
-     * @param validateToken - indicates whether or not the token should be validated.
+     * @param validateToken - indicates if the token should be validated.
      * @return this AttestationTokenValidationOptions object.
      */
     public AttestationTokenValidationOptions setValidateToken(boolean validateToken) {
@@ -63,7 +62,7 @@ public class AttestationTokenValidationOptions {
      * Returns if the returned attestation token should be validated at all.
      * @return a boolean indicating if the attestation token should be validated.
      */
-    public boolean getValidateToken() {
+    public boolean isValidateToken() {
         return validateToken;
     }
 
@@ -98,7 +97,8 @@ public class AttestationTokenValidationOptions {
      *                 the default validations.
      * @return this AttestationTokenValidationOptions object.
      */
-    public AttestationTokenValidationOptions setValidationCallback(BiConsumer<AttestationToken, AttestationSigner> callback) {
+    public AttestationTokenValidationOptions
+        setValidationCallback(BiConsumer<AttestationToken, AttestationSigner> callback) {
         this.validationCallback = callback;
         return this;
     }
@@ -125,7 +125,7 @@ public class AttestationTokenValidationOptions {
      * Returns whether expiration time should be validated.
      * @return the current state of the ExpiresOn validation.
      */
-    public boolean getValidateExpiresOn() {
+    public boolean isValidateExpiresOn() {
         return validateExpiresOn;
     }
 
@@ -138,11 +138,12 @@ public class AttestationTokenValidationOptions {
         this.validateNotBefore = validateNotBefore;
         return this;
     }
+
     /**
      * Returns whether expiration time should be validated.
      * @return the current state of the ExpiresOn validation.
      */
-    public boolean getValidateNotBefore() {
+    public boolean isValidateNotBefore() {
         return validateNotBefore;
     }
 

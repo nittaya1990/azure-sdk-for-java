@@ -2,7 +2,7 @@
 
 This library provides access to the Azure Digital Twins service for managing twins, models, relationships, etc.
 
-  [Source code][source] | [Package](https://search.maven.org/artifact/com.azure/azure-digitaltwins-core)
+  [Source code][source] | [Package](https://central.sonatype.com/artifact/com.azure/azure-digitaltwins-core)
 
 ## Getting started
 
@@ -51,7 +51,7 @@ add the direct dependency to your project as follows.
 <dependency>
   <groupId>com.azure</groupId>
   <artifactId>azure-digitaltwins-core</artifactId>
-  <version>1.1.3</version>
+  <version>1.4.0</version>
 </dependency>
 ```
 
@@ -75,7 +75,7 @@ In order to interact with the Azure Digital Twins service, you will need to crea
 
 ## Key concepts
 
-Azure Digital Twins Preview is an Azure IoT service that creates comprehensive models of the physical environment.
+Azure Digital Twins is an Azure IoT service that creates comprehensive models of the physical environment.
 It can create spatial intelligence graphs to model the relationships and interactions between people, spaces, and devices.
 
 You can learn more about Azure Digital Twins by visiting [Azure Digital Twins Documentation][digital_twins_documentation]
@@ -93,8 +93,6 @@ You can familiarize yourself with different APIs using [samples for Digital Twin
 - [`models` package](https://github.com/Azure/azure-sdk-for-java/tree/main/sdk/digitaltwins/azure-digitaltwins-core/src/main/java/com/azure/digitaltwins/core/models)
 
 Portions of the client library are generated through Autorest, and the swagger file used is defined in the Autorest config file.
-
-To regenerate the code, run the Powershell script [generate.ps1](https://github.com/Azure/azure-sdk-for-java/blob/main/sdk/digitaltwins/azure-digitaltwins-core/generate.ps1).
 
 ### /src/samples
 
@@ -129,7 +127,7 @@ See implementation examples with our [code samples](https://github.com/Azure/azu
 
 This project welcomes contributions and suggestions.
 Most contributions require you to agree to a Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us the rights to use your contribution.
-For details, visit <https://cla.microsoft.com.>
+For details, visit <https://cla.microsoft.com>.
 
 When you submit a pull request, a CLA-bot will automatically determine whether you need to provide a CLA and decorate the PR appropriately (e.g., label, comment).
 Simply follow the instructions provided by the bot.

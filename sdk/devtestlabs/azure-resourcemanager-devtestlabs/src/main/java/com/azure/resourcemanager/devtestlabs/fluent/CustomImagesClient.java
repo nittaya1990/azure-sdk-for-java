@@ -24,7 +24,7 @@ public interface CustomImagesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<CustomImageInner> list(String resourceGroupName, String labName);
@@ -42,16 +42,27 @@ public interface CustomImagesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of a list operation.
+     * @return the response of a list operation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    PagedIterable<CustomImageInner> list(
-        String resourceGroupName,
-        String labName,
-        String expand,
-        String filter,
-        Integer top,
-        String orderby,
+    PagedIterable<CustomImageInner> list(String resourceGroupName, String labName, String expand, String filter,
+        Integer top, String orderby, Context context);
+
+    /**
+     * Get custom image.
+     *
+     * @param resourceGroupName The name of the resource group.
+     * @param labName The name of the lab.
+     * @param name The name of the custom image.
+     * @param expand Specify the $expand query. Example: 'properties($select=vm)'.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return custom image along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<CustomImageInner> getWithResponse(String resourceGroupName, String labName, String name, String expand,
         Context context);
 
     /**
@@ -69,23 +80,6 @@ public interface CustomImagesClient {
     CustomImageInner get(String resourceGroupName, String labName, String name);
 
     /**
-     * Get custom image.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param labName The name of the lab.
-     * @param name The name of the custom image.
-     * @param expand Specify the $expand query. Example: 'properties($select=vm)'.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return custom image.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<CustomImageInner> getWithResponse(
-        String resourceGroupName, String labName, String name, String expand, Context context);
-
-    /**
      * Create or replace an existing custom image. This operation can take a while to complete.
      *
      * @param resourceGroupName The name of the resource group.
@@ -95,11 +89,11 @@ public interface CustomImagesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a custom image.
+     * @return the {@link SyncPoller} for polling of a custom image.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<CustomImageInner>, CustomImageInner> beginCreateOrUpdate(
-        String resourceGroupName, String labName, String name, CustomImageInner customImage);
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<CustomImageInner>, CustomImageInner> beginCreateOrUpdate(String resourceGroupName,
+        String labName, String name, CustomImageInner customImage);
 
     /**
      * Create or replace an existing custom image. This operation can take a while to complete.
@@ -112,11 +106,11 @@ public interface CustomImagesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a custom image.
+     * @return the {@link SyncPoller} for polling of a custom image.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<CustomImageInner>, CustomImageInner> beginCreateOrUpdate(
-        String resourceGroupName, String labName, String name, CustomImageInner customImage, Context context);
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<CustomImageInner>, CustomImageInner> beginCreateOrUpdate(String resourceGroupName,
+        String labName, String name, CustomImageInner customImage, Context context);
 
     /**
      * Create or replace an existing custom image. This operation can take a while to complete.
@@ -131,8 +125,8 @@ public interface CustomImagesClient {
      * @return a custom image.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    CustomImageInner createOrUpdate(
-        String resourceGroupName, String labName, String name, CustomImageInner customImage);
+    CustomImageInner createOrUpdate(String resourceGroupName, String labName, String name,
+        CustomImageInner customImage);
 
     /**
      * Create or replace an existing custom image. This operation can take a while to complete.
@@ -148,8 +142,8 @@ public interface CustomImagesClient {
      * @return a custom image.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    CustomImageInner createOrUpdate(
-        String resourceGroupName, String labName, String name, CustomImageInner customImage, Context context);
+    CustomImageInner createOrUpdate(String resourceGroupName, String labName, String name, CustomImageInner customImage,
+        Context context);
 
     /**
      * Delete custom image. This operation can take a while to complete.
@@ -160,9 +154,9 @@ public interface CustomImagesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<Void>, Void> beginDelete(String resourceGroupName, String labName, String name);
 
     /**
@@ -175,11 +169,11 @@ public interface CustomImagesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<Void>, Void> beginDelete(
-        String resourceGroupName, String labName, String name, Context context);
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<Void>, Void> beginDelete(String resourceGroupName, String labName, String name,
+        Context context);
 
     /**
      * Delete custom image. This operation can take a while to complete.
@@ -215,13 +209,15 @@ public interface CustomImagesClient {
      * @param labName The name of the lab.
      * @param name The name of the custom image.
      * @param customImage A custom image.
+     * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a custom image.
+     * @return a custom image along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    CustomImageInner update(String resourceGroupName, String labName, String name, CustomImageFragment customImage);
+    Response<CustomImageInner> updateWithResponse(String resourceGroupName, String labName, String name,
+        CustomImageFragment customImage, Context context);
 
     /**
      * Allows modifying tags of custom images. All other properties will be ignored.
@@ -230,13 +226,11 @@ public interface CustomImagesClient {
      * @param labName The name of the lab.
      * @param name The name of the custom image.
      * @param customImage A custom image.
-     * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return a custom image.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<CustomImageInner> updateWithResponse(
-        String resourceGroupName, String labName, String name, CustomImageFragment customImage, Context context);
+    CustomImageInner update(String resourceGroupName, String labName, String name, CustomImageFragment customImage);
 }

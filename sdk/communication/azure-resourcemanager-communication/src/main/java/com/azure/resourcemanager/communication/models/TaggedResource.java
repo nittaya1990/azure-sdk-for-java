@@ -5,26 +5,31 @@
 package com.azure.resourcemanager.communication.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
-/** An ARM resource with that can accept tags. */
+/**
+ * An ARM resource with that can accept tags.
+ */
 @Fluent
 public class TaggedResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TaggedResource.class);
-
     /*
-     * Tags of the service which is a list of key value pairs that describe the
-     * resource.
+     * Tags of the service which is a list of key value pairs that describe the resource.
      */
     @JsonProperty(value = "tags")
+    @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
     private Map<String, String> tags;
 
     /**
+     * Creates an instance of TaggedResource class.
+     */
+    public TaggedResource() {
+    }
+
+    /**
      * Get the tags property: Tags of the service which is a list of key value pairs that describe the resource.
-     *
+     * 
      * @return the tags value.
      */
     public Map<String, String> tags() {
@@ -33,7 +38,7 @@ public class TaggedResource {
 
     /**
      * Set the tags property: Tags of the service which is a list of key value pairs that describe the resource.
-     *
+     * 
      * @param tags the tags value to set.
      * @return the TaggedResource object itself.
      */
@@ -44,7 +49,7 @@ public class TaggedResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

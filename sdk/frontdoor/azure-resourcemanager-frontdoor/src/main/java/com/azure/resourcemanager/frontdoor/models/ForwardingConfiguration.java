@@ -5,25 +5,32 @@
 package com.azure.resourcemanager.frontdoor.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.management.SubResource;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** Describes Forwarding Route. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@odata\\.type")
+/**
+ * Describes Forwarding Route.
+ */
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    property = "@odata.type",
+    defaultImpl = ForwardingConfiguration.class,
+    visible = true)
 @JsonTypeName("#Microsoft.Azure.FrontDoor.Models.FrontdoorForwardingConfiguration")
-@JsonFlatten
 @Fluent
-public class ForwardingConfiguration extends RouteConfiguration {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ForwardingConfiguration.class);
+public final class ForwardingConfiguration extends RouteConfiguration {
+    /*
+     * The @odata.type property.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "@odata.type", required = true)
+    private String odataType = "#Microsoft.Azure.FrontDoor.Models.FrontdoorForwardingConfiguration";
 
     /*
-     * A custom path used to rewrite resource paths matched by this rule. Leave
-     * empty to use incoming path.
+     * A custom path used to rewrite resource paths matched by this rule. Leave empty to use incoming path.
      */
     @JsonProperty(value = "customForwardingPath")
     private String customForwardingPath;
@@ -47,9 +54,25 @@ public class ForwardingConfiguration extends RouteConfiguration {
     private SubResource backendPool;
 
     /**
+     * Creates an instance of ForwardingConfiguration class.
+     */
+    public ForwardingConfiguration() {
+    }
+
+    /**
+     * Get the odataType property: The &#064;odata.type property.
+     * 
+     * @return the odataType value.
+     */
+    @Override
+    public String odataType() {
+        return this.odataType;
+    }
+
+    /**
      * Get the customForwardingPath property: A custom path used to rewrite resource paths matched by this rule. Leave
      * empty to use incoming path.
-     *
+     * 
      * @return the customForwardingPath value.
      */
     public String customForwardingPath() {
@@ -59,7 +82,7 @@ public class ForwardingConfiguration extends RouteConfiguration {
     /**
      * Set the customForwardingPath property: A custom path used to rewrite resource paths matched by this rule. Leave
      * empty to use incoming path.
-     *
+     * 
      * @param customForwardingPath the customForwardingPath value to set.
      * @return the ForwardingConfiguration object itself.
      */
@@ -70,7 +93,7 @@ public class ForwardingConfiguration extends RouteConfiguration {
 
     /**
      * Get the forwardingProtocol property: Protocol this rule will use when forwarding traffic to backends.
-     *
+     * 
      * @return the forwardingProtocol value.
      */
     public FrontDoorForwardingProtocol forwardingProtocol() {
@@ -79,7 +102,7 @@ public class ForwardingConfiguration extends RouteConfiguration {
 
     /**
      * Set the forwardingProtocol property: Protocol this rule will use when forwarding traffic to backends.
-     *
+     * 
      * @param forwardingProtocol the forwardingProtocol value to set.
      * @return the ForwardingConfiguration object itself.
      */
@@ -90,7 +113,7 @@ public class ForwardingConfiguration extends RouteConfiguration {
 
     /**
      * Get the cacheConfiguration property: The caching configuration associated with this rule.
-     *
+     * 
      * @return the cacheConfiguration value.
      */
     public CacheConfiguration cacheConfiguration() {
@@ -99,7 +122,7 @@ public class ForwardingConfiguration extends RouteConfiguration {
 
     /**
      * Set the cacheConfiguration property: The caching configuration associated with this rule.
-     *
+     * 
      * @param cacheConfiguration the cacheConfiguration value to set.
      * @return the ForwardingConfiguration object itself.
      */
@@ -110,7 +133,7 @@ public class ForwardingConfiguration extends RouteConfiguration {
 
     /**
      * Get the backendPool property: A reference to the BackendPool which this rule routes to.
-     *
+     * 
      * @return the backendPool value.
      */
     public SubResource backendPool() {
@@ -119,7 +142,7 @@ public class ForwardingConfiguration extends RouteConfiguration {
 
     /**
      * Set the backendPool property: A reference to the BackendPool which this rule routes to.
-     *
+     * 
      * @param backendPool the backendPool value to set.
      * @return the ForwardingConfiguration object itself.
      */
@@ -130,7 +153,7 @@ public class ForwardingConfiguration extends RouteConfiguration {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

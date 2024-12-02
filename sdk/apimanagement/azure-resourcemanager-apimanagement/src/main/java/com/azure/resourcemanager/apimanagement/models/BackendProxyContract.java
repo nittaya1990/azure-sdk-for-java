@@ -6,17 +6,14 @@ package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Details of the Backend WebProxy Server to use in the Request to Backend. */
 @Fluent
 public final class BackendProxyContract {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(BackendProxyContract.class);
-
     /*
-     * WebProxy Server AbsoluteUri property which includes the entire URI
-     * stored in the Uri instance, including all fragments and query strings.
+     * WebProxy Server AbsoluteUri property which includes the entire URI stored in the Uri instance, including all
+     * fragments and query strings.
      */
     @JsonProperty(value = "url", required = true)
     private String url;
@@ -32,6 +29,10 @@ public final class BackendProxyContract {
      */
     @JsonProperty(value = "password")
     private String password;
+
+    /** Creates an instance of BackendProxyContract class. */
+    public BackendProxyContract() {
+    }
 
     /**
      * Get the url property: WebProxy Server AbsoluteUri property which includes the entire URI stored in the Uri
@@ -102,9 +103,10 @@ public final class BackendProxyContract {
      */
     public void validate() {
         if (url() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property url in model BackendProxyContract"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property url in model BackendProxyContract"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(BackendProxyContract.class);
 }

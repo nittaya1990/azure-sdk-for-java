@@ -5,116 +5,106 @@
 package com.azure.resourcemanager.security.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.security.models.State;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Regulatory compliance control details and state. */
-@JsonFlatten
+/**
+ * Regulatory compliance control details and state.
+ */
 @Fluent
-public class RegulatoryComplianceControlInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RegulatoryComplianceControlInner.class);
-
+public final class RegulatoryComplianceControlInner extends ProxyResource {
     /*
-     * The description of the regulatory compliance control
+     * Regulatory compliance control data
      */
-    @JsonProperty(value = "properties.description", access = JsonProperty.Access.WRITE_ONLY)
-    private String description;
+    @JsonProperty(value = "properties")
+    private RegulatoryComplianceControlProperties innerProperties;
 
-    /*
-     * Aggregative state based on the control's supported assessments states
+    /**
+     * Creates an instance of RegulatoryComplianceControlInner class.
      */
-    @JsonProperty(value = "properties.state")
-    private State state;
+    public RegulatoryComplianceControlInner() {
+    }
 
-    /*
-     * The number of supported regulatory compliance assessments of the given
-     * control with a passed state
+    /**
+     * Get the innerProperties property: Regulatory compliance control data.
+     * 
+     * @return the innerProperties value.
      */
-    @JsonProperty(value = "properties.passedAssessments", access = JsonProperty.Access.WRITE_ONLY)
-    private Integer passedAssessments;
-
-    /*
-     * The number of supported regulatory compliance assessments of the given
-     * control with a failed state
-     */
-    @JsonProperty(value = "properties.failedAssessments", access = JsonProperty.Access.WRITE_ONLY)
-    private Integer failedAssessments;
-
-    /*
-     * The number of supported regulatory compliance assessments of the given
-     * control with a skipped state
-     */
-    @JsonProperty(value = "properties.skippedAssessments", access = JsonProperty.Access.WRITE_ONLY)
-    private Integer skippedAssessments;
+    private RegulatoryComplianceControlProperties innerProperties() {
+        return this.innerProperties;
+    }
 
     /**
      * Get the description property: The description of the regulatory compliance control.
-     *
+     * 
      * @return the description value.
      */
     public String description() {
-        return this.description;
+        return this.innerProperties() == null ? null : this.innerProperties().description();
     }
 
     /**
      * Get the state property: Aggregative state based on the control's supported assessments states.
-     *
+     * 
      * @return the state value.
      */
     public State state() {
-        return this.state;
+        return this.innerProperties() == null ? null : this.innerProperties().state();
     }
 
     /**
      * Set the state property: Aggregative state based on the control's supported assessments states.
-     *
+     * 
      * @param state the state value to set.
      * @return the RegulatoryComplianceControlInner object itself.
      */
     public RegulatoryComplianceControlInner withState(State state) {
-        this.state = state;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new RegulatoryComplianceControlProperties();
+        }
+        this.innerProperties().withState(state);
         return this;
     }
 
     /**
      * Get the passedAssessments property: The number of supported regulatory compliance assessments of the given
      * control with a passed state.
-     *
+     * 
      * @return the passedAssessments value.
      */
     public Integer passedAssessments() {
-        return this.passedAssessments;
+        return this.innerProperties() == null ? null : this.innerProperties().passedAssessments();
     }
 
     /**
      * Get the failedAssessments property: The number of supported regulatory compliance assessments of the given
      * control with a failed state.
-     *
+     * 
      * @return the failedAssessments value.
      */
     public Integer failedAssessments() {
-        return this.failedAssessments;
+        return this.innerProperties() == null ? null : this.innerProperties().failedAssessments();
     }
 
     /**
      * Get the skippedAssessments property: The number of supported regulatory compliance assessments of the given
      * control with a skipped state.
-     *
+     * 
      * @return the skippedAssessments value.
      */
     public Integer skippedAssessments() {
-        return this.skippedAssessments;
+        return this.innerProperties() == null ? null : this.innerProperties().skippedAssessments();
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
+        if (innerProperties() != null) {
+            innerProperties().validate();
+        }
     }
 }

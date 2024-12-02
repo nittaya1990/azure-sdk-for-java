@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.quota.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.quota.fluent.models.OperationResponseInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The OperationList model. */
+/**
+ * The OperationList model.
+ */
 @Fluent
 public final class OperationList {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OperationList.class);
-
     /*
      * The value property.
      */
@@ -29,8 +27,14 @@ public final class OperationList {
     private String nextLink;
 
     /**
+     * Creates an instance of OperationList class.
+     */
+    public OperationList() {
+    }
+
+    /**
      * Get the value property: The value property.
-     *
+     * 
      * @return the value value.
      */
     public List<OperationResponseInner> value() {
@@ -39,7 +43,7 @@ public final class OperationList {
 
     /**
      * Set the value property: The value property.
-     *
+     * 
      * @param value the value value to set.
      * @return the OperationList object itself.
      */
@@ -50,7 +54,7 @@ public final class OperationList {
 
     /**
      * Get the nextLink property: URL to get the next page of items.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -59,7 +63,7 @@ public final class OperationList {
 
     /**
      * Set the nextLink property: URL to get the next page of items.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the OperationList object itself.
      */
@@ -70,7 +74,7 @@ public final class OperationList {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

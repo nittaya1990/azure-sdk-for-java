@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Gateway authentication keys. */
 @Fluent
 public final class GatewayKeysContractInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(GatewayKeysContractInner.class);
-
     /*
      * Primary gateway key.
      */
@@ -25,6 +21,10 @@ public final class GatewayKeysContractInner {
      */
     @JsonProperty(value = "secondary")
     private String secondary;
+
+    /** Creates an instance of GatewayKeysContractInner class. */
+    public GatewayKeysContractInner() {
+    }
 
     /**
      * Get the primary property: Primary gateway key.

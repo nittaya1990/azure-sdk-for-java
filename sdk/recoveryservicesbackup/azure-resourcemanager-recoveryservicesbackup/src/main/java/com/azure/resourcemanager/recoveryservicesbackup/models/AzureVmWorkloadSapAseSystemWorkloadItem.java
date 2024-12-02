@@ -4,76 +4,121 @@
 
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
-import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.azure.core.annotation.Fluent;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** Azure VM workload-specific workload item representing SAP ASE System. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "workloadItemType")
+/**
+ * Azure VM workload-specific workload item representing SAP ASE System.
+ */
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    property = "workloadItemType",
+    defaultImpl = AzureVmWorkloadSapAseSystemWorkloadItem.class,
+    visible = true)
 @JsonTypeName("SAPAseSystem")
-@Immutable
+@Fluent
 public final class AzureVmWorkloadSapAseSystemWorkloadItem extends AzureVmWorkloadItem {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureVmWorkloadSapAseSystemWorkloadItem.class);
+    /*
+     * Type of the backup item.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "workloadItemType", required = true)
+    private String workloadItemType = "SAPAseSystem";
 
-    /** {@inheritDoc} */
+    /**
+     * Creates an instance of AzureVmWorkloadSapAseSystemWorkloadItem class.
+     */
+    public AzureVmWorkloadSapAseSystemWorkloadItem() {
+    }
+
+    /**
+     * Get the workloadItemType property: Type of the backup item.
+     * 
+     * @return the workloadItemType value.
+     */
+    @Override
+    public String workloadItemType() {
+        return this.workloadItemType;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureVmWorkloadSapAseSystemWorkloadItem withParentName(String parentName) {
         super.withParentName(parentName);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureVmWorkloadSapAseSystemWorkloadItem withServerName(String serverName) {
         super.withServerName(serverName);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureVmWorkloadSapAseSystemWorkloadItem withIsAutoProtectable(Boolean isAutoProtectable) {
         super.withIsAutoProtectable(isAutoProtectable);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureVmWorkloadSapAseSystemWorkloadItem withSubinquireditemcount(Integer subinquireditemcount) {
         super.withSubinquireditemcount(subinquireditemcount);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureVmWorkloadSapAseSystemWorkloadItem withSubWorkloadItemCount(Integer subWorkloadItemCount) {
         super.withSubWorkloadItemCount(subWorkloadItemCount);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureVmWorkloadSapAseSystemWorkloadItem withBackupManagementType(String backupManagementType) {
         super.withBackupManagementType(backupManagementType);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureVmWorkloadSapAseSystemWorkloadItem withWorkloadType(String workloadType) {
         super.withWorkloadType(workloadType);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureVmWorkloadSapAseSystemWorkloadItem withFriendlyName(String friendlyName) {
         super.withFriendlyName(friendlyName);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureVmWorkloadSapAseSystemWorkloadItem withProtectionState(ProtectionStatus protectionState) {
         super.withProtectionState(protectionState);
@@ -82,7 +127,7 @@ public final class AzureVmWorkloadSapAseSystemWorkloadItem extends AzureVmWorklo
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

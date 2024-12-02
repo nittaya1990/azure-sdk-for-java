@@ -5,90 +5,160 @@
 package com.azure.resourcemanager.streamanalytics.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import com.azure.resourcemanager.streamanalytics.fluent.models.AzureMachineLearningStudioFunctionBindingRetrievalProperties;
+import java.io.IOException;
 
-/** The parameters needed to retrieve the default function definition for an Azure Machine Learning Studio function. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "bindingType")
-@JsonTypeName("Microsoft.MachineLearning/WebService")
-@JsonFlatten
+/**
+ * The parameters needed to retrieve the default function definition for an Azure Machine Learning Studio function.
+ */
 @Fluent
-public class AzureMachineLearningStudioFunctionRetrieveDefaultDefinitionParameters
+public final class AzureMachineLearningStudioFunctionRetrieveDefaultDefinitionParameters
     extends FunctionRetrieveDefaultDefinitionParameters {
-    @JsonIgnore
-    private final ClientLogger logger =
-        new ClientLogger(AzureMachineLearningStudioFunctionRetrieveDefaultDefinitionParameters.class);
+    /*
+     * Indicates the function binding type.
+     */
+    private String bindingType = "Microsoft.MachineLearning/WebService";
 
     /*
-     * The Request-Response execute endpoint of the Azure Machine Learning
-     * Studio. Find out more here:
-     * https://docs.microsoft.com/en-us/azure/machine-learning/machine-learning-consume-web-services#request-response-service-rrs
+     * The binding retrieval properties associated with an Azure Machine learning Studio.
      */
-    @JsonProperty(value = "bindingRetrievalProperties.executeEndpoint")
-    private String executeEndpoint;
+    private AzureMachineLearningStudioFunctionBindingRetrievalProperties innerBindingRetrievalProperties;
 
-    /*
-     * The function type.
+    /**
+     * Creates an instance of AzureMachineLearningStudioFunctionRetrieveDefaultDefinitionParameters class.
      */
-    @JsonProperty(value = "bindingRetrievalProperties.udfType")
-    private UdfType udfType;
+    public AzureMachineLearningStudioFunctionRetrieveDefaultDefinitionParameters() {
+    }
+
+    /**
+     * Get the bindingType property: Indicates the function binding type.
+     * 
+     * @return the bindingType value.
+     */
+    @Override
+    public String bindingType() {
+        return this.bindingType;
+    }
+
+    /**
+     * Get the innerBindingRetrievalProperties property: The binding retrieval properties associated with an Azure
+     * Machine learning Studio.
+     * 
+     * @return the innerBindingRetrievalProperties value.
+     */
+    private AzureMachineLearningStudioFunctionBindingRetrievalProperties innerBindingRetrievalProperties() {
+        return this.innerBindingRetrievalProperties;
+    }
 
     /**
      * Get the executeEndpoint property: The Request-Response execute endpoint of the Azure Machine Learning Studio.
      * Find out more here:
      * https://docs.microsoft.com/en-us/azure/machine-learning/machine-learning-consume-web-services#request-response-service-rrs.
-     *
+     * 
      * @return the executeEndpoint value.
      */
     public String executeEndpoint() {
-        return this.executeEndpoint;
+        return this.innerBindingRetrievalProperties() == null
+            ? null
+            : this.innerBindingRetrievalProperties().executeEndpoint();
     }
 
     /**
      * Set the executeEndpoint property: The Request-Response execute endpoint of the Azure Machine Learning Studio.
      * Find out more here:
      * https://docs.microsoft.com/en-us/azure/machine-learning/machine-learning-consume-web-services#request-response-service-rrs.
-     *
+     * 
      * @param executeEndpoint the executeEndpoint value to set.
      * @return the AzureMachineLearningStudioFunctionRetrieveDefaultDefinitionParameters object itself.
      */
-    public AzureMachineLearningStudioFunctionRetrieveDefaultDefinitionParameters withExecuteEndpoint(
-        String executeEndpoint) {
-        this.executeEndpoint = executeEndpoint;
+    public AzureMachineLearningStudioFunctionRetrieveDefaultDefinitionParameters
+        withExecuteEndpoint(String executeEndpoint) {
+        if (this.innerBindingRetrievalProperties() == null) {
+            this.innerBindingRetrievalProperties = new AzureMachineLearningStudioFunctionBindingRetrievalProperties();
+        }
+        this.innerBindingRetrievalProperties().withExecuteEndpoint(executeEndpoint);
         return this;
     }
 
     /**
      * Get the udfType property: The function type.
-     *
+     * 
      * @return the udfType value.
      */
     public UdfType udfType() {
-        return this.udfType;
+        return this.innerBindingRetrievalProperties() == null ? null : this.innerBindingRetrievalProperties().udfType();
     }
 
     /**
      * Set the udfType property: The function type.
-     *
+     * 
      * @param udfType the udfType value to set.
      * @return the AzureMachineLearningStudioFunctionRetrieveDefaultDefinitionParameters object itself.
      */
     public AzureMachineLearningStudioFunctionRetrieveDefaultDefinitionParameters withUdfType(UdfType udfType) {
-        this.udfType = udfType;
+        if (this.innerBindingRetrievalProperties() == null) {
+            this.innerBindingRetrievalProperties = new AzureMachineLearningStudioFunctionBindingRetrievalProperties();
+        }
+        this.innerBindingRetrievalProperties().withUdfType(udfType);
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
-        super.validate();
+        if (innerBindingRetrievalProperties() != null) {
+            innerBindingRetrievalProperties().validate();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeStringField("bindingType", this.bindingType);
+        jsonWriter.writeJsonField("bindingRetrievalProperties", this.innerBindingRetrievalProperties);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of AzureMachineLearningStudioFunctionRetrieveDefaultDefinitionParameters from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of AzureMachineLearningStudioFunctionRetrieveDefaultDefinitionParameters if the JsonReader
+     * was pointing to an instance of it, or null if it was pointing to JSON null.
+     * @throws IOException If an error occurs while reading the
+     * AzureMachineLearningStudioFunctionRetrieveDefaultDefinitionParameters.
+     */
+    public static AzureMachineLearningStudioFunctionRetrieveDefaultDefinitionParameters fromJson(JsonReader jsonReader)
+        throws IOException {
+        return jsonReader.readObject(reader -> {
+            AzureMachineLearningStudioFunctionRetrieveDefaultDefinitionParameters deserializedAzureMachineLearningStudioFunctionRetrieveDefaultDefinitionParameters
+                = new AzureMachineLearningStudioFunctionRetrieveDefaultDefinitionParameters();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("bindingType".equals(fieldName)) {
+                    deserializedAzureMachineLearningStudioFunctionRetrieveDefaultDefinitionParameters.bindingType
+                        = reader.getString();
+                } else if ("bindingRetrievalProperties".equals(fieldName)) {
+                    deserializedAzureMachineLearningStudioFunctionRetrieveDefaultDefinitionParameters.innerBindingRetrievalProperties
+                        = AzureMachineLearningStudioFunctionBindingRetrievalProperties.fromJson(reader);
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedAzureMachineLearningStudioFunctionRetrieveDefaultDefinitionParameters;
+        });
     }
 }

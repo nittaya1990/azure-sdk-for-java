@@ -46,21 +46,21 @@ public interface PortalRevisionContract {
     String statusDetails();
 
     /**
-     * Gets the status property: Portal revision publishing status.
+     * Gets the status property: Status of the portal's revision.
      *
      * @return the status value.
      */
     PortalRevisionStatus status();
 
     /**
-     * Gets the isCurrent property: Indicates if the Portal Revision is public.
+     * Gets the isCurrent property: Indicates if the portal's revision is public.
      *
      * @return the isCurrent value.
      */
     Boolean isCurrent();
 
     /**
-     * Gets the createdDateTime property: Portal revision creation date and time.
+     * Gets the createdDateTime property: Portal's revision creation date and time.
      *
      * @return the createdDateTime value.
      */
@@ -74,6 +74,13 @@ public interface PortalRevisionContract {
     OffsetDateTime updatedDateTime();
 
     /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
+
+    /**
      * Gets the inner com.azure.resourcemanager.apimanagement.fluent.models.PortalRevisionContractInner object.
      *
      * @return the inner object.
@@ -84,22 +91,25 @@ public interface PortalRevisionContract {
     interface Definition
         extends DefinitionStages.Blank, DefinitionStages.WithParentResource, DefinitionStages.WithCreate {
     }
+
     /** The PortalRevisionContract definition stages. */
     interface DefinitionStages {
         /** The first stage of the PortalRevisionContract definition. */
         interface Blank extends WithParentResource {
         }
+
         /** The stage of the PortalRevisionContract definition allowing to specify parent resource. */
         interface WithParentResource {
             /**
              * Specifies resourceGroupName, serviceName.
              *
-             * @param resourceGroupName The name of the resource group.
+             * @param resourceGroupName The name of the resource group. The name is case insensitive.
              * @param serviceName The name of the API Management service.
              * @return the next definition stage.
              */
             WithCreate withExistingService(String resourceGroupName, String serviceName);
         }
+
         /**
          * The stage of the PortalRevisionContract definition which contains all the minimum required properties for the
          * resource to be created, but also allows for any other optional properties to be specified.
@@ -120,6 +130,7 @@ public interface PortalRevisionContract {
              */
             PortalRevisionContract create(Context context);
         }
+
         /** The stage of the PortalRevisionContract definition allowing to specify description. */
         interface WithDescription {
             /**
@@ -130,17 +141,19 @@ public interface PortalRevisionContract {
              */
             WithCreate withDescription(String description);
         }
+
         /** The stage of the PortalRevisionContract definition allowing to specify isCurrent. */
         interface WithIsCurrent {
             /**
-             * Specifies the isCurrent property: Indicates if the Portal Revision is public..
+             * Specifies the isCurrent property: Indicates if the portal's revision is public..
              *
-             * @param isCurrent Indicates if the Portal Revision is public.
+             * @param isCurrent Indicates if the portal's revision is public.
              * @return the next definition stage.
              */
             WithCreate withIsCurrent(Boolean isCurrent);
         }
     }
+
     /**
      * Begins update for the PortalRevisionContract resource.
      *
@@ -165,6 +178,7 @@ public interface PortalRevisionContract {
          */
         PortalRevisionContract apply(Context context);
     }
+
     /** The PortalRevisionContract update stages. */
     interface UpdateStages {
         /** The stage of the PortalRevisionContract update allowing to specify description. */
@@ -177,16 +191,18 @@ public interface PortalRevisionContract {
              */
             Update withDescription(String description);
         }
+
         /** The stage of the PortalRevisionContract update allowing to specify isCurrent. */
         interface WithIsCurrent {
             /**
-             * Specifies the isCurrent property: Indicates if the Portal Revision is public..
+             * Specifies the isCurrent property: Indicates if the portal's revision is public..
              *
-             * @param isCurrent Indicates if the Portal Revision is public.
+             * @param isCurrent Indicates if the portal's revision is public.
              * @return the next definition stage.
              */
             Update withIsCurrent(Boolean isCurrent);
         }
+
         /** The stage of the PortalRevisionContract update allowing to specify ifMatch. */
         interface WithIfMatch {
             /**
@@ -200,6 +216,7 @@ public interface PortalRevisionContract {
             Update withIfMatch(String ifMatch);
         }
     }
+
     /**
      * Refreshes the resource to sync with Azure.
      *

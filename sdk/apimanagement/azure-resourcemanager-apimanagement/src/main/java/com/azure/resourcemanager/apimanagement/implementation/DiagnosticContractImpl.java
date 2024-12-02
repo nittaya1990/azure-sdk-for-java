@@ -68,6 +68,14 @@ public final class DiagnosticContractImpl
         return this.innerModel().operationNameFormat();
     }
 
+    public Boolean metrics() {
+        return this.innerModel().metrics();
+    }
+
+    public String resourceGroupName() {
+        return resourceGroupName;
+    }
+
     public DiagnosticContractInner innerModel() {
         return this.innerObject;
     }
@@ -96,24 +104,20 @@ public final class DiagnosticContractImpl
     }
 
     public DiagnosticContract create() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getApiDiagnostics()
-                .createOrUpdateWithResponse(
-                    resourceGroupName, serviceName, apiId, diagnosticId, this.innerModel(), createIfMatch, Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getApiDiagnostics()
+            .createOrUpdateWithResponse(resourceGroupName, serviceName, apiId, diagnosticId, this.innerModel(),
+                createIfMatch, Context.NONE)
+            .getValue();
         return this;
     }
 
     public DiagnosticContract create(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getApiDiagnostics()
-                .createOrUpdateWithResponse(
-                    resourceGroupName, serviceName, apiId, diagnosticId, this.innerModel(), createIfMatch, context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getApiDiagnostics()
+            .createOrUpdateWithResponse(resourceGroupName, serviceName, apiId, diagnosticId, this.innerModel(),
+                createIfMatch, context)
+            .getValue();
         return this;
     }
 
@@ -130,29 +134,24 @@ public final class DiagnosticContractImpl
     }
 
     public DiagnosticContract apply() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getApiDiagnostics()
-                .updateWithResponse(
-                    resourceGroupName, serviceName, apiId, diagnosticId, updateIfMatch, this.innerModel(), Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getApiDiagnostics()
+            .updateWithResponse(resourceGroupName, serviceName, apiId, diagnosticId, updateIfMatch, this.innerModel(),
+                Context.NONE)
+            .getValue();
         return this;
     }
 
     public DiagnosticContract apply(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getApiDiagnostics()
-                .updateWithResponse(
-                    resourceGroupName, serviceName, apiId, diagnosticId, updateIfMatch, this.innerModel(), context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getApiDiagnostics()
+            .updateWithResponse(resourceGroupName, serviceName, apiId, diagnosticId, updateIfMatch, this.innerModel(),
+                context)
+            .getValue();
         return this;
     }
 
-    DiagnosticContractImpl(
-        DiagnosticContractInner innerObject,
+    DiagnosticContractImpl(DiagnosticContractInner innerObject,
         com.azure.resourcemanager.apimanagement.ApiManagementManager serviceManager) {
         this.innerObject = innerObject;
         this.serviceManager = serviceManager;
@@ -163,22 +162,18 @@ public final class DiagnosticContractImpl
     }
 
     public DiagnosticContract refresh() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getApiDiagnostics()
-                .getWithResponse(resourceGroupName, serviceName, apiId, diagnosticId, Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getApiDiagnostics()
+            .getWithResponse(resourceGroupName, serviceName, apiId, diagnosticId, Context.NONE)
+            .getValue();
         return this;
     }
 
     public DiagnosticContract refresh(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getApiDiagnostics()
-                .getWithResponse(resourceGroupName, serviceName, apiId, diagnosticId, context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getApiDiagnostics()
+            .getWithResponse(resourceGroupName, serviceName, apiId, diagnosticId, context)
+            .getValue();
         return this;
     }
 
@@ -224,6 +219,11 @@ public final class DiagnosticContractImpl
 
     public DiagnosticContractImpl withOperationNameFormat(OperationNameFormat operationNameFormat) {
         this.innerModel().withOperationNameFormat(operationNameFormat);
+        return this;
+    }
+
+    public DiagnosticContractImpl withMetrics(Boolean metrics) {
+        this.innerModel().withMetrics(metrics);
         return this;
     }
 

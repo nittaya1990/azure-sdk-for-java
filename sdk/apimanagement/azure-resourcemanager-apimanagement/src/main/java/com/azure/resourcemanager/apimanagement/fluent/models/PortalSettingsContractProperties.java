@@ -5,18 +5,14 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.models.RegistrationDelegationSettingsProperties;
 import com.azure.resourcemanager.apimanagement.models.SubscriptionsDelegationSettingsProperties;
 import com.azure.resourcemanager.apimanagement.models.TermsOfServiceProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Sign-in settings contract properties. */
 @Fluent
 public final class PortalSettingsContractProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PortalSettingsContractProperties.class);
-
     /*
      * A delegation Url.
      */
@@ -24,8 +20,7 @@ public final class PortalSettingsContractProperties {
     private String url;
 
     /*
-     * A base64-encoded validation key to validate, that a request is coming
-     * from Azure API Management.
+     * A base64-encoded validation key to validate, that a request is coming from Azure API Management.
      */
     @JsonProperty(value = "validationKey")
     private String validationKey;
@@ -53,6 +48,10 @@ public final class PortalSettingsContractProperties {
      */
     @JsonProperty(value = "termsOfService")
     private TermsOfServiceProperties termsOfService;
+
+    /** Creates an instance of PortalSettingsContractProperties class. */
+    public PortalSettingsContractProperties() {
+    }
 
     /**
      * Get the url property: A delegation Url.
@@ -131,8 +130,8 @@ public final class PortalSettingsContractProperties {
      * @param userRegistration the userRegistration value to set.
      * @return the PortalSettingsContractProperties object itself.
      */
-    public PortalSettingsContractProperties withUserRegistration(
-        RegistrationDelegationSettingsProperties userRegistration) {
+    public PortalSettingsContractProperties
+        withUserRegistration(RegistrationDelegationSettingsProperties userRegistration) {
         this.userRegistration = userRegistration;
         return this;
     }

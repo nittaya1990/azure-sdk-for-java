@@ -5,10 +5,11 @@ package com.azure.resourcemanager.storage;
 
 import com.azure.core.credential.TokenCredential;
 import com.azure.core.http.HttpPipeline;
+import com.azure.resourcemanager.authorization.AuthorizationManager;
 import com.azure.resourcemanager.resources.fluentcore.arm.AzureConfigurable;
-import com.azure.resourcemanager.resources.fluentcore.arm.implementation.AzureConfigurableImpl;
 import com.azure.resourcemanager.resources.fluentcore.arm.Manager;
 import com.azure.core.management.profile.AzureProfile;
+import com.azure.resourcemanager.resources.fluentcore.arm.implementation.AzureConfigurableImpl;
 import com.azure.resourcemanager.resources.fluentcore.utils.HttpPipelineProvider;
 import com.azure.resourcemanager.storage.fluent.StorageManagementClient;
 import com.azure.resourcemanager.storage.implementation.StorageManagementClientBuilder;
@@ -25,6 +26,8 @@ import com.azure.resourcemanager.storage.models.StorageAccounts;
 import com.azure.resourcemanager.storage.models.StorageSkus;
 import com.azure.resourcemanager.storage.models.Usages;
 
+import java.util.Objects;
+
 /** Entry point to Azure storage resource management. */
 public final class StorageManager extends Manager<StorageManagementClient> {
     // Collections
@@ -34,6 +37,12 @@ public final class StorageManager extends Manager<StorageManagementClient> {
     private BlobContainers blobContainers;
     private BlobServices blobServices;
     private ManagementPolicies managementPolicies;
+    private final AuthorizationManager authorizationManager;
+
+    /** @return the authorization manager */
+    public AuthorizationManager authorizationManager() {
+        return authorizationManager;
+    }
 
     /**
      * Get a Configurable instance that can be used to create StorageManager with optional configuration.
@@ -52,17 +61,21 @@ public final class StorageManager extends Manager<StorageManagementClient> {
      * @return the StorageManager
      */
     public static StorageManager authenticate(TokenCredential credential, AzureProfile profile) {
+        Objects.requireNonNull(credential, "'credential' cannot be null.");
+        Objects.requireNonNull(profile, "'profile' cannot be null.");
         return authenticate(HttpPipelineProvider.buildHttpPipeline(credential, profile), profile);
     }
 
     /**
      * Creates an instance of StorageManager that exposes storage resource management API entry points.
      *
-     * @param httpPipeline the RestClient to be used for API calls.
+     * @param httpPipeline the {@link HttpPipeline} configured with Azure authentication credential.
      * @param profile the profile to use
      * @return the StorageManager
      */
-    private static StorageManager authenticate(HttpPipeline httpPipeline, AzureProfile profile) {
+    public static StorageManager authenticate(HttpPipeline httpPipeline, AzureProfile profile) {
+        Objects.requireNonNull(httpPipeline, "'httpPipeline' cannot be null.");
+        Objects.requireNonNull(profile, "'profile' cannot be null.");
         return new StorageManager(httpPipeline, profile);
     }
 
@@ -86,20 +99,18 @@ public final class StorageManager extends Manager<StorageManagementClient> {
     }
 
     private StorageManager(HttpPipeline httpPipeline, AzureProfile profile) {
-        super(
-            httpPipeline,
-            profile,
-            new StorageManagementClientBuilder()
-                .pipeline(httpPipeline)
+        super(httpPipeline, profile,
+            new StorageManagementClientBuilder().pipeline(httpPipeline)
                 .endpoint(profile.getEnvironment().getResourceManagerEndpoint())
                 .subscriptionId(profile.getSubscriptionId())
                 .buildClient());
+        authorizationManager = AuthorizationManager.authenticate(httpPipeline, profile);
     }
 
     /** @return the storage account management API entry point */
     public StorageAccounts storageAccounts() {
         if (storageAccounts == null) {
-            storageAccounts = new StorageAccountsImpl(this);
+            storageAccounts = new StorageAccountsImpl(this, this.authorizationManager);
         }
         return storageAccounts;
     }

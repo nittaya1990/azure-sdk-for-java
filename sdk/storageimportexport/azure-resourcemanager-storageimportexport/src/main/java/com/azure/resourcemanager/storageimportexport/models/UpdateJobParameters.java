@@ -5,81 +5,38 @@
 package com.azure.resourcemanager.storageimportexport.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonSerializable;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import com.azure.resourcemanager.storageimportexport.fluent.models.UpdateJobParametersProperties;
+import java.io.IOException;
 import java.util.List;
 
-/** Update Job parameters. */
-@JsonFlatten
+/**
+ * Update Job parameters.
+ */
 @Fluent
-public class UpdateJobParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(UpdateJobParameters.class);
-
+public final class UpdateJobParameters implements JsonSerializable<UpdateJobParameters> {
     /*
      * Specifies the tags that will be assigned to the job
      */
-    @JsonProperty(value = "tags")
     private Object tags;
 
     /*
-     * If specified, the value must be true. The service will attempt to cancel
-     * the job.
+     * Specifies the properties of a UpdateJob.
      */
-    @JsonProperty(value = "properties.cancelRequested")
-    private Boolean cancelRequested;
+    private UpdateJobParametersProperties innerProperties;
 
-    /*
-     * If specified, the value must be Shipping, which tells the Import/Export
-     * service that the package for the job has been shipped. The ReturnAddress
-     * and DeliveryPackage properties must have been set either in this request
-     * or in a previous request, otherwise the request will fail.
+    /**
+     * Creates an instance of UpdateJobParameters class.
      */
-    @JsonProperty(value = "properties.state")
-    private String state;
-
-    /*
-     * Specifies the return address information for the job.
-     */
-    @JsonProperty(value = "properties.returnAddress")
-    private ReturnAddress returnAddress;
-
-    /*
-     * Specifies the return carrier and customer's account with the carrier.
-     */
-    @JsonProperty(value = "properties.returnShipping")
-    private ReturnShipping returnShipping;
-
-    /*
-     * Contains information about the package being shipped by the customer to
-     * the Microsoft data center.
-     */
-    @JsonProperty(value = "properties.deliveryPackage")
-    private DeliveryPackageInformation deliveryPackage;
-
-    /*
-     * Indicates whether error logging or verbose logging is enabled.
-     */
-    @JsonProperty(value = "properties.logLevel")
-    private String logLevel;
-
-    /*
-     * Indicates whether the manifest files on the drives should be copied to
-     * block blobs.
-     */
-    @JsonProperty(value = "properties.backupDriveManifest")
-    private Boolean backupDriveManifest;
-
-    /*
-     * List of drives that comprise the job.
-     */
-    @JsonProperty(value = "properties.driveList")
-    private List<DriveStatus> driveList;
+    public UpdateJobParameters() {
+    }
 
     /**
      * Get the tags property: Specifies the tags that will be assigned to the job.
-     *
+     * 
      * @return the tags value.
      */
     public Object tags() {
@@ -88,7 +45,7 @@ public class UpdateJobParameters {
 
     /**
      * Set the tags property: Specifies the tags that will be assigned to the job.
-     *
+     * 
      * @param tags the tags value to set.
      * @return the UpdateJobParameters object itself.
      */
@@ -98,24 +55,36 @@ public class UpdateJobParameters {
     }
 
     /**
+     * Get the innerProperties property: Specifies the properties of a UpdateJob.
+     * 
+     * @return the innerProperties value.
+     */
+    private UpdateJobParametersProperties innerProperties() {
+        return this.innerProperties;
+    }
+
+    /**
      * Get the cancelRequested property: If specified, the value must be true. The service will attempt to cancel the
      * job.
-     *
+     * 
      * @return the cancelRequested value.
      */
     public Boolean cancelRequested() {
-        return this.cancelRequested;
+        return this.innerProperties() == null ? null : this.innerProperties().cancelRequested();
     }
 
     /**
      * Set the cancelRequested property: If specified, the value must be true. The service will attempt to cancel the
      * job.
-     *
+     * 
      * @param cancelRequested the cancelRequested value to set.
      * @return the UpdateJobParameters object itself.
      */
     public UpdateJobParameters withCancelRequested(Boolean cancelRequested) {
-        this.cancelRequested = cancelRequested;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new UpdateJobParametersProperties();
+        }
+        this.innerProperties().withCancelRequested(cancelRequested);
         return this;
     }
 
@@ -123,167 +92,218 @@ public class UpdateJobParameters {
      * Get the state property: If specified, the value must be Shipping, which tells the Import/Export service that the
      * package for the job has been shipped. The ReturnAddress and DeliveryPackage properties must have been set either
      * in this request or in a previous request, otherwise the request will fail.
-     *
+     * 
      * @return the state value.
      */
     public String state() {
-        return this.state;
+        return this.innerProperties() == null ? null : this.innerProperties().state();
     }
 
     /**
      * Set the state property: If specified, the value must be Shipping, which tells the Import/Export service that the
      * package for the job has been shipped. The ReturnAddress and DeliveryPackage properties must have been set either
      * in this request or in a previous request, otherwise the request will fail.
-     *
+     * 
      * @param state the state value to set.
      * @return the UpdateJobParameters object itself.
      */
     public UpdateJobParameters withState(String state) {
-        this.state = state;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new UpdateJobParametersProperties();
+        }
+        this.innerProperties().withState(state);
         return this;
     }
 
     /**
      * Get the returnAddress property: Specifies the return address information for the job.
-     *
+     * 
      * @return the returnAddress value.
      */
     public ReturnAddress returnAddress() {
-        return this.returnAddress;
+        return this.innerProperties() == null ? null : this.innerProperties().returnAddress();
     }
 
     /**
      * Set the returnAddress property: Specifies the return address information for the job.
-     *
+     * 
      * @param returnAddress the returnAddress value to set.
      * @return the UpdateJobParameters object itself.
      */
     public UpdateJobParameters withReturnAddress(ReturnAddress returnAddress) {
-        this.returnAddress = returnAddress;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new UpdateJobParametersProperties();
+        }
+        this.innerProperties().withReturnAddress(returnAddress);
         return this;
     }
 
     /**
      * Get the returnShipping property: Specifies the return carrier and customer's account with the carrier.
-     *
+     * 
      * @return the returnShipping value.
      */
     public ReturnShipping returnShipping() {
-        return this.returnShipping;
+        return this.innerProperties() == null ? null : this.innerProperties().returnShipping();
     }
 
     /**
      * Set the returnShipping property: Specifies the return carrier and customer's account with the carrier.
-     *
+     * 
      * @param returnShipping the returnShipping value to set.
      * @return the UpdateJobParameters object itself.
      */
     public UpdateJobParameters withReturnShipping(ReturnShipping returnShipping) {
-        this.returnShipping = returnShipping;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new UpdateJobParametersProperties();
+        }
+        this.innerProperties().withReturnShipping(returnShipping);
         return this;
     }
 
     /**
      * Get the deliveryPackage property: Contains information about the package being shipped by the customer to the
      * Microsoft data center.
-     *
+     * 
      * @return the deliveryPackage value.
      */
     public DeliveryPackageInformation deliveryPackage() {
-        return this.deliveryPackage;
+        return this.innerProperties() == null ? null : this.innerProperties().deliveryPackage();
     }
 
     /**
      * Set the deliveryPackage property: Contains information about the package being shipped by the customer to the
      * Microsoft data center.
-     *
+     * 
      * @param deliveryPackage the deliveryPackage value to set.
      * @return the UpdateJobParameters object itself.
      */
     public UpdateJobParameters withDeliveryPackage(DeliveryPackageInformation deliveryPackage) {
-        this.deliveryPackage = deliveryPackage;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new UpdateJobParametersProperties();
+        }
+        this.innerProperties().withDeliveryPackage(deliveryPackage);
         return this;
     }
 
     /**
      * Get the logLevel property: Indicates whether error logging or verbose logging is enabled.
-     *
+     * 
      * @return the logLevel value.
      */
     public String logLevel() {
-        return this.logLevel;
+        return this.innerProperties() == null ? null : this.innerProperties().logLevel();
     }
 
     /**
      * Set the logLevel property: Indicates whether error logging or verbose logging is enabled.
-     *
+     * 
      * @param logLevel the logLevel value to set.
      * @return the UpdateJobParameters object itself.
      */
     public UpdateJobParameters withLogLevel(String logLevel) {
-        this.logLevel = logLevel;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new UpdateJobParametersProperties();
+        }
+        this.innerProperties().withLogLevel(logLevel);
         return this;
     }
 
     /**
      * Get the backupDriveManifest property: Indicates whether the manifest files on the drives should be copied to
      * block blobs.
-     *
+     * 
      * @return the backupDriveManifest value.
      */
     public Boolean backupDriveManifest() {
-        return this.backupDriveManifest;
+        return this.innerProperties() == null ? null : this.innerProperties().backupDriveManifest();
     }
 
     /**
      * Set the backupDriveManifest property: Indicates whether the manifest files on the drives should be copied to
      * block blobs.
-     *
+     * 
      * @param backupDriveManifest the backupDriveManifest value to set.
      * @return the UpdateJobParameters object itself.
      */
     public UpdateJobParameters withBackupDriveManifest(Boolean backupDriveManifest) {
-        this.backupDriveManifest = backupDriveManifest;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new UpdateJobParametersProperties();
+        }
+        this.innerProperties().withBackupDriveManifest(backupDriveManifest);
         return this;
     }
 
     /**
      * Get the driveList property: List of drives that comprise the job.
-     *
+     * 
      * @return the driveList value.
      */
     public List<DriveStatus> driveList() {
-        return this.driveList;
+        return this.innerProperties() == null ? null : this.innerProperties().driveList();
     }
 
     /**
      * Set the driveList property: List of drives that comprise the job.
-     *
+     * 
      * @param driveList the driveList value to set.
      * @return the UpdateJobParameters object itself.
      */
     public UpdateJobParameters withDriveList(List<DriveStatus> driveList) {
-        this.driveList = driveList;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new UpdateJobParametersProperties();
+        }
+        this.innerProperties().withDriveList(driveList);
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
-        if (returnAddress() != null) {
-            returnAddress().validate();
+        if (innerProperties() != null) {
+            innerProperties().validate();
         }
-        if (returnShipping() != null) {
-            returnShipping().validate();
-        }
-        if (deliveryPackage() != null) {
-            deliveryPackage().validate();
-        }
-        if (driveList() != null) {
-            driveList().forEach(e -> e.validate());
-        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeUntypedField("tags", this.tags);
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of UpdateJobParameters from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of UpdateJobParameters if the JsonReader was pointing to an instance of it, or null if it was
+     * pointing to JSON null.
+     * @throws IOException If an error occurs while reading the UpdateJobParameters.
+     */
+    public static UpdateJobParameters fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            UpdateJobParameters deserializedUpdateJobParameters = new UpdateJobParameters();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("tags".equals(fieldName)) {
+                    deserializedUpdateJobParameters.tags = reader.readUntyped();
+                } else if ("properties".equals(fieldName)) {
+                    deserializedUpdateJobParameters.innerProperties = UpdateJobParametersProperties.fromJson(reader);
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedUpdateJobParameters;
+        });
     }
 }

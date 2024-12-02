@@ -5,28 +5,22 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.models.KeyVaultContractCreateProperties;
 import com.azure.resourcemanager.apimanagement.models.NamedValueEntityBaseParameters;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** NamedValue Contract properties. */
 @Fluent
 public final class NamedValueUpdateParameterProperties extends NamedValueEntityBaseParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(NamedValueUpdateParameterProperties.class);
-
     /*
-     * Unique name of NamedValue. It may contain only letters, digits, period,
-     * dash, and underscore characters.
+     * Unique name of NamedValue. It may contain only letters, digits, period, dash, and underscore characters.
      */
     @JsonProperty(value = "displayName")
     private String displayName;
 
     /*
-     * Value of the NamedValue. Can contain policy expressions. It may not be
-     * empty or consist only of whitespace.
+     * Value of the NamedValue. Can contain policy expressions. It may not be empty or consist only of whitespace.
      */
     @JsonProperty(value = "value")
     private String value;
@@ -36,6 +30,10 @@ public final class NamedValueUpdateParameterProperties extends NamedValueEntityB
      */
     @JsonProperty(value = "keyVault")
     private KeyVaultContractCreateProperties keyVault;
+
+    /** Creates an instance of NamedValueUpdateParameterProperties class. */
+    public NamedValueUpdateParameterProperties() {
+    }
 
     /**
      * Get the displayName property: Unique name of NamedValue. It may contain only letters, digits, period, dash, and

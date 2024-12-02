@@ -8,6 +8,8 @@ import com.azure.security.attestation.models.AttestationResult;
 import com.azure.security.attestation.models.AttestationSigner;
 
 import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
 /** A Microsoft Azure Attestation response token body - the body of a response token issued by MAA. */
 
@@ -26,19 +28,19 @@ public final class AttestationResultImpl implements com.azure.security.attestati
      * The time at which the token was issued, in the number of seconds since
      * 1970-01-0T00:00:00Z UTC
      */
-    private Instant iat;
+    private OffsetDateTime iat;
 
     /*
      * The expiration time after which the token is no longer valid, in the
      * number of seconds since 1970-01-0T00:00:00Z UTC
      */
-    private Instant exp;
+    private OffsetDateTime exp;
 
     /*
-     * The not before time before which the token cannot be considered valid,
+     * The "not before" time before which the token cannot be considered valid,
      * in the number of seconds since 1970-01-0T00:00:00Z UTC
      */
-    private Instant nbf;
+    private OffsetDateTime nbf;
 
     /*
      * The Nonce input to the attestation request, if provided.
@@ -89,7 +91,7 @@ public final class AttestationResultImpl implements com.azure.security.attestati
     /*
      * The SGX Product ID for the enclave.
      */
-    private Float productId;
+    private int productId;
 
     /*
      * The HEX encoded SGX MRENCLAVE value for the enclave.
@@ -104,10 +106,10 @@ public final class AttestationResultImpl implements com.azure.security.attestati
     /*
      * The SGX SVN value for the enclave.
      */
-    private Float svn;
+    private int svn;
 
     /*
-     * A copy of the RuntimeData specified as an input to the attest call.
+     * A copy of the RuntimeData specified as an input to the Attest call.
      */
     private byte[] enclaveHeldData;
 
@@ -121,7 +123,8 @@ public final class AttestationResultImpl implements com.azure.security.attestati
      *
      * @return the jti value.
      */
-    @Override public String getUniqueIdentifier() {
+    @Override
+    public String getUniqueIdentifier() {
         return this.jti;
     }
 
@@ -130,7 +133,8 @@ public final class AttestationResultImpl implements com.azure.security.attestati
      *
      * @return the iss value.
      */
-    @Override public String getIssuer() {
+    @Override
+    public String getIssuer() {
         return this.iss;
     }
 
@@ -140,7 +144,8 @@ public final class AttestationResultImpl implements com.azure.security.attestati
      *
      * @return the iat value.
      */
-    @Override public Instant getIssuedAt() {
+    @Override
+    public OffsetDateTime getIssuedAt() {
         return this.iat;
     }
 
@@ -150,18 +155,19 @@ public final class AttestationResultImpl implements com.azure.security.attestati
      *
      * @return the exp value.
      */
-    @Override public Instant getExpiresOn() {
+    @Override
+    public OffsetDateTime getExpiresOn() {
         return this.exp;
     }
 
-
     /**
-     * Get the nbf property: The not before time before which the token cannot be considered valid, in the number of
+     * Get the nbf property: The "not before" time before which the token cannot be considered valid, in the number of
      * seconds since 1970-01-0T00:00:00Z UTC.
      *
      * @return the nbf value.
      */
-    @Override public Instant getNotBefore() {
+    @Override
+    public OffsetDateTime getNotBefore() {
         return this.nbf;
     }
 
@@ -170,7 +176,8 @@ public final class AttestationResultImpl implements com.azure.security.attestati
      *
      * @return the nonce value.
      */
-    @Override public String getNonce() {
+    @Override
+    public String getNonce() {
         return this.nonce;
     }
 
@@ -179,7 +186,8 @@ public final class AttestationResultImpl implements com.azure.security.attestati
      *
      * @return the version value.
      */
-    @Override public String getVersion() {
+    @Override
+    public String getVersion() {
         return this.version;
     }
 
@@ -188,7 +196,8 @@ public final class AttestationResultImpl implements com.azure.security.attestati
      *
      * @return the runtimeClaims value.
      */
-    @Override public Object getRuntimeClaims() {
+    @Override
+    public Object getRuntimeClaims() {
         return this.runtimeClaims;
     }
 
@@ -197,7 +206,8 @@ public final class AttestationResultImpl implements com.azure.security.attestati
      *
      * @return the inittimeClaims value.
      */
-    @Override public Object getInitTimeClaims() {
+    @Override
+    public Object getInitTimeClaims() {
         return this.inittimeClaims;
     }
 
@@ -206,7 +216,8 @@ public final class AttestationResultImpl implements com.azure.security.attestati
      *
      * @return the policyClaims value.
      */
-    @Override public Object getPolicyClaims() {
+    @Override
+    public Object getPolicyClaims() {
         return this.policyClaims;
     }
 
@@ -215,7 +226,8 @@ public final class AttestationResultImpl implements com.azure.security.attestati
      *
      * @return the verifierType value.
      */
-    @Override public String getVerifierType() {
+    @Override
+    public String getVerifierType() {
         return this.verifierType;
     }
 
@@ -224,7 +236,8 @@ public final class AttestationResultImpl implements com.azure.security.attestati
      *
      * @return the policySigner value.
      */
-    @Override public AttestationSigner getPolicySigner() {
+    @Override
+    public AttestationSigner getPolicySigner() {
         return this.policySigner;
     }
 
@@ -233,7 +246,8 @@ public final class AttestationResultImpl implements com.azure.security.attestati
      *
      * @return the policyHash value.
      */
-    @Override public BinaryData getPolicyHash() {
+    @Override
+    public BinaryData getPolicyHash() {
         return BinaryData.fromBytes(this.policyHash);
     }
 
@@ -242,7 +256,8 @@ public final class AttestationResultImpl implements com.azure.security.attestati
      *
      * @return the isDebuggable value.
      */
-    @Override public Boolean isDebuggable() {
+    @Override
+    public Boolean isDebuggable() {
         return this.isDebuggable;
     }
 
@@ -251,7 +266,8 @@ public final class AttestationResultImpl implements com.azure.security.attestati
      *
      * @return the productId value.
      */
-    @Override public Float getProductId() {
+    @Override
+    public int getProductId() {
         return this.productId;
     }
 
@@ -260,7 +276,8 @@ public final class AttestationResultImpl implements com.azure.security.attestati
      *
      * @return the mrEnclave value.
      */
-    @Override public String getMrEnclave() {
+    @Override
+    public String getMrEnclave() {
         return this.mrEnclave;
     }
 
@@ -269,7 +286,8 @@ public final class AttestationResultImpl implements com.azure.security.attestati
      *
      * @return the mrSigner value.
      */
-    @Override public String getMrSigner() {
+    @Override
+    public String getMrSigner() {
         return this.mrSigner;
     }
 
@@ -278,16 +296,18 @@ public final class AttestationResultImpl implements com.azure.security.attestati
      *
      * @return the svn value.
      */
-    @Override public Float getSvn() {
+    @Override
+    public int getSvn() {
         return this.svn;
     }
 
     /**
-     * Get the enclaveHeldData property: A copy of the RuntimeData specified as an input to the attest call.
+     * Get the enclaveHeldData property: A copy of the RuntimeData specified as an input to the Attest API call.
      *
      * @return the enclaveHeldData value.
      */
-    @Override public BinaryData getEnclaveHeldData() {
+    @Override
+    public BinaryData getEnclaveHeldData() {
         return BinaryData.fromBytes(this.enclaveHeldData);
     }
 
@@ -296,17 +316,18 @@ public final class AttestationResultImpl implements com.azure.security.attestati
      *
      * @return the sgxCollateral value.
      */
-    @Override public Object getSgxCollateral() {
+    @Override
+    public Object getSgxCollateral() {
         return this.sgxCollateral;
     }
-
 
     /**
      * Return a public attestation result from the generated result.
      * @param generated - Generated result.
      * @return Public result.
      */
-    public static AttestationResult fromGeneratedAttestationResult(com.azure.security.attestation.implementation.models.AttestationResult generated) {
+    public static AttestationResult fromGeneratedAttestationResult(
+        com.azure.security.attestation.implementation.models.AttestationResult generated) {
         AttestationResultImpl result = new AttestationResultImpl();
         // MAA Claims:
         result.enclaveHeldData = generated.getEnclaveHeldData();
@@ -322,9 +343,9 @@ public final class AttestationResultImpl implements com.azure.security.attestati
         result.jti = generated.getJti();
 
         // RFC 7515 Claims
-        result.exp = Instant.ofEpochSecond(generated.getExp().longValue());
-        result.iat = Instant.ofEpochSecond(generated.getIat().longValue());
-        result.nbf  = Instant.ofEpochSecond(generated.getNbf().longValue());
+        result.exp = OffsetDateTime.ofInstant(Instant.ofEpochSecond(generated.getExp().longValue()), ZoneOffset.UTC);
+        result.iat = OffsetDateTime.ofInstant(Instant.ofEpochSecond(generated.getIat().longValue()), ZoneOffset.UTC);
+        result.nbf = OffsetDateTime.ofInstant(Instant.ofEpochSecond(generated.getNbf().longValue()), ZoneOffset.UTC);
 
         // SGX properties.
         result.mrEnclave = generated.getMrEnclave();
@@ -335,8 +356,8 @@ public final class AttestationResultImpl implements com.azure.security.attestati
             result.policySigner = AttestationSignerImpl.fromJsonWebKey(generated.getPolicySigner());
         }
         result.sgxCollateral = generated.getSgxCollateral();
-        result.svn = generated.getSvn();
-        result.productId = generated.getProductId();
+        result.svn = generated.getSvn().intValue();
+        result.productId = generated.getProductId().intValue();
 
         return result;
     }

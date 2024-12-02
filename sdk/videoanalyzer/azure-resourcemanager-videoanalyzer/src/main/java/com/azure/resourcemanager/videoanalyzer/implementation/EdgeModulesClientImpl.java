@@ -29,7 +29,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.videoanalyzer.fluent.EdgeModulesClient;
 import com.azure.resourcemanager.videoanalyzer.fluent.models.EdgeModuleEntityInner;
 import com.azure.resourcemanager.videoanalyzer.fluent.models.EdgeModuleProvisioningTokenInner;
@@ -39,8 +38,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in EdgeModulesClient. */
 public final class EdgeModulesClientImpl implements EdgeModulesClient {
-    private final ClientLogger logger = new ClientLogger(EdgeModulesClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final EdgeModulesService service;
 
@@ -53,8 +50,8 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
      * @param client the instance of the service client containing this operation class.
      */
     EdgeModulesClientImpl(VideoAnalyzerManagementClientImpl client) {
-        this.service =
-            RestProxy.create(EdgeModulesService.class, client.getHttpPipeline(), client.getSerializerAdapter());
+        this.service
+            = RestProxy.create(EdgeModulesService.class, client.getHttpPipeline(), client.getSerializerAdapter());
         this.client = client;
     }
 
@@ -65,97 +62,70 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
     @Host("{$host}")
     @ServiceInterface(name = "VideoAnalyzerManagem")
     private interface EdgeModulesService {
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Media"
-                + "/videoAnalyzers/{accountName}/edgeModules")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Media"
+            + "/videoAnalyzers/{accountName}/edgeModules")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<EdgeModuleEntityCollection>> list(
-            @HostParam("$host") String endpoint,
+        Mono<Response<EdgeModuleEntityCollection>> list(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("accountName") String accountName,
-            @QueryParam("api-version") String apiVersion,
-            @QueryParam("$top") Integer top,
-            @HeaderParam("Accept") String accept,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("accountName") String accountName,
+            @QueryParam("api-version") String apiVersion, @QueryParam("$top") Integer top,
+            @HeaderParam("Accept") String accept, Context context);
+
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Media"
+            + "/videoAnalyzers/{accountName}/edgeModules/{edgeModuleName}")
+        @ExpectedResponses({ 200 })
+        @UnexpectedResponseExceptionType(ManagementException.class)
+        Mono<Response<EdgeModuleEntityInner>> get(@HostParam("$host") String endpoint,
+            @PathParam("subscriptionId") String subscriptionId,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("accountName") String accountName,
+            @PathParam("edgeModuleName") String edgeModuleName, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
+
+        @Headers({ "Content-Type: application/json" })
+        @Put("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Media"
+            + "/videoAnalyzers/{accountName}/edgeModules/{edgeModuleName}")
+        @ExpectedResponses({ 200, 201 })
+        @UnexpectedResponseExceptionType(ManagementException.class)
+        Mono<Response<EdgeModuleEntityInner>> createOrUpdate(@HostParam("$host") String endpoint,
+            @PathParam("subscriptionId") String subscriptionId,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("accountName") String accountName,
+            @PathParam("edgeModuleName") String edgeModuleName, @QueryParam("api-version") String apiVersion,
+            @BodyParam("application/json") EdgeModuleEntityInner parameters, @HeaderParam("Accept") String accept,
             Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Media"
-                + "/videoAnalyzers/{accountName}/edgeModules/{edgeModuleName}")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Delete("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Media"
+            + "/videoAnalyzers/{accountName}/edgeModules/{edgeModuleName}")
+        @ExpectedResponses({ 200, 204 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<EdgeModuleEntityInner>> get(
-            @HostParam("$host") String endpoint,
+        Mono<Response<Void>> delete(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("accountName") String accountName,
-            @PathParam("edgeModuleName") String edgeModuleName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("accountName") String accountName,
+            @PathParam("edgeModuleName") String edgeModuleName, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
+
+        @Headers({ "Content-Type: application/json" })
+        @Post("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Media"
+            + "/videoAnalyzers/{accountName}/edgeModules/{edgeModuleName}/listProvisioningToken")
+        @ExpectedResponses({ 200 })
+        @UnexpectedResponseExceptionType(ManagementException.class)
+        Mono<Response<EdgeModuleProvisioningTokenInner>> listProvisioningToken(@HostParam("$host") String endpoint,
+            @PathParam("subscriptionId") String subscriptionId,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("accountName") String accountName,
+            @PathParam("edgeModuleName") String edgeModuleName, @QueryParam("api-version") String apiVersion,
+            @BodyParam("application/json") ListProvisioningTokenInput parameters, @HeaderParam("Accept") String accept,
             Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Put(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Media"
-                + "/videoAnalyzers/{accountName}/edgeModules/{edgeModuleName}")
-        @ExpectedResponses({200, 201})
-        @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<EdgeModuleEntityInner>> createOrUpdate(
-            @HostParam("$host") String endpoint,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("accountName") String accountName,
-            @PathParam("edgeModuleName") String edgeModuleName,
-            @QueryParam("api-version") String apiVersion,
-            @BodyParam("application/json") EdgeModuleEntityInner parameters,
-            @HeaderParam("Accept") String accept,
-            Context context);
-
-        @Headers({"Content-Type: application/json"})
-        @Delete(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Media"
-                + "/videoAnalyzers/{accountName}/edgeModules/{edgeModuleName}")
-        @ExpectedResponses({200, 204})
-        @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Void>> delete(
-            @HostParam("$host") String endpoint,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("accountName") String accountName,
-            @PathParam("edgeModuleName") String edgeModuleName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
-
-        @Headers({"Content-Type: application/json"})
-        @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Media"
-                + "/videoAnalyzers/{accountName}/edgeModules/{edgeModuleName}/listProvisioningToken")
-        @ExpectedResponses({200})
-        @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<EdgeModuleProvisioningTokenInner>> listProvisioningToken(
-            @HostParam("$host") String endpoint,
-            @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("accountName") String accountName,
-            @PathParam("edgeModuleName") String edgeModuleName,
-            @QueryParam("api-version") String apiVersion,
-            @BodyParam("application/json") ListProvisioningTokenInput parameters,
-            @HeaderParam("Accept") String accept,
-            Context context);
-
-        @Headers({"Content-Type: application/json"})
+        @Headers({ "Content-Type: application/json" })
         @Get("{nextLink}")
-        @ExpectedResponses({200})
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<EdgeModuleEntityCollection>> listNext(
-            @PathParam(value = "nextLink", encoded = true) String nextLink,
-            @HostParam("$host") String endpoint,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam(value = "nextLink", encoded = true) String nextLink, @HostParam("$host") String endpoint,
+            @HeaderParam("Accept") String accept, Context context);
     }
 
     /**
@@ -168,22 +138,19 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of EdgeModuleEntity items.
+     * @return a collection of EdgeModuleEntity items along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<EdgeModuleEntityInner>> listSinglePageAsync(
-        String resourceGroupName, String accountName, Integer top) {
+    private Mono<PagedResponse<EdgeModuleEntityInner>> listSinglePageAsync(String resourceGroupName, String accountName,
+        Integer top) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -194,27 +161,10 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .list(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            accountName,
-                            this.client.getApiVersion(),
-                            top,
-                            accept,
-                            context))
-            .<PagedResponse<EdgeModuleEntityInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null))
+            .withContext(context -> service.list(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                resourceGroupName, accountName, this.client.getApiVersion(), top, accept, context))
+            .<PagedResponse<EdgeModuleEntityInner>>map(res -> new PagedResponseBase<>(res.getRequest(),
+                res.getStatusCode(), res.getHeaders(), res.getValue().value(), res.getValue().nextLink(), null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -229,22 +179,19 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of EdgeModuleEntity items.
+     * @return a collection of EdgeModuleEntity items along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<EdgeModuleEntityInner>> listSinglePageAsync(
-        String resourceGroupName, String accountName, Integer top, Context context) {
+    private Mono<PagedResponse<EdgeModuleEntityInner>> listSinglePageAsync(String resourceGroupName, String accountName,
+        Integer top, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -256,24 +203,10 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
         final String accept = "application/json";
         context = this.client.mergeContext(context);
         return service
-            .list(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                accountName,
-                this.client.getApiVersion(),
-                top,
-                accept,
-                context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null));
+            .list(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName, accountName,
+                this.client.getApiVersion(), top, accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), res.getValue().nextLink(), null));
     }
 
     /**
@@ -286,12 +219,11 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of EdgeModuleEntity items.
+     * @return a collection of EdgeModuleEntity items as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<EdgeModuleEntityInner> listAsync(String resourceGroupName, String accountName, Integer top) {
-        return new PagedFlux<>(
-            () -> listSinglePageAsync(resourceGroupName, accountName, top),
+        return new PagedFlux<>(() -> listSinglePageAsync(resourceGroupName, accountName, top),
             nextLink -> listNextSinglePageAsync(nextLink));
     }
 
@@ -303,13 +235,12 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of EdgeModuleEntity items.
+     * @return a collection of EdgeModuleEntity items as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<EdgeModuleEntityInner> listAsync(String resourceGroupName, String accountName) {
         final Integer top = null;
-        return new PagedFlux<>(
-            () -> listSinglePageAsync(resourceGroupName, accountName, top),
+        return new PagedFlux<>(() -> listSinglePageAsync(resourceGroupName, accountName, top),
             nextLink -> listNextSinglePageAsync(nextLink));
     }
 
@@ -324,13 +255,12 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of EdgeModuleEntity items.
+     * @return a collection of EdgeModuleEntity items as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<EdgeModuleEntityInner> listAsync(
-        String resourceGroupName, String accountName, Integer top, Context context) {
-        return new PagedFlux<>(
-            () -> listSinglePageAsync(resourceGroupName, accountName, top, context),
+    private PagedFlux<EdgeModuleEntityInner> listAsync(String resourceGroupName, String accountName, Integer top,
+        Context context) {
+        return new PagedFlux<>(() -> listSinglePageAsync(resourceGroupName, accountName, top, context),
             nextLink -> listNextSinglePageAsync(nextLink, context));
     }
 
@@ -342,7 +272,7 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of EdgeModuleEntity items.
+     * @return a collection of EdgeModuleEntity items as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<EdgeModuleEntityInner> list(String resourceGroupName, String accountName) {
@@ -361,11 +291,11 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of EdgeModuleEntity items.
+     * @return a collection of EdgeModuleEntity items as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<EdgeModuleEntityInner> list(
-        String resourceGroupName, String accountName, Integer top, Context context) {
+    public PagedIterable<EdgeModuleEntityInner> list(String resourceGroupName, String accountName, Integer top,
+        Context context) {
         return new PagedIterable<>(listAsync(resourceGroupName, accountName, top, context));
     }
 
@@ -378,22 +308,19 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the representation of an edge module.
+     * @return the representation of an edge module along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<EdgeModuleEntityInner>> getWithResponseAsync(
-        String resourceGroupName, String accountName, String edgeModuleName) {
+    private Mono<Response<EdgeModuleEntityInner>> getWithResponseAsync(String resourceGroupName, String accountName,
+        String edgeModuleName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -407,18 +334,8 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .get(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            accountName,
-                            edgeModuleName,
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
+            .withContext(context -> service.get(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                resourceGroupName, accountName, edgeModuleName, this.client.getApiVersion(), accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -432,22 +349,19 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the representation of an edge module.
+     * @return the representation of an edge module along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<EdgeModuleEntityInner>> getWithResponseAsync(
-        String resourceGroupName, String accountName, String edgeModuleName, Context context) {
+    private Mono<Response<EdgeModuleEntityInner>> getWithResponseAsync(String resourceGroupName, String accountName,
+        String edgeModuleName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -461,16 +375,8 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .get(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                accountName,
-                edgeModuleName,
-                this.client.getApiVersion(),
-                accept,
-                context);
+        return service.get(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName, accountName,
+            edgeModuleName, this.client.getApiVersion(), accept, context);
     }
 
     /**
@@ -482,19 +388,12 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the representation of an edge module.
+     * @return the representation of an edge module on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<EdgeModuleEntityInner> getAsync(String resourceGroupName, String accountName, String edgeModuleName) {
         return getWithResponseAsync(resourceGroupName, accountName, edgeModuleName)
-            .flatMap(
-                (Response<EdgeModuleEntityInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
@@ -523,11 +422,11 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the representation of an edge module.
+     * @return the representation of an edge module along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<EdgeModuleEntityInner> getWithResponse(
-        String resourceGroupName, String accountName, String edgeModuleName, Context context) {
+    public Response<EdgeModuleEntityInner> getWithResponse(String resourceGroupName, String accountName,
+        String edgeModuleName, Context context) {
         return getWithResponseAsync(resourceGroupName, accountName, edgeModuleName, context).block();
     }
 
@@ -546,22 +445,19 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the representation of an edge module.
+     * @return the representation of an edge module along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<EdgeModuleEntityInner>> createOrUpdateWithResponseAsync(
-        String resourceGroupName, String accountName, String edgeModuleName, EdgeModuleEntityInner parameters) {
+    private Mono<Response<EdgeModuleEntityInner>> createOrUpdateWithResponseAsync(String resourceGroupName,
+        String accountName, String edgeModuleName, EdgeModuleEntityInner parameters) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -580,19 +476,9 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .createOrUpdate(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            accountName,
-                            edgeModuleName,
-                            this.client.getApiVersion(),
-                            parameters,
-                            accept,
-                            context))
+            .withContext(context -> service.createOrUpdate(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                resourceGroupName, accountName, edgeModuleName, this.client.getApiVersion(), parameters, accept,
+                context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -612,26 +498,19 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the representation of an edge module.
+     * @return the representation of an edge module along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<EdgeModuleEntityInner>> createOrUpdateWithResponseAsync(
-        String resourceGroupName,
-        String accountName,
-        String edgeModuleName,
-        EdgeModuleEntityInner parameters,
-        Context context) {
+    private Mono<Response<EdgeModuleEntityInner>> createOrUpdateWithResponseAsync(String resourceGroupName,
+        String accountName, String edgeModuleName, EdgeModuleEntityInner parameters, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -650,17 +529,8 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .createOrUpdate(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                accountName,
-                edgeModuleName,
-                this.client.getApiVersion(),
-                parameters,
-                accept,
-                context);
+        return service.createOrUpdate(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+            accountName, edgeModuleName, this.client.getApiVersion(), parameters, accept, context);
     }
 
     /**
@@ -678,20 +548,13 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the representation of an edge module.
+     * @return the representation of an edge module on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<EdgeModuleEntityInner> createOrUpdateAsync(
-        String resourceGroupName, String accountName, String edgeModuleName, EdgeModuleEntityInner parameters) {
+    private Mono<EdgeModuleEntityInner> createOrUpdateAsync(String resourceGroupName, String accountName,
+        String edgeModuleName, EdgeModuleEntityInner parameters) {
         return createOrUpdateWithResponseAsync(resourceGroupName, accountName, edgeModuleName, parameters)
-            .flatMap(
-                (Response<EdgeModuleEntityInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
@@ -712,8 +575,8 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
      * @return the representation of an edge module.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public EdgeModuleEntityInner createOrUpdate(
-        String resourceGroupName, String accountName, String edgeModuleName, EdgeModuleEntityInner parameters) {
+    public EdgeModuleEntityInner createOrUpdate(String resourceGroupName, String accountName, String edgeModuleName,
+        EdgeModuleEntityInner parameters) {
         return createOrUpdateAsync(resourceGroupName, accountName, edgeModuleName, parameters).block();
     }
 
@@ -733,15 +596,11 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the representation of an edge module.
+     * @return the representation of an edge module along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<EdgeModuleEntityInner> createOrUpdateWithResponse(
-        String resourceGroupName,
-        String accountName,
-        String edgeModuleName,
-        EdgeModuleEntityInner parameters,
-        Context context) {
+    public Response<EdgeModuleEntityInner> createOrUpdateWithResponse(String resourceGroupName, String accountName,
+        String edgeModuleName, EdgeModuleEntityInner parameters, Context context) {
         return createOrUpdateWithResponseAsync(resourceGroupName, accountName, edgeModuleName, parameters, context)
             .block();
     }
@@ -757,22 +616,18 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Void>> deleteWithResponseAsync(
-        String resourceGroupName, String accountName, String edgeModuleName) {
+    private Mono<Response<Void>> deleteWithResponseAsync(String resourceGroupName, String accountName,
+        String edgeModuleName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -786,18 +641,8 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .delete(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            accountName,
-                            edgeModuleName,
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
+            .withContext(context -> service.delete(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                resourceGroupName, accountName, edgeModuleName, this.client.getApiVersion(), accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -813,22 +658,18 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Void>> deleteWithResponseAsync(
-        String resourceGroupName, String accountName, String edgeModuleName, Context context) {
+    private Mono<Response<Void>> deleteWithResponseAsync(String resourceGroupName, String accountName,
+        String edgeModuleName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -842,16 +683,8 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .delete(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                accountName,
-                edgeModuleName,
-                this.client.getApiVersion(),
-                accept,
-                context);
+        return service.delete(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+            accountName, edgeModuleName, this.client.getApiVersion(), accept, context);
     }
 
     /**
@@ -865,12 +698,11 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> deleteAsync(String resourceGroupName, String accountName, String edgeModuleName) {
-        return deleteWithResponseAsync(resourceGroupName, accountName, edgeModuleName)
-            .flatMap((Response<Void> res) -> Mono.empty());
+        return deleteWithResponseAsync(resourceGroupName, accountName, edgeModuleName).flatMap(ignored -> Mono.empty());
     }
 
     /**
@@ -902,11 +734,11 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> deleteWithResponse(
-        String resourceGroupName, String accountName, String edgeModuleName, Context context) {
+    public Response<Void> deleteWithResponse(String resourceGroupName, String accountName, String edgeModuleName,
+        Context context) {
         return deleteWithResponseAsync(resourceGroupName, accountName, edgeModuleName, context).block();
     }
 
@@ -925,22 +757,18 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return provisioning token properties.
+     * @return provisioning token properties along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<EdgeModuleProvisioningTokenInner>> listProvisioningTokenWithResponseAsync(
         String resourceGroupName, String accountName, String edgeModuleName, ListProvisioningTokenInput parameters) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -959,19 +787,9 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .listProvisioningToken(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            accountName,
-                            edgeModuleName,
-                            this.client.getApiVersion(),
-                            parameters,
-                            accept,
-                            context))
+            .withContext(context -> service.listProvisioningToken(this.client.getEndpoint(),
+                this.client.getSubscriptionId(), resourceGroupName, accountName, edgeModuleName,
+                this.client.getApiVersion(), parameters, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -991,26 +809,19 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return provisioning token properties.
+     * @return provisioning token properties along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<EdgeModuleProvisioningTokenInner>> listProvisioningTokenWithResponseAsync(
-        String resourceGroupName,
-        String accountName,
-        String edgeModuleName,
-        ListProvisioningTokenInput parameters,
+        String resourceGroupName, String accountName, String edgeModuleName, ListProvisioningTokenInput parameters,
         Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1029,17 +840,8 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .listProvisioningToken(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                accountName,
-                edgeModuleName,
-                this.client.getApiVersion(),
-                parameters,
-                accept,
-                context);
+        return service.listProvisioningToken(this.client.getEndpoint(), this.client.getSubscriptionId(),
+            resourceGroupName, accountName, edgeModuleName, this.client.getApiVersion(), parameters, accept, context);
     }
 
     /**
@@ -1057,20 +859,13 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return provisioning token properties.
+     * @return provisioning token properties on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<EdgeModuleProvisioningTokenInner> listProvisioningTokenAsync(
-        String resourceGroupName, String accountName, String edgeModuleName, ListProvisioningTokenInput parameters) {
+    private Mono<EdgeModuleProvisioningTokenInner> listProvisioningTokenAsync(String resourceGroupName,
+        String accountName, String edgeModuleName, ListProvisioningTokenInput parameters) {
         return listProvisioningTokenWithResponseAsync(resourceGroupName, accountName, edgeModuleName, parameters)
-            .flatMap(
-                (Response<EdgeModuleProvisioningTokenInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
@@ -1091,8 +886,8 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
      * @return provisioning token properties.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public EdgeModuleProvisioningTokenInner listProvisioningToken(
-        String resourceGroupName, String accountName, String edgeModuleName, ListProvisioningTokenInput parameters) {
+    public EdgeModuleProvisioningTokenInner listProvisioningToken(String resourceGroupName, String accountName,
+        String edgeModuleName, ListProvisioningTokenInput parameters) {
         return listProvisioningTokenAsync(resourceGroupName, accountName, edgeModuleName, parameters).block();
     }
 
@@ -1112,18 +907,13 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return provisioning token properties.
+     * @return provisioning token properties along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<EdgeModuleProvisioningTokenInner> listProvisioningTokenWithResponse(
-        String resourceGroupName,
-        String accountName,
-        String edgeModuleName,
-        ListProvisioningTokenInput parameters,
-        Context context) {
-        return listProvisioningTokenWithResponseAsync(
-                resourceGroupName, accountName, edgeModuleName, parameters, context)
-            .block();
+    public Response<EdgeModuleProvisioningTokenInner> listProvisioningTokenWithResponse(String resourceGroupName,
+        String accountName, String edgeModuleName, ListProvisioningTokenInput parameters, Context context) {
+        return listProvisioningTokenWithResponseAsync(resourceGroupName, accountName, edgeModuleName, parameters,
+            context).block();
     }
 
     /**
@@ -1133,7 +923,8 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of EdgeModuleEntity items.
+     * @return a collection of EdgeModuleEntity items along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<EdgeModuleEntityInner>> listNextSinglePageAsync(String nextLink) {
@@ -1141,23 +932,13 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
             return Mono.error(new IllegalArgumentException("Parameter nextLink is required and cannot be null."));
         }
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         final String accept = "application/json";
-        return FluxUtil
-            .withContext(context -> service.listNext(nextLink, this.client.getEndpoint(), accept, context))
-            .<PagedResponse<EdgeModuleEntityInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null))
+        return FluxUtil.withContext(context -> service.listNext(nextLink, this.client.getEndpoint(), accept, context))
+            .<PagedResponse<EdgeModuleEntityInner>>map(res -> new PagedResponseBase<>(res.getRequest(),
+                res.getStatusCode(), res.getHeaders(), res.getValue().value(), res.getValue().nextLink(), null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -1169,7 +950,8 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of EdgeModuleEntity items.
+     * @return a collection of EdgeModuleEntity items along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<EdgeModuleEntityInner>> listNextSinglePageAsync(String nextLink, Context context) {
@@ -1177,23 +959,13 @@ public final class EdgeModulesClientImpl implements EdgeModulesClient {
             return Mono.error(new IllegalArgumentException("Parameter nextLink is required and cannot be null."));
         }
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .listNext(nextLink, this.client.getEndpoint(), accept, context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(),
-                        res.getStatusCode(),
-                        res.getHeaders(),
-                        res.getValue().value(),
-                        res.getValue().nextLink(),
-                        null));
+        return service.listNext(nextLink, this.client.getEndpoint(), accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), res.getValue().nextLink(), null));
     }
 }

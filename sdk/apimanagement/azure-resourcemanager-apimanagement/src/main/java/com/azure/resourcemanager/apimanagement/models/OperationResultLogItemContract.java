@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Log of the entity being created, updated or deleted. */
 @Fluent
 public final class OperationResultLogItemContract {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OperationResultLogItemContract.class);
-
     /*
      * The type of entity contract.
      */
@@ -31,6 +27,10 @@ public final class OperationResultLogItemContract {
      */
     @JsonProperty(value = "objectKey")
     private String objectKey;
+
+    /** Creates an instance of OperationResultLogItemContract class. */
+    public OperationResultLogItemContract() {
+    }
 
     /**
      * Get the objectType property: The type of entity contract.

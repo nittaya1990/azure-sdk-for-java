@@ -4,7 +4,6 @@
 
 package com.azure.resourcemanager.kusto.generated;
 
-import com.azure.core.util.Context;
 import com.azure.resourcemanager.kusto.fluent.models.LanguageExtensionInner;
 import com.azure.resourcemanager.kusto.models.LanguageExtensionName;
 import com.azure.resourcemanager.kusto.models.LanguageExtensionsList;
@@ -13,7 +12,7 @@ import java.util.Arrays;
 /** Samples for Clusters RemoveLanguageExtensions. */
 public final class ClustersRemoveLanguageExtensionsSamples {
     /*
-     * x-ms-original-file: specification/azure-kusto/resource-manager/Microsoft.Kusto/stable/2021-08-27/examples/KustoClusterRemoveLanguageExtensions.json
+     * x-ms-original-file: specification/azure-kusto/resource-manager/Microsoft.Kusto/stable/2023-08-15/examples/KustoClusterRemoveLanguageExtensions.json
      */
     /**
      * Sample code: KustoClusterRemoveLanguageExtensions.
@@ -25,13 +24,13 @@ public final class ClustersRemoveLanguageExtensionsSamples {
             .clusters()
             .removeLanguageExtensions(
                 "kustorptest",
-                "kustoclusterrptest4",
+                "kustoCluster",
                 new LanguageExtensionsList()
                     .withValue(
                         Arrays
                             .asList(
                                 new LanguageExtensionInner().withLanguageExtensionName(LanguageExtensionName.PYTHON),
                                 new LanguageExtensionInner().withLanguageExtensionName(LanguageExtensionName.R))),
-                Context.NONE);
+                com.azure.core.util.Context.NONE);
     }
 }

@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Day of the week. */
+/**
+ * Day of the week.
+ */
 @Fluent
 public final class Day {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Day.class);
-
     /*
      * Date of the month
      */
@@ -27,8 +25,14 @@ public final class Day {
     private Boolean isLast;
 
     /**
+     * Creates an instance of Day class.
+     */
+    public Day() {
+    }
+
+    /**
      * Get the date property: Date of the month.
-     *
+     * 
      * @return the date value.
      */
     public Integer date() {
@@ -37,7 +41,7 @@ public final class Day {
 
     /**
      * Set the date property: Date of the month.
-     *
+     * 
      * @param date the date value to set.
      * @return the Day object itself.
      */
@@ -48,7 +52,7 @@ public final class Day {
 
     /**
      * Get the isLast property: Whether Date is last date of month.
-     *
+     * 
      * @return the isLast value.
      */
     public Boolean isLast() {
@@ -57,7 +61,7 @@ public final class Day {
 
     /**
      * Set the isLast property: Whether Date is last date of month.
-     *
+     * 
      * @param isLast the isLast value to set.
      * @return the Day object itself.
      */
@@ -68,7 +72,7 @@ public final class Day {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

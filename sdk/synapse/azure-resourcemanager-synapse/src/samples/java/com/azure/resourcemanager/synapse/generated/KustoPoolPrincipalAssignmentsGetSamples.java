@@ -4,22 +4,22 @@
 
 package com.azure.resourcemanager.synapse.generated;
 
-import com.azure.core.util.Context;
-
-/** Samples for KustoPoolPrincipalAssignments Get. */
+/**
+ * Samples for KustoPoolPrincipalAssignments Get.
+ */
 public final class KustoPoolPrincipalAssignmentsGetSamples {
     /*
-     * x-ms-original-file: specification/synapse/resource-manager/Microsoft.Synapse/preview/2021-06-01-preview/examples/KustoPoolPrincipalAssignmentsGet.json
+     * x-ms-original-file: specification/synapse/resource-manager/Microsoft.Synapse/preview/2021-06-01-preview/examples/
+     * KustoPoolPrincipalAssignmentsGet.json
      */
     /**
      * Sample code: KustoPoolPrincipalAssignmentsGet.
-     *
+     * 
      * @param manager Entry point to SynapseManager.
      */
     public static void kustoPoolPrincipalAssignmentsGet(com.azure.resourcemanager.synapse.SynapseManager manager) {
-        manager
-            .kustoPoolPrincipalAssignments()
-            .getWithResponse(
-                "synapseWorkspaceName", "kustoclusterrptest4", "kustoprincipal1", "kustorptest", Context.NONE);
+        manager.kustoPoolPrincipalAssignments()
+            .getWithResponse("synapseWorkspaceName", "kustoclusterrptest4", "kustoprincipal1", "kustorptest",
+                com.azure.core.util.Context.NONE);
     }
 }

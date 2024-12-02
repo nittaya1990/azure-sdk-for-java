@@ -5,16 +5,12 @@
 package com.azure.resourcemanager.resourcehealth.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Azure service impacted by the service health event. */
 @Fluent
 public final class Impact {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Impact.class);
-
     /*
      * Impacted service name.
      */
@@ -26,6 +22,10 @@ public final class Impact {
      */
     @JsonProperty(value = "impactedRegions")
     private List<ImpactedServiceRegion> impactedRegions;
+
+    /** Creates an instance of Impact class. */
+    public Impact() {
+    }
 
     /**
      * Get the impactedService property: Impacted service name.

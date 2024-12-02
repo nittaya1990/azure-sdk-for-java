@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Region profile. */
 @Fluent
 public final class RegionContractInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RegionContractInner.class);
-
     /*
      * Region name.
      */
@@ -31,6 +27,10 @@ public final class RegionContractInner {
      */
     @JsonProperty(value = "isDeleted")
     private Boolean isDeleted;
+
+    /** Creates an instance of RegionContractInner class. */
+    public RegionContractInner() {
+    }
 
     /**
      * Get the name property: Region name.

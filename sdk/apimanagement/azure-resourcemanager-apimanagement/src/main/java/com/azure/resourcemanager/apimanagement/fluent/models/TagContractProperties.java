@@ -6,19 +6,20 @@ package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Tag contract Properties. */
 @Fluent
 public final class TagContractProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TagContractProperties.class);
-
     /*
      * Tag name.
      */
     @JsonProperty(value = "displayName", required = true)
     private String displayName;
+
+    /** Creates an instance of TagContractProperties class. */
+    public TagContractProperties() {
+    }
 
     /**
      * Get the displayName property: Tag name.
@@ -47,10 +48,10 @@ public final class TagContractProperties {
      */
     public void validate() {
         if (displayName() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property displayName in model TagContractProperties"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property displayName in model TagContractProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(TagContractProperties.class);
 }

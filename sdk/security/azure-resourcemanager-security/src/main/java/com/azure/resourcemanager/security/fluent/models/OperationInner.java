@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.security.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.security.models.OperationDisplay;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Possible operation in the REST API of Microsoft.Security. */
+/**
+ * Possible operation in the REST API of Microsoft.Security.
+ */
 @Fluent
 public final class OperationInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OperationInner.class);
-
     /*
      * Name of the operation
      */
@@ -34,8 +32,14 @@ public final class OperationInner {
     private OperationDisplay display;
 
     /**
+     * Creates an instance of OperationInner class.
+     */
+    public OperationInner() {
+    }
+
+    /**
      * Get the name property: Name of the operation.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -44,7 +48,7 @@ public final class OperationInner {
 
     /**
      * Get the origin property: Where the operation is originated.
-     *
+     * 
      * @return the origin value.
      */
     public String origin() {
@@ -53,7 +57,7 @@ public final class OperationInner {
 
     /**
      * Get the display property: Security operation display.
-     *
+     * 
      * @return the display value.
      */
     public OperationDisplay display() {
@@ -62,7 +66,7 @@ public final class OperationInner {
 
     /**
      * Set the display property: Security operation display.
-     *
+     * 
      * @param display the display value to set.
      * @return the OperationInner object itself.
      */
@@ -73,7 +77,7 @@ public final class OperationInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

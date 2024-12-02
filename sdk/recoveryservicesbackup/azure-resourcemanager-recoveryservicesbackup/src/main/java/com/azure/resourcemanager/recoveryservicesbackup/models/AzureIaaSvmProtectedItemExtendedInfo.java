@@ -5,21 +5,37 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
-/** Additional information on Azure IaaS VM specific backup item. */
+/**
+ * Additional information on Azure IaaS VM specific backup item.
+ */
 @Fluent
 public final class AzureIaaSvmProtectedItemExtendedInfo {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureIaaSvmProtectedItemExtendedInfo.class);
-
     /*
-     * The oldest backup copy available for this backup item.
+     * The oldest backup copy available for this backup item across all tiers.
      */
     @JsonProperty(value = "oldestRecoveryPoint")
     private OffsetDateTime oldestRecoveryPoint;
+
+    /*
+     * The oldest backup copy available for this backup item in vault tier
+     */
+    @JsonProperty(value = "oldestRecoveryPointInVault")
+    private OffsetDateTime oldestRecoveryPointInVault;
+
+    /*
+     * The oldest backup copy available for this backup item in archive tier
+     */
+    @JsonProperty(value = "oldestRecoveryPointInArchive")
+    private OffsetDateTime oldestRecoveryPointInArchive;
+
+    /*
+     * The latest backup copy available for this backup item in archive tier
+     */
+    @JsonProperty(value = "newestRecoveryPointInArchive")
+    private OffsetDateTime newestRecoveryPointInArchive;
 
     /*
      * Number of backup copies available for this backup item.
@@ -28,15 +44,20 @@ public final class AzureIaaSvmProtectedItemExtendedInfo {
     private Integer recoveryPointCount;
 
     /*
-     * Specifies if backup policy associated with the backup item is
-     * inconsistent.
+     * Specifies if backup policy associated with the backup item is inconsistent.
      */
     @JsonProperty(value = "policyInconsistent")
     private Boolean policyInconsistent;
 
     /**
-     * Get the oldestRecoveryPoint property: The oldest backup copy available for this backup item.
-     *
+     * Creates an instance of AzureIaaSvmProtectedItemExtendedInfo class.
+     */
+    public AzureIaaSvmProtectedItemExtendedInfo() {
+    }
+
+    /**
+     * Get the oldestRecoveryPoint property: The oldest backup copy available for this backup item across all tiers.
+     * 
      * @return the oldestRecoveryPoint value.
      */
     public OffsetDateTime oldestRecoveryPoint() {
@@ -44,8 +65,8 @@ public final class AzureIaaSvmProtectedItemExtendedInfo {
     }
 
     /**
-     * Set the oldestRecoveryPoint property: The oldest backup copy available for this backup item.
-     *
+     * Set the oldestRecoveryPoint property: The oldest backup copy available for this backup item across all tiers.
+     * 
      * @param oldestRecoveryPoint the oldestRecoveryPoint value to set.
      * @return the AzureIaaSvmProtectedItemExtendedInfo object itself.
      */
@@ -55,8 +76,75 @@ public final class AzureIaaSvmProtectedItemExtendedInfo {
     }
 
     /**
+     * Get the oldestRecoveryPointInVault property: The oldest backup copy available for this backup item in vault tier.
+     * 
+     * @return the oldestRecoveryPointInVault value.
+     */
+    public OffsetDateTime oldestRecoveryPointInVault() {
+        return this.oldestRecoveryPointInVault;
+    }
+
+    /**
+     * Set the oldestRecoveryPointInVault property: The oldest backup copy available for this backup item in vault tier.
+     * 
+     * @param oldestRecoveryPointInVault the oldestRecoveryPointInVault value to set.
+     * @return the AzureIaaSvmProtectedItemExtendedInfo object itself.
+     */
+    public AzureIaaSvmProtectedItemExtendedInfo
+        withOldestRecoveryPointInVault(OffsetDateTime oldestRecoveryPointInVault) {
+        this.oldestRecoveryPointInVault = oldestRecoveryPointInVault;
+        return this;
+    }
+
+    /**
+     * Get the oldestRecoveryPointInArchive property: The oldest backup copy available for this backup item in archive
+     * tier.
+     * 
+     * @return the oldestRecoveryPointInArchive value.
+     */
+    public OffsetDateTime oldestRecoveryPointInArchive() {
+        return this.oldestRecoveryPointInArchive;
+    }
+
+    /**
+     * Set the oldestRecoveryPointInArchive property: The oldest backup copy available for this backup item in archive
+     * tier.
+     * 
+     * @param oldestRecoveryPointInArchive the oldestRecoveryPointInArchive value to set.
+     * @return the AzureIaaSvmProtectedItemExtendedInfo object itself.
+     */
+    public AzureIaaSvmProtectedItemExtendedInfo
+        withOldestRecoveryPointInArchive(OffsetDateTime oldestRecoveryPointInArchive) {
+        this.oldestRecoveryPointInArchive = oldestRecoveryPointInArchive;
+        return this;
+    }
+
+    /**
+     * Get the newestRecoveryPointInArchive property: The latest backup copy available for this backup item in archive
+     * tier.
+     * 
+     * @return the newestRecoveryPointInArchive value.
+     */
+    public OffsetDateTime newestRecoveryPointInArchive() {
+        return this.newestRecoveryPointInArchive;
+    }
+
+    /**
+     * Set the newestRecoveryPointInArchive property: The latest backup copy available for this backup item in archive
+     * tier.
+     * 
+     * @param newestRecoveryPointInArchive the newestRecoveryPointInArchive value to set.
+     * @return the AzureIaaSvmProtectedItemExtendedInfo object itself.
+     */
+    public AzureIaaSvmProtectedItemExtendedInfo
+        withNewestRecoveryPointInArchive(OffsetDateTime newestRecoveryPointInArchive) {
+        this.newestRecoveryPointInArchive = newestRecoveryPointInArchive;
+        return this;
+    }
+
+    /**
      * Get the recoveryPointCount property: Number of backup copies available for this backup item.
-     *
+     * 
      * @return the recoveryPointCount value.
      */
     public Integer recoveryPointCount() {
@@ -65,7 +153,7 @@ public final class AzureIaaSvmProtectedItemExtendedInfo {
 
     /**
      * Set the recoveryPointCount property: Number of backup copies available for this backup item.
-     *
+     * 
      * @param recoveryPointCount the recoveryPointCount value to set.
      * @return the AzureIaaSvmProtectedItemExtendedInfo object itself.
      */
@@ -76,7 +164,7 @@ public final class AzureIaaSvmProtectedItemExtendedInfo {
 
     /**
      * Get the policyInconsistent property: Specifies if backup policy associated with the backup item is inconsistent.
-     *
+     * 
      * @return the policyInconsistent value.
      */
     public Boolean policyInconsistent() {
@@ -85,7 +173,7 @@ public final class AzureIaaSvmProtectedItemExtendedInfo {
 
     /**
      * Set the policyInconsistent property: Specifies if backup policy associated with the backup item is inconsistent.
-     *
+     * 
      * @param policyInconsistent the policyInconsistent value to set.
      * @return the AzureIaaSvmProtectedItemExtendedInfo object itself.
      */
@@ -96,7 +184,7 @@ public final class AzureIaaSvmProtectedItemExtendedInfo {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

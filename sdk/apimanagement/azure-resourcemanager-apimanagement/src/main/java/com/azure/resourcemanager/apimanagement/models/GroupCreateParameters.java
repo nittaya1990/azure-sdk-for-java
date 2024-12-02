@@ -5,21 +5,21 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.models.GroupCreateParametersProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Parameters supplied to the Create Group operation. */
 @Fluent
 public final class GroupCreateParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(GroupCreateParameters.class);
-
     /*
      * Properties supplied to Create Group operation.
      */
     @JsonProperty(value = "properties")
     private GroupCreateParametersProperties innerProperties;
+
+    /** Creates an instance of GroupCreateParameters class. */
+    public GroupCreateParameters() {
+    }
 
     /**
      * Get the innerProperties property: Properties supplied to Create Group operation.

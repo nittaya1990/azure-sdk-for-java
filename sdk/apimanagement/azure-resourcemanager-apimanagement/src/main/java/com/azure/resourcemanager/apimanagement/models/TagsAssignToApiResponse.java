@@ -20,16 +20,16 @@ public final class TagsAssignToApiResponse extends ResponseBase<TagsAssignToApiH
      * @param value the deserialized value of the HTTP response.
      * @param headers the deserialized headers of the HTTP response.
      */
-    public TagsAssignToApiResponse(
-        HttpRequest request,
-        int statusCode,
-        HttpHeaders rawHeaders,
-        TagContractInner value,
+    public TagsAssignToApiResponse(HttpRequest request, int statusCode, HttpHeaders rawHeaders, TagContractInner value,
         TagsAssignToApiHeaders headers) {
         super(request, statusCode, rawHeaders, value, headers);
     }
 
-    /** @return the deserialized response body. */
+    /**
+     * Gets the deserialized response body.
+     *
+     * @return the deserialized response body.
+     */
     @Override
     public TagContractInner getValue() {
         return super.getValue();

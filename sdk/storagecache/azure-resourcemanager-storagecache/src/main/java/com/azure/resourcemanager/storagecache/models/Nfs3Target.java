@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.storagecache.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Properties pertaining to the Nfs3Target. */
+/**
+ * Properties pertaining to the Nfs3Target.
+ */
 @Fluent
 public final class Nfs3Target {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Nfs3Target.class);
-
     /*
      * IP address or host name of an NFSv3 host (e.g., 10.0.44.44).
      */
@@ -21,15 +19,32 @@ public final class Nfs3Target {
     private String target;
 
     /*
-     * Identifies the StorageCache usage model to be used for this storage
-     * target.
+     * Identifies the StorageCache usage model to be used for this storage target.
      */
     @JsonProperty(value = "usageModel")
     private String usageModel;
 
+    /*
+     * Amount of time (in seconds) the cache waits before it checks the back-end storage for file updates.
+     */
+    @JsonProperty(value = "verificationTimer")
+    private Integer verificationTimer;
+
+    /*
+     * Amount of time (in seconds) the cache waits after the last file change before it copies the changed file to back-end storage.
+     */
+    @JsonProperty(value = "writeBackTimer")
+    private Integer writeBackTimer;
+
+    /**
+     * Creates an instance of Nfs3Target class.
+     */
+    public Nfs3Target() {
+    }
+
     /**
      * Get the target property: IP address or host name of an NFSv3 host (e.g., 10.0.44.44).
-     *
+     * 
      * @return the target value.
      */
     public String target() {
@@ -38,7 +53,7 @@ public final class Nfs3Target {
 
     /**
      * Set the target property: IP address or host name of an NFSv3 host (e.g., 10.0.44.44).
-     *
+     * 
      * @param target the target value to set.
      * @return the Nfs3Target object itself.
      */
@@ -49,7 +64,7 @@ public final class Nfs3Target {
 
     /**
      * Get the usageModel property: Identifies the StorageCache usage model to be used for this storage target.
-     *
+     * 
      * @return the usageModel value.
      */
     public String usageModel() {
@@ -58,7 +73,7 @@ public final class Nfs3Target {
 
     /**
      * Set the usageModel property: Identifies the StorageCache usage model to be used for this storage target.
-     *
+     * 
      * @param usageModel the usageModel value to set.
      * @return the Nfs3Target object itself.
      */
@@ -68,8 +83,52 @@ public final class Nfs3Target {
     }
 
     /**
+     * Get the verificationTimer property: Amount of time (in seconds) the cache waits before it checks the back-end
+     * storage for file updates.
+     * 
+     * @return the verificationTimer value.
+     */
+    public Integer verificationTimer() {
+        return this.verificationTimer;
+    }
+
+    /**
+     * Set the verificationTimer property: Amount of time (in seconds) the cache waits before it checks the back-end
+     * storage for file updates.
+     * 
+     * @param verificationTimer the verificationTimer value to set.
+     * @return the Nfs3Target object itself.
+     */
+    public Nfs3Target withVerificationTimer(Integer verificationTimer) {
+        this.verificationTimer = verificationTimer;
+        return this;
+    }
+
+    /**
+     * Get the writeBackTimer property: Amount of time (in seconds) the cache waits after the last file change before it
+     * copies the changed file to back-end storage.
+     * 
+     * @return the writeBackTimer value.
+     */
+    public Integer writeBackTimer() {
+        return this.writeBackTimer;
+    }
+
+    /**
+     * Set the writeBackTimer property: Amount of time (in seconds) the cache waits after the last file change before it
+     * copies the changed file to back-end storage.
+     * 
+     * @param writeBackTimer the writeBackTimer value to set.
+     * @return the Nfs3Target object itself.
+     */
+    public Nfs3Target withWriteBackTimer(Integer writeBackTimer) {
+        this.writeBackTimer = writeBackTimer;
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

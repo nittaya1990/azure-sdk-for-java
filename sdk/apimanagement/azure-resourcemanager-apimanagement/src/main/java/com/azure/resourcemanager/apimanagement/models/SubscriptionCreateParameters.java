@@ -5,21 +5,21 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.models.SubscriptionCreateParameterProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Subscription create details. */
 @Fluent
 public final class SubscriptionCreateParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SubscriptionCreateParameters.class);
-
     /*
      * Subscription contract properties.
      */
     @JsonProperty(value = "properties")
     private SubscriptionCreateParameterProperties innerProperties;
+
+    /** Creates an instance of SubscriptionCreateParameters class. */
+    public SubscriptionCreateParameters() {
+    }
 
     /**
      * Get the innerProperties property: Subscription contract properties.

@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.resourcehealth.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Useful links for service health event. */
 @Fluent
 public final class Link {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Link.class);
-
     /*
      * Type of link.
      */
@@ -27,25 +23,27 @@ public final class Link {
     private LinkDisplayText displayText;
 
     /*
-     * It provides the name of portal extension to produce link for given
-     * service health event.
+     * It provides the name of portal extension to produce link for given service health event.
      */
     @JsonProperty(value = "extensionName")
     private String extensionName;
 
     /*
-     * It provides the name of portal extension blade to produce link for given
-     * service health event.
+     * It provides the name of portal extension blade to produce link for given service health event.
      */
     @JsonProperty(value = "bladeName")
     private String bladeName;
 
     /*
-     * It provides a map of parameter name and value for portal extension blade
-     * to produce lik for given service health event.
+     * It provides a map of parameter name and value for portal extension blade to produce lik for given service health
+     * event.
      */
     @JsonProperty(value = "parameters")
     private Object parameters;
+
+    /** Creates an instance of Link class. */
+    public Link() {
+    }
 
     /**
      * Get the type property: Type of link.

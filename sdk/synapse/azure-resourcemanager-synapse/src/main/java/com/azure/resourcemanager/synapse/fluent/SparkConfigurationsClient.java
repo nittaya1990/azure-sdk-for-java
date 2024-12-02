@@ -10,11 +10,33 @@ import com.azure.core.http.rest.Response;
 import com.azure.core.util.Context;
 import com.azure.resourcemanager.synapse.fluent.models.SparkConfigurationResourceInner;
 
-/** An instance of this class provides access to all the operations defined in SparkConfigurationsClient. */
+/**
+ * An instance of this class provides access to all the operations defined in SparkConfigurationsClient.
+ */
 public interface SparkConfigurationsClient {
     /**
+     * Get SparkConfiguration by name.
+     * 
      * Get SparkConfiguration by name in a workspace.
-     *
+     * 
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param sparkConfigurationName SparkConfiguration name.
+     * @param workspaceName The name of the workspace.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return sparkConfiguration by name in a workspace along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<SparkConfigurationResourceInner> getWithResponse(String resourceGroupName, String sparkConfigurationName,
+        String workspaceName, Context context);
+
+    /**
+     * Get SparkConfiguration by name.
+     * 
+     * Get SparkConfiguration by name in a workspace.
+     * 
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param sparkConfigurationName SparkConfiguration name.
      * @param workspaceName The name of the workspace.
@@ -25,20 +47,4 @@ public interface SparkConfigurationsClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     SparkConfigurationResourceInner get(String resourceGroupName, String sparkConfigurationName, String workspaceName);
-
-    /**
-     * Get SparkConfiguration by name in a workspace.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param sparkConfigurationName SparkConfiguration name.
-     * @param workspaceName The name of the workspace.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return sparkConfiguration by name in a workspace.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<SparkConfigurationResourceInner> getWithResponse(
-        String resourceGroupName, String sparkConfigurationName, String workspaceName, Context context);
 }

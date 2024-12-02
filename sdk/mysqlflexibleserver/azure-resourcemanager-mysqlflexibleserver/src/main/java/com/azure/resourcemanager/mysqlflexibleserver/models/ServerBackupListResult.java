@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.mysqlflexibleserver.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.mysqlflexibleserver.fluent.models.ServerBackupInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** A list of server backups. */
+/**
+ * A list of server backups.
+ */
 @Fluent
 public final class ServerBackupListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ServerBackupListResult.class);
-
     /*
      * The list of backups of a server.
      */
@@ -29,8 +27,14 @@ public final class ServerBackupListResult {
     private String nextLink;
 
     /**
+     * Creates an instance of ServerBackupListResult class.
+     */
+    public ServerBackupListResult() {
+    }
+
+    /**
      * Get the value property: The list of backups of a server.
-     *
+     * 
      * @return the value value.
      */
     public List<ServerBackupInner> value() {
@@ -39,7 +43,7 @@ public final class ServerBackupListResult {
 
     /**
      * Set the value property: The list of backups of a server.
-     *
+     * 
      * @param value the value value to set.
      * @return the ServerBackupListResult object itself.
      */
@@ -50,7 +54,7 @@ public final class ServerBackupListResult {
 
     /**
      * Get the nextLink property: The link used to get the next page of operations.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -59,7 +63,7 @@ public final class ServerBackupListResult {
 
     /**
      * Set the nextLink property: The link used to get the next page of operations.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the ServerBackupListResult object itself.
      */
@@ -70,7 +74,7 @@ public final class ServerBackupListResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

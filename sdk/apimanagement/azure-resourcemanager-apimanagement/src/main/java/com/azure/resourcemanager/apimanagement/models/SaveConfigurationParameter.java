@@ -5,21 +5,21 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.models.SaveConfigurationParameterProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Save Tenant Configuration Contract details. */
 @Fluent
 public final class SaveConfigurationParameter {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SaveConfigurationParameter.class);
-
     /*
      * Properties of the Save Configuration Parameters.
      */
     @JsonProperty(value = "properties")
     private SaveConfigurationParameterProperties innerProperties;
+
+    /** Creates an instance of SaveConfigurationParameter class. */
+    public SaveConfigurationParameter() {
+    }
 
     /**
      * Get the innerProperties property: Properties of the Save Configuration Parameters.

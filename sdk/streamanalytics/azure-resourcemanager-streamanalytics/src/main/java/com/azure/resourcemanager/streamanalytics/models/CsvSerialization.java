@@ -5,51 +5,64 @@
 package com.azure.resourcemanager.streamanalytics.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import com.azure.resourcemanager.streamanalytics.fluent.models.CsvSerializationProperties;
+import java.io.IOException;
 
-/** Describes how data from an input is serialized or how data is serialized when written to an output in CSV format. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@JsonTypeName("Csv")
-@JsonFlatten
+/**
+ * Describes how data from an input is serialized or how data is serialized when written to an output in CSV format.
+ */
 @Fluent
-public class CsvSerialization extends Serialization {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CsvSerialization.class);
-
+public final class CsvSerialization extends Serialization {
     /*
-     * Specifies the delimiter that will be used to separate comma-separated
-     * value (CSV) records. See
-     * https://docs.microsoft.com/en-us/rest/api/streamanalytics/stream-analytics-input
-     * or
-     * https://docs.microsoft.com/en-us/rest/api/streamanalytics/stream-analytics-output
-     * for a list of supported values. Required on PUT (CreateOrReplace)
-     * requests.
+     * Indicates the type of serialization that the input or output uses. Required on PUT (CreateOrReplace) requests.
      */
-    @JsonProperty(value = "properties.fieldDelimiter")
-    private String fieldDelimiter;
+    private EventSerializationType type = EventSerializationType.CSV;
 
     /*
-     * Specifies the encoding of the incoming data in the case of input and the
-     * encoding of outgoing data in the case of output. Required on PUT
+     * The properties that are associated with the CSV serialization type. Required on PUT (CreateOrReplace) requests.
+     */
+    private CsvSerializationProperties innerProperties;
+
+    /**
+     * Creates an instance of CsvSerialization class.
+     */
+    public CsvSerialization() {
+    }
+
+    /**
+     * Get the type property: Indicates the type of serialization that the input or output uses. Required on PUT
      * (CreateOrReplace) requests.
+     * 
+     * @return the type value.
      */
-    @JsonProperty(value = "properties.encoding")
-    private Encoding encoding;
+    @Override
+    public EventSerializationType type() {
+        return this.type;
+    }
+
+    /**
+     * Get the innerProperties property: The properties that are associated with the CSV serialization type. Required on
+     * PUT (CreateOrReplace) requests.
+     * 
+     * @return the innerProperties value.
+     */
+    private CsvSerializationProperties innerProperties() {
+        return this.innerProperties;
+    }
 
     /**
      * Get the fieldDelimiter property: Specifies the delimiter that will be used to separate comma-separated value
      * (CSV) records. See https://docs.microsoft.com/en-us/rest/api/streamanalytics/stream-analytics-input or
      * https://docs.microsoft.com/en-us/rest/api/streamanalytics/stream-analytics-output for a list of supported values.
      * Required on PUT (CreateOrReplace) requests.
-     *
+     * 
      * @return the fieldDelimiter value.
      */
     public String fieldDelimiter() {
-        return this.fieldDelimiter;
+        return this.innerProperties() == null ? null : this.innerProperties().fieldDelimiter();
     }
 
     /**
@@ -57,44 +70,91 @@ public class CsvSerialization extends Serialization {
      * (CSV) records. See https://docs.microsoft.com/en-us/rest/api/streamanalytics/stream-analytics-input or
      * https://docs.microsoft.com/en-us/rest/api/streamanalytics/stream-analytics-output for a list of supported values.
      * Required on PUT (CreateOrReplace) requests.
-     *
+     * 
      * @param fieldDelimiter the fieldDelimiter value to set.
      * @return the CsvSerialization object itself.
      */
     public CsvSerialization withFieldDelimiter(String fieldDelimiter) {
-        this.fieldDelimiter = fieldDelimiter;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new CsvSerializationProperties();
+        }
+        this.innerProperties().withFieldDelimiter(fieldDelimiter);
         return this;
     }
 
     /**
      * Get the encoding property: Specifies the encoding of the incoming data in the case of input and the encoding of
      * outgoing data in the case of output. Required on PUT (CreateOrReplace) requests.
-     *
+     * 
      * @return the encoding value.
      */
     public Encoding encoding() {
-        return this.encoding;
+        return this.innerProperties() == null ? null : this.innerProperties().encoding();
     }
 
     /**
      * Set the encoding property: Specifies the encoding of the incoming data in the case of input and the encoding of
      * outgoing data in the case of output. Required on PUT (CreateOrReplace) requests.
-     *
+     * 
      * @param encoding the encoding value to set.
      * @return the CsvSerialization object itself.
      */
     public CsvSerialization withEncoding(Encoding encoding) {
-        this.encoding = encoding;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new CsvSerializationProperties();
+        }
+        this.innerProperties().withEncoding(encoding);
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
-        super.validate();
+        if (innerProperties() != null) {
+            innerProperties().validate();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeStringField("type", this.type == null ? null : this.type.toString());
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of CsvSerialization from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of CsvSerialization if the JsonReader was pointing to an instance of it, or null if it was
+     * pointing to JSON null.
+     * @throws IOException If an error occurs while reading the CsvSerialization.
+     */
+    public static CsvSerialization fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            CsvSerialization deserializedCsvSerialization = new CsvSerialization();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("type".equals(fieldName)) {
+                    deserializedCsvSerialization.type = EventSerializationType.fromString(reader.getString());
+                } else if ("properties".equals(fieldName)) {
+                    deserializedCsvSerialization.innerProperties = CsvSerializationProperties.fromJson(reader);
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedCsvSerialization;
+        });
     }
 }

@@ -6,14 +6,13 @@ package com.azure.resourcemanager.communication.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Description of an Azure Notification Hub to link to the communication service. */
+/**
+ * Description of an Azure Notification Hub to link to the communication service.
+ */
 @Fluent
 public final class LinkNotificationHubParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(LinkNotificationHubParameters.class);
-
     /*
      * The resource ID of the notification hub
      */
@@ -27,8 +26,14 @@ public final class LinkNotificationHubParameters {
     private String connectionString;
 
     /**
+     * Creates an instance of LinkNotificationHubParameters class.
+     */
+    public LinkNotificationHubParameters() {
+    }
+
+    /**
      * Get the resourceId property: The resource ID of the notification hub.
-     *
+     * 
      * @return the resourceId value.
      */
     public String resourceId() {
@@ -37,7 +42,7 @@ public final class LinkNotificationHubParameters {
 
     /**
      * Set the resourceId property: The resource ID of the notification hub.
-     *
+     * 
      * @param resourceId the resourceId value to set.
      * @return the LinkNotificationHubParameters object itself.
      */
@@ -48,7 +53,7 @@ public final class LinkNotificationHubParameters {
 
     /**
      * Get the connectionString property: Connection string for the notification hub.
-     *
+     * 
      * @return the connectionString value.
      */
     public String connectionString() {
@@ -57,7 +62,7 @@ public final class LinkNotificationHubParameters {
 
     /**
      * Set the connectionString property: Connection string for the notification hub.
-     *
+     * 
      * @param connectionString the connectionString value to set.
      * @return the LinkNotificationHubParameters object itself.
      */
@@ -68,21 +73,19 @@ public final class LinkNotificationHubParameters {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (resourceId() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property resourceId in model LinkNotificationHubParameters"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property resourceId in model LinkNotificationHubParameters"));
         }
         if (connectionString() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property connectionString in model LinkNotificationHubParameters"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property connectionString in model LinkNotificationHubParameters"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(LinkNotificationHubParameters.class);
 }

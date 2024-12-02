@@ -5,132 +5,193 @@
 package com.azure.resourcemanager.streamanalytics.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import com.azure.resourcemanager.streamanalytics.fluent.models.CSharpFunctionBindingProperties;
+import java.io.IOException;
 
-/** The binding to a CSharp function. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@JsonTypeName("Microsoft.StreamAnalytics/CLRUdf")
-@JsonFlatten
+/**
+ * The binding to a CSharp function.
+ */
 @Fluent
-public class CSharpFunctionBinding extends FunctionBinding {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CSharpFunctionBinding.class);
+public final class CSharpFunctionBinding extends FunctionBinding {
+    /*
+     * Indicates the function binding type.
+     */
+    private String type = "Microsoft.StreamAnalytics/CLRUdf";
 
     /*
-     * The Csharp code containing a single function definition.
+     * The binding properties associated with a CSharp function.
      */
-    @JsonProperty(value = "properties.script")
-    private String script;
-
-    /*
-     * The Csharp code containing a single function definition.
-     */
-    @JsonProperty(value = "properties.dllPath")
-    private String dllPath;
-
-    /*
-     * The Csharp code containing a single function definition.
-     */
-    @JsonProperty(value = "properties.class")
-    private String classProperty;
-
-    /*
-     * The Csharp code containing a single function definition.
-     */
-    @JsonProperty(value = "properties.method")
-    private String method;
+    private CSharpFunctionBindingProperties innerProperties;
 
     /**
-     * Get the script property: The Csharp code containing a single function definition.
-     *
-     * @return the script value.
+     * Creates an instance of CSharpFunctionBinding class.
      */
-    public String script() {
-        return this.script;
+    public CSharpFunctionBinding() {
     }
 
     /**
-     * Set the script property: The Csharp code containing a single function definition.
-     *
-     * @param script the script value to set.
-     * @return the CSharpFunctionBinding object itself.
+     * Get the type property: Indicates the function binding type.
+     * 
+     * @return the type value.
      */
-    public CSharpFunctionBinding withScript(String script) {
-        this.script = script;
-        return this;
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
+     * Get the innerProperties property: The binding properties associated with a CSharp function.
+     * 
+     * @return the innerProperties value.
+     */
+    private CSharpFunctionBindingProperties innerProperties() {
+        return this.innerProperties;
     }
 
     /**
      * Get the dllPath property: The Csharp code containing a single function definition.
-     *
+     * 
      * @return the dllPath value.
      */
     public String dllPath() {
-        return this.dllPath;
+        return this.innerProperties() == null ? null : this.innerProperties().dllPath();
     }
 
     /**
      * Set the dllPath property: The Csharp code containing a single function definition.
-     *
+     * 
      * @param dllPath the dllPath value to set.
      * @return the CSharpFunctionBinding object itself.
      */
     public CSharpFunctionBinding withDllPath(String dllPath) {
-        this.dllPath = dllPath;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new CSharpFunctionBindingProperties();
+        }
+        this.innerProperties().withDllPath(dllPath);
         return this;
     }
 
     /**
      * Get the classProperty property: The Csharp code containing a single function definition.
-     *
+     * 
      * @return the classProperty value.
      */
     public String classProperty() {
-        return this.classProperty;
+        return this.innerProperties() == null ? null : this.innerProperties().classProperty();
     }
 
     /**
      * Set the classProperty property: The Csharp code containing a single function definition.
-     *
+     * 
      * @param classProperty the classProperty value to set.
      * @return the CSharpFunctionBinding object itself.
      */
     public CSharpFunctionBinding withClassProperty(String classProperty) {
-        this.classProperty = classProperty;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new CSharpFunctionBindingProperties();
+        }
+        this.innerProperties().withClassProperty(classProperty);
         return this;
     }
 
     /**
      * Get the method property: The Csharp code containing a single function definition.
-     *
+     * 
      * @return the method value.
      */
     public String method() {
-        return this.method;
+        return this.innerProperties() == null ? null : this.innerProperties().method();
     }
 
     /**
      * Set the method property: The Csharp code containing a single function definition.
-     *
+     * 
      * @param method the method value to set.
      * @return the CSharpFunctionBinding object itself.
      */
     public CSharpFunctionBinding withMethod(String method) {
-        this.method = method;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new CSharpFunctionBindingProperties();
+        }
+        this.innerProperties().withMethod(method);
+        return this;
+    }
+
+    /**
+     * Get the updateMode property: Refresh modes for Stream Analytics functions.
+     * 
+     * @return the updateMode value.
+     */
+    public UpdateMode updateMode() {
+        return this.innerProperties() == null ? null : this.innerProperties().updateMode();
+    }
+
+    /**
+     * Set the updateMode property: Refresh modes for Stream Analytics functions.
+     * 
+     * @param updateMode the updateMode value to set.
+     * @return the CSharpFunctionBinding object itself.
+     */
+    public CSharpFunctionBinding withUpdateMode(UpdateMode updateMode) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new CSharpFunctionBindingProperties();
+        }
+        this.innerProperties().withUpdateMode(updateMode);
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
-        super.validate();
+        if (innerProperties() != null) {
+            innerProperties().validate();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeStringField("type", this.type);
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of CSharpFunctionBinding from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of CSharpFunctionBinding if the JsonReader was pointing to an instance of it, or null if it
+     * was pointing to JSON null.
+     * @throws IOException If an error occurs while reading the CSharpFunctionBinding.
+     */
+    public static CSharpFunctionBinding fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            CSharpFunctionBinding deserializedCSharpFunctionBinding = new CSharpFunctionBinding();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("type".equals(fieldName)) {
+                    deserializedCSharpFunctionBinding.type = reader.getString();
+                } else if ("properties".equals(fieldName)) {
+                    deserializedCSharpFunctionBinding.innerProperties
+                        = CSharpFunctionBindingProperties.fromJson(reader);
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedCSharpFunctionBinding;
+        });
     }
 }

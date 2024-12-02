@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
-/** Additional information on Azure Sql specific protected item. */
+/**
+ * Additional information on Azure Sql specific protected item.
+ */
 @Fluent
 public final class AzureSqlProtectedItemExtendedInfo {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureSqlProtectedItemExtendedInfo.class);
-
     /*
      * The oldest backup copy available for this item in the service.
      */
@@ -34,8 +32,14 @@ public final class AzureSqlProtectedItemExtendedInfo {
     private String policyState;
 
     /**
+     * Creates an instance of AzureSqlProtectedItemExtendedInfo class.
+     */
+    public AzureSqlProtectedItemExtendedInfo() {
+    }
+
+    /**
      * Get the oldestRecoveryPoint property: The oldest backup copy available for this item in the service.
-     *
+     * 
      * @return the oldestRecoveryPoint value.
      */
     public OffsetDateTime oldestRecoveryPoint() {
@@ -44,7 +48,7 @@ public final class AzureSqlProtectedItemExtendedInfo {
 
     /**
      * Set the oldestRecoveryPoint property: The oldest backup copy available for this item in the service.
-     *
+     * 
      * @param oldestRecoveryPoint the oldestRecoveryPoint value to set.
      * @return the AzureSqlProtectedItemExtendedInfo object itself.
      */
@@ -55,7 +59,7 @@ public final class AzureSqlProtectedItemExtendedInfo {
 
     /**
      * Get the recoveryPointCount property: Number of available backup copies associated with this backup item.
-     *
+     * 
      * @return the recoveryPointCount value.
      */
     public Integer recoveryPointCount() {
@@ -64,7 +68,7 @@ public final class AzureSqlProtectedItemExtendedInfo {
 
     /**
      * Set the recoveryPointCount property: Number of available backup copies associated with this backup item.
-     *
+     * 
      * @param recoveryPointCount the recoveryPointCount value to set.
      * @return the AzureSqlProtectedItemExtendedInfo object itself.
      */
@@ -75,7 +79,7 @@ public final class AzureSqlProtectedItemExtendedInfo {
 
     /**
      * Get the policyState property: State of the backup policy associated with this backup item.
-     *
+     * 
      * @return the policyState value.
      */
     public String policyState() {
@@ -84,7 +88,7 @@ public final class AzureSqlProtectedItemExtendedInfo {
 
     /**
      * Set the policyState property: State of the backup policy associated with this backup item.
-     *
+     * 
      * @param policyState the policyState value to set.
      * @return the AzureSqlProtectedItemExtendedInfo object itself.
      */
@@ -95,7 +99,7 @@ public final class AzureSqlProtectedItemExtendedInfo {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

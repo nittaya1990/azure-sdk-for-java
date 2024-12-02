@@ -108,6 +108,21 @@ public interface IdentityProviderContract {
     String passwordResetPolicyName();
 
     /**
+     * Gets the clientLibrary property: The client library to be used in the developer portal. Only applies to AAD and
+     * AAD B2C Identity Provider.
+     *
+     * @return the clientLibrary value.
+     */
+    String clientLibrary();
+
+    /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
+
+    /**
      * Gets the inner com.azure.resourcemanager.apimanagement.fluent.models.IdentityProviderContractInner object.
      *
      * @return the inner object.
@@ -118,38 +133,35 @@ public interface IdentityProviderContract {
     interface Definition
         extends DefinitionStages.Blank, DefinitionStages.WithParentResource, DefinitionStages.WithCreate {
     }
+
     /** The IdentityProviderContract definition stages. */
     interface DefinitionStages {
         /** The first stage of the IdentityProviderContract definition. */
         interface Blank extends WithParentResource {
         }
+
         /** The stage of the IdentityProviderContract definition allowing to specify parent resource. */
         interface WithParentResource {
             /**
              * Specifies resourceGroupName, serviceName.
              *
-             * @param resourceGroupName The name of the resource group.
+             * @param resourceGroupName The name of the resource group. The name is case insensitive.
              * @param serviceName The name of the API Management service.
              * @return the next definition stage.
              */
             WithCreate withExistingService(String resourceGroupName, String serviceName);
         }
+
         /**
          * The stage of the IdentityProviderContract definition which contains all the minimum required properties for
          * the resource to be created, but also allows for any other optional properties to be specified.
          */
-        interface WithCreate
-            extends DefinitionStages.WithClientId,
-                DefinitionStages.WithClientSecret,
-                DefinitionStages.WithTypePropertiesType,
-                DefinitionStages.WithSigninTenant,
-                DefinitionStages.WithAllowedTenants,
-                DefinitionStages.WithAuthority,
-                DefinitionStages.WithSignupPolicyName,
-                DefinitionStages.WithSigninPolicyName,
-                DefinitionStages.WithProfileEditingPolicyName,
-                DefinitionStages.WithPasswordResetPolicyName,
-                DefinitionStages.WithIfMatch {
+        interface WithCreate extends DefinitionStages.WithClientId, DefinitionStages.WithClientSecret,
+            DefinitionStages.WithTypePropertiesType, DefinitionStages.WithSigninTenant,
+            DefinitionStages.WithAllowedTenants, DefinitionStages.WithAuthority, DefinitionStages.WithSignupPolicyName,
+            DefinitionStages.WithSigninPolicyName, DefinitionStages.WithProfileEditingPolicyName,
+            DefinitionStages.WithPasswordResetPolicyName, DefinitionStages.WithClientLibrary,
+            DefinitionStages.WithIfMatch {
             /**
              * Executes the create request.
              *
@@ -165,6 +177,7 @@ public interface IdentityProviderContract {
              */
             IdentityProviderContract create(Context context);
         }
+
         /** The stage of the IdentityProviderContract definition allowing to specify clientId. */
         interface WithClientId {
             /**
@@ -177,6 +190,7 @@ public interface IdentityProviderContract {
              */
             WithCreate withClientId(String clientId);
         }
+
         /** The stage of the IdentityProviderContract definition allowing to specify clientSecret. */
         interface WithClientSecret {
             /**
@@ -193,6 +207,7 @@ public interface IdentityProviderContract {
              */
             WithCreate withClientSecret(String clientSecret);
         }
+
         /** The stage of the IdentityProviderContract definition allowing to specify typePropertiesType. */
         interface WithTypePropertiesType {
             /**
@@ -203,6 +218,7 @@ public interface IdentityProviderContract {
              */
             WithCreate withTypePropertiesType(IdentityProviderType typePropertiesType);
         }
+
         /** The stage of the IdentityProviderContract definition allowing to specify signinTenant. */
         interface WithSigninTenant {
             /**
@@ -214,6 +230,7 @@ public interface IdentityProviderContract {
              */
             WithCreate withSigninTenant(String signinTenant);
         }
+
         /** The stage of the IdentityProviderContract definition allowing to specify allowedTenants. */
         interface WithAllowedTenants {
             /**
@@ -225,6 +242,7 @@ public interface IdentityProviderContract {
              */
             WithCreate withAllowedTenants(List<String> allowedTenants);
         }
+
         /** The stage of the IdentityProviderContract definition allowing to specify authority. */
         interface WithAuthority {
             /**
@@ -235,6 +253,7 @@ public interface IdentityProviderContract {
              */
             WithCreate withAuthority(String authority);
         }
+
         /** The stage of the IdentityProviderContract definition allowing to specify signupPolicyName. */
         interface WithSignupPolicyName {
             /**
@@ -245,6 +264,7 @@ public interface IdentityProviderContract {
              */
             WithCreate withSignupPolicyName(String signupPolicyName);
         }
+
         /** The stage of the IdentityProviderContract definition allowing to specify signinPolicyName. */
         interface WithSigninPolicyName {
             /**
@@ -255,6 +275,7 @@ public interface IdentityProviderContract {
              */
             WithCreate withSigninPolicyName(String signinPolicyName);
         }
+
         /** The stage of the IdentityProviderContract definition allowing to specify profileEditingPolicyName. */
         interface WithProfileEditingPolicyName {
             /**
@@ -266,6 +287,7 @@ public interface IdentityProviderContract {
              */
             WithCreate withProfileEditingPolicyName(String profileEditingPolicyName);
         }
+
         /** The stage of the IdentityProviderContract definition allowing to specify passwordResetPolicyName. */
         interface WithPasswordResetPolicyName {
             /**
@@ -277,6 +299,20 @@ public interface IdentityProviderContract {
              */
             WithCreate withPasswordResetPolicyName(String passwordResetPolicyName);
         }
+
+        /** The stage of the IdentityProviderContract definition allowing to specify clientLibrary. */
+        interface WithClientLibrary {
+            /**
+             * Specifies the clientLibrary property: The client library to be used in the developer portal. Only applies
+             * to AAD and AAD B2C Identity Provider..
+             *
+             * @param clientLibrary The client library to be used in the developer portal. Only applies to AAD and AAD
+             *     B2C Identity Provider.
+             * @return the next definition stage.
+             */
+            WithCreate withClientLibrary(String clientLibrary);
+        }
+
         /** The stage of the IdentityProviderContract definition allowing to specify ifMatch. */
         interface WithIfMatch {
             /**
@@ -290,6 +326,7 @@ public interface IdentityProviderContract {
             WithCreate withIfMatch(String ifMatch);
         }
     }
+
     /**
      * Begins update for the IdentityProviderContract resource.
      *
@@ -298,18 +335,10 @@ public interface IdentityProviderContract {
     IdentityProviderContract.Update update();
 
     /** The template for IdentityProviderContract update. */
-    interface Update
-        extends UpdateStages.WithClientId,
-            UpdateStages.WithClientSecret,
-            UpdateStages.WithType,
-            UpdateStages.WithSigninTenant,
-            UpdateStages.WithAllowedTenants,
-            UpdateStages.WithAuthority,
-            UpdateStages.WithSignupPolicyName,
-            UpdateStages.WithSigninPolicyName,
-            UpdateStages.WithProfileEditingPolicyName,
-            UpdateStages.WithPasswordResetPolicyName,
-            UpdateStages.WithIfMatch {
+    interface Update extends UpdateStages.WithClientId, UpdateStages.WithClientSecret, UpdateStages.WithType,
+        UpdateStages.WithSigninTenant, UpdateStages.WithAllowedTenants, UpdateStages.WithAuthority,
+        UpdateStages.WithSignupPolicyName, UpdateStages.WithSigninPolicyName, UpdateStages.WithProfileEditingPolicyName,
+        UpdateStages.WithPasswordResetPolicyName, UpdateStages.WithClientLibrary, UpdateStages.WithIfMatch {
         /**
          * Executes the update request.
          *
@@ -325,6 +354,7 @@ public interface IdentityProviderContract {
          */
         IdentityProviderContract apply(Context context);
     }
+
     /** The IdentityProviderContract update stages. */
     interface UpdateStages {
         /** The stage of the IdentityProviderContract update allowing to specify clientId. */
@@ -339,6 +369,7 @@ public interface IdentityProviderContract {
              */
             Update withClientId(String clientId);
         }
+
         /** The stage of the IdentityProviderContract update allowing to specify clientSecret. */
         interface WithClientSecret {
             /**
@@ -353,6 +384,7 @@ public interface IdentityProviderContract {
              */
             Update withClientSecret(String clientSecret);
         }
+
         /** The stage of the IdentityProviderContract update allowing to specify type. */
         interface WithType {
             /**
@@ -363,6 +395,7 @@ public interface IdentityProviderContract {
              */
             Update withType(IdentityProviderType type);
         }
+
         /** The stage of the IdentityProviderContract update allowing to specify signinTenant. */
         interface WithSigninTenant {
             /**
@@ -374,6 +407,7 @@ public interface IdentityProviderContract {
              */
             Update withSigninTenant(String signinTenant);
         }
+
         /** The stage of the IdentityProviderContract update allowing to specify allowedTenants. */
         interface WithAllowedTenants {
             /**
@@ -385,6 +419,7 @@ public interface IdentityProviderContract {
              */
             Update withAllowedTenants(List<String> allowedTenants);
         }
+
         /** The stage of the IdentityProviderContract update allowing to specify authority. */
         interface WithAuthority {
             /**
@@ -395,6 +430,7 @@ public interface IdentityProviderContract {
              */
             Update withAuthority(String authority);
         }
+
         /** The stage of the IdentityProviderContract update allowing to specify signupPolicyName. */
         interface WithSignupPolicyName {
             /**
@@ -405,6 +441,7 @@ public interface IdentityProviderContract {
              */
             Update withSignupPolicyName(String signupPolicyName);
         }
+
         /** The stage of the IdentityProviderContract update allowing to specify signinPolicyName. */
         interface WithSigninPolicyName {
             /**
@@ -415,6 +452,7 @@ public interface IdentityProviderContract {
              */
             Update withSigninPolicyName(String signinPolicyName);
         }
+
         /** The stage of the IdentityProviderContract update allowing to specify profileEditingPolicyName. */
         interface WithProfileEditingPolicyName {
             /**
@@ -426,6 +464,7 @@ public interface IdentityProviderContract {
              */
             Update withProfileEditingPolicyName(String profileEditingPolicyName);
         }
+
         /** The stage of the IdentityProviderContract update allowing to specify passwordResetPolicyName. */
         interface WithPasswordResetPolicyName {
             /**
@@ -437,6 +476,20 @@ public interface IdentityProviderContract {
              */
             Update withPasswordResetPolicyName(String passwordResetPolicyName);
         }
+
+        /** The stage of the IdentityProviderContract update allowing to specify clientLibrary. */
+        interface WithClientLibrary {
+            /**
+             * Specifies the clientLibrary property: The client library to be used in the developer portal. Only applies
+             * to AAD and AAD B2C Identity Provider..
+             *
+             * @param clientLibrary The client library to be used in the developer portal. Only applies to AAD and AAD
+             *     B2C Identity Provider.
+             * @return the next definition stage.
+             */
+            Update withClientLibrary(String clientLibrary);
+        }
+
         /** The stage of the IdentityProviderContract update allowing to specify ifMatch. */
         interface WithIfMatch {
             /**
@@ -450,6 +503,7 @@ public interface IdentityProviderContract {
             Update withIfMatch(String ifMatch);
         }
     }
+
     /**
      * Refreshes the resource to sync with Azure.
      *
@@ -468,15 +522,6 @@ public interface IdentityProviderContract {
     /**
      * Gets the client secret details of the Identity Provider.
      *
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the client secret details of the Identity Provider.
-     */
-    ClientSecretContract listSecrets();
-
-    /**
-     * Gets the client secret details of the Identity Provider.
-     *
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
@@ -484,4 +529,13 @@ public interface IdentityProviderContract {
      * @return the client secret details of the Identity Provider.
      */
     Response<ClientSecretContract> listSecretsWithResponse(Context context);
+
+    /**
+     * Gets the client secret details of the Identity Provider.
+     *
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the client secret details of the Identity Provider.
+     */
+    ClientSecretContract listSecrets();
 }

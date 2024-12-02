@@ -16,8 +16,8 @@ public final class SparkConfigurationResourceImpl implements SparkConfigurationR
 
     private final com.azure.resourcemanager.synapse.SynapseManager serviceManager;
 
-    SparkConfigurationResourceImpl(
-        SparkConfigurationResourceInner innerObject, com.azure.resourcemanager.synapse.SynapseManager serviceManager) {
+    SparkConfigurationResourceImpl(SparkConfigurationResourceInner innerObject,
+        com.azure.resourcemanager.synapse.SynapseManager serviceManager) {
         this.innerObject = innerObject;
         this.serviceManager = serviceManager;
     }
@@ -70,6 +70,15 @@ public final class SparkConfigurationResourceImpl implements SparkConfigurationR
 
     public OffsetDateTime created() {
         return this.innerModel().created();
+    }
+
+    public Map<String, String> configMergeRule() {
+        Map<String, String> inner = this.innerModel().configMergeRule();
+        if (inner != null) {
+            return Collections.unmodifiableMap(inner);
+        } else {
+            return Collections.emptyMap();
+        }
     }
 
     public SparkConfigurationResourceInner innerModel() {

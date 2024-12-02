@@ -6,15 +6,12 @@ package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
 /** Gateway token request contract properties. */
 @Fluent
 public final class GatewayTokenRequestContract {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(GatewayTokenRequestContract.class);
-
     /*
      * The Key to be used to generate gateway token.
      */
@@ -22,13 +19,16 @@ public final class GatewayTokenRequestContract {
     private KeyType keyType;
 
     /*
-     * The Expiry time of the Token. Maximum token expiry time is set to 30
-     * days. The date conforms to the following format: `yyyy-MM-ddTHH:mm:ssZ`
-     * as specified by the ISO 8601 standard.
+     * The Expiry time of the Token. Maximum token expiry time is set to 30 days. The date conforms to the following
+     * format: `yyyy-MM-ddTHH:mm:ssZ` as specified by the ISO 8601 standard.
      *
      */
     @JsonProperty(value = "expiry", required = true)
     private OffsetDateTime expiry;
+
+    /** Creates an instance of GatewayTokenRequestContract class. */
+    public GatewayTokenRequestContract() {
+    }
 
     /**
      * Get the keyType property: The Key to be used to generate gateway token.
@@ -79,16 +79,14 @@ public final class GatewayTokenRequestContract {
      */
     public void validate() {
         if (keyType() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property keyType in model GatewayTokenRequestContract"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property keyType in model GatewayTokenRequestContract"));
         }
         if (expiry() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property expiry in model GatewayTokenRequestContract"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property expiry in model GatewayTokenRequestContract"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(GatewayTokenRequestContract.class);
 }

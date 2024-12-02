@@ -4,13 +4,12 @@
 
 package com.azure.resourcemanager.kusto.generated;
 
-import com.azure.core.util.Context;
 import com.azure.resourcemanager.kusto.fluent.models.FollowerDatabaseDefinitionInner;
 
 /** Samples for Clusters DetachFollowerDatabases. */
 public final class ClustersDetachFollowerDatabasesSamples {
     /*
-     * x-ms-original-file: specification/azure-kusto/resource-manager/Microsoft.Kusto/stable/2021-08-27/examples/KustoClusterDetachFollowerDatabases.json
+     * x-ms-original-file: specification/azure-kusto/resource-manager/Microsoft.Kusto/stable/2023-08-15/examples/KustoClusterDetachFollowerDatabases.json
      */
     /**
      * Sample code: KustoClusterDetachFollowerDatabases.
@@ -22,11 +21,11 @@ public final class ClustersDetachFollowerDatabasesSamples {
             .clusters()
             .detachFollowerDatabases(
                 "kustorptest",
-                "kustoclusterrptest4",
+                "kustoCluster",
                 new FollowerDatabaseDefinitionInner()
                     .withClusterResourceId(
-                        "/subscriptions/12345678-1234-1234-1234-123456789098/resourceGroups/kustorptest/providers/Microsoft.Kusto/clusters/leader4")
-                    .withAttachedDatabaseConfigurationName("myAttachedDatabaseConfiguration"),
-                Context.NONE);
+                        "/subscriptions/12345678-1234-1234-1234-123456789098/resourceGroups/kustorptest/providers/Microsoft.Kusto/clusters/kustoCluster2")
+                    .withAttachedDatabaseConfigurationName("attachedDatabaseConfigurationsTest"),
+                com.azure.core.util.Context.NONE);
     }
 }

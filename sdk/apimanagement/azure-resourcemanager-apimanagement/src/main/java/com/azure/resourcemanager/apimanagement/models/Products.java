@@ -13,19 +13,19 @@ public interface Products {
     /**
      * Lists a collection of products in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Products list representation.
+     * @return paged Products list representation as paginated response with {@link PagedIterable}.
      */
     PagedIterable<ProductContract> listByService(String resourceGroupName, String serviceName);
 
     /**
      * Lists a collection of products in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -43,22 +43,30 @@ public interface Products {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Products list representation.
+     * @return paged Products list representation as paginated response with {@link PagedIterable}.
      */
-    PagedIterable<ProductContract> listByService(
-        String resourceGroupName,
-        String serviceName,
-        String filter,
-        Integer top,
-        Integer skip,
-        Boolean expandGroups,
-        String tags,
-        Context context);
+    PagedIterable<ProductContract> listByService(String resourceGroupName, String serviceName, String filter,
+        Integer top, Integer skip, Boolean expandGroups, String tags, Context context);
 
     /**
      * Gets the entity state (Etag) version of the product specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param productId Product identifier. Must be unique in the current API Management service instance.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the entity state (Etag) version of the product specified by its identifier.
+     */
+    ProductsGetEntityTagResponse getEntityTagWithResponse(String resourceGroupName, String serviceName,
+        String productId, Context context);
+
+    /**
+     * Gets the entity state (Etag) version of the product specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -68,24 +76,24 @@ public interface Products {
     void getEntityTag(String resourceGroupName, String serviceName, String productId);
 
     /**
-     * Gets the entity state (Etag) version of the product specified by its identifier.
+     * Gets the details of the product specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the product specified by its identifier.
+     * @return the details of the product specified by its identifier.
      */
-    ProductsGetEntityTagResponse getEntityTagWithResponse(
-        String resourceGroupName, String serviceName, String productId, Context context);
+    Response<ProductContract> getWithResponse(String resourceGroupName, String serviceName, String productId,
+        Context context);
 
     /**
      * Gets the details of the product specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -96,24 +104,27 @@ public interface Products {
     ProductContract get(String resourceGroupName, String serviceName, String productId);
 
     /**
-     * Gets the details of the product specified by its identifier.
+     * Delete product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @param deleteSubscriptions Delete existing subscriptions associated with the product or not.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the product specified by its identifier.
+     * @return the {@link Response}.
      */
-    Response<ProductContract> getWithResponse(
-        String resourceGroupName, String serviceName, String productId, Context context);
+    Response<Void> deleteWithResponse(String resourceGroupName, String serviceName, String productId, String ifMatch,
+        Boolean deleteSubscriptions, Context context);
 
     /**
      * Delete product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -125,44 +136,21 @@ public interface Products {
     void delete(String resourceGroupName, String serviceName, String productId, String ifMatch);
 
     /**
-     * Delete product.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param productId Product identifier. Must be unique in the current API Management service instance.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @param deleteSubscriptions Delete existing subscriptions associated with the product or not.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    Response<Void> deleteWithResponse(
-        String resourceGroupName,
-        String serviceName,
-        String productId,
-        String ifMatch,
-        Boolean deleteSubscriptions,
-        Context context);
-
-    /**
      * Lists a collection of products associated with tags.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Tag list representation.
+     * @return paged Tag list representation as paginated response with {@link PagedIterable}.
      */
     PagedIterable<TagResourceContract> listByTags(String resourceGroupName, String serviceName);
 
     /**
      * Lists a collection of products associated with tags.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -178,16 +166,10 @@ public interface Products {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Tag list representation.
+     * @return paged Tag list representation as paginated response with {@link PagedIterable}.
      */
-    PagedIterable<TagResourceContract> listByTags(
-        String resourceGroupName,
-        String serviceName,
-        String filter,
-        Integer top,
-        Integer skip,
-        Boolean includeNotTaggedProducts,
-        Context context);
+    PagedIterable<TagResourceContract> listByTags(String resourceGroupName, String serviceName, String filter,
+        Integer top, Integer skip, Boolean includeNotTaggedProducts, Context context);
 
     /**
      * Gets the details of the product specified by its identifier.
@@ -233,7 +215,7 @@ public interface Products {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
     Response<Void> deleteByIdWithResponse(String id, String ifMatch, Boolean deleteSubscriptions, Context context);
 

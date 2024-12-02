@@ -30,8 +30,8 @@ public interface LocationBasedRecommendedActionSessionsOperationStatus {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return recommendation action session operation status.
+     * @return recommendation action session operation status along with {@link Response}.
      */
-    Response<RecommendedActionSessionsOperationStatus> getWithResponse(
-        String locationName, String operationId, Context context);
+    Response<RecommendedActionSessionsOperationStatus> getWithResponse(String locationName, String operationId,
+        Context context);
 }

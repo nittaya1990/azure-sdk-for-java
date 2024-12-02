@@ -14,7 +14,9 @@ import com.azure.resourcemanager.iothub.models.FailoverInput;
 /** An instance of this class provides access to all the operations defined in IotHubsClient. */
 public interface IotHubsClient {
     /**
-     * Manually initiate a failover for the IoT Hub to its secondary region. To learn more, see
+     * Manually initiate a failover for the IoT Hub to its secondary region
+     *
+     * <p>Manually initiate a failover for the IoT Hub to its secondary region. To learn more, see
      * https://aka.ms/manualfailover.
      *
      * @param iotHubName Name of the IoT hub to failover.
@@ -25,14 +27,16 @@ public interface IotHubsClient {
      * @throws com.azure.resourcemanager.iothub.models.ErrorDetailsException thrown if the request is rejected by
      *     server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<Void>, Void> beginManualFailover(
-        String iotHubName, String resourceGroupName, FailoverInput failoverInput);
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<Void>, Void> beginManualFailover(String iotHubName, String resourceGroupName,
+        FailoverInput failoverInput);
 
     /**
-     * Manually initiate a failover for the IoT Hub to its secondary region. To learn more, see
+     * Manually initiate a failover for the IoT Hub to its secondary region
+     *
+     * <p>Manually initiate a failover for the IoT Hub to its secondary region. To learn more, see
      * https://aka.ms/manualfailover.
      *
      * @param iotHubName Name of the IoT hub to failover.
@@ -44,14 +48,16 @@ public interface IotHubsClient {
      * @throws com.azure.resourcemanager.iothub.models.ErrorDetailsException thrown if the request is rejected by
      *     server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    SyncPoller<PollResult<Void>, Void> beginManualFailover(
-        String iotHubName, String resourceGroupName, FailoverInput failoverInput, Context context);
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    SyncPoller<PollResult<Void>, Void> beginManualFailover(String iotHubName, String resourceGroupName,
+        FailoverInput failoverInput, Context context);
 
     /**
-     * Manually initiate a failover for the IoT Hub to its secondary region. To learn more, see
+     * Manually initiate a failover for the IoT Hub to its secondary region
+     *
+     * <p>Manually initiate a failover for the IoT Hub to its secondary region. To learn more, see
      * https://aka.ms/manualfailover.
      *
      * @param iotHubName Name of the IoT hub to failover.
@@ -67,7 +73,9 @@ public interface IotHubsClient {
     void manualFailover(String iotHubName, String resourceGroupName, FailoverInput failoverInput);
 
     /**
-     * Manually initiate a failover for the IoT Hub to its secondary region. To learn more, see
+     * Manually initiate a failover for the IoT Hub to its secondary region
+     *
+     * <p>Manually initiate a failover for the IoT Hub to its secondary region. To learn more, see
      * https://aka.ms/manualfailover.
      *
      * @param iotHubName Name of the IoT hub to failover.

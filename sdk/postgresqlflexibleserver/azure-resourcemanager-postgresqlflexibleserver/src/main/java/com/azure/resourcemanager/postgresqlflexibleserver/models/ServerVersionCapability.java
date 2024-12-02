@@ -5,37 +5,35 @@
 package com.azure.resourcemanager.postgresqlflexibleserver.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Server version capabilities. */
+/**
+ * Server version capabilities.
+ */
 @Immutable
-public final class ServerVersionCapability {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ServerVersionCapability.class);
-
+public final class ServerVersionCapability extends CapabilityBase {
     /*
-     * server version
+     * Server version
      */
     @JsonProperty(value = "name", access = JsonProperty.Access.WRITE_ONLY)
     private String name;
 
     /*
-     * The supportedVcores property.
+     * Supported servers versions to upgrade
      */
-    @JsonProperty(value = "supportedVcores", access = JsonProperty.Access.WRITE_ONLY)
-    private List<VcoreCapability> supportedVcores;
-
-    /*
-     * The status
-     */
-    @JsonProperty(value = "status", access = JsonProperty.Access.WRITE_ONLY)
-    private String status;
+    @JsonProperty(value = "supportedVersionsToUpgrade", access = JsonProperty.Access.WRITE_ONLY)
+    private List<String> supportedVersionsToUpgrade;
 
     /**
-     * Get the name property: server version.
-     *
+     * Creates an instance of ServerVersionCapability class.
+     */
+    public ServerVersionCapability() {
+    }
+
+    /**
+     * Get the name property: Server version.
+     * 
      * @return the name value.
      */
     public String name() {
@@ -43,31 +41,21 @@ public final class ServerVersionCapability {
     }
 
     /**
-     * Get the supportedVcores property: The supportedVcores property.
-     *
-     * @return the supportedVcores value.
+     * Get the supportedVersionsToUpgrade property: Supported servers versions to upgrade.
+     * 
+     * @return the supportedVersionsToUpgrade value.
      */
-    public List<VcoreCapability> supportedVcores() {
-        return this.supportedVcores;
-    }
-
-    /**
-     * Get the status property: The status.
-     *
-     * @return the status value.
-     */
-    public String status() {
-        return this.status;
+    public List<String> supportedVersionsToUpgrade() {
+        return this.supportedVersionsToUpgrade;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
+    @Override
     public void validate() {
-        if (supportedVcores() != null) {
-            supportedVcores().forEach(e -> e.validate());
-        }
+        super.validate();
     }
 }

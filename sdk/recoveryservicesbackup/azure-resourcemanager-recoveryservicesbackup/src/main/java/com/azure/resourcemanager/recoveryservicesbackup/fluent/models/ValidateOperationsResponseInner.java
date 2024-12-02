@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.recoveryservicesbackup.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.recoveryservicesbackup.models.ValidateOperationResponse;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The ValidateOperationsResponse model. */
+/**
+ * The ValidateOperationsResponse model.
+ */
 @Fluent
 public final class ValidateOperationsResponseInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ValidateOperationsResponseInner.class);
-
     /*
      * Base class for validate operation response.
      */
@@ -22,8 +20,14 @@ public final class ValidateOperationsResponseInner {
     private ValidateOperationResponse validateOperationResponse;
 
     /**
+     * Creates an instance of ValidateOperationsResponseInner class.
+     */
+    public ValidateOperationsResponseInner() {
+    }
+
+    /**
      * Get the validateOperationResponse property: Base class for validate operation response.
-     *
+     * 
      * @return the validateOperationResponse value.
      */
     public ValidateOperationResponse validateOperationResponse() {
@@ -32,19 +36,19 @@ public final class ValidateOperationsResponseInner {
 
     /**
      * Set the validateOperationResponse property: Base class for validate operation response.
-     *
+     * 
      * @param validateOperationResponse the validateOperationResponse value to set.
      * @return the ValidateOperationsResponseInner object itself.
      */
-    public ValidateOperationsResponseInner withValidateOperationResponse(
-        ValidateOperationResponse validateOperationResponse) {
+    public ValidateOperationsResponseInner
+        withValidateOperationResponse(ValidateOperationResponse validateOperationResponse) {
         this.validateOperationResponse = validateOperationResponse;
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

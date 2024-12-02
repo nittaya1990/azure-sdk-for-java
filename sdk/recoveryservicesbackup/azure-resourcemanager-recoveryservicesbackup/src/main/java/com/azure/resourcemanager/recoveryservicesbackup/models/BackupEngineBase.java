@@ -5,27 +5,32 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** The base backup engine class. All workload specific backup engines derive from this class. */
+/**
+ * The base backup engine class. All workload specific backup engines derive from this class.
+ */
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
-    include = JsonTypeInfo.As.PROPERTY,
     property = "backupEngineType",
-    defaultImpl = BackupEngineBase.class)
+    defaultImpl = BackupEngineBase.class,
+    visible = true)
 @JsonTypeName("BackupEngineBase")
 @JsonSubTypes({
     @JsonSubTypes.Type(name = "AzureBackupServerEngine", value = AzureBackupServerEngine.class),
-    @JsonSubTypes.Type(name = "DpmBackupEngine", value = DpmBackupEngine.class)
-})
+    @JsonSubTypes.Type(name = "DpmBackupEngine", value = DpmBackupEngine.class) })
 @Fluent
 public class BackupEngineBase {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(BackupEngineBase.class);
+    /*
+     * Type of the backup engine.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "backupEngineType", required = true)
+    private BackupEngineType backupEngineType;
 
     /*
      * Friendly name of the backup engine.
@@ -40,15 +45,13 @@ public class BackupEngineBase {
     private BackupManagementType backupManagementType;
 
     /*
-     * Registration status of the backup engine with the Recovery Services
-     * Vault.
+     * Registration status of the backup engine with the Recovery Services Vault.
      */
     @JsonProperty(value = "registrationStatus")
     private String registrationStatus;
 
     /*
-     * Status of the backup engine with the Recovery Services Vault. =
-     * {Active/Deleting/DeleteFailed}
+     * Status of the backup engine with the Recovery Services Vault. = {Active/Deleting/DeleteFailed}
      */
     @JsonProperty(value = "backupEngineState")
     private String backupEngineState;
@@ -60,8 +63,7 @@ public class BackupEngineBase {
     private String healthStatus;
 
     /*
-     * Flag indicating if the backup engine be registered, once already
-     * registered.
+     * Flag indicating if the backup engine be registered, once already registered.
      */
     @JsonProperty(value = "canReRegister")
     private Boolean canReRegister;
@@ -103,8 +105,24 @@ public class BackupEngineBase {
     private BackupEngineExtendedInfo extendedInfo;
 
     /**
+     * Creates an instance of BackupEngineBase class.
+     */
+    public BackupEngineBase() {
+        this.backupEngineType = BackupEngineType.fromString("BackupEngineBase");
+    }
+
+    /**
+     * Get the backupEngineType property: Type of the backup engine.
+     * 
+     * @return the backupEngineType value.
+     */
+    public BackupEngineType backupEngineType() {
+        return this.backupEngineType;
+    }
+
+    /**
      * Get the friendlyName property: Friendly name of the backup engine.
-     *
+     * 
      * @return the friendlyName value.
      */
     public String friendlyName() {
@@ -113,7 +131,7 @@ public class BackupEngineBase {
 
     /**
      * Set the friendlyName property: Friendly name of the backup engine.
-     *
+     * 
      * @param friendlyName the friendlyName value to set.
      * @return the BackupEngineBase object itself.
      */
@@ -124,7 +142,7 @@ public class BackupEngineBase {
 
     /**
      * Get the backupManagementType property: Type of backup management for the backup engine.
-     *
+     * 
      * @return the backupManagementType value.
      */
     public BackupManagementType backupManagementType() {
@@ -133,7 +151,7 @@ public class BackupEngineBase {
 
     /**
      * Set the backupManagementType property: Type of backup management for the backup engine.
-     *
+     * 
      * @param backupManagementType the backupManagementType value to set.
      * @return the BackupEngineBase object itself.
      */
@@ -144,7 +162,7 @@ public class BackupEngineBase {
 
     /**
      * Get the registrationStatus property: Registration status of the backup engine with the Recovery Services Vault.
-     *
+     * 
      * @return the registrationStatus value.
      */
     public String registrationStatus() {
@@ -153,7 +171,7 @@ public class BackupEngineBase {
 
     /**
      * Set the registrationStatus property: Registration status of the backup engine with the Recovery Services Vault.
-     *
+     * 
      * @param registrationStatus the registrationStatus value to set.
      * @return the BackupEngineBase object itself.
      */
@@ -165,7 +183,7 @@ public class BackupEngineBase {
     /**
      * Get the backupEngineState property: Status of the backup engine with the Recovery Services Vault. =
      * {Active/Deleting/DeleteFailed}.
-     *
+     * 
      * @return the backupEngineState value.
      */
     public String backupEngineState() {
@@ -175,7 +193,7 @@ public class BackupEngineBase {
     /**
      * Set the backupEngineState property: Status of the backup engine with the Recovery Services Vault. =
      * {Active/Deleting/DeleteFailed}.
-     *
+     * 
      * @param backupEngineState the backupEngineState value to set.
      * @return the BackupEngineBase object itself.
      */
@@ -186,7 +204,7 @@ public class BackupEngineBase {
 
     /**
      * Get the healthStatus property: Backup status of the backup engine.
-     *
+     * 
      * @return the healthStatus value.
      */
     public String healthStatus() {
@@ -195,7 +213,7 @@ public class BackupEngineBase {
 
     /**
      * Set the healthStatus property: Backup status of the backup engine.
-     *
+     * 
      * @param healthStatus the healthStatus value to set.
      * @return the BackupEngineBase object itself.
      */
@@ -206,7 +224,7 @@ public class BackupEngineBase {
 
     /**
      * Get the canReRegister property: Flag indicating if the backup engine be registered, once already registered.
-     *
+     * 
      * @return the canReRegister value.
      */
     public Boolean canReRegister() {
@@ -215,7 +233,7 @@ public class BackupEngineBase {
 
     /**
      * Set the canReRegister property: Flag indicating if the backup engine be registered, once already registered.
-     *
+     * 
      * @param canReRegister the canReRegister value to set.
      * @return the BackupEngineBase object itself.
      */
@@ -226,7 +244,7 @@ public class BackupEngineBase {
 
     /**
      * Get the backupEngineId property: ID of the backup engine.
-     *
+     * 
      * @return the backupEngineId value.
      */
     public String backupEngineId() {
@@ -235,7 +253,7 @@ public class BackupEngineBase {
 
     /**
      * Set the backupEngineId property: ID of the backup engine.
-     *
+     * 
      * @param backupEngineId the backupEngineId value to set.
      * @return the BackupEngineBase object itself.
      */
@@ -246,7 +264,7 @@ public class BackupEngineBase {
 
     /**
      * Get the dpmVersion property: Backup engine version.
-     *
+     * 
      * @return the dpmVersion value.
      */
     public String dpmVersion() {
@@ -255,7 +273,7 @@ public class BackupEngineBase {
 
     /**
      * Set the dpmVersion property: Backup engine version.
-     *
+     * 
      * @param dpmVersion the dpmVersion value to set.
      * @return the BackupEngineBase object itself.
      */
@@ -266,7 +284,7 @@ public class BackupEngineBase {
 
     /**
      * Get the azureBackupAgentVersion property: Backup agent version.
-     *
+     * 
      * @return the azureBackupAgentVersion value.
      */
     public String azureBackupAgentVersion() {
@@ -275,7 +293,7 @@ public class BackupEngineBase {
 
     /**
      * Set the azureBackupAgentVersion property: Backup agent version.
-     *
+     * 
      * @param azureBackupAgentVersion the azureBackupAgentVersion value to set.
      * @return the BackupEngineBase object itself.
      */
@@ -286,7 +304,7 @@ public class BackupEngineBase {
 
     /**
      * Get the isAzureBackupAgentUpgradeAvailable property: To check if backup agent upgrade available.
-     *
+     * 
      * @return the isAzureBackupAgentUpgradeAvailable value.
      */
     public Boolean isAzureBackupAgentUpgradeAvailable() {
@@ -295,7 +313,7 @@ public class BackupEngineBase {
 
     /**
      * Set the isAzureBackupAgentUpgradeAvailable property: To check if backup agent upgrade available.
-     *
+     * 
      * @param isAzureBackupAgentUpgradeAvailable the isAzureBackupAgentUpgradeAvailable value to set.
      * @return the BackupEngineBase object itself.
      */
@@ -306,7 +324,7 @@ public class BackupEngineBase {
 
     /**
      * Get the isDpmUpgradeAvailable property: To check if backup engine upgrade available.
-     *
+     * 
      * @return the isDpmUpgradeAvailable value.
      */
     public Boolean isDpmUpgradeAvailable() {
@@ -315,7 +333,7 @@ public class BackupEngineBase {
 
     /**
      * Set the isDpmUpgradeAvailable property: To check if backup engine upgrade available.
-     *
+     * 
      * @param isDpmUpgradeAvailable the isDpmUpgradeAvailable value to set.
      * @return the BackupEngineBase object itself.
      */
@@ -326,7 +344,7 @@ public class BackupEngineBase {
 
     /**
      * Get the extendedInfo property: Extended info of the backupengine.
-     *
+     * 
      * @return the extendedInfo value.
      */
     public BackupEngineExtendedInfo extendedInfo() {
@@ -335,7 +353,7 @@ public class BackupEngineBase {
 
     /**
      * Set the extendedInfo property: Extended info of the backupengine.
-     *
+     * 
      * @param extendedInfo the extendedInfo value to set.
      * @return the BackupEngineBase object itself.
      */
@@ -346,7 +364,7 @@ public class BackupEngineBase {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

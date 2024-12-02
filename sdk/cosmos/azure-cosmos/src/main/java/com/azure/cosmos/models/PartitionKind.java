@@ -3,23 +3,23 @@
 
 package com.azure.cosmos.models;
 
-import com.azure.cosmos.util.Beta;
-import com.azure.cosmos.util.Beta.SinceVersion;
-
 /**
- * Specifies the partition scheme for an multiple-partitioned container in the Azure Cosmos DB database service.
+ * Specifies the partition scheme for a multiple-partitioned container in the Azure Cosmos DB database service.
  */
 public enum PartitionKind {
     /**
-     * The Partition of a item is calculated based on the hash value of the PartitionKey.
+     * The Partition of an item is calculated based on the hash value of the PartitionKey.
      */
     HASH("Hash"),
 
-    RANGE("Range"),
     /**
-     * The Partition of a item is calculated based on the hash value of multiple PartitionKeys.
+     * The Partition of an item is calculated based on a range.
      */
-    @Beta(value = SinceVersion.V4_16_0, warningText = Beta.PREVIEW_SUBJECT_TO_CHANGE_WARNING)
+    RANGE("Range"),
+
+    /**
+     * The Partition of an item is calculated based on the hash value of multiple PartitionKeys.
+     */
     MULTI_HASH("MultiHash");
 
     PartitionKind(String overWireValue) {

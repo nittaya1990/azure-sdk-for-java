@@ -139,6 +139,13 @@ public interface Disk {
     String regionName();
 
     /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
+
+    /**
      * Gets the inner com.azure.resourcemanager.devtestlabs.fluent.models.DiskInner object.
      *
      * @return the inner object.
@@ -146,17 +153,16 @@ public interface Disk {
     DiskInner innerModel();
 
     /** The entirety of the Disk definition. */
-    interface Definition
-        extends DefinitionStages.Blank,
-            DefinitionStages.WithLocation,
-            DefinitionStages.WithParentResource,
-            DefinitionStages.WithCreate {
+    interface Definition extends DefinitionStages.Blank, DefinitionStages.WithLocation,
+        DefinitionStages.WithParentResource, DefinitionStages.WithCreate {
     }
+
     /** The Disk definition stages. */
     interface DefinitionStages {
         /** The first stage of the Disk definition. */
         interface Blank extends WithLocation {
         }
+
         /** The stage of the Disk definition allowing to specify location. */
         interface WithLocation {
             /**
@@ -175,6 +181,7 @@ public interface Disk {
              */
             WithParentResource withRegion(String location);
         }
+
         /** The stage of the Disk definition allowing to specify parent resource. */
         interface WithParentResource {
             /**
@@ -187,20 +194,15 @@ public interface Disk {
              */
             WithCreate withExistingUser(String resourceGroupName, String labName, String username);
         }
+
         /**
          * The stage of the Disk definition which contains all the minimum required properties for the resource to be
          * created, but also allows for any other optional properties to be specified.
          */
-        interface WithCreate
-            extends DefinitionStages.WithTags,
-                DefinitionStages.WithDiskType,
-                DefinitionStages.WithDiskSizeGiB,
-                DefinitionStages.WithLeasedByLabVmId,
-                DefinitionStages.WithDiskBlobName,
-                DefinitionStages.WithDiskUri,
-                DefinitionStages.WithStorageAccountId,
-                DefinitionStages.WithHostCaching,
-                DefinitionStages.WithManagedDiskId {
+        interface WithCreate extends DefinitionStages.WithTags, DefinitionStages.WithDiskType,
+            DefinitionStages.WithDiskSizeGiB, DefinitionStages.WithLeasedByLabVmId, DefinitionStages.WithDiskBlobName,
+            DefinitionStages.WithDiskUri, DefinitionStages.WithStorageAccountId, DefinitionStages.WithHostCaching,
+            DefinitionStages.WithManagedDiskId {
             /**
              * Executes the create request.
              *
@@ -216,6 +218,7 @@ public interface Disk {
              */
             Disk create(Context context);
         }
+
         /** The stage of the Disk definition allowing to specify tags. */
         interface WithTags {
             /**
@@ -226,6 +229,7 @@ public interface Disk {
              */
             WithCreate withTags(Map<String, String> tags);
         }
+
         /** The stage of the Disk definition allowing to specify diskType. */
         interface WithDiskType {
             /**
@@ -236,6 +240,7 @@ public interface Disk {
              */
             WithCreate withDiskType(StorageType diskType);
         }
+
         /** The stage of the Disk definition allowing to specify diskSizeGiB. */
         interface WithDiskSizeGiB {
             /**
@@ -246,6 +251,7 @@ public interface Disk {
              */
             WithCreate withDiskSizeGiB(Integer diskSizeGiB);
         }
+
         /** The stage of the Disk definition allowing to specify leasedByLabVmId. */
         interface WithLeasedByLabVmId {
             /**
@@ -256,6 +262,7 @@ public interface Disk {
              */
             WithCreate withLeasedByLabVmId(String leasedByLabVmId);
         }
+
         /** The stage of the Disk definition allowing to specify diskBlobName. */
         interface WithDiskBlobName {
             /**
@@ -266,6 +273,7 @@ public interface Disk {
              */
             WithCreate withDiskBlobName(String diskBlobName);
         }
+
         /** The stage of the Disk definition allowing to specify diskUri. */
         interface WithDiskUri {
             /**
@@ -276,6 +284,7 @@ public interface Disk {
              */
             WithCreate withDiskUri(String diskUri);
         }
+
         /** The stage of the Disk definition allowing to specify storageAccountId. */
         interface WithStorageAccountId {
             /**
@@ -286,6 +295,7 @@ public interface Disk {
              */
             WithCreate withStorageAccountId(String storageAccountId);
         }
+
         /** The stage of the Disk definition allowing to specify hostCaching. */
         interface WithHostCaching {
             /**
@@ -297,6 +307,7 @@ public interface Disk {
              */
             WithCreate withHostCaching(String hostCaching);
         }
+
         /** The stage of the Disk definition allowing to specify managedDiskId. */
         interface WithManagedDiskId {
             /**
@@ -309,6 +320,7 @@ public interface Disk {
             WithCreate withManagedDiskId(String managedDiskId);
         }
     }
+
     /**
      * Begins update for the Disk resource.
      *
@@ -333,6 +345,7 @@ public interface Disk {
          */
         Disk apply(Context context);
     }
+
     /** The Disk update stages. */
     interface UpdateStages {
         /** The stage of the Disk update allowing to specify tags. */
@@ -346,6 +359,7 @@ public interface Disk {
             Update withTags(Map<String, String> tags);
         }
     }
+
     /**
      * Refreshes the resource to sync with Azure.
      *

@@ -5,39 +5,47 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
 import com.azure.resourcemanager.datafactory.fluent.models.FlowletTypeProperties;
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.HashMap;
+import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
-/** Data flow flowlet. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@JsonTypeName("Flowlet")
+/**
+ * Data flow flowlet.
+ */
 @Fluent
 public final class Flowlet extends DataFlow {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Flowlet.class);
+    /*
+     * Type of data flow.
+     */
+    private String type = "Flowlet";
 
     /*
      * Flowlet type properties.
      */
-    @JsonProperty(value = "typeProperties")
     private FlowletTypeProperties innerTypeProperties;
 
-    /*
-     * Data flow flowlet
+    /**
+     * Creates an instance of Flowlet class.
      */
-    @JsonIgnore private Map<String, Object> additionalProperties;
+    public Flowlet() {
+    }
+
+    /**
+     * Get the type property: Type of data flow.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
 
     /**
      * Get the innerTypeProperties property: Flowlet type properties.
-     *
+     * 
      * @return the innerTypeProperties value.
      */
     private FlowletTypeProperties innerTypeProperties() {
@@ -45,49 +53,26 @@ public final class Flowlet extends DataFlow {
     }
 
     /**
-     * Get the additionalProperties property: Data flow flowlet.
-     *
-     * @return the additionalProperties value.
+     * {@inheritDoc}
      */
-    @JsonAnyGetter
-    public Map<String, Object> additionalProperties() {
-        return this.additionalProperties;
-    }
-
-    /**
-     * Set the additionalProperties property: Data flow flowlet.
-     *
-     * @param additionalProperties the additionalProperties value to set.
-     * @return the Flowlet object itself.
-     */
-    public Flowlet withAdditionalProperties(Map<String, Object> additionalProperties) {
-        this.additionalProperties = additionalProperties;
-        return this;
-    }
-
-    @JsonAnySetter
-    void withAdditionalProperties(String key, Object value) {
-        if (additionalProperties == null) {
-            additionalProperties = new HashMap<>();
-        }
-        additionalProperties.put(key, value);
-    }
-
-    /** {@inheritDoc} */
     @Override
     public Flowlet withDescription(String description) {
         super.withDescription(description);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Flowlet withAnnotations(List<Object> annotations) {
         super.withAnnotations(annotations);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Flowlet withFolder(DataFlowFolder folder) {
         super.withFolder(folder);
@@ -96,7 +81,7 @@ public final class Flowlet extends DataFlow {
 
     /**
      * Get the sources property: List of sources in Flowlet.
-     *
+     * 
      * @return the sources value.
      */
     public List<DataFlowSource> sources() {
@@ -105,7 +90,7 @@ public final class Flowlet extends DataFlow {
 
     /**
      * Set the sources property: List of sources in Flowlet.
-     *
+     * 
      * @param sources the sources value to set.
      * @return the Flowlet object itself.
      */
@@ -119,7 +104,7 @@ public final class Flowlet extends DataFlow {
 
     /**
      * Get the sinks property: List of sinks in Flowlet.
-     *
+     * 
      * @return the sinks value.
      */
     public List<DataFlowSink> sinks() {
@@ -128,7 +113,7 @@ public final class Flowlet extends DataFlow {
 
     /**
      * Set the sinks property: List of sinks in Flowlet.
-     *
+     * 
      * @param sinks the sinks value to set.
      * @return the Flowlet object itself.
      */
@@ -142,7 +127,7 @@ public final class Flowlet extends DataFlow {
 
     /**
      * Get the transformations property: List of transformations in Flowlet.
-     *
+     * 
      * @return the transformations value.
      */
     public List<Transformation> transformations() {
@@ -151,7 +136,7 @@ public final class Flowlet extends DataFlow {
 
     /**
      * Set the transformations property: List of transformations in Flowlet.
-     *
+     * 
      * @param transformations the transformations value to set.
      * @return the Flowlet object itself.
      */
@@ -165,7 +150,7 @@ public final class Flowlet extends DataFlow {
 
     /**
      * Get the script property: Flowlet script.
-     *
+     * 
      * @return the script value.
      */
     public String script() {
@@ -174,7 +159,7 @@ public final class Flowlet extends DataFlow {
 
     /**
      * Set the script property: Flowlet script.
-     *
+     * 
      * @param script the script value to set.
      * @return the Flowlet object itself.
      */
@@ -188,7 +173,7 @@ public final class Flowlet extends DataFlow {
 
     /**
      * Get the scriptLines property: Flowlet script lines.
-     *
+     * 
      * @return the scriptLines value.
      */
     public List<String> scriptLines() {
@@ -197,7 +182,7 @@ public final class Flowlet extends DataFlow {
 
     /**
      * Set the scriptLines property: Flowlet script lines.
-     *
+     * 
      * @param scriptLines the scriptLines value to set.
      * @return the Flowlet object itself.
      */
@@ -210,31 +195,8 @@ public final class Flowlet extends DataFlow {
     }
 
     /**
-     * Get the additionalProperties property: Any object.
-     *
-     * @return the additionalProperties value.
-     */
-    public Object additionalPropertiesTypePropertiesAdditionalProperties() {
-        return this.innerTypeProperties() == null ? null : this.innerTypeProperties().additionalProperties();
-    }
-
-    /**
-     * Set the additionalProperties property: Any object.
-     *
-     * @param additionalProperties the additionalProperties value to set.
-     * @return the Flowlet object itself.
-     */
-    public Flowlet withAdditionalPropertiesTypePropertiesAdditionalProperties(Object additionalProperties) {
-        if (this.innerTypeProperties() == null) {
-            this.innerTypeProperties = new FlowletTypeProperties();
-        }
-        this.innerTypeProperties().withAdditionalProperties(additionalProperties);
-        return this;
-    }
-
-    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
@@ -243,5 +205,54 @@ public final class Flowlet extends DataFlow {
         if (innerTypeProperties() != null) {
             innerTypeProperties().validate();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeStringField("description", description());
+        jsonWriter.writeArrayField("annotations", annotations(), (writer, element) -> writer.writeUntyped(element));
+        jsonWriter.writeJsonField("folder", folder());
+        jsonWriter.writeStringField("type", this.type);
+        jsonWriter.writeJsonField("typeProperties", this.innerTypeProperties);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of Flowlet from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of Flowlet if the JsonReader was pointing to an instance of it, or null if it was pointing to
+     * JSON null.
+     * @throws IOException If an error occurs while reading the Flowlet.
+     */
+    public static Flowlet fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            Flowlet deserializedFlowlet = new Flowlet();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("description".equals(fieldName)) {
+                    deserializedFlowlet.withDescription(reader.getString());
+                } else if ("annotations".equals(fieldName)) {
+                    List<Object> annotations = reader.readArray(reader1 -> reader1.readUntyped());
+                    deserializedFlowlet.withAnnotations(annotations);
+                } else if ("folder".equals(fieldName)) {
+                    deserializedFlowlet.withFolder(DataFlowFolder.fromJson(reader));
+                } else if ("type".equals(fieldName)) {
+                    deserializedFlowlet.type = reader.getString();
+                } else if ("typeProperties".equals(fieldName)) {
+                    deserializedFlowlet.innerTypeProperties = FlowletTypeProperties.fromJson(reader);
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedFlowlet;
+        });
     }
 }

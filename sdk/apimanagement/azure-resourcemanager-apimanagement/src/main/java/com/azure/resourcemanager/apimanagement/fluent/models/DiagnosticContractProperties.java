@@ -12,14 +12,11 @@ import com.azure.resourcemanager.apimanagement.models.OperationNameFormat;
 import com.azure.resourcemanager.apimanagement.models.PipelineDiagnosticSettings;
 import com.azure.resourcemanager.apimanagement.models.SamplingSettings;
 import com.azure.resourcemanager.apimanagement.models.Verbosity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Diagnostic Entity Properties. */
 @Fluent
 public final class DiagnosticContractProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DiagnosticContractProperties.class);
-
     /*
      * Specifies for what type of messages sampling settings should not apply.
      */
@@ -69,11 +66,20 @@ public final class DiagnosticContractProperties {
     private Verbosity verbosity;
 
     /*
-     * The format of the Operation Name for Application Insights telemetries.
-     * Default is Name.
+     * The format of the Operation Name for Application Insights telemetries. Default is Name.
      */
     @JsonProperty(value = "operationNameFormat")
     private OperationNameFormat operationNameFormat;
+
+    /*
+     * Emit custom metrics via emit-metric policy. Applicable only to Application Insights diagnostic settings.
+     */
+    @JsonProperty(value = "metrics")
+    private Boolean metrics;
+
+    /** Creates an instance of DiagnosticContractProperties class. */
+    public DiagnosticContractProperties() {
+    }
 
     /**
      * Get the alwaysLog property: Specifies for what type of messages sampling settings should not apply.
@@ -258,16 +264,36 @@ public final class DiagnosticContractProperties {
     }
 
     /**
+     * Get the metrics property: Emit custom metrics via emit-metric policy. Applicable only to Application Insights
+     * diagnostic settings.
+     *
+     * @return the metrics value.
+     */
+    public Boolean metrics() {
+        return this.metrics;
+    }
+
+    /**
+     * Set the metrics property: Emit custom metrics via emit-metric policy. Applicable only to Application Insights
+     * diagnostic settings.
+     *
+     * @param metrics the metrics value to set.
+     * @return the DiagnosticContractProperties object itself.
+     */
+    public DiagnosticContractProperties withMetrics(Boolean metrics) {
+        this.metrics = metrics;
+        return this;
+    }
+
+    /**
      * Validates the instance.
      *
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (loggerId() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property loggerId in model DiagnosticContractProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property loggerId in model DiagnosticContractProperties"));
         }
         if (sampling() != null) {
             sampling().validate();
@@ -279,4 +305,6 @@ public final class DiagnosticContractProperties {
             backend().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(DiagnosticContractProperties.class);
 }

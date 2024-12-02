@@ -6,7 +6,6 @@ package com.azure.resourcemanager.videoanalyzer.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
@@ -14,8 +13,6 @@ import java.util.Map;
 /** The managed identity for the Video Analyzer resource. */
 @Fluent
 public class VideoAnalyzerIdentity {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(VideoAnalyzerIdentity.class);
-
     /*
      * The identity type.
      */
@@ -64,8 +61,8 @@ public class VideoAnalyzerIdentity {
      * @param userAssignedIdentities the userAssignedIdentities value to set.
      * @return the VideoAnalyzerIdentity object itself.
      */
-    public VideoAnalyzerIdentity withUserAssignedIdentities(
-        Map<String, UserAssignedManagedIdentity> userAssignedIdentities) {
+    public VideoAnalyzerIdentity
+        withUserAssignedIdentities(Map<String, UserAssignedManagedIdentity> userAssignedIdentities) {
         this.userAssignedIdentities = userAssignedIdentities;
         return this;
     }
@@ -77,19 +74,17 @@ public class VideoAnalyzerIdentity {
      */
     public void validate() {
         if (type() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property type in model VideoAnalyzerIdentity"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property type in model VideoAnalyzerIdentity"));
         }
         if (userAssignedIdentities() != null) {
-            userAssignedIdentities()
-                .values()
-                .forEach(
-                    e -> {
-                        if (e != null) {
-                            e.validate();
-                        }
-                    });
+            userAssignedIdentities().values().forEach(e -> {
+                if (e != null) {
+                    e.validate();
+                }
+            });
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(VideoAnalyzerIdentity.class);
 }

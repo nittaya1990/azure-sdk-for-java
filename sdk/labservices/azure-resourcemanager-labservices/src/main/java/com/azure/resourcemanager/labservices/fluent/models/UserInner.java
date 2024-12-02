@@ -5,185 +5,263 @@
 package com.azure.resourcemanager.labservices.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
-import com.azure.core.management.Resource;
+import com.azure.core.management.ProxyResource;
+import com.azure.core.management.SystemData;
 import com.azure.core.util.logging.ClientLogger;
-import com.azure.resourcemanager.labservices.models.LatestOperationResult;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import com.azure.resourcemanager.labservices.models.InvitationState;
+import com.azure.resourcemanager.labservices.models.ProvisioningState;
+import com.azure.resourcemanager.labservices.models.RegistrationState;
+import java.io.IOException;
 import java.time.Duration;
-import java.util.Map;
+import java.time.OffsetDateTime;
 
-/** The User registered to a lab. */
-@JsonFlatten
+/**
+ * User of a lab that can register for and use virtual machines within the lab.
+ */
 @Fluent
-public class UserInner extends Resource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(UserInner.class);
+public final class UserInner extends ProxyResource {
+    /*
+     * Metadata pertaining to creation and last modification of the user resource.
+     */
+    private SystemData systemData;
 
     /*
-     * The user email address, as it was specified during registration.
+     * User resource properties
      */
-    @JsonProperty(value = "properties.email", access = JsonProperty.Access.WRITE_ONLY)
-    private String email;
+    private UserProperties innerProperties = new UserProperties();
 
     /*
-     * The user family name, as it was specified during registration.
+     * The type of the resource.
      */
-    @JsonProperty(value = "properties.familyName", access = JsonProperty.Access.WRITE_ONLY)
-    private String familyName;
+    private String type;
 
     /*
-     * The user given name, as it was specified during registration.
+     * The name of the resource.
      */
-    @JsonProperty(value = "properties.givenName", access = JsonProperty.Access.WRITE_ONLY)
-    private String givenName;
+    private String name;
 
     /*
-     * The user tenant ID, as it was specified during registration.
+     * Fully qualified resource Id for the resource.
      */
-    @JsonProperty(value = "properties.tenantId", access = JsonProperty.Access.WRITE_ONLY)
-    private String tenantId;
-
-    /*
-     * How long the user has used his VMs in this lab
-     */
-    @JsonProperty(value = "properties.totalUsage", access = JsonProperty.Access.WRITE_ONLY)
-    private Duration totalUsage;
-
-    /*
-     * The provisioning status of the resource.
-     */
-    @JsonProperty(value = "properties.provisioningState")
-    private String provisioningState;
-
-    /*
-     * The unique immutable identifier of a resource (Guid).
-     */
-    @JsonProperty(value = "properties.uniqueIdentifier")
-    private String uniqueIdentifier;
-
-    /*
-     * The details of the latest operation. ex: status, error
-     */
-    @JsonProperty(value = "properties.latestOperationResult", access = JsonProperty.Access.WRITE_ONLY)
-    private LatestOperationResult latestOperationResult;
+    private String id;
 
     /**
-     * Get the email property: The user email address, as it was specified during registration.
-     *
+     * Creates an instance of UserInner class.
+     */
+    public UserInner() {
+    }
+
+    /**
+     * Get the systemData property: Metadata pertaining to creation and last modification of the user resource.
+     * 
+     * @return the systemData value.
+     */
+    public SystemData systemData() {
+        return this.systemData;
+    }
+
+    /**
+     * Get the innerProperties property: User resource properties.
+     * 
+     * @return the innerProperties value.
+     */
+    private UserProperties innerProperties() {
+        return this.innerProperties;
+    }
+
+    /**
+     * Get the type property: The type of the resource.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
+     * Get the name property: The name of the resource.
+     * 
+     * @return the name value.
+     */
+    @Override
+    public String name() {
+        return this.name;
+    }
+
+    /**
+     * Get the id property: Fully qualified resource Id for the resource.
+     * 
+     * @return the id value.
+     */
+    @Override
+    public String id() {
+        return this.id;
+    }
+
+    /**
+     * Get the provisioningState property: Current provisioning state of the user resource.
+     * 
+     * @return the provisioningState value.
+     */
+    public ProvisioningState provisioningState() {
+        return this.innerProperties() == null ? null : this.innerProperties().provisioningState();
+    }
+
+    /**
+     * Get the displayName property: Display name of the user, for example user's full name.
+     * 
+     * @return the displayName value.
+     */
+    public String displayName() {
+        return this.innerProperties() == null ? null : this.innerProperties().displayName();
+    }
+
+    /**
+     * Get the email property: Email address of the user.
+     * 
      * @return the email value.
      */
     public String email() {
-        return this.email;
+        return this.innerProperties() == null ? null : this.innerProperties().email();
     }
 
     /**
-     * Get the familyName property: The user family name, as it was specified during registration.
-     *
-     * @return the familyName value.
+     * Set the email property: Email address of the user.
+     * 
+     * @param email the email value to set.
+     * @return the UserInner object itself.
      */
-    public String familyName() {
-        return this.familyName;
+    public UserInner withEmail(String email) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new UserProperties();
+        }
+        this.innerProperties().withEmail(email);
+        return this;
     }
 
     /**
-     * Get the givenName property: The user given name, as it was specified during registration.
-     *
-     * @return the givenName value.
+     * Get the registrationState property: State of the user's registration within the lab.
+     * 
+     * @return the registrationState value.
      */
-    public String givenName() {
-        return this.givenName;
+    public RegistrationState registrationState() {
+        return this.innerProperties() == null ? null : this.innerProperties().registrationState();
     }
 
     /**
-     * Get the tenantId property: The user tenant ID, as it was specified during registration.
-     *
-     * @return the tenantId value.
+     * Get the invitationState property: State of the invitation message for the user.
+     * 
+     * @return the invitationState value.
      */
-    public String tenantId() {
-        return this.tenantId;
+    public InvitationState invitationState() {
+        return this.innerProperties() == null ? null : this.innerProperties().invitationState();
     }
 
     /**
-     * Get the totalUsage property: How long the user has used his VMs in this lab.
-     *
+     * Get the invitationSent property: Date and time when the invitation message was sent to the user.
+     * 
+     * @return the invitationSent value.
+     */
+    public OffsetDateTime invitationSent() {
+        return this.innerProperties() == null ? null : this.innerProperties().invitationSent();
+    }
+
+    /**
+     * Get the totalUsage property: How long the user has used their virtual machines in this lab.
+     * 
      * @return the totalUsage value.
      */
     public Duration totalUsage() {
-        return this.totalUsage;
+        return this.innerProperties() == null ? null : this.innerProperties().totalUsage();
     }
 
     /**
-     * Get the provisioningState property: The provisioning status of the resource.
-     *
-     * @return the provisioningState value.
+     * Get the additionalUsageQuota property: The amount of usage quota time the user gets in addition to the lab usage
+     * quota.
+     * 
+     * @return the additionalUsageQuota value.
      */
-    public String provisioningState() {
-        return this.provisioningState;
+    public Duration additionalUsageQuota() {
+        return this.innerProperties() == null ? null : this.innerProperties().additionalUsageQuota();
     }
 
     /**
-     * Set the provisioningState property: The provisioning status of the resource.
-     *
-     * @param provisioningState the provisioningState value to set.
+     * Set the additionalUsageQuota property: The amount of usage quota time the user gets in addition to the lab usage
+     * quota.
+     * 
+     * @param additionalUsageQuota the additionalUsageQuota value to set.
      * @return the UserInner object itself.
      */
-    public UserInner withProvisioningState(String provisioningState) {
-        this.provisioningState = provisioningState;
-        return this;
-    }
-
-    /**
-     * Get the uniqueIdentifier property: The unique immutable identifier of a resource (Guid).
-     *
-     * @return the uniqueIdentifier value.
-     */
-    public String uniqueIdentifier() {
-        return this.uniqueIdentifier;
-    }
-
-    /**
-     * Set the uniqueIdentifier property: The unique immutable identifier of a resource (Guid).
-     *
-     * @param uniqueIdentifier the uniqueIdentifier value to set.
-     * @return the UserInner object itself.
-     */
-    public UserInner withUniqueIdentifier(String uniqueIdentifier) {
-        this.uniqueIdentifier = uniqueIdentifier;
-        return this;
-    }
-
-    /**
-     * Get the latestOperationResult property: The details of the latest operation. ex: status, error.
-     *
-     * @return the latestOperationResult value.
-     */
-    public LatestOperationResult latestOperationResult() {
-        return this.latestOperationResult;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public UserInner withLocation(String location) {
-        super.withLocation(location);
-        return this;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public UserInner withTags(Map<String, String> tags) {
-        super.withTags(tags);
+    public UserInner withAdditionalUsageQuota(Duration additionalUsageQuota) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new UserProperties();
+        }
+        this.innerProperties().withAdditionalUsageQuota(additionalUsageQuota);
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
-        if (latestOperationResult() != null) {
-            latestOperationResult().validate();
+        if (innerProperties() == null) {
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property innerProperties in model UserInner"));
+        } else {
+            innerProperties().validate();
         }
+    }
+
+    private static final ClientLogger LOGGER = new ClientLogger(UserInner.class);
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of UserInner from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of UserInner if the JsonReader was pointing to an instance of it, or null if it was pointing
+     * to JSON null.
+     * @throws IllegalStateException If the deserialized JSON object was missing any required properties.
+     * @throws IOException If an error occurs while reading the UserInner.
+     */
+    public static UserInner fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            UserInner deserializedUserInner = new UserInner();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("id".equals(fieldName)) {
+                    deserializedUserInner.id = reader.getString();
+                } else if ("name".equals(fieldName)) {
+                    deserializedUserInner.name = reader.getString();
+                } else if ("type".equals(fieldName)) {
+                    deserializedUserInner.type = reader.getString();
+                } else if ("properties".equals(fieldName)) {
+                    deserializedUserInner.innerProperties = UserProperties.fromJson(reader);
+                } else if ("systemData".equals(fieldName)) {
+                    deserializedUserInner.systemData = SystemData.fromJson(reader);
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedUserInner;
+        });
     }
 }

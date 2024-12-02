@@ -5,74 +5,55 @@
 package com.azure.resourcemanager.policyinsights.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.annotation.JsonFlatten;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonSerializable;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import java.io.IOException;
 
-/** Slim version of policy metadata resource definition, excluding properties with large strings. */
-@JsonFlatten
+/**
+ * Slim version of policy metadata resource definition, excluding properties with large strings.
+ */
 @Immutable
-public class SlimPolicyMetadataInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SlimPolicyMetadataInner.class);
+public final class SlimPolicyMetadataInner implements JsonSerializable<SlimPolicyMetadataInner> {
+    /*
+     * Properties of the policy metadata.
+     */
+    private PolicyMetadataSlimProperties innerProperties;
 
     /*
      * The ID of the policy metadata.
      */
-    @JsonProperty(value = "id", access = JsonProperty.Access.WRITE_ONLY)
     private String id;
 
     /*
      * The type of the policy metadata.
      */
-    @JsonProperty(value = "type", access = JsonProperty.Access.WRITE_ONLY)
     private String type;
 
     /*
      * The name of the policy metadata.
      */
-    @JsonProperty(value = "name", access = JsonProperty.Access.WRITE_ONLY)
     private String name;
 
-    /*
-     * The policy metadata identifier.
+    /**
+     * Creates an instance of SlimPolicyMetadataInner class.
      */
-    @JsonProperty(value = "properties.metadataId", access = JsonProperty.Access.WRITE_ONLY)
-    private String metadataId;
+    public SlimPolicyMetadataInner() {
+    }
 
-    /*
-     * The category of the policy metadata.
+    /**
+     * Get the innerProperties property: Properties of the policy metadata.
+     * 
+     * @return the innerProperties value.
      */
-    @JsonProperty(value = "properties.category", access = JsonProperty.Access.WRITE_ONLY)
-    private String category;
-
-    /*
-     * The title of the policy metadata.
-     */
-    @JsonProperty(value = "properties.title", access = JsonProperty.Access.WRITE_ONLY)
-    private String title;
-
-    /*
-     * The owner of the policy metadata.
-     */
-    @JsonProperty(value = "properties.owner", access = JsonProperty.Access.WRITE_ONLY)
-    private String owner;
-
-    /*
-     * Url for getting additional content about the resource metadata.
-     */
-    @JsonProperty(value = "properties.additionalContentUrl", access = JsonProperty.Access.WRITE_ONLY)
-    private String additionalContentUrl;
-
-    /*
-     * Additional metadata.
-     */
-    @JsonProperty(value = "properties.metadata", access = JsonProperty.Access.WRITE_ONLY)
-    private Object metadata;
+    private PolicyMetadataSlimProperties innerProperties() {
+        return this.innerProperties;
+    }
 
     /**
      * Get the id property: The ID of the policy metadata.
-     *
+     * 
      * @return the id value.
      */
     public String id() {
@@ -81,7 +62,7 @@ public class SlimPolicyMetadataInner {
 
     /**
      * Get the type property: The type of the policy metadata.
-     *
+     * 
      * @return the type value.
      */
     public String type() {
@@ -90,7 +71,7 @@ public class SlimPolicyMetadataInner {
 
     /**
      * Get the name property: The name of the policy metadata.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -99,63 +80,108 @@ public class SlimPolicyMetadataInner {
 
     /**
      * Get the metadataId property: The policy metadata identifier.
-     *
+     * 
      * @return the metadataId value.
      */
     public String metadataId() {
-        return this.metadataId;
+        return this.innerProperties() == null ? null : this.innerProperties().metadataId();
     }
 
     /**
      * Get the category property: The category of the policy metadata.
-     *
+     * 
      * @return the category value.
      */
     public String category() {
-        return this.category;
+        return this.innerProperties() == null ? null : this.innerProperties().category();
     }
 
     /**
      * Get the title property: The title of the policy metadata.
-     *
+     * 
      * @return the title value.
      */
     public String title() {
-        return this.title;
+        return this.innerProperties() == null ? null : this.innerProperties().title();
     }
 
     /**
      * Get the owner property: The owner of the policy metadata.
-     *
+     * 
      * @return the owner value.
      */
     public String owner() {
-        return this.owner;
+        return this.innerProperties() == null ? null : this.innerProperties().owner();
     }
 
     /**
      * Get the additionalContentUrl property: Url for getting additional content about the resource metadata.
-     *
+     * 
      * @return the additionalContentUrl value.
      */
     public String additionalContentUrl() {
-        return this.additionalContentUrl;
+        return this.innerProperties() == null ? null : this.innerProperties().additionalContentUrl();
     }
 
     /**
      * Get the metadata property: Additional metadata.
-     *
+     * 
      * @return the metadata value.
      */
     public Object metadata() {
-        return this.metadata;
+        return this.innerProperties() == null ? null : this.innerProperties().metadata();
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
+        if (innerProperties() != null) {
+            innerProperties().validate();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeJsonField("properties", this.innerProperties);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of SlimPolicyMetadataInner from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of SlimPolicyMetadataInner if the JsonReader was pointing to an instance of it, or null if it
+     * was pointing to JSON null.
+     * @throws IOException If an error occurs while reading the SlimPolicyMetadataInner.
+     */
+    public static SlimPolicyMetadataInner fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            SlimPolicyMetadataInner deserializedSlimPolicyMetadataInner = new SlimPolicyMetadataInner();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("properties".equals(fieldName)) {
+                    deserializedSlimPolicyMetadataInner.innerProperties = PolicyMetadataSlimProperties.fromJson(reader);
+                } else if ("id".equals(fieldName)) {
+                    deserializedSlimPolicyMetadataInner.id = reader.getString();
+                } else if ("type".equals(fieldName)) {
+                    deserializedSlimPolicyMetadataInner.type = reader.getString();
+                } else if ("name".equals(fieldName)) {
+                    deserializedSlimPolicyMetadataInner.name = reader.getString();
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedSlimPolicyMetadataInner;
+        });
     }
 }

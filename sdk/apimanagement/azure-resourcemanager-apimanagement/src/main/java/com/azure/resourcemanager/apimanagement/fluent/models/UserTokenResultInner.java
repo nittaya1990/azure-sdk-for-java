@@ -5,20 +5,20 @@
 package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Get User Token response details. */
 @Fluent
 public final class UserTokenResultInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(UserTokenResultInner.class);
-
     /*
      * Shared Access Authorization token for the User.
      */
     @JsonProperty(value = "value")
     private String value;
+
+    /** Creates an instance of UserTokenResultInner class. */
+    public UserTokenResultInner() {
+    }
 
     /**
      * Get the value property: Shared Access Authorization token for the User.
